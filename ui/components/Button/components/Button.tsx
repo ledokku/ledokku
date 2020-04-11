@@ -9,6 +9,7 @@ export interface ButtonProps {
   variant?: 'solid';
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
+  onClick?(): void;
 }
 
 export const Button: React.FC<ButtonProps> = (props) => {
