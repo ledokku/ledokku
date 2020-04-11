@@ -1,0 +1,38 @@
+{
+  "name": "ledokku",
+  "private": true,
+  "version": "0.0.1",
+  "repository": "https://github.com/ledokku/ledokku.git",
+  "author": "pradel <pradel.leo@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "prettier": "prettier --write '**/*.{js,ts,tsx,md,css}'"
+  },
+  "prettier": {
+    "singleQuote": true
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx,md,css}": "prettier --write"
+  },
+  "dependencies": {
+    "next": "9.3.4",
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
+  },
+  "devDependencies": {
+    "@types/node": "13.11.1",
+    "@types/react": "16.9.34",
+    "husky": ">=4",
+    "lint-staged": ">=10",
+    "prettier": "2.0.4",
+    "typescript": "3.8.3"
+  }
+}
