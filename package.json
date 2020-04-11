@@ -23,9 +23,13 @@
     "*.{js,ts,tsx,md,css}": "prettier --write"
   },
   "dependencies": {
+    "@types/styled-components": "^5.0.1",
     "next": "9.3.4",
+    "polished": "^3.5.1",
     "react": "16.13.1",
-    "react-dom": "16.13.1"
+    "react-dom": "16.13.1",
+    "react-feather": "^2.0.4",
+    "styled-components": "^5.1.0"
   },
   "devDependencies": {
     "@types/node": "13.11.1",
