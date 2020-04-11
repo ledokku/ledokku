@@ -34,6 +34,7 @@
   "devDependencies": {
     "@types/node": "13.11.1",
     "@types/react": "16.9.34",
+    "babel-plugin-styled-components": "^1.10.7",
     "husky": ">=4",
     "lint-staged": ">=10",
     "prettier": "2.0.4",
