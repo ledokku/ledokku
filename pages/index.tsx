@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { GitHub } from 'react-feather';
+import { useRouter } from 'next/router';
 
 import { LandingLayout } from '../layouts/LandingLayout';
 import { Button } from '../ui/components/Button';
@@ -10,6 +11,7 @@ import withApollo from '../lib/withApollo';
 import { useLoginWithGithubMutation } from '../src/generated/graphql';
 
 const Home = () => {
+  const router = useRouter();
   const [
     loginWithGithubMutation,
     { data, loading, error },
@@ -33,7 +35,7 @@ const Home = () => {
         // TODO handle errors
         if (data.data) {
           localStorage.setItem('accessToken', data.data.loginWithGithub.token);
-          // TODO redirect to dashboard
+          router.push('/dashboard');
         }
       }
     };
