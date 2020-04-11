@@ -9,6 +9,7 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
+    "generate": "graphql-codegen --config codegen.yml",
     "prettier": "prettier --write '**/*.{js,ts,tsx,md,css}'"
   },
   "prettier": {
@@ -23,8 +24,13 @@
     "*.{js,ts,tsx,md,css}": "prettier --write"
   },
   "dependencies": {
+    "@apollo/react-hooks": "3.1.4",
     "@types/styled-components": "^5.0.1",
+    "apollo-boost": "0.4.7",
+    "dotenv": "8.2.0",
+    "graphql": "15.0.0",
     "next": "9.3.4",
+    "next-with-apollo": "5.0.0",
     "polished": "^3.5.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
@@ -32,6 +38,10 @@
     "styled-components": "^5.1.0"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "1.13.2",
+    "@graphql-codegen/typescript": "1.13.2",
+    "@graphql-codegen/typescript-operations": "1.13.2",
+    "@graphql-codegen/typescript-react-apollo": "1.13.2",
     "@types/node": "13.11.1",
     "@types/react": "16.9.34",
     "babel-plugin-styled-components": "^1.10.7",
