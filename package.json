@@ -9,6 +9,7 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
+    "generate": "graphql-codegen --config codegen.yml",
     "prettier": "prettier --write '**/*.{js,ts,tsx,md,css}'"
   },
   "prettier": {
@@ -37,6 +38,10 @@
     "styled-components": "^5.1.0"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "1.13.2",
+    "@graphql-codegen/typescript": "1.13.2",
+    "@graphql-codegen/typescript-operations": "1.13.2",
+    "@graphql-codegen/typescript-react-apollo": "1.13.2",
     "@types/node": "13.11.1",
     "@types/react": "16.9.34",
     "husky": ">=4",

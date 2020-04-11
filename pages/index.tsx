@@ -7,21 +7,38 @@ import { Headline } from '../ui/components/Typography/components/Headline';
 import { Paragraph } from '../ui/components/Typography/components/Paragraph';
 import { config } from '../config';
 import withApollo from '../lib/withApollo';
+import { useLoginWithGithubMutation } from '../src/generated/graphql';
 
 const Home = () => {
+  const [
+    loginWithGithubMutation,
+    { data, loading, error },
+  ] = useLoginWithGithubMutation();
+
   // On mount we check if there is a github code present
   useEffect(() => {
-    const githubCode = window.location.search
-      .substring(1)
-      .split('&')[0]
-      .split('code=')[1];
+    const login = async () => {
+      const githubCode = window.location.search
+        .substring(1)
+        .split('&')[0]
+        .split('code=')[1];
 
-    if (githubCode) {
-      // TODO show loading during login
-      // Remove hash in url
-      window.history.replaceState({}, document.title, '.');
-      // TODO call mutation to login
-    }
+      if (githubCode) {
+        // TODO show loading during login
+        // Remove hash in url
+        window.history.replaceState({}, document.title, '.');
+        const data = await loginWithGithubMutation({
+          variables: { code: githubCode },
+        });
+        // TODO handle errors
+        if (data.data) {
+          localStorage.setItem('accessToken', data.data.loginWithGithub.token);
+          // TODO redirect to dashboard
+        }
+      }
+    };
+
+    login();
   }, []);
 
   const handleLogin = () => {
