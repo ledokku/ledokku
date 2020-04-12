@@ -73,9 +73,8 @@ const CloudProvider = () => {
             provider
           </Typography.Caption>
           <Typography.Caption marginTop={8}>
-            Note that if you are a new DigitalOcean user, you will receive $100
-            Free Credit once you sign up for the first two months. This is
-            enough for two months of multiple servers!
+            If you are a new DigitalOcean user, you will receive $100 Free
+            Credit once you sign up for the first two months.
           </Typography.Caption>
         </Box>
         <TextField
