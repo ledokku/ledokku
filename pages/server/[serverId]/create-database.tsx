@@ -96,6 +96,9 @@ const CreateDatabase = () => {
               disabled={true}
             />
           </Grid>
+          <Typography.Caption marginTop={8}>
+            We currently only provide PostgreSQL
+          </Typography.Caption>
         </Box>
         <Flex justifyContent="flex-end">
           <Button type="submit" background="primary" endIcon={<ArrowRight />}>
