@@ -29,7 +29,7 @@ const CreateDatabase = () => {
       // TODO validation token is required
       try {
         const data = await createDatabaseMutation({
-          variables: { name: values.name, serverId: 'dadsf' },
+          variables: { name: values.name, serverId: 'NEEDTOFILLWTIHREALVALUE' },
         });
         console.log(data);
         router.push('/dashboard');

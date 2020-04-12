@@ -53,6 +53,11 @@ export type CreateDatabaseInput = {
 export type Query = {
   __typename?: 'Query';
   servers?: Maybe<Array<Server>>;
+  server?: Maybe<Server>;
+};
+
+export type QueryServerArgs = {
+  id: Scalars['String'];
 };
 
 export type Mutation = {
@@ -198,6 +203,14 @@ export type CreateDatabaseMutationOptions = ApolloReactCommon.BaseMutationOption
   CreateDatabaseMutation,
   CreateDatabaseMutationVariables
 >;
+export type ServerByIdQueryVariables = {
+  id: Scalars['String'];
+};
+
+export type ServerByIdQuery = { __typename?: 'Query' } & {
+  server?: Maybe<{ __typename?: 'Server' } & Pick<Server, 'id' | 'name'>>;
+};
+
 export const CreateDigitalOceanServerDocument = gql`
   mutation createDigitalOceanServer($serverName: String!) {
     createDigitalOceanServer(serverName: $serverName) {
@@ -409,4 +422,59 @@ export type DashboardLazyQueryHookResult = ReturnType<
 export type DashboardQueryResult = ApolloReactCommon.QueryResult<
   DashboardQuery,
   DashboardQueryVariables
+>;
+export const ServerByIdDocument = gql`
+  query serverById($id: String!) {
+    server(id: $id) {
+      id
+      name
+    }
+  }
+`;
+
+/**
+ * __useServerByIdQuery__
+ *
+ * To run a query within a React component, call `useServerByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useServerByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useServerByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useServerByIdQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    ServerByIdQuery,
+    ServerByIdQueryVariables
+  >
+) {
+  return ApolloReactHooks.useQuery<ServerByIdQuery, ServerByIdQueryVariables>(
+    ServerByIdDocument,
+    baseOptions
+  );
+}
+export function useServerByIdLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    ServerByIdQuery,
+    ServerByIdQueryVariables
+  >
+) {
+  return ApolloReactHooks.useLazyQuery<
+    ServerByIdQuery,
+    ServerByIdQueryVariables
+  >(ServerByIdDocument, baseOptions);
+}
+export type ServerByIdQueryHookResult = ReturnType<typeof useServerByIdQuery>;
+export type ServerByIdLazyQueryHookResult = ReturnType<
+  typeof useServerByIdLazyQuery
+>;
+export type ServerByIdQueryResult = ApolloReactCommon.QueryResult<
+  ServerByIdQuery,
+  ServerByIdQueryVariables
 >;
