@@ -10,7 +10,7 @@ import { config } from '../config';
 import withApollo from '../lib/withApollo';
 import { useDashboardQuery } from '../src/generated/graphql';
 import { LoggedInLayout } from '../layouts/LoggedInLayout';
-import { Typography, BoxButton, Grid } from '../ui';
+import { Typography, BoxButton, Grid, Flex } from '../ui';
 import { RubyIcon } from '../ui/icons/RubyIcon';
 import { PHPIcon } from '../ui/icons/PHPIcon';
 import { NodeIcon } from '../ui/icons/NodeIcon';
@@ -41,6 +41,7 @@ const Dashboard = () => {
           justifyContent="center"
           justifyItems="center"
           alignContent="center"
+          flexGrow={1}
         >
           <Typography.Paragraph marginBottom={0} textAlign="center">
             First thing first!

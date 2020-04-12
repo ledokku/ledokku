@@ -2,11 +2,9 @@ import React from 'react';
 import { rgba } from 'polished';
 
 import { styled } from '../../../StyledComponents';
-import { Box } from '../../Box';
-import { BoxProps } from '../../Box/components/Box';
 import { Typography } from '../../Typography';
 
-export interface BoxButtonProps extends BoxProps {
+export interface BoxButtonProps {
   className?: string;
   selected?: boolean;
   icon?: React.ReactNode;
@@ -32,7 +30,7 @@ const RootComponent: React.FC<BoxButtonProps> = ({
   label,
   disabled,
   ...props
-}) => <Box {...props} />;
+}) => <div {...props} />;
 
 const Root = styled(RootComponent)`
   display: flex;

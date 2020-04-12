@@ -43,6 +43,7 @@ export interface SharedGridProps
   >;
   children: React.ReactNode;
   fullHeight?: boolean;
+  flexGrow?: number;
 }
 
 export interface GridProps extends SharedGridProps {
@@ -108,7 +109,8 @@ const Root = styled(RootComponent)`
   ${maxWidthHelper}
   ${marginHelper}
   ${paddingHelper}
-  height: ${({ fullHeight }) => (fullHeight ? '100%' : 'auto')};
+  min-height: ${({ fullHeight }) => (fullHeight ? '100%' : 'auto')};
+  flex-grow: ${({ flexGrow }) => flexGrow};
   ${({ theme, display }) => getResponsiveProperty('display', display, theme)}
   ${({ theme, gridTemplateColumns }) =>
     getResponsiveProperty('gridTemplateColumns', gridTemplateColumns, theme)}

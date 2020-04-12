@@ -36,6 +36,6 @@ export const Flex = styled(FlexComponent)(
     justifyContent,
     alignItems,
     alignContent,
-    height: fullHeight ? '100%' : 'auto',
+    minHeight: fullHeight ? '100%' : 'auto',
   })
 );
