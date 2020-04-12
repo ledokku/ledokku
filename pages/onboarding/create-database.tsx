@@ -16,9 +16,10 @@ import {
   BoxButton,
   Grid,
 } from '../../ui';
-import { DigitalOceanIcon } from '../../ui/icons/DigitalOceanIcon';
-import { LinodeIcon } from '../../ui/icons/LinodeIcon';
-import { AWSIcon } from '../../ui/icons/AWSIcon';
+import { PostgreSQLIcon } from '../../ui/icons/PostgreSQLIcon';
+import { MySQLIcon } from '../../ui/icons/MySQLIcon';
+import { MongoIcon } from '../../ui/icons/MongoIcon';
+import { RedisIcon } from '../../ui/icons/RedisIcon';
 
 const CloudProvider = () => {
   const router = useRouter();
@@ -71,10 +72,26 @@ const CloudProvider = () => {
             columnGap={16}
             rowGap={16}
           >
-            <BoxButton selected={true} label="PostgreSQL" />
-            <BoxButton label="MySQL" disabled={true} />
-            <BoxButton label="Mongo" disabled={true} />
-            <BoxButton label="Redis" disabled={true} />
+            <BoxButton
+              selected={true}
+              label="PostgreSQL"
+              icon={<PostgreSQLIcon size={40} />}
+            />
+            <BoxButton
+              label="MySQL"
+              icon={<MySQLIcon size={40} />}
+              disabled={true}
+            />
+            <BoxButton
+              label="Mongo"
+              icon={<MongoIcon size={40} />}
+              disabled={true}
+            />
+            <BoxButton
+              label="Redis"
+              icon={<RedisIcon size={40} />}
+              disabled={true}
+            />
           </Grid>
           <Typography.Caption marginTop={8}>
             We currently only provide PostgreSQL
