@@ -1,0 +1,14 @@
+query dashboard {
+  servers {
+    id
+    name
+    apps {
+      id
+      name
+    }
+    databases {
+      id
+      name
+    }
+  }
+}

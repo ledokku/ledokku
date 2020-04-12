@@ -39,6 +39,17 @@ export type LoginResult = {
   token: Scalars['String'];
 };
 
+export type CreateAppInput = {
+  serverId: Scalars['String'];
+  name: Scalars['String'];
+  gitUrl: Scalars['String'];
+};
+
+export type CreateDatabaseInput = {
+  serverId: Scalars['String'];
+  name: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   servers?: Maybe<Array<Server>>;
@@ -49,6 +60,8 @@ export type Mutation = {
   loginWithGithub?: Maybe<LoginResult>;
   saveDigitalOceanAccessToken?: Maybe<Scalars['Boolean']>;
   createDigitalOceanServer?: Maybe<Scalars['Boolean']>;
+  createApp: App;
+  createDatabase: Database;
 };
 
 export type MutationLoginWithGithubArgs = {
@@ -61,6 +74,14 @@ export type MutationSaveDigitalOceanAccessTokenArgs = {
 
 export type MutationCreateDigitalOceanServerArgs = {
   serverName: Scalars['String'];
+};
+
+export type MutationCreateAppArgs = {
+  input: CreateAppInput;
+};
+
+export type MutationCreateDatabaseArgs = {
+  input: CreateDatabaseInput;
 };
 
 export enum CacheControlScope {
@@ -93,6 +114,23 @@ export type SaveDigitalOceanAccessTokenMutationVariables = {
 export type SaveDigitalOceanAccessTokenMutation = {
   __typename?: 'Mutation';
 } & Pick<Mutation, 'saveDigitalOceanAccessToken'>;
+
+export type DashboardQueryVariables = {};
+
+export type DashboardQuery = { __typename?: 'Query' } & {
+  servers?: Maybe<
+    Array<
+      { __typename?: 'Server' } & Pick<Server, 'id' | 'name'> & {
+          apps?: Maybe<
+            Array<{ __typename?: 'App' } & Pick<App, 'id' | 'name'>>
+          >;
+          databases?: Maybe<
+            Array<{ __typename?: 'Database' } & Pick<Database, 'id' | 'name'>>
+          >;
+        }
+    >
+  >;
+};
 
 export const CreateDigitalOceanServerDocument = gql`
   mutation createDigitalOceanServer($serverName: String!) {
@@ -241,4 +279,66 @@ export type SaveDigitalOceanAccessTokenMutationResult = ApolloReactCommon.Mutati
 export type SaveDigitalOceanAccessTokenMutationOptions = ApolloReactCommon.BaseMutationOptions<
   SaveDigitalOceanAccessTokenMutation,
   SaveDigitalOceanAccessTokenMutationVariables
+>;
+export const DashboardDocument = gql`
+  query dashboard {
+    servers {
+      id
+      name
+      apps {
+        id
+        name
+      }
+      databases {
+        id
+        name
+      }
+    }
+  }
+`;
+
+/**
+ * __useDashboardQuery__
+ *
+ * To run a query within a React component, call `useDashboardQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDashboardQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDashboardQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useDashboardQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    DashboardQuery,
+    DashboardQueryVariables
+  >
+) {
+  return ApolloReactHooks.useQuery<DashboardQuery, DashboardQueryVariables>(
+    DashboardDocument,
+    baseOptions
+  );
+}
+export function useDashboardLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    DashboardQuery,
+    DashboardQueryVariables
+  >
+) {
+  return ApolloReactHooks.useLazyQuery<DashboardQuery, DashboardQueryVariables>(
+    DashboardDocument,
+    baseOptions
+  );
+}
+export type DashboardQueryHookResult = ReturnType<typeof useDashboardQuery>;
+export type DashboardLazyQueryHookResult = ReturnType<
+  typeof useDashboardLazyQuery
+>;
+export type DashboardQueryResult = ApolloReactCommon.QueryResult<
+  DashboardQuery,
+  DashboardQueryVariables
 >;
