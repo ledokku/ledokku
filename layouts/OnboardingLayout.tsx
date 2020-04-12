@@ -13,18 +13,30 @@ export const OnboardingLayout: React.FC<OnboardingLayoutProps> = ({
   breadcrumb,
 }) => (
   <DefaultLayout>
-    <Layout padding={24}>
+    <Layout>
       <Page.BreadcrumbHeader items={breadcrumb} />
       {children}
     </Layout>
   </DefaultLayout>
 );
 
-const Layout = styled(Box)`
+const Layout = styled.div`
   box-sizing: border-box;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  grid-row-gap: 80px;
+  max-width: 800px;
+  width: 100%;
+  margin: 80px auto 40px;
+  padding: 64px;
+
+  @media ${({ theme }) => theme.media.tablet} {
+    margin: 0 auto;
+    grid-row-gap: 40px;
+  }
+
+  @media ${({ theme }) => theme.media.phone} {
+    margin: 0 auto;
+    grid-row-gap: 40px;
+    padding: 24px;
+  }
 `;
