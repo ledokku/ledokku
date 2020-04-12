@@ -9,6 +9,7 @@ export interface LoggedInLayoutProps extends DefaultLayoutProps {
 
 export const LoggedInLayout: React.FC<LoggedInLayoutProps> = ({
   breadcrumb,
+  children,
   ...props
 }) => {
   return (
@@ -20,8 +21,8 @@ export const LoggedInLayout: React.FC<LoggedInLayoutProps> = ({
           <div>Profile</div>
         </Flex>
       </Box>
-      <Divider.Vertical />
-      <span>Hey</span>
+      <Divider.Horizontal />
+      {children}
     </DefaultLayout>
   );
 };
