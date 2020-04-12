@@ -76,6 +76,9 @@ const CloudProvider = () => {
             <BoxButton label="Mongo" disabled={true} />
             <BoxButton label="Redis" disabled={true} />
           </Grid>
+          <Typography.Caption marginTop={8}>
+            We currently only provide PostgreSQL
+          </Typography.Caption>
         </Box>
         <Flex justifyContent="flex-end">
           <Button type="submit" background="primary" endIcon={<ArrowRight />}>
