@@ -13,10 +13,10 @@ export const spacingTypographyHelper = styledComponents.css<
     marginTop,
     marginBottom,
     '&:first-child': {
-      marginTop: 0,
+      marginTop: typeof marginTop === 'undefined' ? 0 : marginTop,
     },
     '&:last-child': {
-      marginBottom: 0,
+      marginBottom: typeof marginBottom === 'undefined' ? 0 : marginBottom,
     },
   });
 });

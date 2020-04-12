@@ -18,6 +18,8 @@ export const typography = {
   } as CSSProperties,
   h2: {
     ...headlineTypography,
+    fontWeight: 'normal',
+    fontSize: '1.5rem',
   } as CSSProperties,
   h3: {
     ...headlineTypography,
@@ -69,7 +71,7 @@ export const typography = {
 
 export const DefaultTheme = {
   background: 'white',
-  foreground: 'black',
+  foreground: '#222',
 
   primary: '#2F51C7',
 

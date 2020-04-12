@@ -1,5 +1,4 @@
 import React from 'react';
-import { rgba } from 'polished';
 
 import { styled } from '../../..';
 import { DividerVertical } from '../../Divider/components/DividerVertical';
@@ -18,11 +17,11 @@ export const BreadcrumbHeader: React.FC<BreadcrumbHeaderProps> = (props) => {
   return (
     <Root>
       <Breadcrumb>
-        <Item>
+        <LogoItem>
           <Link href="/">
             <LogoLabel>Ledokku</LogoLabel>
           </Link>
-        </Item>
+        </LogoItem>
 
         {items.map((item, index) => (
           <Item key={index}>
@@ -63,6 +62,16 @@ const BreadcrumbDivider = styled(DividerVertical)`
 const Item = styled.div`
   display: flex;
   align-items: center;
+
+  @media ${({ theme }) => theme.media.phone} {
+    display: none;
+  }
+`;
+
+const LogoItem = styled(Item)`
+  @media ${({ theme }) => theme.media.phone} {
+    display: flex;
+  }
 `;
 
 const Link = styled.a`
@@ -75,6 +84,14 @@ const Link = styled.a`
 const Label = styled.span`
   font-family: ${({ theme }) => theme.typography.label.fontFamily};
   font-size: 20px;
+
+  @media ${({ theme }) => theme.media.tablet} {
+    font-size: 16px;
+  }
+
+  @media ${({ theme }) => theme.media.phone} {
+    font-size: 16px;
+  }
 `;
 
 const LogoLabel = styled(Label)`

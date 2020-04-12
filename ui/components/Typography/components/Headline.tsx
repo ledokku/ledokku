@@ -10,7 +10,7 @@ import {
 export interface HeadlineProps extends TypographyProps, SpacingTypographyProps {
   className?: string;
   level: 1 | 2 | 3 | 4 | 5 | 6;
-  children?: string;
+  children?: string | React.ReactNode;
 }
 
 export const Headline: React.FC<HeadlineProps> = (props) => {
