@@ -19,7 +19,7 @@ export interface BoxButtonProps extends BoxProps {
 export const BoxButton: React.FC<BoxButtonProps> = ({ children, ...props }) => {
   const { label, icon, size = 'normal' } = props;
   return (
-    <Root {...props}>
+    <Root {...props} size={size}>
       {icon && <Icon>{icon}</Icon>}
       {label && <Label>{label}</Label>}
     </Root>
@@ -45,7 +45,7 @@ const Root = styled(RootComponent)`
   transition: ${({ theme }) => theme.transition};
   color: ${({ selected, theme }) =>
     selected ? theme.primary : theme.foreground};
-  padding: ${({ size }) => (size === 'normal' ? 24 : 64)}px
+  padding: ${({ size }) => (size === 'normal' ? 40 : 64)}px
     ${({ size }) => (size === 'normal' ? 24 : 64)}px;
   border-radius: 4px;
   cursor: pointer;
@@ -82,4 +82,5 @@ const Icon = styled.div`
 
 const Label = styled(Typography.Label)`
   color: currentColor;
+  text-align: center;
 `;
