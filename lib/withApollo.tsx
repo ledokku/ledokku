@@ -6,7 +6,7 @@ import { config } from '../config';
 export default withApollo(
   ({ initialState }) => {
     return new ApolloClient({
-      uri: config.serverUrl,
+      uri: `${config.serverUrl}/graphql`,
       cache: new InMemoryCache().restore(initialState || {}),
     });
   },
