@@ -9,6 +9,7 @@ import { Paragraph } from '../ui/components/Typography/components/Paragraph';
 import { config } from '../config';
 import withApollo from '../lib/withApollo';
 import { useDashboardQuery } from '../src/generated/graphql';
+import { LoggedInLayout } from '../layouts/LoggedInLayout';
 
 const Dashboard = () => {
   const router = useRouter();
@@ -22,7 +23,13 @@ const Dashboard = () => {
   };
 
   return (
-    <div>
+    <LoggedInLayout
+      breadcrumb={[
+        {
+          label: 'Dashboard',
+        },
+      ]}
+    >
       <p>Yo welcome</p>
       {data?.servers?.length === 0 && (
         <p>
@@ -44,7 +51,7 @@ const Dashboard = () => {
           <p>-----------------------------</p>
         </div>
       ))}
-    </div>
+    </LoggedInLayout>
   );
 };
 
