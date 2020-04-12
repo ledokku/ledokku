@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { GitHub } from 'react-feather';
+import { GitHub, Divide } from 'react-feather';
 import { useRouter } from 'next/router';
 
 import { LandingLayout } from '../layouts/LandingLayout';
@@ -30,6 +30,20 @@ const Dashboard = () => {
           <button onClick={handleCreateFirstApp}>+ Create a new app</button>
         </p>
       )}
+      {data?.servers.map((server) => (
+        <div key={server.id}>
+          <p>Server name: {server.name}</p>
+          <p>Apps:</p>
+          {server.apps?.map((app) => (
+            <div key={app.id}>App name: {app.name}</div>
+          ))}
+          <p>Databases:</p>
+          {server.databases?.map((database) => (
+            <div key={database.id}>Database name: {database.name}</div>
+          ))}
+          <p>-----------------------------</p>
+        </div>
+      ))}
     </div>
   );
 };
