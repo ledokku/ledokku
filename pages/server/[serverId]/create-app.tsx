@@ -12,9 +12,10 @@ const CreateApp = () => {
   const router = useRouter();
   const { serverId } = router.query as { serverId: string };
   const [createAppMutation] = useCreateAppMutation();
-  const formik = useFormik<{ name: string }>({
+  const formik = useFormik<{ name: string; gitUrl: string }>({
     initialValues: {
       name: '',
+      gitUrl: '',
     },
     onSubmit: async (values) => {
       // TODO validation name is required
@@ -66,8 +67,15 @@ const CreateApp = () => {
           <TextField
             id="name"
             name="name"
-            label="Enter the git url of your new app"
+            label="Enter the name of your new app"
             value={formik.values.name}
+            onChange={formik.handleChange}
+          />
+          <TextField
+            id="gitUrl"
+            name="gitUrl"
+            label="Enter the git url of your new app"
+            value={formik.values.gitUrl}
             onChange={formik.handleChange}
           />
           <Flex justifyContent="flex-end">

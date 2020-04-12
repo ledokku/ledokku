@@ -154,7 +154,11 @@ const Dashboard = () => {
               </Grid>
             ))}
 
-            <BoxButton label="Create a new server" icon={<Plus />} />
+            <BoxButton
+              label="Create a new server"
+              icon={<Plus />}
+              onClick={() => router.push(`/onboarding/create-server`)}
+            />
           </Grid>
         </Box>
       )}
