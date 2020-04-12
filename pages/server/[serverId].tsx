@@ -155,6 +155,11 @@ const Server = () => {
           tablet: 40,
           phone: 24,
         }}
+        marginBottom={{
+          desktop: 80,
+          tablet: 40,
+          phone: 24,
+        }}
       >
         <Typography.Headline
           level={2}

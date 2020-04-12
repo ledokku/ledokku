@@ -24,6 +24,7 @@ const Root = styled(Box)`
   background: ${({ theme }) => theme.foreground};
   color: ${({ theme }) => theme.background};
   border-radius: 4px;
+  box-shadow: 0 16px 64px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.2);
 `;
 
 const Title = styled(Typography.Label)`
