@@ -74,26 +74,10 @@ const CloudProvider = () => {
             columnGap={16}
             rowGap={16}
           >
-            <BoxButton
-              selected={true}
-              label="PostgreSQL"
-              icon={<DigitalOceanIcon size={40} />}
-            />
-            <BoxButton
-              label="MySQL"
-              disabled={true}
-              icon={<LinodeIcon size={40} />}
-            />
-            <BoxButton
-              label="Mongo"
-              disabled={true}
-              icon={<AWSIcon size={40} />}
-            />
-            <BoxButton
-              label="Redis"
-              disabled={true}
-              icon={<AWSIcon size={40} />}
-            />
+            <BoxButton selected={true} label="PostgreSQL" />
+            <BoxButton label="MySQL" disabled={true} />
+            <BoxButton label="Mongo" disabled={true} />
+            <BoxButton label="Redis" disabled={true} />
           </Grid>
         </Box>
         <Flex justifyContent="flex-end">
