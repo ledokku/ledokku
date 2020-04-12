@@ -3,6 +3,7 @@ import React from 'react';
 import { styled } from '../../..';
 
 export interface FlexProps {
+  className?: string;
   display?: 'flex' | 'inline-flex';
   flexDirection?: React.CSSProperties['flexDirection'];
   flexWrap?: React.CSSProperties['flexWrap'];
@@ -13,7 +14,9 @@ export interface FlexProps {
   fullHeight?: boolean;
 }
 
-const FlexComponent: React.FC<FlexProps> = (props) => <div {...props} />;
+const FlexComponent: React.FC<FlexProps> = ({ children, className }) => (
+  <div className={className}>{children}</div>
+);
 
 export const Flex = styled(FlexComponent)(
   ({
