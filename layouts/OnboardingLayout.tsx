@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { DefaultLayout } from './DefaultLayout';
-import { styled, Box, Flex, Page } from '../ui';
+import { styled, Box, Page } from '../ui';
 import { BreadcrumbHeaderProps } from '../ui/components/Page/components/BreadcrumbHeader';
 
 export interface OnboardingLayoutProps {
@@ -22,9 +22,14 @@ export const OnboardingLayout: React.FC<OnboardingLayoutProps> = ({
 
 const Layout = styled(Box)`
   box-sizing: border-box;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  grid-row-gap: 80px;
+  max-width: 800px;
+  width: 100%;
+  margin: 80px auto;
+
+  @media ${({ theme }) => theme.media.phone} {
+    margin: 0 auto;
+    grid-row-gap: 40px;
+  }
 `;

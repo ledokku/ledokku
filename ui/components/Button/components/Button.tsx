@@ -5,6 +5,8 @@ import { styled } from '../../../StyledComponents';
 export interface ButtonProps {
   children?: React.ReactNode;
   className?: string;
+  background?: 'foreground' | 'primary';
+  type?: 'submit' | 'button';
   size?: 'normal' | 'large';
   variant?: 'solid';
   startIcon?: React.ReactNode;
@@ -35,14 +37,19 @@ const RootComponent: React.FC<ButtonProps> = ({
   size,
   startIcon,
   endIcon,
+  background,
   ...props
 }) => <button {...props} />;
 
 const Root = styled(RootComponent)`
   position: relative;
   box-sizing: border-box;
-  background: ${({ theme, variant }) =>
-    variant === 'solid' ? theme.foreground : 'transparent'};
+  background: ${({ theme, variant, background }) =>
+    variant === 'solid'
+      ? background === 'primary'
+        ? theme.primary
+        : theme.foreground
+      : 'transparent'};
   border: none;
   color: ${({ theme, variant }) =>
     variant === 'solid' ? theme.background : theme.foreground};
@@ -57,7 +64,7 @@ const Root = styled(RootComponent)`
 
   display: inline-flex;
   flex-direction: row;
-  padding: 0 32px;
+  padding: 0 ${({ size }: ButtonProps) => (size === 'normal' ? 24 : 32)}px;
   align-items: center;
 
   height: ${({ size }: ButtonProps) => (size === 'normal' ? 48 : 56)}px;
@@ -66,7 +73,7 @@ const Root = styled(RootComponent)`
     opacity: 0.9;
   }
   &:active {
-    opacity: 0.6;
+    opacity: 0.75;
     transform: scale(0.95);
   }
   &:focus {

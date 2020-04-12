@@ -7,20 +7,20 @@ import {
   spacingTypographyHelper,
 } from '../utils/spacingTypographyHelper';
 
-export interface LabelProps extends TypographyProps, SpacingTypographyProps {
+export interface CaptionProps extends TypographyProps, SpacingTypographyProps {
   className?: string;
   display?: 'block' | 'inline';
 }
 
-export const Label: React.FC<LabelProps> = (props) => <Root {...props} />;
+export const Caption: React.FC<CaptionProps> = (props) => <Root {...props} />;
 
-const RootComponent: React.FC<LabelProps> = (props) => {
+const RootComponent: React.FC<CaptionProps> = (props) => {
   const { className, children } = props;
   return <span className={className}>{children}</span>;
 };
 
 const RootWithTheme = styled(RootComponent)(({ theme }) => ({
-  ...theme.typography.label,
+  ...theme.typography.caption,
   color: theme.foreground,
 }));
 
