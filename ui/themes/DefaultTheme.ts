@@ -43,15 +43,14 @@ export const typography = {
   } as CSSProperties,
   button: {
     fontFamily: "'Source Sans Pro', 'Helvetica', 'Arial', sans",
-    fontSize: '1.125rem',
-    lineHeight: '1.125em',
+    fontSize: '1rem',
+    lineHeight: '1em',
     fontWeight: 600,
   } as CSSProperties,
   label: {
     fontFamily: "'Source Sans Pro', 'Helvetica', 'Arial', sans",
-    fontWeight: 'bold',
     fontSize: '1rem',
-    letterSpacing: '0.1em',
+    fontWeight: 'normal',
   } as CSSProperties,
   link: {
     fontFamily: "'Source Sans Pro', 'Helvetica', 'Arial', sans",
@@ -71,6 +70,8 @@ export const typography = {
 export const DefaultTheme = {
   background: 'white',
   foreground: 'black',
+
+  primary: '#2F51C7',
 
   transition: '250ms',
 
