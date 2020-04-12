@@ -14,15 +14,17 @@ export const LoggedInLayout: React.FC<LoggedInLayoutProps> = ({
 }) => {
   return (
     <DefaultLayout {...props}>
-      <Box padding={24}>
-        <Flex justifyContent="space-between">
-          <Page.BreadcrumbHeader items={breadcrumb} />
+      <Flex fullHeight={true} flexDirection="column">
+        <Box padding={24}>
+          <Flex justifyContent="space-between">
+            <Page.BreadcrumbHeader items={breadcrumb} />
 
-          <div>Profile</div>
-        </Flex>
-      </Box>
-      <Divider.Horizontal />
-      {children}
+            <div>Profile</div>
+          </Flex>
+        </Box>
+        <Divider.Horizontal />
+        {children}
+      </Flex>
     </DefaultLayout>
   );
 };

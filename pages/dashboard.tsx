@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { GitHub, Divide } from 'react-feather';
+import { GitHub, Divide, Plus } from 'react-feather';
 import { useRouter } from 'next/router';
 
 import { LandingLayout } from '../layouts/LandingLayout';
@@ -10,6 +10,10 @@ import { config } from '../config';
 import withApollo from '../lib/withApollo';
 import { useDashboardQuery } from '../src/generated/graphql';
 import { LoggedInLayout } from '../layouts/LoggedInLayout';
+import { Typography, BoxButton, Grid } from '../ui';
+import { RubyIcon } from '../ui/icons/RubyIcon';
+import { PHPIcon } from '../ui/icons/PHPIcon';
+import { NodeIcon } from '../ui/icons/NodeIcon';
 
 const Dashboard = () => {
   const router = useRouter();
@@ -30,12 +34,29 @@ const Dashboard = () => {
         },
       ]}
     >
-      <p>Yo welcome</p>
       {data?.servers?.length === 0 && (
-        <p>
-          TODO add empty Dashboard here{' '}
-          <button onClick={handleCreateFirstApp}>+ Create a new app</button>
-        </p>
+        <Grid
+          fullHeight={true}
+          rowGap={40}
+          justifyContent="center"
+          justifyItems="center"
+          alignContent="center"
+        >
+          <Typography.Paragraph marginBottom={0} textAlign="center">
+            First thing first!
+          </Typography.Paragraph>
+          <BoxButton
+            onClick={handleCreateFirstApp}
+            icon={<Plus />}
+            label="Create a new app"
+            size="large"
+          />
+          <Grid templateColumns="24px 24px 24px" columnGap={32}>
+            <RubyIcon opacity={0.2} />
+            <PHPIcon opacity={0.2} />
+            <NodeIcon opacity={0.2} />
+          </Grid>
+        </Grid>
       )}
       {data?.servers.map((server) => (
         <div key={server.id}>

@@ -10,6 +10,7 @@ export interface FlexProps {
   justifyContent?: React.CSSProperties['justifyContent'];
   alignItems?: React.CSSProperties['alignItems'];
   alignContent?: React.CSSProperties['alignContent'];
+  fullHeight?: boolean;
 }
 
 const FlexComponent: React.FC<FlexProps> = (props) => <div {...props} />;
@@ -23,6 +24,7 @@ export const Flex = styled(FlexComponent)(
     justifyContent,
     alignItems,
     alignContent,
+    fullHeight,
   }) => ({
     display,
     flexDirection,
@@ -31,5 +33,6 @@ export const Flex = styled(FlexComponent)(
     justifyContent,
     alignItems,
     alignContent,
+    height: fullHeight ? '100%' : 'auto',
   })
 );

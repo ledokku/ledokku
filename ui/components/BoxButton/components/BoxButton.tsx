@@ -12,10 +12,12 @@ export interface BoxButtonProps extends BoxProps {
   icon?: React.ReactNode;
   label?: string;
   disabled?: boolean;
+  size?: 'normal' | 'large';
+  onClick?(): void;
 }
 
 export const BoxButton: React.FC<BoxButtonProps> = ({ children, ...props }) => {
-  const { label, icon } = props;
+  const { label, icon, size = 'normal' } = props;
   return (
     <Root {...props}>
       {icon && <Icon>{icon}</Icon>}
@@ -33,6 +35,9 @@ const RootComponent: React.FC<BoxButtonProps> = ({
 }) => <Box {...props} />;
 
 const Root = styled(RootComponent)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background: ${({ theme }) => theme.background};
   box-shadow: inset 0 0 0 ${({ selected }) => (selected ? 2 : 1)}px
     ${({ selected, theme }) =>
@@ -40,7 +45,8 @@ const Root = styled(RootComponent)`
   transition: ${({ theme }) => theme.transition};
   color: ${({ selected, theme }) =>
     selected ? theme.primary : theme.foreground};
-  padding: 24px;
+  padding: ${({ size }) => (size === 'normal' ? 24 : 64)}px
+    ${({ size }) => (size === 'normal' ? 24 : 64)}px;
   border-radius: 4px;
   cursor: pointer;
 
@@ -48,12 +54,31 @@ const Root = styled(RootComponent)`
     outline: none;
   }
 
+  &:hover {
+    box-shadow: inset 0 0 0 2px
+      ${({ theme, disabled }) =>
+        disabled ? rgba(theme.foreground, 0.1) : theme.primary};
+    color: ${({ theme, disabled }) =>
+      disabled ? theme.foreground : theme.primary};
+  }
+
+  &:hover {
+    opacity: 0.9;
+  }
+  &:active {
+    opacity: 0.75;
+    transform: scale(${({ theme, disabled }) => (disabled ? 0.98 : 0.95)});
+  }
+
   * {
     opacity: ${({ disabled }) => (disabled ? 0.25 : 1)};
   }
 `;
 
-const Icon = styled.div``;
+const Icon = styled.div`
+  font-size: 0;
+  margin-bottom: 16px;
+`;
 
 const Label = styled(Typography.Label)`
   color: currentColor;

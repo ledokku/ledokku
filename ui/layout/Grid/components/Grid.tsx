@@ -42,6 +42,7 @@ export interface SharedGridProps
     | 'space-evenly'
   >;
   children: React.ReactNode;
+  fullHeight?: boolean;
 }
 
 export interface GridProps extends SharedGridProps {
@@ -107,6 +108,7 @@ const Root = styled(RootComponent)`
   ${maxWidthHelper}
   ${marginHelper}
   ${paddingHelper}
+  height: ${({ fullHeight }) => (fullHeight ? '100%' : 'auto')};
   ${({ theme, display }) => getResponsiveProperty('display', display, theme)}
   ${({ theme, gridTemplateColumns }) =>
     getResponsiveProperty('gridTemplateColumns', gridTemplateColumns, theme)}
