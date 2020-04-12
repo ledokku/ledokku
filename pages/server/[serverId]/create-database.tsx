@@ -2,9 +2,9 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
 
-import { useCreateDatabaseMutation } from '../../src/generated/graphql';
-import { OnboardingLayout } from '../../layouts/OnboardingLayout';
-import withApollo from '../../lib/withApollo';
+import { useCreateDatabaseMutation } from '../../../src/generated/graphql';
+import { OnboardingLayout } from '../../../layouts/OnboardingLayout';
+import withApollo from '../../../lib/withApollo';
 import { ArrowRight } from 'react-feather';
 import {
   TextField,
@@ -15,10 +15,11 @@ import {
   Box,
   BoxButton,
   Grid,
-} from '../../ui';
+} from '../../../ui';
 
 const CreateDatabase = () => {
   const router = useRouter();
+  const { serverId } = router.query as { serverId: string };
   const [createDatabaseMutation] = useCreateDatabaseMutation();
   console.log('router:', router);
   const formik = useFormik<{ name: string }>({
@@ -29,7 +30,7 @@ const CreateDatabase = () => {
       // TODO validation token is required
       try {
         const data = await createDatabaseMutation({
-          variables: { name: values.name, serverId: 'NEEDTOFILLWTIHREALVALUE' },
+          variables: { name: values.name, serverId },
         });
         console.log(data);
         router.push('/dashboard');
