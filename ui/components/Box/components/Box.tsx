@@ -6,6 +6,7 @@ import { MaxWidthProps, maxWidthHelper } from '../../../utils/maxWidthHelper';
 
 export interface BoxProps extends MarginProps, PaddingProps, MaxWidthProps {
   className?: string;
+  width?: '100%';
 }
 
 export const Box: React.FC<BoxProps> = (props) => {
@@ -16,6 +17,7 @@ const RootComponent: React.FC<BoxProps> = ({ className, children }) => (
   <div className={className}>{children}</div>
 );
 const Root = styled(RootComponent)`
+  width: ${({ width }) => width};
   ${marginHelper}
   ${paddingHelper}
   ${maxWidthHelper}

@@ -10,6 +10,7 @@ import {
 export interface LabelProps extends TypographyProps, SpacingTypographyProps {
   className?: string;
   display?: 'block' | 'inline';
+  opacity?: number;
 }
 
 export const Label: React.FC<LabelProps> = (props) => <Root {...props} />;
@@ -28,4 +29,5 @@ const Root = styled(RootWithTheme)`
   ${typographyHelper}
   ${spacingTypographyHelper}
   display: ${({ display = 'block' }) => display};
+  opacity: ${({ opacity }) => opacity};
 `;

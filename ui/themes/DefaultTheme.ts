@@ -23,15 +23,19 @@ export const typography = {
   } as CSSProperties,
   h3: {
     ...headlineTypography,
+    fontWeight: 'normal',
   } as CSSProperties,
   h4: {
     ...headlineTypography,
+    fontWeight: 'normal',
   } as CSSProperties,
   h5: {
     ...headlineTypography,
+    fontWeight: 'normal',
   } as CSSProperties,
   h6: {
     ...headlineTypography,
+    fontWeight: 'normal',
   } as CSSProperties,
   paragraph: {
     fontFamily: "'Source Sans Pro', 'Helvetica', 'Arial', sans",
@@ -61,7 +65,7 @@ export const typography = {
   } as CSSProperties,
   caption: {
     fontFamily: "'Source Sans Pro' , 'Helvetica' , 'Arial' , sans",
-    fontSize: '0.75rem',
+    fontSize: '0.875rem',
     opacity: 0.5,
   },
   small: {
