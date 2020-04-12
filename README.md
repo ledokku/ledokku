@@ -1,1 +1,3 @@
-# ledokku
+# Ledokku
+
+![Dashboard](/images/Dashboard.png)
