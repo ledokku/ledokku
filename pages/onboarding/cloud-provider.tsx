@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
 
 import { useSaveDigitalOceanAccessTokenMutation } from '../../src/generated/graphql';
@@ -17,6 +18,7 @@ import {
 } from '../../ui';
 
 const CloudProvider = () => {
+  const router = useRouter();
   const [
     saveDigitalOceanAccessTokenMutation,
   ] = useSaveDigitalOceanAccessTokenMutation();
@@ -31,7 +33,7 @@ const CloudProvider = () => {
           variables: { digitalOceanAccessToken: values.token },
         });
         console.log(data);
-        // TODO if successful redirect to next step
+        router.push('/onboarding/create-server');
       } catch (error) {
         // TODO catch errors
         console.log(error);
