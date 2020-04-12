@@ -40,7 +40,13 @@ const Home = () => {
       }
     };
 
-    login();
+    // First we check if the user is connected, if yes we need to redirect him to the dashboard
+    const authToken = localStorage.getItem('accessToken');
+    if (authToken) {
+      router.push('/dashboard');
+    } else {
+      login();
+    }
   }, []);
 
   const handleLogin = () => {
