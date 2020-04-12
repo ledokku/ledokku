@@ -1,0 +1,3 @@
+mutation saveDigitalOceanAccessToken($digitalOceanAccessToken: String!) {
+  saveDigitalOceanAccessToken(digitalOceanAccessToken: $digitalOceanAccessToken)
+}

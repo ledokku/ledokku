@@ -28,6 +28,7 @@
     "@types/styled-components": "^5.0.1",
     "apollo-boost": "0.4.7",
     "dotenv": "8.2.0",
+    "formik": "2.1.4",
     "graphql": "15.0.0",
     "next": "9.3.4",
     "next-with-apollo": "5.0.0",

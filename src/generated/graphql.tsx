@@ -58,6 +58,14 @@ export type LoginWithGithubMutation = { __typename?: 'Mutation' } & {
   >;
 };
 
+export type SaveDigitalOceanAccessTokenMutationVariables = {
+  digitalOceanAccessToken: Scalars['String'];
+};
+
+export type SaveDigitalOceanAccessTokenMutation = {
+  __typename?: 'Mutation';
+} & Pick<Mutation, 'saveDigitalOceanAccessToken'>;
+
 export const LoginWithGithubDocument = gql`
   mutation loginWithGithub($code: String!) {
     loginWithGithub(code: $code) {
@@ -107,4 +115,54 @@ export type LoginWithGithubMutationResult = ApolloReactCommon.MutationResult<
 export type LoginWithGithubMutationOptions = ApolloReactCommon.BaseMutationOptions<
   LoginWithGithubMutation,
   LoginWithGithubMutationVariables
+>;
+export const SaveDigitalOceanAccessTokenDocument = gql`
+  mutation saveDigitalOceanAccessToken($digitalOceanAccessToken: String!) {
+    saveDigitalOceanAccessToken(
+      digitalOceanAccessToken: $digitalOceanAccessToken
+    )
+  }
+`;
+export type SaveDigitalOceanAccessTokenMutationFn = ApolloReactCommon.MutationFunction<
+  SaveDigitalOceanAccessTokenMutation,
+  SaveDigitalOceanAccessTokenMutationVariables
+>;
+
+/**
+ * __useSaveDigitalOceanAccessTokenMutation__
+ *
+ * To run a mutation, you first call `useSaveDigitalOceanAccessTokenMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSaveDigitalOceanAccessTokenMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [saveDigitalOceanAccessTokenMutation, { data, loading, error }] = useSaveDigitalOceanAccessTokenMutation({
+ *   variables: {
+ *      digitalOceanAccessToken: // value for 'digitalOceanAccessToken'
+ *   },
+ * });
+ */
+export function useSaveDigitalOceanAccessTokenMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    SaveDigitalOceanAccessTokenMutation,
+    SaveDigitalOceanAccessTokenMutationVariables
+  >
+) {
+  return ApolloReactHooks.useMutation<
+    SaveDigitalOceanAccessTokenMutation,
+    SaveDigitalOceanAccessTokenMutationVariables
+  >(SaveDigitalOceanAccessTokenDocument, baseOptions);
+}
+export type SaveDigitalOceanAccessTokenMutationHookResult = ReturnType<
+  typeof useSaveDigitalOceanAccessTokenMutation
+>;
+export type SaveDigitalOceanAccessTokenMutationResult = ApolloReactCommon.MutationResult<
+  SaveDigitalOceanAccessTokenMutation
+>;
+export type SaveDigitalOceanAccessTokenMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  SaveDigitalOceanAccessTokenMutation,
+  SaveDigitalOceanAccessTokenMutationVariables
 >;
