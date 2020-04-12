@@ -37,30 +37,33 @@ const CreateApp = () => {
     <LoggedInLayout
       breadcrumb={[
         {
-          label: 'Dashboard',
-          href: '/dashboard',
+          label: 'Berlin Library Project',
         },
         {
-          label: 'Berlin Library Project - Create new app',
+          label: 'New App',
         },
       ]}
     >
       <Box
-        marginLeft={{
+        margin={{
           desktop: 80,
           tablet: 40,
           phone: 24,
         }}
-        marginRight={{
+        marginLeft="auto"
+        marginRight="auto"
+        paddingLeft={{
           desktop: 80,
           tablet: 40,
           phone: 24,
         }}
-        marginBottom={{
+        paddingRight={{
           desktop: 80,
           tablet: 40,
           phone: 24,
         }}
+        width="100%"
+        maxWidth={800}
       >
         <Form onSubmit={formik.handleSubmit}>
           <TextField
