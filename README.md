@@ -17,6 +17,17 @@ And link them with wide most popular dbs : **postgresql, mongodb, redis**.
  - Link your custom domain
  - App is live 🎉🎉🎉
  
+
+**Built with** :
+Node.js 💚
+GraphQL 💓
+Prisma △
+TypeScript 💙
+NextJS 🖤
+GithubAPI 🐱
+DIgitalOceanAPI 🌊
+dokku 🐳
+ 
  Made by 
  [Ondrej](https://github.com/orgs/ledokku/people/bartaxyz),
  [Leo](https://github.com/orgs/ledokku/people/pradel),

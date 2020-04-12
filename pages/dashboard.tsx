@@ -119,7 +119,13 @@ const Dashboard = () => {
                         />
                       ))}
 
-                      <BoxButton label="New App" icon={<Plus />} />
+                      <BoxButton
+                        label="New App"
+                        icon={<Plus />}
+                        onClick={() =>
+                          router.push(`/server/${server.id}/create-app`)
+                        }
+                      />
                     </Grid>
                   </Box>
 
@@ -135,14 +141,24 @@ const Dashboard = () => {
                           icon={<PostgreSQLIcon size={24} />}
                         />
                       ))}
-                      <BoxButton label="New Database" icon={<Plus />} />
+                      <BoxButton
+                        label="New Database"
+                        icon={<Plus />}
+                        onClick={() =>
+                          router.push(`/server/${server.id}/create-database`)
+                        }
+                      />
                     </Grid>
                   </Box>
                 </Grid>
               </Grid>
             ))}
 
-            <BoxButton label="Create a new server" icon={<Plus />} />
+            <BoxButton
+              label="Create a new server"
+              icon={<Plus />}
+              onClick={() => router.push(`/onboarding/create-server`)}
+            />
           </Grid>
         </Box>
       )}

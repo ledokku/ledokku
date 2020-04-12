@@ -3,28 +3,29 @@ import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
 import { ArrowRight } from 'react-feather';
 
-import { useCreateDigitalOceanServerMutation } from '../../../src/generated/graphql';
+import { useCreateAppMutation } from '../../../src/generated/graphql';
 import withApollo from '../../../lib/withApollo';
 import { TextField, Button, styled, Flex, Box, BoxButton } from '../../../ui';
 import { LoggedInLayout } from '../../../layouts/LoggedInLayout';
 
 const CreateApp = () => {
   const router = useRouter();
-  const [
-    createDigitalOceanServerMutation,
-  ] = useCreateDigitalOceanServerMutation();
-  const formik = useFormik<{ gitUrl: string }>({
+  const { serverId } = router.query as { serverId: string };
+  const [createAppMutation] = useCreateAppMutation();
+  const formik = useFormik<{ name: string; gitUrl: string }>({
     initialValues: {
+      name: '',
       gitUrl: '',
     },
     onSubmit: async (values) => {
       // TODO validation name is required
       try {
-        const data = await createDigitalOceanServerMutation({
-          variables: { serverName: values.gitUrl },
+        const data = await createAppMutation({
+          variables: { gitUrl: 'TODO', name: values.name, serverId },
         });
         console.log(data);
-        router.push(`/server/${data.data.createDigitalOceanServer.id}`);
+        // TODO router.push(`/server/${serverId}/apps/${data.data.createApp.id}`);
+        router.push('/dashboard');
       } catch (error) {
         // TODO catch errors
         console.log(error);
@@ -66,6 +67,13 @@ const CreateApp = () => {
         maxWidth={800}
       >
         <Form onSubmit={formik.handleSubmit}>
+          <TextField
+            id="name"
+            name="name"
+            label="Enter the name of your new app"
+            value={formik.values.name}
+            onChange={formik.handleChange}
+          />
           <TextField
             id="gitUrl"
             name="gitUrl"

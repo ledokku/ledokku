@@ -25,7 +25,6 @@ const CreateDatabase = () => {
   const router = useRouter();
   const { serverId } = router.query as { serverId: string };
   const [createDatabaseMutation] = useCreateDatabaseMutation();
-  console.log('router:', router);
   const formik = useFormik<{ name: string }>({
     initialValues: {
       name: '',
@@ -36,7 +35,6 @@ const CreateDatabase = () => {
         const data = await createDatabaseMutation({
           variables: { name: values.name, serverId },
         });
-        console.log(data);
         router.push('/dashboard');
       } catch (error) {
         // TODO catch errors

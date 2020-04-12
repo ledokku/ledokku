@@ -1,0 +1,6 @@
+mutation createApp($serverId: String!, $name: String!, $gitUrl: String!) {
+  createApp(input: { serverId: $serverId, name: $name, gitUrl: $gitUrl }) {
+    id
+    name
+  }
+}
