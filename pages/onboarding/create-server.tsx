@@ -2,30 +2,31 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
 
-import { useSaveDigitalOceanAccessTokenMutation } from '../../src/generated/graphql';
+import { useCreateDigitalOceanServerMutation } from '../../src/generated/graphql';
 import { OnboardingLayout } from '../../layouts/OnboardingLayout';
 import { Button } from '../../ui/components/Button';
 import { Headline } from '../../ui/components/Typography/components/Headline';
 import { Paragraph } from '../../ui/components/Typography/components/Paragraph';
 import withApollo from '../../lib/withApollo';
 
-const CloudProvider = () => {
+const CreateServer = () => {
   const router = useRouter();
   const [
-    saveDigitalOceanAccessTokenMutation,
-  ] = useSaveDigitalOceanAccessTokenMutation();
-  const formik = useFormik<{ token: string }>({
+    createDigitalOceanServerMutation,
+  ] = useCreateDigitalOceanServerMutation();
+  const formik = useFormik<{ name: string }>({
     initialValues: {
-      token: '',
+      name: '',
     },
     onSubmit: async (values) => {
-      // TODO validation token is required
+      // TODO validation name is required
       try {
-        const data = await saveDigitalOceanAccessTokenMutation({
-          variables: { digitalOceanAccessToken: values.token },
+        const data = await createDigitalOceanServerMutation({
+          variables: { serverName: values.name },
         });
         console.log(data);
-        router.push('/onboarding/create-server');
+        // TODO if successful redirect to next step
+        // router.push(`/server/${}`);
       } catch (error) {
         // TODO catch errors
         console.log(error);
@@ -38,16 +39,16 @@ const CloudProvider = () => {
     <OnboardingLayout
       breadcrumb={[
         {
-          label: 'Pick your cloud provider',
+          label: 'Create a new server',
         },
       ]}
     >
       <form onSubmit={formik.handleSubmit}>
-        <p>Enter your token</p>
+        <p>Enter a name for your new server</p>
         <input
-          id="token"
-          name="token"
-          value={formik.values.token}
+          id="name"
+          name="name"
+          value={formik.values.name}
           onChange={formik.handleChange}
         />
         <button type="submit">Submit</button>
@@ -56,4 +57,4 @@ const CloudProvider = () => {
   );
 };
 
-export default withApollo(CloudProvider);
+export default withApollo(CreateServer);

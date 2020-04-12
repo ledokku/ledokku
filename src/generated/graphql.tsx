@@ -13,10 +13,25 @@ export type Scalars = {
   Upload: any;
 };
 
-export type Book = {
-  __typename?: 'Book';
-  title?: Maybe<Scalars['String']>;
-  author?: Maybe<Scalars['String']>;
+export type Server = {
+  __typename?: 'Server';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  ip: Scalars['String'];
+  apps?: Maybe<Array<App>>;
+  databases?: Maybe<Array<Database>>;
+};
+
+export type App = {
+  __typename?: 'App';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+};
+
+export type Database = {
+  __typename?: 'Database';
+  id: Scalars['ID'];
+  name: Scalars['String'];
 };
 
 export type LoginResult = {
@@ -26,13 +41,14 @@ export type LoginResult = {
 
 export type Query = {
   __typename?: 'Query';
-  books?: Maybe<Array<Maybe<Book>>>;
+  servers?: Maybe<Array<Server>>;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
   loginWithGithub?: Maybe<LoginResult>;
   saveDigitalOceanAccessToken?: Maybe<Scalars['Boolean']>;
+  createDigitalOceanServer?: Maybe<Scalars['Boolean']>;
 };
 
 export type MutationLoginWithGithubArgs = {
@@ -43,10 +59,22 @@ export type MutationSaveDigitalOceanAccessTokenArgs = {
   digitalOceanAccessToken: Scalars['String'];
 };
 
+export type MutationCreateDigitalOceanServerArgs = {
+  serverName: Scalars['String'];
+};
+
 export enum CacheControlScope {
   Public = 'PUBLIC',
   Private = 'PRIVATE',
 }
+
+export type CreateDigitalOceanServerMutationVariables = {
+  serverName: Scalars['String'];
+};
+
+export type CreateDigitalOceanServerMutation = {
+  __typename?: 'Mutation';
+} & Pick<Mutation, 'createDigitalOceanServer'>;
 
 export type LoginWithGithubMutationVariables = {
   code: Scalars['String'];
@@ -66,6 +94,54 @@ export type SaveDigitalOceanAccessTokenMutation = {
   __typename?: 'Mutation';
 } & Pick<Mutation, 'saveDigitalOceanAccessToken'>;
 
+export const CreateDigitalOceanServerDocument = gql`
+  mutation createDigitalOceanServer($serverName: String!) {
+    createDigitalOceanServer(serverName: $serverName)
+  }
+`;
+export type CreateDigitalOceanServerMutationFn = ApolloReactCommon.MutationFunction<
+  CreateDigitalOceanServerMutation,
+  CreateDigitalOceanServerMutationVariables
+>;
+
+/**
+ * __useCreateDigitalOceanServerMutation__
+ *
+ * To run a mutation, you first call `useCreateDigitalOceanServerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateDigitalOceanServerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createDigitalOceanServerMutation, { data, loading, error }] = useCreateDigitalOceanServerMutation({
+ *   variables: {
+ *      serverName: // value for 'serverName'
+ *   },
+ * });
+ */
+export function useCreateDigitalOceanServerMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    CreateDigitalOceanServerMutation,
+    CreateDigitalOceanServerMutationVariables
+  >
+) {
+  return ApolloReactHooks.useMutation<
+    CreateDigitalOceanServerMutation,
+    CreateDigitalOceanServerMutationVariables
+  >(CreateDigitalOceanServerDocument, baseOptions);
+}
+export type CreateDigitalOceanServerMutationHookResult = ReturnType<
+  typeof useCreateDigitalOceanServerMutation
+>;
+export type CreateDigitalOceanServerMutationResult = ApolloReactCommon.MutationResult<
+  CreateDigitalOceanServerMutation
+>;
+export type CreateDigitalOceanServerMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  CreateDigitalOceanServerMutation,
+  CreateDigitalOceanServerMutationVariables
+>;
 export const LoginWithGithubDocument = gql`
   mutation loginWithGithub($code: String!) {
     loginWithGithub(code: $code) {
