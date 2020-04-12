@@ -5,7 +5,7 @@ import { ArrowRight } from 'react-feather';
 
 import { useCreateAppMutation } from '../../../src/generated/graphql';
 import withApollo from '../../../lib/withApollo';
-import { TextField, Button, styled, Flex, Box, BoxButton } from '../../../ui';
+import { TextField, Button, styled, Flex, Box, Grid } from '../../../ui';
 import { LoggedInLayout } from '../../../layouts/LoggedInLayout';
 
 const CreateApp = () => {
@@ -67,20 +67,22 @@ const CreateApp = () => {
         maxWidth={800}
       >
         <Form onSubmit={formik.handleSubmit}>
-          <TextField
-            id="name"
-            name="name"
-            label="Enter the name of your new app"
-            value={formik.values.name}
-            onChange={formik.handleChange}
-          />
-          <TextField
-            id="gitUrl"
-            name="gitUrl"
-            label="Enter the git url of your new app"
-            value={formik.values.gitUrl}
-            onChange={formik.handleChange}
-          />
+          <Grid rowGap={{ desktop: 40, tablet: 40, phone: 24 }}>
+            <TextField
+              id="name"
+              name="name"
+              label="Enter the name of your new app"
+              value={formik.values.name}
+              onChange={formik.handleChange}
+            />
+            <TextField
+              id="gitUrl"
+              name="gitUrl"
+              label="Enter the git url of your new app"
+              value={formik.values.gitUrl}
+              onChange={formik.handleChange}
+            />
+          </Grid>
           <Flex justifyContent="flex-end">
             <Button type="submit" background="primary" endIcon={<ArrowRight />}>
               Submit
