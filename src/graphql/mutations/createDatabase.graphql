@@ -1,0 +1,6 @@
+mutation createDatabase($serverId: String!, $name: String!) {
+  createDatabase(input: { serverId: $serverId, name: $name }) {
+    id
+    name
+  }
+}
