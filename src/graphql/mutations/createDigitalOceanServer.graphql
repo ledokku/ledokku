@@ -1,3 +1,5 @@
 mutation createDigitalOceanServer($serverName: String!) {
-  createDigitalOceanServer(serverName: $serverName)
+  createDigitalOceanServer(serverName: $serverName) {
+    id
+  }
 }

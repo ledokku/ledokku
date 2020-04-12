@@ -59,9 +59,10 @@ export type Mutation = {
   __typename?: 'Mutation';
   loginWithGithub?: Maybe<LoginResult>;
   saveDigitalOceanAccessToken?: Maybe<Scalars['Boolean']>;
-  createDigitalOceanServer?: Maybe<Scalars['Boolean']>;
+  createDigitalOceanServer: Server;
   createApp: App;
   createDatabase: Database;
+  updateServerInfo?: Maybe<Scalars['Boolean']>;
 };
 
 export type MutationLoginWithGithubArgs = {
@@ -84,6 +85,10 @@ export type MutationCreateDatabaseArgs = {
   input: CreateDatabaseInput;
 };
 
+export type MutationUpdateServerInfoArgs = {
+  serverId: Scalars['String'];
+};
+
 export enum CacheControlScope {
   Public = 'PUBLIC',
   Private = 'PRIVATE',
@@ -93,9 +98,9 @@ export type CreateDigitalOceanServerMutationVariables = {
   serverName: Scalars['String'];
 };
 
-export type CreateDigitalOceanServerMutation = {
-  __typename?: 'Mutation';
-} & Pick<Mutation, 'createDigitalOceanServer'>;
+export type CreateDigitalOceanServerMutation = { __typename?: 'Mutation' } & {
+  createDigitalOceanServer: { __typename?: 'Server' } & Pick<Server, 'id'>;
+};
 
 export type LoginWithGithubMutationVariables = {
   code: Scalars['String'];
@@ -134,7 +139,9 @@ export type DashboardQuery = { __typename?: 'Query' } & {
 
 export const CreateDigitalOceanServerDocument = gql`
   mutation createDigitalOceanServer($serverName: String!) {
-    createDigitalOceanServer(serverName: $serverName)
+    createDigitalOceanServer(serverName: $serverName) {
+      id
+    }
   }
 `;
 export type CreateDigitalOceanServerMutationFn = ApolloReactCommon.MutationFunction<
