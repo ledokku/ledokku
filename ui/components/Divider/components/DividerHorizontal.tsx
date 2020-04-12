@@ -13,8 +13,8 @@ export const DividerHorizontal: React.FC<DividerHorizontalProps> = (props) => {
 };
 
 const Root = styled.div`
-  height: 100%;
-  width: ${({ theme }) => theme.divider.width}px;
+  height: ${({ theme }) => theme.divider.width}px;
+  width: 100%;
   background: ${({ theme }) => rgba(theme.foreground, theme.divider.opacity)};
   transition: ${({ theme }) => theme.transition};
 `;
