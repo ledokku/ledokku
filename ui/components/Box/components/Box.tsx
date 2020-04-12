@@ -17,6 +17,7 @@ const RootComponent: React.FC<BoxProps> = ({ className, children }) => (
   <div className={className}>{children}</div>
 );
 const Root = styled(RootComponent)`
+  box-sizing: border-box;
   width: ${({ width }) => width};
   ${marginHelper}
   ${paddingHelper}
