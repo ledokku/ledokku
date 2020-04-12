@@ -94,6 +94,15 @@ export enum CacheControlScope {
   Private = 'PRIVATE',
 }
 
+export type CreateDatabaseMutationVariables = {
+  serverId: Scalars['String'];
+  name: Scalars['String'];
+};
+
+export type CreateDatabaseMutation = { __typename?: 'Mutation' } & {
+  createDatabase: { __typename?: 'Database' } & Pick<Database, 'id' | 'name'>;
+};
+
 export type CreateDigitalOceanServerMutationVariables = {
   serverName: Scalars['String'];
 };
@@ -137,6 +146,58 @@ export type DashboardQuery = { __typename?: 'Query' } & {
   >;
 };
 
+export const CreateDatabaseDocument = gql`
+  mutation createDatabase($serverId: String!, $name: String!) {
+    createDatabase(input: { serverId: $serverId, name: $name }) {
+      id
+      name
+    }
+  }
+`;
+export type CreateDatabaseMutationFn = ApolloReactCommon.MutationFunction<
+  CreateDatabaseMutation,
+  CreateDatabaseMutationVariables
+>;
+
+/**
+ * __useCreateDatabaseMutation__
+ *
+ * To run a mutation, you first call `useCreateDatabaseMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateDatabaseMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createDatabaseMutation, { data, loading, error }] = useCreateDatabaseMutation({
+ *   variables: {
+ *      serverId: // value for 'serverId'
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useCreateDatabaseMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    CreateDatabaseMutation,
+    CreateDatabaseMutationVariables
+  >
+) {
+  return ApolloReactHooks.useMutation<
+    CreateDatabaseMutation,
+    CreateDatabaseMutationVariables
+  >(CreateDatabaseDocument, baseOptions);
+}
+export type CreateDatabaseMutationHookResult = ReturnType<
+  typeof useCreateDatabaseMutation
+>;
+export type CreateDatabaseMutationResult = ApolloReactCommon.MutationResult<
+  CreateDatabaseMutation
+>;
+export type CreateDatabaseMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  CreateDatabaseMutation,
+  CreateDatabaseMutationVariables
+>;
 export const CreateDigitalOceanServerDocument = gql`
   mutation createDigitalOceanServer($serverName: String!) {
     createDigitalOceanServer(serverName: $serverName) {

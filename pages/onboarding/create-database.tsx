@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
 
-import { useSaveDigitalOceanAccessTokenMutation } from '../../src/generated/graphql';
+import { useCreateDatabaseMutation } from '../../src/generated/graphql';
 import { OnboardingLayout } from '../../layouts/OnboardingLayout';
 import withApollo from '../../lib/withApollo';
 import { ArrowRight } from 'react-feather';
@@ -16,27 +16,23 @@ import {
   BoxButton,
   Grid,
 } from '../../ui';
-import { DigitalOceanIcon } from '../../ui/icons/DigitalOceanIcon';
-import { LinodeIcon } from '../../ui/icons/LinodeIcon';
-import { AWSIcon } from '../../ui/icons/AWSIcon';
 
-const CloudProvider = () => {
+const CreateDatabase = () => {
   const router = useRouter();
-  const [
-    saveDigitalOceanAccessTokenMutation,
-  ] = useSaveDigitalOceanAccessTokenMutation();
-  const formik = useFormik<{ token: string }>({
+  const [createDatabaseMutation] = useCreateDatabaseMutation();
+  console.log('router:', router);
+  const formik = useFormik<{ name: string }>({
     initialValues: {
-      token: '',
+      name: '',
     },
     onSubmit: async (values) => {
       // TODO validation token is required
       try {
-        const data = await saveDigitalOceanAccessTokenMutation({
-          variables: { digitalOceanAccessToken: values.token },
+        const data = await createDatabaseMutation({
+          variables: { name: values.name, serverId: 'dadsf' },
         });
         console.log(data);
-        router.push('/onboarding/create-server');
+        router.push('/dashboard');
       } catch (error) {
         // TODO catch errors
         console.log(error);
@@ -55,10 +51,10 @@ const CloudProvider = () => {
     >
       <Form onSubmit={formik.handleSubmit}>
         <TextField
-          id="token"
-          name="token"
+          id="name"
+          name="name"
           label="Database name"
-          value={formik.values.token}
+          value={formik.values.name}
           onChange={formik.handleChange}
         />
         <Box>
@@ -99,4 +95,4 @@ const Form = styled.form`
   }
 `;
 
-export default withApollo(CloudProvider);
+export default withApollo(CreateDatabase);
