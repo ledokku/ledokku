@@ -30,6 +30,7 @@ const Label = styled(Typography.Label)`
 `;
 
 const Input = styled.input`
+  font-family: ${({ theme }) => theme.typography.label.fontFamily};
   background: ${({ theme }) => theme.background};
   border: none;
   box-shadow: inset 0 0 0 1px ${({ theme }) => rgba(theme.foreground, 0.1)};
