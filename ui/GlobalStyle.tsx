@@ -13,8 +13,10 @@ export const GlobalStyle = createGlobalStyle`
     -moz-osx-font-smoothing: grayscale;
     font-smoothing: antialiased;
 
-    background: radial-gradient(rgba(0, 0, 0, 0.1) 1.25px, #FFF 1.25px);
-    background-size: 18px 18px;
+    background:
+      linear-gradient(-45deg, white, transparent, white),
+      radial-gradient(rgba(0, 0, 0, 0.1) 1.25px, #FFF 1.25px);
+    background-size: cover, 18px 18px;
   }
 
   #__next {
