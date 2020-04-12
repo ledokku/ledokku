@@ -6,131 +6,41 @@ import withApollo from '../../lib/withApollo';
 import { config } from '../../config';
 import { LoggedInLayout } from '../../layouts/LoggedInLayout';
 import { Box, Typography, LogBox } from '../../ui';
+import { useServerByIdQuery } from '../../src/generated/graphql';
 
 interface RealtimeLog {
   message: string;
   type: 'command' | 'stdout' | 'stderr';
 }
 
-const tempLogs: RealtimeLog[] = [
-  {
-    type: 'command',
-    message: 'Ondrej-MacBook-Pro:ledokku ondrejbarta$ yarn dev',
-  },
-  { type: 'command', message: 'yarn run v1.17.3' },
-  { type: 'command', message: '$ next' },
-  { type: 'command', message: '[ wait ]  starting the development server ...' },
-  {
-    type: 'command',
-    message: '[ info ]  waiting on http://localhost:3000 ...',
-  },
-  {
-    type: 'command',
-    message: '[ info ]  bundled successfully, waiting for typecheck results...',
-  },
-  {
-    type: 'command',
-    message: '[ ready ] compiled successfully - ready on http://localhost:3000',
-  },
-  { type: 'command', message: '[ event ] build page: /next/dist/pages/_error' },
-  { type: 'command', message: '[ wait ]  compiling ...' },
-  {
-    type: 'command',
-    message: '[ info ]  bundled successfully, waiting for typecheck results...',
-  },
-  {
-    type: 'command',
-    message: '[ ready ] compiled successfully - ready on http://localhost:3000',
-  },
-  {
-    type: 'command',
-    message: '[ info ]  bundled successfully, waiting for typecheck results...',
-  },
-  {
-    type: 'command',
-    message: '[ ready ] compiled successfully - ready on http://localhost:3000',
-  },
-  { type: 'command', message: '[ event ] build page: /next/dist/pages/_error' },
-  { type: 'command', message: '[ wait ]  compiling ...' },
-  {
-    type: 'command',
-    message: '[ info ]  bundled successfully, waiting for typecheck results...',
-  },
-  {
-    type: 'command',
-    message: '[ ready ] compiled successfully - ready on http://localhost:3000',
-  },
-  { type: 'command', message: '[ wait ]  starting the development server ...' },
-  {
-    type: 'command',
-    message: '[ info ]  waiting on http://localhost:3000 ...',
-  },
-  {
-    type: 'command',
-    message: '[ info ]  bundled successfully, waiting for typecheck results...',
-  },
-  {
-    type: 'command',
-    message: '[ ready ] compiled successfully - ready on http://localhost:3000',
-  },
-  { type: 'command', message: '[ event ] build page: /next/dist/pages/_error' },
-  { type: 'command', message: '[ wait ]  compiling ...' },
-  {
-    type: 'command',
-    message: '[ info ]  bundled successfully, waiting for typecheck results...',
-  },
-  {
-    type: 'command',
-    message: '[ ready ] compiled successfully - ready on http://localhost:3000',
-  },
-  {
-    type: 'command',
-    message: '[ info ]  bundled successfully, waiting for typecheck results...',
-  },
-  {
-    type: 'command',
-    message: '[ ready ] compiled successfully - ready on http://localhost:3000',
-  },
-  { type: 'command', message: '[ event ] build page: /next/dist/pages/_error' },
-  { type: 'command', message: '[ wait ]  compiling ...' },
-  {
-    type: 'command',
-    message: '[ info ]  bundled successfully, waiting for typecheck results...',
-  },
-  {
-    type: 'command',
-    message: '[ ready ] compiled successfully - ready on http://localhost:3000',
-  },
-];
-
 const Server = () => {
   const router = useRouter();
-  const { serverId } = router.query;
+  const { serverId } = router.query as { serverId: string };
+  const { data, loading, error } = useServerByIdQuery({
+    variables: {
+      id: serverId,
+    },
+    ssr: false,
+  });
   const [logs, setLogs] = useState<RealtimeLog[]>([]);
 
-  useEffect(() => {
-    setInterval(() => {
-      const randomLog = tempLogs[Math.floor(Math.random() * tempLogs.length)];
-      setLogs((previousLogs) => {
-        const newLogs = [...previousLogs, randomLog];
-        return newLogs;
-      });
-    }, 500);
-  }, []);
+  console.log(data, loading, error, serverId);
 
   useEffect(() => {
-    const socket = socketIOClient(config.serverUrl);
-    socket.on(`create-server:${serverId}`, (data: RealtimeLog) => {
-      setLogs((previousLogs) => {
-        const newLogs = [...previousLogs, data];
-        return newLogs;
+    if (serverId) {
+      const socket = socketIOClient(config.serverUrl);
+      console.log(`listening to create-server:${serverId}`);
+      socket.on(`create-server:${serverId}`, (data: RealtimeLog) => {
+        setLogs((previousLogs) => {
+          const newLogs = [...previousLogs, data];
+          return newLogs;
+        });
+        console.log('received create-server', data);
       });
-      console.log('received create-server', data);
-    });
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
+    }
+
+    // TODO  socket.disconnect(); on unmount
+  }, [serverId]);
 
   return (
     <LoggedInLayout
