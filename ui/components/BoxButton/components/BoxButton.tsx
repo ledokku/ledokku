@@ -70,7 +70,7 @@ const Root = styled(RootComponent)`
     transform: scale(${({ theme, disabled }) => (disabled ? 0.98 : 0.95)});
   }
 
-  * {
+  > * {
     opacity: ${({ disabled }) => (disabled ? 0.25 : 1)};
   }
 `;

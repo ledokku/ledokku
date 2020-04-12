@@ -16,6 +16,9 @@ import {
   BoxButton,
   Grid,
 } from '../../ui';
+import { DigitalOceanIcon } from '../../ui/icons/DigitalOceanIcon';
+import { LinodeIcon } from '../../ui/icons/LinodeIcon';
+import { AWSIcon } from '../../ui/icons/AWSIcon';
 
 const CloudProvider = () => {
   const router = useRouter();
@@ -64,9 +67,21 @@ const CloudProvider = () => {
             columnGap={16}
             rowGap={16}
           >
-            <BoxButton selected={true} label="Digital Ocean" />
-            <BoxButton label="Linode" disabled={true} />
-            <BoxButton label="Amazon Web Services" disabled={true} />
+            <BoxButton
+              selected={true}
+              label="Digital Ocean"
+              icon={<DigitalOceanIcon size={40} />}
+            />
+            <BoxButton
+              label="Linode"
+              disabled={true}
+              icon={<LinodeIcon size={40} />}
+            />
+            <BoxButton
+              label="Amazon Web Services"
+              disabled={true}
+              icon={<AWSIcon size={40} />}
+            />
           </Grid>
           <Typography.Caption marginTop={8}>
             We currently only provide Digital Ocean as an option of cloud
