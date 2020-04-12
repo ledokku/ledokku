@@ -35,8 +35,7 @@ const CreateServer = () => {
           variables: { serverName: values.name },
         });
         console.log(data);
-        // TODO if successful redirect to next step
-        // router.push(`/server/${}`);
+        router.push(`/server/${data.data.createDigitalOceanServer.id}`);
       } catch (error) {
         // TODO catch errors
         console.log(error);
