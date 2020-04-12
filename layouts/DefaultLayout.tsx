@@ -5,6 +5,10 @@ import { ThemeProvider } from 'styled-components';
 import { DefaultTheme } from '../ui/themes/DefaultTheme';
 import { GlobalStyle } from '../ui/GlobalStyle';
 
+export interface DefaultLayoutProps {
+  //
+}
+
 export const DefaultLayout = ({ children }) => (
   <ThemeProvider theme={DefaultTheme}>
     <Head>

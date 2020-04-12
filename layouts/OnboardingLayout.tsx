@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { DefaultLayout } from './DefaultLayout';
-import { styled, Box, Flex, Page } from '../ui';
+import { styled, Box, Page } from '../ui';
 import { BreadcrumbHeaderProps } from '../ui/components/Page/components/BreadcrumbHeader';
 
 export interface OnboardingLayoutProps {
