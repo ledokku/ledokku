@@ -99,6 +99,16 @@ export enum CacheControlScope {
   Private = 'PRIVATE',
 }
 
+export type CreateAppMutationVariables = {
+  serverId: Scalars['String'];
+  name: Scalars['String'];
+  gitUrl: Scalars['String'];
+};
+
+export type CreateAppMutation = { __typename?: 'Mutation' } & {
+  createApp: { __typename?: 'App' } & Pick<App, 'id' | 'name'>;
+};
+
 export type CreateDatabaseMutationVariables = {
   serverId: Scalars['String'];
   name: Scalars['String'];
@@ -151,6 +161,67 @@ export type DashboardQuery = { __typename?: 'Query' } & {
   >;
 };
 
+export type ServerByIdQueryVariables = {
+  id: Scalars['String'];
+};
+
+export type ServerByIdQuery = { __typename?: 'Query' } & {
+  server?: Maybe<{ __typename?: 'Server' } & Pick<Server, 'id' | 'name'>>;
+};
+
+export const CreateAppDocument = gql`
+  mutation createApp($serverId: String!, $name: String!, $gitUrl: String!) {
+    createApp(input: { serverId: $serverId, name: $name, gitUrl: $gitUrl }) {
+      id
+      name
+    }
+  }
+`;
+export type CreateAppMutationFn = ApolloReactCommon.MutationFunction<
+  CreateAppMutation,
+  CreateAppMutationVariables
+>;
+
+/**
+ * __useCreateAppMutation__
+ *
+ * To run a mutation, you first call `useCreateAppMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAppMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createAppMutation, { data, loading, error }] = useCreateAppMutation({
+ *   variables: {
+ *      serverId: // value for 'serverId'
+ *      name: // value for 'name'
+ *      gitUrl: // value for 'gitUrl'
+ *   },
+ * });
+ */
+export function useCreateAppMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    CreateAppMutation,
+    CreateAppMutationVariables
+  >
+) {
+  return ApolloReactHooks.useMutation<
+    CreateAppMutation,
+    CreateAppMutationVariables
+  >(CreateAppDocument, baseOptions);
+}
+export type CreateAppMutationHookResult = ReturnType<
+  typeof useCreateAppMutation
+>;
+export type CreateAppMutationResult = ApolloReactCommon.MutationResult<
+  CreateAppMutation
+>;
+export type CreateAppMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  CreateAppMutation,
+  CreateAppMutationVariables
+>;
 export const CreateDatabaseDocument = gql`
   mutation createDatabase($serverId: String!, $name: String!) {
     createDatabase(input: { serverId: $serverId, name: $name }) {
@@ -203,14 +274,6 @@ export type CreateDatabaseMutationOptions = ApolloReactCommon.BaseMutationOption
   CreateDatabaseMutation,
   CreateDatabaseMutationVariables
 >;
-export type ServerByIdQueryVariables = {
-  id: Scalars['String'];
-};
-
-export type ServerByIdQuery = { __typename?: 'Query' } & {
-  server?: Maybe<{ __typename?: 'Server' } & Pick<Server, 'id' | 'name'>>;
-};
-
 export const CreateDigitalOceanServerDocument = gql`
   mutation createDigitalOceanServer($serverName: String!) {
     createDigitalOceanServer(serverName: $serverName) {
