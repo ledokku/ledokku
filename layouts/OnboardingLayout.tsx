@@ -26,8 +26,8 @@ const Layout = styled.div`
   grid-row-gap: 80px;
   max-width: 800px;
   width: 100%;
-  margin: 80px auto 40px;
-  padding: 64px;
+  margin: 0 auto;
+  padding: 80px 64px 40px;
 
   @media ${({ theme }) => theme.media.tablet} {
     margin: 0 auto;
