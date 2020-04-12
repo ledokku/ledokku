@@ -24,31 +24,6 @@ const Dashboard = () => {
     router.push('/onboarding/cloud-provider');
   };
 
-  data = {
-    servers: [
-      {
-        id: 'string',
-        name: 'Berlin Library Project',
-        apps: [
-          {
-            id: 'asdf',
-            name: 'Library API',
-          },
-          {
-            id: 'sdh',
-            name: 'Main Server',
-          },
-        ],
-        databases: [
-          {
-            id: 'asdfafdg',
-            name: 'User Data',
-          },
-        ],
-      },
-    ],
-  };
-
   return (
     <LoggedInLayout
       breadcrumb={[
