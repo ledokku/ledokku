@@ -50,8 +50,7 @@ export const typography = {
   label: {
     fontFamily: "'Source Sans Pro', 'Helvetica', 'Arial', sans",
     fontWeight: 'bold',
-    fontSize: '0.5625rem',
-    opacity: 0.5,
+    fontSize: '1rem',
     letterSpacing: '0.1em',
   } as CSSProperties,
   link: {
@@ -61,8 +60,8 @@ export const typography = {
   } as CSSProperties,
   caption: {
     fontFamily: "'Source Sans Pro' , 'Helvetica' , 'Arial' , sans",
-    fontWeight: 700,
     fontSize: '0.75rem',
+    opacity: 0.5,
   },
   small: {
     fontSize: '0.75em',

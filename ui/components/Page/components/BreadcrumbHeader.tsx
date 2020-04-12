@@ -2,6 +2,7 @@ import React from 'react';
 import { rgba } from 'polished';
 
 import { styled } from '../../..';
+import { DividerVertical } from '../../Divider/components/DividerVertical';
 
 interface Item {
   label: string;
@@ -19,18 +20,14 @@ export const BreadcrumbHeader: React.FC<BreadcrumbHeaderProps> = (props) => {
       <Root>
         <Breadcrumb>
           <Item>
-            {/* <BartaxyzIcon /> */}
-
             <Link href="/">
-              <Label>Ondřej Bárta</Label>
+              <LogoLabel>Ledokku</LogoLabel>
             </Link>
           </Item>
 
           {items.map((item, index) => (
             <Item key={index}>
-              {/* <Chevron>
-                <ChevronRightIcon />
-              </Chevron> */}
+              <DividerVertical />
 
               <Link href={item.href}>
                 <Label>{item.label}</Label>
@@ -38,8 +35,6 @@ export const BreadcrumbHeader: React.FC<BreadcrumbHeaderProps> = (props) => {
             </Item>
           ))}
         </Breadcrumb>
-
-        <BreadcrumbDivider />
       </Root>
 
       {/* Visual placeholder for the height of the Root */}
@@ -54,8 +49,6 @@ const Root = styled.div`
   display: flex;
   justify-content: center;
   align-content: center;
-  min-height: 56px;
-  padding: 16px 24px;
   color: ${({ theme }) => theme.foreground};
   transition: ${({ theme }) => theme.transition};
 
@@ -142,6 +135,10 @@ const Link = styled.a`
 `;
 
 const Label = styled.span`
-  font-family: 'Pier Sans';
-  font-size: 14px;
+  font-family: ${({ theme }) => theme.typography.label.fontFamily};
+  font-size: 20px;
+`;
+
+const LogoLabel = styled(Label)`
+  font-weight: bold;
 `;
