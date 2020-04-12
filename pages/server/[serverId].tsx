@@ -4,6 +4,7 @@ import socketIOClient from 'socket.io-client';
 
 import withApollo from '../../lib/withApollo';
 import { config } from '../../config';
+import { LoggedInLayout } from '../../layouts/LoggedInLayout';
 
 interface RealtimeLog {
   message: string;
@@ -30,14 +31,24 @@ const Server = () => {
   }, []);
 
   return (
-    <div>
+    <LoggedInLayout
+      breadcrumb={[
+        {
+          label: 'Dashboard',
+          href: '/dashboard',
+        },
+        {
+          label: 'Berlin Library Project',
+        },
+      ]}
+    >
       <p>Hello world</p>
       {logs.map((log, index) => (
         <p key={index}>
           <b>{log.type}:</b> {log.message}
         </p>
       ))}
-    </div>
+    </LoggedInLayout>
   );
 };
 
