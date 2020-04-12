@@ -22,9 +22,6 @@ import { AWSIcon } from '../../ui/icons/AWSIcon';
 
 const CloudProvider = () => {
   const router = useRouter();
-  const [
-    saveDigitalOceanAccessTokenMutation,
-  ] = useSaveDigitalOceanAccessTokenMutation();
   const formik = useFormik<{ token: string }>({
     initialValues: {
       token: '',
@@ -32,11 +29,11 @@ const CloudProvider = () => {
     onSubmit: async (values) => {
       // TODO validation token is required
       try {
-        const data = await saveDigitalOceanAccessTokenMutation({
-          variables: { digitalOceanAccessToken: values.token },
-        });
-        console.log(data);
-        router.push('/onboarding/create-server');
+        // const data = await saveDigitalOceanAccessTokenMutation({
+        //   variables: { digitalOceanAccessToken: values.token },
+        // });
+        // console.log(data);
+        // router.push('/onboarding/create-server');
       } catch (error) {
         // TODO catch errors
         console.log(error);
