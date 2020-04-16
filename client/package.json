@@ -1,0 +1,39 @@
+{
+  "name": "ledokku-client",
+  "private": true,
+  "version": "0.0.1",
+  "license": "MIT",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "generate": "graphql-codegen --config codegen.yml"
+  },
+  "dependencies": {
+    "@apollo/react-hooks": "3.1.4",
+    "@types/styled-components": "^5.0.1",
+    "apollo-boost": "0.4.7",
+    "dotenv": "8.2.0",
+    "formik": "2.1.4",
+    "graphql": "15.0.0",
+    "next": "9.3.4",
+    "next-with-apollo": "5.0.0",
+    "polished": "^3.5.1",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
+    "react-feather": "^2.0.4",
+    "socket.io-client": "2.3.0",
+    "styled-components": "^5.1.0"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "1.13.2",
+    "@graphql-codegen/typescript": "1.13.2",
+    "@graphql-codegen/typescript-operations": "1.13.2",
+    "@graphql-codegen/typescript-react-apollo": "1.13.2",
+    "@types/node": "13.11.1",
+    "@types/react": "16.9.34",
+    "@types/socket.io-client": "1.4.32",
+    "babel-plugin-styled-components": "^1.10.7",
+    "typescript": "3.8.3"
+  }
+}

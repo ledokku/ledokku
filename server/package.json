@@ -1,0 +1,41 @@
+{
+  "name": "ledokku-server",
+  "private": true,
+  "version": "0.0.1",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon 'src/index.ts' --exec 'ts-node' src/index.ts -e ts,graphql",
+    "generate": "graphql-codegen --config codegen.yml"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "1.13.2",
+    "@graphql-codegen/typescript": "1.13.2",
+    "@graphql-codegen/typescript-resolvers": "1.13.2",
+    "@prisma/cli": "^2.0.0-beta.2",
+    "@types/bull": "3.12.2",
+    "@types/debug": "4.1.5",
+    "@types/jsonwebtoken": "8.3.9",
+    "@types/node-ssh": "7.0.0",
+    "@types/socket.io": "2.1.4",
+    "nodemon": "2.0.3",
+    "ts-node": "8.8.2",
+    "typescript": "3.8.3"
+  },
+  "dependencies": {
+    "@octokit/rest": "17.2.0",
+    "@prisma/client": "^2.0.0-beta.2",
+    "apollo-server": "2.12.0",
+    "apollo-server-express": "2.12.0",
+    "bull": "3.13.0",
+    "crypto": "^1.0.1",
+    "debug": "^4.1.1",
+    "dotenv": "8.2.0",
+    "express": "4.17.1",
+    "graphql": "15.0.0",
+    "jsonwebtoken": "8.5.1",
+    "node-fetch": "2.6.0",
+    "node-ssh": "8.0.0",
+    "socket.io": "2.3.0",
+    "sshpk": "^1.16.1"
+  }
+}
