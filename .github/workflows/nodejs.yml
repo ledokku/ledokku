@@ -35,6 +35,10 @@ jobs:
 
       - run: yarn
 
-      - run: yarn test
+      - run: cd server && yarn build
+        env:
+          CI: true
+
+      - run: cd client && yarn build
         env:
           CI: true
