@@ -11,19 +11,22 @@
   },
   "dependencies": {
     "@apollo/react-hooks": "3.1.4",
-    "@types/styled-components": "^5.0.1",
-    "apollo-boost": "0.4.7",
+    "@types/styled-components": "5.0.1",
+    "apollo-cache-inmemory": "1.6.5",
+    "apollo-client": "2.6.8",
+    "apollo-link-context": "1.0.20",
+    "apollo-link-http": "1.5.17",
     "dotenv": "8.2.0",
     "formik": "2.1.4",
     "graphql": "15.0.0",
     "next": "9.3.4",
     "next-with-apollo": "5.0.0",
-    "polished": "^3.5.1",
+    "polished": "3.5.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "react-feather": "^2.0.4",
+    "react-feather": "2.0.4",
     "socket.io-client": "2.3.0",
-    "styled-components": "^5.1.0"
+    "styled-components": "5.1.0"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "1.13.2",
@@ -33,7 +36,7 @@
     "@types/node": "13.11.1",
     "@types/react": "16.9.34",
     "@types/socket.io-client": "1.4.32",
-    "babel-plugin-styled-components": "^1.10.7",
+    "babel-plugin-styled-components": "1.10.7",
     "typescript": "3.8.3"
   }
 }
