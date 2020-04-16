@@ -5,6 +5,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon 'src/index.ts' --exec 'ts-node' src/index.ts -e ts,graphql",
+    "build": "tsc",
+    "start": "node .build/index.js",
     "generate": "graphql-codegen --config codegen.yml"
   },
   "devDependencies": {
