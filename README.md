@@ -30,6 +30,6 @@ And link them with wide most popular dbs : **postgresql, mongodb, redis**.
 - DIgitalOceanAPI 🌊
 
 Made by
-[Ondrej](https://github.com/orgs/ledokku/people/bartaxyz),
-[Leo](https://github.com/orgs/ledokku/people/pradel),
-[Arturs](https://github.com/orgs/ledokku/people/Akirtovskis)
+[Ondrej](https://github.com/bartaxyz),
+[Leo](https://github.com/pradel),
+[Arturs](https://github.com/Akirtovskis)
