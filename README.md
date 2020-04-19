@@ -19,14 +19,15 @@ And link them with wide most popular dbs : **postgresql, mongodb, redis**.
 - App is live 🎉🎉🎉
 
 **Built with** :
-Node.js 💚
-GraphQL 💓
-Prisma △
-TypeScript 💙
-NextJS 🖤
-GithubAPI 🐱
-DIgitalOceanAPI 🌊
-dokku 🐳
+
+- Dokku 🐳
+- Node.js 💚
+- GraphQL 💓
+- Prisma △
+- TypeScript 💙
+- NextJS 🖤
+- GithubAPI 🐱
+- DIgitalOceanAPI 🌊
 
 Made by
 [Ondrej](https://github.com/orgs/ledokku/people/bartaxyz),
