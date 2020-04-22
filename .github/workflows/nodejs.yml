@@ -42,3 +42,5 @@ jobs:
       - run: cd client && yarn build
         env:
           CI: true
+          GITHUB_CLIENT_ID: TEST_GITHUB_CLIENT_ID
+          SERVER_URL: http://localhost:4000
