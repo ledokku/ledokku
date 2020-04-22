@@ -54,13 +54,13 @@ In your terminal, run `docker-compose up` from the root folder of the repository
 
 ### Apply the latest migrations
 
-To apply the latest migrations to the PostgreSQL database run `yarn prisma migrate up --experimental` from the root folder of the repository.
+To apply the latest migrations to the PostgreSQL database, in the `server` folder run `yarn prisma migrate up --experimental`.
 
 ### Starting the application
 
-Inside the the `server` folder run `yarn dev` to start the server. The server should now be listening incoming requests on port 4000.
+Inside the `server` folder run `yarn dev` to start the server. The server should now be listening incoming requests on port 4000.
 
-Inside the the `client` folder run `yarn dev` to start the next.js client app. The client should now be listening incoming requests on port 3000.
+Inside the `client` folder run `yarn dev` to start the next.js client app. The client should now be listening incoming requests on port 3000.
 
 You can now open your browser and visit http://localhost:3000 to see the app running.
 
