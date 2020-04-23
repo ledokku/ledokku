@@ -48,6 +48,12 @@ GITHUB_CLIENT_SECRET="MY_GITHUB_CLIENT_SECRET_CREATE_AT_THE_PREVIOUS_STEP"
 JWT_SECRET="strong-secret"
 ```
 
+Finally we also need to create a `.env` file for prisma. Inside the `server/prisma` folder create a new `.env` file and add the following env variable:
+
+```
+DATABASE_URL="postgres://postgres:postgrespassword@localhost:5433/postgres"
+```
+
 ### Starting the databases
 
 In your terminal, run `docker-compose up` from the root folder of the repository to start the database services required to run the app.
