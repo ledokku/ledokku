@@ -40,8 +40,7 @@ const Server = () => {
         },
       ]}
     >
-      {/* TODO only display if server state is new */}
-      <CreateServer server={data.server} />
+      {data.server.status === 'NEW' && <CreateServer server={data.server} />}
     </LoggedInLayout>
   );
 };

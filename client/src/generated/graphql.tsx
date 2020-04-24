@@ -19,6 +19,7 @@ export type Server = {
   name: Scalars['String'];
   ip?: Maybe<Scalars['String']>;
   type: ServerTypes;
+  status: ServerStatus;
   apps?: Maybe<Array<App>>;
   databases?: Maybe<Array<Database>>;
 };
@@ -27,6 +28,12 @@ export type ServerTypes =
   'AWS' |
   'DIGITALOCEAN' |
   'LINODE';
+
+export type ServerStatus = 
+  'NEW' |
+  'ACTIVE' |
+  'OFF' |
+  'ARCHIVE';
 
 export type App = {
    __typename?: 'App';
@@ -204,7 +211,7 @@ export type ServerByIdQuery = (
   { __typename?: 'Query' }
   & { server?: Maybe<(
     { __typename?: 'Server' }
-    & Pick<Server, 'id' | 'name' | 'ip' | 'type'>
+    & Pick<Server, 'id' | 'name' | 'ip' | 'type' | 'status'>
   )> }
 );
 
@@ -420,6 +427,7 @@ export const ServerByIdDocument = gql`
     name
     ip
     type
+    status
   }
 }
     `;

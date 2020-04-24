@@ -18,6 +18,7 @@ export type Server = {
   name: Scalars['String'];
   ip?: Maybe<Scalars['String']>;
   type: ServerTypes;
+  status: ServerStatus;
   apps?: Maybe<Array<App>>;
   databases?: Maybe<Array<Database>>;
 };
@@ -26,6 +27,12 @@ export type ServerTypes =
   'AWS' |
   'DIGITALOCEAN' |
   'LINODE';
+
+export type ServerStatus = 
+  'NEW' |
+  'ACTIVE' |
+  'OFF' |
+  'ARCHIVE';
 
 export type App = {
    __typename?: 'App';
@@ -189,6 +196,7 @@ export type ResolversTypes = {
   Server: ResolverTypeWrapper<Server>,
   ID: ResolverTypeWrapper<Scalars['ID']>,
   ServerTypes: ServerTypes,
+  ServerStatus: ServerStatus,
   App: ResolverTypeWrapper<App>,
   Database: ResolverTypeWrapper<Database>,
   LoginResult: ResolverTypeWrapper<LoginResult>,
@@ -207,6 +215,7 @@ export type ResolversParentTypes = {
   Server: Server,
   ID: Scalars['ID'],
   ServerTypes: ServerTypes,
+  ServerStatus: ServerStatus,
   App: App,
   Database: Database,
   LoginResult: LoginResult,
@@ -223,6 +232,7 @@ export type ServerResolvers<ContextType = any, ParentType extends ResolversParen
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   ip?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   type?: Resolver<ResolversTypes['ServerTypes'], ParentType, ContextType>,
+  status?: Resolver<ResolversTypes['ServerStatus'], ParentType, ContextType>,
   apps?: Resolver<Maybe<Array<ResolversTypes['App']>>, ParentType, ContextType>,
   databases?: Resolver<Maybe<Array<ResolversTypes['Database']>>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,

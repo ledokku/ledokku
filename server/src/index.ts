@@ -21,6 +21,7 @@ const typeDefs = gql`
     # Ip is not available when the server is being created
     ip: String
     type: ServerTypes!
+    status: ServerStatus!
     apps: [App!]
     databases: [Database!]
   }
@@ -29,6 +30,13 @@ const typeDefs = gql`
     AWS
     DIGITALOCEAN
     LINODE
+  }
+
+  enum ServerStatus {
+    NEW
+    ACTIVE
+    OFF
+    ARCHIVE
   }
 
   type App {

@@ -132,6 +132,14 @@ const worker = new Worker(
         status: 'COMPLETED',
       },
     });
+    await prisma.server.update({
+      where: {
+        id: server.id,
+      },
+      data: {
+        status: 'ACTIVE',
+      },
+    });
     debug(`finished createServerQueue for server id ${server.id}`);
 
     // TODO notify client via socket.io that job is finished

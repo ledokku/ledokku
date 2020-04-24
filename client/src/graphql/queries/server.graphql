@@ -4,5 +4,6 @@ query serverById($id: String!) {
     name
     ip
     type
+    status
   }
 }
