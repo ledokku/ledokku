@@ -30,14 +30,14 @@
     "yup": "0.28.4"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "1.13.2",
-    "@graphql-codegen/typescript": "1.13.2",
-    "@graphql-codegen/typescript-operations": "1.13.2",
-    "@graphql-codegen/typescript-react-apollo": "1.13.2",
-    "@types/node": "13.11.1",
+    "@graphql-codegen/cli": "1.13.3",
+    "@graphql-codegen/typescript": "1.13.3",
+    "@graphql-codegen/typescript-operations": "1.13.3",
+    "@graphql-codegen/typescript-react-apollo": "1.13.3",
+    "@types/node": "13.13.2",
     "@types/react": "16.9.34",
     "@types/socket.io-client": "1.4.32",
-    "@types/yup": "0.26.37",
+    "@types/yup": "0.28.0",
     "babel-plugin-styled-components": "1.10.7",
     "typescript": "3.8.3"
   }
