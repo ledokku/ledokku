@@ -8,6 +8,11 @@ import { prisma } from '../prisma';
 const queueName = 'create-server';
 const debug = createDebug(`queue:${queueName}`);
 
+interface RealtimeLog {
+  message: string;
+  type: 'command' | 'stdout' | 'stderr';
+}
+
 interface QueueArgs {
   actionId: string;
 }
@@ -64,15 +69,27 @@ const worker = new Worker(
       },
     });
 
+    // We send multiple logs at once to not spam the client
+    let logs: RealtimeLog[] = [];
+    let logTimerId: number;
+    const sendLogs = (log: RealtimeLog) => {
+      logs.push(log);
+      clearTimeout(logTimerId);
+      logTimerId = setTimeout(() => {
+        io.emit(`create-server:${server.id}`, logs);
+        logs = [];
+      }, 500);
+    };
+
     const onStdout = (chunk: Buffer) => {
       const message = chunk.toString('utf8');
-      io.emit(`create-server:${server.id}`, [{ message, type: 'stdout' }]);
+      sendLogs({ message, type: 'stdout' });
       debug(`stdoutChunk: ${message}`);
     };
 
     const onStderr = (chunk: Buffer) => {
       const message = chunk.toString('utf8');
-      io.emit(`create-server:${server.id}`, [{ message, type: 'stderr' }]);
+      sendLogs({ message, type: 'stderr' });
       debug(`stderrChunk ${message}`);
     };
 
@@ -88,6 +105,7 @@ const worker = new Worker(
     });
     debug(`connected to ${server.ip}`);
 
+    // TODO find a way to get the latest available release
     const wgetCommand =
       'wget https://raw.githubusercontent.com/dokku/dokku/v0.20.3/bootstrap.sh';
     io.emit(`create-server:${server.id}`, [
