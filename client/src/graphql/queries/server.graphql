@@ -2,5 +2,7 @@ query serverById($id: String!) {
   server(id: $id) {
     id
     name
+    ip
+    type
   }
 }

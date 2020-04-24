@@ -1,17 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
-import socketIOClient from 'socket.io-client';
 
 import withApollo from '../../lib/withApollo';
-import { config } from '../../config';
 import { LoggedInLayout } from '../../layouts/LoggedInLayout';
-import { Box, Typography, LogBox } from '../../ui';
 import { useServerByIdQuery } from '../../src/generated/graphql';
-
-interface RealtimeLog {
-  message: string;
-  type: 'command' | 'stdout' | 'stderr';
-}
+import { CreateServer } from '../../src/modules/server/CreateServer';
 
 const Server = () => {
   const router = useRouter();
@@ -22,25 +15,18 @@ const Server = () => {
     },
     ssr: false,
   });
-  const [logs, setLogs] = useState<RealtimeLog[]>([]);
 
-  console.log(data, loading, error, serverId);
+  // TODO display error
 
-  useEffect(() => {
-    if (serverId) {
-      const socket = socketIOClient(config.serverUrl);
-      console.log(`listening to create-server:${serverId}`);
-      socket.on(`create-server:${serverId}`, (data: RealtimeLog) => {
-        setLogs((previousLogs) => {
-          const newLogs = [...previousLogs, data];
-          return newLogs;
-        });
-        console.log('received create-server', data);
-      });
-    }
+  if (loading) {
+    // TODO nice loading
+    return <p>Loading...</p>;
+  }
 
-    // TODO  socket.disconnect(); on unmount
-  }, [serverId]);
+  if (!data.server) {
+    // TODO nice 404
+    return <p>Server not found.</p>;
+  }
 
   return (
     <LoggedInLayout
@@ -50,50 +36,12 @@ const Server = () => {
           href: '/dashboard',
         },
         {
-          label: 'Berlin Library Project',
+          label: data.server.id,
         },
       ]}
     >
-      <Box
-        marginLeft={{
-          desktop: 80,
-          tablet: 40,
-          phone: 24,
-        }}
-        marginRight={{
-          desktop: 80,
-          tablet: 40,
-          phone: 24,
-        }}
-        marginBottom={{
-          desktop: 80,
-          tablet: 40,
-          phone: 24,
-        }}
-      >
-        <Typography.Headline
-          level={2}
-          marginTop={80}
-          marginBottom={80}
-          textAlign="center"
-        >
-          Your server <b>Berlin Library Project</b> is being created
-        </Typography.Headline>
-
-        <LogBox
-          title={
-            <React.Fragment>
-              Logs from <b>Digital Ocean</b>—70.98.192.00
-            </React.Fragment>
-          }
-        >
-          {logs.map((log, index) => (
-            <div key={index}>
-              <b>{log.type}:</b> {log.message}
-            </div>
-          ))}
-        </LogBox>
-      </Box>
+      {/* TODO only display if server state is new */}
+      <CreateServer server={data.server} />
     </LoggedInLayout>
   );
 };

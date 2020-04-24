@@ -18,9 +18,17 @@ const typeDefs = gql`
   type Server {
     id: ID!
     name: String!
-    ip: String!
+    # Ip is not available when the server is being created
+    ip: String
+    type: ServerTypes!
     apps: [App!]
     databases: [Database!]
+  }
+
+  enum ServerTypes {
+    AWS
+    DIGITALOCEAN
+    LINODE
   }
 
   type App {
