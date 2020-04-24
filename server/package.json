@@ -10,7 +10,7 @@
     "generate": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
-    "@octokit/rest": "17.2.0",
+    "@octokit/rest": "17.6.0",
     "@prisma/client": "2.0.0-beta.3",
     "apollo-server": "2.12.0",
     "apollo-server-express": "2.12.0",

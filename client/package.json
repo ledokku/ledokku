@@ -10,8 +10,7 @@
     "generate": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
-    "@apollo/react-hooks": "3.1.4",
-    "@types/styled-components": "5.0.1",
+    "@apollo/react-hooks": "3.1.5",
     "apollo-cache-inmemory": "1.6.5",
     "apollo-client": "2.6.8",
     "apollo-link-context": "1.0.20",
@@ -19,9 +18,9 @@
     "dotenv": "8.2.0",
     "formik": "2.1.4",
     "graphql": "15.0.0",
-    "next": "9.3.4",
-    "next-with-apollo": "5.0.0",
-    "polished": "3.5.1",
+    "next": "9.3.5",
+    "next-with-apollo": "5.0.1",
+    "polished": "3.5.2",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-feather": "2.0.4",
@@ -37,6 +36,7 @@
     "@types/node": "13.13.2",
     "@types/react": "16.9.34",
     "@types/socket.io-client": "1.4.32",
+    "@types/styled-components": "5.1.0",
     "@types/yup": "0.28.0",
     "babel-plugin-styled-components": "1.10.7",
     "typescript": "3.8.3"
