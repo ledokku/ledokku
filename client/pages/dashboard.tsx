@@ -1,6 +1,7 @@
 import React from 'react';
 import { Plus } from 'react-feather';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 import { config } from '../config';
 import withApollo from '../lib/withApollo';
@@ -85,7 +86,13 @@ const Dashboard = () => {
                     <DigitalOceanIcon size={24} />
                     <Box>
                       <Typography.Headline level={3} marginBottom={8}>
-                        {server.name}
+                        <Link
+                          href="/server/[serverId]"
+                          as={`/server/${server.id}`}
+                          passHref
+                        >
+                          <a>{server.name}</a>
+                        </Link>
                       </Typography.Headline>
 
                       <Typography.Caption marginBottom={4}>
