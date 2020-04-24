@@ -8,13 +8,19 @@ import { CreateServer } from '../../src/modules/server/CreateServer';
 
 const Server = () => {
   const router = useRouter();
-  const { serverId } = router.query as { serverId: string };
+  // On first render serverId will be undefined, the value is set after and a rerender is triggered.
+  const { serverId } = router.query as { serverId?: string };
   const { data, loading, error } = useServerByIdQuery({
     variables: {
       id: serverId,
     },
     ssr: false,
+    skip: !serverId,
   });
+
+  if (!data) {
+    return null;
+  }
 
   // TODO display error
 
@@ -36,7 +42,7 @@ const Server = () => {
           href: '/dashboard',
         },
         {
-          label: data.server.id,
+          label: data.server.name,
         },
       ]}
     >
