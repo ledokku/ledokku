@@ -3,12 +3,7 @@ dotenv.config();
 import { ApolloServer, gql } from 'apollo-server-express';
 import jsonwebtoken from 'jsonwebtoken';
 import { Resolvers } from './generated/graphql';
-import { loginWithGithub } from './graphql/mutations/loginWithGithub';
-import { saveDigitalOceanAccessToken } from './graphql/mutations/saveDigitalOceanAccessToken';
-import { createDigitalOceanServer } from './graphql/mutations/createDigitalOceanServer';
-import { updateServerInfo } from './graphql/mutations/updateServerInfo';
-import { createDatabase } from './graphql/mutations/createDatabase';
-import { createApp } from './graphql/mutations/createApp';
+import { mutations } from './graphql/mutations';
 import { prisma } from './prisma';
 import { config } from './config';
 import { app, http, io } from './server';
@@ -81,14 +76,7 @@ const typeDefs = gql`
 
 const resolvers: Resolvers<{ userId?: string }> = {
   Query: queries,
-  Mutation: {
-    loginWithGithub,
-    saveDigitalOceanAccessToken,
-    createDigitalOceanServer,
-    updateServerInfo,
-    createDatabase,
-    createApp,
-  },
+  Mutation: mutations,
   Server: {
     apps: async (server) => {
       const serverApps = await prisma.app.findMany({
