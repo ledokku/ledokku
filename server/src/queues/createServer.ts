@@ -66,13 +66,13 @@ const worker = new Worker(
 
     const onStdout = (chunk: Buffer) => {
       const message = chunk.toString('utf8');
-      io.emit(`create-server:${server.id}`, { message, type: 'stdout' });
+      io.emit(`create-server:${server.id}`, [{ message, type: 'stdout' }]);
       debug(`stdoutChunk: ${message}`);
     };
 
     const onStderr = (chunk: Buffer) => {
       const message = chunk.toString('utf8');
-      io.emit(`create-server:${server.id}`, { message, type: 'stderr' });
+      io.emit(`create-server:${server.id}`, [{ message, type: 'stderr' }]);
       debug(`stderrChunk ${message}`);
     };
 
@@ -90,10 +90,12 @@ const worker = new Worker(
 
     const wgetCommand =
       'wget https://raw.githubusercontent.com/dokku/dokku/v0.20.3/bootstrap.sh';
-    io.emit(`create-server:${server.id}`, {
-      message: wgetCommand,
-      type: 'command',
-    });
+    io.emit(`create-server:${server.id}`, [
+      {
+        message: wgetCommand,
+        type: 'command',
+      },
+    ]);
     // Then we install dokku on the new server
     const resultWget = await ssh.execCommand(wgetCommand, {
       onStdout,
@@ -102,10 +104,12 @@ const worker = new Worker(
     debug('resultWget', resultWget);
 
     const dokkuBootstrapCommand = 'DOKKU_TAG=v0.20.3 bash bootstrap.sh';
-    io.emit(`create-server:${server.id}`, {
-      message: dokkuBootstrapCommand,
-      type: 'command',
-    });
+    io.emit(`create-server:${server.id}`, [
+      {
+        message: dokkuBootstrapCommand,
+        type: 'command',
+      },
+    ]);
     // Then we install dokku on the new server
     const resultDokkuBootstrap = await ssh.execCommand(dokkuBootstrapCommand, {
       onStdout,
@@ -115,10 +119,12 @@ const worker = new Worker(
 
     const dokkuClone =
       'dokku plugin:install https://github.com/crisward/dokku-clone.git clone';
-    io.emit(`create-server:${server.id}`, {
-      message: dokkuClone,
-      type: 'command',
-    });
+    io.emit(`create-server:${server.id}`, [
+      {
+        message: dokkuClone,
+        type: 'command',
+      },
+    ]);
     // Now we can install redis
     const resultDokkuClone = await ssh.execCommand(dokkuClone, {
       onStdout,

@@ -20,10 +20,9 @@ export const CreateServer = ({ server }: CreateServerProps) => {
   useEffect(() => {
     const socket = socketIOClient(config.serverUrl);
     console.log(`listening to create-server:${server.id}`);
-    socket.on(`create-server:${server.id}`, (data: RealtimeLog) => {
-      // TODO throttle the render to avoid glitch
+    socket.on(`create-server:${server.id}`, (data: RealtimeLog[]) => {
       setLogs((previousLogs) => {
-        const newLogs = [...previousLogs, data];
+        const newLogs = [...previousLogs, ...data];
         return newLogs;
       });
       console.log('received create-server', data);
