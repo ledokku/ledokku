@@ -191,7 +191,7 @@ export type DashboardQuery = (
   { __typename?: 'Query' }
   & { servers?: Maybe<Array<(
     { __typename?: 'Server' }
-    & Pick<Server, 'id' | 'name'>
+    & Pick<Server, 'id' | 'name' | 'ip' | 'type'>
     & { apps?: Maybe<Array<(
       { __typename?: 'App' }
       & Pick<App, 'id' | 'name'>
@@ -384,6 +384,8 @@ export const DashboardDocument = gql`
   servers {
     id
     name
+    ip
+    type
     apps {
       id
       name

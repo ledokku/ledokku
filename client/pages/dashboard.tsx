@@ -12,6 +12,7 @@ import { PHPIcon } from '../ui/icons/PHPIcon';
 import { NodeIcon } from '../ui/icons/NodeIcon';
 import { DigitalOceanIcon } from '../ui/icons/DigitalOceanIcon';
 import { PostgreSQLIcon } from '../ui/icons/PostgreSQLIcon';
+import { serverTypeReadableName } from '../src/utils';
 
 const Dashboard = () => {
   const router = useRouter();
@@ -88,11 +89,13 @@ const Dashboard = () => {
                       </Typography.Headline>
 
                       <Typography.Caption marginBottom={4}>
-                        Running on <b>Digital Ocean</b>
+                        Running on <b>{serverTypeReadableName(server.type)}</b>
                       </Typography.Caption>
-                      <Typography.Caption>
-                        ip address—70.98.192.00
-                      </Typography.Caption>
+                      {server.ip && (
+                        <Typography.Caption>
+                          ip address—{server.ip}
+                        </Typography.Caption>
+                      )}
                     </Box>
                   </Grid>
                 </Box>

@@ -3,6 +3,7 @@ import socketIOClient from 'socket.io-client';
 import { config } from '../../../config';
 import { Box, Typography, LogBox } from '../../../ui';
 import { ServerByIdQuery, ServerTypes } from '../../generated/graphql';
+import { serverTypeReadableName } from '../../utils';
 
 interface RealtimeLog {
   message: string;
@@ -12,19 +13,6 @@ interface RealtimeLog {
 interface CreateServerProps {
   server: ServerByIdQuery['server'];
 }
-
-const serverTypeReadableName = (type: ServerTypes) => {
-  switch (type) {
-    case 'DIGITALOCEAN':
-      return 'Digital Ocean';
-    case 'AWS':
-      return 'AWS';
-    case 'LINODE':
-      return 'Linode';
-    default:
-      return type;
-  }
-};
 
 export const CreateServer = ({ server }: CreateServerProps) => {
   const [logs, setLogs] = useState<RealtimeLog[]>([]);
