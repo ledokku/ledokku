@@ -47,7 +47,13 @@ export type Database = {
    __typename?: 'Database';
   id: Scalars['ID'];
   name: Scalars['String'];
+  type: DatabaseTypes;
 };
+
+export type DatabaseTypes = 
+  'REDIS' |
+  'POSTGRESQL' |
+  'MONGODB';
 
 export type LoginResult = {
    __typename?: 'LoginResult';
@@ -63,6 +69,7 @@ export type CreateAppInput = {
 export type CreateDatabaseInput = {
   serverId: Scalars['String'];
   name: Scalars['String'];
+  type: DatabaseTypes;
 };
 
 export type Query = {
@@ -137,8 +144,7 @@ export type CreateAppMutation = (
 );
 
 export type CreateDatabaseMutationVariables = {
-  serverId: Scalars['String'];
-  name: Scalars['String'];
+  input: CreateDatabaseInput;
 };
 
 
@@ -254,8 +260,8 @@ export type CreateAppMutationHookResult = ReturnType<typeof useCreateAppMutation
 export type CreateAppMutationResult = ApolloReactCommon.MutationResult<CreateAppMutation>;
 export type CreateAppMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateAppMutation, CreateAppMutationVariables>;
 export const CreateDatabaseDocument = gql`
-    mutation createDatabase($serverId: String!, $name: String!) {
-  createDatabase(input: {serverId: $serverId, name: $name}) {
+    mutation createDatabase($input: CreateDatabaseInput!) {
+  createDatabase(input: $input) {
     id
     name
   }
@@ -276,8 +282,7 @@ export type CreateDatabaseMutationFn = ApolloReactCommon.MutationFunction<Create
  * @example
  * const [createDatabaseMutation, { data, loading, error }] = useCreateDatabaseMutation({
  *   variables: {
- *      serverId: // value for 'serverId'
- *      name: // value for 'name'
+ *      input: // value for 'input'
  *   },
  * });
  */

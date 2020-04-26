@@ -34,7 +34,9 @@ const CreateDatabase = () => {
       // TODO validation token is required
       try {
         const data = await createDatabaseMutation({
-          variables: { name: values.name, serverId },
+          variables: {
+            input: { name: values.name, serverId, type: 'POSTGRESQL' },
+          },
         });
         router.push('/dashboard');
       } catch (error) {

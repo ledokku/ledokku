@@ -46,7 +46,13 @@ export type Database = {
    __typename?: 'Database';
   id: Scalars['ID'];
   name: Scalars['String'];
+  type: DatabaseTypes;
 };
+
+export type DatabaseTypes = 
+  'REDIS' |
+  'POSTGRESQL' |
+  'MONGODB';
 
 export type LoginResult = {
    __typename?: 'LoginResult';
@@ -62,6 +68,7 @@ export type CreateAppInput = {
 export type CreateDatabaseInput = {
   serverId: Scalars['String'];
   name: Scalars['String'];
+  type: DatabaseTypes;
 };
 
 export type Query = {
@@ -201,6 +208,7 @@ export type ResolversTypes = {
   ServerStatus: ServerStatus,
   App: ResolverTypeWrapper<App>,
   Database: ResolverTypeWrapper<Database>,
+  DatabaseTypes: DatabaseTypes,
   LoginResult: ResolverTypeWrapper<LoginResult>,
   CreateAppInput: CreateAppInput,
   CreateDatabaseInput: CreateDatabaseInput,
@@ -220,6 +228,7 @@ export type ResolversParentTypes = {
   ServerStatus: ServerStatus,
   App: App,
   Database: Database,
+  DatabaseTypes: DatabaseTypes,
   LoginResult: LoginResult,
   CreateAppInput: CreateAppInput,
   CreateDatabaseInput: CreateDatabaseInput,
@@ -249,6 +258,7 @@ export type AppResolvers<ContextType = any, ParentType extends ResolversParentTy
 export type DatabaseResolvers<ContextType = any, ParentType extends ResolversParentTypes['Database'] = ResolversParentTypes['Database']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  type?: Resolver<ResolversTypes['DatabaseTypes'], ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 

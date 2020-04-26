@@ -1,5 +1,5 @@
-mutation createDatabase($serverId: String!, $name: String!) {
-  createDatabase(input: { serverId: $serverId, name: $name }) {
+mutation createDatabase($input: CreateDatabaseInput!) {
+  createDatabase(input: $input) {
     id
     name
   }
