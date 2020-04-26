@@ -6,3 +6,5 @@ generates:
     plugins:
       - 'typescript'
       - 'typescript-resolvers'
+    config:
+      enumsAsTypes: true

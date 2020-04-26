@@ -1,0 +1,26 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "CreateEnum",
+      "enum": "ServerStatus",
+      "values": [
+        "NEW",
+        "ACTIVE",
+        "OFF",
+        "ARCHIVE"
+      ]
+    },
+    {
+      "tag": "DeleteEnum",
+      "enum": "ServerStates"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Server",
+      "field": "status",
+      "type": "ServerStatus",
+      "arity": "Required"
+    }
+  ]
+}
