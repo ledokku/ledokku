@@ -3,8 +3,8 @@ import { useRouter } from 'next/router';
 
 import withApollo from '../../lib/withApollo';
 import { LoggedInLayout } from '../../layouts/LoggedInLayout';
-import { useServerByIdQuery } from '../../src/generated/graphql';
-import { CreateServer } from '../../src/modules/server/CreateServer';
+import { useServerByIdQuery } from '../../generated/graphql';
+import { CreateServer } from '../../modules/server/CreateServer';
 
 const Server = () => {
   const router = useRouter();

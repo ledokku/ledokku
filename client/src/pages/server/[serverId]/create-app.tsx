@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
 import { ArrowRight } from 'react-feather';
 
-import { useCreateAppMutation } from '../../../src/generated/graphql';
+import { useCreateAppMutation } from '../../../generated/graphql';
 import withApollo from '../../../lib/withApollo';
 import { TextField, Button, styled, Flex, Box, Grid } from '../../../ui';
 import { LoggedInLayout } from '../../../layouts/LoggedInLayout';

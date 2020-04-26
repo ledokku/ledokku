@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
 
-import { useCreateDatabaseMutation } from '../../../src/generated/graphql';
+import { useCreateDatabaseMutation } from '../../../generated/graphql';
 import { OnboardingLayout } from '../../../layouts/OnboardingLayout';
 import withApollo from '../../../lib/withApollo';
 import { ArrowRight } from 'react-feather';

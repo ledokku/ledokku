@@ -8,10 +8,12 @@ import { Headline } from '../ui/components/Typography/components/Headline';
 import { Paragraph } from '../ui/components/Typography/components/Paragraph';
 import { config } from '../config';
 import withApollo from '../lib/withApollo';
-import { useLoginWithGithubMutation } from '../src/generated/graphql';
+import { useLoginWithGithubMutation } from '../generated/graphql';
+import { useAuth } from '../modules/auth/AuthContext';
 
 const Home = () => {
   const router = useRouter();
+  const { loggedIn, login } = useAuth();
   const [
     loginWithGithubMutation,
     { data, loading, error },
@@ -19,7 +21,7 @@ const Home = () => {
 
   // On mount we check if there is a github code present
   useEffect(() => {
-    const login = async () => {
+    const codeToLogin = async () => {
       const githubCode = window.location.search
         .substring(1)
         .split('&')[0]
@@ -34,20 +36,19 @@ const Home = () => {
         });
         // TODO handle errors
         if (data.data) {
-          localStorage.setItem('accessToken', data.data.loginWithGithub.token);
+          login(data.data.loginWithGithub.token);
           router.push('/dashboard');
         }
       }
     };
 
-    // First we check if the user is connected, if yes we need to redirect him to the dashboard
-    const authToken = localStorage.getItem('accessToken');
-    if (authToken) {
-      router.push('/dashboard');
-    } else {
-      login();
-    }
+    codeToLogin();
   }, []);
+
+  // We check if the user is connected, if yes we need to redirect him to the dashboard
+  if (loggedIn) {
+    router.push('/dashboard');
+  }
 
   const handleLogin = () => {
     // TODO redirect_uri only on localhost

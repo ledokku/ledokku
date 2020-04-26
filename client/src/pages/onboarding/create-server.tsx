@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
 import { ArrowRight } from 'react-feather';
 
-import { useCreateDigitalOceanServerMutation } from '../../src/generated/graphql';
+import { useCreateDigitalOceanServerMutation } from '../../generated/graphql';
 import { OnboardingLayout } from '../../layouts/OnboardingLayout';
 import { Headline } from '../../ui/components/Typography/components/Headline';
 import { Paragraph } from '../../ui/components/Typography/components/Paragraph';
