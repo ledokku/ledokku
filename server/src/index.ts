@@ -117,7 +117,7 @@ const apolloServer = new ApolloServer({
 });
 apolloServer.applyMiddleware({ app });
 
-io.on('connection', function (socket) {
+io.on('connection', function () {
   console.log('a user connected');
 });
 

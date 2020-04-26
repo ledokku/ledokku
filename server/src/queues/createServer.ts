@@ -18,7 +18,7 @@ interface QueueArgs {
 }
 
 // TODO move it somewhere else
-let url = config.redisUrl.split(':');
+const url = config.redisUrl.split(':');
 const connection = {
   host: url[1].replace('//', ''),
   port: +url[2],

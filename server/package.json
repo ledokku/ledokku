@@ -27,6 +27,7 @@
     "yup": "0.28.4"
   },
   "devDependencies": {
+    "@graphql-codegen/add": "1.13.3",
     "@graphql-codegen/cli": "1.13.3",
     "@graphql-codegen/typescript": "1.13.3",
     "@graphql-codegen/typescript-resolvers": "1.13.3",

@@ -5,6 +5,7 @@ import { ThemeProvider } from 'styled-components';
 import { DefaultTheme } from '../ui/themes/DefaultTheme';
 import { GlobalStyle } from '../ui/GlobalStyle';
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface DefaultLayoutProps {
   //
 }
