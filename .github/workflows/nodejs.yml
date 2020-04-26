@@ -35,6 +35,11 @@ jobs:
 
       - run: yarn
 
+      - name: Lint
+        run: yarn test:lint
+        env:
+          CI: true
+
       - run: cd server && yarn build
         env:
           CI: true

@@ -4,6 +4,7 @@
   "repository": "https://github.com/ledokku/ledokku.git",
   "author": "pradel <pradel.leo@gmail.com>",
   "scripts": {
+    "test:lint": "eslint '{client,server}/**/*.{ts,tsx}'",
     "prettier": "prettier --write '**/*.{js,ts,tsx,md,css}'"
   },
   "workspaces": [
@@ -22,6 +23,12 @@
     "*.{js,ts,tsx,md,css}": "prettier --write"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "2.29.0",
+    "@typescript-eslint/parser": "2.29.0",
+    "eslint": "6.8.0",
+    "eslint-config-prettier": "6.11.0",
+    "eslint-plugin-jest": "23.8.2",
+    "eslint-plugin-prettier": "3.1.3",
     "husky": "4.2.5",
     "lint-staged": "10.1.7",
     "prettier": "2.0.5"
