@@ -40,11 +40,13 @@ jobs:
         env:
           CI: true
 
-      - run: cd server && yarn build
+      - name: Test server
+        run: cd server && yarn build
         env:
           CI: true
 
-      - run: cd client && yarn build
+      - name: Test client
+        run: cd client && yarn build
         env:
           CI: true
           GITHUB_CLIENT_ID: TEST_GITHUB_CLIENT_ID
