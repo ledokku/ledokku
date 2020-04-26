@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import socketIOClient from 'socket.io-client';
 import { config } from '../../config';
 import { Box, Typography, LogBox } from '../../ui';
-import { ServerByIdQuery, ServerTypes } from '../../generated/graphql';
+import { ServerByIdQuery } from '../../generated/graphql';
 import { serverTypeReadableName } from '../../utils';
 
 interface RealtimeLog {
