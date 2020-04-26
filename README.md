@@ -18,7 +18,7 @@ And link them with wide most popular dbs : **postgresql, mongodb, redis**.
 - Link your custom domain
 - App is live 🎉🎉🎉
 
-**Built with** :
+### Built with
 
 - Dokku 🐳
 - Node.js 💚
@@ -29,7 +29,12 @@ And link them with wide most popular dbs : **postgresql, mongodb, redis**.
 - GithubAPI 🐱
 - DIgitalOceanAPI 🌊
 
-Made by
+## Contributing
+
+Read our [contributing guide](CONTRIBUTING.md) to see how to locally setup the repository and see our development process.
+
+## Made by
+
 [Ondrej](https://github.com/bartaxyz),
 [Leo](https://github.com/pradel),
 [Arturs](https://github.com/Akirtovskis)
