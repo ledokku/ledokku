@@ -5,6 +5,7 @@ import withApollo from '../../lib/withApollo';
 import { LoggedInLayout } from '../../layouts/LoggedInLayout';
 import { useServerByIdQuery } from '../../generated/graphql';
 import { CreateServer } from '../../modules/server/CreateServer';
+import { Protected } from '../../modules/auth/Protected';
 
 const Server = () => {
   const router = useRouter();
@@ -51,4 +52,8 @@ const Server = () => {
   );
 };
 
-export default withApollo(Server);
+export default withApollo(() => (
+  <Protected>
+    <Server />
+  </Protected>
+));

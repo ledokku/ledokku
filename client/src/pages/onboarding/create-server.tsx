@@ -18,6 +18,7 @@ import {
   BoxButton,
   Grid,
 } from '../../ui';
+import { Protected } from '../../modules/auth/Protected';
 
 const CreateServer = () => {
   const router = useRouter();
@@ -79,4 +80,8 @@ const Form = styled.form`
   }
 `;
 
-export default withApollo(CreateServer);
+export default withApollo(() => (
+  <Protected>
+    <CreateServer />
+  </Protected>
+));
