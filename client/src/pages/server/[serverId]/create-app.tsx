@@ -3,10 +3,11 @@ import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
 import { ArrowRight } from 'react-feather';
 
-import { useCreateAppMutation } from '../../../src/generated/graphql';
+import { useCreateAppMutation } from '../../../generated/graphql';
 import withApollo from '../../../lib/withApollo';
 import { TextField, Button, styled, Flex, Box, Grid } from '../../../ui';
 import { LoggedInLayout } from '../../../layouts/LoggedInLayout';
+import { Protected } from '../../../modules/auth/Protected';
 
 const CreateApp = () => {
   const router = useRouter();
@@ -103,4 +104,8 @@ const Form = styled.form`
   }
 `;
 
-export default withApollo(CreateApp);
+export default withApollo(() => (
+  <Protected>
+    <CreateApp />
+  </Protected>
+));

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
 import { ArrowRight } from 'react-feather';
 
-import { useCreateDigitalOceanServerMutation } from '../../src/generated/graphql';
+import { useCreateDigitalOceanServerMutation } from '../../generated/graphql';
 import { OnboardingLayout } from '../../layouts/OnboardingLayout';
 import { Headline } from '../../ui/components/Typography/components/Headline';
 import { Paragraph } from '../../ui/components/Typography/components/Paragraph';
@@ -18,6 +18,7 @@ import {
   BoxButton,
   Grid,
 } from '../../ui';
+import { Protected } from '../../modules/auth/Protected';
 
 const CreateServer = () => {
   const router = useRouter();
@@ -79,4 +80,8 @@ const Form = styled.form`
   }
 `;
 
-export default withApollo(CreateServer);
+export default withApollo(() => (
+  <Protected>
+    <CreateServer />
+  </Protected>
+));
