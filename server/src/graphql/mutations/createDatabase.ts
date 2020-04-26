@@ -6,10 +6,12 @@ import { prisma } from '../../prisma';
 // Validate the name to make sure there are no security risks by adding it to the ssh exec command.
 // Only letters and "-" allowed
 // TODO unit test this schema
-const databaseNameSchema = yup
-  .string()
-  .required()
-  .matches(/^[a-z0-9-]+$/);
+const createDatabaseSchema = yup.object({
+  name: yup
+    .string()
+    .required()
+    .matches(/^[a-z0-9-]+$/),
+});
 
 export const createDatabase: MutationResolvers['createDatabase'] = async (
   _,
@@ -37,7 +39,7 @@ export const createDatabase: MutationResolvers['createDatabase'] = async (
   }
 
   // We make sure the name is valid to avoid security risks
-  databaseNameSchema.validateSync(input.name);
+  createDatabaseSchema.validateSync({ name: input.name });
 
   const ssh = new NodeSsh();
 

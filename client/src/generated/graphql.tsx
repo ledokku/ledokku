@@ -53,7 +53,8 @@ export type Database = {
 export type DatabaseTypes = 
   'REDIS' |
   'POSTGRESQL' |
-  'MONGODB';
+  'MONGODB' |
+  'MYSQL';
 
 export type LoginResult = {
    __typename?: 'LoginResult';

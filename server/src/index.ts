@@ -49,6 +49,7 @@ const typeDefs = gql`
     REDIS
     POSTGRESQL
     MONGODB
+    MYSQL
   }
 
   type LoginResult {
