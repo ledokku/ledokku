@@ -18,7 +18,7 @@ export const BreadcrumbHeader: React.FC<BreadcrumbHeaderProps> = (props) => {
     <Root>
       <Breadcrumb>
         <LogoItem>
-          <Link href="/">
+          <Link href="/dashboard">
             <LogoLabel>Ledokku</LogoLabel>
           </Link>
         </LogoItem>

@@ -1,5 +1,4 @@
 import withApollo from 'next-with-apollo';
-import { Router } from 'next/router';
 import { ApolloClient } from 'apollo-client';
 import { from } from 'apollo-link';
 import { createHttpLink } from 'apollo-link-http';

@@ -2,6 +2,7 @@ import React from 'react';
 import { DefaultLayout, DefaultLayoutProps } from './DefaultLayout';
 import { BreadcrumbHeaderProps } from '../ui/components/Page/components/BreadcrumbHeader';
 import { Page, Divider, Box, Flex } from '../ui';
+import { useAuth } from '../modules/auth/AuthContext';
 
 export interface LoggedInLayoutProps extends DefaultLayoutProps {
   breadcrumb: BreadcrumbHeaderProps['items'];
@@ -12,6 +13,8 @@ export const LoggedInLayout: React.FC<LoggedInLayoutProps> = ({
   children,
   ...props
 }) => {
+  const { logout } = useAuth();
+
   return (
     <DefaultLayout {...props}>
       <Flex fullHeight={true} flexDirection="column">
@@ -19,7 +22,8 @@ export const LoggedInLayout: React.FC<LoggedInLayoutProps> = ({
           <Flex justifyContent="space-between">
             <Page.BreadcrumbHeader items={breadcrumb} />
 
-            <div>Profile</div>
+            {/* TODO Clean this part */}
+            <div onClick={() => logout()}>Profile</div>
           </Flex>
         </Box>
         <Divider.Horizontal />
