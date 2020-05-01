@@ -6,6 +6,7 @@ import { Resolvers } from './generated/graphql';
 import { loginWithGithub } from './graphql/mutations/loginWithGithub';
 import { saveDigitalOceanAccessToken } from './graphql/mutations/saveDigitalOceanAccessToken';
 import { createDigitalOceanServer } from './graphql/mutations/createDigitalOceanServer';
+import { deleteDigitalOceanServer } from './graphql/mutations/deleteDigitalOceanServer';
 import { updateServerInfo } from './graphql/mutations/updateServerInfo';
 import { createDatabase } from './graphql/mutations/createDatabase';
 import { createApp } from './graphql/mutations/createApp';
@@ -57,6 +58,7 @@ const typeDefs = gql`
     loginWithGithub(code: String!): LoginResult
     saveDigitalOceanAccessToken(digitalOceanAccessToken: String!): Boolean
     createDigitalOceanServer(serverName: String!): Server!
+    deleteDigitalOceanServer(serverId: String!): Boolean
     createApp(input: CreateAppInput!): App!
     createDatabase(input: CreateDatabaseInput!): Database!
     updateServerInfo(serverId: String!): Boolean
@@ -69,6 +71,7 @@ const resolvers: Resolvers<{ userId?: string }> = {
     loginWithGithub,
     saveDigitalOceanAccessToken,
     createDigitalOceanServer,
+    deleteDigitalOceanServer,
     updateServerInfo,
     createDatabase,
     createApp,
