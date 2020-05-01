@@ -1,0 +1,4 @@
+client/.next
+client/src/generated
+server/.build
+server/src/generated

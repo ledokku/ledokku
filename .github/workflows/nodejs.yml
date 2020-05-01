@@ -35,11 +35,18 @@ jobs:
 
       - run: yarn
 
-      - run: cd server && yarn build
+      - name: Lint
+        run: yarn test:lint
         env:
           CI: true
 
-      - run: cd client && yarn build
+      - name: Test server
+        run: cd server && yarn build
+        env:
+          CI: true
+
+      - name: Test client
+        run: cd client && yarn build
         env:
           CI: true
           GITHUB_CLIENT_ID: TEST_GITHUB_CLIENT_ID

@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
 
-import { useCreateDatabaseMutation } from '../../../src/generated/graphql';
+import { useCreateDatabaseMutation } from '../../../generated/graphql';
 import { OnboardingLayout } from '../../../layouts/OnboardingLayout';
 import withApollo from '../../../lib/withApollo';
 import { ArrowRight } from 'react-feather';
@@ -20,6 +20,7 @@ import { PostgreSQLIcon } from '../../../ui/icons/PostgreSQLIcon';
 import { MySQLIcon } from '../../../ui/icons/MySQLIcon';
 import { MongoIcon } from '../../../ui/icons/MongoIcon';
 import { RedisIcon } from '../../../ui/icons/RedisIcon';
+import { Protected } from '../../../modules/auth/Protected';
 
 const CreateDatabase = () => {
   const router = useRouter();
@@ -117,4 +118,8 @@ const Form = styled.form`
   }
 `;
 
-export default withApollo(CreateDatabase);
+export default withApollo(() => (
+  <Protected>
+    <CreateDatabase />
+  </Protected>
+));

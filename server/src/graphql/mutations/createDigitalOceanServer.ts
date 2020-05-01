@@ -121,6 +121,7 @@ export const createDigitalOceanServer: MutationResolvers['createDigitalOceanServ
           name: serverName,
           serverId: resData.droplet.id,
           type: 'DIGITALOCEAN',
+          status: 'NEW',
           actionId: resData.links.actions[0].id,
           user: {
             connect: {

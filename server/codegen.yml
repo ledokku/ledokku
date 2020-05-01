@@ -4,5 +4,8 @@ documents: null
 generates:
   src/generated/graphql.ts:
     plugins:
+      - add: '/* eslint-disable */'
       - 'typescript'
       - 'typescript-resolvers'
+    config:
+      enumsAsTypes: true

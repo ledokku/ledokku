@@ -1,7 +1,9 @@
+/* eslint-disable */
 import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/react-common';
 import * as ApolloReactHooks from '@apollo/react-hooks';
 export type Maybe<T> = T | null;
+
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -14,28 +16,41 @@ export type Scalars = {
 };
 
 export type Server = {
-  __typename?: 'Server';
+   __typename?: 'Server';
   id: Scalars['ID'];
   name: Scalars['String'];
-  ip: Scalars['String'];
+  ip?: Maybe<Scalars['String']>;
+  type: ServerTypes;
+  status: ServerStatus;
   apps?: Maybe<Array<App>>;
   databases?: Maybe<Array<Database>>;
 };
 
+export type ServerTypes = 
+  'AWS' |
+  'DIGITALOCEAN' |
+  'LINODE';
+
+export type ServerStatus = 
+  'NEW' |
+  'ACTIVE' |
+  'OFF' |
+  'ARCHIVE';
+
 export type App = {
-  __typename?: 'App';
+   __typename?: 'App';
   id: Scalars['ID'];
   name: Scalars['String'];
 };
 
 export type Database = {
-  __typename?: 'Database';
+   __typename?: 'Database';
   id: Scalars['ID'];
   name: Scalars['String'];
 };
 
 export type LoginResult = {
-  __typename?: 'LoginResult';
+   __typename?: 'LoginResult';
   token: Scalars['String'];
 };
 
@@ -51,17 +66,18 @@ export type CreateDatabaseInput = {
 };
 
 export type Query = {
-  __typename?: 'Query';
+   __typename?: 'Query';
   servers?: Maybe<Array<Server>>;
   server?: Maybe<Server>;
 };
+
 
 export type QueryServerArgs = {
   id: Scalars['String'];
 };
 
 export type Mutation = {
-  __typename?: 'Mutation';
+   __typename?: 'Mutation';
   loginWithGithub?: Maybe<LoginResult>;
   saveDigitalOceanAccessToken?: Maybe<Scalars['Boolean']>;
   createDigitalOceanServer: Server;
@@ -70,34 +86,40 @@ export type Mutation = {
   updateServerInfo?: Maybe<Scalars['Boolean']>;
 };
 
+
 export type MutationLoginWithGithubArgs = {
   code: Scalars['String'];
 };
+
 
 export type MutationSaveDigitalOceanAccessTokenArgs = {
   digitalOceanAccessToken: Scalars['String'];
 };
 
+
 export type MutationCreateDigitalOceanServerArgs = {
   serverName: Scalars['String'];
 };
+
 
 export type MutationCreateAppArgs = {
   input: CreateAppInput;
 };
 
+
 export type MutationCreateDatabaseArgs = {
   input: CreateDatabaseInput;
 };
+
 
 export type MutationUpdateServerInfoArgs = {
   serverId: Scalars['String'];
 };
 
-export enum CacheControlScope {
-  Public = 'PUBLIC',
-  Private = 'PRIVATE',
-}
+export type CacheControlScope = 
+  'PUBLIC' |
+  'PRIVATE';
+
 
 export type CreateAppMutationVariables = {
   serverId: Scalars['String'];
@@ -105,82 +127,106 @@ export type CreateAppMutationVariables = {
   gitUrl: Scalars['String'];
 };
 
-export type CreateAppMutation = { __typename?: 'Mutation' } & {
-  createApp: { __typename?: 'App' } & Pick<App, 'id' | 'name'>;
-};
+
+export type CreateAppMutation = (
+  { __typename?: 'Mutation' }
+  & { createApp: (
+    { __typename?: 'App' }
+    & Pick<App, 'id' | 'name'>
+  ) }
+);
 
 export type CreateDatabaseMutationVariables = {
   serverId: Scalars['String'];
   name: Scalars['String'];
 };
 
-export type CreateDatabaseMutation = { __typename?: 'Mutation' } & {
-  createDatabase: { __typename?: 'Database' } & Pick<Database, 'id' | 'name'>;
-};
+
+export type CreateDatabaseMutation = (
+  { __typename?: 'Mutation' }
+  & { createDatabase: (
+    { __typename?: 'Database' }
+    & Pick<Database, 'id' | 'name'>
+  ) }
+);
 
 export type CreateDigitalOceanServerMutationVariables = {
   serverName: Scalars['String'];
 };
 
-export type CreateDigitalOceanServerMutation = { __typename?: 'Mutation' } & {
-  createDigitalOceanServer: { __typename?: 'Server' } & Pick<Server, 'id'>;
-};
+
+export type CreateDigitalOceanServerMutation = (
+  { __typename?: 'Mutation' }
+  & { createDigitalOceanServer: (
+    { __typename?: 'Server' }
+    & Pick<Server, 'id'>
+  ) }
+);
 
 export type LoginWithGithubMutationVariables = {
   code: Scalars['String'];
 };
 
-export type LoginWithGithubMutation = { __typename?: 'Mutation' } & {
-  loginWithGithub?: Maybe<
-    { __typename?: 'LoginResult' } & Pick<LoginResult, 'token'>
-  >;
-};
+
+export type LoginWithGithubMutation = (
+  { __typename?: 'Mutation' }
+  & { loginWithGithub?: Maybe<(
+    { __typename?: 'LoginResult' }
+    & Pick<LoginResult, 'token'>
+  )> }
+);
 
 export type SaveDigitalOceanAccessTokenMutationVariables = {
   digitalOceanAccessToken: Scalars['String'];
 };
 
-export type SaveDigitalOceanAccessTokenMutation = {
-  __typename?: 'Mutation';
-} & Pick<Mutation, 'saveDigitalOceanAccessToken'>;
+
+export type SaveDigitalOceanAccessTokenMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'saveDigitalOceanAccessToken'>
+);
 
 export type DashboardQueryVariables = {};
 
-export type DashboardQuery = { __typename?: 'Query' } & {
-  servers?: Maybe<
-    Array<
-      { __typename?: 'Server' } & Pick<Server, 'id' | 'name'> & {
-          apps?: Maybe<
-            Array<{ __typename?: 'App' } & Pick<App, 'id' | 'name'>>
-          >;
-          databases?: Maybe<
-            Array<{ __typename?: 'Database' } & Pick<Database, 'id' | 'name'>>
-          >;
-        }
-    >
-  >;
-};
+
+export type DashboardQuery = (
+  { __typename?: 'Query' }
+  & { servers?: Maybe<Array<(
+    { __typename?: 'Server' }
+    & Pick<Server, 'id' | 'name' | 'ip' | 'type'>
+    & { apps?: Maybe<Array<(
+      { __typename?: 'App' }
+      & Pick<App, 'id' | 'name'>
+    )>>, databases?: Maybe<Array<(
+      { __typename?: 'Database' }
+      & Pick<Database, 'id' | 'name'>
+    )>> }
+  )>> }
+);
 
 export type ServerByIdQueryVariables = {
   id: Scalars['String'];
 };
 
-export type ServerByIdQuery = { __typename?: 'Query' } & {
-  server?: Maybe<{ __typename?: 'Server' } & Pick<Server, 'id' | 'name'>>;
-};
+
+export type ServerByIdQuery = (
+  { __typename?: 'Query' }
+  & { server?: Maybe<(
+    { __typename?: 'Server' }
+    & Pick<Server, 'id' | 'name' | 'ip' | 'type' | 'status'>
+  )> }
+);
+
 
 export const CreateAppDocument = gql`
-  mutation createApp($serverId: String!, $name: String!, $gitUrl: String!) {
-    createApp(input: { serverId: $serverId, name: $name, gitUrl: $gitUrl }) {
-      id
-      name
-    }
+    mutation createApp($serverId: String!, $name: String!, $gitUrl: String!) {
+  createApp(input: {serverId: $serverId, name: $name, gitUrl: $gitUrl}) {
+    id
+    name
   }
-`;
-export type CreateAppMutationFn = ApolloReactCommon.MutationFunction<
-  CreateAppMutation,
-  CreateAppMutationVariables
->;
+}
+    `;
+export type CreateAppMutationFn = ApolloReactCommon.MutationFunction<CreateAppMutation, CreateAppMutationVariables>;
 
 /**
  * __useCreateAppMutation__
@@ -201,39 +247,21 @@ export type CreateAppMutationFn = ApolloReactCommon.MutationFunction<
  *   },
  * });
  */
-export function useCreateAppMutation(
-  baseOptions?: ApolloReactHooks.MutationHookOptions<
-    CreateAppMutation,
-    CreateAppMutationVariables
-  >
-) {
-  return ApolloReactHooks.useMutation<
-    CreateAppMutation,
-    CreateAppMutationVariables
-  >(CreateAppDocument, baseOptions);
-}
-export type CreateAppMutationHookResult = ReturnType<
-  typeof useCreateAppMutation
->;
-export type CreateAppMutationResult = ApolloReactCommon.MutationResult<
-  CreateAppMutation
->;
-export type CreateAppMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  CreateAppMutation,
-  CreateAppMutationVariables
->;
+export function useCreateAppMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateAppMutation, CreateAppMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateAppMutation, CreateAppMutationVariables>(CreateAppDocument, baseOptions);
+      }
+export type CreateAppMutationHookResult = ReturnType<typeof useCreateAppMutation>;
+export type CreateAppMutationResult = ApolloReactCommon.MutationResult<CreateAppMutation>;
+export type CreateAppMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateAppMutation, CreateAppMutationVariables>;
 export const CreateDatabaseDocument = gql`
-  mutation createDatabase($serverId: String!, $name: String!) {
-    createDatabase(input: { serverId: $serverId, name: $name }) {
-      id
-      name
-    }
+    mutation createDatabase($serverId: String!, $name: String!) {
+  createDatabase(input: {serverId: $serverId, name: $name}) {
+    id
+    name
   }
-`;
-export type CreateDatabaseMutationFn = ApolloReactCommon.MutationFunction<
-  CreateDatabaseMutation,
-  CreateDatabaseMutationVariables
->;
+}
+    `;
+export type CreateDatabaseMutationFn = ApolloReactCommon.MutationFunction<CreateDatabaseMutation, CreateDatabaseMutationVariables>;
 
 /**
  * __useCreateDatabaseMutation__
@@ -253,38 +281,20 @@ export type CreateDatabaseMutationFn = ApolloReactCommon.MutationFunction<
  *   },
  * });
  */
-export function useCreateDatabaseMutation(
-  baseOptions?: ApolloReactHooks.MutationHookOptions<
-    CreateDatabaseMutation,
-    CreateDatabaseMutationVariables
-  >
-) {
-  return ApolloReactHooks.useMutation<
-    CreateDatabaseMutation,
-    CreateDatabaseMutationVariables
-  >(CreateDatabaseDocument, baseOptions);
-}
-export type CreateDatabaseMutationHookResult = ReturnType<
-  typeof useCreateDatabaseMutation
->;
-export type CreateDatabaseMutationResult = ApolloReactCommon.MutationResult<
-  CreateDatabaseMutation
->;
-export type CreateDatabaseMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  CreateDatabaseMutation,
-  CreateDatabaseMutationVariables
->;
+export function useCreateDatabaseMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateDatabaseMutation, CreateDatabaseMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateDatabaseMutation, CreateDatabaseMutationVariables>(CreateDatabaseDocument, baseOptions);
+      }
+export type CreateDatabaseMutationHookResult = ReturnType<typeof useCreateDatabaseMutation>;
+export type CreateDatabaseMutationResult = ApolloReactCommon.MutationResult<CreateDatabaseMutation>;
+export type CreateDatabaseMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateDatabaseMutation, CreateDatabaseMutationVariables>;
 export const CreateDigitalOceanServerDocument = gql`
-  mutation createDigitalOceanServer($serverName: String!) {
-    createDigitalOceanServer(serverName: $serverName) {
-      id
-    }
+    mutation createDigitalOceanServer($serverName: String!) {
+  createDigitalOceanServer(serverName: $serverName) {
+    id
   }
-`;
-export type CreateDigitalOceanServerMutationFn = ApolloReactCommon.MutationFunction<
-  CreateDigitalOceanServerMutation,
-  CreateDigitalOceanServerMutationVariables
->;
+}
+    `;
+export type CreateDigitalOceanServerMutationFn = ApolloReactCommon.MutationFunction<CreateDigitalOceanServerMutation, CreateDigitalOceanServerMutationVariables>;
 
 /**
  * __useCreateDigitalOceanServerMutation__
@@ -303,38 +313,20 @@ export type CreateDigitalOceanServerMutationFn = ApolloReactCommon.MutationFunct
  *   },
  * });
  */
-export function useCreateDigitalOceanServerMutation(
-  baseOptions?: ApolloReactHooks.MutationHookOptions<
-    CreateDigitalOceanServerMutation,
-    CreateDigitalOceanServerMutationVariables
-  >
-) {
-  return ApolloReactHooks.useMutation<
-    CreateDigitalOceanServerMutation,
-    CreateDigitalOceanServerMutationVariables
-  >(CreateDigitalOceanServerDocument, baseOptions);
-}
-export type CreateDigitalOceanServerMutationHookResult = ReturnType<
-  typeof useCreateDigitalOceanServerMutation
->;
-export type CreateDigitalOceanServerMutationResult = ApolloReactCommon.MutationResult<
-  CreateDigitalOceanServerMutation
->;
-export type CreateDigitalOceanServerMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  CreateDigitalOceanServerMutation,
-  CreateDigitalOceanServerMutationVariables
->;
+export function useCreateDigitalOceanServerMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateDigitalOceanServerMutation, CreateDigitalOceanServerMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateDigitalOceanServerMutation, CreateDigitalOceanServerMutationVariables>(CreateDigitalOceanServerDocument, baseOptions);
+      }
+export type CreateDigitalOceanServerMutationHookResult = ReturnType<typeof useCreateDigitalOceanServerMutation>;
+export type CreateDigitalOceanServerMutationResult = ApolloReactCommon.MutationResult<CreateDigitalOceanServerMutation>;
+export type CreateDigitalOceanServerMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateDigitalOceanServerMutation, CreateDigitalOceanServerMutationVariables>;
 export const LoginWithGithubDocument = gql`
-  mutation loginWithGithub($code: String!) {
-    loginWithGithub(code: $code) {
-      token
-    }
+    mutation loginWithGithub($code: String!) {
+  loginWithGithub(code: $code) {
+    token
   }
-`;
-export type LoginWithGithubMutationFn = ApolloReactCommon.MutationFunction<
-  LoginWithGithubMutation,
-  LoginWithGithubMutationVariables
->;
+}
+    `;
+export type LoginWithGithubMutationFn = ApolloReactCommon.MutationFunction<LoginWithGithubMutation, LoginWithGithubMutationVariables>;
 
 /**
  * __useLoginWithGithubMutation__
@@ -353,38 +345,18 @@ export type LoginWithGithubMutationFn = ApolloReactCommon.MutationFunction<
  *   },
  * });
  */
-export function useLoginWithGithubMutation(
-  baseOptions?: ApolloReactHooks.MutationHookOptions<
-    LoginWithGithubMutation,
-    LoginWithGithubMutationVariables
-  >
-) {
-  return ApolloReactHooks.useMutation<
-    LoginWithGithubMutation,
-    LoginWithGithubMutationVariables
-  >(LoginWithGithubDocument, baseOptions);
-}
-export type LoginWithGithubMutationHookResult = ReturnType<
-  typeof useLoginWithGithubMutation
->;
-export type LoginWithGithubMutationResult = ApolloReactCommon.MutationResult<
-  LoginWithGithubMutation
->;
-export type LoginWithGithubMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  LoginWithGithubMutation,
-  LoginWithGithubMutationVariables
->;
+export function useLoginWithGithubMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<LoginWithGithubMutation, LoginWithGithubMutationVariables>) {
+        return ApolloReactHooks.useMutation<LoginWithGithubMutation, LoginWithGithubMutationVariables>(LoginWithGithubDocument, baseOptions);
+      }
+export type LoginWithGithubMutationHookResult = ReturnType<typeof useLoginWithGithubMutation>;
+export type LoginWithGithubMutationResult = ApolloReactCommon.MutationResult<LoginWithGithubMutation>;
+export type LoginWithGithubMutationOptions = ApolloReactCommon.BaseMutationOptions<LoginWithGithubMutation, LoginWithGithubMutationVariables>;
 export const SaveDigitalOceanAccessTokenDocument = gql`
-  mutation saveDigitalOceanAccessToken($digitalOceanAccessToken: String!) {
-    saveDigitalOceanAccessToken(
-      digitalOceanAccessToken: $digitalOceanAccessToken
-    )
-  }
-`;
-export type SaveDigitalOceanAccessTokenMutationFn = ApolloReactCommon.MutationFunction<
-  SaveDigitalOceanAccessTokenMutation,
-  SaveDigitalOceanAccessTokenMutationVariables
->;
+    mutation saveDigitalOceanAccessToken($digitalOceanAccessToken: String!) {
+  saveDigitalOceanAccessToken(digitalOceanAccessToken: $digitalOceanAccessToken)
+}
+    `;
+export type SaveDigitalOceanAccessTokenMutationFn = ApolloReactCommon.MutationFunction<SaveDigitalOceanAccessTokenMutation, SaveDigitalOceanAccessTokenMutationVariables>;
 
 /**
  * __useSaveDigitalOceanAccessTokenMutation__
@@ -403,43 +375,30 @@ export type SaveDigitalOceanAccessTokenMutationFn = ApolloReactCommon.MutationFu
  *   },
  * });
  */
-export function useSaveDigitalOceanAccessTokenMutation(
-  baseOptions?: ApolloReactHooks.MutationHookOptions<
-    SaveDigitalOceanAccessTokenMutation,
-    SaveDigitalOceanAccessTokenMutationVariables
-  >
-) {
-  return ApolloReactHooks.useMutation<
-    SaveDigitalOceanAccessTokenMutation,
-    SaveDigitalOceanAccessTokenMutationVariables
-  >(SaveDigitalOceanAccessTokenDocument, baseOptions);
-}
-export type SaveDigitalOceanAccessTokenMutationHookResult = ReturnType<
-  typeof useSaveDigitalOceanAccessTokenMutation
->;
-export type SaveDigitalOceanAccessTokenMutationResult = ApolloReactCommon.MutationResult<
-  SaveDigitalOceanAccessTokenMutation
->;
-export type SaveDigitalOceanAccessTokenMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  SaveDigitalOceanAccessTokenMutation,
-  SaveDigitalOceanAccessTokenMutationVariables
->;
+export function useSaveDigitalOceanAccessTokenMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SaveDigitalOceanAccessTokenMutation, SaveDigitalOceanAccessTokenMutationVariables>) {
+        return ApolloReactHooks.useMutation<SaveDigitalOceanAccessTokenMutation, SaveDigitalOceanAccessTokenMutationVariables>(SaveDigitalOceanAccessTokenDocument, baseOptions);
+      }
+export type SaveDigitalOceanAccessTokenMutationHookResult = ReturnType<typeof useSaveDigitalOceanAccessTokenMutation>;
+export type SaveDigitalOceanAccessTokenMutationResult = ApolloReactCommon.MutationResult<SaveDigitalOceanAccessTokenMutation>;
+export type SaveDigitalOceanAccessTokenMutationOptions = ApolloReactCommon.BaseMutationOptions<SaveDigitalOceanAccessTokenMutation, SaveDigitalOceanAccessTokenMutationVariables>;
 export const DashboardDocument = gql`
-  query dashboard {
-    servers {
+    query dashboard {
+  servers {
+    id
+    name
+    ip
+    type
+    apps {
       id
       name
-      apps {
-        id
-        name
-      }
-      databases {
-        id
-        name
-      }
+    }
+    databases {
+      id
+      name
     }
   }
-`;
+}
+    `;
 
 /**
  * __useDashboardQuery__
@@ -456,44 +415,26 @@ export const DashboardDocument = gql`
  *   },
  * });
  */
-export function useDashboardQuery(
-  baseOptions?: ApolloReactHooks.QueryHookOptions<
-    DashboardQuery,
-    DashboardQueryVariables
-  >
-) {
-  return ApolloReactHooks.useQuery<DashboardQuery, DashboardQueryVariables>(
-    DashboardDocument,
-    baseOptions
-  );
-}
-export function useDashboardLazyQuery(
-  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
-    DashboardQuery,
-    DashboardQueryVariables
-  >
-) {
-  return ApolloReactHooks.useLazyQuery<DashboardQuery, DashboardQueryVariables>(
-    DashboardDocument,
-    baseOptions
-  );
-}
+export function useDashboardQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<DashboardQuery, DashboardQueryVariables>) {
+        return ApolloReactHooks.useQuery<DashboardQuery, DashboardQueryVariables>(DashboardDocument, baseOptions);
+      }
+export function useDashboardLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<DashboardQuery, DashboardQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<DashboardQuery, DashboardQueryVariables>(DashboardDocument, baseOptions);
+        }
 export type DashboardQueryHookResult = ReturnType<typeof useDashboardQuery>;
-export type DashboardLazyQueryHookResult = ReturnType<
-  typeof useDashboardLazyQuery
->;
-export type DashboardQueryResult = ApolloReactCommon.QueryResult<
-  DashboardQuery,
-  DashboardQueryVariables
->;
+export type DashboardLazyQueryHookResult = ReturnType<typeof useDashboardLazyQuery>;
+export type DashboardQueryResult = ApolloReactCommon.QueryResult<DashboardQuery, DashboardQueryVariables>;
 export const ServerByIdDocument = gql`
-  query serverById($id: String!) {
-    server(id: $id) {
-      id
-      name
-    }
+    query serverById($id: String!) {
+  server(id: $id) {
+    id
+    name
+    ip
+    type
+    status
   }
-`;
+}
+    `;
 
 /**
  * __useServerByIdQuery__
@@ -511,33 +452,12 @@ export const ServerByIdDocument = gql`
  *   },
  * });
  */
-export function useServerByIdQuery(
-  baseOptions?: ApolloReactHooks.QueryHookOptions<
-    ServerByIdQuery,
-    ServerByIdQueryVariables
-  >
-) {
-  return ApolloReactHooks.useQuery<ServerByIdQuery, ServerByIdQueryVariables>(
-    ServerByIdDocument,
-    baseOptions
-  );
-}
-export function useServerByIdLazyQuery(
-  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
-    ServerByIdQuery,
-    ServerByIdQueryVariables
-  >
-) {
-  return ApolloReactHooks.useLazyQuery<
-    ServerByIdQuery,
-    ServerByIdQueryVariables
-  >(ServerByIdDocument, baseOptions);
-}
+export function useServerByIdQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<ServerByIdQuery, ServerByIdQueryVariables>) {
+        return ApolloReactHooks.useQuery<ServerByIdQuery, ServerByIdQueryVariables>(ServerByIdDocument, baseOptions);
+      }
+export function useServerByIdLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<ServerByIdQuery, ServerByIdQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<ServerByIdQuery, ServerByIdQueryVariables>(ServerByIdDocument, baseOptions);
+        }
 export type ServerByIdQueryHookResult = ReturnType<typeof useServerByIdQuery>;
-export type ServerByIdLazyQueryHookResult = ReturnType<
-  typeof useServerByIdLazyQuery
->;
-export type ServerByIdQueryResult = ApolloReactCommon.QueryResult<
-  ServerByIdQuery,
-  ServerByIdQueryVariables
->;
+export type ServerByIdLazyQueryHookResult = ReturnType<typeof useServerByIdLazyQuery>;
+export type ServerByIdQueryResult = ApolloReactCommon.QueryResult<ServerByIdQuery, ServerByIdQueryVariables>;

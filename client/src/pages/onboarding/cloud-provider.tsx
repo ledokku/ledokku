@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
 
-import { useSaveDigitalOceanAccessTokenMutation } from '../../src/generated/graphql';
+import { useSaveDigitalOceanAccessTokenMutation } from '../../generated/graphql';
 import { OnboardingLayout } from '../../layouts/OnboardingLayout';
 import withApollo from '../../lib/withApollo';
 import { ArrowRight } from 'react-feather';
@@ -19,6 +19,7 @@ import {
 import { DigitalOceanIcon } from '../../ui/icons/DigitalOceanIcon';
 import { LinodeIcon } from '../../ui/icons/LinodeIcon';
 import { AWSIcon } from '../../ui/icons/AWSIcon';
+import { Protected } from '../../modules/auth/Protected';
 
 const CloudProvider = () => {
   const router = useRouter();
@@ -118,4 +119,8 @@ const Form = styled.form`
   }
 `;
 
-export default withApollo(CloudProvider);
+export default withApollo(() => (
+  <Protected>
+    <CloudProvider />
+  </Protected>
+));

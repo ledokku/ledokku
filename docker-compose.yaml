@@ -10,7 +10,7 @@ services:
     environment:
       POSTGRES_PASSWORD: postgrespassword
   redis:
-    image: 'redis:4'
+    image: 'redis:5'
     ports:
       - '6380:6379'
 volumes:

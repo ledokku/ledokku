@@ -1,10 +1,10 @@
 import React from 'react';
 import { Plus } from 'react-feather';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
-import { config } from '../config';
 import withApollo from '../lib/withApollo';
-import { useDashboardQuery } from '../src/generated/graphql';
+import { useDashboardQuery } from '../generated/graphql';
 import { LoggedInLayout } from '../layouts/LoggedInLayout';
 import { Typography, BoxButton, Grid, Box } from '../ui';
 import { RubyIcon } from '../ui/icons/RubyIcon';
@@ -12,6 +12,8 @@ import { PHPIcon } from '../ui/icons/PHPIcon';
 import { NodeIcon } from '../ui/icons/NodeIcon';
 import { DigitalOceanIcon } from '../ui/icons/DigitalOceanIcon';
 import { PostgreSQLIcon } from '../ui/icons/PostgreSQLIcon';
+import { serverTypeReadableName } from '../utils';
+import { Protected } from '../modules/auth/Protected';
 
 const Dashboard = () => {
   const router = useRouter();
@@ -84,15 +86,23 @@ const Dashboard = () => {
                     <DigitalOceanIcon size={24} />
                     <Box>
                       <Typography.Headline level={3} marginBottom={8}>
-                        {server.name}
+                        <Link
+                          href="/server/[serverId]"
+                          as={`/server/${server.id}`}
+                          passHref
+                        >
+                          <a>{server.name}</a>
+                        </Link>
                       </Typography.Headline>
 
                       <Typography.Caption marginBottom={4}>
-                        Running on <b>Digital Ocean</b>
+                        Running on <b>{serverTypeReadableName(server.type)}</b>
                       </Typography.Caption>
-                      <Typography.Caption>
-                        ip address—70.98.192.00
-                      </Typography.Caption>
+                      {server.ip && (
+                        <Typography.Caption>
+                          ip address—{server.ip}
+                        </Typography.Caption>
+                      )}
                     </Box>
                   </Grid>
                 </Box>
@@ -166,4 +176,8 @@ const Dashboard = () => {
   );
 };
 
-export default withApollo(Dashboard);
+export default withApollo(() => (
+  <Protected>
+    <Dashboard />
+  </Protected>
+));

@@ -3,13 +3,7 @@ dotenv.config();
 import { ApolloServer, gql } from 'apollo-server-express';
 import jsonwebtoken from 'jsonwebtoken';
 import { Resolvers } from './generated/graphql';
-import { loginWithGithub } from './graphql/mutations/loginWithGithub';
-import { saveDigitalOceanAccessToken } from './graphql/mutations/saveDigitalOceanAccessToken';
-import { createDigitalOceanServer } from './graphql/mutations/createDigitalOceanServer';
-import { deleteDigitalOceanServer } from './graphql/mutations/deleteDigitalOceanServer';
-import { updateServerInfo } from './graphql/mutations/updateServerInfo';
-import { createDatabase } from './graphql/mutations/createDatabase';
-import { createApp } from './graphql/mutations/createApp';
+import { mutations } from './graphql/mutations';
 import { prisma } from './prisma';
 import { config } from './config';
 import { app, http, io } from './server';
@@ -19,9 +13,25 @@ const typeDefs = gql`
   type Server {
     id: ID!
     name: String!
-    ip: String!
+    # Ip is not available when the server is being created
+    ip: String
+    type: ServerTypes!
+    status: ServerStatus!
     apps: [App!]
     databases: [Database!]
+  }
+
+  enum ServerTypes {
+    AWS
+    DIGITALOCEAN
+    LINODE
+  }
+
+  enum ServerStatus {
+    NEW
+    ACTIVE
+    OFF
+    ARCHIVE
   }
 
   type App {
@@ -67,15 +77,7 @@ const typeDefs = gql`
 
 const resolvers: Resolvers<{ userId?: string }> = {
   Query: queries,
-  Mutation: {
-    loginWithGithub,
-    saveDigitalOceanAccessToken,
-    createDigitalOceanServer,
-    deleteDigitalOceanServer,
-    updateServerInfo,
-    createDatabase,
-    createApp,
-  },
+  Mutation: mutations,
   Server: {
     apps: async (server) => {
       const serverApps = await prisma.app.findMany({
@@ -116,7 +118,7 @@ const apolloServer = new ApolloServer({
 });
 apolloServer.applyMiddleware({ app });
 
-io.on('connection', function (socket) {
+io.on('connection', function () {
   console.log('a user connected');
 });
 

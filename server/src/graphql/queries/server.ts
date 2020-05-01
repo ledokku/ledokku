@@ -74,7 +74,7 @@ export const server: QueryResolvers['server'] = async (
       });
 
       // We trigger the queue that will add dokku to the server
-      await createServerQueue.add({ actionId: action.id });
+      await createServerQueue.add('create-server', { actionId: action.id });
     }
   }
 

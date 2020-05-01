@@ -1,161 +1,184 @@
-import Queue from 'bull';
+import { Worker, Queue } from 'bullmq';
 import NodeSsh from 'node-ssh';
 import createDebug from 'debug';
 import { config } from '../config';
 import { io } from '../server';
 import { prisma } from '../prisma';
 
-const debug = createDebug('queue:create-server');
+const queueName = 'create-server';
+const debug = createDebug(`queue:${queueName}`);
+
+interface RealtimeLog {
+  message: string;
+  type: 'command' | 'stdout' | 'stderr';
+}
+
+interface QueueArgs {
+  actionId: string;
+}
+
+// TODO move it somewhere else
+const url = config.redisUrl.split(':');
+const connection = {
+  host: url[1].replace('//', ''),
+  port: +url[2],
+};
+
+export const createServerQueue = new Queue<QueueArgs>(queueName, {
+  defaultJobOptions: {
+    // We wait 1 minute to start the job so the server have time to finish to boot properly
+    // TODO for now delay is not working, when we add any delay the job is never picked up. Add it back once the bug is fixed
+    // delay: 60000,
+    // Max timeout 20 minutes
+    timeout: 1.2e6,
+  },
+  connection,
+});
 
 /**
  * - Install dokku on the server
- * - Install postgres plugin
- * - Install redis plugin
  */
-export const createServerQueue = new Queue<{ actionId: string }>(
-  'create server queue',
-  {
-    redis: config.redisUrl,
-    defaultJobOptions: {
-      // Max timeout 20 minutes
-      timeout: 1.2e6,
-    },
-  }
-);
+const worker = new Worker(
+  queueName,
+  async (job) => {
+    const { actionId } = job.data;
+    debug(`starting createServerQueue for action id ${actionId}`);
 
-// TODO on error update the action object
-createServerQueue.process(async (job) => {
-  const { actionId } = job.data;
-  debug(`starting createServerQueue for action id ${actionId}`);
-
-  const action = await prisma.action.findOne({
-    where: { id: actionId },
-    select: {
-      id: true,
-      server: {
-        select: {
-          id: true,
-          ip: true,
-          sshKey: { select: { id: true, privateKey: true } },
+    const action = await prisma.action.findOne({
+      where: { id: actionId },
+      select: {
+        id: true,
+        server: {
+          select: {
+            id: true,
+            ip: true,
+            sshKey: { select: { id: true, privateKey: true } },
+          },
         },
       },
-    },
-  });
-  if (!action) {
-    throw new Error(`Action ${actionId} not found for job ${job.id}`);
-  }
-  const server = action.server;
+    });
+    if (!action) {
+      throw new Error(`Action ${actionId} not found for job ${job.id}`);
+    }
+    const server = action.server;
 
-  await prisma.action.update({
-    where: { id: action.id },
-    data: {
-      status: 'IN_PROGRESS',
-    },
-  });
+    await prisma.action.update({
+      where: { id: action.id },
+      data: {
+        status: 'IN_PROGRESS',
+      },
+    });
 
-  const onStdout = (chunk: Buffer) => {
-    const message = chunk.toString('utf8');
-    io.emit(`create-server:${server.id}`, { message, type: 'stdout' });
-    debug(`stdoutChunk: ${message}`);
-  };
+    // We send multiple logs at once to not spam the client
+    let logs: RealtimeLog[] = [];
+    let logTimerId: number;
+    const sendLogs = (log: RealtimeLog) => {
+      logs.push(log);
+      clearTimeout(logTimerId);
+      logTimerId = setTimeout(() => {
+        io.emit(`create-server:${server.id}`, logs);
+        logs = [];
+      }, 500);
+    };
 
-  const onStderr = (chunk: Buffer) => {
-    const message = chunk.toString('utf8');
-    io.emit(`create-server:${server.id}`, { message, type: 'stderr' });
-    debug(`stderrChunk ${message}`);
-  };
+    const onStdout = (chunk: Buffer) => {
+      const message = chunk.toString('utf8');
+      sendLogs({ message, type: 'stdout' });
+      debug(`stdoutChunk: ${message}`);
+    };
 
-  const ssh = new NodeSsh();
+    const onStderr = (chunk: Buffer) => {
+      const message = chunk.toString('utf8');
+      sendLogs({ message, type: 'stderr' });
+      debug(`stderrChunk ${message}`);
+    };
 
-  debug(`connecting to ${server.ip}`);
-  // First we setup a connection to the server
-  try {
+    const ssh = new NodeSsh();
+
+    debug(`connecting to ${server.ip}`);
+    // First we setup a connection to the server
     await ssh.connect({
       host: server.ip,
       // TODO create separate user
       username: 'root',
       privateKey: server.sshKey.privateKey,
     });
-  } catch (error) {
-    console.error(error);
-    throw new Error('Failed to connect via ssh');
-  }
+    debug(`connected to ${server.ip}`);
 
-  debug(`connected to ${server.ip}`);
+    // TODO find a way to get the latest available release
+    const wgetCommand =
+      'wget https://raw.githubusercontent.com/dokku/dokku/v0.20.3/bootstrap.sh';
+    io.emit(`create-server:${server.id}`, [
+      {
+        message: wgetCommand,
+        type: 'command',
+      },
+    ]);
+    // Then we install dokku on the new server
+    const resultWget = await ssh.execCommand(wgetCommand, {
+      onStdout,
+      onStderr,
+    });
+    debug('resultWget', resultWget);
 
-  const wgetCommand =
-    'wget https://raw.githubusercontent.com/dokku/dokku/v0.20.3/bootstrap.sh';
-  io.emit(`create-server:${server.id}`, {
-    message: wgetCommand,
-    type: 'command',
-  });
-  // Then we install dokku on the new server
-  const resultWget = await ssh.execCommand(wgetCommand, {
-    onStdout,
-    onStderr,
-  });
-  debug('resultWget', resultWget);
+    const dokkuBootstrapCommand = 'DOKKU_TAG=v0.20.3 bash bootstrap.sh';
+    io.emit(`create-server:${server.id}`, [
+      {
+        message: dokkuBootstrapCommand,
+        type: 'command',
+      },
+    ]);
+    // Then we install dokku on the new server
+    const resultDokkuBootstrap = await ssh.execCommand(dokkuBootstrapCommand, {
+      onStdout,
+      onStderr,
+    });
+    debug('resultDokkuBootstrap', resultDokkuBootstrap);
 
-  const dokkuBootstrapCommand = 'DOKKU_TAG=v0.20.3 bash bootstrap.sh';
-  io.emit(`create-server:${server.id}`, {
-    message: dokkuBootstrapCommand,
-    type: 'command',
-  });
-  // Then we install dokku on the new server
-  const resultDokkuBootstrap = await ssh.execCommand(dokkuBootstrapCommand, {
-    onStdout,
-    onStderr,
-  });
-  debug('resultDokkuBootstrap', resultDokkuBootstrap);
+    const dokkuClone =
+      'dokku plugin:install https://github.com/crisward/dokku-clone.git clone';
+    io.emit(`create-server:${server.id}`, [
+      {
+        message: dokkuClone,
+        type: 'command',
+      },
+    ]);
+    // Now we can install redis
+    const resultDokkuClone = await ssh.execCommand(dokkuClone, {
+      onStdout,
+      onStderr,
+    });
+    debug('resultDokkuClone', resultDokkuClone);
 
-  const dokkuPostgres =
-    'dokku plugin:install https://github.com/dokku/dokku-postgres.git postgres';
-  io.emit(`create-server:${server.id}`, {
-    message: dokkuPostgres,
-    type: 'command',
-  });
-  // Now we can install postgres
-  const resultDokkuPostgres = await ssh.execCommand(dokkuPostgres, {
-    onStdout,
-    onStderr,
-  });
-  debug('resultDokkuPostgres', resultDokkuPostgres);
+    await prisma.action.update({
+      where: { id: action.id },
+      data: {
+        status: 'COMPLETED',
+      },
+    });
+    await prisma.server.update({
+      where: {
+        id: server.id,
+      },
+      data: {
+        status: 'ACTIVE',
+      },
+    });
+    debug(`finished createServerQueue for server id ${server.id}`);
 
-  const dokkuRedis =
-    'dokku plugin:install https://github.com/dokku/dokku-redis.git redis';
-  io.emit(`create-server:${server.id}`, {
-    message: dokkuRedis,
-    type: 'command',
-  });
-  // Now we can install redis
-  const resultDokkuRedis = await ssh.execCommand(dokkuRedis, {
-    onStdout,
-    onStderr,
-  });
-  debug('resultDokkuRedis', resultDokkuRedis);
+    // TODO notify client via socket.io that job is finished
+  },
+  { connection }
+);
 
-  const dokkuClone =
-    'dokku plugin:install https://github.com/crisward/dokku-clone.git clone';
-  io.emit(`create-server:${server.id}`, {
-    message: dokkuClone,
-    type: 'command',
-  });
-  // Now we can install redis
-  const resultDokkuClone = await ssh.execCommand(dokkuClone, {
-    onStdout,
-    onStderr,
-  });
-  debug('resultDokkuClone', resultDokkuClone);
-
+worker.on('failed', async (job, err) => {
+  const { actionId } = job.data;
+  // TODO save err.message to show it to the end user
   await prisma.action.update({
-    where: { id: action.id },
+    where: { id: actionId },
     data: {
-      status: 'COMPLETED',
+      status: 'ERRORED',
     },
   });
-  debug(`finished createServerQueue for server id ${server.id}`);
-});
-
-createServerQueue.on('error', (error) => {
-  console.error(error);
+  debug(`${job.id} has failed for action ${actionId}: ${err.message}`);
 });
