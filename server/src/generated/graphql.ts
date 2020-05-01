@@ -80,6 +80,7 @@ export type Mutation = {
   loginWithGithub?: Maybe<LoginResult>;
   saveDigitalOceanAccessToken?: Maybe<Scalars['Boolean']>;
   createDigitalOceanServer: Server;
+  deleteDigitalOceanServer?: Maybe<Scalars['Boolean']>;
   createApp: App;
   createDatabase: Database;
   updateServerInfo?: Maybe<Scalars['Boolean']>;
@@ -98,6 +99,11 @@ export type MutationSaveDigitalOceanAccessTokenArgs = {
 
 export type MutationCreateDigitalOceanServerArgs = {
   serverName: Scalars['String'];
+};
+
+
+export type MutationDeleteDigitalOceanServerArgs = {
+  serverId: Scalars['String'];
 };
 
 
@@ -266,6 +272,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   loginWithGithub?: Resolver<Maybe<ResolversTypes['LoginResult']>, ParentType, ContextType, RequireFields<MutationLoginWithGithubArgs, 'code'>>,
   saveDigitalOceanAccessToken?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationSaveDigitalOceanAccessTokenArgs, 'digitalOceanAccessToken'>>,
   createDigitalOceanServer?: Resolver<ResolversTypes['Server'], ParentType, ContextType, RequireFields<MutationCreateDigitalOceanServerArgs, 'serverName'>>,
+  deleteDigitalOceanServer?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteDigitalOceanServerArgs, 'serverId'>>,
   createApp?: Resolver<ResolversTypes['App'], ParentType, ContextType, RequireFields<MutationCreateAppArgs, 'input'>>,
   createDatabase?: Resolver<ResolversTypes['Database'], ParentType, ContextType, RequireFields<MutationCreateDatabaseArgs, 'input'>>,
   updateServerInfo?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateServerInfoArgs, 'serverId'>>,
