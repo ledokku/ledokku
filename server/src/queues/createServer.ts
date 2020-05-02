@@ -1,7 +1,7 @@
 import { Worker, Queue } from 'bullmq';
 import NodeSsh from 'node-ssh';
 import createDebug from 'debug';
-import { config } from '../config';
+import { redisConnection } from '../config';
 import { io } from '../server';
 import { prisma } from '../prisma';
 
@@ -17,13 +17,6 @@ interface QueueArgs {
   actionId: string;
 }
 
-// TODO move it somewhere else
-const url = config.redisUrl.split(':');
-const connection = {
-  host: url[1].replace('//', ''),
-  port: +url[2],
-};
-
 export const createServerQueue = new Queue<QueueArgs>(queueName, {
   defaultJobOptions: {
     // We wait 1 minute to start the job so the server have time to finish to boot properly
@@ -32,7 +25,7 @@ export const createServerQueue = new Queue<QueueArgs>(queueName, {
     // Max timeout 20 minutes
     timeout: 1.2e6,
   },
-  connection,
+  connection: redisConnection,
 });
 
 /**
@@ -105,50 +98,26 @@ const worker = new Worker(
     });
     debug(`connected to ${server.ip}`);
 
+    const execCommand = async (command: string) => {
+      debug('execCommand', command);
+      io.emit(`create-server:${server.id}`, [
+        {
+          message: command,
+          type: 'command',
+        },
+      ]);
+      const resultCommand = await ssh.execCommand(command, {
+        onStdout,
+        onStderr,
+      });
+      debug('resultCommand', resultCommand);
+    };
+
     // TODO find a way to get the latest available release
-    const wgetCommand =
-      'wget https://raw.githubusercontent.com/dokku/dokku/v0.20.3/bootstrap.sh';
-    io.emit(`create-server:${server.id}`, [
-      {
-        message: wgetCommand,
-        type: 'command',
-      },
-    ]);
-    // Then we install dokku on the new server
-    const resultWget = await ssh.execCommand(wgetCommand, {
-      onStdout,
-      onStderr,
-    });
-    debug('resultWget', resultWget);
-
-    const dokkuBootstrapCommand = 'DOKKU_TAG=v0.20.3 bash bootstrap.sh';
-    io.emit(`create-server:${server.id}`, [
-      {
-        message: dokkuBootstrapCommand,
-        type: 'command',
-      },
-    ]);
-    // Then we install dokku on the new server
-    const resultDokkuBootstrap = await ssh.execCommand(dokkuBootstrapCommand, {
-      onStdout,
-      onStderr,
-    });
-    debug('resultDokkuBootstrap', resultDokkuBootstrap);
-
-    const dokkuClone =
-      'dokku plugin:install https://github.com/crisward/dokku-clone.git clone';
-    io.emit(`create-server:${server.id}`, [
-      {
-        message: dokkuClone,
-        type: 'command',
-      },
-    ]);
-    // Now we can install redis
-    const resultDokkuClone = await ssh.execCommand(dokkuClone, {
-      onStdout,
-      onStderr,
-    });
-    debug('resultDokkuClone', resultDokkuClone);
+    await execCommand(
+      'wget https://raw.githubusercontent.com/dokku/dokku/v0.20.3/bootstrap.sh'
+    );
+    await execCommand('DOKKU_TAG=v0.20.3 bash bootstrap.sh');
 
     await prisma.action.update({
       where: { id: action.id },
@@ -168,7 +137,7 @@ const worker = new Worker(
 
     // TODO notify client via socket.io that job is finished
   },
-  { connection }
+  { connection: redisConnection }
 );
 
 worker.on('failed', async (job, err) => {
