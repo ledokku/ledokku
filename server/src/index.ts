@@ -68,6 +68,7 @@ const typeDefs = gql`
     loginWithGithub(code: String!): LoginResult
     saveDigitalOceanAccessToken(digitalOceanAccessToken: String!): Boolean
     createDigitalOceanServer(serverName: String!): Server!
+    deleteDigitalOceanServer(serverId: String!): Boolean
     createApp(input: CreateAppInput!): App!
     createDatabase(input: CreateDatabaseInput!): Database!
     updateServerInfo(serverId: String!): Boolean
