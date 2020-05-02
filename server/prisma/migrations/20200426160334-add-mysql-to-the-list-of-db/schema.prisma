@@ -1,6 +1,6 @@
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 generator client {
@@ -8,20 +8,17 @@ generator client {
 }
 
 model User {
-  id                      String     @default(uuid()) @id
-  createdAt               DateTime   @default(now())
-  updatedAt               DateTime   @default(now())
-  username                String     @unique
+  id                      String   @default(uuid()) @id
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @default(now())
+  username                String   @unique
   avatarUrl               String
   email                   String
-  githubId                String     @unique
+  githubId                String   @unique
   githubAccessToken       String
   digitaloceanAccessToken String?
   servers                 Server[]
   sshKeys                 SshKey[]
-  Action                  Action[]
-  App                     App[]
-  Database                Database[]
 }
 
 model SshKey {
@@ -36,22 +33,19 @@ model SshKey {
 }
 
 model Server {
-  id        String       @default(uuid()) @id
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @default(now())
-  serverId  Int
-  ip        String?
-  name      String
-  type      ServerTypes
-  status    ServerStatus
-  actionId  Int?
-  user      User         @relation(fields: [userId], references: [id])
-  userId    String
-  sshKey    SshKey       @relation(fields: [sshKeyId], references: [id])
-  sshKeyId  String
-  Action    Action[]
-  App       App[]
-  Database  Database[]
+  id          String      @default(uuid()) @id
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @default(now())
+  serverId    Int
+  ip          String?
+  name        String
+  type        ServerTypes
+  status      ServerStatus
+  actionId    Int?
+  user        User        @relation(fields: [userId], references: [id])
+  userId      String
+  sshKey      SshKey      @relation(fields: [sshKeyId], references: [id])
+  sshKeyId    String
 }
 
 enum ServerTypes {
@@ -68,15 +62,15 @@ enum ServerStatus {
 }
 
 model Action {
-  id        String       @default(uuid()) @id
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @default(now())
-  status    ActionStatus
-  type      ActionType
-  server    Server       @relation(fields: [serverId], references: [id])
-  serverId  String
-  user      User         @relation(fields: [userId], references: [id])
-  userId    String
+  id             String   @default(uuid()) @id
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @default(now())
+  status         ActionStatus
+  type           ActionType
+  server         Server   @relation(fields: [serverId], references: [id])
+  serverId       String
+  user           User     @relation(fields: [userId], references: [id])
+  userId         String
 }
 
 enum ActionStatus {

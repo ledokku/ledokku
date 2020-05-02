@@ -2,7 +2,10 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
 
-import { useCreateDatabaseMutation } from '../../../generated/graphql';
+import {
+  useCreateDatabaseMutation,
+  DatabaseTypes,
+} from '../../../generated/graphql';
 import { OnboardingLayout } from '../../../layouts/OnboardingLayout';
 import withApollo from '../../../lib/withApollo';
 import { ArrowRight } from 'react-feather';
@@ -21,20 +24,24 @@ import { MySQLIcon } from '../../../ui/icons/MySQLIcon';
 import { MongoIcon } from '../../../ui/icons/MongoIcon';
 import { RedisIcon } from '../../../ui/icons/RedisIcon';
 import { Protected } from '../../../modules/auth/Protected';
+import { Link } from '../../../ui/components/Typography/components/Link';
 
 const CreateDatabase = () => {
   const router = useRouter();
   const { serverId } = router.query as { serverId: string };
   const [createDatabaseMutation] = useCreateDatabaseMutation();
-  const formik = useFormik<{ name: string }>({
+  const formik = useFormik<{ name: string; type: DatabaseTypes }>({
     initialValues: {
       name: '',
+      type: 'POSTGRESQL',
     },
     onSubmit: async (values) => {
       // TODO validation token is required
       try {
         const data = await createDatabaseMutation({
-          variables: { name: values.name, serverId },
+          variables: {
+            input: { name: values.name, serverId, type: values.type },
+          },
         });
         router.push('/dashboard');
       } catch (error) {
@@ -75,29 +82,71 @@ const CreateDatabase = () => {
             rowGap={16}
           >
             <BoxButton
-              selected={true}
+              selected={formik.values.type === 'POSTGRESQL'}
               label="PostgreSQL"
               icon={<PostgreSQLIcon size={40} />}
+              onClick={() => formik.setFieldValue('type', 'POSTGRESQL')}
             />
             <BoxButton
+              selected={formik.values.type === 'MYSQL'}
               label="MySQL"
               icon={<MySQLIcon size={40} />}
               disabled={true}
+              onClick={() => formik.setFieldValue('type', 'MYSQL')}
             />
             <BoxButton
+              selected={formik.values.type === 'MONGODB'}
               label="Mongo"
               icon={<MongoIcon size={40} />}
               disabled={true}
+              onClick={() => formik.setFieldValue('type', 'MONGODB')}
             />
             <BoxButton
+              selected={formik.values.type === 'REDIS'}
               label="Redis"
               icon={<RedisIcon size={40} />}
               disabled={true}
+              onClick={() => formik.setFieldValue('type', 'REDIS')}
             />
           </Grid>
-          <Typography.Caption marginTop={8}>
-            We currently only provide PostgreSQL
-          </Typography.Caption>
+          {formik.values.type === 'POSTGRESQL' && (
+            <Typography.Caption marginTop={8}>
+              We currently only provide PostgreSQL
+            </Typography.Caption>
+          )}
+          {formik.values.type === 'MYSQL' && (
+            <Typography.Caption marginTop={8}>
+              We currently don't support MySQL.
+              <br />
+              Take a look at{' '}
+              <Link href="https://github.com/ledokku/ledokku/issues/22">
+                the issue
+              </Link>{' '}
+              to track the progress.
+            </Typography.Caption>
+          )}
+          {formik.values.type === 'MONGODB' && (
+            <Typography.Caption marginTop={8}>
+              We currently don't support Mongo.
+              <br />
+              Take a look at{' '}
+              <Link href="https://github.com/ledokku/ledokku/issues/21">
+                the issue
+              </Link>{' '}
+              to track the progress.
+            </Typography.Caption>
+          )}
+          {formik.values.type === 'REDIS' && (
+            <Typography.Caption marginTop={8}>
+              We currently don't support Redis.
+              <br />
+              Take a look at{' '}
+              <Link href="https://github.com/ledokku/ledokku/issues/20">
+                the issue
+              </Link>{' '}
+              to track the progress.
+            </Typography.Caption>
+          )}
         </Box>
         <Flex justifyContent="flex-end">
           <Button type="submit" background="primary" endIcon={<ArrowRight />}>

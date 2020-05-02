@@ -1,0 +1,47 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "CreateField",
+      "model": "User",
+      "field": "Action",
+      "type": "Action",
+      "arity": "List"
+    },
+    {
+      "tag": "CreateField",
+      "model": "User",
+      "field": "App",
+      "type": "App",
+      "arity": "List"
+    },
+    {
+      "tag": "CreateField",
+      "model": "User",
+      "field": "Database",
+      "type": "Database",
+      "arity": "List"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Server",
+      "field": "Action",
+      "type": "Action",
+      "arity": "List"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Server",
+      "field": "App",
+      "type": "App",
+      "arity": "List"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Server",
+      "field": "Database",
+      "type": "Database",
+      "arity": "List"
+    }
+  ]
+}

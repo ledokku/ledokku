@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 const AuthContext = React.createContext<{
   loggedIn: boolean;
   login(token: string): void;
-}>({ loggedIn: false, login: () => null });
+  logout(): void;
+}>({ loggedIn: false, login: () => null, logout: () => null });
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -24,8 +25,13 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     setState({ loggedIn: true });
   };
 
+  const logout = () => {
+    localStorage.removeItem('accessToken');
+    window.location.href = '/';
+  };
+
   return (
-    <AuthContext.Provider value={{ loggedIn: state.loggedIn, login }}>
+    <AuthContext.Provider value={{ loggedIn: state.loggedIn, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

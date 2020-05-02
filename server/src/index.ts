@@ -42,6 +42,14 @@ const typeDefs = gql`
   type Database {
     id: ID!
     name: String!
+    type: DatabaseTypes!
+  }
+
+  enum DatabaseTypes {
+    REDIS
+    POSTGRESQL
+    MONGODB
+    MYSQL
   }
 
   type LoginResult {
@@ -57,6 +65,7 @@ const typeDefs = gql`
   input CreateDatabaseInput {
     serverId: String!
     name: String!
+    type: DatabaseTypes!
   }
 
   type Query {
