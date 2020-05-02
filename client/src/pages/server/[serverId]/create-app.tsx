@@ -22,7 +22,7 @@ const CreateApp = () => {
       // TODO validation name is required
       try {
         const data = await createAppMutation({
-          variables: { gitUrl: 'TODO', name: values.name, serverId },
+          variables: { gitUrl: values.gitUrl, name: values.name, serverId },
         });
         console.log(data);
         // TODO router.push(`/server/${serverId}/apps/${data.data.createApp.id}`);

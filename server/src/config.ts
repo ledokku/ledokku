@@ -33,3 +33,9 @@ Take a look at the contributing guide to see how to setup the project.
 https://github.com/ledokku/ledokku/blob/master/CONTRIBUTING.md`);
   process.exit(1);
 }
+
+const url = config.redisUrl.split(':');
+export const redisConnection = {
+  host: url[1].replace('//', ''),
+  port: +url[2],
+};
