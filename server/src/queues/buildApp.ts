@@ -140,19 +140,19 @@ const worker = new Worker(
       await execCommand(`ssh-keyscan ${server.ip} >> ~/.ssh/known_hosts`);
     }
 
+    const appFolderPath = `/home/ledokku-repos/${app.name}`;
+
     // First step is to clone the github repo
-    await execCommand(
-      `git clone ${app.githubRepoUrl} /home/ledokku-repos/${app.name}`
-    );
+    await execCommand(`git clone ${app.githubRepoUrl} ${appFolderPath}`);
 
     // Then we add the dokku remote that will trigger the build steps every time you commit
     await execCommand(`git remote add dokku dokku@${server.ip}:${app.name}`, {
-      cwd: `/home/ledokku-repos/${app.name}`,
+      cwd: appFolderPath,
     });
 
     // Finally we push
     await execCommand('git push -f dokku master', {
-      cwd: `/home/ledokku-repos/${app.name}`,
+      cwd: appFolderPath,
     });
 
     await prisma.appBuild.update({
