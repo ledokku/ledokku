@@ -68,6 +68,11 @@ const typeDefs = gql`
     token: String!
   }
 
+  type CreateAppResult {
+    app: App!
+    appBuild: AppBuild!
+  }
+
   input CreateAppInput {
     serverId: String!
     name: String!
@@ -90,7 +95,7 @@ const typeDefs = gql`
     saveDigitalOceanAccessToken(digitalOceanAccessToken: String!): Boolean
     createDigitalOceanServer(serverName: String!): Server!
     deleteDigitalOceanServer(serverId: String!): Boolean
-    createApp(input: CreateAppInput!): App!
+    createApp(input: CreateAppInput!): CreateAppResult!
     createDatabase(input: CreateDatabaseInput!): Database!
     updateServerInfo(serverId: String!): Boolean
   }

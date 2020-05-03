@@ -4,7 +4,6 @@ import createDebug from 'debug';
 import { redisConnection } from '../config';
 import { io } from '../server';
 import { prisma } from '../prisma';
-import { dokku } from '../lib/dokku';
 
 const queueName = 'build-app';
 const debug = createDebug(`queue:${queueName}`);

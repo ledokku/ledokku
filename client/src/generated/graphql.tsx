@@ -27,21 +27,33 @@ export type Server = {
 };
 
 export type ServerTypes = 
-  'AWS' |
-  'DIGITALOCEAN' |
-  'LINODE';
+  | 'AWS'
+  | 'DIGITALOCEAN'
+  | 'LINODE';
 
 export type ServerStatus = 
-  'NEW' |
-  'ACTIVE' |
-  'OFF' |
-  'ARCHIVE';
+  | 'NEW'
+  | 'ACTIVE'
+  | 'OFF'
+  | 'ARCHIVE';
 
 export type App = {
    __typename?: 'App';
   id: Scalars['ID'];
   name: Scalars['String'];
 };
+
+export type AppBuild = {
+   __typename?: 'AppBuild';
+  id: Scalars['ID'];
+  status: AppBuildStatus;
+};
+
+export type AppBuildStatus = 
+  | 'PENDING'
+  | 'IN_PROGRESS'
+  | 'COMPLETED'
+  | 'ERRORED';
 
 export type Database = {
    __typename?: 'Database';
@@ -51,14 +63,20 @@ export type Database = {
 };
 
 export type DatabaseTypes = 
-  'REDIS' |
-  'POSTGRESQL' |
-  'MONGODB' |
-  'MYSQL';
+  | 'REDIS'
+  | 'POSTGRESQL'
+  | 'MONGODB'
+  | 'MYSQL';
 
 export type LoginResult = {
    __typename?: 'LoginResult';
   token: Scalars['String'];
+};
+
+export type CreateAppResult = {
+   __typename?: 'CreateAppResult';
+  app: App;
+  appBuild: AppBuild;
 };
 
 export type CreateAppInput = {
@@ -89,7 +107,8 @@ export type Mutation = {
   loginWithGithub?: Maybe<LoginResult>;
   saveDigitalOceanAccessToken?: Maybe<Scalars['Boolean']>;
   createDigitalOceanServer: Server;
-  createApp: App;
+  deleteDigitalOceanServer?: Maybe<Scalars['Boolean']>;
+  createApp: CreateAppResult;
   createDatabase: Database;
   updateServerInfo?: Maybe<Scalars['Boolean']>;
 };
@@ -110,6 +129,11 @@ export type MutationCreateDigitalOceanServerArgs = {
 };
 
 
+export type MutationDeleteDigitalOceanServerArgs = {
+  serverId: Scalars['String'];
+};
+
+
 export type MutationCreateAppArgs = {
   input: CreateAppInput;
 };
@@ -125,8 +149,8 @@ export type MutationUpdateServerInfoArgs = {
 };
 
 export type CacheControlScope = 
-  'PUBLIC' |
-  'PRIVATE';
+  | 'PUBLIC'
+  | 'PRIVATE';
 
 
 export type CreateAppMutationVariables = {
@@ -139,8 +163,14 @@ export type CreateAppMutationVariables = {
 export type CreateAppMutation = (
   { __typename?: 'Mutation' }
   & { createApp: (
-    { __typename?: 'App' }
-    & Pick<App, 'id' | 'name'>
+    { __typename?: 'CreateAppResult' }
+    & { app: (
+      { __typename?: 'App' }
+      & Pick<App, 'id'>
+    ), appBuild: (
+      { __typename?: 'AppBuild' }
+      & Pick<AppBuild, 'id'>
+    ) }
   ) }
 );
 
@@ -228,8 +258,12 @@ export type ServerByIdQuery = (
 export const CreateAppDocument = gql`
     mutation createApp($serverId: String!, $name: String!, $gitUrl: String!) {
   createApp(input: {serverId: $serverId, name: $name, gitUrl: $gitUrl}) {
-    id
-    name
+    app {
+      id
+    }
+    appBuild {
+      id
+    }
   }
 }
     `;

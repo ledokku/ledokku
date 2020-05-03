@@ -25,8 +25,9 @@ const CreateApp = () => {
           variables: { gitUrl: values.gitUrl, name: values.name, serverId },
         });
         console.log(data);
-        // TODO router.push(`/server/${serverId}/apps/${data.data.createApp.id}`);
-        router.push('/dashboard');
+        router.push(
+          `/app/${data.data.createApp.app.id}/build/${data.data.createApp.appBuild.id}`
+        );
       } catch (error) {
         // TODO catch errors
         console.log(error);
