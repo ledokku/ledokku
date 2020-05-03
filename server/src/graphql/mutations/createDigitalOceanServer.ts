@@ -1,8 +1,13 @@
 import fetch from 'node-fetch';
-import { MutationResolvers } from '../../generated/graphql';
-import { prisma } from './../../prisma';
+import * as yup from 'yup';
 import Crypto from 'crypto';
 import sshpk from 'sshpk';
+import { MutationResolvers } from '../../generated/graphql';
+import { prisma } from './../../prisma';
+
+const createDigitalOceanServerSchema = yup.object({
+  serverName: yup.string().required(),
+});
 
 export const createDigitalOceanServer: MutationResolvers['createDigitalOceanServer'] = async (
   _,
@@ -20,6 +25,9 @@ export const createDigitalOceanServer: MutationResolvers['createDigitalOceanServ
   if (!currentUser.digitaloceanAccessToken) {
     throw new Error('Digitalocean token required');
   }
+
+  // We make sure the name is valid to avoid security risks
+  createDigitalOceanServerSchema.validateSync({ serverName });
 
   // check to see whether can follow the action
   // ACTION STATE

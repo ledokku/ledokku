@@ -7,6 +7,7 @@ export interface TextFieldProps {
   id?: string;
   name?: string;
   value?: string;
+  error?: string;
   onChange?(eventOrPath: string | ChangeEvent<any>): void;
   label: string;
 }
@@ -16,6 +17,7 @@ export const TextField: React.FC<TextFieldProps> = ({ label, ...props }) => {
     <Root>
       <Label>{label}</Label>
       <Input {...props} />
+      {props.error && <HelperText>{props.error}</HelperText>}
     </Root>
   );
 };
@@ -27,6 +29,10 @@ const Root = styled.div`
 
 const Label = styled(Typography.Label)`
   margin-bottom: 8px;
+`;
+
+const HelperText = styled(Typography.Label)`
+  color: red;
 `;
 
 const Input = styled.input`

@@ -2,22 +2,12 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
 import { ArrowRight } from 'react-feather';
-
+import * as yup from 'yup';
 import { useCreateDigitalOceanServerMutation } from '../../generated/graphql';
 import { OnboardingLayout } from '../../layouts/OnboardingLayout';
-import { Headline } from '../../ui/components/Typography/components/Headline';
-import { Paragraph } from '../../ui/components/Typography/components/Paragraph';
+
 import withApollo from '../../lib/withApollo';
-import {
-  TextField,
-  Button,
-  styled,
-  Flex,
-  Typography,
-  Box,
-  BoxButton,
-  Grid,
-} from '../../ui';
+import { TextField, Button, styled, Flex } from '../../ui';
 import { Protected } from '../../modules/auth/Protected';
 
 const CreateServer = () => {
@@ -29,8 +19,11 @@ const CreateServer = () => {
     initialValues: {
       name: '',
     },
+    validationSchema: yup.object({
+      name: yup.string().trim().required('Server name is required'),
+    }),
+
     onSubmit: async (values) => {
-      // TODO validation name is required
       try {
         const data = await createDigitalOceanServerMutation({
           variables: { serverName: values.name },
@@ -60,6 +53,7 @@ const CreateServer = () => {
           label="Enter a name for your new server"
           value={formik.values.name}
           onChange={formik.handleChange}
+          error={formik.touched && formik.errors.name}
         />
         <Flex justifyContent="flex-end">
           <Button type="submit" background="primary" endIcon={<ArrowRight />}>
