@@ -5,19 +5,9 @@ import { ArrowRight } from 'react-feather';
 import * as yup from 'yup';
 import { useCreateDigitalOceanServerMutation } from '../../generated/graphql';
 import { OnboardingLayout } from '../../layouts/OnboardingLayout';
-import { Headline } from '../../ui/components/Typography/components/Headline';
-import { Paragraph } from '../../ui/components/Typography/components/Paragraph';
+
 import withApollo from '../../lib/withApollo';
-import {
-  TextField,
-  Button,
-  styled,
-  Flex,
-  Typography,
-  Box,
-  BoxButton,
-  Grid,
-} from '../../ui';
+import { TextField, Button, styled, Flex } from '../../ui';
 import { Protected } from '../../modules/auth/Protected';
 
 const CreateServer = () => {

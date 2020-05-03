@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
+import * as yup from 'yup';
 import { useSaveDigitalOceanAccessTokenMutation } from '../../generated/graphql';
 import { OnboardingLayout } from '../../layouts/OnboardingLayout';
 import withApollo from '../../lib/withApollo';
@@ -27,11 +27,12 @@ const CloudProvider = () => {
   const [
     saveDigitalOceanAccessTokenMutation,
   ] = useSaveDigitalOceanAccessTokenMutation();
-  const digitalOceanAccessTokenSchema = Yup.object().shape({
-    token: Yup.string()
+  const digitalOceanAccessTokenSchema = yup.object().shape({
+    token: yup
+      .string()
       .trim()
-      .min(64, 'Token too short, it should be exactly 64 chars long')
-      .max(64, 'Token too long, it should be exactly 64 chars long')
+      .min(64, 'Token too short, it should be exactly 64 characters long')
+      .max(64, 'Token too long, it should be exactly 64 characters long')
       .matches(
         digitalOceanAccessTokenRegExp,
         'Whoops, invalid token format. Try entering it again'
