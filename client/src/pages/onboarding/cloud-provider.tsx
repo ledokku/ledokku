@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
-
+import * as Yup from 'yup';
 import { useSaveDigitalOceanAccessTokenMutation } from '../../generated/graphql';
 import { OnboardingLayout } from '../../layouts/OnboardingLayout';
 import withApollo from '../../lib/withApollo';
@@ -20,18 +20,30 @@ import { DigitalOceanIcon } from '../../ui/icons/DigitalOceanIcon';
 import { LinodeIcon } from '../../ui/icons/LinodeIcon';
 import { AWSIcon } from '../../ui/icons/AWSIcon';
 import { Protected } from '../../modules/auth/Protected';
+import { digitalOceanAccessTokenRegExp } from '../../utils/index';
 
 const CloudProvider = () => {
   const router = useRouter();
   const [
     saveDigitalOceanAccessTokenMutation,
   ] = useSaveDigitalOceanAccessTokenMutation();
+  const digitalOceanAccessTokenSchema = Yup.object().shape({
+    token: Yup.string()
+      .trim()
+      .min(64, 'Token too short, it should be exactly 64 chars long')
+      .max(64, 'Token too long, it should be exactly 64 chars long')
+      .matches(
+        digitalOceanAccessTokenRegExp,
+        'Whoops, invalid token format. Try entering it again'
+      )
+      .required('Whoops, token is missing. Try entering it again'),
+  });
   const formik = useFormik<{ token: string }>({
     initialValues: {
       token: '',
     },
+    validationSchema: digitalOceanAccessTokenSchema,
     onSubmit: async (values) => {
-      // TODO validation token is required
       try {
         const data = await saveDigitalOceanAccessTokenMutation({
           variables: { digitalOceanAccessToken: values.token },
@@ -99,6 +111,7 @@ const CloudProvider = () => {
           label="Enter your access token"
           value={formik.values.token}
           onChange={formik.handleChange}
+          error={formik.touched && formik.errors.token}
         />
         <Flex justifyContent="flex-end">
           <Button type="submit" background="primary" endIcon={<ArrowRight />}>
