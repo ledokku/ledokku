@@ -2,6 +2,7 @@ import * as yup from 'yup';
 import NodeSsh from 'node-ssh';
 import { MutationResolvers } from '../../generated/graphql';
 import { prisma } from '../../prisma';
+import { dokku } from '../../lib/dokku';
 
 // Validate the name to make sure there are no security risks by adding it to the ssh exec command.
 // Only letters and "-" allowed
@@ -50,6 +51,11 @@ export const createDatabase: MutationResolvers['createDatabase'] = async (
     username: 'root',
     privateKey: server.sshKey.privateKey,
   });
+
+  const isDbInstalled = await dokku.plugin.installed(ssh, 'postgres');
+  if (!isDbInstalled) {
+    throw new Error('Database postgres is not installed');
+  }
 
   const resultCommand = await ssh.execCommand(
     `dokku postgres:create ${input.name}`
