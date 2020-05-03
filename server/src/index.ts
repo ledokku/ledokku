@@ -39,6 +39,18 @@ const typeDefs = gql`
     name: String!
   }
 
+  type AppBuild {
+    id: ID!
+    status: AppBuildStatus!
+  }
+
+  enum AppBuildStatus {
+    PENDING
+    IN_PROGRESS
+    COMPLETED
+    ERRORED
+  }
+
   type Database {
     id: ID!
     name: String!
