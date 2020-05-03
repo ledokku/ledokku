@@ -1,6 +1,16 @@
 import fetch from 'node-fetch';
+import * as yup from 'yup';
+import { digitalOceanAccessTokenRegExp } from './../utils';
 import { MutationResolvers } from '../../generated/graphql';
 import { prisma } from '../../prisma';
+
+// TODO unit test this schema
+const saveDigitalOceanTokenSchema = yup.object({
+  digitalOceanAccessToken: yup
+    .string()
+    .required()
+    .matches(digitalOceanAccessTokenRegExp),
+});
 
 export const saveDigitalOceanAccessToken: MutationResolvers['saveDigitalOceanAccessToken'] = async (
   _,
@@ -10,6 +20,9 @@ export const saveDigitalOceanAccessToken: MutationResolvers['saveDigitalOceanAcc
   if (!userId) {
     throw new Error('Unauthorized');
   }
+
+  // We make sure the token is valid to avoid security risks
+  saveDigitalOceanTokenSchema.validateSync({ digitalOceanAccessToken });
 
   try {
     const resData = await fetch('https://api.digitalocean.com/v2/account', {
