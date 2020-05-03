@@ -120,20 +120,25 @@ const worker = new Worker(
         cwd: options.cwd,
       });
       debug('resultCommand', resultCommand);
+      return resultCommand;
     };
 
     // TODO only if folder does not exist clone
     // TODO otherwise git pull first
 
-    // First is to generate a deploy ssh key
-    // TODO set a password for better security?
-    await execCommand('ssh-keygen -t rsa -f /root/.ssh/id_rsa -N ""');
+    // If server does not have any ssh key we first create a new one to be able to deploy the app
+    const resultTest = await execCommand('test -e /root/.ssh/id_rsa');
+    if (resultTest.code === 1) {
+      // First is to generate a deploy ssh key
+      // TODO set a password for better security?
+      await execCommand('ssh-keygen -t rsa -f /root/.ssh/id_rsa -N ""');
 
-    // Then we add the key to the list of allowed key
-    await execCommand('dokku ssh-keys:add ledokku /root/.ssh/id_rsa.pub');
+      // Then we add the key to the list of allowed key
+      await execCommand('dokku ssh-keys:add ledokku /root/.ssh/id_rsa.pub');
 
-    // We whitelist the ip into the known hosts
-    await execCommand(`ssh-keyscan ${server.ip} >> ~/.ssh/known_hosts`);
+      // We whitelist the ip into the known hosts
+      await execCommand(`ssh-keyscan ${server.ip} >> ~/.ssh/known_hosts`);
+    }
 
     // First step is to clone the github repo
     await execCommand(
