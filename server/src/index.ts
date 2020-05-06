@@ -39,6 +39,18 @@ const typeDefs = gql`
     name: String!
   }
 
+  type AppBuild {
+    id: ID!
+    status: AppBuildStatus!
+  }
+
+  enum AppBuildStatus {
+    PENDING
+    IN_PROGRESS
+    COMPLETED
+    ERRORED
+  }
+
   type Database {
     id: ID!
     name: String!
@@ -54,6 +66,11 @@ const typeDefs = gql`
 
   type LoginResult {
     token: String!
+  }
+
+  type CreateAppResult {
+    app: App!
+    appBuild: AppBuild!
   }
 
   input CreateAppInput {
@@ -78,7 +95,7 @@ const typeDefs = gql`
     saveDigitalOceanAccessToken(digitalOceanAccessToken: String!): Boolean
     createDigitalOceanServer(serverName: String!): Server!
     deleteDigitalOceanServer(serverId: String!): Boolean
-    createApp(input: CreateAppInput!): App!
+    createApp(input: CreateAppInput!): CreateAppResult!
     createDatabase(input: CreateDatabaseInput!): Database!
     updateServerInfo(serverId: String!): Boolean
   }

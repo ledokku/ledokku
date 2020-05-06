@@ -26,21 +26,33 @@ export type Server = {
 };
 
 export type ServerTypes = 
-  'AWS' |
-  'DIGITALOCEAN' |
-  'LINODE';
+  | 'AWS'
+  | 'DIGITALOCEAN'
+  | 'LINODE';
 
 export type ServerStatus = 
-  'NEW' |
-  'ACTIVE' |
-  'OFF' |
-  'ARCHIVE';
+  | 'NEW'
+  | 'ACTIVE'
+  | 'OFF'
+  | 'ARCHIVE';
 
 export type App = {
    __typename?: 'App';
   id: Scalars['ID'];
   name: Scalars['String'];
 };
+
+export type AppBuild = {
+   __typename?: 'AppBuild';
+  id: Scalars['ID'];
+  status: AppBuildStatus;
+};
+
+export type AppBuildStatus = 
+  | 'PENDING'
+  | 'IN_PROGRESS'
+  | 'COMPLETED'
+  | 'ERRORED';
 
 export type Database = {
    __typename?: 'Database';
@@ -50,14 +62,20 @@ export type Database = {
 };
 
 export type DatabaseTypes = 
-  'REDIS' |
-  'POSTGRESQL' |
-  'MONGODB' |
-  'MYSQL';
+  | 'REDIS'
+  | 'POSTGRESQL'
+  | 'MONGODB'
+  | 'MYSQL';
 
 export type LoginResult = {
    __typename?: 'LoginResult';
   token: Scalars['String'];
+};
+
+export type CreateAppResult = {
+   __typename?: 'CreateAppResult';
+  app: App;
+  appBuild: AppBuild;
 };
 
 export type CreateAppInput = {
@@ -89,7 +107,7 @@ export type Mutation = {
   saveDigitalOceanAccessToken?: Maybe<Scalars['Boolean']>;
   createDigitalOceanServer: Server;
   deleteDigitalOceanServer?: Maybe<Scalars['Boolean']>;
-  createApp: App;
+  createApp: CreateAppResult;
   createDatabase: Database;
   updateServerInfo?: Maybe<Scalars['Boolean']>;
 };
@@ -130,8 +148,8 @@ export type MutationUpdateServerInfoArgs = {
 };
 
 export type CacheControlScope = 
-  'PUBLIC' |
-  'PRIVATE';
+  | 'PUBLIC'
+  | 'PRIVATE';
 
 
 
@@ -214,9 +232,12 @@ export type ResolversTypes = {
   ServerTypes: ServerTypes,
   ServerStatus: ServerStatus,
   App: ResolverTypeWrapper<App>,
+  AppBuild: ResolverTypeWrapper<AppBuild>,
+  AppBuildStatus: AppBuildStatus,
   Database: ResolverTypeWrapper<Database>,
   DatabaseTypes: DatabaseTypes,
   LoginResult: ResolverTypeWrapper<LoginResult>,
+  CreateAppResult: ResolverTypeWrapper<CreateAppResult>,
   CreateAppInput: CreateAppInput,
   CreateDatabaseInput: CreateDatabaseInput,
   Query: ResolverTypeWrapper<{}>,
@@ -234,9 +255,12 @@ export type ResolversParentTypes = {
   ServerTypes: ServerTypes,
   ServerStatus: ServerStatus,
   App: App,
+  AppBuild: AppBuild,
+  AppBuildStatus: AppBuildStatus,
   Database: Database,
   DatabaseTypes: DatabaseTypes,
   LoginResult: LoginResult,
+  CreateAppResult: CreateAppResult,
   CreateAppInput: CreateAppInput,
   CreateDatabaseInput: CreateDatabaseInput,
   Query: {},
@@ -262,6 +286,12 @@ export type AppResolvers<ContextType = any, ParentType extends ResolversParentTy
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
+export type AppBuildResolvers<ContextType = any, ParentType extends ResolversParentTypes['AppBuild'] = ResolversParentTypes['AppBuild']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  status?: Resolver<ResolversTypes['AppBuildStatus'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
 export type DatabaseResolvers<ContextType = any, ParentType extends ResolversParentTypes['Database'] = ResolversParentTypes['Database']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
@@ -271,6 +301,12 @@ export type DatabaseResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type LoginResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['LoginResult'] = ResolversParentTypes['LoginResult']> = {
   token?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type CreateAppResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateAppResult'] = ResolversParentTypes['CreateAppResult']> = {
+  app?: Resolver<ResolversTypes['App'], ParentType, ContextType>,
+  appBuild?: Resolver<ResolversTypes['AppBuild'], ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -284,7 +320,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   saveDigitalOceanAccessToken?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationSaveDigitalOceanAccessTokenArgs, 'digitalOceanAccessToken'>>,
   createDigitalOceanServer?: Resolver<ResolversTypes['Server'], ParentType, ContextType, RequireFields<MutationCreateDigitalOceanServerArgs, 'serverName'>>,
   deleteDigitalOceanServer?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteDigitalOceanServerArgs, 'serverId'>>,
-  createApp?: Resolver<ResolversTypes['App'], ParentType, ContextType, RequireFields<MutationCreateAppArgs, 'input'>>,
+  createApp?: Resolver<ResolversTypes['CreateAppResult'], ParentType, ContextType, RequireFields<MutationCreateAppArgs, 'input'>>,
   createDatabase?: Resolver<ResolversTypes['Database'], ParentType, ContextType, RequireFields<MutationCreateDatabaseArgs, 'input'>>,
   updateServerInfo?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateServerInfoArgs, 'serverId'>>,
 };
@@ -296,8 +332,10 @@ export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTyp
 export type Resolvers<ContextType = any> = {
   Server?: ServerResolvers<ContextType>,
   App?: AppResolvers<ContextType>,
+  AppBuild?: AppBuildResolvers<ContextType>,
   Database?: DatabaseResolvers<ContextType>,
   LoginResult?: LoginResultResolvers<ContextType>,
+  CreateAppResult?: CreateAppResultResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
   Upload?: GraphQLScalarType,
@@ -307,5 +345,5 @@ export type Resolvers<ContextType = any> = {
 /**
  * @deprecated
  * Use "Resolvers" root object instead. If you wish to get "IResolvers", add "typesPrefix: I" to your config.
-*/
+ */
 export type IResolvers<ContextType = any> = Resolvers<ContextType>;

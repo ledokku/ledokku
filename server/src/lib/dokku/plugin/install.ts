@@ -9,6 +9,4 @@ export const install = async (ssh: NodeSsh, pluginUrl: string) => {
     console.error(resultPluginInstall);
     throw new Error(resultPluginInstall.stderr);
   }
-
-  return resultPluginInstall.code === 0;
 };
