@@ -13,6 +13,12 @@ const envSchema = yup.object({
   REDIS_URL: yup
     .string()
     .required('Please provide a valid REDIS_URL env variable.'),
+  DOKKU_SSH_HOST: yup
+    .string()
+    .required('Please provide a valid DOKKU_SSH_HOST env variable.'),
+  DOKKU_SSH_PORT: yup
+    .string()
+    .required('Please provide a valid DOKKU_SSH_PORT env variable.'),
 });
 
 try {
@@ -37,4 +43,6 @@ export const config = {
   githubClientSecret: process.env.GITHUB_CLIENT_SECRET,
   redisUrl: process.env.REDIS_URL,
   redisConnection,
+  dokkuSshHost: process.env.DOKKU_SSH_HOST,
+  dokkuSshPort: +process.env.DOKKU_SSH_PORT,
 };
