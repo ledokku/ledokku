@@ -1,6 +1,7 @@
 import { Worker, Queue } from 'bullmq';
 import createDebug from 'debug';
 import { resolve } from 'path';
+import execa from 'execa';
 import { config } from '../config';
 import { io } from '../server';
 import { prisma } from '../prisma';
@@ -125,20 +126,37 @@ const worker = new Worker(
     const appFolderPath = resolve(__dirname, '..', '..', '.ledokku', app.name);
 
     // First step is to clone the github repo
-    await execCommand(`git clone ${app.githubRepoUrl} ${appFolderPath}`);
+    const res = await execa('git', ['clone', app.githubRepoUrl, appFolderPath]);
+    debug('git clone', res);
+    // await execCommand(`git clone ${app.githubRepoUrl} ${appFolderPath}`);
 
     // Then we add the dokku remote that will trigger the build steps every time you commit
-    await execCommand(
-      `git remote add dokku ssh://dokku@${config.dokkuSshHost}:${config.dokkuSshPort}/${app.name}`,
-      {
-        cwd: appFolderPath,
-      }
+    const res2 = await execa(
+      'git',
+      [
+        'remote',
+        'add',
+        'dokku',
+        `ssh://dokku@${config.dokkuSshHost}:${config.dokkuSshPort}/${app.name}`,
+      ],
+      { cwd: appFolderPath }
     );
+    debug('git remote', res2);
+    // await execCommand(
+    //   `git remote add dokku ssh://dokku@${config.dokkuSshHost}:${config.dokkuSshPort}/${app.name}`,
+    //   {
+    //     cwd: appFolderPath,
+    //   }
+    // );
 
     // Finally we push
-    await execCommand('git push -f dokku master', {
+    const res3 = await execa('git', ['push', '-f', 'dokku', 'master'], {
       cwd: appFolderPath,
     });
+    debug('git push', res3);
+    // await execCommand('git push -f dokku master', {
+    //   cwd: appFolderPath,
+    // });
 
     await prisma.appBuild.update({
       where: { id: appBuild.id },
