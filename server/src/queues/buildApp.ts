@@ -1,7 +1,7 @@
 import { Worker, Queue } from 'bullmq';
 import NodeSsh from 'node-ssh';
 import createDebug from 'debug';
-import { redisConnection } from '../config';
+import { config } from '../config';
 import { io } from '../server';
 import { prisma } from '../prisma';
 
@@ -22,7 +22,7 @@ export const buildAppQueue = new Queue<QueueArgs>(queueName, {
     // Max timeout 20 minutes
     timeout: 1.2e6,
   },
-  connection: redisConnection,
+  connection: config.redisConnection,
 });
 
 /**
@@ -164,7 +164,7 @@ const worker = new Worker(
     debug(`finished buildAppQueue for app id ${app.id}`);
     // TODO notify client via socket.io that build is finished
   },
-  { connection: redisConnection }
+  { connection: config.redisConnection }
 );
 
 worker.on('failed', async (job, err) => {
