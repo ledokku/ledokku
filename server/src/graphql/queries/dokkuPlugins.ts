@@ -7,10 +7,9 @@ export const dokkuPlugins: QueryResolvers['dokkuPlugins'] = async (
   __,
   { userId }
 ) => {
-  // TODO enable
-  //   if (!userId) {
-  //     throw new Error('Unauthorized');
-  //   }
+  if (!userId) {
+    throw new Error('Unauthorized');
+  }
 
   const ssh = await sshConnect();
 
