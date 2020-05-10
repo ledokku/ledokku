@@ -73,35 +73,32 @@ const worker = new Worker(
       }, 500);
     };
 
-    const onStdout = (chunk: Buffer) => {
-      const message = chunk.toString('utf8');
+    const onStdout = (message: string) => {
       sendLogs({ message, type: 'stdout' });
       debug(`stdoutChunk: ${message}`);
     };
-    const onStderr = (chunk: Buffer) => {
-      const message = chunk.toString('utf8');
+    const onStderr = (message: string) => {
       sendLogs({ message, type: 'stderr' });
       debug(`stderrChunk ${message}`);
     };
 
-    const ssh = await sshConnect();
-
     const execCommand = async (
       command: string,
+      args: string[],
       options: { cwd?: string } = {}
     ) => {
-      debug('execCommand', command);
+      debug('execCommand', command, args);
       io.emit(`app-build:${appBuild.id}`, [
         {
+          // TODO concat args to command
           message: command,
           type: 'command',
         },
       ]);
-      const resultCommand = await ssh.execCommand(command, {
-        onStdout,
-        onStderr,
-        cwd: options.cwd,
-      });
+      const subprocess = execa(command, args, options);
+      subprocess.stdout.on('data', onStdout);
+      subprocess.stderr.on('data', onStderr);
+      const resultCommand = await subprocess;
       debug('resultCommand', resultCommand);
       return resultCommand;
     };
@@ -126,12 +123,10 @@ const worker = new Worker(
     const appFolderPath = resolve(__dirname, '..', '..', '.ledokku', app.name);
 
     // First step is to clone the github repo
-    const res = await execa('git', ['clone', app.githubRepoUrl, appFolderPath]);
-    debug('git clone', res);
-    // await execCommand(`git clone ${app.githubRepoUrl} ${appFolderPath}`);
+    await execCommand('git', ['clone', app.githubRepoUrl, appFolderPath]);
 
     // Then we add the dokku remote that will trigger the build steps every time you commit
-    const res2 = await execa(
+    await execCommand(
       'git',
       [
         'remote',
@@ -141,22 +136,11 @@ const worker = new Worker(
       ],
       { cwd: appFolderPath }
     );
-    debug('git remote', res2);
-    // await execCommand(
-    //   `git remote add dokku ssh://dokku@${config.dokkuSshHost}:${config.dokkuSshPort}/${app.name}`,
-    //   {
-    //     cwd: appFolderPath,
-    //   }
-    // );
 
     // Finally we push
-    const res3 = await execa('git', ['push', '-f', 'dokku', 'master'], {
+    execCommand('git', ['push', '-f', 'dokku', 'master'], {
       cwd: appFolderPath,
     });
-    debug('git push', res3);
-    // await execCommand('git push -f dokku master', {
-    //   cwd: appFolderPath,
-    // });
 
     await prisma.appBuild.update({
       where: { id: appBuild.id },
