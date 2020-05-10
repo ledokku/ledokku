@@ -73,6 +73,16 @@ const typeDefs = gql`
     appBuild: AppBuild!
   }
 
+  type DokkuPlugin {
+    name: String!
+    version: String!
+  }
+
+  type DokkuPluginResult {
+    version: String!
+    plugins: [DokkuPlugin!]!
+  }
+
   input CreateAppInput {
     serverId: String!
     name: String!
@@ -88,6 +98,7 @@ const typeDefs = gql`
   type Query {
     servers: [Server!]
     server(id: String!): Server
+    dokkuPlugins: DokkuPluginResult!
   }
 
   type Mutation {

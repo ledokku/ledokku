@@ -78,6 +78,18 @@ export type CreateAppResult = {
   appBuild: AppBuild;
 };
 
+export type DokkuPlugin = {
+   __typename?: 'DokkuPlugin';
+  name: Scalars['String'];
+  version: Scalars['String'];
+};
+
+export type DokkuPluginResult = {
+   __typename?: 'DokkuPluginResult';
+  version: Scalars['String'];
+  plugins: Array<DokkuPlugin>;
+};
+
 export type CreateAppInput = {
   serverId: Scalars['String'];
   name: Scalars['String'];
@@ -94,6 +106,7 @@ export type Query = {
    __typename?: 'Query';
   servers?: Maybe<Array<Server>>;
   server?: Maybe<Server>;
+  dokkuPlugins: DokkuPluginResult;
 };
 
 
@@ -238,6 +251,8 @@ export type ResolversTypes = {
   DatabaseTypes: DatabaseTypes,
   LoginResult: ResolverTypeWrapper<LoginResult>,
   CreateAppResult: ResolverTypeWrapper<CreateAppResult>,
+  DokkuPlugin: ResolverTypeWrapper<DokkuPlugin>,
+  DokkuPluginResult: ResolverTypeWrapper<DokkuPluginResult>,
   CreateAppInput: CreateAppInput,
   CreateDatabaseInput: CreateDatabaseInput,
   Query: ResolverTypeWrapper<{}>,
@@ -261,6 +276,8 @@ export type ResolversParentTypes = {
   DatabaseTypes: DatabaseTypes,
   LoginResult: LoginResult,
   CreateAppResult: CreateAppResult,
+  DokkuPlugin: DokkuPlugin,
+  DokkuPluginResult: DokkuPluginResult,
   CreateAppInput: CreateAppInput,
   CreateDatabaseInput: CreateDatabaseInput,
   Query: {},
@@ -310,9 +327,22 @@ export type CreateAppResultResolvers<ContextType = any, ParentType extends Resol
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
+export type DokkuPluginResolvers<ContextType = any, ParentType extends ResolversParentTypes['DokkuPlugin'] = ResolversParentTypes['DokkuPlugin']> = {
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  version?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type DokkuPluginResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['DokkuPluginResult'] = ResolversParentTypes['DokkuPluginResult']> = {
+  version?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  plugins?: Resolver<Array<ResolversTypes['DokkuPlugin']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   servers?: Resolver<Maybe<Array<ResolversTypes['Server']>>, ParentType, ContextType>,
   server?: Resolver<Maybe<ResolversTypes['Server']>, ParentType, ContextType, RequireFields<QueryServerArgs, 'id'>>,
+  dokkuPlugins?: Resolver<ResolversTypes['DokkuPluginResult'], ParentType, ContextType>,
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
@@ -336,6 +366,8 @@ export type Resolvers<ContextType = any> = {
   Database?: DatabaseResolvers<ContextType>,
   LoginResult?: LoginResultResolvers<ContextType>,
   CreateAppResult?: CreateAppResultResolvers<ContextType>,
+  DokkuPlugin?: DokkuPluginResolvers<ContextType>,
+  DokkuPluginResult?: DokkuPluginResultResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
   Upload?: GraphQLScalarType,

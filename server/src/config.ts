@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+import { readFileSync } from 'fs';
 
 const envSchema = yup.object({
   JWT_SECRET: yup
@@ -19,6 +20,9 @@ const envSchema = yup.object({
   DOKKU_SSH_PORT: yup
     .string()
     .required('Please provide a valid DOKKU_SSH_PORT env variable.'),
+  SSH_PRIVATE_KEY_PATH: yup
+    .string()
+    .required('Please provide a valid SSH_PRIVATE_KEY_PATH env variable.'),
 });
 
 try {
@@ -30,6 +34,10 @@ Take a look at the contributing guide to see how to setup the project.
 https://github.com/ledokku/ledokku/blob/master/CONTRIBUTING.md`);
   process.exit(1);
 }
+
+const privateKey = readFileSync(process.env.SSH_PRIVATE_KEY_PATH, {
+  encoding: 'utf8',
+});
 
 const url = process.env.REDIS_URL.split(':');
 const redisConnection = {
@@ -45,4 +53,5 @@ export const config = {
   redisConnection,
   dokkuSshHost: process.env.DOKKU_SSH_HOST,
   dokkuSshPort: +process.env.DOKKU_SSH_PORT,
+  privateKey,
 };
