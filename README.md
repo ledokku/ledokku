@@ -2,7 +2,7 @@
 
 ![Dashboard](/images/Dashboard.png)
 
-Ledokku is a beautiful UI powered by [dokku]("dokku")
+Ledokku is a beautiful UI powered by [dokku]("http://dokku.viewdocs.io/dokku/")
 
 With us you will be able to deploy apps written in:
 **node.js, php, ruby and many more**.
