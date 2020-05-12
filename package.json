@@ -9,7 +9,8 @@
   },
   "workspaces": [
     "client",
-    "server"
+    "server",
+    "website"
   ],
   "prettier": {
     "singleQuote": true
