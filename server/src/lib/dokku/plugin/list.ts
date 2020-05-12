@@ -19,7 +19,7 @@ const parsePluginListCommand = (commandResult: string) => {
 };
 
 export const list = async (ssh: NodeSsh) => {
-  const resultPluginList = await ssh.execCommand('dokku plugin:list');
+  const resultPluginList = await ssh.execCommand('plugin:list');
   if (resultPluginList.code !== 0) {
     console.error(resultPluginList);
     throw new Error(resultPluginList.stderr);

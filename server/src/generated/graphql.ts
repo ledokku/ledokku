@@ -14,28 +14,6 @@ export type Scalars = {
   Upload: any;
 };
 
-export type Server = {
-   __typename?: 'Server';
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  ip?: Maybe<Scalars['String']>;
-  type: ServerTypes;
-  status: ServerStatus;
-  apps?: Maybe<Array<App>>;
-  databases?: Maybe<Array<Database>>;
-};
-
-export type ServerTypes = 
-  | 'AWS'
-  | 'DIGITALOCEAN'
-  | 'LINODE';
-
-export type ServerStatus = 
-  | 'NEW'
-  | 'ACTIVE'
-  | 'OFF'
-  | 'ARCHIVE';
-
 export type App = {
    __typename?: 'App';
   id: Scalars['ID'];
@@ -78,58 +56,43 @@ export type CreateAppResult = {
   appBuild: AppBuild;
 };
 
+export type DokkuPlugin = {
+   __typename?: 'DokkuPlugin';
+  name: Scalars['String'];
+  version: Scalars['String'];
+};
+
+export type DokkuPluginResult = {
+   __typename?: 'DokkuPluginResult';
+  version: Scalars['String'];
+  plugins: Array<DokkuPlugin>;
+};
+
 export type CreateAppInput = {
-  serverId: Scalars['String'];
   name: Scalars['String'];
   gitUrl: Scalars['String'];
 };
 
 export type CreateDatabaseInput = {
-  serverId: Scalars['String'];
   name: Scalars['String'];
   type: DatabaseTypes;
 };
 
 export type Query = {
    __typename?: 'Query';
-  servers?: Maybe<Array<Server>>;
-  server?: Maybe<Server>;
-};
-
-
-export type QueryServerArgs = {
-  id: Scalars['String'];
+  dokkuPlugins: DokkuPluginResult;
 };
 
 export type Mutation = {
    __typename?: 'Mutation';
   loginWithGithub?: Maybe<LoginResult>;
-  saveDigitalOceanAccessToken?: Maybe<Scalars['Boolean']>;
-  createDigitalOceanServer: Server;
-  deleteDigitalOceanServer?: Maybe<Scalars['Boolean']>;
   createApp: CreateAppResult;
   createDatabase: Database;
-  updateServerInfo?: Maybe<Scalars['Boolean']>;
 };
 
 
 export type MutationLoginWithGithubArgs = {
   code: Scalars['String'];
-};
-
-
-export type MutationSaveDigitalOceanAccessTokenArgs = {
-  digitalOceanAccessToken: Scalars['String'];
-};
-
-
-export type MutationCreateDigitalOceanServerArgs = {
-  serverName: Scalars['String'];
-};
-
-
-export type MutationDeleteDigitalOceanServerArgs = {
-  serverId: Scalars['String'];
 };
 
 
@@ -140,11 +103,6 @@ export type MutationCreateAppArgs = {
 
 export type MutationCreateDatabaseArgs = {
   input: CreateDatabaseInput;
-};
-
-
-export type MutationUpdateServerInfoArgs = {
-  serverId: Scalars['String'];
 };
 
 export type CacheControlScope = 
@@ -227,17 +185,16 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
-  Server: ResolverTypeWrapper<Server>,
-  ID: ResolverTypeWrapper<Scalars['ID']>,
-  ServerTypes: ServerTypes,
-  ServerStatus: ServerStatus,
   App: ResolverTypeWrapper<App>,
+  ID: ResolverTypeWrapper<Scalars['ID']>,
   AppBuild: ResolverTypeWrapper<AppBuild>,
   AppBuildStatus: AppBuildStatus,
   Database: ResolverTypeWrapper<Database>,
   DatabaseTypes: DatabaseTypes,
   LoginResult: ResolverTypeWrapper<LoginResult>,
   CreateAppResult: ResolverTypeWrapper<CreateAppResult>,
+  DokkuPlugin: ResolverTypeWrapper<DokkuPlugin>,
+  DokkuPluginResult: ResolverTypeWrapper<DokkuPluginResult>,
   CreateAppInput: CreateAppInput,
   CreateDatabaseInput: CreateDatabaseInput,
   Query: ResolverTypeWrapper<{}>,
@@ -250,34 +207,22 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   String: Scalars['String'],
   Boolean: Scalars['Boolean'],
-  Server: Server,
-  ID: Scalars['ID'],
-  ServerTypes: ServerTypes,
-  ServerStatus: ServerStatus,
   App: App,
+  ID: Scalars['ID'],
   AppBuild: AppBuild,
   AppBuildStatus: AppBuildStatus,
   Database: Database,
   DatabaseTypes: DatabaseTypes,
   LoginResult: LoginResult,
   CreateAppResult: CreateAppResult,
+  DokkuPlugin: DokkuPlugin,
+  DokkuPluginResult: DokkuPluginResult,
   CreateAppInput: CreateAppInput,
   CreateDatabaseInput: CreateDatabaseInput,
   Query: {},
   Mutation: {},
   CacheControlScope: CacheControlScope,
   Upload: Scalars['Upload'],
-};
-
-export type ServerResolvers<ContextType = any, ParentType extends ResolversParentTypes['Server'] = ResolversParentTypes['Server']> = {
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  ip?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  type?: Resolver<ResolversTypes['ServerTypes'], ParentType, ContextType>,
-  status?: Resolver<ResolversTypes['ServerStatus'], ParentType, ContextType>,
-  apps?: Resolver<Maybe<Array<ResolversTypes['App']>>, ParentType, ContextType>,
-  databases?: Resolver<Maybe<Array<ResolversTypes['Database']>>, ParentType, ContextType>,
-  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type AppResolvers<ContextType = any, ParentType extends ResolversParentTypes['App'] = ResolversParentTypes['App']> = {
@@ -310,19 +255,26 @@ export type CreateAppResultResolvers<ContextType = any, ParentType extends Resol
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
+export type DokkuPluginResolvers<ContextType = any, ParentType extends ResolversParentTypes['DokkuPlugin'] = ResolversParentTypes['DokkuPlugin']> = {
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  version?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type DokkuPluginResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['DokkuPluginResult'] = ResolversParentTypes['DokkuPluginResult']> = {
+  version?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  plugins?: Resolver<Array<ResolversTypes['DokkuPlugin']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  servers?: Resolver<Maybe<Array<ResolversTypes['Server']>>, ParentType, ContextType>,
-  server?: Resolver<Maybe<ResolversTypes['Server']>, ParentType, ContextType, RequireFields<QueryServerArgs, 'id'>>,
+  dokkuPlugins?: Resolver<ResolversTypes['DokkuPluginResult'], ParentType, ContextType>,
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   loginWithGithub?: Resolver<Maybe<ResolversTypes['LoginResult']>, ParentType, ContextType, RequireFields<MutationLoginWithGithubArgs, 'code'>>,
-  saveDigitalOceanAccessToken?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationSaveDigitalOceanAccessTokenArgs, 'digitalOceanAccessToken'>>,
-  createDigitalOceanServer?: Resolver<ResolversTypes['Server'], ParentType, ContextType, RequireFields<MutationCreateDigitalOceanServerArgs, 'serverName'>>,
-  deleteDigitalOceanServer?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteDigitalOceanServerArgs, 'serverId'>>,
   createApp?: Resolver<ResolversTypes['CreateAppResult'], ParentType, ContextType, RequireFields<MutationCreateAppArgs, 'input'>>,
   createDatabase?: Resolver<ResolversTypes['Database'], ParentType, ContextType, RequireFields<MutationCreateDatabaseArgs, 'input'>>,
-  updateServerInfo?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateServerInfoArgs, 'serverId'>>,
 };
 
 export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
@@ -330,12 +282,13 @@ export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTyp
 }
 
 export type Resolvers<ContextType = any> = {
-  Server?: ServerResolvers<ContextType>,
   App?: AppResolvers<ContextType>,
   AppBuild?: AppBuildResolvers<ContextType>,
   Database?: DatabaseResolvers<ContextType>,
   LoginResult?: LoginResultResolvers<ContextType>,
   CreateAppResult?: CreateAppResultResolvers<ContextType>,
+  DokkuPlugin?: DokkuPluginResolvers<ContextType>,
+  DokkuPluginResult?: DokkuPluginResultResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
   Upload?: GraphQLScalarType,

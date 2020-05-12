@@ -1,9 +1,11 @@
 import { Worker, Queue } from 'bullmq';
-import NodeSsh from 'node-ssh';
 import createDebug from 'debug';
-import { redisConnection } from '../config';
+import { resolve } from 'path';
+import execa from 'execa';
+import { config } from '../config';
 import { io } from '../server';
 import { prisma } from '../prisma';
+import { sshConnect } from '../lib/ssh';
 
 const queueName = 'build-app';
 const debug = createDebug(`queue:${queueName}`);
@@ -22,7 +24,7 @@ export const buildAppQueue = new Queue<QueueArgs>(queueName, {
     // Max timeout 20 minutes
     timeout: 1.2e6,
   },
-  connection: redisConnection,
+  connection: config.redisConnection,
 });
 
 /**
@@ -38,13 +40,6 @@ const worker = new Worker(
       where: { id: buildId },
       select: {
         id: true,
-        server: {
-          select: {
-            id: true,
-            ip: true,
-            sshKey: { select: { id: true, privateKey: true } },
-          },
-        },
         app: {
           select: {
             id: true,
@@ -58,7 +53,6 @@ const worker = new Worker(
       throw new Error(`App build ${buildId} not found for job ${job.id}`);
     }
 
-    const server = appBuild.server;
     const app = appBuild.app;
     await prisma.appBuild.update({
       where: { id: appBuild.id },
@@ -79,45 +73,32 @@ const worker = new Worker(
       }, 500);
     };
 
-    const onStdout = (chunk: Buffer) => {
-      const message = chunk.toString('utf8');
+    const onStdout = (message: string) => {
       sendLogs({ message, type: 'stdout' });
       debug(`stdoutChunk: ${message}`);
     };
-    const onStderr = (chunk: Buffer) => {
-      const message = chunk.toString('utf8');
+    const onStderr = (message: string) => {
       sendLogs({ message, type: 'stderr' });
       debug(`stderrChunk ${message}`);
     };
 
-    const ssh = new NodeSsh();
-
-    debug(`connecting to ${server.ip}`);
-    // First we setup a connection to the server
-    await ssh.connect({
-      host: server.ip,
-      // TODO create separate user
-      username: 'root',
-      privateKey: server.sshKey.privateKey,
-    });
-    debug(`connected to ${server.ip}`);
-
     const execCommand = async (
       command: string,
+      args: string[],
       options: { cwd?: string } = {}
     ) => {
-      debug('execCommand', command);
+      debug('execCommand', command, args);
       io.emit(`app-build:${appBuild.id}`, [
         {
+          // TODO concat args to command
           message: command,
           type: 'command',
         },
       ]);
-      const resultCommand = await ssh.execCommand(command, {
-        onStdout,
-        onStderr,
-        cwd: options.cwd,
-      });
+      const subprocess = execa(command, args, options);
+      subprocess.stdout.on('data', onStdout);
+      subprocess.stderr.on('data', onStderr);
+      const resultCommand = await subprocess;
       debug('resultCommand', resultCommand);
       return resultCommand;
     };
@@ -126,31 +107,38 @@ const worker = new Worker(
     // TODO otherwise git pull first
 
     // If server does not have any ssh key we first create a new one to be able to deploy the app
-    const resultTest = await execCommand('test -e /root/.ssh/id_rsa');
-    if (resultTest.code === 1) {
-      // First is to generate a deploy ssh key
-      // TODO set a password for better security?
-      await execCommand('ssh-keygen -t rsa -f /root/.ssh/id_rsa -N ""');
+    // const resultTest = await execCommand('test -e /root/.ssh/id_rsa');
+    // if (resultTest.code === 1) {
+    //   // First is to generate a deploy ssh key
+    //   // TODO set a password for better security?
+    //   await execCommand('ssh-keygen -t rsa -f /root/.ssh/id_rsa -N ""');
 
-      // Then we add the key to the list of allowed key
-      await execCommand('dokku ssh-keys:add ledokku /root/.ssh/id_rsa.pub');
+    //   // Then we add the key to the list of allowed key
+    //   await execCommand('dokku ssh-keys:add ledokku /root/.ssh/id_rsa.pub');
 
-      // We whitelist the ip into the known hosts
-      await execCommand(`ssh-keyscan ${server.ip} >> ~/.ssh/known_hosts`);
-    }
+    //   // We whitelist the ip into the known hosts
+    //   await execCommand(`ssh-keyscan ${server.ip} >> ~/.ssh/known_hosts`);
+    // }
 
-    const appFolderPath = `/home/ledokku-repos/${app.name}`;
+    const appFolderPath = resolve(__dirname, '..', '..', '.ledokku', app.name);
 
     // First step is to clone the github repo
-    await execCommand(`git clone ${app.githubRepoUrl} ${appFolderPath}`);
+    await execCommand('git', ['clone', app.githubRepoUrl, appFolderPath]);
 
     // Then we add the dokku remote that will trigger the build steps every time you commit
-    await execCommand(`git remote add dokku dokku@${server.ip}:${app.name}`, {
-      cwd: appFolderPath,
-    });
+    await execCommand(
+      'git',
+      [
+        'remote',
+        'add',
+        'dokku',
+        `ssh://dokku@${config.dokkuSshHost}:${config.dokkuSshPort}/${app.name}`,
+      ],
+      { cwd: appFolderPath }
+    );
 
     // Finally we push
-    await execCommand('git push -f dokku master', {
+    execCommand('git', ['push', '-f', 'dokku', 'master'], {
       cwd: appFolderPath,
     });
 
@@ -164,7 +152,7 @@ const worker = new Worker(
     debug(`finished buildAppQueue for app id ${app.id}`);
     // TODO notify client via socket.io that build is finished
   },
-  { connection: redisConnection }
+  { connection: config.redisConnection }
 );
 
 worker.on('failed', async (job, err) => {

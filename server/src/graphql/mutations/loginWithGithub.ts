@@ -56,6 +56,13 @@ export const loginWithGithub: MutationResolvers['loginWithGithub'] = async (
 
   // User not found it means we are creating a new user
   if (!user) {
+    // We limit to only one user per server for now
+    // This can be fixed later by allowing user to invite other users for example
+    const nbUsers = await prisma.user.count();
+    if (nbUsers >= 1) {
+      throw new Error('Unauthorized');
+    }
+
     // We fetch the user private emails
     const { data: emails } = await octokit.users.listEmails();
     // Github return an array of emails, we just need the primary email
