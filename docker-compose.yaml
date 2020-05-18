@@ -1,5 +1,25 @@
 version: '3.6'
 services:
+  client:
+    build:
+      context: ./client
+    volumes:
+      - ./client:/usr/src/app
+      - /usr/src/app/node_modules/
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=development
+  server:
+    build:
+      context: ./server
+    volumes:
+      - ./server:/usr/src/app
+      - /usr/src/app/node_modules/
+    ports:
+      - '4000:4000'
+    environment:
+      - NODE_ENV=development
   postgres:
     image: postgres:12
     restart: always
