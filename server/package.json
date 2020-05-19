@@ -4,11 +4,12 @@
   "version": "0.0.1",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon 'src/index.ts' --exec 'ts-node' src/index.ts -e ts,graphql",
+    "dev": "yarn prisma:migrate && yarn prisma:generate && nodemon 'src/index.ts' --exec 'ts-node' src/index.ts -e ts,graphql",
     "build": "tsc",
     "start": "node .build/index.js",
     "generate": "graphql-codegen --config codegen.yml",
-    "prisma:generate": "prisma generate"
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate up --experimental"
   },
   "dependencies": {
     "@octokit/rest": "17.9.2",
