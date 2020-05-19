@@ -7,5 +7,5 @@ export const installed = async (
   const resultPluginInstalled = await ssh.execCommand(
     `plugin:installed ${pluginName}`
   );
-  return resultPluginInstalled.code === 0;
+  return resultPluginInstalled.code !== 1;
 };
