@@ -62,8 +62,8 @@ if (!existsSync(sshKeyPath)) {
     .toString('ssh');
 
   mkdirSync(sshKeyFolderPath, { recursive: true });
-  writeFileSync(sshKeyPath, sshKeyPrivateKey, { encoding: 'utf8' });
-  writeFileSync(`${sshKeyPath}.pub`, sshKeyPublicKey, { encoding: 'utf8' });
+  writeFileSync(sshKeyPath, sshKeyPrivateKey, { encoding: 'utf8', mode: "400" });
+  writeFileSync(`${sshKeyPath}.pub`, sshKeyPublicKey, { encoding: 'utf8', mode: "400" });
 
   console.log(`
     Successfully generated a new private key 🎉.
