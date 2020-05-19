@@ -127,9 +127,7 @@ const worker = new Worker(
     // TODO only if needed
     // TODO move this part when the server is booting?
     const sshKnowHostPath = join(process.env.HOME, '/.ssh/known_hosts');
-    const res = await execCommand('ssh-keyscan', [
-      config.dokkuSshHost,
-    ]);
+    const res = await execCommand('ssh-keyscan', [config.dokkuSshHost]);
     let sshKnowHostFile = '';
     if (existsSync(sshKnowHostPath)) {
       sshKnowHostFile = readFileSync(sshKnowHostPath, {
