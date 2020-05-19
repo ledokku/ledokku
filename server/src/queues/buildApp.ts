@@ -63,7 +63,7 @@ const worker = new Worker(
 
     // We send multiple logs at once to not spam the client
     let logs: RealtimeLog[] = [];
-    let logTimerId: NodeJS.Timeout;
+    let logTimerId: any;
     const sendLogs = (log: RealtimeLog) => {
       logs.push(log);
       clearTimeout(logTimerId);

@@ -6,6 +6,7 @@ services:
     volumes:
       - ./client:/usr/src/app
       - /usr/src/app/node_modules/
+      - server_ssh_key:/root/.ssh
     ports:
       - '3000:3000'
     environment:
@@ -43,4 +44,5 @@ services:
       - '6380:6379'
 
 volumes:
+  server_ssh_key:
   db_data:
