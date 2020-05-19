@@ -52,7 +52,6 @@ GITHUB_CLIENT_SECRET="MY_GITHUB_CLIENT_SECRET_CREATE_AT_THE_PREVIOUS_STEP"
 JWT_SECRET="strong-secret"
 DOKKU_SSH_HOST="dokku.me"
 DOKKU_SSH_PORT="22"
-SSH_PRIVATE_KEY_PATH="/home/myusername/.ssh/id_rsa"
 ```
 
 Finally we also need to create a `.env` file for prisma. Inside the `server/prisma` folder create a new `.env` file and add the following env variable:

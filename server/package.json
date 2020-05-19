@@ -37,6 +37,7 @@
     "@types/jsonwebtoken": "8.5.0",
     "@types/node-ssh": "7.0.0",
     "@types/socket.io": "2.1.5",
+    "@types/sshpk": "1.10.4",
     "@types/yup": "0.28.3",
     "nodemon": "2.0.4",
     "ts-node": "8.10.1",
