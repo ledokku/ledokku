@@ -10,6 +10,7 @@ services:
       - '3000:3000'
     environment:
       - NODE_ENV=development
+
   server:
     build:
       context: ./server
@@ -18,8 +19,14 @@ services:
       - /usr/src/app/node_modules/
     ports:
       - '4000:4000'
+    depends_on:
+      - postgres
+      - redis
     environment:
       - NODE_ENV=development
+      - DATABASE_URL="postgres://postgres:postgrespassword@localhost:5433/postgres"
+      - REDIS_URL="redis://127.0.0.1:6380"
+
   postgres:
     image: postgres:12
     restart: always
@@ -29,9 +36,11 @@ services:
       - db_data:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: postgrespassword
+
   redis:
     image: 'redis:5'
     ports:
       - '6380:6379'
+
 volumes:
   db_data:
