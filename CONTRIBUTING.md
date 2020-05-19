@@ -45,19 +45,11 @@ SERVER_URL="http://localhost:4000"
 Let's now setup the server environment. Inside the `server` folder create a new `.env` file and add the following env variables (replace the github id and secret with the one you obtained when creating the Github OAuth App, also replace the path to your local ssh key):
 
 ```
-DATABASE_URL="postgres://postgres:postgrespassword@localhost:5433/postgres"
-REDIS_URL="redis://127.0.0.1:6380"
 GITHUB_CLIENT_ID="MY_GITHUB_CLIENT_ID_CREATE_AT_THE_PREVIOUS_STEP"
 GITHUB_CLIENT_SECRET="MY_GITHUB_CLIENT_SECRET_CREATE_AT_THE_PREVIOUS_STEP"
 JWT_SECRET="strong-secret"
 DOKKU_SSH_HOST="dokku.me"
 DOKKU_SSH_PORT="22"
-```
-
-Finally we also need to create a `.env` file for prisma. Inside the `server/prisma` folder create a new `.env` file and add the following env variable:
-
-```
-DATABASE_URL="postgres://postgres:postgrespassword@localhost:5433/postgres"
 ```
 
 ### Starting the databases
