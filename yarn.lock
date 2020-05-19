@@ -2333,13 +2333,6 @@
     "@types/node" "*"
     "@types/ssh2-streams" "*"
 
-"@types/sshpk@1.10.4":
-  version "1.10.4"
-  resolved "https://registry.yarnpkg.com/@types/sshpk/-/sshpk-1.10.4.tgz#61871614349a3ecd9fafdec5ed992736408df8a1"
-  integrity sha512-ly9tBXvJ3XQZH0ehBmbi5TA8SRxVYyIqj9EHqLjh9Ec/3V0FGOjiIsxO1n9/OPFKB6QEg98JqMJ19KOOkSnfbA==
-  dependencies:
-    "@types/node" "*"
-
 "@types/styled-components@5.1.0":
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/@types/styled-components/-/styled-components-5.1.0.tgz#24d3412ba5395aa06e14fbc93c52f9454cebd0d6"

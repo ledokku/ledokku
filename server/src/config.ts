@@ -59,7 +59,6 @@ if (!existsSync(sshKeyPath)) {
   const sshKeyPublicKey = pemKey.toString('ssh');
   const sshKeyPrivateKey = sshpk
     .parsePrivateKey(privateKey, 'pem')
-    // @ts-ignore
     .toString('ssh');
 
   mkdirSync(sshKeyFolderPath, { recursive: true });
