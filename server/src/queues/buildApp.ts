@@ -1,11 +1,11 @@
 import { Worker, Queue } from 'bullmq';
 import createDebug from 'debug';
-import { resolve } from 'path';
+import { resolve, join } from 'path';
 import execa from 'execa';
 import { config } from '../config';
 import { io } from '../server';
 import { prisma } from '../prisma';
-import { sshConnect } from '../lib/ssh';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 
 const queueName = 'build-app';
 const debug = createDebug(`queue:${queueName}`);
@@ -63,7 +63,7 @@ const worker = new Worker(
 
     // We send multiple logs at once to not spam the client
     let logs: RealtimeLog[] = [];
-    let logTimerId: number;
+    let logTimerId: any;
     const sendLogs = (log: RealtimeLog) => {
       logs.push(log);
       clearTimeout(logTimerId);
@@ -106,20 +106,6 @@ const worker = new Worker(
     // TODO only if folder does not exist clone
     // TODO otherwise git pull first
 
-    // If server does not have any ssh key we first create a new one to be able to deploy the app
-    // const resultTest = await execCommand('test -e /root/.ssh/id_rsa');
-    // if (resultTest.code === 1) {
-    //   // First is to generate a deploy ssh key
-    //   // TODO set a password for better security?
-    //   await execCommand('ssh-keygen -t rsa -f /root/.ssh/id_rsa -N ""');
-
-    //   // Then we add the key to the list of allowed key
-    //   await execCommand('dokku ssh-keys:add ledokku /root/.ssh/id_rsa.pub');
-
-    //   // We whitelist the ip into the known hosts
-    //   await execCommand(`ssh-keyscan ${server.ip} >> ~/.ssh/known_hosts`);
-    // }
-
     const appFolderPath = resolve(__dirname, '..', '..', '.ledokku', app.name);
 
     // First step is to clone the github repo
@@ -137,8 +123,22 @@ const worker = new Worker(
       { cwd: appFolderPath }
     );
 
+    // We whitelist the ip into the known hosts
+    // TODO only if needed
+    // TODO move this part when the server is booting?
+    const sshKnowHostPath = join(process.env.HOME, '/.ssh/known_hosts');
+    const res = await execCommand('ssh-keyscan', [config.dokkuSshHost]);
+    let sshKnowHostFile = '';
+    if (existsSync(sshKnowHostPath)) {
+      sshKnowHostFile = readFileSync(sshKnowHostPath, {
+        encoding: 'utf8',
+      });
+    }
+    sshKnowHostFile += res.stdout;
+    writeFileSync(sshKnowHostPath, sshKnowHostFile, { encoding: 'utf8' });
+
     // Finally we push
-    execCommand('git', ['push', '-f', 'dokku', 'master'], {
+    await execCommand('git', ['push', '-f', 'dokku', 'master'], {
       cwd: appFolderPath,
     });
 

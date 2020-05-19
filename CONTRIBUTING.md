@@ -42,40 +42,27 @@ GITHUB_CLIENT_ID="MY_GITHUB_CLIENT_ID_CREATE_AT_THE_PREVIOUS_STEP"
 SERVER_URL="http://localhost:4000"
 ```
 
-Let's now setup the server environment. Inside the `server` folder create a new `.env` file and add the following env variables (replace the github id and secret with the one you obtained when creating the Github OAuth App, also replace the path to your local ssh key):
+Let's now setup the server environment. Inside the `server` folder create a new `.env` file and add the following env variables (replace the github id and secret with the one you obtained when creating the Github OAuth App):
 
 ```
-DATABASE_URL="postgres://postgres:postgrespassword@localhost:5433/postgres"
-REDIS_URL="redis://127.0.0.1:6380"
 GITHUB_CLIENT_ID="MY_GITHUB_CLIENT_ID_CREATE_AT_THE_PREVIOUS_STEP"
 GITHUB_CLIENT_SECRET="MY_GITHUB_CLIENT_SECRET_CREATE_AT_THE_PREVIOUS_STEP"
 JWT_SECRET="strong-secret"
 DOKKU_SSH_HOST="dokku.me"
 DOKKU_SSH_PORT="22"
-SSH_PRIVATE_KEY_PATH="/home/myusername/.ssh/id_rsa"
 ```
 
-Finally we also need to create a `.env` file for prisma. Inside the `server/prisma` folder create a new `.env` file and add the following env variable:
+### Starting the services
 
-```
-DATABASE_URL="postgres://postgres:postgrespassword@localhost:5433/postgres"
-```
+In your terminal, run `docker-compose up` from the root folder of the repository to start the database and apps services. When the server is booting, the prisma client is generated and the latest migration is executed on the database. The web application is running on port 3000 and the server on port 4000.
 
-### Starting the databases
-
-In your terminal, run `docker-compose up` from the root folder of the repository to start the database services required to run the app.
-
-### Apply the latest migrations
-
-To apply the latest migrations to the PostgreSQL database, in the `server` folder run `yarn prisma migrate up --experimental`.
-
-### Starting the application
-
-Inside the `server` folder run `yarn dev` to start the server. The server should now be listening incoming requests on port 4000.
-
-Inside the `client` folder run `yarn dev` to start the next.js client app. The client should now be listening incoming requests on port 3000.
+If you take a look at the server logs in the terminal, you should see a message saying that the server successfully generated a new ssh key. You need to add this key to the dokku vagrant instance to allow the server to interact with it. In order to connect to the vagrant box run `vagrant ssh`. Then copy paste the command the server printed in the logs. Once the key is added your server should be able to connect to the dokku instance.
 
 You can now open your browser and visit http://localhost:3000 to see the app running.
+
+### Create a new migration
+
+To create a new database migration, first edit the `schema.prisma` file with the changes you would like to do. Then connect to the server docker container `docker-compose run server bash`. To create a new migration run `yarn prisma migrate save --experimental`. Then you need to apply the latest migration to the PostgreSQL database `yarn prisma migrate up --experimental`. Finally to regenerate the prisma client with your latest changes run `yarn prisma generate`.
 
 ## Style Guide
 

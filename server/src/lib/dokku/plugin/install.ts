@@ -5,7 +5,7 @@ export const install = async (ssh: NodeSsh, pluginUrl: string) => {
   const resultPluginInstall = await ssh.execCommand(
     `plugin:install ${pluginUrl}`
   );
-  if (resultPluginInstall.code !== 0) {
+  if (resultPluginInstall.code === 1) {
     console.error(resultPluginInstall);
     throw new Error(resultPluginInstall.stderr);
   }

@@ -1,5 +1,8 @@
 import * as yup from 'yup';
-import { readFileSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
+import { join } from 'path';
+import { generateKeyPairSync } from 'crypto';
+import sshpk from 'sshpk';
 
 const envSchema = yup.object({
   JWT_SECRET: yup
@@ -20,9 +23,6 @@ const envSchema = yup.object({
   DOKKU_SSH_PORT: yup
     .string()
     .required('Please provide a valid DOKKU_SSH_PORT env variable.'),
-  SSH_PRIVATE_KEY_PATH: yup
-    .string()
-    .required('Please provide a valid SSH_PRIVATE_KEY_PATH env variable.'),
 });
 
 try {
@@ -35,7 +35,50 @@ https://github.com/ledokku/ledokku/blob/master/CONTRIBUTING.md`);
   process.exit(1);
 }
 
-const privateKey = readFileSync(process.env.SSH_PRIVATE_KEY_PATH, {
+/**
+ * We generate a new ssh key if it's the first time server is booted
+ */
+const sshKeyFolderPath = join(process.env.HOME, '/.ssh');
+const sshKeyPath = join(sshKeyFolderPath, 'id_rsa');
+if (!existsSync(sshKeyPath)) {
+  //   create public and private ssh key
+  const { privateKey, publicKey } = generateKeyPairSync('rsa', {
+    modulusLength: 2048,
+    publicKeyEncoding: {
+      type: 'spki',
+      format: 'pem',
+    },
+    privateKeyEncoding: {
+      type: 'pkcs8',
+      format: 'pem',
+    },
+  });
+
+  // parse ssh
+  const pemKey = sshpk.parseKey(publicKey, 'pem');
+  const sshKeyPublicKey = pemKey.toString('ssh');
+  const sshKeyPrivateKey = sshpk
+    .parsePrivateKey(privateKey, 'pem')
+    .toString('ssh');
+
+  mkdirSync(sshKeyFolderPath, { recursive: true });
+  writeFileSync(sshKeyPath, sshKeyPrivateKey, {
+    encoding: 'utf8',
+    mode: '400',
+  });
+  writeFileSync(`${sshKeyPath}.pub`, sshKeyPublicKey, {
+    encoding: 'utf8',
+    mode: '400',
+  });
+
+  console.log(`
+    Successfully generated a new private key 🎉.
+    To setup the ssh access, run the following command on your dokku server.
+    echo "${sshKeyPublicKey}" | dokku ssh-keys:add ledokku
+  `);
+}
+
+const privateKey = readFileSync(sshKeyPath, {
   encoding: 'utf8',
 });
 

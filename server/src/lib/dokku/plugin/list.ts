@@ -20,7 +20,7 @@ const parsePluginListCommand = (commandResult: string) => {
 
 export const list = async (ssh: NodeSsh) => {
   const resultPluginList = await ssh.execCommand('plugin:list');
-  if (resultPluginList.code !== 0) {
+  if (resultPluginList.code === 1) {
     console.error(resultPluginList);
     throw new Error(resultPluginList.stderr);
   }

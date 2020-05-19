@@ -1,5 +1,33 @@
 version: '3.6'
 services:
+  client:
+    build:
+      context: ./client
+    volumes:
+      - ./client:/usr/src/app
+      - /usr/src/app/node_modules/
+      - server_ssh_key:/root/.ssh
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=development
+
+  server:
+    build:
+      context: ./server
+    volumes:
+      - ./server:/usr/src/app
+      - /usr/src/app/node_modules/
+    ports:
+      - '4000:4000'
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgres://postgres:postgrespassword@postgres:5432/postgres
+      - REDIS_URL=redis://redis:6379
+
   postgres:
     image: postgres:12
     restart: always
@@ -9,9 +37,12 @@ services:
       - db_data:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: postgrespassword
+
   redis:
     image: 'redis:5'
     ports:
       - '6380:6379'
+
 volumes:
+  server_ssh_key:
   db_data:
