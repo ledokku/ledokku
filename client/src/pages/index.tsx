@@ -2,10 +2,6 @@ import React, { useEffect } from 'react';
 import { GitHub } from 'react-feather';
 import { useRouter } from 'next/router';
 
-import { LandingLayout } from '../layouts/LandingLayout';
-import { Button } from '../ui/components/Button';
-import { Headline } from '../ui/components/Typography/components/Headline';
-import { Paragraph } from '../ui/components/Typography/components/Paragraph';
 import { config } from '../config';
 import withApollo from '../lib/withApollo';
 import { useLoginWithGithubMutation } from '../generated/graphql';
@@ -58,19 +54,16 @@ const Home = () => {
   };
 
   return (
-    <LandingLayout>
-      <Headline level={1} marginTop={0} marginBottom={32} textAlign="center">
-        Ledokku
-      </Headline>
-      <Paragraph marginTop={0} marginBottom={32} textAlign="center">
-        Have you ever felt like creating a thing?
-        <br />
-        Well now you can!
-      </Paragraph>
-      <Button size="large" startIcon={<GitHub />} onClick={handleLogin}>
-        Log in with Github
-      </Button>
-    </LandingLayout>
+    <div className="min-h-screen flex flex-col items-center justify-center text-center">
+      <h1 className="text-2xl font-bold">Ledokku</h1>
+      <p className="mt-3">Login to get started.</p>
+      <button
+        className="flex mt-4 p-3 rounded bg-black text-white transition-all duration-100 hover:opacity-75 focus:scale-95"
+        // onClick={handleLogin}
+      >
+        <GitHub className="mr-4" /> Log in with Github
+      </button>
+    </div>
   );
 };
 

@@ -41,6 +41,8 @@
     "@types/styled-components": "5.1.0",
     "@types/yup": "0.28.3",
     "babel-plugin-styled-components": "1.10.7",
+    "postcss-preset-env": "6.7.0",
+    "tailwindcss": "1.4.6",
     "typescript": "3.9.2"
   }
 }
