@@ -12,7 +12,6 @@ export const logs = async (ssh: NodeSsh, name: string) => {
   const resultAppLogs = await ssh.execCommand(`logs ${name}`);
   console.log(resultAppLogs);
   if (resultAppLogs.code === 1) {
-    console.error(resultAppLogs);
     throw new Error(resultAppLogs.stderr);
   }
 
