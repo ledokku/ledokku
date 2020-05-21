@@ -58,7 +58,7 @@ const Home = () => {
       <h1 className="text-2xl font-bold">Ledokku</h1>
       <p className="mt-3">Login to get started.</p>
       <button
-        className="flex mt-4 p-3 rounded bg-black text-white transition-all duration-100 hover:opacity-75 focus:scale-95"
+        className="flex mt-4 px-4 py-3 rounded bg-black hover:bg-gray-900 text-white transition ease-in-out duration-150"
         onClick={handleLogin}
       >
         <GitHub className="mr-4" /> Log in with Github
