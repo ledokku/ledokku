@@ -59,7 +59,7 @@ const Home = () => {
       <p className="mt-3">Login to get started.</p>
       <button
         className="flex mt-4 p-3 rounded bg-black text-white transition-all duration-100 hover:opacity-75 focus:scale-95"
-        // onClick={handleLogin}
+        onClick={handleLogin}
       >
         <GitHub className="mr-4" /> Log in with Github
       </button>
