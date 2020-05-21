@@ -58,6 +58,10 @@ const typeDefs = gql`
     plugins: [DokkuPlugin!]!
   }
 
+  type AppLogsResult {
+    logs: String!
+  }
+
   input CreateAppInput {
     name: String!
     gitUrl: String!
@@ -70,6 +74,7 @@ const typeDefs = gql`
 
   type Query {
     dokkuPlugins: DokkuPluginResult!
+    appLogs(name: String!): AppLogsResult!
   }
 
   type Mutation {

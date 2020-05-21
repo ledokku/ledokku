@@ -68,6 +68,11 @@ export type DokkuPluginResult = {
   plugins: Array<DokkuPlugin>;
 };
 
+export type AppLogsResult = {
+   __typename?: 'AppLogsResult';
+  logs: Scalars['String'];
+};
+
 export type CreateAppInput = {
   name: Scalars['String'];
   gitUrl: Scalars['String'];
@@ -81,6 +86,12 @@ export type CreateDatabaseInput = {
 export type Query = {
    __typename?: 'Query';
   dokkuPlugins: DokkuPluginResult;
+  appLogs: AppLogsResult;
+};
+
+
+export type QueryAppLogsArgs = {
+  name: Scalars['String'];
 };
 
 export type Mutation = {
@@ -195,6 +206,7 @@ export type ResolversTypes = {
   CreateAppResult: ResolverTypeWrapper<CreateAppResult>,
   DokkuPlugin: ResolverTypeWrapper<DokkuPlugin>,
   DokkuPluginResult: ResolverTypeWrapper<DokkuPluginResult>,
+  AppLogsResult: ResolverTypeWrapper<AppLogsResult>,
   CreateAppInput: CreateAppInput,
   CreateDatabaseInput: CreateDatabaseInput,
   Query: ResolverTypeWrapper<{}>,
@@ -217,6 +229,7 @@ export type ResolversParentTypes = {
   CreateAppResult: CreateAppResult,
   DokkuPlugin: DokkuPlugin,
   DokkuPluginResult: DokkuPluginResult,
+  AppLogsResult: AppLogsResult,
   CreateAppInput: CreateAppInput,
   CreateDatabaseInput: CreateDatabaseInput,
   Query: {},
@@ -267,8 +280,14 @@ export type DokkuPluginResultResolvers<ContextType = any, ParentType extends Res
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
+export type AppLogsResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['AppLogsResult'] = ResolversParentTypes['AppLogsResult']> = {
+  logs?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   dokkuPlugins?: Resolver<ResolversTypes['DokkuPluginResult'], ParentType, ContextType>,
+  appLogs?: Resolver<ResolversTypes['AppLogsResult'], ParentType, ContextType, RequireFields<QueryAppLogsArgs, 'name'>>,
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
@@ -289,6 +308,7 @@ export type Resolvers<ContextType = any> = {
   CreateAppResult?: CreateAppResultResolvers<ContextType>,
   DokkuPlugin?: DokkuPluginResolvers<ContextType>,
   DokkuPluginResult?: DokkuPluginResultResolvers<ContextType>,
+  AppLogsResult?: AppLogsResultResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
   Upload?: GraphQLScalarType,

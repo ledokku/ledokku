@@ -1,19 +1,9 @@
-import * as yup from 'yup';
 import { MutationResolvers } from '../../generated/graphql';
 import { prisma } from '../../prisma';
 import { dokku } from '../../lib/dokku';
 import { buildAppQueue } from '../../queues/buildApp';
 import { sshConnect } from '../../lib/ssh';
-
-// Validate the name to make sure there are no security risks by adding it to the ssh exec command.
-// Only letters and "-" allowed
-// TODO unit test this schema
-const createAppSchema = yup.object({
-  name: yup
-    .string()
-    .required()
-    .matches(/^[a-z0-9-]+$/),
-});
+import { appNameSchema } from '../utils';
 
 export const createApp: MutationResolvers['createApp'] = async (
   _,
@@ -25,7 +15,7 @@ export const createApp: MutationResolvers['createApp'] = async (
   }
 
   // We make sure the name is valid to avoid security risks
-  createAppSchema.validateSync({ name: input.name });
+  appNameSchema.validateSync({ name: input.name });
 
   // TODO check name of the app is unique per server
 
