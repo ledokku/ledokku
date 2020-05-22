@@ -3,11 +3,12 @@ import { useRouter } from 'next/router';
 
 import withApollo from '../../lib/withApollo';
 import { LoggedInLayout } from '../../layouts/LoggedInLayout';
-import { useServerByIdQuery } from '../../generated/graphql';
+// import { useServerByIdQuery } from '../../generated/graphql';
 import { CreateServer } from '../../modules/server/CreateServer';
 import { Protected } from '../../modules/auth/Protected';
 
 const Server = () => {
+  return null;
   const router = useRouter();
   // On first render serverId will be undefined, the value is set after and a rerender is triggered.
   const { serverId } = router.query as { serverId?: string };

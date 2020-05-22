@@ -31,7 +31,7 @@ const Dashboard = () => {
     <div>
       <Header />
 
-      <div className="max-w-5xl mx-auto sm:px-6 lg:px-8">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav className="flex space-x-5 text-sm leading-5 border-b border-gray-200">
           <Link href="/dashboard" passHref>
             <a className="-mb-px border-b border-black text-black py-3 px-0.5">
@@ -56,7 +56,7 @@ const Dashboard = () => {
         </nav>
       </div>
 
-      <div className="max-w-5xl mx-auto py-6 sm:px-6 lg:px-8">
+      <div className="max-w-5xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <main className="grid grid-cols-12 col-gap-20">
           <div className="col-span-7">
             <h3 className="text-gray-700 text-sm py-3">Apps</h3>
