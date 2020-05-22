@@ -7,6 +7,7 @@ import { mutations } from './graphql/mutations';
 import { config } from './config';
 import { app, http, io } from './server';
 import { queries } from './graphql/queries';
+import { prisma } from './prisma';
 
 const typeDefs = gql`
   type App {
@@ -48,6 +49,10 @@ const typeDefs = gql`
     appBuild: AppBuild!
   }
 
+  type DeleteAppResult {
+    result: String!
+  }
+
   type DokkuPlugin {
     name: String!
     version: String!
@@ -72,6 +77,10 @@ const typeDefs = gql`
     type: DatabaseTypes!
   }
 
+  input DeleteAppInput {
+    name: String!
+  }
+
   type Query {
     dokkuPlugins: DokkuPluginResult!
     appLogs(name: String!): AppLogsResult!
@@ -81,6 +90,7 @@ const typeDefs = gql`
     loginWithGithub(code: String!): LoginResult
     createApp(input: CreateAppInput!): CreateAppResult!
     createDatabase(input: CreateDatabaseInput!): Database!
+    deleteApp(input: DeleteAppInput!): DeleteAppResult!
   }
 `;
 
