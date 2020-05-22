@@ -3,7 +3,6 @@ import socketIOClient from 'socket.io-client';
 import { config } from '../../config';
 import { Box, Typography, LogBox } from '../../ui';
 // import { ServerByIdQuery } from '../../generated/graphql';
-import { serverTypeReadableName } from '../../utils';
 
 interface RealtimeLog {
   message: string;
@@ -63,7 +62,7 @@ export const CreateServer = ({ server }: CreateServerProps) => {
       <LogBox
         title={
           <React.Fragment>
-            Logs from <b>{serverTypeReadableName(server.type)}</b>
+            Logs from <b>{server.type}</b>
             {server.ip && `-${server.ip}`}
           </React.Fragment>
         }
