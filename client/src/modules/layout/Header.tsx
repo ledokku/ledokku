@@ -23,11 +23,13 @@ export const Header = () => {
                 aria-haspopup="true"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
               >
-                <img
-                  className="h-8 w-8 rounded-full"
-                  src={user?.avatarUrl ?? ''}
-                  alt="Avatar"
-                />
+                {user?.avatarUrl && (
+                  <img
+                    className="h-8 w-8 rounded-full"
+                    src={user.avatarUrl}
+                    alt="Avatar"
+                  />
+                )}
               </button>
             </div>
 
