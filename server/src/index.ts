@@ -48,6 +48,10 @@ const typeDefs = gql`
     appBuild: AppBuild!
   }
 
+  type DeleteAppResult {
+    result: String!
+  }
+
   type DokkuPlugin {
     name: String!
     version: String!
@@ -72,6 +76,10 @@ const typeDefs = gql`
     type: DatabaseTypes!
   }
 
+  input DeleteAppInput {
+    name: String!
+  }
+
   type Query {
     dokkuPlugins: DokkuPluginResult!
     appLogs(name: String!): AppLogsResult!
@@ -81,6 +89,7 @@ const typeDefs = gql`
     loginWithGithub(code: String!): LoginResult
     createApp(input: CreateAppInput!): CreateAppResult!
     createDatabase(input: CreateDatabaseInput!): Database!
+    deleteApp(input: DeleteAppInput!): DeleteAppResult!
   }
 `;
 
