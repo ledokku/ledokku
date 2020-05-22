@@ -1,7 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import jwtDecode from 'jwt-decode';
+
+interface JwtUser {
+  userId: string;
+  avatarUrl: string;
+}
 
 const AuthContext = React.createContext<{
   loggedIn: boolean;
+  user?: JwtUser;
   login(token: string): void;
   logout(): void;
 }>({ loggedIn: false, login: () => null, logout: () => null });
@@ -13,11 +20,16 @@ interface AuthProviderProps {
 const AuthProvider = ({ children }: AuthProviderProps) => {
   const [state, setState] = useState<{
     loggedIn: boolean;
-  }>({
-    loggedIn:
+    user?: JwtUser;
+  }>(() => {
+    const token =
       typeof window === 'undefined'
         ? false
-        : Boolean(localStorage?.getItem('accessToken')),
+        : localStorage?.getItem('accessToken');
+
+    return {
+      loggedIn: Boolean(token),
+    };
   });
 
   const login = (token: string) => {
@@ -30,8 +42,29 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     window.location.href = '/';
   };
 
+  useEffect(() => {
+    const token = localStorage?.getItem('accessToken');
+    if (token) {
+      const decodedToken = jwtDecode<JwtUser>(token);
+      setState({
+        loggedIn: true,
+        user: {
+          userId: decodedToken.userId,
+          avatarUrl: decodedToken.avatarUrl,
+        },
+      });
+    }
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ loggedIn: state.loggedIn, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        loggedIn: state.loggedIn,
+        user: state.user,
+        login,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
