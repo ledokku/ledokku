@@ -85,6 +85,8 @@ export type CreateDatabaseInput = {
 
 export type Query = {
    __typename?: 'Query';
+  apps: Array<App>;
+  databases: Array<Database>;
   dokkuPlugins: DokkuPluginResult;
   appLogs: AppLogsResult;
 };
@@ -286,6 +288,8 @@ export type AppLogsResultResolvers<ContextType = any, ParentType extends Resolve
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  apps?: Resolver<Array<ResolversTypes['App']>, ParentType, ContextType>,
+  databases?: Resolver<Array<ResolversTypes['Database']>, ParentType, ContextType>,
   dokkuPlugins?: Resolver<ResolversTypes['DokkuPluginResult'], ParentType, ContextType>,
   appLogs?: Resolver<ResolversTypes['AppLogsResult'], ParentType, ContextType, RequireFields<QueryAppLogsArgs, 'name'>>,
 };
