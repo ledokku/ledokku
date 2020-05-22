@@ -14,6 +14,9 @@ import { DigitalOceanIcon } from '../ui/icons/DigitalOceanIcon';
 import { PostgreSQLIcon } from '../ui/icons/PostgreSQLIcon';
 import { serverTypeReadableName } from '../utils';
 import { Protected } from '../modules/auth/Protected';
+import { Header } from '../modules/layout/Header';
+
+
 
 const Dashboard = () => {
   const router = useRouter();
@@ -25,6 +28,18 @@ const Dashboard = () => {
   const handleCreateFirstApp = () => {
     router.push('/onboarding/cloud-provider');
   };
+
+  return (
+    <div>
+      <Header />
+
+      <main>
+        <div className="max-w-5xl mx-auto py-6 sm:px-6 lg:px-8">
+          <div className="px-4 py-6 sm:px-0">Dashboard</div>
+        </div>
+      </main>
+    </div>
+  );
 
   return (
     <LoggedInLayout
