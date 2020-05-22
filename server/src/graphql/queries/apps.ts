@@ -1,11 +1,7 @@
 import { QueryResolvers } from '../../generated/graphql';
 import { prisma } from '../../prisma';
 
-export const apps: QueryResolvers['apps'] = async (
-  _,
-  __,
-  { userId }
-) => {
+export const apps: QueryResolvers['apps'] = async (_, __, { userId }) => {
   if (!userId) {
     throw new Error('Unauthorized');
   }

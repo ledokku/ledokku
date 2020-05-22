@@ -73,9 +73,7 @@ const Dashboard = () => {
             ))}
             <p>
               <Link href="/create-database" passHref>
-                <a>
-                  Create new database
-                </a>
+                <a>Create new database</a>
               </Link>
             </p>
           </div>
