@@ -3,7 +3,7 @@ import React from 'react';
 interface IconProps {
   opacity?: number;
   className?: string;
-  size?: 24 | 40;
+  size?: number;
 }
 
 export const NodeIcon: React.FC<IconProps> = ({

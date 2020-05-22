@@ -63,8 +63,8 @@ const Dashboard = () => {
             {data?.apps.map((app) => (
               <div key={app.id}>
                 <Link href="/app/[appId]" as={`/app/${app.id}`} passHref>
-                  <a className="flex py-3">
-                    <NodeIcon size={24} className="mr-2" /> {app.name}
+                  <a className="flex items-center py-3">
+                    <NodeIcon size={20} className="mr-2" /> {app.name}
                   </a>
                 </Link>
               </div>
