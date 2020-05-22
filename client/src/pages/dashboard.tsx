@@ -57,14 +57,16 @@ const Dashboard = () => {
       </div>
 
       <div className="max-w-5xl mx-auto py-6 sm:px-6 lg:px-8">
-        <main className="grid grid-cols-12">
+        <main className="grid grid-cols-12 col-gap-20">
           <div className="col-span-7">
             <h3 className="text-gray-700 text-sm py-3">Apps</h3>
             {data?.apps.map((app) => (
               <div key={app.id}>
                 <Link href="/app/[appId]" as={`/app/${app.id}`} passHref>
-                  <a className="flex items-center py-3">
-                    <NodeIcon size={20} className="mr-2" /> {app.name}
+                  <a className="py-2 block">
+                    <div className="flex items-center py-3 px-2 shadow hover:shadow-md transition-shadow duration-100 ease-in-out rounded bg-white">
+                      <NodeIcon size={20} className="mr-2" /> {app.name}
+                    </div>
                   </a>
                 </Link>
               </div>
