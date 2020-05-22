@@ -20,8 +20,6 @@ export const deleteApp: MutationResolvers['deleteApp'] = async (
 
   const ssh = await sshConnect();
 
-  await dokku.apps.deleteApp(ssh, input.name);
-
   // We find app to delete
   const allApps = await prisma.user
     .findOne({
@@ -52,12 +50,18 @@ export const deleteApp: MutationResolvers['deleteApp'] = async (
     },
   });
 
+  // TODO @arturs : check this issue and if cascade feature is delivered by prisma
+  // implement it instead of looking for related fields "manually"
+  // Link to GH issue : https://github.com/prisma/migrate/issues/249
+
   // We delete the app itself
   await prisma.app.delete({
     where: {
       id: appToDelete[0].id,
     },
   });
+
+  await dokku.apps.deleteApp(ssh, input.name);
 
   return { result: `${appToDelete[0].name} app deleted successfully` };
 };
