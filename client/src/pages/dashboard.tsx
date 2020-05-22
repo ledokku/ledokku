@@ -59,26 +59,33 @@ const Dashboard = () => {
       <div className="max-w-5xl mx-auto py-6 sm:px-6 lg:px-8">
         <main className="grid grid-cols-12">
           <div className="col-span-7">
-            <h3 className="text-gray-700 text-sm">Apps</h3>
+            <h3 className="text-gray-700 text-sm py-3">Apps</h3>
             {data?.apps.map((app) => (
-              <p key={app.id}>
+              <div key={app.id}>
                 <Link href="/app/[appId]" as={`/app/${app.id}`} passHref>
-                  <a>{app.name}</a>
+                  <a className="flex py-3">
+                    <NodeIcon size={24} className="mr-2" /> {app.name}
+                  </a>
                 </Link>
-              </p>
+              </div>
             ))}
-            <h3 className="text-gray-700 text-sm mt-4">Databases</h3>
+            <p className="py-3">
+              <Link href="/create-app" passHref>
+                <a>Create new app</a>
+              </Link>
+            </p>
+            <h3 className="text-gray-700 text-sm py-3">Databases</h3>
             {data?.databases.map((database) => (
               <p key={database.id}>{database.name}</p>
             ))}
-            <p>
+            <p className="py-3">
               <Link href="/create-database" passHref>
                 <a>Create new database</a>
               </Link>
             </p>
           </div>
           <div className="col-span-5">
-            <h3 className="text-gray-700 text-sm">Latest activity</h3>
+            <h3 className="text-gray-700 text-sm py-3">Latest activity</h3>
             <p>TODO</p>
           </div>
         </main>

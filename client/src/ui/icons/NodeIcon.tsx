@@ -2,6 +2,7 @@ import React from 'react';
 
 interface IconProps {
   opacity?: number;
+  className?: string;
   size?: 24 | 40;
 }
 
