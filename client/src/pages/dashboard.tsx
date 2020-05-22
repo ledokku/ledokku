@@ -16,8 +16,6 @@ import { serverTypeReadableName } from '../utils';
 import { Protected } from '../modules/auth/Protected';
 import { Header } from '../modules/layout/Header';
 
-
-
 const Dashboard = () => {
   const router = useRouter();
   const { data, loading, error } = useDashboardQuery({});
