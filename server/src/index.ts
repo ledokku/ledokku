@@ -7,7 +7,6 @@ import { mutations } from './graphql/mutations';
 import { config } from './config';
 import { app, http, io } from './server';
 import { queries } from './graphql/queries';
-import { prisma } from './prisma';
 
 const typeDefs = gql`
   type App {
