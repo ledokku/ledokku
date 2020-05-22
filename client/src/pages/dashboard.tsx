@@ -31,11 +31,42 @@ const Dashboard = () => {
     <div>
       <Header />
 
-      <main>
-        <div className="max-w-5xl mx-auto py-6 sm:px-6 lg:px-8">
-          <div className="px-4 py-6 sm:px-0">Dashboard</div>
-        </div>
-      </main>
+      <div className="max-w-5xl mx-auto sm:px-6 lg:px-8">
+        <nav className="flex space-x-5 text-sm leading-5 border-b border-gray-200">
+          <Link href="/dashboard" passHref>
+            <a className="-mb-px border-b border-black text-black py-3 px-0.5">
+              Dashboard
+            </a>
+          </Link>
+          <Link href="/activity" passHref>
+            <a className="text-gray-500 hover:text-black py-3 px-0.5 transition-colors ease-in-out duration-150">
+              Activity
+            </a>
+          </Link>
+          <Link href="/metrics" passHref>
+            <a className="text-gray-500 hover:text-black py-3 px-0.5 transition-colors ease-in-out duration-150">
+              Metrics
+            </a>
+          </Link>
+          <Link href="/settings" passHref>
+            <a className="text-gray-500 hover:text-black py-3 px-0.5 transition-colors ease-in-out duration-150">
+              Settings
+            </a>
+          </Link>
+        </nav>
+      </div>
+
+      <div className="max-w-5xl mx-auto py-6 sm:px-6 lg:px-8">
+        <main className="grid grid-cols-12">
+          <div className="col-span-7">
+            <h3 className="text-gray-700 text-sm">Apps</h3>
+            <h3 className="text-gray-700 text-sm">Databases</h3>
+          </div>
+          <div className="col-span-5">
+            <h3 className="text-gray-700">Latest activity</h3>
+          </div>
+        </main>
+      </div>
     </div>
   );
 
