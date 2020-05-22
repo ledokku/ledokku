@@ -1,16 +1,11 @@
 query dashboard {
-  servers {
+  apps {
     id
     name
-    ip
+  }
+  databases {
+    id
+    name
     type
-    apps {
-      id
-      name
-    }
-    databases {
-      id
-      name
-    }
   }
 }

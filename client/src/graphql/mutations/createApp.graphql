@@ -1,5 +1,5 @@
-mutation createApp($serverId: String!, $name: String!, $gitUrl: String!) {
-  createApp(input: { serverId: $serverId, name: $name, gitUrl: $gitUrl }) {
+mutation createApp($name: String!, $gitUrl: String!) {
+  createApp(input: { name: $name, gitUrl: $gitUrl }) {
     app {
       id
     }

@@ -3,15 +3,14 @@ import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
 import { ArrowRight } from 'react-feather';
 
-import { useCreateAppMutation } from '../../../generated/graphql';
-import withApollo from '../../../lib/withApollo';
-import { TextField, Button, styled, Flex, Box, Grid } from '../../../ui';
-import { LoggedInLayout } from '../../../layouts/LoggedInLayout';
-import { Protected } from '../../../modules/auth/Protected';
+import { useCreateAppMutation } from '../generated/graphql';
+import withApollo from '../lib/withApollo';
+import { TextField, Button, styled, Flex, Box, Grid } from '../ui';
+import { LoggedInLayout } from '../layouts/LoggedInLayout';
+import { Protected } from '../modules/auth/Protected';
 
 const CreateApp = () => {
   const router = useRouter();
-  const { serverId } = router.query as { serverId: string };
   const [createAppMutation] = useCreateAppMutation();
   const formik = useFormik<{ name: string; gitUrl: string }>({
     initialValues: {
@@ -22,7 +21,7 @@ const CreateApp = () => {
       // TODO validation name is required
       try {
         const data = await createAppMutation({
-          variables: { gitUrl: values.gitUrl, name: values.name, serverId },
+          variables: { gitUrl: values.gitUrl, name: values.name },
         });
         console.log(data);
         router.push(

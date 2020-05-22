@@ -81,6 +81,9 @@ const typeDefs = gql`
   }
 
   type Query {
+    apps: [App!]!
+    app(appId: String!): App
+    databases: [Database!]!
     dokkuPlugins: DokkuPluginResult!
     appLogs(name: String!): AppLogsResult!
   }
