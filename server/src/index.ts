@@ -62,6 +62,15 @@ const typeDefs = gql`
     logs: String!
   }
 
+  type EnvVar {
+    key: String!
+    value: String!
+  }
+
+  type EnvVarsResult {
+    envVars: [EnvVar!]!
+  }
+
   input CreateAppInput {
     name: String!
     gitUrl: String!
@@ -75,6 +84,7 @@ const typeDefs = gql`
   type Query {
     dokkuPlugins: DokkuPluginResult!
     appLogs(name: String!): AppLogsResult!
+    envVars(name: String!): EnvVarsResult!
   }
 
   type Mutation {
