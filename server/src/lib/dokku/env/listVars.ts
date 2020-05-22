@@ -15,7 +15,7 @@ const parseEnvVarsCommand = (commandResult: string) => {
   });
 };
 
-export const env = async (ssh: NodeSsh, name: string) => {
+export const listVars = async (ssh: NodeSsh, name: string) => {
   const resultEnv = await ssh.execCommand(`config ${name}`);
 
   if (resultEnv.code === 1) {
