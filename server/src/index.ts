@@ -48,6 +48,10 @@ const typeDefs = gql`
     appBuild: AppBuild!
   }
 
+  type DeleteAppResult {
+    result: String!
+  }
+
   type DokkuPlugin {
     name: String!
     version: String!
@@ -100,7 +104,14 @@ const typeDefs = gql`
     key: String!
   }
 
+  input DeleteAppInput {
+    name: String!
+  }
+
   type Query {
+    apps: [App!]!
+    app(appId: String!): App
+    databases: [Database!]!
     dokkuPlugins: DokkuPluginResult!
     appLogs(name: String!): AppLogsResult!
     envVars(name: String!): EnvVarsResult!
@@ -112,6 +123,7 @@ const typeDefs = gql`
     createDatabase(input: CreateDatabaseInput!): Database!
     addEnvVar(input: AddEnvVarInput!): AddEnvVarResult!
     deleteEnvVar(input: DeleteEnvVarInput!): DeleteEnvVarResult!
+    deleteApp(input: DeleteAppInput!): DeleteAppResult!
   }
 `;
 

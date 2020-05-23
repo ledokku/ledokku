@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import socketIOClient from 'socket.io-client';
 import { config } from '../../config';
 import { Box, Typography, LogBox } from '../../ui';
-import { ServerByIdQuery } from '../../generated/graphql';
-import { serverTypeReadableName } from '../../utils';
+// import { ServerByIdQuery } from '../../generated/graphql';
 
 interface RealtimeLog {
   message: string;
@@ -11,7 +10,7 @@ interface RealtimeLog {
 }
 
 interface CreateServerProps {
-  server: ServerByIdQuery['server'];
+  server: any;
 }
 
 export const CreateServer = ({ server }: CreateServerProps) => {
@@ -63,7 +62,7 @@ export const CreateServer = ({ server }: CreateServerProps) => {
       <LogBox
         title={
           <React.Fragment>
-            Logs from <b>{serverTypeReadableName(server.type)}</b>
+            Logs from <b>{server.type}</b>
             {server.ip && `-${server.ip}`}
           </React.Fragment>
         }

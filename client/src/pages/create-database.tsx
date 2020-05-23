@@ -2,12 +2,9 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
 
-import {
-  useCreateDatabaseMutation,
-  DatabaseTypes,
-} from '../../../generated/graphql';
-import { OnboardingLayout } from '../../../layouts/OnboardingLayout';
-import withApollo from '../../../lib/withApollo';
+import { useCreateDatabaseMutation, DatabaseTypes } from '../generated/graphql';
+import { OnboardingLayout } from '../layouts/OnboardingLayout';
+import withApollo from '../lib/withApollo';
 import { ArrowRight } from 'react-feather';
 import {
   TextField,
@@ -18,17 +15,16 @@ import {
   Box,
   BoxButton,
   Grid,
-} from '../../../ui';
-import { PostgreSQLIcon } from '../../../ui/icons/PostgreSQLIcon';
-import { MySQLIcon } from '../../../ui/icons/MySQLIcon';
-import { MongoIcon } from '../../../ui/icons/MongoIcon';
-import { RedisIcon } from '../../../ui/icons/RedisIcon';
-import { Protected } from '../../../modules/auth/Protected';
-import { Link } from '../../../ui/components/Typography/components/Link';
+} from '../ui';
+import { PostgreSQLIcon } from '../ui/icons/PostgreSQLIcon';
+import { MySQLIcon } from '../ui/icons/MySQLIcon';
+import { MongoIcon } from '../ui/icons/MongoIcon';
+import { RedisIcon } from '../ui/icons/RedisIcon';
+import { Protected } from '../modules/auth/Protected';
+import { Link } from '../ui/components/Typography/components/Link';
 
 const CreateDatabase = () => {
   const router = useRouter();
-  const { serverId } = router.query as { serverId: string };
   const [createDatabaseMutation] = useCreateDatabaseMutation();
   const formik = useFormik<{ name: string; type: DatabaseTypes }>({
     initialValues: {
@@ -36,11 +32,11 @@ const CreateDatabase = () => {
       type: 'POSTGRESQL',
     },
     onSubmit: async (values) => {
-      // TODO validation token is required
+      // TODO validate name
       try {
         const data = await createDatabaseMutation({
           variables: {
-            input: { name: values.name, serverId, type: values.type },
+            input: { name: values.name, type: values.type },
           },
         });
         router.push('/dashboard');
@@ -51,6 +47,8 @@ const CreateDatabase = () => {
       }
     },
   });
+
+  // return null;
 
   return (
     <OnboardingLayout
