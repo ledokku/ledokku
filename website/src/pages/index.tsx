@@ -9,7 +9,7 @@ import styles from './styles.module.css';
 const features = [
   {
     title: <>Web interface</>,
-    imageUrl: 'img/undraw_docusaurus_mountain.svg',
+    imageUrl: 'img/undraw_docusaurus_tree.svg',
     description: (
       <>
         Ledokku provide a beautiful and intuitive web interface that let you
@@ -19,7 +19,7 @@ const features = [
   },
   {
     title: <>Deploy your app in no time</>,
-    imageUrl: 'img/undraw_docusaurus_tree.svg',
+    imageUrl: 'img/undraw_docusaurus_mountain.svg',
     description: (
       <>
         By providing native Github auto deployments, Ledokku shift away all the
