@@ -34,3 +34,22 @@
   height: 200px;
   width: 200px;
 }
+
+.languages {
+  padding: 3rem 0;
+  display: flex;
+  text-align: center;
+}
+
+.languages h3 {
+  margin-bottom: 32px;
+}
+
+.languages img {
+  height: 60px;
+  padding: 10px;
+}
+
+.databases {
+  padding-bottom: 4em;
+}

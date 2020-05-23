@@ -28,12 +28,12 @@ const features = [
     ),
   },
   {
-    title: <>Powered by React</>,
+    title: <>Powered by Dokku</>,
     imageUrl: 'img/undraw_docusaurus_react.svg',
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        With almost 20k+ stars on github, Dokku is one of the most famous
+        open-source PaaS using docker 🐋.
       </>
     ),
   },
@@ -79,6 +79,7 @@ function Home() {
           </div>
         </div>
       </header>
+
       <main>
         {features && features.length && (
           <section className={styles.features}>
@@ -91,6 +92,74 @@ function Home() {
             </div>
           </section>
         )}
+
+        <section className={styles.languages}>
+          <div className="container">
+            <h3>Supported languages</h3>
+            <div>
+              <a href="https://nodejs.org/" target="_blank">
+                <img
+                  alt="nodejs"
+                  src="https://cdn.svgporn.com/logos/nodejs-icon.svg"
+                />
+              </a>
+              <a href="https://golang.org/" target="_blank">
+                <img alt="go" src="https://cdn.svgporn.com/logos/go.svg" />
+              </a>
+              <a href="https://www.python.org/" target="_blank">
+                <img
+                  alt="python"
+                  src="https://cdn.svgporn.com/logos/python.svg"
+                />
+              </a>
+              <a href="https://www.php.net/" target="_blank">
+                <img alt="php" src="https://cdn.svgporn.com/logos/php.svg" />
+              </a>
+              <a href="https://www.ruby-lang.org/" target="_blank">
+                <img alt="ruby" src="https://cdn.svgporn.com/logos/ruby.svg" />
+              </a>
+              <a href="https://www.java.com/" target="_blank">
+                <img alt="java" src="https://cdn.svgporn.com/logos/java.svg" />
+              </a>
+              <a href="https://www.scala-lang.org/" target="_blank">
+                <img
+                  alt="scala"
+                  src="https://cdn.svgporn.com/logos/scala.svg"
+                />
+              </a>
+              <a href="https://clojure.org/" target="_blank">
+                <img
+                  alt="clojure"
+                  src="https://cdn.svgporn.com/logos/clojure.svg"
+                />
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <section className={classnames(styles.languages, styles.databases)}>
+          <div className="container">
+            <h3>Supported databases</h3>
+            <a href="https://www.postgresql.org/" target="_blank">
+              <img
+                alt="postgresql"
+                src="https://cdn.svgporn.com/logos/postgresql.svg"
+              />
+            </a>
+            <a href="https://dev.mysql.com/" target="_blank">
+              <img alt="mysql" src="https://cdn.svgporn.com/logos/mysql.svg" />
+            </a>
+            <a href="https://www.mongodb.com/" target="_blank">
+              <img
+                alt="mongodb"
+                src="https://cdn.svgporn.com/logos/mongodb.svg"
+              />
+            </a>
+            <a href="https://redis.io/" target="_blank">
+              <img alt="redis" src="https://cdn.svgporn.com/logos/redis.svg" />
+            </a>
+          </div>
+        </section>
       </main>
     </Layout>
   );
