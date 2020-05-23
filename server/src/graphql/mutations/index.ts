@@ -1,3 +1,4 @@
+import { deleteEnvVar } from './deleteEnvVar';
 import { addEnvVar } from './addEnvVar';
 import { loginWithGithub } from './loginWithGithub';
 import { createDatabase } from './createDatabase';
@@ -9,5 +10,6 @@ export const mutations = {
   createDatabase,
   createApp,
   addEnvVar,
+  deleteEnvVar,
   deleteApp,
 };

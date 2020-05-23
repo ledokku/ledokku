@@ -5,9 +5,10 @@ import { logs } from './apps/logs';
 import { listVars } from './env/listVars';
 import { add } from './env/add';
 import { deleteApp } from './apps/delete';
+import { deleteEnvVar } from './env/delete';
 
 export const dokku = {
   apps: { create, logs, deleteApp },
   plugin: { installed, list },
-  env: { listVars, add },
+  env: { listVars, add, deleteEnvVar },
 };
