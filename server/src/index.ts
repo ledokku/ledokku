@@ -58,6 +58,14 @@ const typeDefs = gql`
     plugins: [DokkuPlugin!]!
   }
 
+  type AddEnvVarResult {
+    result: String!
+  }
+
+  type DeleteEnvVarResult {
+    result: String!
+  }
+
   type AppLogsResult {
     logs: String!
   }
@@ -81,6 +89,17 @@ const typeDefs = gql`
     type: DatabaseTypes!
   }
 
+  input AddEnvVarInput {
+    name: String!
+    key: String!
+    value: String!
+  }
+
+  input DeleteEnvVarInput {
+    name: String!
+    key: String!
+  }
+
   type Query {
     dokkuPlugins: DokkuPluginResult!
     appLogs(name: String!): AppLogsResult!
@@ -91,6 +110,8 @@ const typeDefs = gql`
     loginWithGithub(code: String!): LoginResult
     createApp(input: CreateAppInput!): CreateAppResult!
     createDatabase(input: CreateDatabaseInput!): Database!
+    addEnvVar(input: AddEnvVarInput!): AddEnvVarResult!
+    deleteEnvVar(input: DeleteEnvVarInput!): DeleteEnvVarResult!
   }
 `;
 

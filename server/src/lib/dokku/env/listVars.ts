@@ -16,11 +16,10 @@ const parseEnvVarsCommand = (commandResult: string) => {
 };
 
 export const listVars = async (ssh: NodeSsh, name: string) => {
-  const resultEnv = await ssh.execCommand(`config ${name}`);
+  const resultListEnv = await ssh.execCommand(`config ${name}`);
 
-  if (resultEnv.code === 1) {
-    throw new Error(resultEnv.stderr);
+  if (resultListEnv.code === 1) {
+    throw new Error(resultListEnv.stderr);
   }
-  console.log(parseEnvVarsCommand(resultEnv.stdout));
-  return parseEnvVarsCommand(resultEnv.stdout);
+  return parseEnvVarsCommand(resultListEnv.stdout);
 };
