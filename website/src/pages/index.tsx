@@ -8,22 +8,22 @@ import styles from './styles.module.css';
 
 const features = [
   {
-    title: <>Easy to Use</>,
+    title: <>Web interface</>,
     imageUrl: 'img/undraw_docusaurus_mountain.svg',
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Ledokku provide a beautiful and intuitive web interface that let you
+        manage your Dokku server.
       </>
     ),
   },
   {
-    title: <>Focus on What Matters</>,
+    title: <>Deploy your app in no time</>,
     imageUrl: 'img/undraw_docusaurus_tree.svg',
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        By providing native Github auto deployments, Ledokku shift away all the
+        manual configuration.
       </>
     ),
   },
