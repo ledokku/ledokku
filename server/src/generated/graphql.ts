@@ -118,6 +118,7 @@ export type AddEnvVarInput = {
 export type DeleteEnvVarInput = {
   name: Scalars['String'];
   key: Scalars['String'];
+}
 export type DeleteAppInput = {
   name: Scalars['String'];
 };
@@ -179,7 +180,8 @@ export type MutationAddEnvVarArgs = {
 
 
 export type MutationDeleteEnvVarArgs = {
-  input: DeleteEnvVarInput;
+  input: DeleteEnvVarInput;}
+
 export type MutationDeleteAppArgs = {
   input: DeleteAppInput;
 };
