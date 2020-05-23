@@ -24,15 +24,27 @@ export const deleteApp: MutationResolvers['deleteApp'] = async (
   });
 
   if (!appToDelete) {
-    throw new Error('App does not exist');
+    throw new Error(`App with id : ${appId} was not found`);
   }
 
   const ssh = await sshConnect();
 
-  // We delete all the related app builds
-  await prisma.appBuild.deleteMany({
+  // We find and delete all the related app builds
+  const allAppBuilds = await prisma.user
+    .findOne({
+      where: {
+        id: userId,
+      },
+    })
+    .AppBuild();
+
+  const appBuildToDelete = allAppBuilds.filter(
+    (appBuild) => appBuild.appId === appToDelete.id
+  );
+
+  await prisma.appBuild.delete({
     where: {
-      id: appId,
+      id: appBuildToDelete[0].id,
     },
   });
 
