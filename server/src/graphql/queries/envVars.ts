@@ -3,7 +3,6 @@ import { QueryResolvers } from '../../generated/graphql';
 import { sshConnect } from '../../lib/ssh';
 import { dokku } from '../../lib/dokku';
 
-// @ts-ignore
 export const envVars: QueryResolvers['envVars'] = async (
   _,
   { name },
