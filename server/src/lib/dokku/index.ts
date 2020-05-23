@@ -2,13 +2,13 @@ import { create } from './apps/create';
 import { installed } from './plugin/installed';
 import { list } from './plugin/list';
 import { logs } from './apps/logs';
-import { listVars } from './env/listVars';
-import { add } from './env/add';
-import { deleteApp } from './apps/delete';
-import { deleteEnvVar } from './env/delete';
+import { listVars } from './config/listVars';
+import { set } from './config/set';
+import { destroy } from './apps/delete';
+import { unset } from './config/unset';
 
 export const dokku = {
-  apps: { create, logs, deleteApp },
+  apps: { create, logs, destroy },
   plugin: { installed, list },
-  env: { listVars, add, deleteEnvVar },
+  config: { listVars, set, unset },
 };

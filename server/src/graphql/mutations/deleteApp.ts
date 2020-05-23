@@ -2,7 +2,6 @@ import { MutationResolvers } from '../../generated/graphql';
 import { prisma } from '../../prisma';
 import { dokku } from '../../lib/dokku';
 import { sshConnect } from '../../lib/ssh';
-import { appNameSchema } from '../utils';
 
 export const deleteApp: MutationResolvers['deleteApp'] = async (
   _,
@@ -13,40 +12,27 @@ export const deleteApp: MutationResolvers['deleteApp'] = async (
     throw new Error('Unauthorized');
   }
 
-  // We make sure the name is valid to avoid security risks
-  appNameSchema.validateSync({ name: input.name });
+  const { appId } = input;
 
   // TODO check name of the app is unique per server
 
+  // We find app to delete
+  const appToDelete = await prisma.app.findOne({
+    where: {
+      id: appId,
+    },
+  });
+
+  if (!appToDelete) {
+    throw new Error('App does not exist');
+  }
+
   const ssh = await sshConnect();
 
-  // We find app to delete
-  const allApps = await prisma.user
-    .findOne({
-      where: {
-        id: userId,
-      },
-    })
-    .App();
-
-  const appToDelete = allApps.filter((app) => app.name === input.name);
-
-  // We find all related app builds and delete them
-  const allAppBuilds = await prisma.user
-    .findOne({
-      where: {
-        id: userId,
-      },
-    })
-    .AppBuild();
-
-  const appBuildToDelete = allAppBuilds.filter(
-    (appBuild) => appBuild.appId === appToDelete[0].id
-  );
-
+  // We delete all the related app builds
   await prisma.appBuild.deleteMany({
     where: {
-      id: appBuildToDelete[0].id,
+      id: appId,
     },
   });
 
@@ -57,11 +43,11 @@ export const deleteApp: MutationResolvers['deleteApp'] = async (
   // We delete the app itself
   await prisma.app.delete({
     where: {
-      id: appToDelete[0].id,
+      id: appId,
     },
   });
 
-  await dokku.apps.deleteApp(ssh, input.name);
+  const result = await dokku.apps.destroy(ssh, appToDelete.name);
 
-  return { result: `${appToDelete[0].name} app deleted successfully` };
+  return { result };
 };

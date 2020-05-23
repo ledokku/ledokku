@@ -49,7 +49,7 @@ const typeDefs = gql`
   }
 
   type DeleteAppResult {
-    result: String!
+    result: Boolean!
   }
 
   type DokkuPlugin {
@@ -63,11 +63,11 @@ const typeDefs = gql`
   }
 
   type AddEnvVarResult {
-    result: String!
+    result: Boolean!
   }
 
   type DeleteEnvVarResult {
-    result: String!
+    result: Boolean!
   }
 
   type AppLogsResult {
@@ -94,18 +94,18 @@ const typeDefs = gql`
   }
 
   input AddEnvVarInput {
-    name: String!
+    appId: String!
     key: String!
     value: String!
   }
 
   input DeleteEnvVarInput {
-    name: String!
+    appId: String!
     key: String!
   }
 
   input DeleteAppInput {
-    name: String!
+    appId: String!
   }
 
   type Query {
@@ -113,8 +113,8 @@ const typeDefs = gql`
     app(appId: String!): App
     databases: [Database!]!
     dokkuPlugins: DokkuPluginResult!
-    appLogs(name: String!): AppLogsResult!
-    envVars(name: String!): EnvVarsResult!
+    appLogs(appId: String!): AppLogsResult!
+    envVars(appId: String!): EnvVarsResult!
   }
 
   type Mutation {

@@ -1,7 +1,7 @@
 import { MutationResolvers } from '../../generated/graphql';
 import { dokku } from '../../lib/dokku';
 import { sshConnect } from '../../lib/ssh';
-import { appNameSchema } from '../utils';
+import { prisma } from '../../prisma';
 
 export const addEnvVar: MutationResolvers['addEnvVar'] = async (
   _,
@@ -12,16 +12,21 @@ export const addEnvVar: MutationResolvers['addEnvVar'] = async (
     throw new Error('Unauthorized');
   }
 
-  const { name, key, value } = input;
+  const { appId, key, value } = input;
 
-  // We make sure the name is valid to avoid security risks
-  appNameSchema.validateSync({ name });
+  const app = await prisma.app.findOne({
+    where: {
+      id: appId,
+    },
+  });
+
+  if (!app) {
+    throw new Error(`App with ID ${appId} not found`);
+  }
 
   const ssh = await sshConnect();
 
-  await dokku.env.add(ssh, name, key, value);
-
-  const result = `Environment variable ${key}=${value} set successfully`;
+  const result = await dokku.config.set(ssh, app.name, key, value);
 
   return { result };
 };

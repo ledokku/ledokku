@@ -1,7 +1,7 @@
 import { MutationResolvers } from '../../generated/graphql';
 import { dokku } from '../../lib/dokku';
 import { sshConnect } from '../../lib/ssh';
-import { appNameSchema } from '../utils';
+import { prisma } from '../../prisma';
 
 export const deleteEnvVar: MutationResolvers['deleteEnvVar'] = async (
   _,
@@ -12,16 +12,21 @@ export const deleteEnvVar: MutationResolvers['deleteEnvVar'] = async (
     throw new Error('Unauthorized');
   }
 
-  const { name, key } = input;
+  const { appId, key } = input;
 
-  // We make sure the name is valid to avoid security risks
-  appNameSchema.validateSync({ name });
+  const app = await prisma.app.findOne({
+    where: {
+      id: appId,
+    },
+  });
+
+  if (!app) {
+    throw new Error(`App with ID ${appId} not found`);
+  }
 
   const ssh = await sshConnect();
 
-  await dokku.env.deleteEnvVar(ssh, name, key);
-
-  const result = `Environment variable ${key} deleted successfully`;
+  const result = await dokku.config.unset(ssh, app.name, key);
 
   return { result };
 };

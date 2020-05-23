@@ -1,22 +1,30 @@
-import { appNameSchema } from './../utils';
 import { QueryResolvers } from '../../generated/graphql';
 import { sshConnect } from '../../lib/ssh';
 import { dokku } from '../../lib/dokku';
+import { prisma } from '../../prisma';
 
 export const envVars: QueryResolvers['envVars'] = async (
   _,
-  { name },
+  { appId },
   { userId }
 ) => {
   if (!userId) {
     throw new Error('Unauthorized');
   }
 
-  appNameSchema.validateSync({ name });
+  const app = await prisma.app.findOne({
+    where: {
+      id: appId,
+    },
+  });
+
+  if (!app) {
+    throw new Error(`App with ID ${appId} not found`);
+  }
 
   const ssh = await sshConnect();
 
-  const envVars = await dokku.env.listVars(ssh, name);
+  const envVars = await dokku.config.listVars(ssh, app.name);
 
   return { envVars };
 };
