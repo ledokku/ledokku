@@ -26,7 +26,7 @@ export const unsetEnvVar: MutationResolvers['unsetEnvVar'] = async (
 
   const ssh = await sshConnect();
 
-  const result = await dokku.config.unset(ssh, app.name, key);
+  await dokku.config.unset(ssh, app.name, key);
 
-  return { result };
+  return { result: true };
 };
