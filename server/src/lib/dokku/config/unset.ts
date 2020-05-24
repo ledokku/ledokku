@@ -6,6 +6,4 @@ export const unset = async (ssh: NodeSsh, name: string, key: string) => {
   if (resultUnsetEnv.code === 1) {
     throw new Error(resultUnsetEnv.stderr);
   }
-
-  return true;
 };

@@ -13,6 +13,4 @@ export const set = async (
   if (resultSetEnv.code === 1) {
     throw new Error(resultSetEnv.stderr);
   }
-
-  return true;
 };
