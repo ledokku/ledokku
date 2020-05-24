@@ -12,7 +12,7 @@ const features = [
     imageUrl: 'img/undraw_docusaurus_tree.svg',
     description: (
       <>
-        Ledokku provide a beautiful and intuitive web interface that let you
+        Ledokku provides a beautiful and intuitive web interface that lets you
         manage your Dokku server.
       </>
     ),
@@ -22,7 +22,7 @@ const features = [
     imageUrl: 'img/undraw_docusaurus_mountain.svg',
     description: (
       <>
-        By providing native Github auto deployments, Ledokku shift away all the
+        By providing native Github auto deployments, Ledokku shifts away all the
         manual configuration.
       </>
     ),
@@ -57,6 +57,8 @@ function Feature({ imageUrl, title, description }) {
 function Home() {
   const context = useDocusaurusContext();
   const { siteConfig = {} } = context;
+  const dashboardImgUrl = useBaseUrl('img/dashboard.png');
+
   return (
     <Layout
       title={`Hello from ${siteConfig.title}`}
@@ -81,6 +83,10 @@ function Home() {
       </header>
 
       <main>
+        <section className={styles.dashboard}>
+          <img alt="dashboard" src={dashboardImgUrl} height="500" />
+        </section>
+
         {features && features.length && (
           <section className={styles.features}>
             <div className="container">

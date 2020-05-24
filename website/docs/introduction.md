@@ -3,4 +3,21 @@ id: introduction
 title: Introduction
 ---
 
-TODO
+## Our vision
+
+We started to work on this because current deployment solutions were expensive or hard to configure. With Ledokku we plan to provide a solution were deployment experience is smooth, enjoyable and affordable.
+
+## MVP
+
+To get initial feedback we are working the MVP state where current Dokku users will be able to use the web ui of Ledokku while keeping control on their server. It will allow us to gather feedback from active Dokku users and shape the future of Ledokku.
+
+## MVP features
+
+- Beautiful web ui
+- Auto deployment from Github on every commit
+- Common app management (create, delete, stop)
+- Real time deployment logs
+- Env variables management (set, unset, edit)
+- Databases management (create, delete, link)
+- Domains management
+- Explore app logs

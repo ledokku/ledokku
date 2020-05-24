@@ -17,10 +17,24 @@
   }
 }
 
+.getStarted {
+  color: #fff !important;
+}
+.getStarted:hover {
+  color: var(--ifm-color-primary) !important;
+}
+
 .buttons {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.dashboard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 0;
 }
 
 .features {
