@@ -17,10 +17,24 @@
   }
 }
 
+.getStarted {
+  color: #fff !important;
+}
+.getStarted:hover {
+  color: var(--ifm-color-primary) !important;
+}
+
 .buttons {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.dashboard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 0;
 }
 
 .features {
@@ -33,4 +47,23 @@
 .featureImage {
   height: 200px;
   width: 200px;
+}
+
+.languages {
+  padding: 3rem 0;
+  display: flex;
+  text-align: center;
+}
+
+.languages h3 {
+  margin-bottom: 32px;
+}
+
+.languages img {
+  height: 60px;
+  padding: 10px;
+}
+
+.databases {
+  padding-bottom: 4em;
 }
