@@ -3,7 +3,7 @@ import { prisma } from '../../prisma';
 import { dokku } from '../../lib/dokku';
 import { sshConnect } from '../../lib/ssh';
 
-export const deleteApp: MutationResolvers['deleteApp'] = async (
+export const destroyApp: MutationResolvers['destroyApp'] = async (
   _,
   { input },
   { userId }

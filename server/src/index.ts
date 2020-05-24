@@ -48,7 +48,7 @@ const typeDefs = gql`
     appBuild: AppBuild!
   }
 
-  type DeleteAppResult {
+  type DestroyAppResult {
     result: Boolean!
   }
 
@@ -104,7 +104,7 @@ const typeDefs = gql`
     key: String!
   }
 
-  input DeleteAppInput {
+  input DestroyAppInput {
     appId: String!
   }
 
@@ -123,7 +123,7 @@ const typeDefs = gql`
     createDatabase(input: CreateDatabaseInput!): Database!
     setEnvVar(input: SetEnvVarInput!): SetEnvVarResult!
     unsetEnvVar(input: UnsetEnvVarInput!): UnsetEnvVarResult!
-    deleteApp(input: DeleteAppInput!): DeleteAppResult!
+    destroyApp(input: DestroyAppInput!): DestroyAppResult!
   }
 `;
 
