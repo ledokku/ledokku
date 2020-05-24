@@ -1,9 +1,8 @@
+import { setEnvVarQueue } from '../../queues/setEnvVar';
 import { MutationResolvers } from '../../generated/graphql';
-import { dokku } from '../../lib/dokku';
-import { sshConnect } from '../../lib/ssh';
 import { prisma } from '../../prisma';
 
-export const deleteEnvVar: MutationResolvers['deleteEnvVar'] = async (
+export const setEnvVar: MutationResolvers['setEnvVar'] = async (
   _,
   { input },
   { userId }
@@ -12,7 +11,7 @@ export const deleteEnvVar: MutationResolvers['deleteEnvVar'] = async (
     throw new Error('Unauthorized');
   }
 
-  const { appId, key } = input;
+  const { appId, key, value } = input;
 
   const app = await prisma.app.findOne({
     where: {
@@ -24,9 +23,12 @@ export const deleteEnvVar: MutationResolvers['deleteEnvVar'] = async (
     throw new Error(`App with ID ${appId} not found`);
   }
 
-  const ssh = await sshConnect();
+  // We trigger the queue that will add env var to dokku
+  await setEnvVarQueue.add('set-env-var', {
+    appName: app.name,
+    key,
+    value,
+  });
 
-  const result = await dokku.config.unset(ssh, app.name, key);
-
-  return { result };
+  return { result: true };
 };

@@ -3,7 +3,7 @@ import { dokku } from '../../lib/dokku';
 import { sshConnect } from '../../lib/ssh';
 import { prisma } from '../../prisma';
 
-export const addEnvVar: MutationResolvers['addEnvVar'] = async (
+export const unsetEnvVar: MutationResolvers['unsetEnvVar'] = async (
   _,
   { input },
   { userId }
@@ -12,7 +12,7 @@ export const addEnvVar: MutationResolvers['addEnvVar'] = async (
     throw new Error('Unauthorized');
   }
 
-  const { appId, key, value } = input;
+  const { appId, key } = input;
 
   const app = await prisma.app.findOne({
     where: {
@@ -26,7 +26,7 @@ export const addEnvVar: MutationResolvers['addEnvVar'] = async (
 
   const ssh = await sshConnect();
 
-  const result = await dokku.config.set(ssh, app.name, key, value);
+  const result = await dokku.config.unset(ssh, app.name, key);
 
   return { result };
 };

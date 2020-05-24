@@ -62,11 +62,11 @@ const typeDefs = gql`
     plugins: [DokkuPlugin!]!
   }
 
-  type AddEnvVarResult {
+  type SetEnvVarResult {
     result: Boolean!
   }
 
-  type DeleteEnvVarResult {
+  type UnsetEnvVarResult {
     result: Boolean!
   }
 
@@ -93,13 +93,13 @@ const typeDefs = gql`
     type: DatabaseTypes!
   }
 
-  input AddEnvVarInput {
+  input SetEnvVarInput {
     appId: String!
     key: String!
     value: String!
   }
 
-  input DeleteEnvVarInput {
+  input UnsetEnvVarInput {
     appId: String!
     key: String!
   }
@@ -121,8 +121,8 @@ const typeDefs = gql`
     loginWithGithub(code: String!): LoginResult
     createApp(input: CreateAppInput!): CreateAppResult!
     createDatabase(input: CreateDatabaseInput!): Database!
-    addEnvVar(input: AddEnvVarInput!): AddEnvVarResult!
-    deleteEnvVar(input: DeleteEnvVarInput!): DeleteEnvVarResult!
+    setEnvVar(input: SetEnvVarInput!): SetEnvVarResult!
+    unsetEnvVar(input: UnsetEnvVarInput!): UnsetEnvVarResult!
     deleteApp(input: DeleteAppInput!): DeleteAppResult!
   }
 `;
