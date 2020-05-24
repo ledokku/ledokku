@@ -1,7 +1,6 @@
 import { MutationResolvers } from '../../generated/graphql';
-import { dokku } from '../../lib/dokku';
-import { sshConnect } from '../../lib/ssh';
 import { prisma } from '../../prisma';
+import { unsetEnvVarQueue } from './../../queues/unsetEnvVar';
 
 export const unsetEnvVar: MutationResolvers['unsetEnvVar'] = async (
   _,
@@ -24,9 +23,11 @@ export const unsetEnvVar: MutationResolvers['unsetEnvVar'] = async (
     throw new Error(`App with ID ${appId} not found`);
   }
 
-  const ssh = await sshConnect();
-
-  await dokku.config.unset(ssh, app.name, key);
+  // We trigger the queue that will unset env var to dokku
+  await unsetEnvVarQueue.add('unset-env-var', {
+    appName: app.name,
+    key,
+  });
 
   return { result: true };
 };
