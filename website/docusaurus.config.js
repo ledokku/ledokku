@@ -72,8 +72,7 @@ module.exports = {
       {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl:
-            'https://github.com/ledokku/ledokku/edit/master/website/',
+          editUrl: 'https://github.com/ledokku/ledokku/edit/master/website/',
         },
         blog: {
           editUrl:
