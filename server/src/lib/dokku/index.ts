@@ -4,7 +4,7 @@ import { list } from './plugin/list';
 import { logs } from './apps/logs';
 import { listVars } from './config/listVars';
 import { set } from './config/set';
-import { destroy } from './apps/delete';
+import { destroy } from './apps/destroy';
 import { unset } from './config/unset';
 
 export const dokku = {
