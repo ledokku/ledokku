@@ -3,7 +3,7 @@ import { sshConnect } from '../../lib/ssh';
 import { dokku } from '../../lib/dokku';
 import { prisma } from '../../prisma';
 
-export const appLogs: QueryResolvers['appLogs'] = async (
+export const envVars: QueryResolvers['envVars'] = async (
   _,
   { appId },
   { userId }
@@ -24,7 +24,7 @@ export const appLogs: QueryResolvers['appLogs'] = async (
 
   const ssh = await sshConnect();
 
-  const logs = await dokku.apps.logs(ssh, app.name);
+  const envVars = await dokku.config.listVars(ssh, app.name);
 
-  return { logs };
+  return { envVars };
 };

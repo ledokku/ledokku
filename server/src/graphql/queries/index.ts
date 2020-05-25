@@ -3,6 +3,7 @@ import { apps } from './apps';
 import { databases } from './databases';
 import { dokkuPlugins } from './dokkuPlugins';
 import { appLogs } from './appLogs';
+import { envVars } from './envVars';
 
 export const queries = {
   app,
@@ -10,4 +11,5 @@ export const queries = {
   databases,
   dokkuPlugins,
   appLogs,
+  envVars,
 };
