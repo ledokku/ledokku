@@ -49,8 +49,8 @@ const typeDefs = gql`
     appBuild: AppBuild!
   }
 
-  type DeleteAppResult {
-    result: String!
+  type DestroyAppResult {
+    result: Boolean!
   }
 
   type DokkuPlugin {
@@ -63,8 +63,25 @@ const typeDefs = gql`
     plugins: [DokkuPlugin!]!
   }
 
+  type SetEnvVarResult {
+    result: Boolean!
+  }
+
+  type UnsetEnvVarResult {
+    result: Boolean!
+  }
+
   type AppLogsResult {
     logs: String!
+  }
+
+  type EnvVar {
+    key: String!
+    value: String!
+  }
+
+  type EnvVarsResult {
+    envVars: [EnvVar!]!
   }
 
   input CreateAppInput {
@@ -77,8 +94,19 @@ const typeDefs = gql`
     type: DatabaseTypes!
   }
 
-  input DeleteAppInput {
-    name: String!
+  input SetEnvVarInput {
+    appId: String!
+    key: String!
+    value: String!
+  }
+
+  input UnsetEnvVarInput {
+    appId: String!
+    key: String!
+  }
+
+  input DestroyAppInput {
+    appId: String!
   }
 
   type Query {
@@ -86,14 +114,17 @@ const typeDefs = gql`
     app(appId: String!): App
     databases: [Database!]!
     dokkuPlugins: DokkuPluginResult!
-    appLogs(name: String!): AppLogsResult!
+    appLogs(appId: String!): AppLogsResult!
+    envVars(appId: String!): EnvVarsResult!
   }
 
   type Mutation {
     loginWithGithub(code: String!): LoginResult
     createApp(input: CreateAppInput!): CreateAppResult!
     createDatabase(input: CreateDatabaseInput!): Database!
-    deleteApp(input: DeleteAppInput!): DeleteAppResult!
+    setEnvVar(input: SetEnvVarInput!): SetEnvVarResult!
+    unsetEnvVar(input: UnsetEnvVarInput!): UnsetEnvVarResult!
+    destroyApp(input: DestroyAppInput!): DestroyAppResult!
   }
 `;
 
