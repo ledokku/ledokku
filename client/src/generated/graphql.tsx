@@ -19,6 +19,7 @@ export type App = {
    __typename?: 'App';
   id: Scalars['ID'];
   name: Scalars['String'];
+  githubRepoUrl: Scalars['String'];
 };
 
 export type AppBuild = {
@@ -57,6 +58,11 @@ export type CreateAppResult = {
   appBuild: AppBuild;
 };
 
+export type DeleteAppResult = {
+   __typename?: 'DeleteAppResult';
+  result: Scalars['String'];
+};
+
 export type DokkuPlugin = {
    __typename?: 'DokkuPlugin';
   name: Scalars['String'];
@@ -84,12 +90,22 @@ export type CreateDatabaseInput = {
   type: DatabaseTypes;
 };
 
+export type DeleteAppInput = {
+  name: Scalars['String'];
+};
+
 export type Query = {
    __typename?: 'Query';
   apps: Array<App>;
+  app?: Maybe<App>;
   databases: Array<Database>;
   dokkuPlugins: DokkuPluginResult;
   appLogs: AppLogsResult;
+};
+
+
+export type QueryAppArgs = {
+  appId: Scalars['String'];
 };
 
 
@@ -102,6 +118,7 @@ export type Mutation = {
   loginWithGithub?: Maybe<LoginResult>;
   createApp: CreateAppResult;
   createDatabase: Database;
+  deleteApp: DeleteAppResult;
 };
 
 
@@ -117,6 +134,11 @@ export type MutationCreateAppArgs = {
 
 export type MutationCreateDatabaseArgs = {
   input: CreateDatabaseInput;
+};
+
+
+export type MutationDeleteAppArgs = {
+  input: DeleteAppInput;
 };
 
 export type CacheControlScope = 
@@ -167,6 +189,19 @@ export type LoginWithGithubMutation = (
   & { loginWithGithub?: Maybe<(
     { __typename?: 'LoginResult' }
     & Pick<LoginResult, 'token'>
+  )> }
+);
+
+export type AppByIdQueryVariables = {
+  appId: Scalars['String'];
+};
+
+
+export type AppByIdQuery = (
+  { __typename?: 'Query' }
+  & { app?: Maybe<(
+    { __typename?: 'App' }
+    & Pick<App, 'id' | 'name' | 'githubRepoUrl'>
   )> }
 );
 
@@ -288,6 +323,41 @@ export function useLoginWithGithubMutation(baseOptions?: ApolloReactHooks.Mutati
 export type LoginWithGithubMutationHookResult = ReturnType<typeof useLoginWithGithubMutation>;
 export type LoginWithGithubMutationResult = ApolloReactCommon.MutationResult<LoginWithGithubMutation>;
 export type LoginWithGithubMutationOptions = ApolloReactCommon.BaseMutationOptions<LoginWithGithubMutation, LoginWithGithubMutationVariables>;
+export const AppByIdDocument = gql`
+    query appById($appId: String!) {
+  app(appId: $appId) {
+    id
+    name
+    githubRepoUrl
+  }
+}
+    `;
+
+/**
+ * __useAppByIdQuery__
+ *
+ * To run a query within a React component, call `useAppByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAppByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAppByIdQuery({
+ *   variables: {
+ *      appId: // value for 'appId'
+ *   },
+ * });
+ */
+export function useAppByIdQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<AppByIdQuery, AppByIdQueryVariables>) {
+        return ApolloReactHooks.useQuery<AppByIdQuery, AppByIdQueryVariables>(AppByIdDocument, baseOptions);
+      }
+export function useAppByIdLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<AppByIdQuery, AppByIdQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<AppByIdQuery, AppByIdQueryVariables>(AppByIdDocument, baseOptions);
+        }
+export type AppByIdQueryHookResult = ReturnType<typeof useAppByIdQuery>;
+export type AppByIdLazyQueryHookResult = ReturnType<typeof useAppByIdLazyQuery>;
+export type AppByIdQueryResult = ApolloReactCommon.QueryResult<AppByIdQuery, AppByIdQueryVariables>;
 export const DashboardDocument = gql`
     query dashboard {
   apps {
