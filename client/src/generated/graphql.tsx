@@ -58,9 +58,9 @@ export type CreateAppResult = {
   appBuild: AppBuild;
 };
 
-export type DeleteAppResult = {
-   __typename?: 'DeleteAppResult';
-  result: Scalars['String'];
+export type DestroyAppResult = {
+   __typename?: 'DestroyAppResult';
+  result: Scalars['Boolean'];
 };
 
 export type DokkuPlugin = {
@@ -75,9 +75,30 @@ export type DokkuPluginResult = {
   plugins: Array<DokkuPlugin>;
 };
 
+export type SetEnvVarResult = {
+   __typename?: 'SetEnvVarResult';
+  result: Scalars['Boolean'];
+};
+
+export type UnsetEnvVarResult = {
+   __typename?: 'UnsetEnvVarResult';
+  result: Scalars['Boolean'];
+};
+
 export type AppLogsResult = {
    __typename?: 'AppLogsResult';
   logs: Scalars['String'];
+};
+
+export type EnvVar = {
+   __typename?: 'EnvVar';
+  key: Scalars['String'];
+  value: Scalars['String'];
+};
+
+export type EnvVarsResult = {
+   __typename?: 'EnvVarsResult';
+  envVars: Array<EnvVar>;
 };
 
 export type CreateAppInput = {
@@ -90,8 +111,19 @@ export type CreateDatabaseInput = {
   type: DatabaseTypes;
 };
 
-export type DeleteAppInput = {
-  name: Scalars['String'];
+export type SetEnvVarInput = {
+  appId: Scalars['String'];
+  key: Scalars['String'];
+  value: Scalars['String'];
+};
+
+export type UnsetEnvVarInput = {
+  appId: Scalars['String'];
+  key: Scalars['String'];
+};
+
+export type DestroyAppInput = {
+  appId: Scalars['String'];
 };
 
 export type Query = {
@@ -101,6 +133,7 @@ export type Query = {
   databases: Array<Database>;
   dokkuPlugins: DokkuPluginResult;
   appLogs: AppLogsResult;
+  envVars: EnvVarsResult;
 };
 
 
@@ -110,7 +143,12 @@ export type QueryAppArgs = {
 
 
 export type QueryAppLogsArgs = {
-  name: Scalars['String'];
+  appId: Scalars['String'];
+};
+
+
+export type QueryEnvVarsArgs = {
+  appId: Scalars['String'];
 };
 
 export type Mutation = {
@@ -118,7 +156,9 @@ export type Mutation = {
   loginWithGithub?: Maybe<LoginResult>;
   createApp: CreateAppResult;
   createDatabase: Database;
-  deleteApp: DeleteAppResult;
+  setEnvVar: SetEnvVarResult;
+  unsetEnvVar: UnsetEnvVarResult;
+  destroyApp: DestroyAppResult;
 };
 
 
@@ -137,8 +177,18 @@ export type MutationCreateDatabaseArgs = {
 };
 
 
-export type MutationDeleteAppArgs = {
-  input: DeleteAppInput;
+export type MutationSetEnvVarArgs = {
+  input: SetEnvVarInput;
+};
+
+
+export type MutationUnsetEnvVarArgs = {
+  input: UnsetEnvVarInput;
+};
+
+
+export type MutationDestroyAppArgs = {
+  input: DestroyAppInput;
 };
 
 export type CacheControlScope = 
@@ -203,6 +253,19 @@ export type AppByIdQuery = (
     { __typename?: 'App' }
     & Pick<App, 'id' | 'name' | 'githubRepoUrl'>
   )> }
+);
+
+export type AppLogsQueryVariables = {
+  appId: Scalars['String'];
+};
+
+
+export type AppLogsQuery = (
+  { __typename?: 'Query' }
+  & { appLogs: (
+    { __typename?: 'AppLogsResult' }
+    & Pick<AppLogsResult, 'logs'>
+  ) }
 );
 
 export type DashboardQueryVariables = {};
@@ -358,6 +421,39 @@ export function useAppByIdLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHook
 export type AppByIdQueryHookResult = ReturnType<typeof useAppByIdQuery>;
 export type AppByIdLazyQueryHookResult = ReturnType<typeof useAppByIdLazyQuery>;
 export type AppByIdQueryResult = ApolloReactCommon.QueryResult<AppByIdQuery, AppByIdQueryVariables>;
+export const AppLogsDocument = gql`
+    query appLogs($appId: String!) {
+  appLogs(appId: $appId) {
+    logs
+  }
+}
+    `;
+
+/**
+ * __useAppLogsQuery__
+ *
+ * To run a query within a React component, call `useAppLogsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAppLogsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAppLogsQuery({
+ *   variables: {
+ *      appId: // value for 'appId'
+ *   },
+ * });
+ */
+export function useAppLogsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<AppLogsQuery, AppLogsQueryVariables>) {
+        return ApolloReactHooks.useQuery<AppLogsQuery, AppLogsQueryVariables>(AppLogsDocument, baseOptions);
+      }
+export function useAppLogsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<AppLogsQuery, AppLogsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<AppLogsQuery, AppLogsQueryVariables>(AppLogsDocument, baseOptions);
+        }
+export type AppLogsQueryHookResult = ReturnType<typeof useAppLogsQuery>;
+export type AppLogsLazyQueryHookResult = ReturnType<typeof useAppLogsLazyQuery>;
+export type AppLogsQueryResult = ApolloReactCommon.QueryResult<AppLogsQuery, AppLogsQueryVariables>;
 export const DashboardDocument = gql`
     query dashboard {
   apps {
