@@ -3,6 +3,7 @@ import React from 'react';
 interface IconProps {
   opacity?: number;
   size?: 24 | 40;
+  className?: string;
 }
 
 export const PostgreSQLIcon: React.FC<IconProps> = ({
