@@ -1,27 +1,41 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
+import { ArrowRight } from 'react-feather';
+import cx from 'classnames';
 
 import { useCreateDatabaseMutation, DatabaseTypes } from '../generated/graphql';
-import { OnboardingLayout } from '../layouts/OnboardingLayout';
 import withApollo from '../lib/withApollo';
-import { ArrowRight } from 'react-feather';
-import {
-  TextField,
-  Button,
-  styled,
-  Flex,
-  Typography,
-  Box,
-  BoxButton,
-  Grid,
-} from '../ui';
 import { PostgreSQLIcon } from '../ui/icons/PostgreSQLIcon';
 import { MySQLIcon } from '../ui/icons/MySQLIcon';
 import { MongoIcon } from '../ui/icons/MongoIcon';
 import { RedisIcon } from '../ui/icons/RedisIcon';
 import { Protected } from '../modules/auth/Protected';
-import { Link } from '../ui/components/Typography/components/Link';
+import { Header } from '../modules/layout/Header';
+
+interface DatabaseBoxProps {
+  label: string;
+  selected: boolean;
+  icon: React.ReactNode;
+  onClick?(): void;
+}
+
+const DatabaseBox = ({ label, selected, icon, onClick }: DatabaseBoxProps) => {
+  return (
+    <div
+      className={cx(
+        'flex flex-col items-center p-12 bg-white border border-grey rounded cursor-pointer opacity-50 transition duration-200',
+        {
+          'border-black opacity-100': selected,
+        }
+      )}
+      onClick={onClick}
+    >
+      <div className="mb-2">{icon}</div>
+      <p>{label}</p>
+    </div>
+  );
+};
 
 const CreateDatabase = () => {
   const router = useRouter();
@@ -39,6 +53,7 @@ const CreateDatabase = () => {
             input: { name: values.name, type: values.type },
           },
         });
+        // TODO redirect to database page once ready
         router.push('/dashboard');
       } catch (error) {
         // TODO catch errors
@@ -48,122 +63,117 @@ const CreateDatabase = () => {
     },
   });
 
-  // return null;
-
   return (
-    <OnboardingLayout
-      breadcrumb={[
-        {
-          label: 'Create a new database',
-        },
-      ]}
-    >
-      <Form onSubmit={formik.handleSubmit}>
-        <TextField
-          id="name"
-          name="name"
-          label="Database name"
-          value={formik.values.name}
-          onChange={formik.handleChange}
-        />
-        <Box>
-          <Typography.Label marginBottom={24}>
-            Choose your database
-          </Typography.Label>
-          <Grid
-            templateColumns={{
-              desktop: '1fr 1fr 1fr 1fr',
-              tablet: '1fr 1fr 1fr',
-              phone: '1fr 1fr',
-            }}
-            columnGap={16}
-            rowGap={16}
-          >
-            <BoxButton
-              selected={formik.values.type === 'POSTGRESQL'}
-              label="PostgreSQL"
-              icon={<PostgreSQLIcon size={40} />}
-              onClick={() => formik.setFieldValue('type', 'POSTGRESQL')}
+    <React.Fragment>
+      <Header />
+
+      <div className="max-w-5xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <h1 className="text-lg font-bold">Create a new database</h1>
+
+        <form onSubmit={formik.handleSubmit} className="mt-8">
+          <div className="mt-12">
+            <label className="block mb-2">Database name:</label>
+            <input
+              className="block w-full max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
+              id="name"
+              name="name"
+              value={formik.values.name}
+              onChange={formik.handleChange}
             />
-            <BoxButton
-              selected={formik.values.type === 'MYSQL'}
-              label="MySQL"
-              icon={<MySQLIcon size={40} />}
-              disabled={true}
-              onClick={() => formik.setFieldValue('type', 'MYSQL')}
-            />
-            <BoxButton
-              selected={formik.values.type === 'MONGODB'}
-              label="Mongo"
-              icon={<MongoIcon size={40} />}
-              disabled={true}
-              onClick={() => formik.setFieldValue('type', 'MONGODB')}
-            />
-            <BoxButton
-              selected={formik.values.type === 'REDIS'}
-              label="Redis"
-              icon={<RedisIcon size={40} />}
-              disabled={true}
-              onClick={() => formik.setFieldValue('type', 'REDIS')}
-            />
-          </Grid>
-          {formik.values.type === 'POSTGRESQL' && (
-            <Typography.Caption marginTop={8}>
-              We currently only provide PostgreSQL
-            </Typography.Caption>
-          )}
-          {formik.values.type === 'MYSQL' && (
-            <Typography.Caption marginTop={8}>
-              We currently don't support MySQL.
-              <br />
-              Take a look at{' '}
-              <Link href="https://github.com/ledokku/ledokku/issues/22">
-                the issue
-              </Link>{' '}
-              to track the progress.
-            </Typography.Caption>
-          )}
-          {formik.values.type === 'MONGODB' && (
-            <Typography.Caption marginTop={8}>
-              We currently don't support Mongo.
-              <br />
-              Take a look at{' '}
-              <Link href="https://github.com/ledokku/ledokku/issues/21">
-                the issue
-              </Link>{' '}
-              to track the progress.
-            </Typography.Caption>
-          )}
-          {formik.values.type === 'REDIS' && (
-            <Typography.Caption marginTop={8}>
-              We currently don't support Redis.
-              <br />
-              Take a look at{' '}
-              <Link href="https://github.com/ledokku/ledokku/issues/20">
-                the issue
-              </Link>{' '}
-              to track the progress.
-            </Typography.Caption>
-          )}
-        </Box>
-        <Flex justifyContent="flex-end">
-          <Button type="submit" background="primary" endIcon={<ArrowRight />}>
-            Submit
-          </Button>
-        </Flex>
-      </Form>
-    </OnboardingLayout>
+          </div>
+
+          <div className="mt-12">
+            <label className="block mb-2">Choose your database</label>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <DatabaseBox
+                selected={formik.values.type === 'POSTGRESQL'}
+                label="PostgreSQL"
+                icon={<PostgreSQLIcon size={40} />}
+                onClick={() => formik.setFieldValue('type', 'POSTGRESQL')}
+              />
+              <DatabaseBox
+                selected={formik.values.type === 'MYSQL'}
+                label="MySQL"
+                icon={<MySQLIcon size={40} />}
+                onClick={() => formik.setFieldValue('type', 'MYSQL')}
+              />
+              <DatabaseBox
+                selected={formik.values.type === 'MONGODB'}
+                label="Mongo"
+                icon={<MongoIcon size={40} />}
+                onClick={() => formik.setFieldValue('type', 'MONGODB')}
+              />
+              <DatabaseBox
+                selected={formik.values.type === 'REDIS'}
+                label="Redis"
+                icon={<RedisIcon size={40} />}
+                onClick={() => formik.setFieldValue('type', 'REDIS')}
+              />
+            </div>
+            <div className="mt-2 text-gray-400">
+              {formik.values.type === 'POSTGRESQL' && (
+                <p>We currently only provide PostgreSQL</p>
+              )}
+              {formik.values.type === 'MYSQL' && (
+                <p>
+                  We currently don't support MySQL.
+                  <br />
+                  Take a look at{' '}
+                  <a
+                    href="https://github.com/ledokku/ledokku/issues/22"
+                    className="underline"
+                  >
+                    the issue
+                  </a>{' '}
+                  to track the progress.
+                </p>
+              )}
+              {formik.values.type === 'MONGODB' && (
+                <p>
+                  We currently don't support Mongo.
+                  <br />
+                  Take a look at{' '}
+                  <a
+                    href="https://github.com/ledokku/ledokku/issues/21"
+                    className="underline"
+                  >
+                    the issue
+                  </a>{' '}
+                  to track the progress.
+                </p>
+              )}
+              {formik.values.type === 'REDIS' && (
+                <p>
+                  We currently don't support Redis.
+                  <br />
+                  Take a look at{' '}
+                  <a
+                    href="https://github.com/ledokku/ledokku/issues/20"
+                    className="underline"
+                  >
+                    the issue
+                  </a>{' '}
+                  to track the progress.
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div className="mt-12 flex justify-end">
+            <button
+              className="py-3 px-4 bg-black text-white rounded flex justify-center"
+              disabled={formik.isSubmitting}
+              type="submit"
+            >
+              Create
+              <ArrowRight className="ml-2" />
+            </button>
+          </div>
+        </form>
+      </div>
+    </React.Fragment>
   );
 };
-
-const Form = styled.form`
-  display: grid;
-  grid-row-gap: 80px;
-
-  @media ${({ theme }) => theme.media.phone} {
-    grid-row-gap: 40px;
-  }
-`;
 
 export default withApollo(() => (
   <Protected>
