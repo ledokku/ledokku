@@ -1,11 +1,11 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 
-import withApollo from '../../lib/withApollo';
+import withApollo from '../../../lib/withApollo';
 
-import { Protected } from '../../modules/auth/Protected';
-import { Header } from '../../modules/layout/Header';
-import { useAppByIdQuery, useAppLogsQuery } from '../../generated/graphql';
+import { Protected } from '../../../modules/auth/Protected';
+import { Header } from '../../../modules/layout/Header';
+import { useAppByIdQuery, useAppLogsQuery } from '../../../generated/graphql';
 import Link from 'next/link';
 
 const App = () => {
