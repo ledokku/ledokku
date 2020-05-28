@@ -163,6 +163,7 @@ const CreateDatabase = () => {
             <button
               className="py-3 px-4 bg-black text-white rounded flex justify-center"
               disabled={formik.isSubmitting}
+              type="submit"
             >
               Create
               <ArrowRight className="ml-2" />

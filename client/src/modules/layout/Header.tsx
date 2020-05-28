@@ -12,7 +12,11 @@ export const Header = () => {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
-            <h3 className="font-bold">Ledokku</h3>
+            <h3 className="font-bold">
+              <Link href="/" passHref>
+                <a>Ledokku</a>
+              </Link>
+            </h3>
           </div>
           <div className="relative">
             <div>
