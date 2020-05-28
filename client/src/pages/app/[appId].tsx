@@ -85,7 +85,7 @@ const App = () => {
         </nav>
       </div>
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 sm:grid-cols-2 gap-4 mt-10">
+        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4 mt-10">
           <div>
             <h1 className="text-lg font-bold py-5">App info</h1>
             <div className=" bg-gray-100 shadow overflow-hidden rounded-lg border-b border-gray-200">
