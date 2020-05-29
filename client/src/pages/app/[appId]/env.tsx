@@ -30,7 +30,7 @@ const EnvForm = ({ name, value, appId }: EnvFormProps) => {
       // TODO validate values
       try {
         const data = await setEnvVarMutation({
-          variables: { key: name, value, appId },
+          variables: { key: values.name, value: values.value, appId },
         });
         // TODO give feedback about setting success
         console.log(data);
