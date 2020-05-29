@@ -139,43 +139,6 @@ const App = () => {
           <button className="bg-gray-900 hover:bg-blue text-white  font-bold hover:text-white py-2 px-4 border hover:border-transparent rounded-lg">
             Connect database
           </button>
-          {/* <div>
-            <h1 className="text-lg font-bold py-5">Database info</h1>
-            <div className=" bg-gray-100 shadow overflow-hidden rounded-lg border-b border-gray-200">
-              <table className="mt-4 mb-4 min-w-full bg-white">
-                <tbody className="text-gray-700">
-                  <tr className="bg-gray-100">
-                    <td className="w-1/3 text-left py-3 px-4 font-semibold">
-                      Database name
-                    </td>
-                    <td className="w-1/3 text-left py-3 px-4">Node17_db</td>
-                  </tr>
-                  <tr className="bg-gray-100">
-                    <td className="w-1/3 text-left py-3 px-4 font-semibold">
-                      id
-                    </td>
-                    <td className="w-3/4 text-left py-3 px-4">
-                      2131123123-1231231
-                    </td>
-                  </tr>
-                  <tr className="bg-gray-100">
-                    <td className="w-1/3 text-left py-3 px-4 font-semibold">
-                      Type
-                    </td>
-                    <td className="w-1/3 text-left py-3 px-4">mongoDB</td>
-                  </tr>
-                  <tr className="bg-gray-100">
-                    <td className="w-1/3 text-left py-3 px-4 font-semibold">
-                      Created at
-                    </td>
-                    <td className="w-1/3 text-left py-3 px-4">
-                      19:43:00 CET Thu 17th of April, 2020
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div> */}
         </div>
       </div>
     </div>
