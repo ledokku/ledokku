@@ -163,7 +163,12 @@ const Env = () => {
           envVarData.envVars.envVars &&
           envVarData.envVars.envVars.map((envVar) => {
             return (
-              <EnvForm name={envVar.key} value={envVar.value} appId={appId} />
+              <EnvForm
+                key={envVar.key}
+                name={envVar.key}
+                value={envVar.value}
+                appId={appId}
+              />
             );
           })}
       </div>
