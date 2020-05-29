@@ -19,6 +19,7 @@ export type App = {
    __typename?: 'App';
   id: Scalars['ID'];
   name: Scalars['String'];
+  githubRepoUrl: Scalars['String'];
 };
 
 export type AppBuild = {
@@ -57,6 +58,11 @@ export type CreateAppResult = {
   appBuild: AppBuild;
 };
 
+export type DestroyAppResult = {
+   __typename?: 'DestroyAppResult';
+  result: Scalars['Boolean'];
+};
+
 export type DokkuPlugin = {
    __typename?: 'DokkuPlugin';
   name: Scalars['String'];
@@ -69,9 +75,30 @@ export type DokkuPluginResult = {
   plugins: Array<DokkuPlugin>;
 };
 
+export type SetEnvVarResult = {
+   __typename?: 'SetEnvVarResult';
+  result: Scalars['Boolean'];
+};
+
+export type UnsetEnvVarResult = {
+   __typename?: 'UnsetEnvVarResult';
+  result: Scalars['Boolean'];
+};
+
 export type AppLogsResult = {
    __typename?: 'AppLogsResult';
   logs: Scalars['String'];
+};
+
+export type EnvVar = {
+   __typename?: 'EnvVar';
+  key: Scalars['String'];
+  value: Scalars['String'];
+};
+
+export type EnvVarsResult = {
+   __typename?: 'EnvVarsResult';
+  envVars: Array<EnvVar>;
 };
 
 export type CreateAppInput = {
@@ -84,17 +111,44 @@ export type CreateDatabaseInput = {
   type: DatabaseTypes;
 };
 
+export type SetEnvVarInput = {
+  appId: Scalars['String'];
+  key: Scalars['String'];
+  value: Scalars['String'];
+};
+
+export type UnsetEnvVarInput = {
+  appId: Scalars['String'];
+  key: Scalars['String'];
+};
+
+export type DestroyAppInput = {
+  appId: Scalars['String'];
+};
+
 export type Query = {
    __typename?: 'Query';
   apps: Array<App>;
+  app?: Maybe<App>;
   databases: Array<Database>;
   dokkuPlugins: DokkuPluginResult;
   appLogs: AppLogsResult;
+  envVars: EnvVarsResult;
+};
+
+
+export type QueryAppArgs = {
+  appId: Scalars['String'];
 };
 
 
 export type QueryAppLogsArgs = {
-  name: Scalars['String'];
+  appId: Scalars['String'];
+};
+
+
+export type QueryEnvVarsArgs = {
+  appId: Scalars['String'];
 };
 
 export type Mutation = {
@@ -102,6 +156,9 @@ export type Mutation = {
   loginWithGithub?: Maybe<LoginResult>;
   createApp: CreateAppResult;
   createDatabase: Database;
+  setEnvVar: SetEnvVarResult;
+  unsetEnvVar: UnsetEnvVarResult;
+  destroyApp: DestroyAppResult;
 };
 
 
@@ -117,6 +174,21 @@ export type MutationCreateAppArgs = {
 
 export type MutationCreateDatabaseArgs = {
   input: CreateDatabaseInput;
+};
+
+
+export type MutationSetEnvVarArgs = {
+  input: SetEnvVarInput;
+};
+
+
+export type MutationUnsetEnvVarArgs = {
+  input: UnsetEnvVarInput;
+};
+
+
+export type MutationDestroyAppArgs = {
+  input: DestroyAppInput;
 };
 
 export type CacheControlScope = 
@@ -170,6 +242,47 @@ export type LoginWithGithubMutation = (
   )> }
 );
 
+export type SetEnvVarMutationVariables = {
+  key: Scalars['String'];
+  value: Scalars['String'];
+  appId: Scalars['String'];
+};
+
+
+export type SetEnvVarMutation = (
+  { __typename?: 'Mutation' }
+  & { setEnvVar: (
+    { __typename?: 'SetEnvVarResult' }
+    & Pick<SetEnvVarResult, 'result'>
+  ) }
+);
+
+export type AppByIdQueryVariables = {
+  appId: Scalars['String'];
+};
+
+
+export type AppByIdQuery = (
+  { __typename?: 'Query' }
+  & { app?: Maybe<(
+    { __typename?: 'App' }
+    & Pick<App, 'id' | 'name' | 'githubRepoUrl'>
+  )> }
+);
+
+export type AppLogsQueryVariables = {
+  appId: Scalars['String'];
+};
+
+
+export type AppLogsQuery = (
+  { __typename?: 'Query' }
+  & { appLogs: (
+    { __typename?: 'AppLogsResult' }
+    & Pick<AppLogsResult, 'logs'>
+  ) }
+);
+
 export type DashboardQueryVariables = {};
 
 
@@ -182,6 +295,22 @@ export type DashboardQuery = (
     { __typename?: 'Database' }
     & Pick<Database, 'id' | 'name' | 'type'>
   )> }
+);
+
+export type EnvVarsQueryVariables = {
+  appId: Scalars['String'];
+};
+
+
+export type EnvVarsQuery = (
+  { __typename?: 'Query' }
+  & { envVars: (
+    { __typename?: 'EnvVarsResult' }
+    & { envVars: Array<(
+      { __typename?: 'EnvVar' }
+      & Pick<EnvVar, 'key' | 'value'>
+    )> }
+  ) }
 );
 
 
@@ -288,6 +417,108 @@ export function useLoginWithGithubMutation(baseOptions?: ApolloReactHooks.Mutati
 export type LoginWithGithubMutationHookResult = ReturnType<typeof useLoginWithGithubMutation>;
 export type LoginWithGithubMutationResult = ApolloReactCommon.MutationResult<LoginWithGithubMutation>;
 export type LoginWithGithubMutationOptions = ApolloReactCommon.BaseMutationOptions<LoginWithGithubMutation, LoginWithGithubMutationVariables>;
+export const SetEnvVarDocument = gql`
+    mutation setEnvVar($key: String!, $value: String!, $appId: String!) {
+  setEnvVar(input: {key: $key, value: $value, appId: $appId}) {
+    result
+  }
+}
+    `;
+export type SetEnvVarMutationFn = ApolloReactCommon.MutationFunction<SetEnvVarMutation, SetEnvVarMutationVariables>;
+
+/**
+ * __useSetEnvVarMutation__
+ *
+ * To run a mutation, you first call `useSetEnvVarMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetEnvVarMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setEnvVarMutation, { data, loading, error }] = useSetEnvVarMutation({
+ *   variables: {
+ *      key: // value for 'key'
+ *      value: // value for 'value'
+ *      appId: // value for 'appId'
+ *   },
+ * });
+ */
+export function useSetEnvVarMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SetEnvVarMutation, SetEnvVarMutationVariables>) {
+        return ApolloReactHooks.useMutation<SetEnvVarMutation, SetEnvVarMutationVariables>(SetEnvVarDocument, baseOptions);
+      }
+export type SetEnvVarMutationHookResult = ReturnType<typeof useSetEnvVarMutation>;
+export type SetEnvVarMutationResult = ApolloReactCommon.MutationResult<SetEnvVarMutation>;
+export type SetEnvVarMutationOptions = ApolloReactCommon.BaseMutationOptions<SetEnvVarMutation, SetEnvVarMutationVariables>;
+export const AppByIdDocument = gql`
+    query appById($appId: String!) {
+  app(appId: $appId) {
+    id
+    name
+    githubRepoUrl
+  }
+}
+    `;
+
+/**
+ * __useAppByIdQuery__
+ *
+ * To run a query within a React component, call `useAppByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAppByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAppByIdQuery({
+ *   variables: {
+ *      appId: // value for 'appId'
+ *   },
+ * });
+ */
+export function useAppByIdQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<AppByIdQuery, AppByIdQueryVariables>) {
+        return ApolloReactHooks.useQuery<AppByIdQuery, AppByIdQueryVariables>(AppByIdDocument, baseOptions);
+      }
+export function useAppByIdLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<AppByIdQuery, AppByIdQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<AppByIdQuery, AppByIdQueryVariables>(AppByIdDocument, baseOptions);
+        }
+export type AppByIdQueryHookResult = ReturnType<typeof useAppByIdQuery>;
+export type AppByIdLazyQueryHookResult = ReturnType<typeof useAppByIdLazyQuery>;
+export type AppByIdQueryResult = ApolloReactCommon.QueryResult<AppByIdQuery, AppByIdQueryVariables>;
+export const AppLogsDocument = gql`
+    query appLogs($appId: String!) {
+  appLogs(appId: $appId) {
+    logs
+  }
+}
+    `;
+
+/**
+ * __useAppLogsQuery__
+ *
+ * To run a query within a React component, call `useAppLogsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAppLogsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAppLogsQuery({
+ *   variables: {
+ *      appId: // value for 'appId'
+ *   },
+ * });
+ */
+export function useAppLogsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<AppLogsQuery, AppLogsQueryVariables>) {
+        return ApolloReactHooks.useQuery<AppLogsQuery, AppLogsQueryVariables>(AppLogsDocument, baseOptions);
+      }
+export function useAppLogsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<AppLogsQuery, AppLogsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<AppLogsQuery, AppLogsQueryVariables>(AppLogsDocument, baseOptions);
+        }
+export type AppLogsQueryHookResult = ReturnType<typeof useAppLogsQuery>;
+export type AppLogsLazyQueryHookResult = ReturnType<typeof useAppLogsLazyQuery>;
+export type AppLogsQueryResult = ApolloReactCommon.QueryResult<AppLogsQuery, AppLogsQueryVariables>;
 export const DashboardDocument = gql`
     query dashboard {
   apps {
@@ -326,3 +557,39 @@ export function useDashboardLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHo
 export type DashboardQueryHookResult = ReturnType<typeof useDashboardQuery>;
 export type DashboardLazyQueryHookResult = ReturnType<typeof useDashboardLazyQuery>;
 export type DashboardQueryResult = ApolloReactCommon.QueryResult<DashboardQuery, DashboardQueryVariables>;
+export const EnvVarsDocument = gql`
+    query envVars($appId: String!) {
+  envVars(appId: $appId) {
+    envVars {
+      key
+      value
+    }
+  }
+}
+    `;
+
+/**
+ * __useEnvVarsQuery__
+ *
+ * To run a query within a React component, call `useEnvVarsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEnvVarsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useEnvVarsQuery({
+ *   variables: {
+ *      appId: // value for 'appId'
+ *   },
+ * });
+ */
+export function useEnvVarsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<EnvVarsQuery, EnvVarsQueryVariables>) {
+        return ApolloReactHooks.useQuery<EnvVarsQuery, EnvVarsQueryVariables>(EnvVarsDocument, baseOptions);
+      }
+export function useEnvVarsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<EnvVarsQuery, EnvVarsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<EnvVarsQuery, EnvVarsQueryVariables>(EnvVarsDocument, baseOptions);
+        }
+export type EnvVarsQueryHookResult = ReturnType<typeof useEnvVarsQuery>;
+export type EnvVarsLazyQueryHookResult = ReturnType<typeof useEnvVarsLazyQuery>;
+export type EnvVarsQueryResult = ApolloReactCommon.QueryResult<EnvVarsQuery, EnvVarsQueryVariables>;
