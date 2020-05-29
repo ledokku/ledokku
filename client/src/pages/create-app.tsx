@@ -5,9 +5,9 @@ import { ArrowRight } from 'react-feather';
 
 import { useCreateAppMutation } from '../generated/graphql';
 import withApollo from '../lib/withApollo';
-import { TextField, Button, styled, Flex, Box, Grid } from '../ui';
-import { LoggedInLayout } from '../layouts/LoggedInLayout';
+
 import { Protected } from '../modules/auth/Protected';
+import { Header } from '../modules/layout/Header';
 
 const CreateApp = () => {
   const router = useRouter();
@@ -18,15 +18,16 @@ const CreateApp = () => {
       gitUrl: '',
     },
     onSubmit: async (values) => {
-      // TODO validation name is required
+      // TODO validate name
       try {
         const data = await createAppMutation({
-          variables: { gitUrl: values.gitUrl, name: values.name },
+          variables: {
+            name: values.name,
+            gitUrl: values.gitUrl,
+          },
         });
-        console.log(data);
-        router.push(
-          `/app/${data.data.createApp.app.id}/build/${data.data.createApp.appBuild.id}`
-        );
+        // TODO give feedback about app being deployed
+        router.push('/dashboard');
       } catch (error) {
         // TODO catch errors
         console.log(error);
@@ -36,73 +37,53 @@ const CreateApp = () => {
   });
 
   return (
-    <LoggedInLayout
-      breadcrumb={[
-        {
-          label: 'Berlin Library Project',
-        },
-        {
-          label: 'New App',
-        },
-      ]}
-    >
-      <Box
-        margin={{
-          desktop: 80,
-          tablet: 40,
-          phone: 24,
-        }}
-        marginLeft="auto"
-        marginRight="auto"
-        paddingLeft={{
-          desktop: 80,
-          tablet: 40,
-          phone: 24,
-        }}
-        paddingRight={{
-          desktop: 80,
-          tablet: 40,
-          phone: 24,
-        }}
-        width="100%"
-        maxWidth={800}
-      >
-        <Form onSubmit={formik.handleSubmit}>
-          <Grid rowGap={{ desktop: 40, tablet: 40, phone: 24 }}>
-            <TextField
-              id="name"
-              name="name"
-              label="Enter the name of your new app"
-              value={formik.values.name}
-              onChange={formik.handleChange}
-            />
-            <TextField
-              id="gitUrl"
-              name="gitUrl"
-              label="Enter the git url of your new app"
-              value={formik.values.gitUrl}
-              onChange={formik.handleChange}
-            />
-          </Grid>
-          <Flex justifyContent="flex-end">
-            <Button type="submit" background="primary" endIcon={<ArrowRight />}>
-              Submit
-            </Button>
-          </Flex>
-        </Form>
-      </Box>
-    </LoggedInLayout>
+    <React.Fragment>
+      <Header />
+
+      <div className="max-w-5xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <h1 className="text-lg font-bold">Create a new app</h1>
+        <div className="mt-4 mb-4">
+          <h2 className="text-gray-400">
+            Enter app name and link to your github repository. Click create and
+            voila!
+          </h2>
+        </div>
+        <form onSubmit={formik.handleSubmit} className="mt-2">
+          <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4">
+            <div className="mt-8">
+              <input
+                className="inline w-full  max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
+                id="name"
+                name="name"
+                placeholder="Name"
+                value={formik.values.name}
+                onChange={formik.handleChange}
+              />
+            </div>
+            <div className="mt-8">
+              <input
+                className="inline w-full max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
+                id="gitUrl"
+                name="gitUrl"
+                placeholder="Git url"
+                value={formik.values.gitUrl}
+                onChange={formik.handleChange}
+              />
+              <div className="flex justify-end mt-4">
+                <button
+                  type="submit"
+                  className="inline flex justify-end py-2 px-10 bg-gray-900 hover:bg-blue text-white  font-bold hover:text-white border hover:border-transparent rounded-lg"
+                >
+                  Create
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </React.Fragment>
   );
 };
-
-const Form = styled.form`
-  display: grid;
-  grid-row-gap: 80px;
-
-  @media ${({ theme }) => theme.media.phone} {
-    grid-row-gap: 40px;
-  }
-`;
 
 export default withApollo(() => (
   <Protected>

@@ -20,6 +20,8 @@ const App = () => {
     skip: !appId,
   });
 
+  // TODO solve issue when app is not deployed - logs are undefined
+
   const {
     data: appLogsData,
     loading: appLogsLoading,
