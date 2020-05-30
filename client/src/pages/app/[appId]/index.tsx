@@ -30,7 +30,7 @@ const App = () => {
     variables: {
       appId,
     },
-    ssr: true,
+    ssr: false,
     skip: !appId,
     // we fetch status every 2 min 30 sec
     pollInterval: 15000,
