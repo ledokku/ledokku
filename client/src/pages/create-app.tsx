@@ -1,9 +1,8 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
-import { ArrowRight } from 'react-feather';
 
-import { useCreateAppMutation } from '../generated/graphql';
+import { useCreateAppMutation, DashboardDocument } from '../generated/graphql';
 import withApollo from '../lib/withApollo';
 
 import { Protected } from '../modules/auth/Protected';
@@ -25,6 +24,11 @@ const CreateApp = () => {
             name: values.name,
             gitUrl: values.gitUrl,
           },
+          refetchQueries: [
+            {
+              query: DashboardDocument,
+            },
+          ],
         });
         // TODO give feedback about app being deployed
         router.push('/dashboard');
