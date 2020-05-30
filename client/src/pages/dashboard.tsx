@@ -50,8 +50,8 @@ const Dashboard = () => {
 
       <div className="max-w-5xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <main className="grid grid-cols-12 col-gap-20">
-          <div className="col-span-7">
-            <h3 className="text-gray-700 text-sm py-3">Apps</h3>
+          <div className="col-span-7 mt-4">
+            <h1 className="text-lg font-bold py-5 ">Apps</h1>
             {data?.apps.map((app) => (
               <div key={app.id}>
                 <Link href="/app/[appId]" as={`/app/${app.id}`} passHref>
@@ -65,21 +65,25 @@ const Dashboard = () => {
             ))}
             <p className="py-3">
               <Link href="/create-app" passHref>
-                <a>Create new app</a>
+                <button className="inline w-2/3 py-2 px-10 bg-gray-900 hover:bg-blue text-white  font-bold hover:text-white border hover:border-transparent rounded-lg">
+                  Create new app
+                </button>
               </Link>
             </p>
-            <h3 className="text-gray-700 text-sm py-3">Databases</h3>
+            <h1 className="text-lg font-bold py-5">Databases</h1>
             {data?.databases.map((database) => (
               <p key={database.id}>{database.name}</p>
             ))}
             <p className="py-3">
               <Link href="/create-database" passHref>
-                <a>Create new database</a>
+                <button className="inline w-2/3 py-2 px-10 bg-gray-900 hover:bg-blue text-white  font-bold hover:text-white border hover:border-transparent rounded-lg">
+                  Create new database
+                </button>
               </Link>
             </p>
           </div>
-          <div className="col-span-5">
-            <h3 className="text-gray-700 text-sm py-3">Latest activity</h3>
+          <div className="col-span-5 mt-4">
+            <h1 className="text-lg font-bold py-5">Latest activity</h1>
             <p>TODO</p>
           </div>
         </main>
