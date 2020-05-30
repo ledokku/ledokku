@@ -53,7 +53,7 @@ const EnvForm = ({ name, value, appId }: EnvFormProps) => {
             autoComplete="off"
             className="inline w-full  max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
             id="name"
-            name="namew"
+            name="name"
             placeholder="name"
             key={formik.values.name}
             value={formik.values.name}
