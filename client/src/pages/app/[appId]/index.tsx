@@ -32,8 +32,8 @@ const App = () => {
     },
     ssr: false,
     skip: !appId,
-    // we fetch status every 5 min
-    pollInterval: 300000,
+    // we fetch status every 2 min 30 sec
+    pollInterval: 15000,
   });
 
   if (!data) {
@@ -132,9 +132,15 @@ const App = () => {
             >
               <div className="mt-4 flex">
                 <p className="flex-1 typing items-center pl-2">{`App status:`}</p>
-                <span className="text-green-400">
-                  {appLogsLoading ? 'Loading...' : appLogsData.appLogs.logs}
-                </span>
+                {!appLogsData ? (
+                  <span className="text-yellow-400">
+                    App is still deploying
+                  </span>
+                ) : (
+                  <span className="text-green-400">
+                    {appLogsLoading ? 'Loading...' : appLogsData.appLogs.logs}
+                  </span>
+                )}
               </div>
             </div>
           </div>

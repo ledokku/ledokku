@@ -10,7 +10,6 @@ const parseLogsCommand = (commandResult: string) => {
 
 export const logs = async (ssh: NodeSsh, name: string) => {
   const resultAppLogs = await ssh.execCommand(`logs ${name}`);
-  console.log(resultAppLogs);
   if (resultAppLogs.code === 1) {
     throw new Error(resultAppLogs.stderr);
   }
