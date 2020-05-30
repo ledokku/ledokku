@@ -20,6 +20,7 @@ export type App = {
   id: Scalars['ID'];
   name: Scalars['String'];
   githubRepoUrl: Scalars['String'];
+  createdAt: Scalars['String'];
 };
 
 export type AppBuild = {
@@ -279,7 +280,7 @@ export type AppByIdQuery = (
   { __typename?: 'Query' }
   & { app?: Maybe<(
     { __typename?: 'App' }
-    & Pick<App, 'id' | 'name' | 'githubRepoUrl'>
+    & Pick<App, 'id' | 'name' | 'githubRepoUrl' | 'createdAt'>
   )> }
 );
 
@@ -502,6 +503,7 @@ export const AppByIdDocument = gql`
     id
     name
     githubRepoUrl
+    createdAt
   }
 }
     `;

@@ -19,6 +19,7 @@ export type App = {
   id: Scalars['ID'];
   name: Scalars['String'];
   githubRepoUrl: Scalars['String'];
+  createdAt: Scalars['String'];
 };
 
 export type AppBuild = {
@@ -332,6 +333,7 @@ export type AppResolvers<ContextType = any, ParentType extends ResolversParentTy
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   githubRepoUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 

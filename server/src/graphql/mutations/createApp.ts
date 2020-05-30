@@ -33,6 +33,8 @@ export const createApp: MutationResolvers['createApp'] = async (
           id: userId,
         },
       },
+      createdAt: new Date().toString(),
+      updatedAt: new Date().toString(),
     },
   });
 
@@ -49,6 +51,8 @@ export const createApp: MutationResolvers['createApp'] = async (
           id: app.id,
         },
       },
+      createdAt: new Date().toString(),
+      updatedAt: new Date().toString(),
     },
   });
 
