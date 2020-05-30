@@ -229,6 +229,19 @@ export type CreateDatabaseMutation = (
   ) }
 );
 
+export type DestroyAppMutationVariables = {
+  input: DestroyAppInput;
+};
+
+
+export type DestroyAppMutation = (
+  { __typename?: 'Mutation' }
+  & { destroyApp: (
+    { __typename?: 'DestroyAppResult' }
+    & Pick<DestroyAppResult, 'result'>
+  ) }
+);
+
 export type LoginWithGithubMutationVariables = {
   code: Scalars['String'];
 };
@@ -385,6 +398,38 @@ export function useCreateDatabaseMutation(baseOptions?: ApolloReactHooks.Mutatio
 export type CreateDatabaseMutationHookResult = ReturnType<typeof useCreateDatabaseMutation>;
 export type CreateDatabaseMutationResult = ApolloReactCommon.MutationResult<CreateDatabaseMutation>;
 export type CreateDatabaseMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateDatabaseMutation, CreateDatabaseMutationVariables>;
+export const DestroyAppDocument = gql`
+    mutation destroyApp($input: DestroyAppInput!) {
+  destroyApp(input: $input) {
+    result
+  }
+}
+    `;
+export type DestroyAppMutationFn = ApolloReactCommon.MutationFunction<DestroyAppMutation, DestroyAppMutationVariables>;
+
+/**
+ * __useDestroyAppMutation__
+ *
+ * To run a mutation, you first call `useDestroyAppMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDestroyAppMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [destroyAppMutation, { data, loading, error }] = useDestroyAppMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDestroyAppMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DestroyAppMutation, DestroyAppMutationVariables>) {
+        return ApolloReactHooks.useMutation<DestroyAppMutation, DestroyAppMutationVariables>(DestroyAppDocument, baseOptions);
+      }
+export type DestroyAppMutationHookResult = ReturnType<typeof useDestroyAppMutation>;
+export type DestroyAppMutationResult = ApolloReactCommon.MutationResult<DestroyAppMutation>;
+export type DestroyAppMutationOptions = ApolloReactCommon.BaseMutationOptions<DestroyAppMutation, DestroyAppMutationVariables>;
 export const LoginWithGithubDocument = gql`
     mutation loginWithGithub($code: String!) {
   loginWithGithub(code: $code) {
