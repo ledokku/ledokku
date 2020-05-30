@@ -8,6 +8,7 @@ import { Header } from '../../../modules/layout/Header';
 import {
   useAppByIdQuery,
   useDestroyAppMutation,
+  DashboardDocument,
 } from '../../../generated/graphql';
 import Link from 'next/link';
 import { useFormik } from 'formik';
@@ -64,13 +65,16 @@ const Settings = () => {
     validationSchema: DeleteAppNameSchema,
 
     onSubmit: async (values) => {
-      console.log('triggered');
       try {
         const data = await destroyAppMutation({
           variables: {
             input: { appId },
           },
-          refetchQueries: [],
+          refetchQueries: [
+            {
+              query: DashboardDocument,
+            },
+          ],
         });
 
         router.push('/dashboard');
@@ -117,10 +121,12 @@ const Settings = () => {
         <div className="grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 gap-4 mt-10">
           <h1 className="text-lg font-bold py-5">App settings</h1>
 
-          <h2 className="text-gray-400">
-            To delete the app type the name of the app below and click Delete
+          <h2 className="text-gray-400 w-2/6">
+            This action cannot be undone. This will permanently delete{' '}
+            {app.name} app and everything related to it. Please type{' '}
+            <b>{app.name}</b> to confirm deletion.
           </h2>
-          <form onSubmit={formik.handleSubmit} className="mt-2">
+          <form onSubmit={formik.handleSubmit}>
             <div className="mt-4">
               <input
                 className="block w-full max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
