@@ -74,6 +74,7 @@ const CreateDatabase = () => {
           <div className="mt-12">
             <label className="block mb-2">Database name:</label>
             <input
+              autoComplete="off"
               className="block w-full max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
               id="name"
               name="name"

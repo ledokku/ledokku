@@ -132,7 +132,7 @@ const App = () => {
             >
               <div className="mt-4 flex">
                 <p className="flex-1 typing items-center pl-2">{`App status:`}</p>
-                {!appLogsData ? (
+                {!appLogsData && !appLogsLoading ? (
                   <span className="text-yellow-400">
                     App is still deploying
                   </span>

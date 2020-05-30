@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 
 import withApollo from '../../../lib/withApollo';
@@ -20,6 +20,7 @@ interface EnvFormProps {
 }
 
 const EnvForm = ({ name, value, appId }: EnvFormProps) => {
+  const [isEnvVarVisible, setEnvVarIsVisible] = useState(false);
   const [setEnvVarMutation] = useSetEnvVarMutation();
   const formik = useFormik<{ name: string; value: string }>({
     initialValues: {
@@ -49,25 +50,43 @@ const EnvForm = ({ name, value, appId }: EnvFormProps) => {
       <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4">
         <div className="mt-8">
           <input
+            autoComplete="off"
             className="inline w-full  max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
             id="name"
             name="namew"
             placeholder="name"
+            key={formik.values.name}
             value={formik.values.name}
             onChange={formik.handleChange}
           />
         </div>
-        <div className="mt-8">
+        <div className="mt-8 ">
           <input
+            autoComplete="off"
             className="inline w-full max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
             id="value"
             name="value"
             placeholder="Value"
+            key={formik.values.value}
             value={formik.values.value}
             onChange={formik.handleChange}
+            type={isEnvVarVisible ? 'text' : 'password'}
           />
         </div>
         <div className="flex items-end">
+          {}
+          <svg
+            onClick={() => setEnvVarIsVisible(!isEnvVarVisible)}
+            className={
+              isEnvVarVisible
+                ? 'fill-current text-red-500 h-8 w-8 mt-2 -ml-1.5 mr-5 mb-2'
+                : 'fill-current text-gray-900 h-8 w-8 mt-2 -ml-1.5 mr-5 mb-2'
+            }
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+          >
+            <path d="M.2 10a11 11 0 0 1 19.6 0A11 11 0 0 1 .2 10zm9.8 4a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0-2a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" />
+          </svg>
           <button className="inline py-2 px-10 bg-gray-900 hover:bg-blue text-white  font-bold hover:text-white border hover:border-transparent rounded-lg">
             Save
           </button>
