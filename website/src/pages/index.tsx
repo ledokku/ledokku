@@ -5,11 +5,13 @@ import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import styles from './styles.module.css';
+import 'react-responsive-carousel/lib/styles/carousel.min.css'; // requires a loader
+import { Carousel } from 'react-responsive-carousel';
 
 const features = [
   {
     title: <>Web interface</>,
-    imageUrl: 'img/undraw_docusaurus_tree.svg',
+    imageUrl: 'img/undraw_web_developer.svg',
     description: (
       <>
         Ledokku provides a beautiful and intuitive web interface that lets you
@@ -19,7 +21,7 @@ const features = [
   },
   {
     title: <>Deploy your app in no time</>,
-    imageUrl: 'img/undraw_docusaurus_mountain.svg',
+    imageUrl: 'img/undraw_deploy.svg',
     description: (
       <>
         By providing native Github auto deployments, Ledokku shifts away all the
@@ -29,7 +31,7 @@ const features = [
   },
   {
     title: <>Powered by Dokku</>,
-    imageUrl: 'img/undraw_docusaurus_react.svg',
+    imageUrl: 'img/undraw_server.svg',
     description: (
       <>
         With almost 20k+ stars on github, Dokku is one of the most famous
@@ -57,12 +59,12 @@ function Feature({ imageUrl, title, description }) {
 function Home() {
   const context = useDocusaurusContext();
   const { siteConfig = {} } = context;
-  const dashboardImgUrl = useBaseUrl('img/dashboard.png');
 
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />"
+      // TODO ARTURS - fix so it works with site config
+      title={`Ledokku`}
+      description="Blazing fast, cheap deployment platform based on dokku. Find us on github and twitter @ledokku"
     >
       <header className={classnames('hero hero--primary', styles.heroBanner)}>
         <div className="container">
@@ -84,7 +86,27 @@ function Home() {
 
       <main>
         <section className={styles.dashboard}>
-          <img alt="dashboard" src={dashboardImgUrl} height="500" />
+          <div style={{ border: '1px solid #e2e8f0' }}>
+            <Carousel
+              showIndicators={true}
+              showThumbs={false}
+              showStatus={false}
+              width={800}
+            >
+              <div>
+                <img src="img/dashboard1.png" />
+              </div>
+              <div>
+                <img src="img/app1.png" />
+              </div>
+              <div>
+                <img src="img/env1.png" />
+              </div>
+              <div>
+                <img src="img/delete1.png" />
+              </div>
+            </Carousel>
+          </div>
         </section>
 
         {features && features.length && (
