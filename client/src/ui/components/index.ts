@@ -7,3 +7,4 @@ export * from './Page';
 export * from './Paper';
 export * from './TextField';
 export * from './Typography';
+export * from './TabNav';
