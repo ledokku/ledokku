@@ -77,7 +77,7 @@ const Dashboard = () => {
           </div>
           <div className="col-span-5 mt-4">
             <h1 className="text-lg font-bold py-5">Latest activity</h1>
-            <p>TODO</p>
+            <p className="text-cool-gray-400">Coming soon</p>
           </div>
         </main>
       </div>
