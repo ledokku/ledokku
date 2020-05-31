@@ -4,16 +4,19 @@ import { useRouter } from 'next/router';
 
 import { config } from '../config';
 import withApollo from '../lib/withApollo';
-import { useLoginWithGithubMutation } from '../generated/graphql';
+import {
+  useSetupQuery,
+  useLoginWithGithubMutation,
+} from '../generated/graphql';
 import { useAuth } from '../modules/auth/AuthContext';
 
 const Home = () => {
   const router = useRouter();
   const { loggedIn, login } = useAuth();
-  const [
-    loginWithGithubMutation,
-    { data, loading, error },
-  ] = useLoginWithGithubMutation();
+  const { data, loading, error } = useSetupQuery({});
+  const [loginWithGithubMutation] = useLoginWithGithubMutation();
+
+  console.log('data', data);
 
   // On mount we check if there is a github code present
   useEffect(() => {
@@ -54,15 +57,31 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center text-center">
+    <div className="min-h-screen flex flex-col items-center justify-center text-center max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
       <h1 className="text-2xl font-bold">Ledokku</h1>
-      <p className="mt-3">Login to get started.</p>
-      <button
-        className="flex mt-4 px-4 py-3 rounded bg-black hover:bg-gray-900 text-white transition ease-in-out duration-150"
-        onClick={handleLogin}
-      >
-        <GitHub className="mr-4" /> Log in with Github
-      </button>
+      {data?.setup.canConnectSsh && (
+        <React.Fragment>
+          <p className="mt-3">Login to get started.</p>
+          <button
+            className="flex mt-4 px-4 py-3 rounded bg-black hover:bg-gray-900 text-white transition ease-in-out duration-150"
+            onClick={handleLogin}
+          >
+            <GitHub className="mr-4" /> Log in with Github
+          </button>
+        </React.Fragment>
+      )}
+      {data?.setup.canConnectSsh === false && (
+        <React.Fragment>
+          <p className="mt-3">
+            In order to setup the ssh connection, run the following command on
+            your Dokku server.
+          </p>
+          <code className="break-all mt-3 shadow-lg text-gray-100 text-sm font-mono subpixel-antialiased bg-gray-900 p-4 rounded-lg">
+            {`echo "${data.setup.sshPublicKey}" | dokku ssh-keys:add ledokku`}
+          </code>
+          <p className="mt-3">Once you are done, just refresh this page.</p>
+        </React.Fragment>
+      )}
     </div>
   );
 };
