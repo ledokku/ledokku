@@ -9,6 +9,7 @@ import {
   useLoginWithGithubMutation,
 } from '../generated/graphql';
 import { useAuth } from '../modules/auth/AuthContext';
+import { Terminal } from '../ui';
 
 const Home = () => {
   const router = useRouter();
@@ -55,7 +56,7 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center text-center max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex flex-col items-center justify-center text-center max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
       <h1 className="text-2xl font-bold">Ledokku</h1>
       {error && <p className="mt-3 text-red-500">{error.message}</p>}
 
@@ -77,9 +78,9 @@ const Home = () => {
             In order to setup the ssh connection, run the following command on
             your Dokku server.
           </p>
-          <code className="break-all mt-3 shadow-lg text-gray-100 text-sm font-mono subpixel-antialiased bg-gray-900 p-4 rounded-lg">
+          <Terminal className="break-all">
             {`echo "${data.setup.sshPublicKey}" | dokku ssh-keys:add ledokku`}
-          </code>
+          </Terminal>
           <p className="mt-3">Once you are done, just refresh this page.</p>
         </React.Fragment>
       )}
