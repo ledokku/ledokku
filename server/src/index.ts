@@ -8,7 +8,6 @@ import { mutations } from './graphql/mutations';
 import { config } from './config';
 import { app, http, io } from './server';
 import { queries } from './graphql/queries';
-import { prisma } from './prisma';
 
 const typeDefs = gql`
   scalar DateTime
@@ -180,13 +179,3 @@ http.listen({ port: 4000 }, () =>
     `🚀 Server ready at http://localhost:4000${apolloServer.graphqlPath}`
   )
 );
-
-const test = async () => {
-  const appBuildsa = await prisma.appBuild.findMany();
-
-  const apps = await prisma.app.findMany();
-  console.log(apps);
-  console.log(appBuildsa);
-};
-
-test();
