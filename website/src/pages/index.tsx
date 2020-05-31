@@ -63,8 +63,8 @@ function Home() {
 
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />"
+      title={`Blazing fast deployments`}
+      description="Blazing fast, cheap open source deployment platform based on dokku. Find us on github and twitter @ledokku"
     >
       <header className={classnames('hero hero--primary', styles.heroBanner)}>
         <div className="container">
