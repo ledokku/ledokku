@@ -7,6 +7,7 @@ import { useDashboardQuery } from '../generated/graphql';
 import { NodeIcon } from '../ui/icons/NodeIcon';
 import { Protected } from '../modules/auth/Protected';
 import { Header } from '../modules/layout/Header';
+import { TabNav, TabNavLink } from '../ui';
 
 const Dashboard = () => {
   const router = useRouter();
@@ -24,28 +25,20 @@ const Dashboard = () => {
       <Header />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <nav className="flex space-x-5 text-sm leading-5 border-b border-gray-200">
-          <Link href="/dashboard" passHref>
-            <a className="-mb-px border-b border-black text-black py-3 px-0.5">
-              Dashboard
-            </a>
-          </Link>
-          <Link href="/activity" passHref>
-            <a className="text-gray-500 hover:text-black py-3 px-0.5 transition-colors ease-in-out duration-150">
-              Activity
-            </a>
-          </Link>
-          <Link href="/metrics" passHref>
-            <a className="text-gray-500 hover:text-black py-3 px-0.5 transition-colors ease-in-out duration-150">
-              Metrics
-            </a>
-          </Link>
-          <Link href="/settings" passHref>
-            <a className="text-gray-500 hover:text-black py-3 px-0.5 transition-colors ease-in-out duration-150">
-              Settings
-            </a>
-          </Link>
-        </nav>
+        <TabNav>
+          <TabNavLink href="/dashboard" passHref selected>
+            Dashboard
+          </TabNavLink>
+          <TabNavLink href="/activity" passHref>
+            Activity
+          </TabNavLink>
+          <TabNavLink href="/metrics" passHref>
+            Metrics
+          </TabNavLink>
+          <TabNavLink href="/settings" passHref>
+            Settings
+          </TabNavLink>
+        </TabNav>
       </div>
 
       <div className="max-w-5xl mx-auto py-6 px-4 sm:px-6 lg:px-8">

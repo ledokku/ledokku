@@ -12,6 +12,7 @@ import {
 } from '../../../generated/graphql';
 import Link from 'next/link';
 import { useFormik } from 'formik';
+import { TabNav, TabNavLink } from '../../../ui';
 
 interface EnvFormProps {
   name: string;
@@ -140,33 +141,31 @@ const Env = () => {
     <div>
       <Header />
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <nav className="flex space-x-5 text-sm leading-5 border-b border-gray-200">
-          <Link href="/app/[appId]" as={`/app/${app.id}`} passHref>
-            <a className="text-gray-500 hover:text-black py-3 px-0.5 transition-colors ease-in-out duration-150">
-              App
-            </a>
-          </Link>
-          <Link href="/app/[appId]/env" as={`/app/${app.id}/env`} passHref>
-            <a className="-mb-px border-b border-black text-black py-3 px-0.5">
-              Env setup
-            </a>
-          </Link>
-          <Link
+        <TabNav>
+          <TabNavLink href="/app/[appId]" as={`/app/${app.id}`} passHref>
+            App
+          </TabNavLink>
+          <TabNavLink
+            href="/app/[appId]/env"
+            as={`/app/${app.id}/env`}
+            passHref
+            selected
+          >
+            Env setup
+          </TabNavLink>
+          <TabNavLink
             href="/app/[appId]/settings"
             as={`/app/${app.id}/settings`}
             passHref
           >
-            <a className="text-gray-500 hover:text-black py-3 px-0.5 transition-colors ease-in-out duration-150">
-              Settings
-            </a>
-          </Link>
-          <Link href="/dashboard" passHref>
-            <a className="text-gray-500 hover:text-black py-3 px-0.5 transition-colors ease-in-out duration-15">
-              Return to dashboard
-            </a>
-          </Link>
-        </nav>
+            Settings
+          </TabNavLink>
+          <TabNavLink href="/dashboard" passHref>
+            Return to dashboard
+          </TabNavLink>
+        </TabNav>
       </div>
+
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="mt-16 text-lg font-semibold">Set env variables</h1>
         <div className="mt-4 mb-4">
