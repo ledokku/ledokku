@@ -59,12 +59,13 @@ function Feature({ imageUrl, title, description }) {
 function Home() {
   const context = useDocusaurusContext();
   const { siteConfig = {} } = context;
-  const dashboardImgUrl = useBaseUrl('img/dashboard.png');
 
+  console.log(siteConfig.title);
   return (
     <Layout
+      // TODO ARTURS - fix so it works with site config
       title={`Blazing fast deployments`}
-      description="Blazing fast, cheap open source deployment platform based on dokku. Find us on github and twitter @ledokku"
+      description="Blazing fast, cheap deployment platform based on dokku. Find us on github and twitter @ledokku"
     >
       <header className={classnames('hero hero--primary', styles.heroBanner)}>
         <div className="container">
@@ -85,9 +86,6 @@ function Home() {
       </header>
 
       <main>
-        {/* <section className={styles.dashboard}>
-          <img alt="dashboard" src={dashboardImgUrl} height="500" />
-        </section> */}
         <section className={styles.dashboard}>
           <div style={{ border: '1px solid #e2e8f0' }}>
             <Carousel
