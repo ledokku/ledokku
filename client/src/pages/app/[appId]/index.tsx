@@ -7,6 +7,7 @@ import { Protected } from '../../../modules/auth/Protected';
 import { Header } from '../../../modules/layout/Header';
 import { useAppByIdQuery, useAppLogsQuery } from '../../../generated/graphql';
 import Link from 'next/link';
+import { Terminal } from '../../../ui';
 
 const App = () => {
   const router = useRouter();
@@ -126,11 +127,8 @@ const App = () => {
 
           <div className="w-full">
             <h1 className="font-bold text-lg font-bold py-5">Logs</h1>
-            <div
-              className="coding inverse-toggle px-5 pt-4 shadow-lg text-gray-100 text-sm font-mono subpixel-antialiased 
-              bg-gray-900 pb-16 pt-4 rounded-lg leading-normal overflow-hidden h-auto"
-            >
-              <div className="mt-4 flex">
+            <Terminal className="pt-8 pb-16">
+              <div className="flex">
                 <p className="flex-1 typing items-center pl-2">{`App status:`}</p>
                 {!appLogsData && !appLogsLoading ? (
                   <span className="text-yellow-400">
@@ -142,7 +140,7 @@ const App = () => {
                   </span>
                 )}
               </div>
-            </div>
+            </Terminal>
           </div>
           <button className="bg-gray-900 hover:bg-blue text-white  font-bold hover:text-white py-2 px-4 border hover:border-transparent rounded-lg">
             Connect database
