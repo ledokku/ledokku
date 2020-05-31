@@ -94,16 +94,16 @@ function Home() {
               width={800}
             >
               <div>
-                <img src="img/app1.png" />
-              </div>
-              <div>
                 <img src="img/dashboard1.png" />
               </div>
               <div>
-                <img src="img/delete1.png" />
+                <img src="img/app1.png" />
               </div>
               <div>
                 <img src="img/env1.png" />
+              </div>
+              <div>
+                <img src="img/delete1.png" />
               </div>
             </Carousel>
           </div>
