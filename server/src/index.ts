@@ -1,18 +1,23 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import { ApolloServer, gql } from 'apollo-server-express';
+import { DateTimeResolver } from 'graphql-scalars';
 import jsonwebtoken from 'jsonwebtoken';
 import { Resolvers } from './generated/graphql';
 import { mutations } from './graphql/mutations';
 import { config } from './config';
 import { app, http, io } from './server';
 import { queries } from './graphql/queries';
+import { prisma } from './prisma';
 
 const typeDefs = gql`
+  scalar DateTime
+
   type App {
     id: ID!
     name: String!
     githubRepoUrl: String!
+    createdAt: DateTime!
   }
 
   type AppBuild {
@@ -141,7 +146,10 @@ const resolvers: Resolvers<{ userId?: string }> = {
 
 const apolloServer = new ApolloServer({
   typeDefs,
-  resolvers,
+  resolvers: {
+    ...resolvers,
+    DateTime: DateTimeResolver,
+  },
   context: ({ req }) => {
     const token =
       req.headers['authorization'] &&
@@ -172,3 +180,13 @@ http.listen({ port: 4000 }, () =>
     `🚀 Server ready at http://localhost:4000${apolloServer.graphqlPath}`
   )
 );
+
+const test = async () => {
+  const appBuildsa = await prisma.appBuild.findMany();
+
+  const apps = await prisma.app.findMany();
+  console.log(apps);
+  console.log(appBuildsa);
+};
+
+test();

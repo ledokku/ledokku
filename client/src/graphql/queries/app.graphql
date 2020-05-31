@@ -3,5 +3,6 @@ query appById($appId: String!) {
     id
     name
     githubRepoUrl
+    createdAt
   }
 }

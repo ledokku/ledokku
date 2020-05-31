@@ -10,15 +10,19 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** Use JavaScript Date object for date/time fields. */
+  DateTime: any;
   /** The `Upload` scalar type represents a file upload. */
   Upload: any;
 };
+
 
 export type App = {
    __typename?: 'App';
   id: Scalars['ID'];
   name: Scalars['String'];
   githubRepoUrl: Scalars['String'];
+  createdAt: Scalars['DateTime'];
 };
 
 export type AppBuild = {
@@ -277,6 +281,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
+  DateTime: ResolverTypeWrapper<Scalars['DateTime']>,
   App: ResolverTypeWrapper<App>,
   ID: ResolverTypeWrapper<Scalars['ID']>,
   AppBuild: ResolverTypeWrapper<AppBuild>,
@@ -309,6 +314,7 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   String: Scalars['String'],
   Boolean: Scalars['Boolean'],
+  DateTime: Scalars['DateTime'],
   App: App,
   ID: Scalars['ID'],
   AppBuild: AppBuild,
@@ -337,10 +343,15 @@ export type ResolversParentTypes = {
   Upload: Scalars['Upload'],
 };
 
+export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
+  name: 'DateTime'
+}
+
 export type AppResolvers<ContextType = any, ParentType extends ResolversParentTypes['App'] = ResolversParentTypes['App']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   githubRepoUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -441,6 +452,7 @@ export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTyp
 }
 
 export type Resolvers<ContextType = any> = {
+  DateTime?: GraphQLScalarType,
   App?: AppResolvers<ContextType>,
   AppBuild?: AppBuildResolvers<ContextType>,
   Database?: DatabaseResolvers<ContextType>,
