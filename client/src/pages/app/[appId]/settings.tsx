@@ -12,6 +12,7 @@ import {
 } from '../../../generated/graphql';
 import Link from 'next/link';
 import { useFormik } from 'formik';
+import { TabNav, TabNavLink } from '../../../ui';
 
 const Settings = () => {
   const router = useRouter();
@@ -90,33 +91,31 @@ const Settings = () => {
     <div>
       <Header />
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <nav className="flex space-x-5 text-sm leading-5 border-b border-gray-200">
-          <Link href="/app/[appId]" as={`/app/${app.id}`} passHref>
-            <a className="text-gray-500 hover:text-black py-3 px-0.5 transition-colors ease-in-out duration-150">
-              App
-            </a>
-          </Link>
-          <Link href="/app/[appId]/env" as={`/app/${app.id}/env`} passHref>
-            <a className="text-gray-500 hover:text-black py-3 px-0.5 transition-colors ease-in-out duration-15">
-              Env setup
-            </a>
-          </Link>
-          <Link
+        <TabNav>
+          <TabNavLink href="/app/[appId]" as={`/app/${app.id}`} passHref>
+            App
+          </TabNavLink>
+          <TabNavLink
+            href="/app/[appId]/env"
+            as={`/app/${app.id}/env`}
+            passHref
+          >
+            Env setup
+          </TabNavLink>
+          <TabNavLink
             href="/app/[appId]/settings"
             as={`/app/${app.id}/settings`}
             passHref
+            selected
           >
-            <a className="-mb-px border-b border-black text-black py-3 px-0.5">
-              Settings
-            </a>
-          </Link>
-          <Link href="/dashboard" passHref>
-            <a className="text-gray-500 hover:text-black py-3 px-0.5 transition-colors ease-in-out duration-15">
-              Return to dashboard
-            </a>
-          </Link>
-        </nav>
+            Settings
+          </TabNavLink>
+          <TabNavLink href="/dashboard" passHref>
+            Return to dashboard
+          </TabNavLink>
+        </TabNav>
       </div>
+
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 gap-4 mt-10">
           <h1 className="text-lg font-bold py-5">App settings</h1>

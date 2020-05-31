@@ -7,7 +7,7 @@ import { Protected } from '../../../modules/auth/Protected';
 import { Header } from '../../../modules/layout/Header';
 import { useAppByIdQuery, useAppLogsQuery } from '../../../generated/graphql';
 import Link from 'next/link';
-import { Terminal } from '../../../ui';
+import { TabNav, TabNavLink, Terminal } from '../../../ui';
 
 const App = () => {
   const router = useRouter();
@@ -60,33 +60,35 @@ const App = () => {
       <Header />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <nav className="flex space-x-5 text-sm leading-5 border-b border-gray-200">
-          <Link href="/app/[appId]" as={`/app/${app.id}`} passHref>
-            <a className="-mb-px border-b border-black text-black py-3 px-0.5">
-              App
-            </a>
-          </Link>
-          <Link href="/app/[appId]/env" as={`/app/${app.id}/env`} passHref>
-            <a className="text-gray-500 hover:text-black py-3 px-0.5 transition-colors ease-in-out duration-150">
-              Env setup
-            </a>
-          </Link>
-          <Link
+        <TabNav>
+          <TabNavLink
+            href="/app/[appId]"
+            as={`/app/${app.id}`}
+            passHref
+            selected
+          >
+            App
+          </TabNavLink>
+          <TabNavLink
+            href="/app/[appId]/env"
+            as={`/app/${app.id}/env`}
+            passHref
+          >
+            Env setup
+          </TabNavLink>
+          <TabNavLink
             href="/app/[appId]/settings"
             as={`/app/${app.id}/settings`}
             passHref
           >
-            <a className="text-gray-500 hover:text-black py-3 px-0.5 transition-colors ease-in-out duration-150">
-              Settings
-            </a>
-          </Link>
-          <Link href="/dashboard" passHref>
-            <a className="text-gray-500 hover:text-black py-3 px-0.5 transition-colors ease-in-out duration-15">
-              Return to dashboard
-            </a>
-          </Link>
-        </nav>
+            Settings
+          </TabNavLink>
+          <TabNavLink href="/dashboard" passHref>
+            Return to dashboard
+          </TabNavLink>
+        </TabNav>
       </div>
+
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4 mt-10">
           <div>
