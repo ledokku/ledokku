@@ -16,8 +16,6 @@ const Home = () => {
   const { data, loading, error } = useSetupQuery({});
   const [loginWithGithubMutation] = useLoginWithGithubMutation();
 
-  console.log('data', data);
-
   // On mount we check if there is a github code present
   useEffect(() => {
     const codeToLogin = async () => {
@@ -59,7 +57,9 @@ const Home = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center text-center max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
       <h1 className="text-2xl font-bold">Ledokku</h1>
-      {data?.setup.canConnectSsh && (
+      {error && <p className="mt-3 text-red-500">{error.message}</p>}
+
+      {data?.setup.canConnectSsh === true && (
         <React.Fragment>
           <p className="mt-3">Login to get started.</p>
           <button
@@ -70,6 +70,7 @@ const Home = () => {
           </button>
         </React.Fragment>
       )}
+
       {data?.setup.canConnectSsh === false && (
         <React.Fragment>
           <p className="mt-3">
