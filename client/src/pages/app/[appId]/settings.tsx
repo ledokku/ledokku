@@ -129,6 +129,7 @@ const Settings = () => {
           <form onSubmit={formik.handleSubmit}>
             <div className="mt-4">
               <input
+                autoComplete="off"
                 className="block w-full max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
                 id="appNme"
                 name="appName"

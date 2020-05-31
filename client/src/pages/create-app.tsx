@@ -56,6 +56,7 @@ const CreateApp = () => {
           <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4">
             <div className="mt-8">
               <input
+                autoComplete="off"
                 className="inline w-full  max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
                 id="name"
                 name="name"
