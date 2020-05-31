@@ -60,7 +60,6 @@ function Home() {
   const context = useDocusaurusContext();
   const { siteConfig = {} } = context;
 
-  console.log(siteConfig.title);
   return (
     <Layout
       // TODO ARTURS - fix so it works with site config
