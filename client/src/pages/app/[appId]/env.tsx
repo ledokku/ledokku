@@ -142,11 +142,7 @@ const Env = () => {
       <Header />
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <TabNav>
-          <TabNavLink
-            href="/app/[appId]"
-            as={`/app/${app.id}`}
-            passHref
-          >
+          <TabNavLink href="/app/[appId]" as={`/app/${app.id}`} passHref>
             App
           </TabNavLink>
           <TabNavLink
