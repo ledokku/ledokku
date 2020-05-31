@@ -100,6 +100,12 @@ export type EnvVarsResult = {
   envVars: Array<EnvVar>;
 };
 
+export type SetupResult = {
+   __typename?: 'SetupResult';
+  canConnectSsh: Scalars['Boolean'];
+  sshPublicKey: Scalars['String'];
+};
+
 export type CreateAppInput = {
   name: Scalars['String'];
   gitUrl: Scalars['String'];
@@ -127,6 +133,7 @@ export type DestroyAppInput = {
 
 export type Query = {
    __typename?: 'Query';
+  setup: SetupResult;
   apps: Array<App>;
   app?: Maybe<App>;
   databases: Array<Database>;
@@ -286,6 +293,7 @@ export type ResolversTypes = {
   AppLogsResult: ResolverTypeWrapper<AppLogsResult>,
   EnvVar: ResolverTypeWrapper<EnvVar>,
   EnvVarsResult: ResolverTypeWrapper<EnvVarsResult>,
+  SetupResult: ResolverTypeWrapper<SetupResult>,
   CreateAppInput: CreateAppInput,
   CreateDatabaseInput: CreateDatabaseInput,
   SetEnvVarInput: SetEnvVarInput,
@@ -317,6 +325,7 @@ export type ResolversParentTypes = {
   AppLogsResult: AppLogsResult,
   EnvVar: EnvVar,
   EnvVarsResult: EnvVarsResult,
+  SetupResult: SetupResult,
   CreateAppInput: CreateAppInput,
   CreateDatabaseInput: CreateDatabaseInput,
   SetEnvVarInput: SetEnvVarInput,
@@ -402,7 +411,14 @@ export type EnvVarsResultResolvers<ContextType = any, ParentType extends Resolve
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
+export type SetupResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['SetupResult'] = ResolversParentTypes['SetupResult']> = {
+  canConnectSsh?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  sshPublicKey?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  setup?: Resolver<ResolversTypes['SetupResult'], ParentType, ContextType>,
   apps?: Resolver<Array<ResolversTypes['App']>, ParentType, ContextType>,
   app?: Resolver<Maybe<ResolversTypes['App']>, ParentType, ContextType, RequireFields<QueryAppArgs, 'appId'>>,
   databases?: Resolver<Array<ResolversTypes['Database']>, ParentType, ContextType>,
@@ -438,6 +454,7 @@ export type Resolvers<ContextType = any> = {
   AppLogsResult?: AppLogsResultResolvers<ContextType>,
   EnvVar?: EnvVarResolvers<ContextType>,
   EnvVarsResult?: EnvVarsResultResolvers<ContextType>,
+  SetupResult?: SetupResultResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
   Upload?: GraphQLScalarType,

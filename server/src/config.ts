@@ -97,4 +97,5 @@ export const config = {
   dokkuSshHost: process.env.DOKKU_SSH_HOST,
   dokkuSshPort: +process.env.DOKKU_SSH_PORT,
   privateKey,
+  sshKeyPath,
 };

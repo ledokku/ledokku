@@ -84,6 +84,11 @@ const typeDefs = gql`
     envVars: [EnvVar!]!
   }
 
+  type SetupResult {
+    canConnectSsh: Boolean!
+    sshPublicKey: String!
+  }
+
   input CreateAppInput {
     name: String!
     gitUrl: String!
@@ -110,6 +115,7 @@ const typeDefs = gql`
   }
 
   type Query {
+    setup: SetupResult!
     apps: [App!]!
     app(appId: String!): App
     databases: [Database!]!

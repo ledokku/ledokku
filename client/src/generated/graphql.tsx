@@ -101,6 +101,12 @@ export type EnvVarsResult = {
   envVars: Array<EnvVar>;
 };
 
+export type SetupResult = {
+   __typename?: 'SetupResult';
+  canConnectSsh: Scalars['Boolean'];
+  sshPublicKey: Scalars['String'];
+};
+
 export type CreateAppInput = {
   name: Scalars['String'];
   gitUrl: Scalars['String'];
@@ -128,6 +134,7 @@ export type DestroyAppInput = {
 
 export type Query = {
    __typename?: 'Query';
+  setup: SetupResult;
   apps: Array<App>;
   app?: Maybe<App>;
   databases: Array<Database>;
@@ -323,6 +330,17 @@ export type EnvVarsQuery = (
       { __typename?: 'EnvVar' }
       & Pick<EnvVar, 'key' | 'value'>
     )> }
+  ) }
+);
+
+export type SetupQueryVariables = {};
+
+
+export type SetupQuery = (
+  { __typename?: 'Query' }
+  & { setup: (
+    { __typename?: 'SetupResult' }
+    & Pick<SetupResult, 'canConnectSsh' | 'sshPublicKey'>
   ) }
 );
 
@@ -638,3 +656,36 @@ export function useEnvVarsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHook
 export type EnvVarsQueryHookResult = ReturnType<typeof useEnvVarsQuery>;
 export type EnvVarsLazyQueryHookResult = ReturnType<typeof useEnvVarsLazyQuery>;
 export type EnvVarsQueryResult = ApolloReactCommon.QueryResult<EnvVarsQuery, EnvVarsQueryVariables>;
+export const SetupDocument = gql`
+    query setup {
+  setup {
+    canConnectSsh
+    sshPublicKey
+  }
+}
+    `;
+
+/**
+ * __useSetupQuery__
+ *
+ * To run a query within a React component, call `useSetupQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSetupQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSetupQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSetupQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SetupQuery, SetupQueryVariables>) {
+        return ApolloReactHooks.useQuery<SetupQuery, SetupQueryVariables>(SetupDocument, baseOptions);
+      }
+export function useSetupLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SetupQuery, SetupQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<SetupQuery, SetupQueryVariables>(SetupDocument, baseOptions);
+        }
+export type SetupQueryHookResult = ReturnType<typeof useSetupQuery>;
+export type SetupLazyQueryHookResult = ReturnType<typeof useSetupLazyQuery>;
+export type SetupQueryResult = ApolloReactCommon.QueryResult<SetupQuery, SetupQueryVariables>;

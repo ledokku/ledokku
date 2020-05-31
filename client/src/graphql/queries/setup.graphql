@@ -1,0 +1,6 @@
+query setup {
+  setup {
+    canConnectSsh
+    sshPublicKey
+  }
+}
