@@ -1,6 +1,9 @@
 # Ledokku - deploy your apps within seconds
 
+### Dashboard preview
 ![Dashboard](/images/Dashboard1.png)
+
+### App view preview
 ![App](/images/App1.png)
 
 Ledokku is a beautiful UI powered by [dokku](http://dokku.viewdocs.io/dokku/)
