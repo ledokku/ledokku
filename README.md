@@ -1,6 +1,10 @@
 # Ledokku - deploy your apps within seconds
 
-![Dashboard](/images/Dashboard.png)
+### Dashboard preview
+![Dashboard](/images/Dashboard1.png)
+
+### App info preview
+![App](/images/App1.png)
 
 Ledokku is a beautiful UI powered by [dokku](http://dokku.viewdocs.io/dokku/)
 
@@ -45,7 +49,6 @@ To get initial feedback we are working the MVP state where current Dokku users w
 - TypeScript 💙
 - NextJS 🖤
 - GithubAPI 🐱
-- DIgitalOceanAPI 🌊
 
 ## Contributing
 
