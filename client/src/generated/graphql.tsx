@@ -12,7 +12,7 @@ export type Scalars = {
   Int: number;
   Float: number;
   /** Use JavaScript Date object for date/time fields. */
-  DateTime: Date;
+  DateTime: String;
   /** The `Upload` scalar type represents a file upload. */
   Upload: any;
 };
