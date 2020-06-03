@@ -13,3 +13,5 @@ generates:
       withHOC: false
       withHooks: true
       enumsAsTypes: true
+      scalars:
+        DateTime: string
