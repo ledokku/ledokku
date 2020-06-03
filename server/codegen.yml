@@ -10,4 +10,4 @@ generates:
     config:
       enumsAsTypes: true
       scalars:
-        DateTime: string
+        DateTime: Date
