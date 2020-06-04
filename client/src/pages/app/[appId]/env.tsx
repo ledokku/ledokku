@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useRouter } from 'next/router';
 
 import withApollo from '../../../lib/withApollo';
@@ -9,6 +9,7 @@ import {
   useAppByIdQuery,
   useEnvVarsQuery,
   useSetEnvVarMutation,
+  EnvVarsDocument,
 } from '../../../generated/graphql';
 import Link from 'next/link';
 import { useFormik } from 'formik';
@@ -18,9 +19,11 @@ interface EnvFormProps {
   name: string;
   value: string;
   appId: string;
+  isNewVar?: boolean;
 }
 
-const EnvForm = ({ name, value, appId }: EnvFormProps) => {
+const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
+  const router = useRouter();
   const [isEnvVarVisible, setEnvVarIsVisible] = useState(false);
   const [setEnvVarMutation] = useSetEnvVarMutation();
   const formik = useFormik<{ name: string; value: string }>({
@@ -34,6 +37,11 @@ const EnvForm = ({ name, value, appId }: EnvFormProps) => {
         const data = await setEnvVarMutation({
           variables: { key: values.name, value: values.value, appId },
         });
+
+        if (isNewVar) {
+          router.push(`/app/${appId}/env`);
+        }
+
         // TODO give feedback about setting success
         console.log(data);
       } catch (error) {
@@ -56,7 +64,7 @@ const EnvForm = ({ name, value, appId }: EnvFormProps) => {
             id="name"
             name="name"
             placeholder="name"
-            key={formik.values.name}
+            key={name}
             value={formik.values.name}
             onChange={formik.handleChange}
           />
@@ -68,7 +76,7 @@ const EnvForm = ({ name, value, appId }: EnvFormProps) => {
             id="value"
             name="value"
             placeholder="Value"
-            key={formik.values.value}
+            key={value}
             value={formik.values.value}
             onChange={formik.handleChange}
             type={isEnvVarVisible ? 'text' : 'password'}
@@ -178,17 +186,27 @@ const Env = () => {
         {!envVarLoading &&
           !envVarError &&
           envVarData.envVars &&
-          envVarData.envVars.envVars &&
-          envVarData.envVars.envVars.map((envVar) => {
-            return (
+          envVarData.envVars.envVars && (
+            <React.Fragment>
+              {envVarData.envVars.envVars.map((envVar) => {
+                return (
+                  <EnvForm
+                    key={envVar.key}
+                    name={envVar.key}
+                    value={envVar.value}
+                    appId={appId}
+                  />
+                );
+              })}
               <EnvForm
-                key={envVar.key}
-                name={envVar.key}
-                value={envVar.value}
+                key="newVar"
+                name=""
+                value=""
                 appId={appId}
+                isNewVar={true}
               />
-            );
-          })}
+            </React.Fragment>
+          )}
       </div>
     </div>
   );
