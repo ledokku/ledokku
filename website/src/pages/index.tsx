@@ -64,7 +64,7 @@ function Home() {
     <Layout
       // TODO ARTURS - fix so it works with site config
       title={`Ledokku`}
-      description="Blazing fast, cheap deployment platform based on dokku. Find us on github and twitter @ledokku"
+      description="Blazing fast and super cheap deployment platform based on dokku. Find us on github and twitter @ledokku"
     >
       <header className={classnames('hero hero--primary', styles.heroBanner)}>
         <div className="container">
