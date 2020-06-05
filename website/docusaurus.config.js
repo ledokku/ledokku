@@ -62,6 +62,10 @@ module.exports = {
             },
           ],
         },
+        {
+          title: 'Hosted on',
+          items: [{ label: 'Netlify', href: 'https://www.netlify.com/' }],
+        },
       ],
       copyright: `Copyright © ${new Date().getFullYear()} Ledokku.`,
     },

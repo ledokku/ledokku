@@ -50,7 +50,8 @@ To get initial feedback we are working the MVP state where current Dokku users w
 - NextJS 🖤
 - GithubAPI 🐱
 - Tailwind CSS 🌪
-- Docusaurus 🦖
+- Docusaurus 🦖 
+- Docs hosted on [Netlify](https://www.netlify.com/)
 
 ## Contributing
 
