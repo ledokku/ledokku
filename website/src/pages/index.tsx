@@ -86,7 +86,7 @@ function Home() {
 
       <main>
         <section className={styles.dashboard}>
-          <div style={{ border: '1px solid #e2e8f0' }}>
+          <div style={{ border: '1px solid #e2e8f0', maxWidth: 800 }}>
             <Carousel
               showIndicators={true}
               showThumbs={false}
