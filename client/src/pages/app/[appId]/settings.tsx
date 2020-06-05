@@ -77,7 +77,7 @@ const Settings = () => {
             },
           ],
         });
-        // improve this solution
+
         router.push('/dashboard');
       } catch (error) {
         // TODO catch errors
