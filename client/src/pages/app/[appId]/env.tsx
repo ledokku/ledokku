@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useRouter } from 'next/router';
 
 import withApollo from '../../../lib/withApollo';
@@ -9,6 +9,7 @@ import {
   useAppByIdQuery,
   useEnvVarsQuery,
   useSetEnvVarMutation,
+  EnvVarsDocument,
 } from '../../../generated/graphql';
 import Link from 'next/link';
 import { useFormik } from 'formik';
@@ -18,9 +19,11 @@ interface EnvFormProps {
   name: string;
   value: string;
   appId: string;
+  isNewVar?: boolean;
 }
 
-const EnvForm = ({ name, value, appId }: EnvFormProps) => {
+const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
+  const router = useRouter();
   const [isEnvVarVisible, setEnvVarIsVisible] = useState(false);
   const [setEnvVarMutation] = useSetEnvVarMutation();
   const formik = useFormik<{ name: string; value: string }>({
@@ -33,7 +36,13 @@ const EnvForm = ({ name, value, appId }: EnvFormProps) => {
       try {
         const data = await setEnvVarMutation({
           variables: { key: values.name, value: values.value, appId },
+          refetchQueries: [{ query: EnvVarsDocument, variables: { appId } }],
         });
+
+        if (isNewVar) {
+          router.push(`/app/${appId}/env`);
+        }
+
         // TODO give feedback about setting success
         console.log(data);
       } catch (error) {
@@ -53,10 +62,10 @@ const EnvForm = ({ name, value, appId }: EnvFormProps) => {
           <input
             autoComplete="off"
             className="inline w-full  max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
-            id="name"
+            id={isNewVar ? 'newVarName' : name}
             name="name"
-            placeholder="name"
-            key={formik.values.name}
+            placeholder="Name"
+            key={name}
             value={formik.values.name}
             onChange={formik.handleChange}
           />
@@ -65,10 +74,10 @@ const EnvForm = ({ name, value, appId }: EnvFormProps) => {
           <input
             autoComplete="off"
             className="inline w-full max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
-            id="value"
+            id={isNewVar ? 'newVarValue' : value}
             name="value"
             placeholder="Value"
-            key={formik.values.value}
+            key={value}
             value={formik.values.value}
             onChange={formik.handleChange}
             type={isEnvVarVisible ? 'text' : 'password'}
@@ -88,8 +97,11 @@ const EnvForm = ({ name, value, appId }: EnvFormProps) => {
           >
             <path d="M.2 10a11 11 0 0 1 19.6 0A11 11 0 0 1 .2 10zm9.8 4a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0-2a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" />
           </svg>
-          <button className="inline py-2 px-10 bg-gray-900 hover:bg-blue text-white  font-bold hover:text-white border hover:border-transparent rounded-lg">
-            Save
+          <button
+            type="submit"
+            className="inline py-2 px-10 bg-gray-900 hover:bg-blue text-white  font-bold hover:text-white border hover:border-transparent rounded-lg"
+          >
+            {isNewVar ? 'Add' : 'Save'}
           </button>
         </div>
       </div>
@@ -178,17 +190,27 @@ const Env = () => {
         {!envVarLoading &&
           !envVarError &&
           envVarData.envVars &&
-          envVarData.envVars.envVars &&
-          envVarData.envVars.envVars.map((envVar) => {
-            return (
+          envVarData.envVars.envVars && (
+            <React.Fragment>
+              {envVarData.envVars.envVars.map((envVar) => {
+                return (
+                  <EnvForm
+                    key={envVar.key}
+                    name={envVar.key}
+                    value={envVar.value}
+                    appId={appId}
+                  />
+                );
+              })}
               <EnvForm
-                key={envVar.key}
-                name={envVar.key}
-                value={envVar.value}
+                key="newVar"
+                name=""
+                value=""
                 appId={appId}
+                isNewVar={true}
               />
-            );
-          })}
+            </React.Fragment>
+          )}
       </div>
     </div>
   );
