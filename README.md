@@ -49,6 +49,8 @@ To get initial feedback we are working the MVP state where current Dokku users w
 - TypeScript 💙
 - NextJS 🖤
 - GithubAPI 🐱
+- Tailwind CSS 🌪
+- Docusaurus 🦖
 
 ## Contributing
 
@@ -56,6 +58,9 @@ Read our [contributing guide](CONTRIBUTING.md) to see how to locally setup the r
 
 ## Made by
 
-[Ondrej](https://github.com/bartaxyz),
 [Leo](https://github.com/pradel),
 [Arturs](https://github.com/Akirtovskis)
+
+## License
+
+Ledokku is licensed under the [MIT license](https://github.com/ledokku/ledokku/blob/master/LICENSE).
