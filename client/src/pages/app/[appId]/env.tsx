@@ -61,9 +61,9 @@ const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
           <input
             autoComplete="off"
             className="inline w-full  max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
-            id="name"
+            id={isNewVar ? 'newVarName' : name}
             name="name"
-            placeholder="name"
+            placeholder="Name"
             key={name}
             value={formik.values.name}
             onChange={formik.handleChange}
@@ -73,7 +73,7 @@ const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
           <input
             autoComplete="off"
             className="inline w-full max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
-            id="value"
+            id={isNewVar ? 'newVarValue' : value}
             name="value"
             placeholder="Value"
             key={value}
