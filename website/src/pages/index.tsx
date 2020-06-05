@@ -91,19 +91,19 @@ function Home() {
               showIndicators={true}
               showThumbs={false}
               showStatus={false}
-              width={800}
+              width={'auto'}
             >
               <div>
-                <img src="img/dashboard1.png" />
+                <img alt="Dashboard view" src="img/dashboard1.png" />
               </div>
               <div>
-                <img src="img/app1.png" />
+                <img alt="App view" src="img/app1.png" />
               </div>
               <div>
-                <img src="img/env1.png" />
+                <img alt="Environment variables view" src="img/env1.png" />
               </div>
               <div>
-                <img src="img/delete1.png" />
+                <img alt="Delete app view" src="img/delete1.png" />
               </div>
             </Carousel>
           </div>
