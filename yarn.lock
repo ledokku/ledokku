@@ -6912,6 +6912,11 @@ graphql-request@^1.5.0:
   dependencies:
     cross-fetch "2.2.2"
 
+graphql-scalars@1.1.5:
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/graphql-scalars/-/graphql-scalars-1.1.5.tgz#9d0485e4f67a4120400dcbfa83797fc74f2f19af"
+  integrity sha512-2Kbq8VgreOB62eKUafwp7qvyvDIS3wmw+JNzyXydQS6I986/s4ceJZs6Hc7Ex/9zBrhFsUlVIEl0a6oUqGCU/Q==
+
 graphql-subscriptions@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/graphql-subscriptions/-/graphql-subscriptions-1.1.0.tgz#5f2fa4233eda44cf7570526adfcf3c16937aef11"

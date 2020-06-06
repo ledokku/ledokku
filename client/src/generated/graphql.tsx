@@ -11,15 +11,19 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** Use JavaScript Date object for date/time fields. */
+  DateTime: string;
   /** The `Upload` scalar type represents a file upload. */
   Upload: any;
 };
+
 
 export type App = {
    __typename?: 'App';
   id: Scalars['ID'];
   name: Scalars['String'];
   githubRepoUrl: Scalars['String'];
+  createdAt: Scalars['DateTime'];
 };
 
 export type AppBuild = {
@@ -286,7 +290,7 @@ export type AppByIdQuery = (
   { __typename?: 'Query' }
   & { app?: Maybe<(
     { __typename?: 'App' }
-    & Pick<App, 'id' | 'name' | 'githubRepoUrl'>
+    & Pick<App, 'id' | 'name' | 'githubRepoUrl' | 'createdAt'>
   )> }
 );
 
@@ -520,6 +524,7 @@ export const AppByIdDocument = gql`
     id
     name
     githubRepoUrl
+    createdAt
   }
 }
     `;

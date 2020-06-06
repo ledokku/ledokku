@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import { ApolloServer, gql } from 'apollo-server-express';
+import { DateTimeResolver } from 'graphql-scalars';
 import jsonwebtoken from 'jsonwebtoken';
 import { Resolvers } from './generated/graphql';
 import { mutations } from './graphql/mutations';
@@ -9,10 +10,13 @@ import { app, http, io } from './server';
 import { queries } from './graphql/queries';
 
 const typeDefs = gql`
+  scalar DateTime
+
   type App {
     id: ID!
     name: String!
     githubRepoUrl: String!
+    createdAt: DateTime!
   }
 
   type AppBuild {
@@ -141,7 +145,10 @@ const resolvers: Resolvers<{ userId?: string }> = {
 
 const apolloServer = new ApolloServer({
   typeDefs,
-  resolvers,
+  resolvers: {
+    ...resolvers,
+    DateTime: DateTimeResolver,
+  },
   context: ({ req }) => {
     const token =
       req.headers['authorization'] &&
