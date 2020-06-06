@@ -277,6 +277,20 @@ export type SetEnvVarMutation = (
   ) }
 );
 
+export type UnsetEnvVarMutationVariables = {
+  key: Scalars['String'];
+  appId: Scalars['String'];
+};
+
+
+export type UnsetEnvVarMutation = (
+  { __typename?: 'Mutation' }
+  & { unsetEnvVar: (
+    { __typename?: 'UnsetEnvVarResult' }
+    & Pick<UnsetEnvVarResult, 'result'>
+  ) }
+);
+
 export type AppByIdQueryVariables = {
   appId: Scalars['String'];
 };
@@ -514,6 +528,39 @@ export function useSetEnvVarMutation(baseOptions?: ApolloReactHooks.MutationHook
 export type SetEnvVarMutationHookResult = ReturnType<typeof useSetEnvVarMutation>;
 export type SetEnvVarMutationResult = ApolloReactCommon.MutationResult<SetEnvVarMutation>;
 export type SetEnvVarMutationOptions = ApolloReactCommon.BaseMutationOptions<SetEnvVarMutation, SetEnvVarMutationVariables>;
+export const UnsetEnvVarDocument = gql`
+    mutation unsetEnvVar($key: String!, $appId: String!) {
+  unsetEnvVar(input: {key: $key, appId: $appId}) {
+    result
+  }
+}
+    `;
+export type UnsetEnvVarMutationFn = ApolloReactCommon.MutationFunction<UnsetEnvVarMutation, UnsetEnvVarMutationVariables>;
+
+/**
+ * __useUnsetEnvVarMutation__
+ *
+ * To run a mutation, you first call `useUnsetEnvVarMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUnsetEnvVarMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [unsetEnvVarMutation, { data, loading, error }] = useUnsetEnvVarMutation({
+ *   variables: {
+ *      key: // value for 'key'
+ *      appId: // value for 'appId'
+ *   },
+ * });
+ */
+export function useUnsetEnvVarMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UnsetEnvVarMutation, UnsetEnvVarMutationVariables>) {
+        return ApolloReactHooks.useMutation<UnsetEnvVarMutation, UnsetEnvVarMutationVariables>(UnsetEnvVarDocument, baseOptions);
+      }
+export type UnsetEnvVarMutationHookResult = ReturnType<typeof useUnsetEnvVarMutation>;
+export type UnsetEnvVarMutationResult = ApolloReactCommon.MutationResult<UnsetEnvVarMutation>;
+export type UnsetEnvVarMutationOptions = ApolloReactCommon.BaseMutationOptions<UnsetEnvVarMutation, UnsetEnvVarMutationVariables>;
 export const AppByIdDocument = gql`
     query appById($appId: String!) {
   app(appId: $appId) {

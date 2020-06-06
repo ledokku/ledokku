@@ -9,6 +9,7 @@ import {
   useAppByIdQuery,
   useEnvVarsQuery,
   useSetEnvVarMutation,
+  useUnsetEnvVarMutation,
   EnvVarsDocument,
 } from '../../../generated/graphql';
 import Link from 'next/link';
@@ -26,12 +27,29 @@ const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
   const router = useRouter();
   const [isEnvVarVisible, setEnvVarIsVisible] = useState(false);
   const [setEnvVarMutation] = useSetEnvVarMutation();
+  const [unsetEnvVarMutation] = useUnsetEnvVarMutation();
+
+  const handleDeleteEnvVar = async () => {
+    try {
+      const data = await unsetEnvVarMutation({
+        variables: { key: name, appId },
+        refetchQueries: [{ query: EnvVarsDocument, variables: { appId } }],
+      });
+      console.log(data);
+      router.push(`/app/${appId}/env`);
+    } catch (error) {
+      // TODO catch errors
+      console.log(error);
+      alert(error);
+    }
+  };
+
   const formik = useFormik<{ name: string; value: string }>({
     initialValues: {
       name,
       value,
     },
-    onSubmit: async (values) => {
+    onSubmit: async (values, event) => {
       // TODO validate values
       try {
         const data = await setEnvVarMutation({
@@ -103,6 +121,14 @@ const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
           >
             {isNewVar ? 'Add' : 'Save'}
           </button>
+          {!isNewVar && (
+            <button
+              onClick={handleDeleteEnvVar}
+              className="inline ml-4 py-2 px-10 bg-red-500 hover:bg-blue text-white  font-bold hover:text-white border hover:border-transparent rounded-lg"
+            >
+              Delete
+            </button>
+          )}
         </div>
       </div>
     </form>
