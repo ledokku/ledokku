@@ -14,8 +14,8 @@
   "dependencies": {
     "@octokit/rest": "17.9.2",
     "@prisma/client": "2.0.0-beta.5",
-    "apollo-server": "2.14.2",
-    "apollo-server-express": "2.14.2",
+    "apollo-server": "2.13.1",
+    "apollo-server-express": "2.13.1",
     "bullmq": "1.8.7",
     "debug": "4.1.1",
     "dotenv": "8.2.0",
