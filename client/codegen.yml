@@ -14,4 +14,4 @@ generates:
       withHooks: true
       enumsAsTypes: true
       scalars:
-        DateTime: String
+        DateTime: string
