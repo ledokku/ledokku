@@ -71,64 +71,71 @@ const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
   return (
     //TODO Handle visual feedback on changing env
     //TODO Provide infos about env vars
-    <form onSubmit={formik.handleSubmit} className="mt-2">
-      <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4">
-        <div className="mt-8">
-          <input
-            autoComplete="off"
-            className="inline w-full  max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
-            id={isNewVar ? 'newVarName' : name}
-            name="name"
-            placeholder="Name"
-            key={name}
-            value={formik.values.name}
-            onChange={formik.handleChange}
-          />
-        </div>
-        <div className="mt-8 ">
-          <input
-            autoComplete="off"
-            className="inline w-full max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
-            id={isNewVar ? 'newVarValue' : value}
-            name="value"
-            placeholder="Value"
-            key={value}
-            value={formik.values.value}
-            onChange={formik.handleChange}
-            type={isEnvVarVisible ? 'text' : 'password'}
-          />
-        </div>
-        <div className="flex items-end">
-          {}
-          <svg
-            onClick={() => setEnvVarIsVisible(!isEnvVarVisible)}
-            className={
-              isEnvVarVisible
-                ? 'fill-current text-red-500 h-8 w-8 mt-2 -ml-1.5 mr-5 mb-2'
-                : 'fill-current text-gray-900 h-8 w-8 mt-2 -ml-1.5 mr-5 mb-2'
-            }
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-          >
-            <path d="M.2 10a11 11 0 0 1 19.6 0A11 11 0 0 1 .2 10zm9.8 4a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0-2a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" />
-          </svg>
-          <button
-            type="submit"
-            className="inline py-2 px-10 bg-gray-900 hover:bg-blue text-white  font-bold hover:text-white border hover:border-transparent rounded-lg"
-          >
-            {isNewVar ? 'Add' : 'Save'}
-          </button>
-          {!isNewVar && (
+
+    <React.Fragment>
+      <div className="flex">
+        <form onSubmit={formik.handleSubmit} className="mt-2 md:w-3/4">
+          <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4">
+            <div className="mt-8">
+              <input
+                autoComplete="off"
+                className="inline w-full  max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
+                id={isNewVar ? 'newVarName' : name}
+                name="name"
+                placeholder="Name"
+                key={name}
+                value={formik.values.name}
+                onChange={formik.handleChange}
+              />
+            </div>
+            <div className="mt-8 ">
+              <input
+                autoComplete="off"
+                className="inline w-full max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
+                id={isNewVar ? 'newVarValue' : value}
+                name="value"
+                placeholder="Value"
+                key={value}
+                value={formik.values.value}
+                onChange={formik.handleChange}
+                type={isEnvVarVisible ? 'text' : 'password'}
+              />
+            </div>
+            <div className="flex items-end">
+              {}
+              <svg
+                onClick={() => setEnvVarIsVisible(!isEnvVarVisible)}
+                className={
+                  isEnvVarVisible
+                    ? 'fill-current text-red-500 h-8 w-8 mt-2 -ml-1.5 mr-5 mb-2'
+                    : 'fill-current text-gray-900 h-8 w-8 mt-2 -ml-1.5 mr-5 mb-2'
+                }
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+              >
+                <path d="M.2 10a11 11 0 0 1 19.6 0A11 11 0 0 1 .2 10zm9.8 4a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0-2a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" />
+              </svg>
+              <button
+                type="submit"
+                className="inline py-2 px-10 bg-gray-900 hover:bg-blue text-white  font-bold hover:text-white border hover:border-transparent rounded-lg"
+              >
+                {isNewVar ? 'Add' : 'Save'}
+              </button>
+            </div>
+          </div>
+        </form>
+        {!isNewVar && (
+          <div className="md:w-1/4">
             <button
               onClick={handleDeleteEnvVar}
-              className="inline ml-4 py-2 px-10 bg-red-500 hover:bg-blue text-white  font-bold hover:text-white border hover:border-transparent rounded-lg"
+              className="mt-10 -ml-15 py-2 px-10 bg-red-500 hover:bg-blue text-white  font-bold hover:text-white border hover:border-transparent rounded-lg"
             >
               Delete
             </button>
-          )}
-        </div>
+          </div>
+        )}
       </div>
-    </form>
+    </React.Fragment>
   );
 };
 
@@ -152,6 +159,7 @@ const Env = () => {
     variables: {
       appId,
     },
+    fetchPolicy: 'network-only',
   });
 
   if (!data) {
