@@ -40,7 +40,7 @@ const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
         });
 
         if (isNewVar) {
-          router.push(`/app/${appId}/env`);
+          formik.resetForm();
         }
 
         // TODO give feedback about setting success
