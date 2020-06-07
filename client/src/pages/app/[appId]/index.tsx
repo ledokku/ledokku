@@ -120,7 +120,9 @@ const App = () => {
                     <td className="w-1/3 text-left py-3 px-4 font-semibold">
                       Created at
                     </td>
-                    <td className="w-1/3 text-left py-3 px-4">17th of April</td>
+                    <td className="w-1/3 text-left py-3 px-4">
+                      {app.createdAt}
+                    </td>
                   </tr>
                 </tbody>
               </table>

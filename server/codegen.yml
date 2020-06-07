@@ -9,3 +9,5 @@ generates:
       - 'typescript-resolvers'
     config:
       enumsAsTypes: true
+      scalars:
+        DateTime: Date

@@ -12,7 +12,6 @@ import {
   useUnsetEnvVarMutation,
   EnvVarsDocument,
 } from '../../../generated/graphql';
-import Link from 'next/link';
 import { useFormik } from 'formik';
 import { TabNav, TabNavLink } from '../../../ui';
 
@@ -24,7 +23,6 @@ interface EnvFormProps {
 }
 
 const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
-  const router = useRouter();
   const [isEnvVarVisible, setEnvVarIsVisible] = useState(false);
   const [setEnvVarMutation] = useSetEnvVarMutation();
   const [unsetEnvVarMutation] = useUnsetEnvVarMutation();
@@ -36,7 +34,6 @@ const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
         refetchQueries: [{ query: EnvVarsDocument, variables: { appId } }],
       });
       console.log(data);
-      router.push(`/app/${appId}/env`);
     } catch (error) {
       // TODO catch errors
       console.log(error);
@@ -58,7 +55,7 @@ const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
         });
 
         if (isNewVar) {
-          router.push(`/app/${appId}/env`);
+          formik.resetForm();
         }
 
         // TODO give feedback about setting success
