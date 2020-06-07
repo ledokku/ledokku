@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 
 import withApollo from '../../../lib/withApollo';
@@ -11,7 +11,6 @@ import {
   useSetEnvVarMutation,
   EnvVarsDocument,
 } from '../../../generated/graphql';
-import Link from 'next/link';
 import { useFormik } from 'formik';
 import { TabNav, TabNavLink } from '../../../ui';
 
@@ -23,7 +22,6 @@ interface EnvFormProps {
 }
 
 const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
-  const router = useRouter();
   const [isEnvVarVisible, setEnvVarIsVisible] = useState(false);
   const [setEnvVarMutation] = useSetEnvVarMutation();
   const formik = useFormik<{ name: string; value: string }>({
