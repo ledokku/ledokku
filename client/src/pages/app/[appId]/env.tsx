@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 
 import withApollo from '../../../lib/withApollo';
@@ -33,7 +33,6 @@ const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
         variables: { key: name, appId },
         refetchQueries: [{ query: EnvVarsDocument, variables: { appId } }],
       });
-      console.log(data);
     } catch (error) {
       // TODO catch errors
       console.log(error);
@@ -59,7 +58,6 @@ const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
         }
 
         // TODO give feedback about setting success
-        console.log(data);
       } catch (error) {
         // TODO catch errors
         console.log(error);
