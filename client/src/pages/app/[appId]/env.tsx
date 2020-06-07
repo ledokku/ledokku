@@ -45,7 +45,7 @@ const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
       name,
       value,
     },
-    onSubmit: async (values, event) => {
+    onSubmit: async (values) => {
       // TODO validate values
       try {
         const data = await setEnvVarMutation({
