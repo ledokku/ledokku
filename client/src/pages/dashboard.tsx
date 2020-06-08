@@ -7,7 +7,7 @@ import { useDashboardQuery } from '../generated/graphql';
 import { NodeIcon } from '../ui/icons/NodeIcon';
 import { Protected } from '../modules/auth/Protected';
 import { Header } from '../modules/layout/Header';
-import { TabNav, TabNavLink } from '../ui';
+import { TabNav, TabNavLink, Button } from '../ui';
 
 const Dashboard = () => {
   const router = useRouter();
@@ -78,6 +78,7 @@ const Dashboard = () => {
           <div className="col-span-5 mt-4">
             <h1 className="text-lg font-bold py-5">Latest activity</h1>
             <p className="text-cool-gray-400">Coming soon</p>
+            <Button color={'grey'}>Test btn</Button>
           </div>
         </main>
       </div>
