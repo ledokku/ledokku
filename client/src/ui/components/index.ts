@@ -1,6 +1,5 @@
 export * from './Box';
 export * from './BoxButton';
-// export * from './Button';
 export * from './Divider';
 export * from './LogBox';
 export * from './Page';
