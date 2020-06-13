@@ -7,6 +7,7 @@ import withApollo from '../lib/withApollo';
 
 import { Protected } from '../modules/auth/Protected';
 import { Header } from '../modules/layout/Header';
+import { Button } from '../ui';
 
 const CreateApp = () => {
   const router = useRouter();
@@ -76,12 +77,9 @@ const CreateApp = () => {
                 onChange={formik.handleChange}
               />
               <div className="flex justify-end mt-4">
-                <button
-                  type="submit"
-                  className="inline flex justify-end py-2 px-10 bg-gray-900 hover:bg-blue text-white  font-bold hover:text-white border hover:border-transparent rounded-lg"
-                >
+                <Button color="grey" size="normal" isSubmit={true}>
                   Create
-                </button>
+                </Button>
               </div>
             </div>
           </div>

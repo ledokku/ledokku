@@ -10,9 +10,9 @@ import {
   useDestroyAppMutation,
   DashboardDocument,
 } from '../../../generated/graphql';
-import Link from 'next/link';
+
 import { useFormik } from 'formik';
-import { TabNav, TabNavLink } from '../../../ui';
+import { TabNav, TabNavLink, Button } from '../../../ui';
 
 const Settings = () => {
   const router = useRouter();
@@ -129,7 +129,7 @@ const Settings = () => {
             <div className="mt-4">
               <input
                 autoComplete="off"
-                className="block w-full max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
+                className="mb-2 block w-full max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
                 id="appNme"
                 name="appName"
                 value={formik.values.appName}
@@ -140,14 +140,14 @@ const Settings = () => {
                   {formik.errors.appName}
                 </p>
               )}
-
-              <button
+              <Button
+                isSubmit={true}
                 disabled={!!formik.errors && formik.isSubmitting}
-                type="submit"
-                className="inline mt-6 py-2 px-10 bg-red-500 hover:bg-blue text-white  font-bold hover:text-white border hover:border-transparent rounded-lg "
+                color="red"
+                size="normal"
               >
                 Delete
-              </button>
+              </Button>
             </div>
           </form>
         </div>

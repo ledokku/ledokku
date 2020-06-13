@@ -7,7 +7,7 @@ import { Protected } from '../../../modules/auth/Protected';
 import { Header } from '../../../modules/layout/Header';
 import { useAppByIdQuery, useAppLogsQuery } from '../../../generated/graphql';
 import Link from 'next/link';
-import { TabNav, TabNavLink, Terminal } from '../../../ui';
+import { TabNav, TabNavLink, Terminal, Button } from '../../../ui';
 
 const App = () => {
   const router = useRouter();
@@ -146,9 +146,7 @@ const App = () => {
               </div>
             </Terminal>
           </div>
-          <button className="bg-gray-900 hover:bg-blue text-white  font-bold hover:text-white py-2 px-4 border hover:border-transparent rounded-lg">
-            Connect database
-          </button>
+          <Button color="grey">Connect database</Button>
         </div>
       </div>
     </div>

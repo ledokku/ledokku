@@ -1,7 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-
 import withApollo from '../lib/withApollo';
 import { useDashboardQuery } from '../generated/graphql';
 import { NodeIcon } from '../ui/icons/NodeIcon';
@@ -58,9 +57,11 @@ const Dashboard = () => {
             ))}
             <p className="py-3">
               <Link href="/create-app" passHref>
-                <button className="inline w-2/3 py-2 px-10 bg-gray-900 hover:bg-blue text-white  font-bold hover:text-white border hover:border-transparent rounded-lg">
-                  Create new app
-                </button>
+                <a>
+                  <Button size="large" color={'grey'}>
+                    Create new app
+                  </Button>
+                </a>
               </Link>
             </p>
             <h1 className="text-lg font-bold py-5">Databases</h1>
@@ -69,16 +70,17 @@ const Dashboard = () => {
             ))}
             <p className="py-3">
               <Link href="/create-database" passHref>
-                <button className="inline w-2/3 py-2 px-10 bg-gray-900 hover:bg-blue text-white  font-bold hover:text-white border hover:border-transparent rounded-lg">
-                  Create new database
-                </button>
+                <a>
+                  <Button size="large" color={'grey'}>
+                    Create new database
+                  </Button>
+                </a>
               </Link>
             </p>
           </div>
           <div className="col-span-5 mt-4">
             <h1 className="text-lg font-bold py-5">Latest activity</h1>
             <p className="text-cool-gray-400">Coming soon</p>
-            <Button color={'grey'}>Test btn</Button>
           </div>
         </main>
       </div>
