@@ -12,7 +12,7 @@ Before we dive into comparisons, couple of disclaimers: _We at Ledokku ❤️ Ve
 
 ### Vercel
 
-Ledokku is more flexible than Vercel as it allows you to deploy apps written in any of the most popular programming languages and link them any of the most popular databases. Where as Vercel is focusing just on JAMstack static apps and certainly does it really well.
+Ledokku is more flexible than Vercel as it allows you to deploy apps written in any of the most popular programming languages and link them any of the most popular databases. Where as Vercel is focusing just on JAMstack and serverless apps and certainly does it really well.
 
 ### Netlify
 
