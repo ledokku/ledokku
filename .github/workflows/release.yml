@@ -15,10 +15,11 @@ on:
 #     tags:
 #       - v*
 
+jobs:
   # Push client image to GitHub Packages.
   push-client:
     runs-on: ubuntu-latest
-    # if: github.event_name == 'push'
+    if: github.event_name == 'push'
 
     steps:
       - uses: actions/checkout@v2
