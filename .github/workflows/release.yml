@@ -27,7 +27,7 @@ jobs:
       - name: Build image
         run: |
           cd client
-          docker build . --file Dockerfile --tag ledokku-client
+          docker build . --file Dockerfile.production --tag ledokku-client
 
       - name: Log into registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
