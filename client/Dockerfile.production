@@ -1,4 +1,4 @@
-FROM node:12-alpine
+FROM node:12-alpine AS BUILD_IMAGE
 
 WORKDIR /usr/src/app
 
@@ -9,6 +9,13 @@ RUN yarn
 COPY . .
 
 RUN yarn build
+
+FROM node:12-alpine
+
+WORKDIR /usr/src/app
+
+COPY --from=BUILD_IMAGE /usr/src/app/.next ./.next
+COPY --from=BUILD_IMAGE /usr/src/app/node_modules ./node_modules
 
 EXPOSE 3000
 CMD [ "yarn", "start" ]

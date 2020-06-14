@@ -17,14 +17,20 @@ const config = {
   SERVER_URL: process.env.SERVER_URL,
 };
 
-try {
-  configSchema.validateSync(config);
-} catch (error) {
-  const validationError = error;
-  console.error(`Environment validation failed. ${validationError.message}
+/**
+ * We validate the schema only on development
+ * Otherwise the docker prod build is failing
+ */
+if (process.env === 'development') {
+  try {
+    configSchema.validateSync(config);
+  } catch (error) {
+    const validationError = error;
+    console.error(`Environment validation failed. ${validationError.message}
 Take a look at the contributing guide to see how to setup the project.
 https://github.com/ledokku/ledokku/blob/master/CONTRIBUTING.md`);
-  process.exit(1);
+    process.exit(1);
+  }
 }
 
 module.exports = {
