@@ -1,5 +1,10 @@
 module.exports = {
   someSidebar: {
-    Documentation: ['introduction', 'getting-started'],
+    Documentation: [
+      'introduction',
+      'what-is-ledokku',
+      'why-ledokku',
+      'getting-started',
+    ],
   },
 };
