@@ -29,5 +29,7 @@ https://github.com/ledokku/ledokku/blob/master/CONTRIBUTING.md`);
 
 module.exports = {
   prerenderPages: false,
-  env: config,
+  publicRuntimeConfig: {
+    env: config,
+  },
 };
