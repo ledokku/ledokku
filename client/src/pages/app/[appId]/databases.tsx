@@ -12,7 +12,7 @@ import {
 } from '../../../generated/graphql';
 import Link from 'next/link';
 import { useFormik } from 'formik';
-import { TabNav, TabNavLink } from '../../../ui';
+import { TabNav, TabNavLink, Button } from '../../../ui';
 
 const Databases = () => {
   const router = useRouter();
@@ -91,9 +91,7 @@ const Databases = () => {
             <span className="text-gray-900"> {app.name}</span> app
           </h2>
         </div>
-        <button className="mt-4 bg-gray-900 hover:bg-blue text-white  font-bold hover:text-white py-2 px-4 border hover:border-transparent rounded-lg">
-          Connect database
-        </button>
+        <Button color="grey">Connect database</Button>
       </div>
     </div>
   );

@@ -77,7 +77,12 @@ const CreateApp = () => {
                 onChange={formik.handleChange}
               />
               <div className="flex justify-end mt-4">
-                <Button color="grey" size="normal" isSubmit={true}>
+                <Button
+                  color="grey"
+                  size="normal"
+                  isSubmit={true}
+                  disabled={!formik.values.name || !formik.values.gitUrl}
+                >
                   Create
                 </Button>
               </div>

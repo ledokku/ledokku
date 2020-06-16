@@ -114,6 +114,16 @@ const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
           <Button size="normal" isSubmit={true} color="grey">
             {isNewVar ? 'Add' : 'Save'}
           </Button>
+          {!isNewVar && (
+            <Button
+              className="ml-2"
+              size="normal"
+              color="red"
+              onClick={handleDeleteEnvVar}
+            >
+              Delete
+            </Button>
+          )}
         </div>
       </div>
     </form>

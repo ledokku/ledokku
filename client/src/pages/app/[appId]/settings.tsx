@@ -149,7 +149,7 @@ const Settings = () => {
               )}
               <Button
                 isSubmit={true}
-                disabled={!!formik.errors && formik.isSubmitting}
+                disabled={!formik.values.appName || !!formik.errors.appName}
                 color="red"
                 size="normal"
               >
