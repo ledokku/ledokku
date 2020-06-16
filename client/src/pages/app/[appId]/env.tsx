@@ -9,6 +9,7 @@ import {
   useAppByIdQuery,
   useEnvVarsQuery,
   useSetEnvVarMutation,
+  useUnsetEnvVarMutation,
   EnvVarsDocument,
 } from '../../../generated/graphql';
 import { useFormik } from 'formik';
@@ -24,6 +25,22 @@ interface EnvFormProps {
 const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
   const [isEnvVarVisible, setEnvVarIsVisible] = useState(false);
   const [setEnvVarMutation] = useSetEnvVarMutation();
+  const [unsetEnvVarMutation] = useUnsetEnvVarMutation();
+
+  const handleDeleteEnvVar = async () => {
+    event.preventDefault();
+    try {
+      const data = await unsetEnvVarMutation({
+        variables: { key: name, appId },
+        refetchQueries: [{ query: EnvVarsDocument, variables: { appId } }],
+      });
+    } catch (error) {
+      // TODO catch errors
+      console.log(error);
+      alert(error);
+    }
+  };
+
   const formik = useFormik<{ name: string; value: string }>({
     initialValues: {
       name,
@@ -42,7 +59,6 @@ const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
         }
 
         // TODO give feedback about setting success
-        console.log(data);
       } catch (error) {
         // TODO catch errors
         console.log(error);
@@ -124,6 +140,7 @@ const Env = () => {
     variables: {
       appId,
     },
+    fetchPolicy: 'network-only',
   });
 
   if (!data) {
@@ -151,6 +168,13 @@ const Env = () => {
         <TabNav>
           <TabNavLink href="/app/[appId]" as={`/app/${app.id}`} passHref>
             App
+          </TabNavLink>
+          <TabNavLink
+            href="/app/[appId]/databases"
+            as={`/app/${app.id}/databases`}
+            passHref
+          >
+            Databases
           </TabNavLink>
           <TabNavLink
             href="/app/[appId]/env"

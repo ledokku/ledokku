@@ -96,6 +96,13 @@ const Settings = () => {
             App
           </TabNavLink>
           <TabNavLink
+            href="/app/[appId]/databases"
+            as={`/app/${app.id}/databases`}
+            passHref
+          >
+            Databases
+          </TabNavLink>
+          <TabNavLink
             href="/app/[appId]/env"
             as={`/app/${app.id}/env`}
             passHref
