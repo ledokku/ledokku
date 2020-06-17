@@ -1,3 +1,4 @@
+import React from 'react';
 import { styled } from '../../../StyledComponents';
 import { Box, BoxProps } from '../../Box';
 import { Divider } from '../../Divider';

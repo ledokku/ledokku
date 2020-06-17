@@ -27,7 +27,7 @@ const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
   const [setEnvVarMutation] = useSetEnvVarMutation();
   const [unsetEnvVarMutation] = useUnsetEnvVarMutation();
 
-  const handleDeleteEnvVar = async () => {
+  const handleDeleteEnvVar = async (event: any) => {
     event.preventDefault();
     try {
       const data = await unsetEnvVarMutation({
