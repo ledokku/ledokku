@@ -4,7 +4,7 @@
   "repository": "https://github.com/ledokku/ledokku.git",
   "author": "pradel <pradel.leo@gmail.com>",
   "scripts": {
-    "test:lint": "eslint '{client,server}/**/*.{ts,tsx}'",
+    "test:lint": "eslint 'server/**/*.{ts,tsx}'",
     "prettier": "prettier --write '**/*.{js,ts,tsx,md,css}'"
   },
   "workspaces": [
