@@ -21,18 +21,12 @@ const Metrics = () => {
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <TabNav>
-          <TabNavLink href="/dashboard" passHref>
-            Dashboard
-          </TabNavLink>
-          <TabNavLink href="/activity" passHref>
-            Activity
-          </TabNavLink>
-          <TabNavLink href="/metrics" passHref selected>
+          <TabNavLink to="/dashboard">Dashboard</TabNavLink>
+          <TabNavLink to="/activity">Activity</TabNavLink>
+          <TabNavLink to="/metrics" selected>
             Metrics
           </TabNavLink>
-          <TabNavLink href="/settings" passHref>
-            Settings
-          </TabNavLink>
+          <TabNavLink to="/settings">Settings</TabNavLink>
         </TabNav>
       </div>
 

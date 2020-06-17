@@ -9,6 +9,7 @@ import { onError } from 'apollo-link-error';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { config } from '../config';
 
+// TODO delete this file after cra migration
 export default withApollo(
   ({ initialState }) => {
     const httpLink = createHttpLink({

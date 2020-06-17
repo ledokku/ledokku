@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { GitHub } from 'react-feather';
 import { useHistory, Redirect } from 'react-router-dom';
+import { GitHub } from 'react-feather';
 import { config } from '../config';
 import {
   useSetupQuery,

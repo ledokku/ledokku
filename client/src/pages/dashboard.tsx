@@ -1,23 +1,19 @@
 import React from 'react';
-import { useRouter } from 'next/router';
-import Link from 'next/link';
-
-import withApollo from '../lib/withApollo';
+import { useHistory, Link } from 'react-router-dom';
 import { useDashboardQuery } from '../generated/graphql';
 import { NodeIcon } from '../ui/icons/NodeIcon';
-import { Protected } from '../modules/auth/Protected';
 import { Header } from '../modules/layout/Header';
 import { TabNav, TabNavLink } from '../ui';
 
-const Dashboard = () => {
-  const router = useRouter();
+export const Dashboard = () => {
+  const history = useHistory();
   const { data, loading, error } = useDashboardQuery({});
 
   // TODO show loading
   // TODO handle error
 
   const handleCreateFirstApp = () => {
-    router.push('/onboarding/cloud-provider');
+    history.push('/onboarding/cloud-provider');
   };
 
   return (
@@ -26,18 +22,12 @@ const Dashboard = () => {
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <TabNav>
-          <TabNavLink href="/dashboard" passHref selected>
+          <TabNavLink to="/dashboard" selected>
             Dashboard
           </TabNavLink>
-          <TabNavLink href="/activity" passHref>
-            Activity
-          </TabNavLink>
-          <TabNavLink href="/metrics" passHref>
-            Metrics
-          </TabNavLink>
-          <TabNavLink href="/settings" passHref>
-            Settings
-          </TabNavLink>
+          <TabNavLink to="/activity">Activity</TabNavLink>
+          <TabNavLink to="/metrics">Metrics</TabNavLink>
+          <TabNavLink to="/settings">Settings</TabNavLink>
         </TabNav>
       </div>
 
@@ -47,17 +37,15 @@ const Dashboard = () => {
             <h1 className="text-lg font-bold py-5 ">Apps</h1>
             {data?.apps.map((app) => (
               <div key={app.id}>
-                <Link href="/app/[appId]" as={`/app/${app.id}`} passHref>
-                  <a className="py-2 block">
-                    <div className="flex items-center py-3 px-2 shadow hover:shadow-md transition-shadow duration-100 ease-in-out rounded bg-white">
-                      <NodeIcon size={20} className="mr-2" /> {app.name}
-                    </div>
-                  </a>
+                <Link to={`/app/${app.id}`} className="py-2 block">
+                  <div className="flex items-center py-3 px-2 shadow hover:shadow-md transition-shadow duration-100 ease-in-out rounded bg-white">
+                    <NodeIcon size={20} className="mr-2" /> {app.name}
+                  </div>
                 </Link>
               </div>
             ))}
             <p className="py-3">
-              <Link href="/create-app" passHref>
+              <Link to="/create-app">
                 <button className="inline w-2/3 py-2 px-10 bg-gray-900 hover:bg-blue text-white  font-bold hover:text-white border hover:border-transparent rounded-lg">
                   Create new app
                 </button>
@@ -68,7 +56,7 @@ const Dashboard = () => {
               <p key={database.id}>{database.name}</p>
             ))}
             <p className="py-3">
-              <Link href="/create-database" passHref>
+              <Link to="/create-database">
                 <button className="inline w-2/3 py-2 px-10 bg-gray-900 hover:bg-blue text-white  font-bold hover:text-white border hover:border-transparent rounded-lg">
                   Create new database
                 </button>
@@ -84,9 +72,3 @@ const Dashboard = () => {
     </div>
   );
 };
-
-export default withApollo(() => (
-  <Protected>
-    <Dashboard />
-  </Protected>
-));

@@ -3,32 +3,33 @@ import {
   BrowserRouter,
   Switch,
   Route,
-  Link,
+  RouteProps,
   Redirect,
-  useHistory,
-  useLocation,
 } from 'react-router-dom';
+import { useAuth } from './modules/auth/AuthContext';
 import { Home } from './pages/home';
+import { Dashboard } from './pages/dashboard';
 
-export const PrivateRoute = ({ children, ...rest }) => {
-  return null;
-  //   return (
-  //     <Route
-  //       {...rest}
-  //       render={({ location }) =>
-  //         fakeAuth.isAuthenticated ? (
-  //           children
-  //         ) : (
-  //           <Redirect
-  //             to={{
-  //               pathname: '/login',
-  //               state: { from: location },
-  //             }}
-  //           />
-  //         )
-  //       }
-  //     />
-  //   );
+export const PrivateRoute = ({ children, ...rest }: RouteProps) => {
+  const { loggedIn } = useAuth();
+
+  return (
+    <Route
+      {...rest}
+      render={({ location }) =>
+        loggedIn ? (
+          children
+        ) : (
+          <Redirect
+            to={{
+              pathname: '/',
+              state: { from: location },
+            }}
+          />
+        )
+      }
+    />
+  );
 };
 
 export const Router = () => {
@@ -38,9 +39,9 @@ export const Router = () => {
         <Route path="/" exact>
           <Home />
         </Route>
-        <Route path="/dashboard" exact>
-          <Home />
-        </Route>
+        <PrivateRoute path="/dashboard" exact>
+          <Dashboard />
+        </PrivateRoute>
         {/* TODO 404 page */}
       </Switch>
     </BrowserRouter>

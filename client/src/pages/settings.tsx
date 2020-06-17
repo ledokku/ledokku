@@ -21,16 +21,10 @@ const Settings = () => {
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <TabNav>
-          <TabNavLink href="/dashboard" passHref>
-            Dashboard
-          </TabNavLink>
-          <TabNavLink href="/activity" passHref>
-            Activity
-          </TabNavLink>
-          <TabNavLink href="/metrics" passHref>
-            Metrics
-          </TabNavLink>
-          <TabNavLink href="/settings" passHref selected>
+          <TabNavLink to="/dashboard">Dashboard</TabNavLink>
+          <TabNavLink to="/activity">Activity</TabNavLink>
+          <TabNavLink to="/metrics">Metrics</TabNavLink>
+          <TabNavLink to="/settings" selected>
             Settings
           </TabNavLink>
         </TabNav>

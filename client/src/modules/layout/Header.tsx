@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 import { useAuth } from '../auth/AuthContext';
 
@@ -13,9 +13,7 @@ export const Header = () => {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <h3 className="font-bold">
-              <Link href="/" passHref>
-                <a>Ledokku</a>
-              </Link>
+              <Link to="/">Ledokku</Link>
             </h3>
           </div>
           <div className="relative">
@@ -58,13 +56,12 @@ export const Header = () => {
                   aria-labelledby="user-menu"
                 >
                   <div className="py-1">
-                    <Link href="/dashboard" passHref>
-                      <a
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        role="menuitem"
-                      >
-                        Dashboard
-                      </a>
+                    <Link
+                      to="/dashboard"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      role="menuitem"
+                    >
+                      Dashboard
                     </Link>
                   </div>
                   <div className="border-t border-gray-100" />
@@ -72,6 +69,7 @@ export const Header = () => {
                     <a
                       href="https://github.com/ledokku/ledokku"
                       target="_blank"
+                      rel="noopener noreferrer"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       role="menuitem"
                     >

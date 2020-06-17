@@ -92,34 +92,13 @@ const Settings = () => {
       <Header />
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <TabNav>
-          <TabNavLink href="/app/[appId]" as={`/app/${app.id}`} passHref>
-            App
-          </TabNavLink>
-          <TabNavLink
-            href="/app/[appId]/databases"
-            as={`/app/${app.id}/databases`}
-            passHref
-          >
-            Databases
-          </TabNavLink>
-          <TabNavLink
-            href="/app/[appId]/env"
-            as={`/app/${app.id}/env`}
-            passHref
-          >
-            Env setup
-          </TabNavLink>
-          <TabNavLink
-            href="/app/[appId]/settings"
-            as={`/app/${app.id}/settings`}
-            passHref
-            selected
-          >
+          <TabNavLink to={`/app/${app.id}`}>App</TabNavLink>
+          <TabNavLink to={`/app/${app.id}/databases`}>Databases</TabNavLink>
+          <TabNavLink to={`/app/${app.id}/env`}>Env setup</TabNavLink>
+          <TabNavLink to={`/app/${app.id}/settings`} selected>
             Settings
           </TabNavLink>
-          <TabNavLink href="/dashboard" passHref>
-            Return to dashboard
-          </TabNavLink>
+          <TabNavLink to="/dashboard">Return to dashboard</TabNavLink>
         </TabNav>
       </div>
 

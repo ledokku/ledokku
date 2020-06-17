@@ -5,6 +5,7 @@ interface ProtectedProps {
   children: JSX.Element;
 }
 
+// TODO delete this file after cra migration
 export const Protected = ({ children }: ProtectedProps) => {
   const router = useRouter();
   const { loggedIn } = useAuth();

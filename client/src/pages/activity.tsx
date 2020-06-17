@@ -21,18 +21,12 @@ const Activity = () => {
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <TabNav>
-          <TabNavLink href="/dashboard" passHref>
-            Dashboard
-          </TabNavLink>
-          <TabNavLink href="/activity" passHref selected>
+          <TabNavLink to="/dashboard">Dashboard</TabNavLink>
+          <TabNavLink to="/activity" selected>
             Activity
           </TabNavLink>
-          <TabNavLink href="/metrics" passHref>
-            Metrics
-          </TabNavLink>
-          <TabNavLink href="/settings" passHref>
-            Settings
-          </TabNavLink>
+          <TabNavLink to="/metrics">Metrics</TabNavLink>
+          <TabNavLink to="/settings">Settings</TabNavLink>
         </TabNav>
       </div>
 
