@@ -1,4 +1,7 @@
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
+
 export const config = {
-  githubClientId: process.env.GITHUB_CLIENT_ID,
-  serverUrl: process.env.SERVER_URL,
+  githubClientId: publicRuntimeConfig.env.GITHUB_CLIENT_ID,
+  serverUrl: publicRuntimeConfig.env.SERVER_URL,
 };
