@@ -34,9 +34,8 @@
     "apollo-link-error": "1.1.13",
     "apollo-link-http": "1.5.17",
     "classnames": "2.2.6",
-    "dotenv": "8.2.0",
     "formik": "2.1.4",
-    "graphql": "15.0.0",
+    "graphql": "15.1.0",
     "jwt-decode": "2.2.0",
     "next": "9.4.1",
     "next-with-apollo": "5.0.1",
@@ -47,8 +46,8 @@
     "react-router-dom": "5.2.0",
     "react-transition-group": "4.4.1",
     "socket.io-client": "2.3.0",
-    "styled-components": "5.1.0",
-    "yup": "0.28.5"
+    "styled-components": "5.1.1",
+    "yup": "0.29.1"
   },
   "devDependencies": {
     "@graphql-codegen/add": "1.13.5",
@@ -66,7 +65,7 @@
     "@types/react-transition-group": "4.4.0",
     "@types/socket.io-client": "1.4.33",
     "@types/styled-components": "5.1.0",
-    "@types/yup": "0.28.3",
+    "@types/yup": "0.29.3",
     "babel-plugin-styled-components": "1.10.7",
     "postcss-cli": "7.1.1",
     "postcss-preset-env": "6.7.0",

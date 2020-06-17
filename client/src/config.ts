@@ -1,6 +1,6 @@
+// TODO take from server (runtime) in production mode
+
 export const config = {
-  // githubClientId: publicRuntimeConfig.env.GITHUB_CLIENT_ID,
-  // serverUrl: publicRuntimeConfig.env.SERVER_URL,
-  githubClientId: '',
-  serverUrl: '',
+  githubClientId: process.env.REACT_APP_GITHUB_CLIENT_ID,
+  serverUrl: process.env.REACT_APP_SERVER_URL,
 };
