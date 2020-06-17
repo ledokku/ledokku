@@ -53,7 +53,7 @@ jobs:
 
           docker tag ledokku-client $IMAGE_ID:$VERSION
           # Print docker images so we can check the size
-          docker images
+          docker images | grep ledokku
           docker push $IMAGE_ID:$VERSION
 
   # Push server image to GitHub Packages.
@@ -93,5 +93,5 @@ jobs:
 
           docker tag ledokku-server $IMAGE_ID:$VERSION
           # Print docker images so we can check the size
-          docker images
+          docker images | grep ledokku
           docker push $IMAGE_ID:$VERSION
