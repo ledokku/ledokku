@@ -1,18 +1,12 @@
 import React from 'react';
-import { useRouter } from 'next/router';
+import { Header } from '../../modules/layout/Header';
+import { useAppByIdQuery, useAppLogsQuery } from '../../generated/graphql';
+import { useParams } from 'react-router-dom';
+import { TabNav, TabNavLink, Terminal } from '../../ui';
 
-import withApollo from '../../../lib/withApollo';
+export const App = () => {
+  const { id: appId } = useParams();
 
-import { Protected } from '../../../modules/auth/Protected';
-import { Header } from '../../../modules/layout/Header';
-import { useAppByIdQuery, useAppLogsQuery } from '../../../generated/graphql';
-import Link from 'next/link';
-import { TabNav, TabNavLink, Terminal } from '../../../ui';
-
-const App = () => {
-  const router = useRouter();
-  // // On first render appId will be undefined, the value is set after and a rerender is triggered.
-  const { appId } = router.query as { appId?: string };
   const { data, loading, error } = useAppByIdQuery({
     variables: {
       appId,
@@ -133,9 +127,3 @@ const App = () => {
     </div>
   );
 };
-
-export default withApollo(() => (
-  <Protected>
-    <App />
-  </Protected>
-));

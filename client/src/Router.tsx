@@ -8,6 +8,10 @@ import {
 } from 'react-router-dom';
 import { useAuth } from './modules/auth/AuthContext';
 import { Home } from './pages/home';
+import { App } from './pages/app/index';
+import { Env } from './pages/app/env';
+import { Databases } from './pages/app/databases';
+import { Settings as AppSettings } from './pages/app/settings';
 import { Dashboard } from './pages/dashboard';
 import { Activity } from './pages/activity';
 import { Metrics } from './pages/metrics';
@@ -53,6 +57,18 @@ export const Router = () => {
         </PrivateRoute>
         <PrivateRoute path="/settings" exact>
           <Settings />
+        </PrivateRoute>
+        <PrivateRoute path="/app/:id" exact>
+          <App />
+        </PrivateRoute>
+        <PrivateRoute path="/app/:id/env" exact>
+          <Env />
+        </PrivateRoute>
+        <PrivateRoute path="/app/:id/settings" exact>
+          <AppSettings />
+        </PrivateRoute>
+        <PrivateRoute path="/app/:id/databases" exact>
+          <Databases />
         </PrivateRoute>
         {/* TODO 404 page */}
       </Switch>
