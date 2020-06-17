@@ -1,16 +1,9 @@
 import React from 'react';
-import { useRouter } from 'next/router';
-import Link from 'next/link';
-
-import withApollo from '../lib/withApollo';
-import { useDashboardQuery } from '../generated/graphql';
-import { Protected } from '../modules/auth/Protected';
 import { Header } from '../modules/layout/Header';
 import { TabNav, TabNavLink } from '../ui';
 
-const Metrics = () => {
-  const router = useRouter();
-  const { data, loading, error } = useDashboardQuery({});
+export const Metrics = () => {
+  // const { data, loading, error } = useDashboardQuery({});
 
   // TODO show loading
   // TODO handle error
@@ -21,18 +14,12 @@ const Metrics = () => {
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <TabNav>
-          <TabNavLink href="/dashboard" passHref>
-            Dashboard
-          </TabNavLink>
-          <TabNavLink href="/activity" passHref>
-            Activity
-          </TabNavLink>
-          <TabNavLink href="/metrics" passHref selected>
+          <TabNavLink to="/dashboard">Dashboard</TabNavLink>
+          <TabNavLink to="/activity">Activity</TabNavLink>
+          <TabNavLink to="/metrics" selected>
             Metrics
           </TabNavLink>
-          <TabNavLink href="/settings" passHref>
-            Settings
-          </TabNavLink>
+          <TabNavLink to="/settings">Settings</TabNavLink>
         </TabNav>
       </div>
 
@@ -44,9 +31,3 @@ const Metrics = () => {
     </div>
   );
 };
-
-export default withApollo(() => (
-  <Protected>
-    <Metrics />
-  </Protected>
-));

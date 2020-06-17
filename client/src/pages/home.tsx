@@ -1,9 +1,7 @@
 import React, { useEffect } from 'react';
+import { useHistory, Redirect } from 'react-router-dom';
 import { GitHub } from 'react-feather';
-import { useRouter } from 'next/router';
-
 import { config } from '../config';
-import withApollo from '../lib/withApollo';
 import {
   useSetupQuery,
   useLoginWithGithubMutation,
@@ -11,8 +9,8 @@ import {
 import { useAuth } from '../modules/auth/AuthContext';
 import { Terminal } from '../ui';
 
-const Home = () => {
-  const router = useRouter();
+export const Home = () => {
+  const history = useHistory();
   const { loggedIn, login } = useAuth();
   const { data, loading, error } = useSetupQuery({});
   const [loginWithGithubMutation] = useLoginWithGithubMutation();
@@ -35,18 +33,14 @@ const Home = () => {
         // TODO handle errors
         if (data.data) {
           login(data.data.loginWithGithub.token);
-          router.push('/dashboard');
+          history.push('/dashboard');
         }
       }
     };
 
     codeToLogin();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // We check if the user is connected, if yes we need to redirect him to the dashboard
-  if (loggedIn) {
-    router.push('/dashboard');
-  }
 
   const handleLogin = () => {
     // TODO redirect_uri only on localhost
@@ -55,10 +49,19 @@ const Home = () => {
     );
   };
 
+  // We check if the user is connected, if yes we need to redirect him to the dashboard
+  if (loggedIn) {
+    return <Redirect to="dashboard" />;
+  }
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center text-center max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
       <h1 className="text-2xl font-bold">Ledokku</h1>
+
       {error && <p className="mt-3 text-red-500">{error.message}</p>}
+
+      {/* TODO display spinner if query is loading */}
+      {loading && <p className="mt-3">Loading...</p>}
 
       {data?.setup.canConnectSsh === true && (
         <React.Fragment>
@@ -87,5 +90,3 @@ const Home = () => {
     </div>
   );
 };
-
-export default withApollo(Home);

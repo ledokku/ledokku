@@ -1,15 +1,11 @@
 import React from 'react';
-import { useRouter } from 'next/router';
+import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
-
 import { useCreateAppMutation, DashboardDocument } from '../generated/graphql';
-import withApollo from '../lib/withApollo';
-
-import { Protected } from '../modules/auth/Protected';
 import { Header } from '../modules/layout/Header';
 
-const CreateApp = () => {
-  const router = useRouter();
+export const CreateApp = () => {
+  const history = useHistory();
   const [createAppMutation] = useCreateAppMutation();
   const formik = useFormik<{ name: string; gitUrl: string }>({
     initialValues: {
@@ -30,8 +26,9 @@ const CreateApp = () => {
             },
           ],
         });
+        console.log(data);
         // TODO give feedback about app being deployed
-        router.push('/dashboard');
+        history.push('/dashboard');
       } catch (error) {
         // TODO catch errors
         console.log(error);
@@ -90,9 +87,3 @@ const CreateApp = () => {
     </React.Fragment>
   );
 };
-
-export default withApollo(() => (
-  <Protected>
-    <CreateApp />
-  </Protected>
-));

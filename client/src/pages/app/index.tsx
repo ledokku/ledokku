@@ -1,19 +1,13 @@
 import React from 'react';
-import { useRouter } from 'next/router';
+import { Header } from '../../modules/layout/Header';
+import { useAppByIdQuery, useAppLogsQuery } from '../../generated/graphql';
+import { useParams } from 'react-router-dom';
+import { TabNav, TabNavLink, Terminal } from '../../ui';
 
-import withApollo from '../../../lib/withApollo';
+export const App = () => {
+  const { id: appId } = useParams();
 
-import { Protected } from '../../../modules/auth/Protected';
-import { Header } from '../../../modules/layout/Header';
-import { useAppByIdQuery, useAppLogsQuery } from '../../../generated/graphql';
-import Link from 'next/link';
-import { TabNav, TabNavLink, Terminal } from '../../../ui';
-
-const App = () => {
-  const router = useRouter();
-  // // On first render appId will be undefined, the value is set after and a rerender is triggered.
-  const { appId } = router.query as { appId?: string };
-  const { data, loading, error } = useAppByIdQuery({
+  const { data, loading /* error */ } = useAppByIdQuery({
     variables: {
       appId,
     },
@@ -26,7 +20,7 @@ const App = () => {
   const {
     data: appLogsData,
     loading: appLogsLoading,
-    error: appLogsError,
+    /* error: appLogsError, */
   } = useAppLogsQuery({
     variables: {
       appId,
@@ -61,38 +55,13 @@ const App = () => {
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <TabNav>
-          <TabNavLink
-            href="/app/[appId]"
-            as={`/app/${app.id}`}
-            passHref
-            selected
-          >
+          <TabNavLink to={`/app/${app.id}`} selected>
             App
           </TabNavLink>
-          <TabNavLink
-            href="/app/[appId]/databases"
-            as={`/app/${app.id}/databases`}
-            passHref
-          >
-            Databases
-          </TabNavLink>
-          <TabNavLink
-            href="/app/[appId]/env"
-            as={`/app/${app.id}/env`}
-            passHref
-          >
-            Env setup
-          </TabNavLink>
-          <TabNavLink
-            href="/app/[appId]/settings"
-            as={`/app/${app.id}/settings`}
-            passHref
-          >
-            Settings
-          </TabNavLink>
-          <TabNavLink href="/dashboard" passHref>
-            Return to dashboard
-          </TabNavLink>
+          <TabNavLink to={`/app/${app.id}/databases`}>Databases</TabNavLink>
+          <TabNavLink to={`/app/${app.id}/env`}>Env setup</TabNavLink>
+          <TabNavLink to={`/app/${app.id}/settings`}>Settings</TabNavLink>
+          <TabNavLink to="/dashboard">Return to dashboard</TabNavLink>
         </TabNav>
       </div>
 
@@ -158,9 +127,3 @@ const App = () => {
     </div>
   );
 };
-
-export default withApollo(() => (
-  <Protected>
-    <App />
-  </Protected>
-));
