@@ -70,6 +70,13 @@ const App = () => {
             App
           </TabNavLink>
           <TabNavLink
+            href="/app/[appId]/databases"
+            as={`/app/${app.id}/databases`}
+            passHref
+          >
+            Databases
+          </TabNavLink>
+          <TabNavLink
             href="/app/[appId]/env"
             as={`/app/${app.id}/env`}
             passHref
@@ -93,7 +100,7 @@ const App = () => {
         <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4 mt-10">
           <div>
             <h1 className="text-lg font-bold py-5">App info</h1>
-            <div className=" bg-gray-100 shadow overflow-hidden rounded-lg border-b border-gray-200">
+            <div className="mt-3 bg-gray-100 shadow overflow-hidden rounded-lg border-b border-gray-200">
               <table className="mt-4 mb-4 min-w-full bg-white">
                 <tbody className="text-gray-700">
                   <tr className="bg-gray-100">
@@ -146,9 +153,6 @@ const App = () => {
               </div>
             </Terminal>
           </div>
-          <button className="bg-gray-900 hover:bg-blue text-white  font-bold hover:text-white py-2 px-4 border hover:border-transparent rounded-lg">
-            Connect database
-          </button>
         </div>
       </div>
     </div>
