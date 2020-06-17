@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
 
-import withApollo from '../../../lib/withApollo';
-
-import { Protected } from '../../../modules/auth/Protected';
-import { Header } from '../../../modules/layout/Header';
+import withApollo from '../../lib/withApollo';
+import { useHistory, useParams } from 'react-router-dom';
+import { Protected } from '../../modules/auth/Protected';
+import { Header } from '../../modules/layout/Header';
 import {
   useAppByIdQuery,
   useEnvVarsQuery,
   useSetEnvVarMutation,
   useUnsetEnvVarMutation,
   EnvVarsDocument,
-} from '../../../generated/graphql';
+} from '../../generated/graphql';
 import { useFormik } from 'formik';
-import { TabNav, TabNavLink } from '../../../ui';
+import { TabNav, TabNavLink } from '../../ui';
 
 interface EnvFormProps {
   name: string;
@@ -22,7 +21,7 @@ interface EnvFormProps {
   isNewVar?: boolean;
 }
 
-const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
+export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
   const [isEnvVarVisible, setEnvVarIsVisible] = useState(false);
   const [setEnvVarMutation] = useSetEnvVarMutation();
   const [unsetEnvVarMutation] = useUnsetEnvVarMutation();
@@ -134,10 +133,8 @@ const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
   );
 };
 
-const Env = () => {
-  const router = useRouter();
-  // // On first render appId will be undefined, the value is set after and a rerender is triggered.
-  const { appId } = router.query as { appId?: string };
+export const Env = () => {
+  const { id: appId } = useParams();
   const { data, loading, error } = useAppByIdQuery({
     variables: {
       appId,
@@ -227,9 +224,3 @@ const Env = () => {
     </div>
   );
 };
-
-export default withApollo(() => (
-  <Protected>
-    <Env />
-  </Protected>
-));

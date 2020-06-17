@@ -1,23 +1,18 @@
 import React from 'react';
-import { useRouter } from 'next/router';
 import * as yup from 'yup';
-import withApollo from '../../../lib/withApollo';
-
-import { Protected } from '../../../modules/auth/Protected';
-import { Header } from '../../../modules/layout/Header';
+import { useHistory, useParams } from 'react-router-dom';
+import { Header } from '../../modules/layout/Header';
 import {
   useAppByIdQuery,
   useDestroyAppMutation,
   DashboardDocument,
-} from '../../../generated/graphql';
-import Link from 'next/link';
+} from '../../generated/graphql';
 import { useFormik } from 'formik';
-import { TabNav, TabNavLink } from '../../../ui';
+import { TabNav, TabNavLink } from '../../ui';
 
-const Settings = () => {
-  const router = useRouter();
-  // // On first render appId will be undefined, the value is set after and a rerender is triggered.
-  const { appId } = router.query as { appId?: string };
+export const Settings = () => {
+  const { id: appId } = useParams();
+  let history = useHistory();
   const [destroyAppMutation] = useDestroyAppMutation();
 
   const { data, loading, error } = useAppByIdQuery({
@@ -27,24 +22,6 @@ const Settings = () => {
     ssr: false,
     skip: !appId,
   });
-
-  if (!data) {
-    return null;
-  }
-
-  // // TODO display error
-
-  if (loading) {
-    // TODO nice loading
-    return <p>Loading...</p>;
-  }
-
-  const { app } = data;
-
-  if (!app) {
-    // TODO nice 404
-    return <p>App not found.</p>;
-  }
 
   const DeleteAppNameSchema = yup.object().shape({
     appName: yup
@@ -77,8 +54,7 @@ const Settings = () => {
             },
           ],
         });
-
-        router.push('/dashboard');
+        history.push('/dashboard');
       } catch (error) {
         // TODO catch errors
         console.log(error);
@@ -86,6 +62,24 @@ const Settings = () => {
       }
     },
   });
+
+  if (!data) {
+    return null;
+  }
+
+  // // TODO display error
+
+  if (loading) {
+    // TODO nice loading
+    return <p>Loading...</p>;
+  }
+
+  const { app } = data;
+
+  if (!app) {
+    // TODO nice 404
+    return <p>App not found.</p>;
+  }
 
   return (
     <div>
@@ -141,9 +135,3 @@ const Settings = () => {
     </div>
   );
 };
-
-export default withApollo(() => (
-  <Protected>
-    <Settings />
-  </Protected>
-));

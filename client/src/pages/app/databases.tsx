@@ -1,23 +1,11 @@
 import React from 'react';
-import { useRouter } from 'next/router';
-import * as yup from 'yup';
-import withApollo from '../../../lib/withApollo';
+import { useParams } from 'react-router-dom';
+import { Header } from '../../modules/layout/Header';
+import { useAppByIdQuery } from '../../generated/graphql';
+import { TabNav, TabNavLink } from '../../ui';
 
-import { Protected } from '../../../modules/auth/Protected';
-import { Header } from '../../../modules/layout/Header';
-import {
-  useAppByIdQuery,
-  useDestroyAppMutation,
-  DashboardDocument,
-} from '../../../generated/graphql';
-import Link from 'next/link';
-import { useFormik } from 'formik';
-import { TabNav, TabNavLink } from '../../../ui';
-
-const Databases = () => {
-  const router = useRouter();
-  // // On first render appId will be undefined, the value is set after and a rerender is triggered.
-  const { appId } = router.query as { appId?: string };
+export const Databases = () => {
+  const { id: appId } = useParams();
 
   const { data, loading, error } = useAppByIdQuery({
     variables: {
@@ -50,9 +38,7 @@ const Databases = () => {
       <Header />
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <TabNav>
-          <TabNavLink to={`/app/${app.id}`}>
-            App
-          </TabNavLink>
+          <TabNavLink to={`/app/${app.id}`}>App</TabNavLink>
           <TabNavLink to={`/app/${app.id}/databases`} selected>
             Databases
           </TabNavLink>
@@ -79,9 +65,3 @@ const Databases = () => {
     </div>
   );
 };
-
-export default withApollo(() => (
-  <Protected>
-    <Databases />
-  </Protected>
-));
