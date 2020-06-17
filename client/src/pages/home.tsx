@@ -1,9 +1,7 @@
 import React, { useEffect } from 'react';
 import { GitHub } from 'react-feather';
-import { useRouter } from 'next/router';
-
+import { useHistory } from 'react-router-dom';
 import { config } from '../config';
-import withApollo from '../lib/withApollo';
 import {
   useSetupQuery,
   useLoginWithGithubMutation,
@@ -11,8 +9,8 @@ import {
 import { useAuth } from '../modules/auth/AuthContext';
 import { Terminal } from '../ui';
 
-const Home = () => {
-  const router = useRouter();
+export const Home = () => {
+  const history = useHistory();
   const { loggedIn, login } = useAuth();
   const { data, loading, error } = useSetupQuery({});
   const [loginWithGithubMutation] = useLoginWithGithubMutation();
@@ -35,7 +33,7 @@ const Home = () => {
         // TODO handle errors
         if (data.data) {
           login(data.data.loginWithGithub.token);
-          router.push('/dashboard');
+          history.push('/dashboard');
         }
       }
     };
@@ -45,7 +43,7 @@ const Home = () => {
 
   // We check if the user is connected, if yes we need to redirect him to the dashboard
   if (loggedIn) {
-    router.push('/dashboard');
+    history.push('/dashboard');
   }
 
   const handleLogin = () => {
@@ -59,6 +57,8 @@ const Home = () => {
     <div className="min-h-screen flex flex-col items-center justify-center text-center max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
       <h1 className="text-2xl font-bold">Ledokku</h1>
       {error && <p className="mt-3 text-red-500">{error.message}</p>}
+
+      {/* TODO display spinner if query is loading */}
 
       {data?.setup.canConnectSsh === true && (
         <React.Fragment>
@@ -87,5 +87,3 @@ const Home = () => {
     </div>
   );
 };
-
-export default withApollo(Home);

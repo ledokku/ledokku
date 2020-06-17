@@ -22,13 +22,16 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     loggedIn: boolean;
     user?: JwtUser;
   }>(() => {
-    const token =
-      typeof window === 'undefined'
-        ? false
-        : localStorage?.getItem('accessToken');
-
+    const token = localStorage.getItem('accessToken');
+    const decodedToken = token ? jwtDecode<JwtUser>(token) : undefined;
     return {
       loggedIn: Boolean(token),
+      user: decodedToken
+        ? {
+            userId: decodedToken.userId,
+            avatarUrl: decodedToken.avatarUrl,
+          }
+        : undefined,
     };
   });
 
@@ -41,20 +44,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     localStorage.removeItem('accessToken');
     window.location.href = '/';
   };
-
-  useEffect(() => {
-    const token = localStorage?.getItem('accessToken');
-    if (token) {
-      const decodedToken = jwtDecode<JwtUser>(token);
-      setState({
-        loggedIn: true,
-        user: {
-          userId: decodedToken.userId,
-          avatarUrl: decodedToken.avatarUrl,
-        },
-      });
-    }
-  }, []);
 
   return (
     <AuthContext.Provider
