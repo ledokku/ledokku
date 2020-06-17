@@ -1,20 +1,20 @@
 import React from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useDashboardQuery } from '../generated/graphql';
 import { NodeIcon } from '../ui/icons/NodeIcon';
 import { Header } from '../modules/layout/Header';
 import { TabNav, TabNavLink } from '../ui';
 
 export const Dashboard = () => {
-  const history = useHistory();
-  const { data, loading, error } = useDashboardQuery({});
+  // const history = useHistory();
+  const { data /* loading, error */ } = useDashboardQuery({});
 
   // TODO show loading
   // TODO handle error
 
-  const handleCreateFirstApp = () => {
-    history.push('/onboarding/cloud-provider');
-  };
+  // const handleCreateFirstApp = () => {
+  //   history.push('/onboarding/cloud-provider');
+  // };
 
   return (
     <div>
