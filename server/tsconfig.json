@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es6",
     "lib": ["dom", "esnext"],
-    "outDir": ".build",
+    "outDir": "build",
     "allowJs": false,
     "skipLibCheck": true,
     "strict": false,

@@ -3,11 +3,15 @@ dotenv.config();
 import { ApolloServer, gql } from 'apollo-server-express';
 import { DateTimeResolver } from 'graphql-scalars';
 import jsonwebtoken from 'jsonwebtoken';
+import express from 'express';
+import path from 'path';
 import { Resolvers } from './generated/graphql';
 import { mutations } from './graphql/mutations';
 import { config } from './config';
 import { app, http, io } from './server';
 import { queries } from './graphql/queries';
+
+app.use(express.static(path.join(__dirname, '..', '..', 'client', 'build')));
 
 const typeDefs = gql`
   scalar DateTime
@@ -169,6 +173,12 @@ const apolloServer = new ApolloServer({
   },
 });
 apolloServer.applyMiddleware({ app });
+
+app.get('*', (_, res) => {
+  res.sendFile(
+    path.join(__dirname, '..', '..', 'client', 'build', 'index.html')
+  );
+});
 
 io.on('connection', function () {
   console.log('a user connected');
