@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { createGlobalStyle } from 'styled-components';
 import { ApolloClient } from 'apollo-client';
 import { from } from 'apollo-link';
 import { createHttpLink } from 'apollo-link-http';
@@ -11,6 +12,20 @@ import './generated/index.css';
 import { config } from './config';
 import { AuthProvider } from './modules/auth/AuthContext';
 import { Router } from './Router';
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-smoothing: antialiased;
+
+    background:
+      linear-gradient(-45deg, white, transparent, white),
+      radial-gradient(rgba(0, 0, 0, 0.1) 1.25px, #FFF 1.25px);
+    background-size: cover, 18px 18px;
+  }
+`;
 
 const httpLink = createHttpLink({
   uri: `${config.serverUrl}/graphql`,
@@ -49,6 +64,7 @@ ReactDOM.render(
   <React.StrictMode>
     <ApolloProvider client={apolloClient}>
       <AuthProvider>
+        <GlobalStyle />
         <Router />
       </AuthProvider>
     </ApolloProvider>
