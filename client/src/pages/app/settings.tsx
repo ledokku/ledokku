@@ -15,7 +15,7 @@ export const Settings = () => {
   let history = useHistory();
   const [destroyAppMutation] = useDestroyAppMutation();
 
-  const { data, loading, error } = useAppByIdQuery({
+  const { data, loading /* error */ } = useAppByIdQuery({
     variables: {
       appId,
     },
@@ -44,7 +44,7 @@ export const Settings = () => {
 
     onSubmit: async (values) => {
       try {
-        const data = await destroyAppMutation({
+        await destroyAppMutation({
           variables: {
             input: { appId },
           },

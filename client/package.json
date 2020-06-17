@@ -37,8 +37,6 @@
     "formik": "2.1.4",
     "graphql": "15.1.0",
     "jwt-decode": "2.2.0",
-    "next": "9.4.1",
-    "next-with-apollo": "5.0.1",
     "polished": "3.6.3",
     "react": "16.13.1",
     "react-dom": "16.13.1",

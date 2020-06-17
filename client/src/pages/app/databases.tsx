@@ -7,7 +7,7 @@ import { TabNav, TabNavLink } from '../../ui';
 export const Databases = () => {
   const { id: appId } = useParams();
 
-  const { data, loading, error } = useAppByIdQuery({
+  const { data, loading /* error */ } = useAppByIdQuery({
     variables: {
       appId,
     },

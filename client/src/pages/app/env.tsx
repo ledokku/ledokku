@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-
-import withApollo from '../../lib/withApollo';
-import { useHistory, useParams } from 'react-router-dom';
-import { Protected } from '../../modules/auth/Protected';
+import { useParams } from 'react-router-dom';
 import { Header } from '../../modules/layout/Header';
 import {
   useAppByIdQuery,
@@ -33,6 +30,8 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
         variables: { key: name, appId },
         refetchQueries: [{ query: EnvVarsDocument, variables: { appId } }],
       });
+
+      console.log(data);
     } catch (error) {
       // TODO catch errors
       console.log(error);
@@ -52,6 +51,8 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
           variables: { key: values.name, value: values.value, appId },
           refetchQueries: [{ query: EnvVarsDocument, variables: { appId } }],
         });
+
+        console.log(data);
 
         if (isNewVar) {
           formik.resetForm();
@@ -135,7 +136,7 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
 
 export const Env = () => {
   const { id: appId } = useParams();
-  const { data, loading, error } = useAppByIdQuery({
+  const { data, loading /* error */ } = useAppByIdQuery({
     variables: {
       appId,
     },

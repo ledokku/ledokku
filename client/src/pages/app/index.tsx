@@ -7,7 +7,7 @@ import { TabNav, TabNavLink, Terminal } from '../../ui';
 export const App = () => {
   const { id: appId } = useParams();
 
-  const { data, loading, error } = useAppByIdQuery({
+  const { data, loading /* error */ } = useAppByIdQuery({
     variables: {
       appId,
     },
@@ -20,7 +20,7 @@ export const App = () => {
   const {
     data: appLogsData,
     loading: appLogsLoading,
-    error: appLogsError,
+    /* error: appLogsError, */
   } = useAppLogsQuery({
     variables: {
       appId,

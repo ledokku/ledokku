@@ -16,6 +16,8 @@ import { Dashboard } from './pages/dashboard';
 import { Activity } from './pages/activity';
 import { Metrics } from './pages/metrics';
 import { Settings } from './pages/settings';
+import { CreateDatabase } from './pages/create-database';
+import { CreateApp } from './pages/create-app';
 
 const PrivateRoute = ({ children, ...rest }: RouteProps) => {
   const { loggedIn } = useAuth();
@@ -57,6 +59,12 @@ export const Router = () => {
         </PrivateRoute>
         <PrivateRoute path="/settings" exact>
           <Settings />
+        </PrivateRoute>
+        <PrivateRoute path="/create-app" exact>
+          <CreateApp />
+        </PrivateRoute>
+        <PrivateRoute path="/create-database" exact>
+          <CreateDatabase />
         </PrivateRoute>
         <PrivateRoute path="/app/:id" exact>
           <App />
