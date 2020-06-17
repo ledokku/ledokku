@@ -47,7 +47,6 @@ To get initial feedback we are working the MVP state where current Dokku users w
 - GraphQL 💓
 - Prisma △
 - TypeScript 💙
-- NextJS 🖤
 - GithubAPI 🐱
 - Tailwind CSS 🌪
 - Docusaurus 🦖 

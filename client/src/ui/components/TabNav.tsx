@@ -1,6 +1,6 @@
 import React from 'react';
 import cx from 'classnames';
-import Link, { LinkProps } from 'next/link';
+import { Link, LinkProps } from 'react-router-dom';
 
 interface TabNavProps {
   children?: React.ReactNode;
@@ -30,18 +30,17 @@ export const TabNavLink = ({
   selected,
   ...props
 }: TabNavLinkProps) => (
-  <Link {...props}>
-    <a
-      className={cx(
-        'py-3 px-0.5 transition-colors ease-in-out duration-150',
-        {
-          'text-gray-500 hover:text-black ': !selected,
-          '-mb-px border-b border-black text-black': selected,
-        },
-        className
-      )}
-    >
-      {children}
-    </a>
+  <Link
+    {...props}
+    className={cx(
+      'py-3 px-0.5 transition-colors ease-in-out duration-150',
+      {
+        'text-gray-500 hover:text-black ': !selected,
+        '-mb-px border-b border-black text-black': selected,
+      },
+      className
+    )}
+  >
+    {children}
   </Link>
 );

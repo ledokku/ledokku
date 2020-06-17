@@ -35,11 +35,10 @@ Add a name, a homepage url, and in the field "Authorization callback URL" set th
 
 We use [dotenv](https://github.com/motdotla/dotenv) to loads environment variables from a `.env` file.
 
-Let's first setup the client environment. Inside the `client` folder create a new `.env` file and add the following env variables (replace the `GITHUB_CLIENT_ID` value with the one you obtained when creating the Github OAuth App):
+Let's first setup the client environment. Inside the `client` folder create a new `.env.development.local` file and add the following env variables:
 
 ```
-GITHUB_CLIENT_ID="MY_GITHUB_CLIENT_ID_CREATE_AT_THE_PREVIOUS_STEP"
-SERVER_URL="http://localhost:4000"
+REACT_APP_GITHUB_CLIENT_ID="MY_GITHUB_CLIENT_ID_CREATED_AT_THE_PREVIOUS_STEP"
 ```
 
 Let's now setup the server environment. Inside the `server` folder create a new `.env` file and add the following env variables (replace the github id and secret with the one you obtained when creating the Github OAuth App):
