@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "npm run watch:css && SKIP_PREFLIGHT_CHECK=true react-scripts start",
-    "build": "npm run build:css && react-scripts build",
+    "build": "npm run build:css && SKIP_PREFLIGHT_CHECK=true react-scripts build",
     "test": "react-scripts test",
     "build:css": "postcss src/styles/index.css -o src/generated/index.css",
     "watch:css": "postcss src/styles/index.css -o src/generated/index.css",
