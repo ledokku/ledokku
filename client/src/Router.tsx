@@ -9,6 +9,8 @@ import {
 import { useAuth } from './modules/auth/AuthContext';
 import { Home } from './pages/home';
 import { Dashboard } from './pages/dashboard';
+import { Activity } from './pages/activity';
+import { Metrics } from './pages/metrics';
 import { Settings } from './pages/settings';
 
 const PrivateRoute = ({ children, ...rest }: RouteProps) => {
@@ -42,6 +44,12 @@ export const Router = () => {
         </Route>
         <PrivateRoute path="/dashboard" exact>
           <Dashboard />
+        </PrivateRoute>
+        <PrivateRoute path="/activity" exact>
+          <Activity />
+        </PrivateRoute>
+        <PrivateRoute path="/metrics" exact>
+          <Metrics />
         </PrivateRoute>
         <PrivateRoute path="/settings" exact>
           <Settings />

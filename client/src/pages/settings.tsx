@@ -1,12 +1,10 @@
 import React from 'react';
-import { useRouter } from 'next/router';
-import { useDashboardQuery } from '../generated/graphql';
+// import { useDashboardQuery } from '../generated/graphql';
 import { Header } from '../modules/layout/Header';
 import { TabNav, TabNavLink } from '../ui';
 
 export const Settings = () => {
-  const router = useRouter();
-  const { data, loading, error } = useDashboardQuery({});
+  // const { data, loading, error } = useDashboardQuery({});
 
   // TODO show loading
   // TODO handle error
