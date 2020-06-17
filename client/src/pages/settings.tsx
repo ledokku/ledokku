@@ -1,14 +1,10 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
-
-import withApollo from '../lib/withApollo';
 import { useDashboardQuery } from '../generated/graphql';
-import { Protected } from '../modules/auth/Protected';
 import { Header } from '../modules/layout/Header';
 import { TabNav, TabNavLink } from '../ui';
 
-const Settings = () => {
+export const Settings = () => {
   const router = useRouter();
   const { data, loading, error } = useDashboardQuery({});
 
@@ -38,9 +34,3 @@ const Settings = () => {
     </div>
   );
 };
-
-export default withApollo(() => (
-  <Protected>
-    <Settings />
-  </Protected>
-));

@@ -9,8 +9,9 @@ import {
 import { useAuth } from './modules/auth/AuthContext';
 import { Home } from './pages/home';
 import { Dashboard } from './pages/dashboard';
+import { Settings } from './pages/settings';
 
-export const PrivateRoute = ({ children, ...rest }: RouteProps) => {
+const PrivateRoute = ({ children, ...rest }: RouteProps) => {
   const { loggedIn } = useAuth();
 
   return (
@@ -41,6 +42,9 @@ export const Router = () => {
         </Route>
         <PrivateRoute path="/dashboard" exact>
           <Dashboard />
+        </PrivateRoute>
+        <PrivateRoute path="/settings" exact>
+          <Settings />
         </PrivateRoute>
         {/* TODO 404 page */}
       </Switch>
