@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { GitHub } from 'react-feather';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Redirect } from 'react-router-dom';
 import { config } from '../config';
 import {
   useSetupQuery,
@@ -41,11 +41,6 @@ export const Home = () => {
     codeToLogin();
   }, []);
 
-  // We check if the user is connected, if yes we need to redirect him to the dashboard
-  if (loggedIn) {
-    history.push('/dashboard');
-  }
-
   const handleLogin = () => {
     // TODO redirect_uri only on localhost
     window.location.replace(
@@ -53,12 +48,19 @@ export const Home = () => {
     );
   };
 
+  // We check if the user is connected, if yes we need to redirect him to the dashboard
+  if (loggedIn) {
+    return <Redirect to="dashboard" />;
+  }
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center text-center max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
       <h1 className="text-2xl font-bold">Ledokku</h1>
+
       {error && <p className="mt-3 text-red-500">{error.message}</p>}
 
       {/* TODO display spinner if query is loading */}
+      {loading && <p className="mt-3">Loading...</p>}
 
       {data?.setup.canConnectSsh === true && (
         <React.Fragment>

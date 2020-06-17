@@ -41,6 +41,7 @@ export const Router = () => {
         <Route path="/dashboard" exact>
           <Home />
         </Route>
+        {/* TODO 404 page */}
       </Switch>
     </BrowserRouter>
   );
