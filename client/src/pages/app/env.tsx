@@ -1,19 +1,15 @@
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
-
-import withApollo from '../../../lib/withApollo';
-
-import { Protected } from '../../../modules/auth/Protected';
-import { Header } from '../../../modules/layout/Header';
+import { useParams } from 'react-router-dom';
+import { Header } from '../../modules/layout/Header';
 import {
   useAppByIdQuery,
   useEnvVarsQuery,
   useSetEnvVarMutation,
   useUnsetEnvVarMutation,
   EnvVarsDocument,
-} from '../../../generated/graphql';
+} from '../../generated/graphql';
 import { useFormik } from 'formik';
-import { TabNav, TabNavLink, Button } from '../../../ui';
+import { TabNav, TabNavLink, Button } from '../../ui';
 
 interface EnvFormProps {
   name: string;
@@ -22,18 +18,20 @@ interface EnvFormProps {
   isNewVar?: boolean;
 }
 
-const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
+export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
   const [isEnvVarVisible, setEnvVarIsVisible] = useState(false);
   const [setEnvVarMutation] = useSetEnvVarMutation();
   const [unsetEnvVarMutation] = useUnsetEnvVarMutation();
 
-  const handleDeleteEnvVar = async () => {
+  const handleDeleteEnvVar = async (event: any) => {
     event.preventDefault();
     try {
       const data = await unsetEnvVarMutation({
         variables: { key: name, appId },
         refetchQueries: [{ query: EnvVarsDocument, variables: { appId } }],
       });
+
+      console.log(data);
     } catch (error) {
       // TODO catch errors
       console.log(error);
@@ -53,6 +51,8 @@ const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
           variables: { key: values.name, value: values.value, appId },
           refetchQueries: [{ query: EnvVarsDocument, variables: { appId } }],
         });
+
+        console.log(data);
 
         if (isNewVar) {
           formik.resetForm();
@@ -130,11 +130,9 @@ const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
   );
 };
 
-const Env = () => {
-  const router = useRouter();
-  // // On first render appId will be undefined, the value is set after and a rerender is triggered.
-  const { appId } = router.query as { appId?: string };
-  const { data, loading, error } = useAppByIdQuery({
+export const Env = () => {
+  const { id: appId } = useParams();
+  const { data, loading /* error */ } = useAppByIdQuery({
     variables: {
       appId,
     },
@@ -176,34 +174,13 @@ const Env = () => {
       <Header />
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <TabNav>
-          <TabNavLink href="/app/[appId]" as={`/app/${app.id}`} passHref>
-            App
-          </TabNavLink>
-          <TabNavLink
-            href="/app/[appId]/databases"
-            as={`/app/${app.id}/databases`}
-            passHref
-          >
-            Databases
-          </TabNavLink>
-          <TabNavLink
-            href="/app/[appId]/env"
-            as={`/app/${app.id}/env`}
-            passHref
-            selected
-          >
+          <TabNavLink to={`/app/${app.id}`}>App</TabNavLink>
+          <TabNavLink to={`/app/${app.id}/databases`}>Databases</TabNavLink>
+          <TabNavLink to={`/app/${app.id}/env`} selected>
             Env setup
           </TabNavLink>
-          <TabNavLink
-            href="/app/[appId]/settings"
-            as={`/app/${app.id}/settings`}
-            passHref
-          >
-            Settings
-          </TabNavLink>
-          <TabNavLink href="/dashboard" passHref>
-            Return to dashboard
-          </TabNavLink>
+          <TabNavLink to={`/app/${app.id}/settings`}>Settings</TabNavLink>
+          <TabNavLink to="/dashboard">Return to dashboard</TabNavLink>
         </TabNav>
       </div>
 
@@ -244,9 +221,3 @@ const Env = () => {
     </div>
   );
 };
-
-export default withApollo(() => (
-  <Protected>
-    <Env />
-  </Protected>
-));

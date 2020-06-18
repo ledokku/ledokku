@@ -1,16 +1,13 @@
 import React from 'react';
-import { useRouter } from 'next/router';
+import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { ArrowRight } from 'react-feather';
 import cx from 'classnames';
-
 import { useCreateDatabaseMutation, DatabaseTypes } from '../generated/graphql';
-import withApollo from '../lib/withApollo';
 import { PostgreSQLIcon } from '../ui/icons/PostgreSQLIcon';
 import { MySQLIcon } from '../ui/icons/MySQLIcon';
 import { MongoIcon } from '../ui/icons/MongoIcon';
 import { RedisIcon } from '../ui/icons/RedisIcon';
-import { Protected } from '../modules/auth/Protected';
 import { Header } from '../modules/layout/Header';
 import { Button } from '../ui';
 
@@ -38,8 +35,8 @@ const DatabaseBox = ({ label, selected, icon, onClick }: DatabaseBoxProps) => {
   );
 };
 
-const CreateDatabase = () => {
-  const router = useRouter();
+export const CreateDatabase = () => {
+  const history = useHistory();
   const [createDatabaseMutation] = useCreateDatabaseMutation();
   const formik = useFormik<{ name: string; type: DatabaseTypes }>({
     initialValues: {
@@ -55,7 +52,8 @@ const CreateDatabase = () => {
           },
         });
         // TODO redirect to database page once ready
-        router.push('/dashboard');
+        console.log(data);
+        history.push('/dashboard');
       } catch (error) {
         // TODO catch errors
         console.log(error);
@@ -171,9 +169,3 @@ const CreateDatabase = () => {
     </React.Fragment>
   );
 };
-
-export default withApollo(() => (
-  <Protected>
-    <CreateDatabase />
-  </Protected>
-));

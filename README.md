@@ -1,9 +1,11 @@
 # Ledokku - deploy your apps within seconds
 
 ### Dashboard preview
+
 ![Dashboard](/images/Dashboard1.png)
 
 ### App info preview
+
 ![App](/images/App1.png)
 
 Ledokku is a beautiful UI powered by [dokku](http://dokku.viewdocs.io/dokku/)
@@ -47,10 +49,9 @@ To get initial feedback we are working the MVP state where current Dokku users w
 - GraphQL 💓
 - Prisma △
 - TypeScript 💙
-- NextJS 🖤
 - GithubAPI 🐱
 - Tailwind CSS 🌪
-- Docusaurus 🦖 
+- Docusaurus 🦖
 - Docs hosted on [Netlify](https://www.netlify.com/)
 
 ## Contributing
