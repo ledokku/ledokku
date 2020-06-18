@@ -20,9 +20,7 @@ const envSchema = yup.object({
   DOKKU_SSH_HOST: yup
     .string()
     .required('Please provide a valid DOKKU_SSH_HOST env variable.'),
-  DOKKU_SSH_PORT: yup
-    .string()
-    .required('Please provide a valid DOKKU_SSH_PORT env variable.'),
+  DOKKU_SSH_PORT: yup.string(),
 });
 
 try {
@@ -95,7 +93,7 @@ export const config = {
   redisUrl: process.env.REDIS_URL,
   redisConnection,
   dokkuSshHost: process.env.DOKKU_SSH_HOST,
-  dokkuSshPort: +process.env.DOKKU_SSH_PORT,
+  dokkuSshPort: process.env.DOKKU_SSH_PORT ? +process.env.DOKKU_SSH_PORT : 22,
   privateKey,
   sshKeyPath,
 };
