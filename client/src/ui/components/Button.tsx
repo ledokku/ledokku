@@ -10,7 +10,7 @@ interface ButtonProps {
   disabled?: boolean;
   size?: 'normal' | 'large';
   isSubmit?: boolean;
-  onClick?(): void;
+  onClick?(event?: React.FormEvent): void;
 }
 
 export const Button = ({ children, ...props }: ButtonProps) => {
