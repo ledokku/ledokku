@@ -16,7 +16,7 @@ on:
 #       - v*
 
 jobs:
-  # Push image to GitHub Packages.
+  # Push image to Docker.
   release-docker:
     runs-on: ubuntu-latest
     # if: github.event_name == 'push'
@@ -28,12 +28,15 @@ jobs:
         run: |
           docker build . --file Dockerfile --tag ledokku
 
+      # - name: Log into registry
+      #  run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+
       - name: Log into registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+        run: docker login --username ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Push image
         run: |
-          IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/ledokku
+          IMAGE_ID=ledokku/ledokku
 
           # Change all uppercase to lowercase
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
