@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useDashboardQuery } from '../generated/graphql';
 import { NodeIcon } from '../ui/icons/NodeIcon';
 import { Header } from '../modules/layout/Header';
-import { TabNav, TabNavLink, Spinner } from '../ui';
+import { TabNav, TabNavLink } from '../ui';
 
 export const Dashboard = () => {
   // const history = useHistory();
