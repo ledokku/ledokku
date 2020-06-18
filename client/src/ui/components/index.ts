@@ -9,3 +9,4 @@ export * from './TextField';
 export * from './Typography';
 export * from './Terminal';
 export * from './TabNav';
+export * from './Spinner';

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, Redirect } from 'react-router-dom';
 import { GitHub } from 'react-feather';
 import { config } from '../config';
@@ -7,13 +7,14 @@ import {
   useLoginWithGithubMutation,
 } from '../generated/graphql';
 import { useAuth } from '../modules/auth/AuthContext';
-import { Terminal } from '../ui';
+import { Terminal, Spinner } from '../ui';
 
 export const Home = () => {
   const history = useHistory();
   const { loggedIn, login } = useAuth();
   const { data, loading, error } = useSetupQuery({});
   const [loginWithGithubMutation] = useLoginWithGithubMutation();
+  const [isSpinnerVisible, setIsSpinnverVisilble] = useState(false);
 
   // On mount we check if there is a github code present
   useEffect(() => {
@@ -24,6 +25,7 @@ export const Home = () => {
         .split('code=')[1];
 
       if (githubCode) {
+        setIsSpinnverVisilble(true);
         // TODO show loading during login
         // Remove hash in url
         window.history.replaceState({}, document.title, '.');
@@ -43,6 +45,7 @@ export const Home = () => {
   }, []);
 
   const handleLogin = () => {
+    setIsSpinnverVisilble(true);
     // TODO redirect_uri only on localhost
     window.location.replace(
       `https://github.com/login/oauth/authorize?client_id=${config.githubClientId}&scope=user:email&redirect_uri=http://localhost:3000/`
@@ -63,7 +66,9 @@ export const Home = () => {
       {/* TODO display spinner if query is loading */}
       {loading && <p className="mt-3">Loading...</p>}
 
-      {data?.setup.canConnectSsh === true && (
+      {data?.setup.canConnectSsh === true && isSpinnerVisible ? (
+        <Spinner size="large" />
+      ) : (
         <React.Fragment>
           <p className="mt-3">Login to get started.</p>
           <button
