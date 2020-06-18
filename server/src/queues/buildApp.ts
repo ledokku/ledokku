@@ -24,7 +24,7 @@ export const buildAppQueue = new Queue<QueueArgs>(queueName, {
     // Max timeout 20 minutes
     timeout: 1.2e6,
   },
-  connection: config.redisConnection,
+  connection: config.redisClient,
 });
 
 /**
@@ -152,7 +152,7 @@ const worker = new Worker(
     debug(`finished buildAppQueue for app id ${app.id}`);
     // TODO notify client via socket.io that build is finished
   },
-  { connection: config.redisConnection }
+  { connection: config.redisClient }
 );
 
 worker.on('failed', async (job, err) => {

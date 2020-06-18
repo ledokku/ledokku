@@ -3,6 +3,7 @@ import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { generateKeyPairSync } from 'crypto';
 import sshpk from 'sshpk';
+import Redis from 'ioredis';
 
 const envSchema = yup.object({
   JWT_SECRET: yup
@@ -80,18 +81,12 @@ const privateKey = readFileSync(sshKeyPath, {
   encoding: 'utf8',
 });
 
-const url = process.env.REDIS_URL.split(':');
-const redisConnection = {
-  host: url[1].replace('//', ''),
-  port: +url[2],
-};
-
 export const config = {
   jwtSecret: process.env.JWT_SECRET,
   githubClientId: process.env.GITHUB_CLIENT_ID,
   githubClientSecret: process.env.GITHUB_CLIENT_SECRET,
   redisUrl: process.env.REDIS_URL,
-  redisConnection,
+  redisClient: new Redis(process.env.REDIS_URL),
   dokkuSshHost: process.env.DOKKU_SSH_HOST,
   dokkuSshPort: process.env.DOKKU_SSH_PORT ? +process.env.DOKKU_SSH_PORT : 22,
   privateKey,
