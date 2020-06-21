@@ -5,6 +5,7 @@ import { dokkuPlugins } from './dokkuPlugins';
 import { appLogs } from './appLogs';
 import { envVars } from './envVars';
 import { setup } from './setup';
+import { isPluginInstalled } from './isPluginInstalled';
 
 export const queries = {
   app,
@@ -14,4 +15,5 @@ export const queries = {
   appLogs,
   envVars,
   setup,
+  isPluginInstalled,
 };

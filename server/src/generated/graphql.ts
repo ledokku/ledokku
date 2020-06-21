@@ -110,6 +110,11 @@ export type SetupResult = {
   sshPublicKey: Scalars['String'];
 };
 
+export type IsPluginInstalledResult = {
+   __typename?: 'IsPluginInstalledResult';
+  isPluginInstalled: Scalars['Boolean'];
+};
+
 export type CreateAppInput = {
   name: Scalars['String'];
   gitUrl: Scalars['String'];
@@ -141,6 +146,7 @@ export type Query = {
   apps: Array<App>;
   app?: Maybe<App>;
   databases: Array<Database>;
+  isPluginInstalled: IsPluginInstalledResult;
   dokkuPlugins: DokkuPluginResult;
   appLogs: AppLogsResult;
   envVars: EnvVarsResult;
@@ -149,6 +155,11 @@ export type Query = {
 
 export type QueryAppArgs = {
   appId: Scalars['String'];
+};
+
+
+export type QueryIsPluginInstalledArgs = {
+  pluginName: Scalars['String'];
 };
 
 
@@ -279,11 +290,10 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  String: ResolverTypeWrapper<Scalars['String']>,
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   DateTime: ResolverTypeWrapper<Scalars['DateTime']>,
   App: ResolverTypeWrapper<App>,
   ID: ResolverTypeWrapper<Scalars['ID']>,
+  String: ResolverTypeWrapper<Scalars['String']>,
   AppBuild: ResolverTypeWrapper<AppBuild>,
   AppBuildStatus: AppBuildStatus,
   Database: ResolverTypeWrapper<Database>,
@@ -291,6 +301,7 @@ export type ResolversTypes = {
   LoginResult: ResolverTypeWrapper<LoginResult>,
   CreateAppResult: ResolverTypeWrapper<CreateAppResult>,
   DestroyAppResult: ResolverTypeWrapper<DestroyAppResult>,
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   DokkuPlugin: ResolverTypeWrapper<DokkuPlugin>,
   DokkuPluginResult: ResolverTypeWrapper<DokkuPluginResult>,
   SetEnvVarResult: ResolverTypeWrapper<SetEnvVarResult>,
@@ -299,6 +310,7 @@ export type ResolversTypes = {
   EnvVar: ResolverTypeWrapper<EnvVar>,
   EnvVarsResult: ResolverTypeWrapper<EnvVarsResult>,
   SetupResult: ResolverTypeWrapper<SetupResult>,
+  IsPluginInstalledResult: ResolverTypeWrapper<IsPluginInstalledResult>,
   CreateAppInput: CreateAppInput,
   CreateDatabaseInput: CreateDatabaseInput,
   SetEnvVarInput: SetEnvVarInput,
@@ -312,11 +324,10 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  String: Scalars['String'],
-  Boolean: Scalars['Boolean'],
   DateTime: Scalars['DateTime'],
   App: App,
   ID: Scalars['ID'],
+  String: Scalars['String'],
   AppBuild: AppBuild,
   AppBuildStatus: AppBuildStatus,
   Database: Database,
@@ -324,6 +335,7 @@ export type ResolversParentTypes = {
   LoginResult: LoginResult,
   CreateAppResult: CreateAppResult,
   DestroyAppResult: DestroyAppResult,
+  Boolean: Scalars['Boolean'],
   DokkuPlugin: DokkuPlugin,
   DokkuPluginResult: DokkuPluginResult,
   SetEnvVarResult: SetEnvVarResult,
@@ -332,6 +344,7 @@ export type ResolversParentTypes = {
   EnvVar: EnvVar,
   EnvVarsResult: EnvVarsResult,
   SetupResult: SetupResult,
+  IsPluginInstalledResult: IsPluginInstalledResult,
   CreateAppInput: CreateAppInput,
   CreateDatabaseInput: CreateDatabaseInput,
   SetEnvVarInput: SetEnvVarInput,
@@ -428,11 +441,17 @@ export type SetupResultResolvers<ContextType = any, ParentType extends Resolvers
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
+export type IsPluginInstalledResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['IsPluginInstalledResult'] = ResolversParentTypes['IsPluginInstalledResult']> = {
+  isPluginInstalled?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   setup?: Resolver<ResolversTypes['SetupResult'], ParentType, ContextType>,
   apps?: Resolver<Array<ResolversTypes['App']>, ParentType, ContextType>,
   app?: Resolver<Maybe<ResolversTypes['App']>, ParentType, ContextType, RequireFields<QueryAppArgs, 'appId'>>,
   databases?: Resolver<Array<ResolversTypes['Database']>, ParentType, ContextType>,
+  isPluginInstalled?: Resolver<ResolversTypes['IsPluginInstalledResult'], ParentType, ContextType, RequireFields<QueryIsPluginInstalledArgs, 'pluginName'>>,
   dokkuPlugins?: Resolver<ResolversTypes['DokkuPluginResult'], ParentType, ContextType>,
   appLogs?: Resolver<ResolversTypes['AppLogsResult'], ParentType, ContextType, RequireFields<QueryAppLogsArgs, 'appId'>>,
   envVars?: Resolver<ResolversTypes['EnvVarsResult'], ParentType, ContextType, RequireFields<QueryEnvVarsArgs, 'appId'>>,
@@ -467,6 +486,7 @@ export type Resolvers<ContextType = any> = {
   EnvVar?: EnvVarResolvers<ContextType>,
   EnvVarsResult?: EnvVarsResultResolvers<ContextType>,
   SetupResult?: SetupResultResolvers<ContextType>,
+  IsPluginInstalledResult?: IsPluginInstalledResultResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
   Upload?: GraphQLScalarType,
