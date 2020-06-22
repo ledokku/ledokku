@@ -1,14 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { ArrowRight } from 'react-feather';
 import cx from 'classnames';
-import { useCreateDatabaseMutation, DatabaseTypes } from '../generated/graphql';
+import {
+  useCreateDatabaseMutation,
+  DatabaseTypes,
+  useIsPluginInstalledLazyQuery,
+} from '../generated/graphql';
 import { PostgreSQLIcon } from '../ui/icons/PostgreSQLIcon';
 import { MySQLIcon } from '../ui/icons/MySQLIcon';
 import { MongoIcon } from '../ui/icons/MongoIcon';
 import { RedisIcon } from '../ui/icons/RedisIcon';
 import { Header } from '../modules/layout/Header';
+import { Terminal } from '../ui/components/Terminal';
+import { dbTypeToDokkuPlugin } from './utils';
 
 interface DatabaseBoxProps {
   label: string;
@@ -37,6 +43,10 @@ const DatabaseBox = ({ label, selected, icon, onClick }: DatabaseBoxProps) => {
 export const CreateDatabase = () => {
   const history = useHistory();
   const [createDatabaseMutation] = useCreateDatabaseMutation();
+  const [
+    isDokkuPluginInstalled,
+    { data, loading },
+  ] = useIsPluginInstalledLazyQuery();
   const formik = useFormik<{ name: string; type: DatabaseTypes }>({
     initialValues: {
       name: '',
@@ -61,6 +71,19 @@ export const CreateDatabase = () => {
     },
   });
 
+  useEffect(() => {
+    isDokkuPluginInstalled({
+      variables: {
+        pluginName:
+          // TODO REMOVE THIS CONDITION AS THIS IS ONLY FOR TEST PURPOSES
+          // TAR IS INSTALLED SO WE CAN  SEE BEHAVIOUR OF WHEN ONE PLUGIN IS INSTALLED
+          formik.values.type !== 'POSTGRESQL'
+            ? dbTypeToDokkuPlugin(formik.values.type)
+            : 'tar',
+      },
+    });
+  }, [formik.values.type, data]);
+
   return (
     <React.Fragment>
       <Header />
@@ -70,15 +93,21 @@ export const CreateDatabase = () => {
 
         <form onSubmit={formik.handleSubmit} className="mt-8">
           <div className="mt-12">
-            <label className="block mb-2">Database name:</label>
-            <input
-              autoComplete="off"
-              className="block w-full max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
-              id="name"
-              name="name"
-              value={formik.values.name}
-              onChange={formik.handleChange}
-            />
+            {data?.isPluginInstalled.isPluginInstalled === true && !loading ? (
+              <React.Fragment>
+                <label className="block mb-2">Database name:</label>
+                <input
+                  autoComplete="off"
+                  className="block w-full max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
+                  id="name"
+                  name="name"
+                  value={formik.values.name}
+                  onChange={formik.handleChange}
+                />
+              </React.Fragment>
+            ) : (
+              <Terminal>Install {formik.values.type}</Terminal>
+            )}
           </div>
 
           <div className="mt-12">
