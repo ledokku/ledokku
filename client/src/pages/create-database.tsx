@@ -7,7 +7,6 @@ import {
   useCreateDatabaseMutation,
   DatabaseTypes,
   useIsPluginInstalledLazyQuery,
-  IsPluginInstalledDocument,
 } from '../generated/graphql';
 import { PostgreSQLIcon } from '../ui/icons/PostgreSQLIcon';
 import { MySQLIcon } from '../ui/icons/MySQLIcon';
@@ -72,6 +71,8 @@ export const CreateDatabase = () => {
     },
   });
 
+  const isPluginInstalled = data.isPluginInstalled.isPluginInstalled;
+
   useEffect(() => {
     isDokkuPluginInstalled({
       variables: {
@@ -83,7 +84,7 @@ export const CreateDatabase = () => {
             : 'tar',
       },
     });
-  }, [formik.values.type, data]);
+  }, [formik.values.type, isPluginInstalled]);
 
   return (
     <React.Fragment>
