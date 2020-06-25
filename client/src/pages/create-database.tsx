@@ -82,7 +82,7 @@ export const CreateDatabase = () => {
             : 'tar',
       },
     });
-  }, [formik.values.type, data]);
+  }, [formik.values.type, data?.isPluginInstalled]);
 
   return (
     <React.Fragment>
@@ -93,21 +93,19 @@ export const CreateDatabase = () => {
 
         <form onSubmit={formik.handleSubmit} className="mt-8">
           <div className="mt-12">
-            {data?.isPluginInstalled.isPluginInstalled === true && !loading ? (
-              <React.Fragment>
-                <label className="block mb-2">Database name:</label>
-                <input
-                  autoComplete="off"
-                  className="block w-full max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
-                  id="name"
-                  name="name"
-                  value={formik.values.name}
-                  onChange={formik.handleChange}
-                />
-              </React.Fragment>
-            ) : (
-              <Terminal>Install {formik.values.type}</Terminal>
-            )}
+            <React.Fragment>
+              <label className="block mb-2">Database name:</label>
+              <input
+                autoComplete="off"
+                className="block w-full max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
+                id="name"
+                name="name"
+                value={formik.values.name}
+                onChange={formik.handleChange}
+              />
+            </React.Fragment>
+            {data?.isPluginInstalled.isPluginInstalled === false &&
+              !loading && <Terminal>Install {formik.values.type}</Terminal>}
           </div>
 
           <div className="mt-12">
@@ -190,7 +188,11 @@ export const CreateDatabase = () => {
           <div className="mt-12 flex justify-end">
             <button
               className="py-3 px-4 bg-black text-white rounded flex justify-center"
-              disabled={formik.isSubmitting}
+              disabled={
+                formik.isSubmitting ||
+                (data?.isPluginInstalled.isPluginInstalled === false &&
+                  !loading)
+              }
               type="submit"
             >
               Create
