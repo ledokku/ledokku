@@ -7,6 +7,7 @@ import {
   useCreateDatabaseMutation,
   DatabaseTypes,
   useIsPluginInstalledLazyQuery,
+  IsPluginInstalledDocument,
 } from '../generated/graphql';
 import { PostgreSQLIcon } from '../ui/icons/PostgreSQLIcon';
 import { MySQLIcon } from '../ui/icons/MySQLIcon';
@@ -82,7 +83,7 @@ export const CreateDatabase = () => {
             : 'tar',
       },
     });
-  }, [formik.values.type, data?.isPluginInstalled]);
+  }, [formik.values.type, data]);
 
   return (
     <React.Fragment>
