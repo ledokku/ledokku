@@ -71,7 +71,7 @@ export const CreateDatabase = () => {
     },
   });
 
-  const isPluginInstalled = data.isPluginInstalled.isPluginInstalled;
+  const isPluginInstalled = data?.isPluginInstalled.isPluginInstalled;
 
   useEffect(() => {
     isDokkuPluginInstalled({
