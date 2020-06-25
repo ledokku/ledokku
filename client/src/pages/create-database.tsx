@@ -84,7 +84,7 @@ export const CreateDatabase = () => {
             : 'tar',
       },
     });
-  }, [formik.values.type, isPluginInstalled]);
+  }, [formik.values.type, isPluginInstalled, isDokkuPluginInstalled]);
 
   return (
     <React.Fragment>
