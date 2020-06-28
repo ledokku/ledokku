@@ -64,7 +64,7 @@ export const Home = () => {
       {error && <p className="mt-3 text-red-500">{error.message}</p>}
 
       {/* TODO display spinner if query is loading */}
-      {loading && <p className="mt-3">Loading...</p>}
+      {loading && <Spinner size="large" />}
 
       {data?.setup.canConnectSsh === true && isSpinnerVisible ? (
         <Spinner size="large" />
