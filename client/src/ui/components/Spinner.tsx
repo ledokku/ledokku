@@ -1,8 +1,10 @@
 import React from 'react';
+import cx from 'classnames';
 import styled, { keyframes } from 'styled-components';
 
 interface SpinnerProps {
   size: 'small' | 'large';
+  className?: string;
 }
 
 const rotate360 = keyframes`
@@ -14,20 +16,22 @@ const rotate360 = keyframes`
   }
 `;
 
-// ${({ theme }) => theme.background};
 const StyledSpinner = styled.div`
   animation: ${rotate360} 1.5s linear infinite;
-  height: ${(props: SpinnerProps) =>
-    props.size === 'small' ? '3rem' : '6rem'};
-  width: ${(props: SpinnerProps) => (props.size === 'small' ? '3rem' : '6rem')};
-  border-radius: 9999px;
-  border-width: ${(props: SpinnerProps) =>
-    props.size === 'small' ? '0.3rem' : '0.5rem'};
-  border-top-width: ${(props: SpinnerProps) =>
-    props.size === 'small' ? '0.3rem' : '0.5rem'};
   border-top-color: #1a202c;
-  color: white;
   transition-timing-function: linear;
 `;
 
-export const Spinner = (props: SpinnerProps) => <StyledSpinner {...props} />;
+export const Spinner = ({ size, className, ...props }: SpinnerProps) => (
+  <StyledSpinner
+    {...props}
+    className={cx(
+      'rounded-full border-gray-200 ',
+      {
+        'border-8 border-t-8 h-24 w-24': size === 'large',
+        'border-4 border-t-4 h-8 w-8': size === 'small',
+      },
+      className
+    )}
+  />
+);
