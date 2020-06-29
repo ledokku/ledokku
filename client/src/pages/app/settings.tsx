@@ -121,7 +121,7 @@ export const Settings = () => {
                 </p>
               )}
               <Button
-                isSubmit={true}
+                type="submit"
                 disabled={!formik.values.appName || !!formik.errors.appName}
                 color="red"
                 width="normal"

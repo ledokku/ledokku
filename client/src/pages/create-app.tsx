@@ -77,7 +77,7 @@ export const CreateApp = () => {
                 <Button
                   color="grey"
                   width="normal"
-                  isSubmit={true}
+                  type="submit"
                   disabled={!formik.values.name || !formik.values.gitUrl}
                 >
                   Create

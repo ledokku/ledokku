@@ -161,7 +161,7 @@ export const CreateDatabase = () => {
 
           <div className="mt-12 flex justify-end">
             <Button
-              isSubmit={true}
+              type="submit"
               color="grey"
               width="normal"
               iconEnd={<ArrowRight />}

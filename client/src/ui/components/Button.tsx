@@ -6,12 +6,10 @@ interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
   iconEnd?: React.ReactNode;
   color: 'red' | 'grey';
   width: 'normal' | 'large';
-  isSubmit?: boolean;
 }
 
 export const Button = ({
   children,
-  isSubmit,
   color,
   disabled,
   width,
@@ -22,7 +20,7 @@ export const Button = ({
 }: ButtonProps) => (
   <button
     {...props}
-    type={isSubmit ? 'submit' : 'button'}
+    type={'submit' ? 'submit' : 'button'}
     disabled={disabled}
     className={cx(
       'py-2 px-10 bg-gray-900 hover:bg-blue text-white  font-bold  rounded-lg flex justify-center',
