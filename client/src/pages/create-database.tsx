@@ -13,8 +13,9 @@ import { MySQLIcon } from '../ui/icons/MySQLIcon';
 import { MongoIcon } from '../ui/icons/MongoIcon';
 import { RedisIcon } from '../ui/icons/RedisIcon';
 import { Header } from '../modules/layout/Header';
-import { Terminal } from '../ui/components/Terminal';
+
 import { dbTypeToDokkuPlugin } from './utils';
+import { Button, Terminal } from '../ui';
 
 interface DatabaseBoxProps {
   label: string;
@@ -188,18 +189,14 @@ export const CreateDatabase = () => {
           </div>
 
           <div className="mt-12 flex justify-end">
-            <button
-              className="py-3 px-4 bg-black text-white rounded flex justify-center"
-              disabled={
-                formik.isSubmitting ||
-                (data?.isPluginInstalled.isPluginInstalled === false &&
-                  !loading)
-              }
+            <Button
               type="submit"
+              color="grey"
+              width="normal"
+              iconEnd={<ArrowRight />}
             >
               Create
-              <ArrowRight className="ml-2" />
-            </button>
+            </Button>
           </div>
         </form>
       </div>
