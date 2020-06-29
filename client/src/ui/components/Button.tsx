@@ -20,7 +20,7 @@ export const Button = ({
 }: ButtonProps) => (
   <button
     {...props}
-    type={'submit' ? 'submit' : 'button'}
+    type={type === 'submit' ? 'submit' : 'button'}
     className={cx(
       'py-2 px-10 bg-gray-900 hover:bg-blue text-white  font-bold  rounded-lg flex justify-center',
       {
