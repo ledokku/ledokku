@@ -13,6 +13,7 @@ export const Button = ({
   color,
   disabled,
   width,
+  type,
   className,
   iconEnd,
   iconStart,
@@ -20,8 +21,6 @@ export const Button = ({
 }: ButtonProps) => (
   <button
     {...props}
-    type={'submit' ? 'submit' : 'button'}
-    disabled={disabled}
     className={cx(
       'py-2 px-10 bg-gray-900 hover:bg-blue text-white  font-bold  rounded-lg flex justify-center',
       {
