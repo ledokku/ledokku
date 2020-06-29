@@ -11,23 +11,23 @@ interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
 export const Button = ({
   children,
   color,
-  disabled,
   width,
-  type,
   className,
   iconEnd,
   iconStart,
+  type,
   ...props
 }: ButtonProps) => (
   <button
     {...props}
+    type={'submit' ? 'submit' : 'button'}
     className={cx(
       'py-2 px-10 bg-gray-900 hover:bg-blue text-white  font-bold  rounded-lg flex justify-center',
       {
         'bg-gray-900': color === 'grey',
         'bg-red-500': color === 'red',
-        'opacity-50 cursor-not-allowed': disabled,
-        'hover:text-white border hover:border-transparent': !disabled,
+        'opacity-50 cursor-not-allowed': props.disabled,
+        'hover:text-white border hover:border-transparent': !props.disabled,
         'w-64': width === 'large',
         'w-32': width === 'normal',
       },
