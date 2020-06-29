@@ -46,7 +46,7 @@ export const Dashboard = () => {
             ))}
             <p className="py-3">
               <Link to="/create-app">
-                <Button size="large" color={'grey'}>
+                <Button width="large" color={'grey'}>
                   Create new app
                 </Button>
               </Link>
@@ -57,7 +57,7 @@ export const Dashboard = () => {
             ))}
             <p className="py-3">
               <Link to="/create-database">
-                <Button size="large" color={'grey'}>
+                <Button width="large" color={'grey'}>
                   Create new database
                 </Button>
               </Link>

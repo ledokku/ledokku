@@ -163,7 +163,7 @@ export const CreateDatabase = () => {
             <Button
               isSubmit={true}
               color="grey"
-              size="normal"
+              width="normal"
               iconEnd={<ArrowRight />}
             >
               Create
