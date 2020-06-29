@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { useCreateAppMutation, DashboardDocument } from '../generated/graphql';
 import { Header } from '../modules/layout/Header';
+import { Button } from '../ui';
 
 export const CreateApp = () => {
   const history = useHistory();
@@ -73,12 +74,14 @@ export const CreateApp = () => {
                 onChange={formik.handleChange}
               />
               <div className="flex justify-end mt-4">
-                <button
+                <Button
+                  color="grey"
+                  width="normal"
                   type="submit"
-                  className="inline flex justify-end py-2 px-10 bg-gray-900 hover:bg-blue text-white  font-bold hover:text-white border hover:border-transparent rounded-lg"
+                  disabled={!formik.values.name || !formik.values.gitUrl}
                 >
                   Create
-                </button>
+                </Button>
               </div>
             </div>
           </div>

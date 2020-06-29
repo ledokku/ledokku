@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useDashboardQuery } from '../generated/graphql';
 import { NodeIcon } from '../ui/icons/NodeIcon';
 import { Header } from '../modules/layout/Header';
-import { TabNav, TabNavLink } from '../ui';
+import { TabNav, TabNavLink, Button } from '../ui';
 
 export const Dashboard = () => {
   // const history = useHistory();
@@ -46,9 +46,9 @@ export const Dashboard = () => {
             ))}
             <p className="py-3">
               <Link to="/create-app">
-                <button className="inline w-2/3 py-2 px-10 bg-gray-900 hover:bg-blue text-white  font-bold hover:text-white border hover:border-transparent rounded-lg">
+                <Button width="large" color={'grey'}>
                   Create new app
-                </button>
+                </Button>
               </Link>
             </p>
             <h1 className="text-lg font-bold py-5">Databases</h1>
@@ -57,9 +57,9 @@ export const Dashboard = () => {
             ))}
             <p className="py-3">
               <Link to="/create-database">
-                <button className="inline w-2/3 py-2 px-10 bg-gray-900 hover:bg-blue text-white  font-bold hover:text-white border hover:border-transparent rounded-lg">
+                <Button width="large" color={'grey'}>
                   Create new database
-                </button>
+                </Button>
               </Link>
             </p>
           </div>

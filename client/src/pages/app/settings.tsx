@@ -8,7 +8,7 @@ import {
   DashboardDocument,
 } from '../../generated/graphql';
 import { useFormik } from 'formik';
-import { TabNav, TabNavLink } from '../../ui';
+import { TabNav, TabNavLink, Button } from '../../ui';
 
 export const Settings = () => {
   const { id: appId } = useParams();
@@ -109,7 +109,7 @@ export const Settings = () => {
             <div className="mt-4">
               <input
                 autoComplete="off"
-                className="block w-full max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
+                className="mb-2 block w-full max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
                 id="appNme"
                 name="appName"
                 value={formik.values.appName}
@@ -120,14 +120,14 @@ export const Settings = () => {
                   {formik.errors.appName}
                 </p>
               )}
-
-              <button
-                disabled={!!formik.errors && formik.isSubmitting}
+              <Button
                 type="submit"
-                className="inline mt-6 py-2 px-10 bg-red-500 hover:bg-blue text-white  font-bold hover:text-white border hover:border-transparent rounded-lg "
+                disabled={!formik.values.appName || !!formik.errors.appName}
+                color="red"
+                width="normal"
               >
                 Delete
-              </button>
+              </Button>
             </div>
           </form>
         </div>

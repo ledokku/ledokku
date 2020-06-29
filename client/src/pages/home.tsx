@@ -7,7 +7,7 @@ import {
   useLoginWithGithubMutation,
 } from '../generated/graphql';
 import { useAuth } from '../modules/auth/AuthContext';
-import { Terminal, Spinner } from '../ui';
+import { Terminal, Spinner, Button } from '../ui';
 
 export const Home = () => {
   const history = useHistory();
@@ -70,13 +70,16 @@ export const Home = () => {
         <Spinner size="large" />
       ) : (
         <React.Fragment>
-          <p className="mt-3">Login to get started.</p>
-          <button
-            className="flex mt-4 px-4 py-3 rounded bg-black hover:bg-gray-900 text-white transition ease-in-out duration-150"
+          <p className="mt-3 mb-3">Login to get started.</p>
+
+          <Button
+            width="large"
+            color="grey"
             onClick={handleLogin}
+            iconStart={<GitHub />}
           >
-            <GitHub className="mr-4" /> Log in with Github
-          </button>
+            Log in with Github
+          </Button>
         </React.Fragment>
       )}
 
