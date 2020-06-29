@@ -5,7 +5,7 @@ title: What is Ledokku?
 
 ### Meet Ledokku
 
-Ledokku is a beautiful web UI powered by **dokku**. Almost too good to be true! With Ledokku you will be able to deploy apps in most popular programming languages, link them to most popular databases and all that with almost zero configuration from your side. Apart from all these amazing features it will also save you money along the way.
+Ledokku is a beautiful web dashboard powered by **dokku**. With Ledokku you will be able to deploy apps in most popular programming languages, link them to most popular databases and all that with almost zero configuration from your side. Apart from all these amazing features it will also save you money along the way.
 
 ### What is dokku?
 
@@ -13,7 +13,7 @@ Dokku is Docker-powered Heroku-like tool that allows you to deploy complex appli
 
 ### How does it work?
 
-It is a bit of a black box, but what's happening under the hood is that herokuish is looking for files that define the apps structure and then figures out which language is used and what dependencies are necessary for this program to run. Only thing that you will need to provide is a GitHub link of a project in one of the languages listed below.
+Herokuish is looking for files that define the apps structure and then figures out which language is used and what dependencies are necessary for this program to run. Only thing that you will need to provide is a GitHub link of a project in one of the languages listed below.
 
 As of now you can build apps in these languages : **Javascript**, **Go**, **Ruby**, **PHP**, **Python**, **Java**, **Scala**, **Clojure**
 and link them to any of these databases : **PostgreSQL** , **MongoDB**, **MySQL**, **Redis**.
