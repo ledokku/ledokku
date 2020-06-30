@@ -15,7 +15,7 @@ import { RedisIcon } from '../ui/icons/RedisIcon';
 import { Header } from '../modules/layout/Header';
 
 import { dbTypeToDokkuPlugin } from './utils';
-import { Button, Terminal } from '../ui';
+import { Button, Terminal, Spinner } from '../ui';
 
 interface DatabaseBoxProps {
   label: string;
@@ -47,7 +47,10 @@ export const CreateDatabase = () => {
   const [
     isDokkuPluginInstalled,
     { data, loading },
-  ] = useIsPluginInstalledLazyQuery();
+  ] = useIsPluginInstalledLazyQuery({
+    // we poll every 5 sec
+    pollInterval: 5000,
+  });
   const formik = useFormik<{ name: string; type: DatabaseTypes }>({
     initialValues: {
       name: '',
@@ -77,12 +80,7 @@ export const CreateDatabase = () => {
   useEffect(() => {
     isDokkuPluginInstalled({
       variables: {
-        pluginName:
-          // TODO REMOVE THIS CONDITION AS THIS IS ONLY FOR TEST PURPOSES
-          // TAR IS INSTALLED SO WE CAN  SEE BEHAVIOUR OF WHEN ONE PLUGIN IS INSTALLED
-          formik.values.type !== 'POSTGRESQL'
-            ? dbTypeToDokkuPlugin(formik.values.type)
-            : 'tar',
+        pluginName: dbTypeToDokkuPlugin(formik.values.type),
       },
     });
   }, [formik.values.type, isPluginInstalled, isDokkuPluginInstalled]);
@@ -96,19 +94,42 @@ export const CreateDatabase = () => {
 
         <form onSubmit={formik.handleSubmit} className="mt-8">
           <div className="mt-12">
-            <React.Fragment>
-              <label className="block mb-2">Database name:</label>
-              <input
-                autoComplete="off"
-                className="block w-full max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
-                id="name"
-                name="name"
-                value={formik.values.name}
-                onChange={formik.handleChange}
-              />
-            </React.Fragment>
-            {data?.isPluginInstalled.isPluginInstalled === false &&
-              !loading && <Terminal>Install {formik.values.type}</Terminal>}
+            {loading && (
+              <div className="flex justify-center ">
+                <Spinner size="small" />
+              </div>
+            )}
+            {data?.isPluginInstalled.isPluginInstalled === false && !loading && (
+              <React.Fragment>
+                <p className="mt-3">
+                  {`Before creating a `}
+                  <span className="font-bold">
+                    {formik.values.type.toLowerCase()}
+                  </span>
+                  {` database, you will need to run this command on your
+                    dokku server.`}
+                </p>
+                <Terminal>{`sudo dokku plugin:install https://github.com/dokku/dokku-${dbTypeToDokkuPlugin(
+                  formik.values.type
+                )}.git ${dbTypeToDokkuPlugin(formik.values.type)}`}</Terminal>
+                <p className="mt-3">
+                  Couple of seconds later you will be able to proceed further.
+                </p>
+              </React.Fragment>
+            )}
+            {data?.isPluginInstalled.isPluginInstalled === true && !loading && (
+              <React.Fragment>
+                <label className="block mb-2">Database name:</label>
+                <input
+                  autoComplete="off"
+                  className="block w-full max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
+                  id="name"
+                  name="name"
+                  value={formik.values.name}
+                  onChange={formik.handleChange}
+                />
+              </React.Fragment>
+            )}
           </div>
 
           <div className="mt-12">
@@ -193,6 +214,9 @@ export const CreateDatabase = () => {
               type="submit"
               color="grey"
               width="normal"
+              disabled={
+                data?.isPluginInstalled.isPluginInstalled === false || loading
+              }
               iconEnd={<ArrowRight />}
             >
               Create
