@@ -3,10 +3,79 @@ id: getting-started
 title: Getting started
 ---
 
-:::note
+### Overview
 
-Ledokku is under active development.
+To get started with Ledokku you will have to set up your own server. If you already
+have experience with installing and running dokku, please skip the part below proceed directly to [**installation guide**](installation.md).
 
-🚀 Follow our [twitter](https://twitter.com/ledokku) to get notified once the project is ready.
+If you want to try out Ledokku and need guidance on how to set up your own server and install dokku on it, please follow these steps.
 
-:::
+- [Set up Digital Ocean account](#set-up-digital-ocean-account-and-get-100-credit)
+- [Create Docker Droplet](#create-docker-droplet)
+- [SSH into Digital Ocean Droplet](#ssh-into-digital-ocean-droplet)
+- [Install dokku on your Droplet](#install-dokku-on-your-droplet)
+- [Proceed to next page for further instructions](#proceed-to-next-page-to-install-ledokku)
+
+### Set up Digital Ocean account and get \$100 credit
+
+First you will need to open a Digital Ocean account and we recommend you do it with this [**link**](https://m.do.co/c/35f78321cb42) as it will it bring you **\$100 free credit** to play around for the first 60 days. More than enough to try out Ledokku.
+
+### Create Docker Droplet
+
+In Digital Ocean server's are referred as droplets and in our case we will
+be creating Docker Droplet to host our dokku apps on.
+
+1. Expand the **_Discover_** section on left side menu
+2. Click **_Marketplace_**
+3. Search for **_Docker_**
+
+!["Search for docker droplet"](/../static/img/searchDroplet.png)
+
+4. Click **_Create Docker droplet_**
+
+!["Create one click droplet"](/../static/img/createDroplet.png)
+
+5. Select **_Starter Plan_**
+   It shows $5/month, but to play around with Ledokku for a day or couple of days will most 
+likely cost you under $0.50 and you will be charged just that and no more. After that scroll down for SSH setup.
+
+!["Choose a plan"](/../static/img/choosePlan.png)
+
+6. Choose existing SSH key
+   If you already had previously set up SSH on Digital Ocean then choose one of your
+   existing SSH keys. As you can see in screenshot, existing SSH key called **_Ledokku_** is selected. If you click New SSH key, see step 7.
+
+!["SSH setup screen"](/../static/img/sshSetup.png)
+
+7. Set up new SSH key
+   See the instructions in the input field. That should be enough for you to get through this setup.
+
+!["SSH setup screen"](/../static/img/sshScreen.png)
+
+8. Click green **_CREATE A DROPLET_** button.
+
+### SSH into Digital Ocean Droplet
+
+1. Open terminal of your choice
+
+2. Run this command `ssh root@YOUR_DOCKER_DROPLET_IP` <br/>
+   Before running the command, don't forget to change YOUR_DOCKER_DROPLET_IP part to the
+   ip address you can see as your Droplet IP in your Digital Ocean's dashboard.
+
+!["Docker droplet ip"](/../static/img/dockerIp.png)
+
+3. After running this command you will be asked whether you are sure that you want to connect
+   to this server and to this prompt you should type `yes` and click `ENTER`
+
+4. In your terminal you will see that you are inside the docker droplet <br/>
+   Your terminal path will look something similar to this `root@YOUR_DROPLET_NAME:~#`
+
+### Install dokku on your Droplet
+
+From your Docker Droplet run these commands one after another :
+
+1. `wget https://raw.githubusercontent.com/dokku/dokku/v0.20.4/bootstrap.sh`
+
+2. `sudo DOKKU_TAG=v0.20.4 bash bootstrap.sh`
+
+### Proceed to next page to install Ledokku
