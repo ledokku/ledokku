@@ -48,6 +48,10 @@ module.exports = {
               label: 'Twitter',
               href: 'https://twitter.com/ledokku',
             },
+            {
+              label: 'Telegram',
+              href: 'https://t.me/Ledokku',
+            },
           ],
         },
         {
