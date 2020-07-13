@@ -1,0 +1,5 @@
+query isPluginInstalled($pluginName: String!) {
+  isPluginInstalled(pluginName: $pluginName) {
+    isPluginInstalled
+  }
+}

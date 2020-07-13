@@ -93,6 +93,10 @@ const typeDefs = gql`
     sshPublicKey: String!
   }
 
+  type IsPluginInstalledResult {
+    isPluginInstalled: Boolean!
+  }
+
   input CreateAppInput {
     name: String!
     gitUrl: String!
@@ -123,6 +127,7 @@ const typeDefs = gql`
     apps: [App!]!
     app(appId: String!): App
     databases: [Database!]!
+    isPluginInstalled(pluginName: String!): IsPluginInstalledResult!
     dokkuPlugins: DokkuPluginResult!
     appLogs(appId: String!): AppLogsResult!
     envVars(appId: String!): EnvVarsResult!
