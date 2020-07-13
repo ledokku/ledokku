@@ -42,7 +42,7 @@ dokku config:set ledokku DOKKU_SSH_HOST="MY_SERVER_IP"
 dokku config:set ledokku JWT_SECRET="SUPER_SECURE_SECRET"
 ```
 
-Now pull the app from the docker Github registry and tag it.
+Now pull the app from the docker registry and tag it.
 
 ```sh
 docker pull ledokku/ledokku:0.0.1

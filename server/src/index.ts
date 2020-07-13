@@ -174,6 +174,14 @@ const apolloServer = new ApolloServer({
 });
 apolloServer.applyMiddleware({ app });
 
+/**
+ * Serve the runtime config to the client.
+ * Will only be used on production.
+ */
+app.get('/runtime-config.js', (_, res) => {
+  res.setHeader('Content-Type', 'application/javascript');
+});
+
 app.get('*', (_, res) => {
   res.sendFile(
     path.join(__dirname, '..', '..', 'client', 'build', 'index.html')
