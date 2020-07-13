@@ -111,6 +111,11 @@ export type SetupResult = {
   sshPublicKey: Scalars['String'];
 };
 
+export type IsPluginInstalledResult = {
+   __typename?: 'IsPluginInstalledResult';
+  isPluginInstalled: Scalars['Boolean'];
+};
+
 export type CreateAppInput = {
   name: Scalars['String'];
   gitUrl: Scalars['String'];
@@ -142,6 +147,7 @@ export type Query = {
   apps: Array<App>;
   app?: Maybe<App>;
   databases: Array<Database>;
+  isPluginInstalled: IsPluginInstalledResult;
   dokkuPlugins: DokkuPluginResult;
   appLogs: AppLogsResult;
   envVars: EnvVarsResult;
@@ -150,6 +156,11 @@ export type Query = {
 
 export type QueryAppArgs = {
   appId: Scalars['String'];
+};
+
+
+export type QueryIsPluginInstalledArgs = {
+  pluginName: Scalars['String'];
 };
 
 
@@ -348,6 +359,19 @@ export type EnvVarsQuery = (
       { __typename?: 'EnvVar' }
       & Pick<EnvVar, 'key' | 'value'>
     )> }
+  ) }
+);
+
+export type IsPluginInstalledQueryVariables = {
+  pluginName: Scalars['String'];
+};
+
+
+export type IsPluginInstalledQuery = (
+  { __typename?: 'Query' }
+  & { isPluginInstalled: (
+    { __typename?: 'IsPluginInstalledResult' }
+    & Pick<IsPluginInstalledResult, 'isPluginInstalled'>
   ) }
 );
 
@@ -708,6 +732,39 @@ export function useEnvVarsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHook
 export type EnvVarsQueryHookResult = ReturnType<typeof useEnvVarsQuery>;
 export type EnvVarsLazyQueryHookResult = ReturnType<typeof useEnvVarsLazyQuery>;
 export type EnvVarsQueryResult = ApolloReactCommon.QueryResult<EnvVarsQuery, EnvVarsQueryVariables>;
+export const IsPluginInstalledDocument = gql`
+    query isPluginInstalled($pluginName: String!) {
+  isPluginInstalled(pluginName: $pluginName) {
+    isPluginInstalled
+  }
+}
+    `;
+
+/**
+ * __useIsPluginInstalledQuery__
+ *
+ * To run a query within a React component, call `useIsPluginInstalledQuery` and pass it any options that fit your needs.
+ * When your component renders, `useIsPluginInstalledQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useIsPluginInstalledQuery({
+ *   variables: {
+ *      pluginName: // value for 'pluginName'
+ *   },
+ * });
+ */
+export function useIsPluginInstalledQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<IsPluginInstalledQuery, IsPluginInstalledQueryVariables>) {
+        return ApolloReactHooks.useQuery<IsPluginInstalledQuery, IsPluginInstalledQueryVariables>(IsPluginInstalledDocument, baseOptions);
+      }
+export function useIsPluginInstalledLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<IsPluginInstalledQuery, IsPluginInstalledQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<IsPluginInstalledQuery, IsPluginInstalledQueryVariables>(IsPluginInstalledDocument, baseOptions);
+        }
+export type IsPluginInstalledQueryHookResult = ReturnType<typeof useIsPluginInstalledQuery>;
+export type IsPluginInstalledLazyQueryHookResult = ReturnType<typeof useIsPluginInstalledLazyQuery>;
+export type IsPluginInstalledQueryResult = ApolloReactCommon.QueryResult<IsPluginInstalledQuery, IsPluginInstalledQueryVariables>;
 export const SetupDocument = gql`
     query setup {
   setup {

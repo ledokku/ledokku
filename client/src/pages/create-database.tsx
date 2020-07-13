@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { ArrowRight } from 'react-feather';
 import cx from 'classnames';
-import { useCreateDatabaseMutation, DatabaseTypes } from '../generated/graphql';
+import {
+  useCreateDatabaseMutation,
+  DatabaseTypes,
+  useIsPluginInstalledLazyQuery,
+} from '../generated/graphql';
 import { PostgreSQLIcon } from '../ui/icons/PostgreSQLIcon';
 import { MySQLIcon } from '../ui/icons/MySQLIcon';
 import { MongoIcon } from '../ui/icons/MongoIcon';
 import { RedisIcon } from '../ui/icons/RedisIcon';
 import { Header } from '../modules/layout/Header';
+
+import { dbTypeToDokkuPlugin } from './utils';
+import { Button, Terminal, Spinner } from '../ui';
 
 interface DatabaseBoxProps {
   label: string;
@@ -37,6 +44,13 @@ const DatabaseBox = ({ label, selected, icon, onClick }: DatabaseBoxProps) => {
 export const CreateDatabase = () => {
   const history = useHistory();
   const [createDatabaseMutation] = useCreateDatabaseMutation();
+  const [
+    isDokkuPluginInstalled,
+    { data, loading },
+  ] = useIsPluginInstalledLazyQuery({
+    // we poll every 5 sec
+    pollInterval: 5000,
+  });
   const formik = useFormik<{ name: string; type: DatabaseTypes }>({
     initialValues: {
       name: '',
@@ -61,6 +75,16 @@ export const CreateDatabase = () => {
     },
   });
 
+  const isPluginInstalled = data?.isPluginInstalled.isPluginInstalled;
+
+  useEffect(() => {
+    isDokkuPluginInstalled({
+      variables: {
+        pluginName: dbTypeToDokkuPlugin(formik.values.type),
+      },
+    });
+  }, [formik.values.type, isPluginInstalled, isDokkuPluginInstalled]);
+
   return (
     <React.Fragment>
       <Header />
@@ -70,15 +94,42 @@ export const CreateDatabase = () => {
 
         <form onSubmit={formik.handleSubmit} className="mt-8">
           <div className="mt-12">
-            <label className="block mb-2">Database name:</label>
-            <input
-              autoComplete="off"
-              className="block w-full max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
-              id="name"
-              name="name"
-              value={formik.values.name}
-              onChange={formik.handleChange}
-            />
+            {loading && (
+              <div className="flex justify-center ">
+                <Spinner size="small" />
+              </div>
+            )}
+            {data?.isPluginInstalled.isPluginInstalled === false && !loading && (
+              <React.Fragment>
+                <p className="mt-3">
+                  {`Before creating a `}
+                  <span className="font-bold">
+                    {formik.values.type.toLowerCase()}
+                  </span>
+                  {` database, you will need to run this command on your
+                    dokku server.`}
+                </p>
+                <Terminal>{`sudo dokku plugin:install https://github.com/dokku/dokku-${dbTypeToDokkuPlugin(
+                  formik.values.type
+                )}.git ${dbTypeToDokkuPlugin(formik.values.type)}`}</Terminal>
+                <p className="mt-3">
+                  Couple of seconds later you will be able to proceed further.
+                </p>
+              </React.Fragment>
+            )}
+            {data?.isPluginInstalled.isPluginInstalled === true && !loading && (
+              <React.Fragment>
+                <label className="block mb-2">Database name:</label>
+                <input
+                  autoComplete="off"
+                  className="block w-full max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
+                  id="name"
+                  name="name"
+                  value={formik.values.name}
+                  onChange={formik.handleChange}
+                />
+              </React.Fragment>
+            )}
           </div>
 
           <div className="mt-12">
@@ -159,14 +210,17 @@ export const CreateDatabase = () => {
           </div>
 
           <div className="mt-12 flex justify-end">
-            <button
-              className="py-3 px-4 bg-black text-white rounded flex justify-center"
-              disabled={formik.isSubmitting}
+            <Button
               type="submit"
+              color="grey"
+              width="normal"
+              disabled={
+                data?.isPluginInstalled.isPluginInstalled === false || loading
+              }
+              iconEnd={<ArrowRight />}
             >
               Create
-              <ArrowRight className="ml-2" />
-            </button>
+            </Button>
           </div>
         </form>
       </div>
