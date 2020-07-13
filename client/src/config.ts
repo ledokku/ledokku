@@ -1,9 +1,8 @@
 // TODO take from server (runtime) in production mod
-console.log(window['runConfig']);
 
 export const config = window['runConfig']
   ? {
-      githubClientId: window['GITHUB_CLIENT_ID'],
+      githubClientId: window['runConfig']['GITHUB_CLIENT_ID'],
       serverUrl: '',
     }
   : {
