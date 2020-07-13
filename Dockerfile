@@ -37,6 +37,8 @@ WORKDIR /usr/src/app
 COPY package.json ./
 COPY yarn.lock ./
 COPY server/package.json ./server/package.json
+# Prisma folder is needed in order to run the migrations
+COPY server/prisma ./server/prisma
 
 COPY --from=BUILD_CLIENT /usr/src/app/client/build ./client/build
 COPY --from=BUILD_SERVER /usr/src/app/server/build ./server/build
