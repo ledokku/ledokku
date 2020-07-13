@@ -77,5 +77,3 @@ From your Docker Droplet run these commands one after another :
 1. `wget https://raw.githubusercontent.com/dokku/dokku/v0.20.4/bootstrap.sh`
 
 2. `sudo DOKKU_TAG=v0.20.4 bash bootstrap.sh`
-
-### Proceed to next page to install Ledokku
