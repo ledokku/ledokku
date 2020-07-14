@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+import { DatabaseTypes } from '../generated/graphql';
 
 // Digital ocean token format = exactly 64 chars, lowercase letters & numbers
 export const digitalOceanAccessTokenRegExp = /^[a-z0-9]{64}/;
@@ -14,3 +15,16 @@ const appNameYup = yup
 export const appNameSchema = yup.object({
   name: appNameYup,
 });
+
+export const dbTypeToDokkuPlugin = (dbType: DatabaseTypes) => {
+  switch (dbType) {
+    case 'MONGODB':
+      return 'mongo';
+    case 'POSTGRESQL':
+      return 'postgres';
+    case 'REDIS':
+      return 'redis';
+    case 'MYSQL':
+      return 'mysql';
+  }
+};

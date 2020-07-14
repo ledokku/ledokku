@@ -12,6 +12,10 @@ import { App } from './pages/app/index';
 import { Env } from './pages/app/env';
 import { Databases } from './pages/app/databases';
 import { Settings as AppSettings } from './pages/app/settings';
+import { Database } from './pages/database/index';
+import { Apps } from './pages/database/apps';
+import { Env as DatabaseEnv } from './pages/database/env';
+import { Settings as DatabaseSettings } from './pages/database/settings';
 import { Dashboard } from './pages/dashboard';
 import { Activity } from './pages/activity';
 import { Metrics } from './pages/metrics';
@@ -77,6 +81,18 @@ export const Router = () => {
         </PrivateRoute>
         <PrivateRoute path="/app/:id/databases" exact>
           <Databases />
+        </PrivateRoute>
+        <PrivateRoute path="/database/:id" exact>
+          <Database />
+        </PrivateRoute>
+        <PrivateRoute path="/database/:id/apps" exact>
+          <Apps />
+        </PrivateRoute>
+        <PrivateRoute path="/database/:id/env" exact>
+          <DatabaseEnv />
+        </PrivateRoute>
+        <PrivateRoute path="/database/:id/settings" exact>
+          <DatabaseSettings />
         </PrivateRoute>
         {/* TODO 404 page */}
       </Switch>

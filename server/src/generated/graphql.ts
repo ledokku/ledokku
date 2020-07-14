@@ -145,6 +145,7 @@ export type Query = {
   setup: SetupResult;
   apps: Array<App>;
   app?: Maybe<App>;
+  database?: Maybe<Database>;
   databases: Array<Database>;
   isPluginInstalled: IsPluginInstalledResult;
   dokkuPlugins: DokkuPluginResult;
@@ -155,6 +156,11 @@ export type Query = {
 
 export type QueryAppArgs = {
   appId: Scalars['String'];
+};
+
+
+export type QueryDatabaseArgs = {
+  databaseId: Scalars['String'];
 };
 
 
@@ -450,6 +456,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   setup?: Resolver<ResolversTypes['SetupResult'], ParentType, ContextType>,
   apps?: Resolver<Array<ResolversTypes['App']>, ParentType, ContextType>,
   app?: Resolver<Maybe<ResolversTypes['App']>, ParentType, ContextType, RequireFields<QueryAppArgs, 'appId'>>,
+  database?: Resolver<Maybe<ResolversTypes['Database']>, ParentType, ContextType, RequireFields<QueryDatabaseArgs, 'databaseId'>>,
   databases?: Resolver<Array<ResolversTypes['Database']>, ParentType, ContextType>,
   isPluginInstalled?: Resolver<ResolversTypes['IsPluginInstalledResult'], ParentType, ContextType, RequireFields<QueryIsPluginInstalledArgs, 'pluginName'>>,
   dokkuPlugins?: Resolver<ResolversTypes['DokkuPluginResult'], ParentType, ContextType>,

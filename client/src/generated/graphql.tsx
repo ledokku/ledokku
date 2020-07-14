@@ -146,6 +146,7 @@ export type Query = {
   setup: SetupResult;
   apps: Array<App>;
   app?: Maybe<App>;
+  database?: Maybe<Database>;
   databases: Array<Database>;
   isPluginInstalled: IsPluginInstalledResult;
   dokkuPlugins: DokkuPluginResult;
@@ -156,6 +157,11 @@ export type Query = {
 
 export type QueryAppArgs = {
   appId: Scalars['String'];
+};
+
+
+export type QueryDatabaseArgs = {
+  databaseId: Scalars['String'];
 };
 
 
@@ -341,6 +347,19 @@ export type DashboardQuery = (
     { __typename?: 'App' }
     & Pick<App, 'id' | 'name'>
   )>, databases: Array<(
+    { __typename?: 'Database' }
+    & Pick<Database, 'id' | 'name' | 'type'>
+  )> }
+);
+
+export type DatabaseByIdQueryVariables = {
+  databaseId: Scalars['String'];
+};
+
+
+export type DatabaseByIdQuery = (
+  { __typename?: 'Query' }
+  & { database?: Maybe<(
     { __typename?: 'Database' }
     & Pick<Database, 'id' | 'name' | 'type'>
   )> }
@@ -696,6 +715,41 @@ export function useDashboardLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHo
 export type DashboardQueryHookResult = ReturnType<typeof useDashboardQuery>;
 export type DashboardLazyQueryHookResult = ReturnType<typeof useDashboardLazyQuery>;
 export type DashboardQueryResult = ApolloReactCommon.QueryResult<DashboardQuery, DashboardQueryVariables>;
+export const DatabaseByIdDocument = gql`
+    query databaseById($databaseId: String!) {
+  database(databaseId: $databaseId) {
+    id
+    name
+    type
+  }
+}
+    `;
+
+/**
+ * __useDatabaseByIdQuery__
+ *
+ * To run a query within a React component, call `useDatabaseByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDatabaseByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDatabaseByIdQuery({
+ *   variables: {
+ *      databaseId: // value for 'databaseId'
+ *   },
+ * });
+ */
+export function useDatabaseByIdQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<DatabaseByIdQuery, DatabaseByIdQueryVariables>) {
+        return ApolloReactHooks.useQuery<DatabaseByIdQuery, DatabaseByIdQueryVariables>(DatabaseByIdDocument, baseOptions);
+      }
+export function useDatabaseByIdLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<DatabaseByIdQuery, DatabaseByIdQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<DatabaseByIdQuery, DatabaseByIdQueryVariables>(DatabaseByIdDocument, baseOptions);
+        }
+export type DatabaseByIdQueryHookResult = ReturnType<typeof useDatabaseByIdQuery>;
+export type DatabaseByIdLazyQueryHookResult = ReturnType<typeof useDatabaseByIdLazyQuery>;
+export type DatabaseByIdQueryResult = ApolloReactCommon.QueryResult<DatabaseByIdQuery, DatabaseByIdQueryVariables>;
 export const EnvVarsDocument = gql`
     query envVars($appId: String!) {
   envVars(appId: $appId) {

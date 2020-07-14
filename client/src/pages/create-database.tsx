@@ -7,6 +7,7 @@ import {
   useCreateDatabaseMutation,
   DatabaseTypes,
   useIsPluginInstalledLazyQuery,
+  DashboardDocument,
 } from '../generated/graphql';
 import { PostgreSQLIcon } from '../ui/icons/PostgreSQLIcon';
 import { MySQLIcon } from '../ui/icons/MySQLIcon';
@@ -43,7 +44,10 @@ const DatabaseBox = ({ label, selected, icon, onClick }: DatabaseBoxProps) => {
 
 export const CreateDatabase = () => {
   const history = useHistory();
-  const [createDatabaseMutation] = useCreateDatabaseMutation();
+  const [
+    createDatabaseMutation,
+    { loading: createDbLoading },
+  ] = useCreateDatabaseMutation();
   const [
     isDokkuPluginInstalled,
     { data, loading },
@@ -63,9 +67,13 @@ export const CreateDatabase = () => {
           variables: {
             input: { name: values.name, type: values.type },
           },
+          refetchQueries: [
+            {
+              query: DashboardDocument,
+            },
+          ],
         });
         // TODO redirect to database page once ready
-        console.log(data);
         history.push('/dashboard');
       } catch (error) {
         // TODO catch errors
@@ -215,11 +223,13 @@ export const CreateDatabase = () => {
               color="grey"
               width="normal"
               disabled={
-                data?.isPluginInstalled.isPluginInstalled === false || loading
+                data?.isPluginInstalled.isPluginInstalled === false ||
+                loading ||
+                createDbLoading
               }
               iconEnd={<ArrowRight />}
             >
-              Create
+              {createDbLoading ? <Spinner size="extraSmall" /> : 'Create'}
             </Button>
           </div>
         </form>
