@@ -63,7 +63,7 @@ export const CreateDatabase = () => {
     onSubmit: async (values) => {
       // TODO validate name
       try {
-        const data = await createDatabaseMutation({
+        await createDatabaseMutation({
           variables: {
             input: { name: values.name, type: values.type },
           },

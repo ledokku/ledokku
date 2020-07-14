@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { Header } from '../../modules/layout/Header';
-import { useAppByIdQuery, useDatabaseByIdQuery } from '../../generated/graphql';
+import { useDatabaseByIdQuery } from '../../generated/graphql';
 import { TabNav, TabNavLink } from '../../ui';
 
 export const Apps = () => {
