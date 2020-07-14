@@ -8,6 +8,7 @@ import { mutations } from './graphql/mutations';
 import { config } from './config';
 import { app, http, io } from './server';
 import { queries } from './graphql/queries';
+import { prisma } from './prisma';
 
 const typeDefs = gql`
   scalar DateTime
@@ -54,6 +55,10 @@ const typeDefs = gql`
   }
 
   type DestroyAppResult {
+    result: Boolean!
+  }
+
+  type DestroyDatabaseResult {
     result: Boolean!
   }
 
@@ -122,6 +127,10 @@ const typeDefs = gql`
     appId: String!
   }
 
+  input DestroyDatabaseInput {
+    databaseId: String!
+  }
+
   type Query {
     setup: SetupResult!
     apps: [App!]!
@@ -141,6 +150,7 @@ const typeDefs = gql`
     setEnvVar(input: SetEnvVarInput!): SetEnvVarResult!
     unsetEnvVar(input: UnsetEnvVarInput!): UnsetEnvVarResult!
     destroyApp(input: DestroyAppInput!): DestroyAppResult!
+    destroyDatabase(input: DestroyDatabaseInput!): DestroyDatabaseResult!
   }
 `;
 
@@ -185,3 +195,10 @@ http.listen({ port: 4000 }, () =>
     `🚀 Server ready at http://localhost:4000${apolloServer.graphqlPath}`
   )
 );
+
+const test = async () => {
+  const db = await prisma.database.findMany();
+  console.log(db);
+};
+
+test();
