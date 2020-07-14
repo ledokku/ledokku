@@ -74,6 +74,6 @@ likely cost you under $0.50 and you will be charged just that and no more. After
 
 From your Docker Droplet run these commands one after another :
 
-1. `wget https://raw.githubusercontent.com/dokku/dokku/v0.20.4/bootstrap.sh`
+1. `wget https://raw.githubusercontent.com/dokku/dokku/v0.21.1/bootstrap.sh`
 
-2. `sudo DOKKU_TAG=v0.20.4 bash bootstrap.sh`
+2. `sudo DOKKU_TAG=v0.21.1 bash bootstrap.sh`
