@@ -39,6 +39,8 @@ In your browser open https://github.com/settings/developers and click on the "Ne
 Add a name, a homepage url, and in the field "Authorization callback URL" set the value to your ledokku ip address and port 4000. (eg: http://123.123.123.123:4000)
 Then click the "Register application" button. You should now be able to see the client id and client secret of the app. Let's add them to the ledokku config.
 
+# TODO add screenshot
+
 ```sh
 dokku config:set ledokku GITHUB_CLIENT_ID="MY_GITHUB_CLIENT_ID"
 dokku config:set ledokku GITHUB_CLIENT_SECRET="MY_GITHUB_CLIENT_SECRET"
