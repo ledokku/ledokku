@@ -1,7 +1,12 @@
-# Installation
+---
+id: installation
+title: Installation
+---
 
-> You need to run the following steps on a dokku server.
-> If you do not have a dokku server for now, please follow the getting started guide.
+:::note
+You need to run the following steps on a dokku server.
+If you do not have a dokku server for now, please follow the getting started guide.
+:::
 
 First we need to create a new app for ledokku.
 
@@ -58,3 +63,27 @@ Finally we deploy the tag to start our ledokku server.
 ```sh
 dokku tags:deploy ledokku 0.0.1
 ```
+
+:::note
+Before setting up the domain DNS in order to verify that the installation was successful, we need to open the port 4000. To do so, run the following command:
+
+```sh
+sudo ufw allow 4000
+```
+
+:::
+
+Now open you server ip in your browser with the port 4000 (eg: http://123.123.123.123:4000).
+
+You should be able to see the ledokku admin 🎉.
+
+:::note
+We saw that the server is running properly, so we can remove the rule from the firewall.
+
+```sh
+sudo ufw deny 4000
+```
+
+:::
+
+Congrats, the ledokku app is running on your server 👏. Follow the next guide to properly setup up your domain name and deploy your first app.
