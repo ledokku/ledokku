@@ -3,6 +3,8 @@ id: getting-started
 title: Getting started
 ---
 
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
 ### Overview
 
 To get started with Ledokku you will have to set up your own server. If you already
@@ -29,17 +31,23 @@ be creating Docker Droplet to host our dokku apps on.
 2. Click **_Marketplace_**
 3. Search for **_Docker_**
 
-!["Search for docker droplet"](/../static/img/searchDroplet.png)
+<img
+  alt="Search for docker droplet"
+  src={useBaseUrl('/img/searchDroplet.png')}
+/>
 
 4. Click **_Create Docker droplet_**
 
-!["Create one click droplet"](/../static/img/createDroplet.png)
+<img
+  alt="Create one click droplet"
+  src={useBaseUrl('/img/createDroplet.png')}
+/>
 
 5. Select **_Starter Plan_**
    It shows $5/month, but to play around with Ledokku for a day or couple of days will most 
 likely cost you under $0.50 and you will be charged just that and no more. After that scroll down for SSH setup.
 
-!["Choose a plan"](/../static/img/choosePlan.png)
+<img alt="Choose a plan" src={useBaseUrl('/img/choosePlan.png')} />
 
 6. Choose existing SSH key
    If you already had previously set up SSH on Digital Ocean then choose one of your
@@ -47,10 +55,12 @@ likely cost you under $0.50 and you will be charged just that and no more. After
 
 !["SSH setup screen"](/../static/img/sshSetup.png)
 
+<img alt="SSH setup screen" src={useBaseUrl('/img/sshSetup.png')} />
+
 7. Set up new SSH key
    See the instructions in the input field. That should be enough for you to get through this setup.
 
-!["SSH setup screen"](/../static/img/sshScreen.png)
+<img alt="SSH setup screen" src={useBaseUrl('/img/sshScreen.png')} />
 
 8. Click green **_CREATE A DROPLET_** button.
 
@@ -62,7 +72,7 @@ likely cost you under $0.50 and you will be charged just that and no more. After
    Before running the command, don't forget to change YOUR_DOCKER_DROPLET_IP part to the
    ip address you can see as your Droplet IP in your Digital Ocean's dashboard.
 
-!["Docker droplet ip"](/../static/img/dockerIp.png)
+<img alt="Docker droplet ip" src={useBaseUrl('/img/dockerIp.png')} />
 
 3. After running this command you will be asked whether you are sure that you want to connect
    to this server and to this prompt you should type `yes` and click `ENTER`
