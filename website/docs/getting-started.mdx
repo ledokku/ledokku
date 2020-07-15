@@ -53,8 +53,6 @@ likely cost you under $0.50 and you will be charged just that and no more. After
    If you already had previously set up SSH on Digital Ocean then choose one of your
    existing SSH keys. As you can see in screenshot, existing SSH key called **_Ledokku_** is selected. If you click New SSH key, see step 7.
 
-!["SSH setup screen"](/../static/img/sshSetup.png)
-
 <img alt="SSH setup screen" src={useBaseUrl('/img/sshSetup.png')} />
 
 7. Set up new SSH key
@@ -87,13 +85,10 @@ ssh root@YOUR_DOCKER_DROPLET_IP
 
 ### Install dokku on your Droplet
 
-From your Docker Droplet run these commands one after another :
+From your Docker Droplet run these commands :
 
 ```sh
 wget https://raw.githubusercontent.com/dokku/dokku/v0.21.1/bootstrap.sh
-```
-
-```sh
 sudo DOKKU_TAG=v0.21.1 bash bootstrap.sh
 ```
 
@@ -110,4 +105,6 @@ sudo ufw allow proto tcp from any to any port 80,443
 
 You will need to set up the domain name and put tickbox in `Use virtual host naming for apps`
 
-// TODO ADD CLEAN SCREENSHOT
+<img alt="Dokku Web UI Setup" src={useBaseUrl('/img/dokkuWebUi.png')} />
+
+If set up is successful, you will be redirected to dokku home page.
