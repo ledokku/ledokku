@@ -68,9 +68,14 @@ likely cost you under $0.50 and you will be charged just that and no more. After
 
 1. Open terminal of your choice
 
-2. Run this command `ssh root@YOUR_DOCKER_DROPLET_IP` <br/>
-   Before running the command, don't forget to change YOUR_DOCKER_DROPLET_IP part to the
-   ip address you can see as your Droplet IP in your Digital Ocean's dashboard.
+2. Run this command
+
+```sh
+ssh root@YOUR_DOCKER_DROPLET_IP
+```
+
+Before running the command, don't forget to change YOUR_DOCKER_DROPLET_IP part to the
+ip address you can see as your Droplet IP in your Digital Ocean's dashboard.
 
 <img alt="Docker droplet ip" src={useBaseUrl('/img/dockerIp.png')} />
 
@@ -84,6 +89,10 @@ likely cost you under $0.50 and you will be charged just that and no more. After
 
 From your Docker Droplet run these commands one after another :
 
-1. `wget https://raw.githubusercontent.com/dokku/dokku/v0.21.1/bootstrap.sh`
+```sh
+wget https://raw.githubusercontent.com/dokku/dokku/v0.21.1/bootstrap.sh
+```
 
-2. `sudo DOKKU_TAG=v0.21.1 bash bootstrap.sh`
+```sh
+sudo DOKKU_TAG=v0.21.1 bash bootstrap.sh
+```
