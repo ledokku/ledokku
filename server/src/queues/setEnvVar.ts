@@ -18,7 +18,7 @@ export const setEnvVarQueue = new Queue<QueueArgs>(queueName, {
     // Max timeout 20 minutes
     timeout: 1.2e6,
   },
-  connection: config.redisConnection,
+  connection: config.redisClient,
 });
 
 /**
@@ -36,7 +36,7 @@ const worker = new Worker(
 
     debug(`finished setEnvVarQueue for app:  ${appName} with ${key}=${value}`);
   },
-  { connection: config.redisConnection }
+  { connection: config.redisClient }
 );
 
 worker.on('failed', async (job, err) => {
