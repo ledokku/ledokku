@@ -46,13 +46,14 @@ export const Home = () => {
 
   const handleLogin = () => {
     setIsSpinnverVisilble(true);
-    // TODO redirect_uri only on localhost
-    // The redirect_uri parameter should only be used on production
+    // The redirect_uri parameter should only be used on production,
+    // on dev env we force the redirection to localhost
     window.location.replace(
       `https://github.com/login/oauth/authorize?client_id=${
         config.githubClientId
       }&scope=user:email${
-        config.serverUrl && '&redirect_uri=http://localhost:3000/'
+        config.environment === 'development' &&
+        '&redirect_uri=http://localhost:3000/'
       }`
     );
   };
