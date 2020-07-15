@@ -52,8 +52,9 @@ export const Home = () => {
       `https://github.com/login/oauth/authorize?client_id=${
         config.githubClientId
       }&scope=user:email${
-        config.environment === 'development' &&
-        '&redirect_uri=http://localhost:3000/'
+        config.environment === 'development'
+          ? '&redirect_uri=http://localhost:3000/'
+          : ''
       }`
     );
   };
