@@ -63,12 +63,12 @@ export const Home = () => {
 
       {error && <p className="mt-3 text-red-500">{error.message}</p>}
 
-      {/* TODO display spinner if query is loading */}
       {loading && <Spinner size="large" />}
 
-      {data?.setup.canConnectSsh === true && isSpinnerVisible ? (
+      {data?.setup.canConnectSsh === true && isSpinnerVisible && (
         <Spinner size="large" />
-      ) : (
+      )}
+      {data?.setup.canConnectSsh === true && !isSpinnerVisible && (
         <React.Fragment>
           <p className="mt-3 mb-3">Login to get started.</p>
 
