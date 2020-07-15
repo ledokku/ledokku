@@ -43,6 +43,11 @@ export const loginWithGithub: MutationResolvers['loginWithGithub'] = async (
     throw new Error(data.error_description);
   }
 
+  if ('scope' in data && data.scope !== 'user:email') {
+    console.error(data);
+    throw new Error('Github scope invalid');
+  }
+
   const octokit = new Octokit({
     auth: data.access_token,
   });
