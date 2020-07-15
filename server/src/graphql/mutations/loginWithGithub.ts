@@ -64,7 +64,7 @@ export const loginWithGithub: MutationResolvers['loginWithGithub'] = async (
     }
 
     // We fetch the user private emails
-    const { data: emails } = await octokit.users.listEmails();
+    const { data: emails } = await octokit.users.listEmailsForAuthenticated();
     // Github return an array of emails, we just need the primary email
     const email = emails.find((email) => email.primary);
 
