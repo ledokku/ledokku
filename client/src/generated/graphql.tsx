@@ -3,6 +3,7 @@ import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/react-common';
 import * as ApolloReactHooks from '@apollo/react-hooks';
 export type Maybe<T> = T | null;
+export type Exact<T extends { [key: string]: any }> = { [K in keyof T]: T[K] };
 
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -11,7 +12,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** Use JavaScript Date object for date/time fields. */
+  /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
   DateTime: string;
   /** The `Upload` scalar type represents a file upload. */
   Upload: any;
@@ -19,7 +20,7 @@ export type Scalars = {
 
 
 export type App = {
-   __typename?: 'App';
+  __typename?: 'App';
   id: Scalars['ID'];
   name: Scalars['String'];
   githubRepoUrl: Scalars['String'];
@@ -27,7 +28,7 @@ export type App = {
 };
 
 export type AppBuild = {
-   __typename?: 'AppBuild';
+  __typename?: 'AppBuild';
   id: Scalars['ID'];
   status: AppBuildStatus;
 };
@@ -39,7 +40,7 @@ export type AppBuildStatus =
   | 'ERRORED';
 
 export type Database = {
-   __typename?: 'Database';
+  __typename?: 'Database';
   id: Scalars['ID'];
   name: Scalars['String'];
   type: DatabaseTypes;
@@ -52,67 +53,67 @@ export type DatabaseTypes =
   | 'MYSQL';
 
 export type LoginResult = {
-   __typename?: 'LoginResult';
+  __typename?: 'LoginResult';
   token: Scalars['String'];
 };
 
 export type CreateAppResult = {
-   __typename?: 'CreateAppResult';
+  __typename?: 'CreateAppResult';
   app: App;
   appBuild: AppBuild;
 };
 
 export type DestroyAppResult = {
-   __typename?: 'DestroyAppResult';
+  __typename?: 'DestroyAppResult';
   result: Scalars['Boolean'];
 };
 
 export type DokkuPlugin = {
-   __typename?: 'DokkuPlugin';
+  __typename?: 'DokkuPlugin';
   name: Scalars['String'];
   version: Scalars['String'];
 };
 
 export type DokkuPluginResult = {
-   __typename?: 'DokkuPluginResult';
+  __typename?: 'DokkuPluginResult';
   version: Scalars['String'];
   plugins: Array<DokkuPlugin>;
 };
 
 export type SetEnvVarResult = {
-   __typename?: 'SetEnvVarResult';
+  __typename?: 'SetEnvVarResult';
   result: Scalars['Boolean'];
 };
 
 export type UnsetEnvVarResult = {
-   __typename?: 'UnsetEnvVarResult';
+  __typename?: 'UnsetEnvVarResult';
   result: Scalars['Boolean'];
 };
 
 export type AppLogsResult = {
-   __typename?: 'AppLogsResult';
+  __typename?: 'AppLogsResult';
   logs: Scalars['String'];
 };
 
 export type EnvVar = {
-   __typename?: 'EnvVar';
+  __typename?: 'EnvVar';
   key: Scalars['String'];
   value: Scalars['String'];
 };
 
 export type EnvVarsResult = {
-   __typename?: 'EnvVarsResult';
+  __typename?: 'EnvVarsResult';
   envVars: Array<EnvVar>;
 };
 
 export type SetupResult = {
-   __typename?: 'SetupResult';
+  __typename?: 'SetupResult';
   canConnectSsh: Scalars['Boolean'];
   sshPublicKey: Scalars['String'];
 };
 
 export type IsPluginInstalledResult = {
-   __typename?: 'IsPluginInstalledResult';
+  __typename?: 'IsPluginInstalledResult';
   isPluginInstalled: Scalars['Boolean'];
 };
 
@@ -142,7 +143,7 @@ export type DestroyAppInput = {
 };
 
 export type Query = {
-   __typename?: 'Query';
+  __typename?: 'Query';
   setup: SetupResult;
   apps: Array<App>;
   app?: Maybe<App>;
@@ -174,7 +175,7 @@ export type QueryEnvVarsArgs = {
 };
 
 export type Mutation = {
-   __typename?: 'Mutation';
+  __typename?: 'Mutation';
   loginWithGithub?: Maybe<LoginResult>;
   createApp: CreateAppResult;
   createDatabase: Database;
@@ -218,10 +219,10 @@ export type CacheControlScope =
   | 'PRIVATE';
 
 
-export type CreateAppMutationVariables = {
+export type CreateAppMutationVariables = Exact<{
   name: Scalars['String'];
   gitUrl: Scalars['String'];
-};
+}>;
 
 
 export type CreateAppMutation = (
@@ -238,9 +239,9 @@ export type CreateAppMutation = (
   ) }
 );
 
-export type CreateDatabaseMutationVariables = {
+export type CreateDatabaseMutationVariables = Exact<{
   input: CreateDatabaseInput;
-};
+}>;
 
 
 export type CreateDatabaseMutation = (
@@ -251,9 +252,9 @@ export type CreateDatabaseMutation = (
   ) }
 );
 
-export type DestroyAppMutationVariables = {
+export type DestroyAppMutationVariables = Exact<{
   input: DestroyAppInput;
-};
+}>;
 
 
 export type DestroyAppMutation = (
@@ -264,9 +265,9 @@ export type DestroyAppMutation = (
   ) }
 );
 
-export type LoginWithGithubMutationVariables = {
+export type LoginWithGithubMutationVariables = Exact<{
   code: Scalars['String'];
-};
+}>;
 
 
 export type LoginWithGithubMutation = (
@@ -277,11 +278,11 @@ export type LoginWithGithubMutation = (
   )> }
 );
 
-export type SetEnvVarMutationVariables = {
+export type SetEnvVarMutationVariables = Exact<{
   key: Scalars['String'];
   value: Scalars['String'];
   appId: Scalars['String'];
-};
+}>;
 
 
 export type SetEnvVarMutation = (
@@ -292,10 +293,10 @@ export type SetEnvVarMutation = (
   ) }
 );
 
-export type UnsetEnvVarMutationVariables = {
+export type UnsetEnvVarMutationVariables = Exact<{
   key: Scalars['String'];
   appId: Scalars['String'];
-};
+}>;
 
 
 export type UnsetEnvVarMutation = (
@@ -306,9 +307,9 @@ export type UnsetEnvVarMutation = (
   ) }
 );
 
-export type AppByIdQueryVariables = {
+export type AppByIdQueryVariables = Exact<{
   appId: Scalars['String'];
-};
+}>;
 
 
 export type AppByIdQuery = (
@@ -319,9 +320,9 @@ export type AppByIdQuery = (
   )> }
 );
 
-export type AppLogsQueryVariables = {
+export type AppLogsQueryVariables = Exact<{
   appId: Scalars['String'];
-};
+}>;
 
 
 export type AppLogsQuery = (
@@ -332,7 +333,7 @@ export type AppLogsQuery = (
   ) }
 );
 
-export type DashboardQueryVariables = {};
+export type DashboardQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type DashboardQuery = (
@@ -346,9 +347,9 @@ export type DashboardQuery = (
   )> }
 );
 
-export type EnvVarsQueryVariables = {
+export type EnvVarsQueryVariables = Exact<{
   appId: Scalars['String'];
-};
+}>;
 
 
 export type EnvVarsQuery = (
@@ -362,9 +363,9 @@ export type EnvVarsQuery = (
   ) }
 );
 
-export type IsPluginInstalledQueryVariables = {
+export type IsPluginInstalledQueryVariables = Exact<{
   pluginName: Scalars['String'];
-};
+}>;
 
 
 export type IsPluginInstalledQuery = (
@@ -375,7 +376,7 @@ export type IsPluginInstalledQuery = (
   ) }
 );
 
-export type SetupQueryVariables = {};
+export type SetupQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type SetupQuery = (
