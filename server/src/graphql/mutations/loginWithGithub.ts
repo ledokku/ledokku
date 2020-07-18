@@ -43,6 +43,11 @@ export const loginWithGithub: MutationResolvers['loginWithGithub'] = async (
     throw new Error(data.error_description);
   }
 
+  if ('scope' in data && data.scope !== 'user:email') {
+    console.error(data);
+    throw new Error('Github scope invalid');
+  }
+
   const octokit = new Octokit({
     auth: data.access_token,
   });
@@ -64,7 +69,7 @@ export const loginWithGithub: MutationResolvers['loginWithGithub'] = async (
     }
 
     // We fetch the user private emails
-    const { data: emails } = await octokit.users.listEmails();
+    const { data: emails } = await octokit.users.listEmailsForAuthenticated();
     // Github return an array of emails, we just need the primary email
     const email = emails.find((email) => email.primary);
 

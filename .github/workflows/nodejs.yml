@@ -33,7 +33,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
 
-      - run: yarn
+      - run: yarn install --frozen-lockfile
 
       - name: Lint
         run: yarn test:lint

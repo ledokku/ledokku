@@ -1,0 +1,110 @@
+---
+id: getting-started
+title: Getting started
+---
+
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+### Overview
+
+To get started with Ledokku you will have to set up your own server. If you already
+have experience with installing and running dokku, please skip the part below proceed directly to [**installation guide**](installation.md).
+
+If you want to try out Ledokku and need guidance on how to set up your own server and install dokku on it, please follow these steps.
+
+- [Set up Digital Ocean account](#set-up-digital-ocean-account-and-get-100-credit)
+- [Create Docker Droplet](#create-docker-droplet)
+- [SSH into Digital Ocean Droplet](#ssh-into-digital-ocean-droplet)
+- [Install dokku on your Droplet](#install-dokku-on-your-droplet)
+- [Proceed to next page for further instructions](#proceed-to-next-page-to-install-ledokku)
+
+### Set up Digital Ocean account and get \$100 credit
+
+First you will need to open a Digital Ocean account and we recommend you do it with this [**link**](https://m.do.co/c/35f78321cb42) as it will it bring you **\$100 free credit** to play around for the first 60 days. More than enough to try out Ledokku.
+
+### Create Docker Droplet
+
+In Digital Ocean server's are referred as droplets and in our case we will
+be creating Docker Droplet to host our dokku apps on.
+
+1. Expand the **_Discover_** section on left side menu
+2. Click **_Marketplace_**
+3. Search for **_Docker_**
+
+<img
+  alt="Search for docker droplet"
+  src={useBaseUrl('/img/searchDroplet.png')}
+/>
+
+4. Click **_Create Docker droplet_**
+
+<img
+  alt="Create one click droplet"
+  src={useBaseUrl('/img/createDroplet.png')}
+/>
+
+5. Select **_Starter Plan_**
+   It shows $5/month, but to play around with Ledokku for a day or couple of days will most 
+likely cost you under $0.50 and you will be charged just that and no more. After that scroll down for SSH setup.
+
+<img alt="Choose a plan" src={useBaseUrl('/img/choosePlan.png')} />
+
+6. Choose existing SSH key
+   If you already had previously set up SSH on Digital Ocean then choose one of your
+   existing SSH keys. As you can see in screenshot, existing SSH key called **_Ledokku_** is selected. If you click New SSH key, see step 7.
+
+<img alt="SSH setup screen" src={useBaseUrl('/img/sshSetup.png')} />
+
+7. Set up new SSH key
+   See the instructions in the input field. That should be enough for you to get through this setup.
+
+<img alt="SSH setup screen" src={useBaseUrl('/img/sshScreen.png')} />
+
+8. Click green **_CREATE A DROPLET_** button.
+
+### SSH into Digital Ocean Droplet
+
+1. Open terminal of your choice
+
+2. Run this command
+
+Before running the command, don't forget to change YOUR_DOCKER_DROPLET_IP part to the
+ip address you can see as your Droplet IP in your Digital Ocean's dashboard.
+
+```sh
+ssh root@YOUR_DOCKER_DROPLET_IP
+```
+
+<img alt="Docker droplet ip" src={useBaseUrl('/img/dockerIp.png')} />
+
+3. After running this command you will be asked whether you are sure that you want to connect
+   to this server and to this prompt you should type `yes` and click `ENTER`
+
+4. In your terminal you will see that you are inside the docker droplet <br/>
+   Your terminal path will look something similar to this `root@YOUR_DROPLET_NAME:~#`
+
+### Install dokku on your Droplet
+
+From your Docker Droplet run these commands :
+
+```sh
+wget https://raw.githubusercontent.com/dokku/dokku/v0.21.1/bootstrap.sh
+sudo DOKKU_TAG=v0.21.1 bash bootstrap.sh
+```
+
+### Configure dokku
+
+1. In order to be able to access our dokku server, we update the server Firewall Rules to allow all incoming HTTP and HTTPS requests.
+
+```sh
+sudo ufw allow proto tcp from any to any port 80,443
+```
+
+2. Open http://YOUR_DOCKER_DROPLET_IP in browser
+   You will see dokku webUI with SSH key already there
+
+You will need to set up the domain name and put tickbox in `Use virtual host naming for apps`
+
+<img alt="Dokku Web UI Setup" src={useBaseUrl('/img/dokkuWebUi.png')} />
+
+If set up is successful, you will be redirected to dokku home page.

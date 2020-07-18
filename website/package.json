@@ -14,7 +14,7 @@
     "classnames": "^2.2.6",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
-    "react-responsive-carousel": "^3.2.7"
+    "react-responsive-carousel": "^3.2.9"
   },
   "browserslist": {
     "production": [
