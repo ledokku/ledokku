@@ -12,7 +12,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
+  /** Use JavaScript Date object for date/time fields. */
   DateTime: string;
   /** The `Upload` scalar type represents a file upload. */
   Upload: any;
@@ -69,7 +69,7 @@ export type DestroyAppResult = {
 };
 
 export type DestroyDatabaseResult = {
-   __typename?: 'DestroyDatabaseResult';
+  __typename?: 'DestroyDatabaseResult';
   result: Scalars['Boolean'];
 };
 
@@ -286,9 +286,9 @@ export type DestroyAppMutation = (
   ) }
 );
 
-export type DestroyDatabaseMutationVariables = {
+export type DestroyDatabaseMutationVariables = Exact<{
   input: DestroyDatabaseInput;
-};
+}>;
 
 
 export type DestroyDatabaseMutation = (
@@ -298,7 +298,6 @@ export type DestroyDatabaseMutation = (
     & Pick<DestroyDatabaseResult, 'result'>
   ) }
 );
-
 
 export type LoginWithGithubMutationVariables = Exact<{
   code: Scalars['String'];
@@ -382,9 +381,9 @@ export type DashboardQuery = (
   )> }
 );
 
-export type DatabaseByIdQueryVariables = {
+export type DatabaseByIdQueryVariables = Exact<{
   databaseId: Scalars['String'];
-};
+}>;
 
 
 export type DatabaseByIdQuery = (
@@ -394,7 +393,6 @@ export type DatabaseByIdQuery = (
     & Pick<Database, 'id' | 'name' | 'type'>
   )> }
 );
-
 
 export type EnvVarsQueryVariables = Exact<{
   appId: Scalars['String'];
