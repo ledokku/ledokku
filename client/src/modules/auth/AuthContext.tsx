@@ -37,7 +37,14 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const login = (token: string) => {
     localStorage.setItem('accessToken', token);
-    setState({ loggedIn: true });
+    const decodedToken = jwtDecode<JwtUser>(token);
+    setState({
+      loggedIn: true,
+      user: {
+        userId: decodedToken.userId,
+        avatarUrl: decodedToken.avatarUrl,
+      },
+    });
   };
 
   const logout = () => {
