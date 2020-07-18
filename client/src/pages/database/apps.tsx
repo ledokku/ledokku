@@ -42,11 +42,9 @@ export const Apps = () => {
           <TabNavLink to={`/database/${database.id}/apps`} selected>
             Apps
           </TabNavLink>
-          <TabNavLink to={`/database/${database.id}/env`}>Env setup</TabNavLink>
           <TabNavLink to={`/database/${database.id}/settings`}>
             Settings
           </TabNavLink>
-          <TabNavLink to="/dashboard">Return to dashboard</TabNavLink>
         </TabNav>
       </div>
 

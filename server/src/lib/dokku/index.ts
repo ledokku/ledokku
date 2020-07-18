@@ -12,5 +12,5 @@ export const dokku = {
   apps: { create, logs, destroy },
   plugin: { installed, list },
   config: { listVars, set, unset },
-  postgres: { createPostgres },
+  postgres: { create: createPostgres },
 };

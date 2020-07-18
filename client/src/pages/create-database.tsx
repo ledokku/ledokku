@@ -229,7 +229,11 @@ export const CreateDatabase = () => {
               }
               iconEnd={<ArrowRight />}
             >
-              {createDbLoading ? <Spinner size="extraSmall" /> : 'Create'}
+              {createDbLoading ? (
+                <Spinner className="mt-1" size="extraSmall" />
+              ) : (
+                'Create'
+              )}
             </Button>
           </div>
         </form>

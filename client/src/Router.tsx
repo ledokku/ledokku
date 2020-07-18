@@ -14,7 +14,6 @@ import { Databases } from './pages/app/databases';
 import { Settings as AppSettings } from './pages/app/settings';
 import { Database } from './pages/database/index';
 import { Apps } from './pages/database/apps';
-import { Env as DatabaseEnv } from './pages/database/env';
 import { Settings as DatabaseSettings } from './pages/database/settings';
 import { Dashboard } from './pages/dashboard';
 import { Activity } from './pages/activity';
@@ -87,9 +86,6 @@ export const Router = () => {
         </PrivateRoute>
         <PrivateRoute path="/database/:id/apps" exact>
           <Apps />
-        </PrivateRoute>
-        <PrivateRoute path="/database/:id/env" exact>
-          <DatabaseEnv />
         </PrivateRoute>
         <PrivateRoute path="/database/:id/settings" exact>
           <DatabaseSettings />
