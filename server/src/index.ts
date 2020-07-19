@@ -10,7 +10,6 @@ import { mutations } from './graphql/mutations';
 import { config } from './config';
 import { app, http, io } from './server';
 import { queries } from './graphql/queries';
-import { prisma } from './prisma';
 
 app.use(express.static(path.join(__dirname, '..', '..', 'client', 'build')));
 
@@ -218,10 +217,3 @@ http.listen({ port: 4000 }, () =>
     `🚀 Server ready at http://localhost:4000${apolloServer.graphqlPath}`
   )
 );
-
-const test = async () => {
-  const db = await prisma.database.findMany();
-  console.log(db);
-};
-
-test();

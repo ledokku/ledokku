@@ -14,8 +14,6 @@ export const destroyDatabase: MutationResolvers['destroyDatabase'] = async (
 
   const { databaseId } = input;
 
-  // TODO check name of the database is unique per server
-
   // We find database to delete
   const databaseToDelete = await prisma.database.findOne({
     where: {
@@ -29,14 +27,14 @@ export const destroyDatabase: MutationResolvers['destroyDatabase'] = async (
 
   const ssh = await sshConnect();
 
+  const result = await dokku.postgres.destroy(ssh, databaseToDelete.name);
+
   // We delete the database
   await prisma.database.delete({
     where: {
       id: databaseId,
     },
   });
-
-  const result = await dokku.postgres.destroy(ssh, databaseToDelete.name);
 
   return { result };
 };
