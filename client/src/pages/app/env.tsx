@@ -175,12 +175,11 @@ export const Env = () => {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <TabNav>
           <TabNavLink to={`/app/${app.id}`}>App</TabNavLink>
-          <TabNavLink to={`/app/${app.id}/databases`}>Databases</TabNavLink>
+          <TabNavLink to={`/app/${app.id}/logs`}>Logs</TabNavLink>
           <TabNavLink to={`/app/${app.id}/env`} selected>
             Env setup
           </TabNavLink>
           <TabNavLink to={`/app/${app.id}/settings`}>Settings</TabNavLink>
-          <TabNavLink to="/dashboard">Return to dashboard</TabNavLink>
         </TabNav>
       </div>
 

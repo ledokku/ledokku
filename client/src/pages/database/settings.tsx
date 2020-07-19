@@ -89,7 +89,7 @@ export const Settings = () => {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <TabNav>
           <TabNavLink to={`/database/${database.id}`}>Database</TabNavLink>
-          <TabNavLink to={`/database/${database.id}/apps`}>Apps</TabNavLink>
+          <TabNavLink to={`/database/${database.id}/logs`}>Logs</TabNavLink>
           <TabNavLink to={`/database/${database.id}/settings`} selected>
             Settings
           </TabNavLink>
