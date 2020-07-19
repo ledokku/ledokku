@@ -24,11 +24,6 @@ export const createDatabase: MutationResolvers['createDatabase'] = async (
     throw new Error('Unauthorized');
   }
 
-  // TODO implement other db support
-  if (input.type !== 'POSTGRESQL') {
-    throw new Error('Database not supported');
-  }
-
   // We make sure the name is valid to avoid security risks
   createDatabaseSchema.validateSync({ name: input.name });
 
@@ -45,7 +40,9 @@ export const createDatabase: MutationResolvers['createDatabase'] = async (
     throw new Error(`Database ${input.type} is not installed`);
   }
 
-  await dokku.postgres.create(ssh, input.name);
+  const dbType = dbTypeToDokkuPlugin(input.type);
+
+  await dokku.database.create(ssh, input.name, dbType);
 
   const database = await prisma.database.create({
     data: {

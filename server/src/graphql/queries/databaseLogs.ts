@@ -20,16 +20,14 @@ export const databaseLogs: QueryResolvers['databaseLogs'] = async (
   });
 
   if (!database) {
-    throw new Error(`App with ID ${databaseId} not found`);
+    throw new Error(`Database with ID ${databaseId} not found`);
   }
 
-  console.log(database.type);
   const dbType = dbTypeToDokkuPlugin(database.type);
-  console.log(dbType);
 
   const ssh = await sshConnect();
 
-  const logs = await dokku.postgres.info(ssh, database.name, dbType);
+  const logs = await dokku.database.info(ssh, database.name, dbType);
 
   return { logs };
 };
