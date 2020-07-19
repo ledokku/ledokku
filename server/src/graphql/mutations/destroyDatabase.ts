@@ -36,10 +36,7 @@ export const destroyDatabase: MutationResolvers['destroyDatabase'] = async (
     },
   });
 
-  const result = await dokku.postgres.destroyPostgres(
-    ssh,
-    databaseToDelete.name
-  );
+  const result = await dokku.postgres.destroy(ssh, databaseToDelete.name);
 
   return { result };
 };
