@@ -2,7 +2,7 @@ import React from 'react';
 import { Header } from '../../modules/layout/Header';
 import { useDatabaseByIdQuery } from '../../generated/graphql';
 import { useParams } from 'react-router-dom';
-import { TabNav, TabNavLink, Terminal } from '../../ui';
+import { TabNav, TabNavLink } from '../../ui';
 
 export const Database = () => {
   const { id: databaseId } = useParams();
