@@ -14,7 +14,7 @@ export const Home = () => {
   const { loggedIn, login } = useAuth();
   const { data, loading, error } = useSetupQuery({});
   const [loginWithGithubMutation] = useLoginWithGithubMutation();
-  const [isSpinnerVisible, setIsSpinnverVisilble] = useState(false);
+  const [loggingIn, setLoggingIn] = useState(false);
 
   // On mount we check if there is a github code present
   useEffect(() => {
@@ -25,8 +25,7 @@ export const Home = () => {
         .split('code=')[1];
 
       if (githubCode) {
-        setIsSpinnverVisilble(true);
-        // TODO show loading during login
+        setLoggingIn(true);
         // Remove hash in url
         window.history.replaceState({}, document.title, '.');
         const data = await loginWithGithubMutation({
@@ -45,7 +44,7 @@ export const Home = () => {
   }, []);
 
   const handleLogin = () => {
-    setIsSpinnverVisilble(true);
+    setLoggingIn(true);
     // The redirect_uri parameter should only be used on production,
     // on dev env we force the redirection to localhost
     window.location.replace(
@@ -70,12 +69,9 @@ export const Home = () => {
 
       {error && <p className="mt-3 text-red-500">{error.message}</p>}
 
-      {loading && <Spinner size="large" />}
+      {(loading || loggingIn) && <Spinner size="small" className="mt-2" />}
 
-      {data?.setup.canConnectSsh === true && isSpinnerVisible && (
-        <Spinner size="large" />
-      )}
-      {data?.setup.canConnectSsh === true && !isSpinnerVisible && (
+      {data?.setup.canConnectSsh === true && !loggingIn && (
         <React.Fragment>
           <p className="mt-3 mb-3">Login to get started.</p>
 
