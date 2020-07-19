@@ -10,10 +10,10 @@ import { useAuth } from './modules/auth/AuthContext';
 import { Home } from './pages/home';
 import { App } from './pages/app/index';
 import { Env } from './pages/app/env';
-import { Databases } from './pages/app/databases';
+import { Logs } from './pages/app/logs';
 import { Settings as AppSettings } from './pages/app/settings';
 import { Database } from './pages/database/index';
-import { Apps } from './pages/database/apps';
+import { Logs as DatabaseLogs } from './pages/database/logs';
 import { Settings as DatabaseSettings } from './pages/database/settings';
 import { Dashboard } from './pages/dashboard';
 import { Activity } from './pages/activity';
@@ -78,14 +78,14 @@ export const Router = () => {
         <PrivateRoute path="/app/:id/settings" exact>
           <AppSettings />
         </PrivateRoute>
-        <PrivateRoute path="/app/:id/databases" exact>
-          <Databases />
+        <PrivateRoute path="/app/:id/logs" exact>
+          <Logs />
         </PrivateRoute>
         <PrivateRoute path="/database/:id" exact>
           <Database />
         </PrivateRoute>
-        <PrivateRoute path="/database/:id/apps" exact>
-          <Apps />
+        <PrivateRoute path="/database/:id/logs" exact>
+          <DatabaseLogs />
         </PrivateRoute>
         <PrivateRoute path="/database/:id/settings" exact>
           <DatabaseSettings />
