@@ -11,7 +11,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** Use JavaScript Date object for date/time fields. */
+  /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
   DateTime: Date;
   /** The `Upload` scalar type represents a file upload. */
   Upload: any;
@@ -99,6 +99,11 @@ export type AppLogsResult = {
   logs: Scalars['String'];
 };
 
+export type DatabaseLogsResult = {
+  __typename?: 'DatabaseLogsResult';
+  logs: Array<Maybe<Scalars['String']>>;
+};
+
 export type EnvVar = {
   __typename?: 'EnvVar';
   key: Scalars['String'];
@@ -160,6 +165,7 @@ export type Query = {
   isPluginInstalled: IsPluginInstalledResult;
   dokkuPlugins: DokkuPluginResult;
   appLogs: AppLogsResult;
+  databaseLogs: DatabaseLogsResult;
   envVars: EnvVarsResult;
 };
 
@@ -181,6 +187,11 @@ export type QueryIsPluginInstalledArgs = {
 
 export type QueryAppLogsArgs = {
   appId: Scalars['String'];
+};
+
+
+export type QueryDatabaseLogsArgs = {
+  databaseId: Scalars['String'];
 };
 
 
@@ -335,6 +346,7 @@ export type ResolversTypes = {
   SetEnvVarResult: ResolverTypeWrapper<SetEnvVarResult>;
   UnsetEnvVarResult: ResolverTypeWrapper<UnsetEnvVarResult>;
   AppLogsResult: ResolverTypeWrapper<AppLogsResult>;
+  DatabaseLogsResult: ResolverTypeWrapper<DatabaseLogsResult>;
   EnvVar: ResolverTypeWrapper<EnvVar>;
   EnvVarsResult: ResolverTypeWrapper<EnvVarsResult>;
   SetupResult: ResolverTypeWrapper<SetupResult>;
@@ -369,6 +381,7 @@ export type ResolversParentTypes = {
   SetEnvVarResult: SetEnvVarResult;
   UnsetEnvVarResult: UnsetEnvVarResult;
   AppLogsResult: AppLogsResult;
+  DatabaseLogsResult: DatabaseLogsResult;
   EnvVar: EnvVar;
   EnvVarsResult: EnvVarsResult;
   SetupResult: SetupResult;
@@ -457,6 +470,11 @@ export type AppLogsResultResolvers<ContextType = any, ParentType extends Resolve
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
+export type DatabaseLogsResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['DatabaseLogsResult'] = ResolversParentTypes['DatabaseLogsResult']> = {
+  logs?: Resolver<Array<Maybe<ResolversTypes['String']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
 export type EnvVarResolvers<ContextType = any, ParentType extends ResolversParentTypes['EnvVar'] = ResolversParentTypes['EnvVar']> = {
   key?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -488,6 +506,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   isPluginInstalled?: Resolver<ResolversTypes['IsPluginInstalledResult'], ParentType, ContextType, RequireFields<QueryIsPluginInstalledArgs, 'pluginName'>>;
   dokkuPlugins?: Resolver<ResolversTypes['DokkuPluginResult'], ParentType, ContextType>;
   appLogs?: Resolver<ResolversTypes['AppLogsResult'], ParentType, ContextType, RequireFields<QueryAppLogsArgs, 'appId'>>;
+  databaseLogs?: Resolver<ResolversTypes['DatabaseLogsResult'], ParentType, ContextType, RequireFields<QueryDatabaseLogsArgs, 'databaseId'>>;
   envVars?: Resolver<ResolversTypes['EnvVarsResult'], ParentType, ContextType, RequireFields<QueryEnvVarsArgs, 'appId'>>;
 };
 
@@ -519,6 +538,7 @@ export type Resolvers<ContextType = any> = {
   SetEnvVarResult?: SetEnvVarResultResolvers<ContextType>;
   UnsetEnvVarResult?: UnsetEnvVarResultResolvers<ContextType>;
   AppLogsResult?: AppLogsResultResolvers<ContextType>;
+  DatabaseLogsResult?: DatabaseLogsResultResolvers<ContextType>;
   EnvVar?: EnvVarResolvers<ContextType>;
   EnvVarsResult?: EnvVarsResultResolvers<ContextType>;
   SetupResult?: SetupResultResolvers<ContextType>;

@@ -8,10 +8,11 @@ import { destroy } from './apps/destroy';
 import { unset } from './config/unset';
 import { create as createPostgres } from './plugin/postgres/create';
 import { destroy as destroyPostgres } from './plugin/postgres/destroy';
+import { info } from './plugin/postgres/info';
 
 export const dokku = {
   apps: { create, logs, destroy },
   plugin: { installed, list },
   config: { listVars, set, unset },
-  postgres: { create: createPostgres, destroy: destroyPostgres },
+  postgres: { create: createPostgres, destroy: destroyPostgres, info },
 };

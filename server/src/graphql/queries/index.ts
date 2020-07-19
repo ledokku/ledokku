@@ -7,12 +7,14 @@ import { appLogs } from './appLogs';
 import { envVars } from './envVars';
 import { setup } from './setup';
 import { isPluginInstalled } from './isPluginInstalled';
+import { databaseLogs } from './databaseLogs';
 
 export const queries = {
   app,
   apps,
   database,
   databases,
+  databaseLogs,
   dokkuPlugins,
   appLogs,
   envVars,
