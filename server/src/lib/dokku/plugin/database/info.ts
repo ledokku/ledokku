@@ -2,7 +2,7 @@ import NodeSsh from 'node-ssh';
 
 const parseDatabaseLogsCommand = (commandResult: string) => {
   const databaseLogs = commandResult.split('\n');
-  let logs = [];
+  const logs = [];
   // We remove first line as it is not necessary for us
   databaseLogs.shift();
   databaseLogs.map((dblog) => {
