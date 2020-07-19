@@ -12,7 +12,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
+  /** Use JavaScript Date object for date/time fields. */
   DateTime: string;
   /** The `Upload` scalar type represents a file upload. */
   Upload: any;
@@ -65,6 +65,11 @@ export type CreateAppResult = {
 
 export type DestroyAppResult = {
   __typename?: 'DestroyAppResult';
+  result: Scalars['Boolean'];
+};
+
+export type DestroyDatabaseResult = {
+  __typename?: 'DestroyDatabaseResult';
   result: Scalars['Boolean'];
 };
 
@@ -142,6 +147,10 @@ export type DestroyAppInput = {
   appId: Scalars['String'];
 };
 
+export type DestroyDatabaseInput = {
+  databaseId: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   setup: SetupResult;
@@ -188,6 +197,7 @@ export type Mutation = {
   setEnvVar: SetEnvVarResult;
   unsetEnvVar: UnsetEnvVarResult;
   destroyApp: DestroyAppResult;
+  destroyDatabase: DestroyDatabaseResult;
 };
 
 
@@ -218,6 +228,11 @@ export type MutationUnsetEnvVarArgs = {
 
 export type MutationDestroyAppArgs = {
   input: DestroyAppInput;
+};
+
+
+export type MutationDestroyDatabaseArgs = {
+  input: DestroyDatabaseInput;
 };
 
 export type CacheControlScope = 
@@ -268,6 +283,19 @@ export type DestroyAppMutation = (
   & { destroyApp: (
     { __typename?: 'DestroyAppResult' }
     & Pick<DestroyAppResult, 'result'>
+  ) }
+);
+
+export type DestroyDatabaseMutationVariables = Exact<{
+  input: DestroyDatabaseInput;
+}>;
+
+
+export type DestroyDatabaseMutation = (
+  { __typename?: 'Mutation' }
+  & { destroyDatabase: (
+    { __typename?: 'DestroyDatabaseResult' }
+    & Pick<DestroyDatabaseResult, 'result'>
   ) }
 );
 
@@ -353,9 +381,9 @@ export type DashboardQuery = (
   )> }
 );
 
-export type DatabaseByIdQueryVariables = {
+export type DatabaseByIdQueryVariables = Exact<{
   databaseId: Scalars['String'];
-};
+}>;
 
 
 export type DatabaseByIdQuery = (
@@ -365,7 +393,6 @@ export type DatabaseByIdQuery = (
     & Pick<Database, 'id' | 'name' | 'type'>
   )> }
 );
-
 
 export type EnvVarsQueryVariables = Exact<{
   appId: Scalars['String'];
@@ -511,6 +538,38 @@ export function useDestroyAppMutation(baseOptions?: ApolloReactHooks.MutationHoo
 export type DestroyAppMutationHookResult = ReturnType<typeof useDestroyAppMutation>;
 export type DestroyAppMutationResult = ApolloReactCommon.MutationResult<DestroyAppMutation>;
 export type DestroyAppMutationOptions = ApolloReactCommon.BaseMutationOptions<DestroyAppMutation, DestroyAppMutationVariables>;
+export const DestroyDatabaseDocument = gql`
+    mutation destroyDatabase($input: DestroyDatabaseInput!) {
+  destroyDatabase(input: $input) {
+    result
+  }
+}
+    `;
+export type DestroyDatabaseMutationFn = ApolloReactCommon.MutationFunction<DestroyDatabaseMutation, DestroyDatabaseMutationVariables>;
+
+/**
+ * __useDestroyDatabaseMutation__
+ *
+ * To run a mutation, you first call `useDestroyDatabaseMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDestroyDatabaseMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [destroyDatabaseMutation, { data, loading, error }] = useDestroyDatabaseMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDestroyDatabaseMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DestroyDatabaseMutation, DestroyDatabaseMutationVariables>) {
+        return ApolloReactHooks.useMutation<DestroyDatabaseMutation, DestroyDatabaseMutationVariables>(DestroyDatabaseDocument, baseOptions);
+      }
+export type DestroyDatabaseMutationHookResult = ReturnType<typeof useDestroyDatabaseMutation>;
+export type DestroyDatabaseMutationResult = ApolloReactCommon.MutationResult<DestroyDatabaseMutation>;
+export type DestroyDatabaseMutationOptions = ApolloReactCommon.BaseMutationOptions<DestroyDatabaseMutation, DestroyDatabaseMutationVariables>;
 export const LoginWithGithubDocument = gql`
     mutation loginWithGithub($code: String!) {
   loginWithGithub(code: $code) {
