@@ -1,0 +1,7 @@
+query databaseById($databaseId: String!) {
+  database(databaseId: $databaseId) {
+    id
+    name
+    type
+  }
+}

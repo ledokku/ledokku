@@ -1,3 +1,4 @@
+import { dbTypeToDokkuPlugin } from '../utils';
 import * as yup from 'yup';
 import { MutationResolvers } from '../../generated/graphql';
 import { prisma } from '../../prisma';
@@ -5,7 +6,7 @@ import { dokku } from '../../lib/dokku';
 import { sshConnect } from '../../lib/ssh';
 
 // Validate the name to make sure there are no security risks by adding it to the ssh exec command.
-// Only letters and "-" allowed
+// Only lowercase letters and "-" allowed
 // TODO unit test this schema
 const createDatabaseSchema = yup.object({
   name: yup
@@ -33,19 +34,18 @@ export const createDatabase: MutationResolvers['createDatabase'] = async (
 
   const ssh = await sshConnect();
 
-  const isDbInstalled = await dokku.plugin.installed(ssh, 'postgres');
+  const dokkuPlugins = await dokku.plugin.list(ssh);
+
+  const isDbInstalled =
+    dokkuPlugins.plugins.filter(
+      (plugin) => plugin.name === dbTypeToDokkuPlugin(input.type)
+    ).length !== 0;
+
   if (!isDbInstalled) {
-    throw new Error('Database postgres is not installed');
+    throw new Error(`Database ${input.type} is not installed`);
   }
 
-  const resultCommand = await ssh.execCommand(
-    `dokku postgres:create ${input.name}`
-  );
-
-  if (resultCommand.code !== 0) {
-    console.error(resultCommand);
-    throw new Error(resultCommand.stderr);
-  }
+  await dokku.postgres.create(ssh, input.name);
 
   const database = await prisma.database.create({
     data: {

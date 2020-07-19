@@ -130,6 +130,7 @@ const typeDefs = gql`
     setup: SetupResult!
     apps: [App!]!
     app(appId: String!): App
+    database(databaseId: String!): Database
     databases: [Database!]!
     isPluginInstalled(pluginName: String!): IsPluginInstalledResult!
     dokkuPlugins: DokkuPluginResult!

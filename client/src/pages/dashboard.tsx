@@ -4,6 +4,7 @@ import { useDashboardQuery } from '../generated/graphql';
 import { NodeIcon } from '../ui/icons/NodeIcon';
 import { Header } from '../modules/layout/Header';
 import { TabNav, TabNavLink, Button } from '../ui';
+import { PostgreSQLIcon } from '../ui/icons/PostgreSQLIcon';
 
 export const Dashboard = () => {
   // const history = useHistory();
@@ -53,7 +54,14 @@ export const Dashboard = () => {
             </p>
             <h1 className="text-lg font-bold py-5">Databases</h1>
             {data?.databases.map((database) => (
-              <p key={database.id}>{database.name}</p>
+              <div key={database.id}>
+                <Link to={`/database/${database.id}`} className="py-2 block">
+                  <div className="flex items-center py-3 px-2 shadow hover:shadow-md transition-shadow duration-100 ease-in-out rounded bg-white">
+                    <PostgreSQLIcon size={24} className="mr-2" />
+                    <p>{database.name}</p>
+                  </div>
+                </Link>
+              </div>
             ))}
             <p className="py-3">
               <Link to="/create-database">

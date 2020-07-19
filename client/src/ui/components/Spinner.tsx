@@ -3,7 +3,7 @@ import cx from 'classnames';
 import styled, { keyframes } from 'styled-components';
 
 interface SpinnerProps {
-  size: 'small' | 'large';
+  size: 'small' | 'large' | 'extraSmall';
   className?: string;
 }
 
@@ -30,6 +30,7 @@ export const Spinner = ({ size, className, ...props }: SpinnerProps) => (
       {
         'border-8 border-t-8 h-24 w-24': size === 'large',
         'border-4 border-t-4 h-8 w-8': size === 'small',
+        'border-2 border-t-2 h-4 w-4': size === 'extraSmall',
       },
       className
     )}
