@@ -91,6 +91,10 @@ const typeDefs = gql`
     info: [String]!
   }
 
+  type DatabaseLogsResult {
+    logs: [String]!
+  }
+
   type EnvVar {
     key: String!
     value: String!
@@ -148,6 +152,7 @@ const typeDefs = gql`
     dokkuPlugins: DokkuPluginResult!
     appLogs(appId: String!): AppLogsResult!
     databaseInfo(databaseId: String!): DatabaseInfoResult!
+    databaseLogs(databaseId: String!): DatabaseLogsResult!
     envVars(appId: String!): EnvVarsResult!
   }
 

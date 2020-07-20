@@ -1,0 +1,5 @@
+query databaseLogs($databaseId: String!) {
+  databaseLogs(databaseId: $databaseId) {
+    logs
+  }
+}

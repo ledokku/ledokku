@@ -105,6 +105,11 @@ export type DatabaseInfoResult = {
   info: Array<Maybe<Scalars['String']>>;
 };
 
+export type DatabaseLogsResult = {
+  __typename?: 'DatabaseLogsResult';
+  logs: Array<Maybe<Scalars['String']>>;
+};
+
 export type EnvVar = {
   __typename?: 'EnvVar';
   key: Scalars['String'];
@@ -167,6 +172,7 @@ export type Query = {
   dokkuPlugins: DokkuPluginResult;
   appLogs: AppLogsResult;
   databaseInfo: DatabaseInfoResult;
+  databaseLogs: DatabaseLogsResult;
   envVars: EnvVarsResult;
 };
 
@@ -192,6 +198,11 @@ export type QueryAppLogsArgs = {
 
 
 export type QueryDatabaseInfoArgs = {
+  databaseId: Scalars['String'];
+};
+
+
+export type QueryDatabaseLogsArgs = {
   databaseId: Scalars['String'];
 };
 
@@ -415,6 +426,19 @@ export type DatabaseInfoQuery = (
   & { databaseInfo: (
     { __typename?: 'DatabaseInfoResult' }
     & Pick<DatabaseInfoResult, 'info'>
+  ) }
+);
+
+export type DatabaseLogsQueryVariables = Exact<{
+  databaseId: Scalars['String'];
+}>;
+
+
+export type DatabaseLogsQuery = (
+  { __typename?: 'Query' }
+  & { databaseLogs: (
+    { __typename?: 'DatabaseLogsResult' }
+    & Pick<DatabaseLogsResult, 'logs'>
   ) }
 );
 
@@ -868,6 +892,39 @@ export function useDatabaseInfoLazyQuery(baseOptions?: ApolloReactHooks.LazyQuer
 export type DatabaseInfoQueryHookResult = ReturnType<typeof useDatabaseInfoQuery>;
 export type DatabaseInfoLazyQueryHookResult = ReturnType<typeof useDatabaseInfoLazyQuery>;
 export type DatabaseInfoQueryResult = ApolloReactCommon.QueryResult<DatabaseInfoQuery, DatabaseInfoQueryVariables>;
+export const DatabaseLogsDocument = gql`
+    query databaseLogs($databaseId: String!) {
+  databaseLogs(databaseId: $databaseId) {
+    logs
+  }
+}
+    `;
+
+/**
+ * __useDatabaseLogsQuery__
+ *
+ * To run a query within a React component, call `useDatabaseLogsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDatabaseLogsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDatabaseLogsQuery({
+ *   variables: {
+ *      databaseId: // value for 'databaseId'
+ *   },
+ * });
+ */
+export function useDatabaseLogsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<DatabaseLogsQuery, DatabaseLogsQueryVariables>) {
+        return ApolloReactHooks.useQuery<DatabaseLogsQuery, DatabaseLogsQueryVariables>(DatabaseLogsDocument, baseOptions);
+      }
+export function useDatabaseLogsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<DatabaseLogsQuery, DatabaseLogsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<DatabaseLogsQuery, DatabaseLogsQueryVariables>(DatabaseLogsDocument, baseOptions);
+        }
+export type DatabaseLogsQueryHookResult = ReturnType<typeof useDatabaseLogsQuery>;
+export type DatabaseLogsLazyQueryHookResult = ReturnType<typeof useDatabaseLogsLazyQuery>;
+export type DatabaseLogsQueryResult = ApolloReactCommon.QueryResult<DatabaseLogsQuery, DatabaseLogsQueryVariables>;
 export const EnvVarsDocument = gql`
     query envVars($appId: String!) {
   envVars(appId: $appId) {

@@ -9,10 +9,11 @@ import { unset } from './config/unset';
 import { create as createDb } from './plugin/database/create';
 import { destroy as destroyDb } from './plugin/database/destroy';
 import { info } from './plugin/database/info';
+import { logs as databaseLogs } from './plugin/database/logs';
 
 export const dokku = {
   apps: { create, logs, destroy },
   plugin: { installed, list },
   config: { listVars, set, unset },
-  database: { create: createDb, destroy: destroyDb, info },
+  database: { create: createDb, destroy: destroyDb, info, logs: databaseLogs },
 };

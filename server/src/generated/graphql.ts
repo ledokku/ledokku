@@ -104,6 +104,11 @@ export type DatabaseInfoResult = {
   info: Array<Maybe<Scalars['String']>>;
 };
 
+export type DatabaseLogsResult = {
+  __typename?: 'DatabaseLogsResult';
+  logs: Array<Maybe<Scalars['String']>>;
+};
+
 export type EnvVar = {
   __typename?: 'EnvVar';
   key: Scalars['String'];
@@ -166,6 +171,7 @@ export type Query = {
   dokkuPlugins: DokkuPluginResult;
   appLogs: AppLogsResult;
   databaseInfo: DatabaseInfoResult;
+  databaseLogs: DatabaseLogsResult;
   envVars: EnvVarsResult;
 };
 
@@ -191,6 +197,11 @@ export type QueryAppLogsArgs = {
 
 
 export type QueryDatabaseInfoArgs = {
+  databaseId: Scalars['String'];
+};
+
+
+export type QueryDatabaseLogsArgs = {
   databaseId: Scalars['String'];
 };
 
@@ -347,6 +358,7 @@ export type ResolversTypes = {
   UnsetEnvVarResult: ResolverTypeWrapper<UnsetEnvVarResult>;
   AppLogsResult: ResolverTypeWrapper<AppLogsResult>;
   DatabaseInfoResult: ResolverTypeWrapper<DatabaseInfoResult>;
+  DatabaseLogsResult: ResolverTypeWrapper<DatabaseLogsResult>;
   EnvVar: ResolverTypeWrapper<EnvVar>;
   EnvVarsResult: ResolverTypeWrapper<EnvVarsResult>;
   SetupResult: ResolverTypeWrapper<SetupResult>;
@@ -382,6 +394,7 @@ export type ResolversParentTypes = {
   UnsetEnvVarResult: UnsetEnvVarResult;
   AppLogsResult: AppLogsResult;
   DatabaseInfoResult: DatabaseInfoResult;
+  DatabaseLogsResult: DatabaseLogsResult;
   EnvVar: EnvVar;
   EnvVarsResult: EnvVarsResult;
   SetupResult: SetupResult;
@@ -475,6 +488,11 @@ export type DatabaseInfoResultResolvers<ContextType = any, ParentType extends Re
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
+export type DatabaseLogsResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['DatabaseLogsResult'] = ResolversParentTypes['DatabaseLogsResult']> = {
+  logs?: Resolver<Array<Maybe<ResolversTypes['String']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
 export type EnvVarResolvers<ContextType = any, ParentType extends ResolversParentTypes['EnvVar'] = ResolversParentTypes['EnvVar']> = {
   key?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -507,6 +525,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   dokkuPlugins?: Resolver<ResolversTypes['DokkuPluginResult'], ParentType, ContextType>;
   appLogs?: Resolver<ResolversTypes['AppLogsResult'], ParentType, ContextType, RequireFields<QueryAppLogsArgs, 'appId'>>;
   databaseInfo?: Resolver<ResolversTypes['DatabaseInfoResult'], ParentType, ContextType, RequireFields<QueryDatabaseInfoArgs, 'databaseId'>>;
+  databaseLogs?: Resolver<ResolversTypes['DatabaseLogsResult'], ParentType, ContextType, RequireFields<QueryDatabaseLogsArgs, 'databaseId'>>;
   envVars?: Resolver<ResolversTypes['EnvVarsResult'], ParentType, ContextType, RequireFields<QueryEnvVarsArgs, 'appId'>>;
 };
 
@@ -539,6 +558,7 @@ export type Resolvers<ContextType = any> = {
   UnsetEnvVarResult?: UnsetEnvVarResultResolvers<ContextType>;
   AppLogsResult?: AppLogsResultResolvers<ContextType>;
   DatabaseInfoResult?: DatabaseInfoResultResolvers<ContextType>;
+  DatabaseLogsResult?: DatabaseLogsResultResolvers<ContextType>;
   EnvVar?: EnvVarResolvers<ContextType>;
   EnvVarsResult?: EnvVarsResultResolvers<ContextType>;
   SetupResult?: SetupResultResolvers<ContextType>;
