@@ -7,18 +7,18 @@ import {
   useDatabaseByIdQuery,
   useDestroyDatabaseMutation,
   DashboardDocument,
-  useDatabaseLogsQuery,
+  useDatabaseInfoQuery,
 } from '../../generated/graphql';
 import { TabNav, TabNavLink, Button, Spinner, Terminal } from '../../ui';
 
-interface LogProps {
-  log: string;
+interface InfoProps {
+  infoLine: string;
 }
 
-export const LineOfLog = (props: LogProps) => (
+export const LineOfInfo = (props: InfoProps) => (
   <React.Fragment>
     <br />
-    <p className="text-green-400 w-5/6">{props.log}</p>
+    <p className="text-green-400 w-5/6">{props.infoLine}</p>
   </React.Fragment>
 );
 
@@ -38,9 +38,9 @@ export const Settings = () => {
   });
 
   const {
-    data: databaseLogsData,
-    loading: databaseLogsLoading,
-  } = useDatabaseLogsQuery({
+    data: databaseInfoData,
+    loading: databaseInfoLoading,
+  } = useDatabaseInfoQuery({
     variables: {
       databaseId,
     },
@@ -126,13 +126,13 @@ export const Settings = () => {
             <h1 className="text-lg font-bold py-5">Info</h1>
             <Terminal className="pt-8 pb-16">
               <p className=" typing items-center ">{` ${database.name} database info:`}</p>
-              {!databaseLogsData && !databaseLogsLoading ? (
+              {!databaseInfoData && !databaseInfoLoading ? (
                 <span className="text-yellow-400">Database info loading</span>
-              ) : databaseLogsLoading ? (
+              ) : databaseInfoLoading ? (
                 'Loading...'
               ) : (
-                databaseLogsData.databaseLogs.logs.map((dblog) => (
-                  <LineOfLog log={dblog} />
+                databaseInfoData.databaseInfo.info.map((infoLine) => (
+                  <LineOfInfo infoLine={infoLine} />
                 ))
               )}
             </Terminal>

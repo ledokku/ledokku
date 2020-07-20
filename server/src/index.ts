@@ -87,8 +87,8 @@ const typeDefs = gql`
     logs: String!
   }
 
-  type DatabaseLogsResult {
-    logs: [String]!
+  type DatabaseInfoResult {
+    info: [String]!
   }
 
   type EnvVar {
@@ -147,7 +147,7 @@ const typeDefs = gql`
     isPluginInstalled(pluginName: String!): IsPluginInstalledResult!
     dokkuPlugins: DokkuPluginResult!
     appLogs(appId: String!): AppLogsResult!
-    databaseLogs(databaseId: String!): DatabaseLogsResult!
+    databaseInfo(databaseId: String!): DatabaseInfoResult!
     envVars(appId: String!): EnvVarsResult!
   }
 

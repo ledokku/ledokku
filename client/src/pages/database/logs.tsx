@@ -1,10 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { Header } from '../../modules/layout/Header';
-import {
-  useDatabaseByIdQuery,
-  useDatabaseLogsQuery,
-} from '../../generated/graphql';
+import { useDatabaseByIdQuery } from '../../generated/graphql';
 import { TabNav, TabNavLink, Terminal } from '../../ui';
 
 interface LogProps {
@@ -29,17 +26,17 @@ export const Logs = () => {
     skip: !databaseId,
   });
 
-  const {
-    data: databaseLogsData,
-    loading: databaseLogsLoading,
-  } = useDatabaseLogsQuery({
-    variables: {
-      databaseId,
-    },
-    ssr: false,
-    skip: !databaseId,
-    pollInterval: 15000,
-  });
+  // const {
+  //   data: databaseLogsData,
+  //   loading: databaseLogsLoading,
+  // } = useDatabaseLogsQuery({
+  //   variables: {
+  //     databaseId,
+  //   },
+  //   ssr: false,
+  //   skip: !databaseId,
+  //   pollInterval: 15000,
+  // });
 
   if (!data) {
     return null;
@@ -74,7 +71,7 @@ export const Logs = () => {
         </TabNav>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 gap-4 mt-10">
           <h1 className="text-lg font-bold py-5">Logs</h1>
         </div>
@@ -90,7 +87,7 @@ export const Logs = () => {
             ))
           )}
         </Terminal>
-      </div>
+      </div> */}
     </div>
   );
 };

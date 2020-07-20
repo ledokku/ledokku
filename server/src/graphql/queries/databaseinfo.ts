@@ -1,10 +1,10 @@
-import { dbTypeToDokkuPlugin } from './../utils';
+import { dbTypeToDokkuPlugin } from '../utils';
 import { QueryResolvers } from '../../generated/graphql';
 import { sshConnect } from '../../lib/ssh';
 import { dokku } from '../../lib/dokku';
 import { prisma } from '../../prisma';
 
-export const databaseLogs: QueryResolvers['databaseLogs'] = async (
+export const databaseInfo: QueryResolvers['databaseInfo'] = async (
   _,
   { databaseId },
   { userId }
@@ -27,7 +27,7 @@ export const databaseLogs: QueryResolvers['databaseLogs'] = async (
 
   const ssh = await sshConnect();
 
-  const logs = await dokku.database.info(ssh, database.name, dbType);
+  const info = await dokku.database.info(ssh, database.name, dbType);
 
-  return { logs };
+  return { info };
 };
