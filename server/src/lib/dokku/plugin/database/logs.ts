@@ -7,7 +7,6 @@ const parseDatabaseLogsCommand = (commandResult: string) => {
   databaseLogs.shift();
   databaseLogs.map((dblog) => {
     dblog.trim();
-    // If log is empty line we do not push to array
     dblog !== '' && logs.push(dblog);
   });
   // We return array for the ease of parsing
