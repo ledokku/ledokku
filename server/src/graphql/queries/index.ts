@@ -7,7 +7,7 @@ import { appLogs } from './appLogs';
 import { envVars } from './envVars';
 import { setup } from './setup';
 import { isPluginInstalled } from './isPluginInstalled';
-import { databaseInfo } from './databaseInfo';
+// import { databaseInfo } from './databaseInfo';
 import { databaseLogs } from './databaseLogs';
 
 export const queries = {
@@ -15,7 +15,7 @@ export const queries = {
   apps,
   database,
   databases,
-  databaseInfo,
+  // databaseInfo,
   databaseLogs,
   dokkuPlugins,
   appLogs,
