@@ -22,6 +22,11 @@ export const databaseLogs: QueryResolvers['databaseLogs'] = async (
   if (!database) {
     throw new Error(`Database with ID ${databaseId} not found`);
   }
+  if (database.userId !== userId) {
+    throw new Error(
+      `Database with ID ${databaseId} does not belong to ${userId}`
+    );
+  }
 
   const dbType = dbTypeToDokkuPlugin(database.type);
 

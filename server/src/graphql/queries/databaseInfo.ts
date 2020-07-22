@@ -23,6 +23,12 @@ export const databaseInfo: QueryResolvers['databaseInfo'] = async (
     throw new Error(`Database with ID ${databaseId} not found`);
   }
 
+  if (database.userId !== userId) {
+    throw new Error(
+      `Database with ID ${databaseId} does not belong to ${userId}`
+    );
+  }
+
   const dbType = dbTypeToDokkuPlugin(database.type);
 
   const ssh = await sshConnect();
