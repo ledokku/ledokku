@@ -1,8 +1,22 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { Header } from '../../modules/layout/Header';
-import { useDatabaseByIdQuery } from '../../generated/graphql';
+import {
+  useDatabaseByIdQuery,
+  useDatabaseLogsQuery,
+} from '../../generated/graphql';
 import { TabNav, TabNavLink, Terminal } from '../../ui';
+
+interface LogProps {
+  log: string;
+}
+
+export const LineOfLog = (props: LogProps) => (
+  <React.Fragment>
+    <br />
+    <p className="text-green-400">{props.log}</p>
+  </React.Fragment>
+);
 
 export const Logs = () => {
   const { id: databaseId } = useParams();
@@ -13,6 +27,18 @@ export const Logs = () => {
     },
     ssr: false,
     skip: !databaseId,
+  });
+
+  const {
+    data: databaseLogsData,
+    loading: databaseLogsLoading,
+  } = useDatabaseLogsQuery({
+    variables: {
+      databaseId,
+    },
+    ssr: false,
+    skip: !databaseId,
+    pollInterval: 15000,
   });
 
   if (!data) {
@@ -53,10 +79,19 @@ export const Logs = () => {
           <h1 className="text-lg font-bold py-5">Logs</h1>
         </div>
         <Terminal className="pt-8 pb-16">
-          <div className="flex">
-            <p className="flex-1 typing items-center pl-2">{`Database status:`}</p>
-            Clean
-          </div>
+          <p className=" typing items-center ">{`Logs for ${database.name} database:`}</p>
+          {!databaseLogsData && !databaseLogsLoading ? (
+            <span className="text-yellow-400">Database logs loading</span>
+          ) : databaseLogsLoading ? (
+            'Loading...'
+          ) : (
+            databaseLogsData.databaseLogs.logs.map((dblog) => (
+              <LineOfLog
+                key={databaseLogsData.databaseLogs.logs.lastIndexOf(dblog)}
+                log={dblog}
+              />
+            ))
+          )}
         </Terminal>
       </div>
     </div>

@@ -1,3 +1,4 @@
+import { dbTypeToDokkuPlugin } from './../utils';
 import { MutationResolvers } from '../../generated/graphql';
 import { prisma } from '../../prisma';
 import { dokku } from '../../lib/dokku';
@@ -27,7 +28,13 @@ export const destroyDatabase: MutationResolvers['destroyDatabase'] = async (
 
   const ssh = await sshConnect();
 
-  const result = await dokku.postgres.destroy(ssh, databaseToDelete.name);
+  const dbType = dbTypeToDokkuPlugin(databaseToDelete.type);
+
+  const result = await dokku.database.destroy(
+    ssh,
+    databaseToDelete.name,
+    dbType
+  );
 
   // We delete the database
   await prisma.database.delete({

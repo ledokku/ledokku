@@ -168,53 +168,7 @@ export const CreateDatabase = () => {
                 onClick={() => formik.setFieldValue('type', 'REDIS')}
               />
             </div>
-            <div className="mt-2 text-gray-400">
-              {formik.values.type === 'POSTGRESQL' && (
-                <p>We currently only provide PostgreSQL</p>
-              )}
-              {formik.values.type === 'MYSQL' && (
-                <p>
-                  We currently don't support MySQL.
-                  <br />
-                  Take a look at{' '}
-                  <a
-                    href="https://github.com/ledokku/ledokku/issues/22"
-                    className="underline"
-                  >
-                    the issue
-                  </a>{' '}
-                  to track the progress.
-                </p>
-              )}
-              {formik.values.type === 'MONGODB' && (
-                <p>
-                  We currently don't support Mongo.
-                  <br />
-                  Take a look at{' '}
-                  <a
-                    href="https://github.com/ledokku/ledokku/issues/21"
-                    className="underline"
-                  >
-                    the issue
-                  </a>{' '}
-                  to track the progress.
-                </p>
-              )}
-              {formik.values.type === 'REDIS' && (
-                <p>
-                  We currently don't support Redis.
-                  <br />
-                  Take a look at{' '}
-                  <a
-                    href="https://github.com/ledokku/ledokku/issues/20"
-                    className="underline"
-                  >
-                    the issue
-                  </a>{' '}
-                  to track the progress.
-                </p>
-              )}
-            </div>
+            <div className="mt-2 text-gray-400"></div>
           </div>
 
           <div className="mt-12 flex justify-end">

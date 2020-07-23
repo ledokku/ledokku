@@ -7,8 +7,20 @@ import {
   useDatabaseByIdQuery,
   useDestroyDatabaseMutation,
   DashboardDocument,
+  useDatabaseInfoQuery,
 } from '../../generated/graphql';
-import { TabNav, TabNavLink, Button, Spinner } from '../../ui';
+import { TabNav, TabNavLink, Button, Spinner, Terminal } from '../../ui';
+
+interface InfoProps {
+  infoLine: string;
+}
+
+export const LineOfInfo = (props: InfoProps) => (
+  <React.Fragment>
+    <br />
+    <p className="text-green-400 w-5/6">{props.infoLine}</p>
+  </React.Fragment>
+);
 
 export const Settings = () => {
   const { id: databaseId } = useParams();
@@ -23,6 +35,18 @@ export const Settings = () => {
     },
     ssr: false,
     skip: !databaseId,
+  });
+
+  const {
+    data: databaseInfoData,
+    loading: databaseInfoLoading,
+  } = useDatabaseInfoQuery({
+    variables: {
+      databaseId,
+    },
+    ssr: false,
+    skip: !databaseId,
+    pollInterval: 15000,
   });
 
   const DeleteDatabaseNameSchema = yup.object().shape({
@@ -96,42 +120,59 @@ export const Settings = () => {
         </TabNav>
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 gap-4 mt-10">
-          <h1 className="text-lg font-bold py-5">Database settings</h1>
-
-          <h2 className="text-gray-400 w-2/6">
-            This action cannot be undone. This will permanently delete{' '}
-            {database.name} app and everything related to it. Please type{' '}
-            <b>{database.name}</b> to confirm deletion.
-          </h2>
-          <form onSubmit={formik.handleSubmit}>
-            <div className="mt-4">
-              <input
-                autoComplete="off"
-                className="mb-2 block w-full max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
-                id="databaseName"
-                name="databaseName"
-                value={formik.values.databaseName}
-                onChange={formik.handleChange}
-              />
-              {!!formik.errors && (
-                <p className="text-red-500 text-sm font-semibold">
-                  {formik.errors.databaseName}
-                </p>
+          <div className="col-span-2 w-5/5">
+            <h1 className="text-lg font-bold py-5">Info</h1>
+            <Terminal className="pt-8 pb-16">
+              <p className=" typing items-center ">{` ${database.name} database info:`}</p>
+              {!databaseInfoData && !databaseInfoLoading ? (
+                <span className="text-yellow-400">Database info loading</span>
+              ) : databaseInfoLoading ? (
+                'Loading...'
+              ) : (
+                databaseInfoData.databaseInfo.info.map((infoLine) => (
+                  <LineOfInfo infoLine={infoLine} />
+                ))
               )}
-              <Button
-                type="submit"
-                disabled={
-                  !formik.values.databaseName || !!formik.errors.databaseName
-                }
-                color="red"
-                width="normal"
-              >
-                {destroyDbLoading ? <Spinner size="extraSmall" /> : 'Delete'}
-              </Button>
-            </div>
-          </form>
+            </Terminal>
+          </div>
+          <div className="w-3/3 mb-6">
+            <h1 className="text-lg font-bold py-5">Database settings</h1>
+
+            <h2 className="text-gray-400 w-6/6">
+              This action cannot be undone. This will permanently delete{' '}
+              {database.name} app and everything related to it. Please type{' '}
+              <b>{database.name}</b> to confirm deletion.
+            </h2>
+            <form onSubmit={formik.handleSubmit}>
+              <div className="mt-4">
+                <input
+                  autoComplete="off"
+                  className="mb-2 block w-full max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
+                  id="databaseName"
+                  name="databaseName"
+                  value={formik.values.databaseName}
+                  onChange={formik.handleChange}
+                />
+                {!!formik.errors && (
+                  <p className="text-red-500 text-sm font-semibold">
+                    {formik.errors.databaseName}
+                  </p>
+                )}
+                <Button
+                  type="submit"
+                  disabled={
+                    !formik.values.databaseName || !!formik.errors.databaseName
+                  }
+                  color="red"
+                  width="normal"
+                >
+                  {destroyDbLoading ? <Spinner size="extraSmall" /> : 'Delete'}
+                </Button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
