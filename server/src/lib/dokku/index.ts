@@ -6,11 +6,14 @@ import { listVars } from './config/listVars';
 import { set } from './config/set';
 import { destroy } from './apps/destroy';
 import { unset } from './config/unset';
-import { create as createPostgres } from './plugin/postgres/create';
+import { create as createDb } from './plugin/database/create';
+import { destroy as destroyDb } from './plugin/database/destroy';
+import { info } from './plugin/database/info';
+import { logs as databaseLogs } from './plugin/database/logs';
 
 export const dokku = {
   apps: { create, logs, destroy },
   plugin: { installed, list },
   config: { listVars, set, unset },
-  postgres: { create: createPostgres },
+  database: { create: createDb, destroy: destroyDb, info, logs: databaseLogs },
 };

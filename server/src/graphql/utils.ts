@@ -16,7 +16,7 @@ export const appNameSchema = yup.object({
   name: appNameYup,
 });
 
-export const dbTypeToDokkuPlugin = (dbType: DatabaseTypes) => {
+export const dbTypeToDokkuPlugin = (dbType: DatabaseTypes): string => {
   switch (dbType) {
     case 'MONGODB':
       return 'mongo';

@@ -2,7 +2,7 @@ import React from 'react';
 import { Header } from '../../modules/layout/Header';
 import { useDatabaseByIdQuery } from '../../generated/graphql';
 import { useParams } from 'react-router-dom';
-import { TabNav, TabNavLink, Terminal } from '../../ui';
+import { TabNav, TabNavLink } from '../../ui';
 
 export const Database = () => {
   const { id: databaseId } = useParams();
@@ -43,7 +43,7 @@ export const Database = () => {
             Database
           </TabNavLink>
 
-          <TabNavLink to={`/database/${database.id}/apps`}>Apps</TabNavLink>
+          <TabNavLink to={`/database/${database.id}/logs`}>Logs</TabNavLink>
           <TabNavLink to={`/database/${database.id}/settings`}>
             Settings
           </TabNavLink>
@@ -85,13 +85,16 @@ export const Database = () => {
           </div>
 
           <div className="w-full">
-            <h1 className="font-bold text-lg font-bold py-5">Logs</h1>
-            <Terminal className="pt-8 pb-16">
-              <div className="flex">
-                <p className="flex-1 typing items-center pl-2">{`Database status:`}</p>
-                Clean
-              </div>
-            </Terminal>
+            <h1 className="font-bold text-lg font-bold py-5">Apps</h1>
+            <div className="mt-4 mb-4">
+              <h2 className="text-gray-400">
+                {`Here you can modify apps linked to:`}
+                <span className="text-gray-900"> {database.name}</span> database
+              </h2>
+            </div>
+            <button className="mt-4 bg-gray-900 hover:bg-blue text-white  font-bold hover:text-white py-2 px-4 border hover:border-transparent rounded-lg">
+              Connect app
+            </button>
           </div>
         </div>
       </div>

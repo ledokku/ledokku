@@ -1,8 +1,8 @@
 import React from 'react';
 import { Header } from '../../modules/layout/Header';
-import { useAppByIdQuery, useAppLogsQuery } from '../../generated/graphql';
+import { useAppByIdQuery } from '../../generated/graphql';
 import { useParams } from 'react-router-dom';
-import { TabNav, TabNavLink, Terminal } from '../../ui';
+import { TabNav, TabNavLink } from '../../ui';
 
 export const App = () => {
   const { id: appId } = useParams();
@@ -13,22 +13,6 @@ export const App = () => {
     },
     ssr: false,
     skip: !appId,
-  });
-
-  // TODO solve issue when app is not deployed - logs are undefined
-
-  const {
-    data: appLogsData,
-    loading: appLogsLoading,
-    /* error: appLogsError, */
-  } = useAppLogsQuery({
-    variables: {
-      appId,
-    },
-    ssr: false,
-    skip: !appId,
-    // we fetch status every 2 min 30 sec
-    pollInterval: 15000,
   });
 
   if (!data) {
@@ -58,10 +42,9 @@ export const App = () => {
           <TabNavLink to={`/app/${app.id}`} selected>
             App
           </TabNavLink>
-          <TabNavLink to={`/app/${app.id}/databases`}>Databases</TabNavLink>
+          <TabNavLink to={`/app/${app.id}/logs`}>Logs</TabNavLink>
           <TabNavLink to={`/app/${app.id}/env`}>Env setup</TabNavLink>
           <TabNavLink to={`/app/${app.id}/settings`}>Settings</TabNavLink>
-          <TabNavLink to="/dashboard">Return to dashboard</TabNavLink>
         </TabNav>
       </div>
 
@@ -106,21 +89,16 @@ export const App = () => {
           </div>
 
           <div className="w-full">
-            <h1 className="font-bold text-lg font-bold py-5">Logs</h1>
-            <Terminal className="pt-8 pb-16">
-              <div className="flex">
-                <p className="flex-1 typing items-center pl-2">{`App status:`}</p>
-                {!appLogsData && !appLogsLoading ? (
-                  <span className="text-yellow-400">
-                    App is still deploying
-                  </span>
-                ) : (
-                  <span className="text-green-400">
-                    {appLogsLoading ? 'Loading...' : appLogsData.appLogs.logs}
-                  </span>
-                )}
-              </div>
-            </Terminal>
+            <h1 className="font-bold text-lg font-bold py-5">Databases</h1>
+            <div className="mt-4 mb-4">
+              <h2 className="text-gray-400">
+                {`Here you can modify databases linked to:`}
+                <span className="text-gray-900"> {app.name}</span> app
+              </h2>
+            </div>
+            <button className="mt-4 bg-gray-900 hover:bg-blue text-white  font-bold hover:text-white py-2 px-4 border hover:border-transparent rounded-lg">
+              Connect database
+            </button>
           </div>
         </div>
       </div>

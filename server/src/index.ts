@@ -61,6 +61,10 @@ const typeDefs = gql`
     result: Boolean!
   }
 
+  type DestroyDatabaseResult {
+    result: Boolean!
+  }
+
   type DokkuPlugin {
     name: String!
     version: String!
@@ -81,6 +85,14 @@ const typeDefs = gql`
 
   type AppLogsResult {
     logs: String!
+  }
+
+  type DatabaseInfoResult {
+    info: [String]!
+  }
+
+  type DatabaseLogsResult {
+    logs: [String]!
   }
 
   type EnvVar {
@@ -126,6 +138,10 @@ const typeDefs = gql`
     appId: String!
   }
 
+  input DestroyDatabaseInput {
+    databaseId: String!
+  }
+
   type Query {
     setup: SetupResult!
     apps: [App!]!
@@ -135,6 +151,8 @@ const typeDefs = gql`
     isPluginInstalled(pluginName: String!): IsPluginInstalledResult!
     dokkuPlugins: DokkuPluginResult!
     appLogs(appId: String!): AppLogsResult!
+    databaseInfo(databaseId: String!): DatabaseInfoResult!
+    databaseLogs(databaseId: String!): DatabaseLogsResult!
     envVars(appId: String!): EnvVarsResult!
   }
 
@@ -145,6 +163,7 @@ const typeDefs = gql`
     setEnvVar(input: SetEnvVarInput!): SetEnvVarResult!
     unsetEnvVar(input: UnsetEnvVarInput!): UnsetEnvVarResult!
     destroyApp(input: DestroyAppInput!): DestroyAppResult!
+    destroyDatabase(input: DestroyDatabaseInput!): DestroyDatabaseResult!
   }
 `;
 
