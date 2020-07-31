@@ -12,38 +12,38 @@
     "prisma:migrate": "prisma migrate up --experimental"
   },
   "dependencies": {
-    "@octokit/rest": "18.0.0",
-    "@prisma/client": "2.0.0-beta.5",
-    "apollo-server": "2.15.1",
-    "apollo-server-express": "2.15.1",
-    "bullmq": "1.8.14",
+    "@octokit/rest": "18.0.3",
+    "@prisma/client": "2.3.0",
+    "apollo-server": "2.16.1",
+    "apollo-server-express": "2.16.1",
+    "bullmq": "1.9.0",
     "debug": "4.1.1",
     "dotenv": "8.2.0",
     "execa": "4.0.3",
     "express": "4.17.1",
     "graphql": "15.3.0",
-    "graphql-scalars": "1.2.2",
+    "graphql-scalars": "1.2.6",
     "jsonwebtoken": "8.5.1",
     "node-fetch": "2.6.0",
     "node-ssh": "10.0.2",
     "socket.io": "2.3.0",
     "sshpk": "1.16.1",
-    "yup": "0.29.1"
+    "yup": "0.29.2"
   },
   "devDependencies": {
-    "@graphql-codegen/add": "1.17.0",
-    "@graphql-codegen/cli": "1.17.0",
-    "@graphql-codegen/typescript": "1.17.0",
-    "@graphql-codegen/typescript-resolvers": "1.17.0",
-    "@prisma/cli": "2.0.0-beta.5",
+    "@graphql-codegen/add": "1.17.6",
+    "@graphql-codegen/cli": "1.17.6",
+    "@graphql-codegen/typescript": "1.17.6",
+    "@graphql-codegen/typescript-resolvers": "1.17.6",
+    "@prisma/cli": "2.3.0",
     "@types/debug": "4.1.5",
     "@types/jsonwebtoken": "8.5.0",
-    "@types/node": "14.0.23",
+    "@types/node": "14.0.27",
     "@types/node-ssh": "7.0.0",
-    "@types/socket.io": "2.1.8",
+    "@types/socket.io": "2.1.10",
     "@types/yup": "0.29.3",
     "nodemon": "2.0.4",
     "ts-node": "8.10.2",
-    "typescript": "3.9.6"
+    "typescript": "3.9.7"
   }
 }
