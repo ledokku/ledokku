@@ -9,7 +9,8 @@
     "start": "yarn prisma:migrate && node build/index.js",
     "generate": "graphql-codegen --config codegen.yml",
     "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate up --experimental"
+    "prisma:migrate": "prisma migrate up --experimental",
+    "prisma:migrate:save": "prisma migrate save --experimental"
   },
   "dependencies": {
     "@octokit/rest": "18.0.3",

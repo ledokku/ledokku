@@ -26,8 +26,6 @@ export const createApp: MutationResolvers['createApp'] = async (
   const app = await prisma.app.create({
     data: {
       name: input.name,
-      githubRepoUrl: input.gitUrl,
-      githubId: 'TODO',
       user: {
         connect: {
           id: userId,
