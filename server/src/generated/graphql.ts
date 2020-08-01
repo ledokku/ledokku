@@ -59,7 +59,6 @@ export type LoginResult = {
 export type CreateAppResult = {
   __typename?: 'CreateAppResult';
   app: App;
-  appBuild: AppBuild;
 };
 
 export type DestroyAppResult = {
@@ -442,7 +441,6 @@ export type LoginResultResolvers<ContextType = any, ParentType extends Resolvers
 
 export type CreateAppResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateAppResult'] = ResolversParentTypes['CreateAppResult']> = {
   app?: Resolver<ResolversTypes['App'], ParentType, ContextType>;
-  appBuild?: Resolver<ResolversTypes['AppBuild'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 

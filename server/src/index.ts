@@ -54,7 +54,7 @@ const typeDefs = gql`
 
   type CreateAppResult {
     app: App!
-    appBuild: AppBuild!
+    # appBuild: AppBuild!
   }
 
   type DestroyAppResult {
