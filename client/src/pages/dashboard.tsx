@@ -63,7 +63,7 @@ export const Dashboard = () => {
                 </div>
               ))}
 
-              <h1 className="text-lg font-bold py-5">Databases</h1>
+              <h1 className="text-lg font-bold pb-2 pt-5">Databases</h1>
               {data?.databases.map((database) => (
                 <div
                   key={database.id}
