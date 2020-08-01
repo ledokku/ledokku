@@ -60,7 +60,6 @@ export type LoginResult = {
 export type CreateAppResult = {
   __typename?: 'CreateAppResult';
   app: App;
-  appBuild: AppBuild;
 };
 
 export type DestroyAppResult = {
@@ -134,7 +133,6 @@ export type IsPluginInstalledResult = {
 
 export type CreateAppInput = {
   name: Scalars['String'];
-  gitUrl: Scalars['String'];
 };
 
 export type CreateDatabaseInput = {
@@ -264,7 +262,6 @@ export type CacheControlScope =
 
 export type CreateAppMutationVariables = Exact<{
   name: Scalars['String'];
-  gitUrl: Scalars['String'];
 }>;
 
 
@@ -275,9 +272,6 @@ export type CreateAppMutation = (
     & { app: (
       { __typename?: 'App' }
       & Pick<App, 'id'>
-    ), appBuild: (
-      { __typename?: 'AppBuild' }
-      & Pick<AppBuild, 'id'>
     ) }
   ) }
 );
@@ -484,12 +478,9 @@ export type SetupQuery = (
 
 
 export const CreateAppDocument = gql`
-    mutation createApp($name: String!, $gitUrl: String!) {
-  createApp(input: {name: $name, gitUrl: $gitUrl}) {
+    mutation createApp($name: String!) {
+  createApp(input: {name: $name}) {
     app {
-      id
-    }
-    appBuild {
       id
     }
   }
@@ -511,7 +502,6 @@ export type CreateAppMutationFn = ApolloReactCommon.MutationFunction<CreateAppMu
  * const [createAppMutation, { data, loading, error }] = useCreateAppMutation({
  *   variables: {
  *      name: // value for 'name'
- *      gitUrl: // value for 'gitUrl'
  *   },
  * });
  */

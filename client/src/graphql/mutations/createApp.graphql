@@ -1,10 +1,10 @@
-mutation createApp($name: String!, $gitUrl: String!) {
-  createApp(input: { name: $name, gitUrl: $gitUrl }) {
+mutation createApp($name: String!) {
+  createApp(input: { name: $name }) {
     app {
       id
     }
-    appBuild {
-      id
-    }
+    # appBuild {
+    #   id
+    # }
   }
 }
