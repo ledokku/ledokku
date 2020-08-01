@@ -46,7 +46,7 @@ export const Dashboard = () => {
               </Button>
             </Link>
           </div>
-          <main className="grid grid-cols-12 col-gap-20">
+          <main className="grid grid-cols-1 md:grid-cols-12 md:col-gap-20">
             <div className="col-span-7 mt-4">
               <h1 className="text-lg font-bold py-2">Apps</h1>
               {data?.apps.map((app) => (
