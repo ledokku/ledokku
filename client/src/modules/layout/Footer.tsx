@@ -10,7 +10,7 @@ export const Footer = () => {
         </p>
         <span className="inline-flex sm:ml-auto sm:mt-0 mt-2 justify-center sm:justify-start">
           <a
-            className="text-gray-500"
+            className="text-gray-400"
             href="https://twitter.com/ledokku"
             target="_blank"
             rel="noopener noreferrer"
@@ -18,7 +18,7 @@ export const Footer = () => {
             <Twitter className="w-5 h-5" />
           </a>
           <a
-            className="ml-3 text-gray-500"
+            className="ml-3 text-gray-400"
             href="https://github.com/ledokku/ledokku"
             target="_blank"
             rel="noopener noreferrer"
