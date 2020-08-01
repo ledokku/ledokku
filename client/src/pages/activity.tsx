@@ -29,6 +29,7 @@ export const Activity = () => {
         <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4 mt-10">
           <h1 className="text-lg font-bold py-5">Activity</h1>
         </div>
+        <p className="text-gray-400 text-sm">Coming soon</p>
       </div>
     </div>
   );
