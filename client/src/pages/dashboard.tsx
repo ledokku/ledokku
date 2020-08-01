@@ -34,6 +34,18 @@ export const Dashboard = () => {
         </div>
 
         <div className="max-w-5xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-end pb-6">
+            <Link to="/create-database">
+              <Button color={'grey'} variant="outline" className="text-sm mr-3">
+                Create database
+              </Button>
+            </Link>
+            <Link to="/create-app">
+              <Button color={'grey'} className="text-sm">
+                Create app
+              </Button>
+            </Link>
+          </div>
           <main className="grid grid-cols-12 col-gap-20">
             <div className="col-span-7 mt-4">
               <h1 className="text-lg font-bold py-5 ">Apps</h1>
@@ -46,13 +58,7 @@ export const Dashboard = () => {
                   </Link>
                 </div>
               ))}
-              <p className="py-3">
-                <Link to="/create-app">
-                  <Button width="large" color={'grey'}>
-                    Create new app
-                  </Button>
-                </Link>
-              </p>
+
               <h1 className="text-lg font-bold py-5">Databases</h1>
               {data?.databases.map((database) => (
                 <div key={database.id}>
@@ -64,13 +70,6 @@ export const Dashboard = () => {
                   </Link>
                 </div>
               ))}
-              <p className="py-3">
-                <Link to="/create-database">
-                  <Button width="large" color={'grey'}>
-                    Create new database
-                  </Button>
-                </Link>
-              </p>
             </div>
             <div className="col-span-5 mt-4">
               <h1 className="text-lg font-bold py-5">Latest activity</h1>

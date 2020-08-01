@@ -76,10 +76,10 @@ export const Home = () => {
           <p className="mt-3 mb-3">Login to get started.</p>
 
           <Button
-            width="large"
             color="grey"
             onClick={handleLogin}
             iconStart={<GitHub />}
+            className="px-5"
           >
             Log in with Github
           </Button>

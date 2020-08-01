@@ -175,7 +175,6 @@ export const CreateDatabase = () => {
             <Button
               type="submit"
               color="grey"
-              width="normal"
               disabled={
                 data?.isPluginInstalled.isPluginInstalled === false ||
                 loading ||
