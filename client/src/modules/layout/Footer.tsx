@@ -13,6 +13,7 @@ export const Footer = () => {
             className="text-gray-500"
             href="https://twitter.com/ledokku"
             target="_blank"
+            rel="noopener noreferrer"
           >
             <Twitter className="w-5 h-5" />
           </a>
@@ -20,6 +21,7 @@ export const Footer = () => {
             className="ml-3 text-gray-500"
             href="https://github.com/ledokku/ledokku"
             target="_blank"
+            rel="noopener noreferrer"
           >
             <GitHub className="w-5 h-5" />
           </a>
