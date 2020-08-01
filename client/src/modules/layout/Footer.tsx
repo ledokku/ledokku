@@ -4,7 +4,7 @@ import { Twitter, GitHub } from 'react-feather';
 export const Footer = () => {
   return (
     <footer className="bg-gray-200">
-      <div className="max-w-5xl mx-auto py-4 px-5 flex flex-wrap flex-col sm:flex-row">
+      <div className="max-w-5xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex flex-wrap flex-col sm:flex-row">
         <p className="text-gray-500 text-sm text-center sm:text-left">
           © {new Date().getFullYear()} ledokku
         </p>
