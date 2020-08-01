@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useDashboardQuery } from '../generated/graphql';
-import { NodeIcon } from '../ui/icons/NodeIcon';
 import { Header } from '../modules/layout/Header';
 import { Footer } from '../modules/layout/Footer';
 import { TabNav, TabNavLink, Button } from '../ui';
@@ -46,14 +45,19 @@ export const Dashboard = () => {
           </div>
           <main className="grid grid-cols-12 col-gap-20">
             <div className="col-span-7 mt-4">
-              <h1 className="text-lg font-bold py-5 ">Apps</h1>
+              <h1 className="text-lg font-bold py-2">Apps</h1>
               {data?.apps.map((app) => (
-                <div key={app.id}>
-                  <Link to={`/app/${app.id}`} className="py-2 block">
-                    <div className="flex items-center py-3 px-2 shadow hover:shadow-md transition-shadow duration-100 ease-in-out rounded bg-white">
-                      <NodeIcon size={20} className="mr-2" /> {app.name}
-                    </div>
-                  </Link>
+                <div key={app.id} className="mt-3">
+                  <div className="mb-1 text-gray-900 font-medium">
+                    <Link to={`/app/${app.id}`}>
+                      <div>{app.name}</div>
+                    </Link>
+                  </div>
+                  <div className="flex justify-between text-gray-400 mb-3 text-sm">
+                    <div>ledokku/ledokku</div>
+                    <div>Last deploy 6h ago</div>
+                  </div>
+                  <div className="border-b border-gray-200" />
                 </div>
               ))}
 
@@ -71,7 +75,7 @@ export const Dashboard = () => {
             </div>
             <div className="col-span-5 mt-4">
               <h1 className="text-lg font-bold py-5">Latest activity</h1>
-              <p className="text-cool-gray-400">Coming soon</p>
+              <p className="text-gray-400 text-sm">Coming soon</p>
             </div>
           </main>
         </div>
