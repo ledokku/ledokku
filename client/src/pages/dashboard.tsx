@@ -5,6 +5,9 @@ import { Header } from '../modules/layout/Header';
 import { Footer } from '../modules/layout/Footer';
 import { TabNav, TabNavLink, Button } from '../ui';
 import { PostgreSQLIcon } from '../ui/icons/PostgreSQLIcon';
+import { MongoIcon } from '../ui/icons/MongoIcon';
+import { RedisIcon } from '../ui/icons/RedisIcon';
+import { MySQLIcon } from '../ui/icons/MySQLIcon';
 
 export const Dashboard = () => {
   // const history = useHistory();
@@ -47,29 +50,57 @@ export const Dashboard = () => {
             <div className="col-span-7 mt-4">
               <h1 className="text-lg font-bold py-2">Apps</h1>
               {data?.apps.map((app) => (
-                <div key={app.id} className="mt-3">
+                <div key={app.id} className="py-3 border-b border-gray-200">
                   <div className="mb-1 text-gray-900 font-medium">
                     <Link to={`/app/${app.id}`}>
                       <div>{app.name}</div>
                     </Link>
                   </div>
-                  <div className="flex justify-between text-gray-400 mb-3 text-sm">
+                  <div className="flex justify-between text-gray-400 text-sm">
                     <div>ledokku/ledokku</div>
                     <div>Last deploy 6h ago</div>
                   </div>
-                  <div className="border-b border-gray-200" />
                 </div>
               ))}
 
               <h1 className="text-lg font-bold py-5">Databases</h1>
               {data?.databases.map((database) => (
-                <div key={database.id}>
-                  <Link to={`/database/${database.id}`} className="py-2 block">
-                    <div className="flex items-center py-3 px-2 shadow hover:shadow-md transition-shadow duration-100 ease-in-out rounded bg-white">
-                      <PostgreSQLIcon size={24} className="mr-2" />
-                      <p>{database.name}</p>
+                <div
+                  key={database.id}
+                  className="py-3 border-b border-gray-200"
+                >
+                  <div className="mb-1 text-gray-900 font-medium">
+                    <Link to={`/database/${database.id}`}>{database.name}</Link>
+                  </div>
+                  <div className="flex justify-between text-gray-400 text-sm">
+                    <div className="flex items-center">
+                      {database.type === 'POSTGRESQL' ? (
+                        <React.Fragment>
+                          <PostgreSQLIcon size={16} className="mr-1" />
+                          PostgreSQL
+                        </React.Fragment>
+                      ) : undefined}
+                      {database.type === 'MONGODB' ? (
+                        <React.Fragment>
+                          <MongoIcon size={16} className="mr-1" />
+                          Mongo
+                        </React.Fragment>
+                      ) : undefined}
+                      {database.type === 'REDIS' ? (
+                        <React.Fragment>
+                          <RedisIcon size={16} className="mr-1" />
+                          Redis
+                        </React.Fragment>
+                      ) : undefined}
+                      {database.type === 'MYSQL' ? (
+                        <React.Fragment>
+                          <MySQLIcon size={16} className="mr-1" />
+                          MySQL
+                        </React.Fragment>
+                      ) : undefined}
                     </div>
-                  </Link>
+                    <div>Created 1h ago</div>
+                  </div>
                 </div>
               ))}
             </div>
