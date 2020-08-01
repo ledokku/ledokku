@@ -19,7 +19,7 @@ const typeDefs = gql`
   type App {
     id: ID!
     name: String!
-    githubRepoUrl: String!
+    githubRepoUrl: String
     createdAt: DateTime!
   }
 

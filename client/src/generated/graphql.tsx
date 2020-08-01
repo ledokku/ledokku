@@ -23,7 +23,7 @@ export type App = {
   __typename?: 'App';
   id: Scalars['ID'];
   name: Scalars['String'];
-  githubRepoUrl: Scalars['String'];
+  githubRepoUrl?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
 };
 

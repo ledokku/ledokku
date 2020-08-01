@@ -22,7 +22,7 @@ export type App = {
   __typename?: 'App';
   id: Scalars['ID'];
   name: Scalars['String'];
-  githubRepoUrl: Scalars['String'];
+  githubRepoUrl?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
 };
 
@@ -415,7 +415,7 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
 export type AppResolvers<ContextType = any, ParentType extends ResolversParentTypes['App'] = ResolversParentTypes['App']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  githubRepoUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  githubRepoUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };

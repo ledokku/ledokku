@@ -26,9 +26,7 @@ export const CreateApp = () => {
             },
           ],
         });
-        console.log(data);
-        // TODO give feedback about app being deployed
-        history.push('/dashboard');
+        history.push(`/app/${data.data.createApp.app.id}`);
       } catch (error) {
         // TODO catch errors
         console.log(error);
