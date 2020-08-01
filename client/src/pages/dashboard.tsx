@@ -14,9 +14,7 @@ export const Dashboard = () => {
   // TODO show loading
   // TODO handle error
 
-  // const handleCreateFirstApp = () => {
-  //   history.push('/onboarding/cloud-provider');
-  // };
+  // TODO if no apps or dbs show onboarding screen
 
   return (
     <div className="h-screen flex justify-between flex-col">
