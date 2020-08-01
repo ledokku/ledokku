@@ -115,7 +115,6 @@ const typeDefs = gql`
 
   input CreateAppInput {
     name: String!
-    gitUrl: String!
   }
 
   input CreateDatabaseInput {

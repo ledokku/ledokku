@@ -132,7 +132,6 @@ export type IsPluginInstalledResult = {
 
 export type CreateAppInput = {
   name: Scalars['String'];
-  gitUrl: Scalars['String'];
 };
 
 export type CreateDatabaseInput = {
