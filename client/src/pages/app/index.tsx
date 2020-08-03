@@ -1,11 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Header } from '../../modules/layout/Header';
-import { useAppByIdQuery } from '../../generated/graphql';
-import { useParams } from 'react-router-dom';
-import { TabNav, TabNavLink } from '../../ui';
+import {
+  useAppByIdQuery,
+  useDatabaseQuery,
+  useLinkDatabaseMutation,
+} from '../../generated/graphql';
+import { dbLinkingGraphQLErrorParse } from '../utils';
+import { useParams, Link } from 'react-router-dom';
+import { CSSTransition } from 'react-transition-group';
+import { TabNav, TabNavLink, Button, Spinner } from '../../ui';
 
 export const App = () => {
   const { id: appId } = useParams();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [selectedDb, setSelectedDb] = useState({
+    name: 'Select DB to link',
+    id: '',
+  });
+  const [
+    linkDatabaseMutation,
+    {
+      data: databaseLinkData,
+      loading: databaseLinkLoading,
+      error: databaseLinkError,
+    },
+  ] = useLinkDatabaseMutation();
+
+  const {
+    data: databaseData,
+    loading: loadingDatabaseData,
+  } = useDatabaseQuery();
 
   const { data, loading /* error */ } = useAppByIdQuery({
     variables: {
@@ -26,12 +50,29 @@ export const App = () => {
     return <p>Loading...</p>;
   }
 
+  const { databases } = databaseData;
+
   const { app } = data;
 
   if (!app) {
     // TODO nice 404
     return <p>App not found.</p>;
   }
+
+  const handleConnect = async (databaseId: string, appId: string) => {
+    try {
+      await linkDatabaseMutation({
+        variables: {
+          input: {
+            databaseId,
+            appId,
+          },
+        },
+      });
+    } catch (e) {
+      //
+    }
+  };
 
   return (
     <div>
@@ -90,15 +131,110 @@ export const App = () => {
 
           <div className="w-full">
             <h1 className="font-bold text-lg font-bold py-5">Databases</h1>
-            <div className="mt-4 mb-4">
-              <h2 className="text-gray-400">
-                {`Here you can modify databases linked to:`}
-                <span className="text-gray-900"> {app.name}</span> app
-              </h2>
-            </div>
-            <button className="mt-4 bg-gray-900 hover:bg-blue text-white  font-bold hover:text-white py-2 px-4 border hover:border-transparent rounded-lg">
-              Connect database
-            </button>
+            {databases.length === 0 ? (
+              <React.Fragment>
+                <div className="mt-4 mb-4">
+                  <h2 className="text-gray-400">
+                    Currently you haven't created any databases, to do so
+                    proceed with the database creation flow
+                  </h2>
+                </div>
+                <Link to="/create-database">
+                  <Button width="large" color={'grey'}>
+                    Create a database
+                  </Button>
+                </Link>
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
+                <div
+                  className="w-64 rounded-md bg-white shadow-xs mt-3"
+                  role="menu"
+                  aria-orientation="vertical"
+                  aria-labelledby="database-link-menu"
+                >
+                  <div className="border-t border-gray-100" />
+
+                  <div
+                    className="flex flex-row px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer rounded-md shadow-lg"
+                    onClick={() => {
+                      setIsMenuOpen(!isMenuOpen);
+                    }}
+                  >
+                    {selectedDb.name}
+                    <div className="ml-20 -mr-4  w-6">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+                <CSSTransition
+                  in={isMenuOpen}
+                  timeout={0}
+                  classNames={{
+                    enter:
+                      'transition ease-out duration-100 transform opacity-0 scale-95',
+                    enterActive: 'transform opacity-100 scale-100',
+                    exit:
+                      'transition ease-in duration-75 transform opacity-100 scale-100',
+                    exitActive: 'transform opacity-0 scale-95',
+                  }}
+                  unmountOnExit
+                >
+                  <div className="origin-top-right mt-2 w-64 rounded-md shadow-lg">
+                    <div
+                      className="rounded-md bg-white shadow-xs"
+                      role="menu"
+                      aria-orientation="vertical"
+                      aria-labelledby="database-link-menu"
+                    >
+                      <div className="border-t border-gray-100" />
+                      <div className="py-1">
+                        {databases.map((db) => (
+                          <div
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                            role="menuitem"
+                            onClick={() => {
+                              setSelectedDb({ name: db.name, id: db.id });
+                              setIsMenuOpen(!isMenuOpen);
+                            }}
+                          >
+                            {db.name}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </CSSTransition>
+                {databaseLinkError && (
+                  <p className="text-red-500 text-sm font-semibold">
+                    {dbLinkingGraphQLErrorParse(
+                      databaseLinkError.message,
+                      false
+                    )}
+                  </p>
+                )}
+                <Button
+                  color="grey"
+                  width="large"
+                  className="mt-2"
+                  disabled={!selectedDb.id || databaseLinkLoading}
+                  onClick={() => handleConnect(selectedDb.id, appId)}
+                >
+                  {databaseLinkLoading &&
+                  !databaseLinkData &&
+                  !databaseLinkError ? (
+                    <Spinner size="small" />
+                  ) : (
+                    'Link database'
+                  )}
+                </Button>
+              </React.Fragment>
+            )}
           </div>
         </div>
       </div>

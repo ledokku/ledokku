@@ -10,10 +10,19 @@ import { create as createDb } from './plugin/database/create';
 import { destroy as destroyDb } from './plugin/database/destroy';
 import { info } from './plugin/database/info';
 import { logs as databaseLogs } from './plugin/database/logs';
+import { link } from './plugin/database/link';
+import { linked } from './plugin/database/linked';
 
 export const dokku = {
   apps: { create, logs, destroy },
   plugin: { installed, list },
   config: { listVars, set, unset },
-  database: { create: createDb, destroy: destroyDb, info, logs: databaseLogs },
+  database: {
+    create: createDb,
+    destroy: destroyDb,
+    info,
+    logs: databaseLogs,
+    link,
+    linked,
+  },
 };
