@@ -26,10 +26,7 @@ export const App = () => {
     },
   ] = useLinkDatabaseMutation();
 
-  const {
-    data: databaseData,
-    loading: loadingDatabaseData,
-  } = useDatabaseQuery();
+  const { data: databaseData } = useDatabaseQuery();
 
   const { data, loading /* error */ } = useAppByIdQuery({
     variables: {
@@ -156,13 +153,13 @@ export const App = () => {
                   <div className="border-t border-gray-100" />
 
                   <div
-                    className="flex flex-row px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer rounded-md shadow-lg"
+                    className="flex px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer rounded-md shadow-lg"
                     onClick={() => {
                       setIsMenuOpen(!isMenuOpen);
                     }}
                   >
-                    {selectedDb.name}
-                    <div className="ml-20 -mr-4  w-6">
+                    <span className="flex-1"> {selectedDb.name}</span>
+                    <div className="ml-20 -mr-2  w-6">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 20 20"
