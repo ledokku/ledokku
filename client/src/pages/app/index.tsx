@@ -182,7 +182,7 @@ export const App = () => {
                   }}
                   unmountOnExit
                 >
-                  <div className="origin-top-right mt-2 w-64 rounded-md shadow-lg">
+                  <div className="origin-top-right -mt-1 w-64 rounded-md shadow-lg">
                     <div
                       className="rounded-md bg-white shadow-xs"
                       role="menu"
@@ -192,16 +192,19 @@ export const App = () => {
                       <div className="border-t border-gray-100" />
                       <div className="py-1">
                         {databases.map((db) => (
-                          <div
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-                            role="menuitem"
-                            onClick={() => {
-                              setSelectedDb({ name: db.name, id: db.id });
-                              setIsMenuOpen(!isMenuOpen);
-                            }}
-                          >
-                            {db.name}
-                          </div>
+                          <React.Fragment>
+                            <div
+                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                              role="menuitem"
+                              onClick={() => {
+                                setSelectedDb({ name: db.name, id: db.id });
+                                setIsMenuOpen(!isMenuOpen);
+                              }}
+                            >
+                              {db.name}
+                            </div>
+                            <div className="border-t border-gray-100" />
+                          </React.Fragment>
                         ))}
                       </div>
                     </div>

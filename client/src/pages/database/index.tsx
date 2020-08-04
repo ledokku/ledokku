@@ -176,7 +176,7 @@ export const Database = () => {
                   }}
                   unmountOnExit
                 >
-                  <div className="origin-top-right mt-2 w-64 rounded-md shadow-lg">
+                  <div className="origin-top-right -mt-1 w-64 rounded-md shadow-lg">
                     <div
                       className="rounded-md bg-white shadow-xs"
                       role="menu"
@@ -186,16 +186,19 @@ export const Database = () => {
                       <div className="border-t border-gray-100" />
                       <div className="py-1">
                         {apps.map((app) => (
-                          <div
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-                            role="menuitem"
-                            onClick={() => {
-                              setSelectedApp({ name: app.name, id: app.id });
-                              setIsMenuOpen(!isMenuOpen);
-                            }}
-                          >
-                            {app.name}
-                          </div>
+                          <React.Fragment>
+                            <div
+                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                              role="menuitem"
+                              onClick={() => {
+                                setSelectedApp({ name: app.name, id: app.id });
+                                setIsMenuOpen(!isMenuOpen);
+                              }}
+                            >
+                              {app.name}
+                            </div>
+                            <div className="border-t border-gray-100" />
+                          </React.Fragment>
                         ))}
                       </div>
                     </div>
