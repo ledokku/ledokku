@@ -4,6 +4,7 @@ import {
   useAppByIdQuery,
   useDatabaseQuery,
   useLinkDatabaseMutation,
+  useDatabasesLinkedToAppQuery,
 } from '../../generated/graphql';
 import { dbLinkingGraphQLErrorParse } from '../utils';
 import { useParams, Link } from 'react-router-dom';
@@ -27,6 +28,15 @@ export const App = () => {
   ] = useLinkDatabaseMutation();
 
   const { data: databaseData } = useDatabaseQuery();
+
+  const {
+    data: dbsLinkedToAppData,
+    loading: dbsLinkedToAppDataLoading,
+  } = useDatabasesLinkedToAppQuery({
+    variables: {
+      appId,
+    },
+  });
 
   const { data, loading /* error */ } = useAppByIdQuery({
     variables: {
@@ -144,6 +154,7 @@ export const App = () => {
               </React.Fragment>
             ) : (
               <React.Fragment>
+                <h2 className="mt-3 font-semibold">Linked databases</h2>
                 <div
                   className="w-64 rounded-md bg-white shadow-xs mt-3"
                   role="menu"
@@ -228,7 +239,7 @@ export const App = () => {
                   {databaseLinkLoading &&
                   !databaseLinkData &&
                   !databaseLinkError ? (
-                    <Spinner size="small" />
+                    <Spinner size="extraSmall" />
                   ) : (
                     'Link database'
                   )}

@@ -99,6 +99,10 @@ const typeDefs = gql`
     logs: [String]!
   }
 
+  type DatabasesLinkedToAppResult {
+    databases: [Database]!
+  }
+
   type IsDatabaseLinkedResult {
     isLinked: Boolean!
   }
@@ -166,6 +170,7 @@ const typeDefs = gql`
     appLogs(appId: String!): AppLogsResult!
     databaseInfo(databaseId: String!): DatabaseInfoResult!
     databaseLogs(databaseId: String!): DatabaseLogsResult!
+    databasesLinkedToApp(appId: String!): DatabasesLinkedToAppResult!
     isDatabaseLinked(
       databaseId: String!
       appId: String!
