@@ -4,7 +4,7 @@ import { sshConnect } from '../../lib/ssh';
 import { dokku } from '../../lib/dokku';
 import { prisma } from '../../prisma';
 
-export const databaseLinked: QueryResolvers['databaseLinked'] = async (
+export const isDatabaseLinked: QueryResolvers['isDatabaseLinked'] = async (
   _,
   { databaseId, appId },
   { userId }
