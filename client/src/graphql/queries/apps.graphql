@@ -1,0 +1,6 @@
+query apps {
+  apps {
+    id
+    name
+  }
+}

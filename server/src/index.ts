@@ -65,6 +65,10 @@ const typeDefs = gql`
     result: Boolean!
   }
 
+  type LinkDatabaseResult {
+    result: Boolean!
+  }
+
   type DokkuPlugin {
     name: String!
     version: String!
@@ -93,6 +97,10 @@ const typeDefs = gql`
 
   type DatabaseLogsResult {
     logs: [String]!
+  }
+
+  type DatabaseLinkedResult {
+    isLinked: Boolean!
   }
 
   type EnvVar {
@@ -138,6 +146,11 @@ const typeDefs = gql`
     appId: String!
   }
 
+  input LinkDatabaseInput {
+    appId: String!
+    databaseId: String!
+  }
+
   input DestroyDatabaseInput {
     databaseId: String!
   }
@@ -153,6 +166,7 @@ const typeDefs = gql`
     appLogs(appId: String!): AppLogsResult!
     databaseInfo(databaseId: String!): DatabaseInfoResult!
     databaseLogs(databaseId: String!): DatabaseLogsResult!
+    databaseLinked(databaseId: String!, appId: String!): DatabaseLinkedResult!
     envVars(appId: String!): EnvVarsResult!
   }
 
@@ -164,6 +178,7 @@ const typeDefs = gql`
     unsetEnvVar(input: UnsetEnvVarInput!): UnsetEnvVarResult!
     destroyApp(input: DestroyAppInput!): DestroyAppResult!
     destroyDatabase(input: DestroyDatabaseInput!): DestroyDatabaseResult!
+    linkDatabase(input: LinkDatabaseInput!): LinkDatabaseResult!
   }
 `;
 
