@@ -13,34 +13,34 @@ export const isDatabaseLinked: QueryResolvers['isDatabaseLinked'] = async (
     throw new Error('Unauthorized');
   }
 
-  const database = await prisma.database.findOne({
-    where: {
-      id: databaseId,
-    },
+  const promiseResponse = await Promise.all([
+    prisma.database.findOne({
+      where: {
+        id: databaseId,
+      },
+    }),
+    prisma.app.findOne({
+      where: {
+        id: appId,
+      },
+    }),
+  ]).catch((e) => {
+    throw new Error(`failed to get data from db due to:${e}`);
   });
 
-  const app = await prisma.app.findOne({
-    where: {
-      id: appId,
-    },
-  });
+  const database = promiseResponse[0];
+  const app = promiseResponse[1];
 
   if (!app) {
     throw new Error(`App with ID ${appId} not found`);
-  }
-
-  if (app.userId !== userId) {
-    throw new Error(`App with ID ${appId} does not belong to ${userId}`);
   }
 
   if (!database) {
     throw new Error(`Database with ID ${databaseId} not found`);
   }
 
-  if (database.userId !== userId) {
-    throw new Error(
-      `Database with ID ${databaseId} does not belong to ${userId}`
-    );
+  if (app.userId !== userId || database.userId !== userId) {
+    throw new Error(`App with ID ${appId} does not belong to ${userId}`);
   }
 
   const dbType = dbTypeToDokkuPlugin(database.type);

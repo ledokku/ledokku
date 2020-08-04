@@ -64,12 +64,7 @@ export const linkDatabase: MutationResolvers['linkDatabase'] = async (
     );
   }
 
-  const result = await dokku.database.link(
-    ssh,
-    database.name,
-    dbType,
-    app.name
-  );
+  await dokku.database.link(ssh, database.name, dbType, app.name);
 
   await prisma.database.update({
     where: { id: database.id },
@@ -80,16 +75,5 @@ export const linkDatabase: MutationResolvers['linkDatabase'] = async (
     },
   });
 
-  await prisma.app.update({
-    where: { id: app.id },
-    data: {
-      databases: {
-        connect: { id: databaseId },
-      },
-    },
-  });
-
-  // We link the database
-
-  return { result };
+  return { result: true };
 };
