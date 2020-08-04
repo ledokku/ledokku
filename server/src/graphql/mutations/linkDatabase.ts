@@ -62,7 +62,7 @@ export const linkDatabase: MutationResolvers['linkDatabase'] = async (
 
   const dbLinks = linkedDbs.databases.find((db) => db.id === databaseId);
 
-  const isLinked = !!dbLinks ? true : false;
+  const isLinked = dbLinks ? true : false;
 
   if (isLinked) {
     throw new Error(

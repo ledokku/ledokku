@@ -53,7 +53,7 @@ export const isDatabaseLinked: QueryResolvers['isDatabaseLinked'] = async (
 
   const dbLinks = linkedDbs.databases.find((db) => db.id === databaseId);
 
-  const isLinked = !!dbLinks ? true : false;
+  const isLinked = dbLinks ? true : false;
 
   return { isLinked };
 };
