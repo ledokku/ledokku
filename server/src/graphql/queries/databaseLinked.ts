@@ -54,7 +54,5 @@ export const databaseLinked: QueryResolvers['databaseLinked'] = async (
     app.name
   );
 
-  console.log('isLinkedf', isLinked);
-
   return { isLinked };
 };
