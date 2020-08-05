@@ -55,7 +55,7 @@ export const linkDatabase: MutationResolvers['linkDatabase'] = async (
 
   if (isLinked) {
     throw new Error(
-      `Database with ID ${databaseId} is already linked to an app with id ${appId}`
+      `${database.name} database is already linked to ${app.name} app`
     );
   }
 

@@ -5,7 +5,6 @@ import {
   useDatabaseQuery,
   useLinkDatabaseMutation,
 } from '../../generated/graphql';
-import { dbLinkingGraphQLErrorParse } from '../utils';
 import { useParams, Link } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 import { TabNav, TabNavLink, Button, Spinner } from '../../ui';
@@ -212,10 +211,7 @@ export const App = () => {
                 </CSSTransition>
                 {databaseLinkError && (
                   <p className="text-red-500 text-sm font-semibold">
-                    {dbLinkingGraphQLErrorParse(
-                      databaseLinkError.message,
-                      false
-                    )}
+                    {databaseLinkError.graphQLErrors[0].message}
                   </p>
                 )}
                 <Button

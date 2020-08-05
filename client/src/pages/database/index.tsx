@@ -8,7 +8,6 @@ import {
 import { useParams, Link } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 import { TabNav, TabNavLink, Button, Spinner } from '../../ui';
-import { dbLinkingGraphQLErrorParse } from '../utils';
 
 export const Database = () => {
   const { id: databaseId } = useParams();
@@ -206,10 +205,7 @@ export const Database = () => {
                 </CSSTransition>
                 {databaseLinkError && (
                   <p className="text-red-500 text-sm font-semibold">
-                    {dbLinkingGraphQLErrorParse(
-                      databaseLinkError.message,
-                      true
-                    )}
+                    {databaseLinkError.graphQLErrors[0].message}
                   </p>
                 )}
                 <Button
