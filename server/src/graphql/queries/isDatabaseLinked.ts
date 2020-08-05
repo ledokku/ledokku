@@ -10,20 +10,24 @@ export const isDatabaseLinked: QueryResolvers['isDatabaseLinked'] = async (
     throw new Error('Unauthorized');
   }
   // We query for link between particular db and particular app
-  const linkedApps = await prisma.database.findOne({
-    where: {
-      id: databaseId,
-    },
-    select: {
-      apps: {
-        where: {
-          id: appId,
+  const linkedApps = await prisma.database
+    .findOne({
+      where: {
+        id: databaseId,
+      },
+      select: {
+        apps: {
+          where: {
+            id: appId,
+          },
         },
       },
-    },
-  });
+    })
+    .apps();
 
-  const isLinked = linkedApps.apps.length === 1;
+  console.log(linkedApps);
+
+  const isLinked = linkedApps.length === 1;
 
   return { isLinked };
 };
