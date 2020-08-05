@@ -11,7 +11,6 @@ import { destroy as destroyDb } from './plugin/database/destroy';
 import { info } from './plugin/database/info';
 import { logs as databaseLogs } from './plugin/database/logs';
 import { link } from './plugin/database/link';
-import { linked } from './plugin/database/linked';
 
 export const dokku = {
   apps: { create, logs, destroy },
@@ -23,6 +22,5 @@ export const dokku = {
     info,
     logs: databaseLogs,
     link,
-    linked,
   },
 };

@@ -13,6 +13,4 @@ export const link = async (
     console.error(resultDatabaseLink);
     throw new Error(resultDatabaseLink.stderr);
   }
-
-  return true;
 };

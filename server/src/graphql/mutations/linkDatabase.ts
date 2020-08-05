@@ -15,19 +15,32 @@ export const linkDatabase: MutationResolvers['linkDatabase'] = async (
 
   const { databaseId, appId } = input;
 
-  // We find database to link
-  const database = await prisma.database.findOne({
-    where: {
-      id: databaseId,
-    },
+  const promiseResponse = await Promise.all([
+    prisma.database.findOne({
+      where: {
+        id: databaseId,
+      },
+    }),
+    prisma.app.findOne({
+      where: {
+        id: appId,
+      },
+    }),
+    prisma.app.findOne({
+      where: {
+        id: appId,
+      },
+      select: {
+        databases: true,
+      },
+    }),
+  ]).catch((e) => {
+    throw new Error(`failed to get data from db due to:${e}`);
   });
 
-  // We find app to link
-  const app = await prisma.app.findOne({
-    where: {
-      id: appId,
-    },
-  });
+  const database = promiseResponse[0];
+  const app = promiseResponse[1];
+  const linkedDbs = promiseResponse[2];
 
   if (!app) {
     throw new Error(`App with ID ${appId} not found`);
@@ -47,16 +60,9 @@ export const linkDatabase: MutationResolvers['linkDatabase'] = async (
     );
   }
 
-  const dbType = dbTypeToDokkuPlugin(database.type);
+  const dbLinks = linkedDbs.databases.find((db) => db.id === databaseId);
 
-  const ssh = await sshConnect();
-
-  const isLinked = await dokku.database.linked(
-    ssh,
-    database.name,
-    dbType,
-    app.name
-  );
+  const isLinked = dbLinks ? true : false;
 
   if (isLinked) {
     throw new Error(
@@ -64,12 +70,11 @@ export const linkDatabase: MutationResolvers['linkDatabase'] = async (
     );
   }
 
-  const result = await dokku.database.link(
-    ssh,
-    database.name,
-    dbType,
-    app.name
-  );
+  const dbType = dbTypeToDokkuPlugin(database.type);
+
+  const ssh = await sshConnect();
+
+  await dokku.database.link(ssh, database.name, dbType, app.name);
 
   await prisma.database.update({
     where: { id: database.id },
@@ -80,16 +85,5 @@ export const linkDatabase: MutationResolvers['linkDatabase'] = async (
     },
   });
 
-  await prisma.app.update({
-    where: { id: app.id },
-    data: {
-      databases: {
-        connect: { id: databaseId },
-      },
-    },
-  });
-
-  // We link the database
-
-  return { result };
+  return { result: true };
 };
