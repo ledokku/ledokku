@@ -8,7 +8,7 @@ module.exports = {
   projectName: 'ledokku', // Usually your repo name.
   themeConfig: {
     colorMode: {
-      disabledSwitch: true,
+      disabledSwitch: 'true',
     },
     navbar: {
       title: 'Ledokku',
