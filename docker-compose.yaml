@@ -6,7 +6,6 @@ services:
     volumes:
       - ./client:/usr/src/app
       - /usr/src/app/node_modules/
-      - server_ssh_key:/root/.ssh
     ports:
       - '3000:3000'
     environment:
@@ -18,6 +17,7 @@ services:
     volumes:
       - ./server:/usr/src/app
       - /usr/src/app/node_modules/
+      - server_ssh_key:/root/.ssh
     ports:
       - '4000:4000'
     depends_on:
