@@ -188,7 +188,7 @@ export const App = () => {
                   options={dbOptions}
                   placeholder={selectedDb}
                   isSearchable={false}
-                  aria-labeledby="database-select-dropdown"
+                  aria-labelledby="database-select-dropdown"
                 />
 
                 {databaseLinkError && (
