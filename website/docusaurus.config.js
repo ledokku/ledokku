@@ -13,7 +13,7 @@ module.exports = {
     },
     navbar: {
       title: 'Ledokku',
-      links: [
+      items: [
         {
           to: 'docs/introduction',
           activeBasePath: 'docs',
