@@ -7,7 +7,10 @@ module.exports = {
   organizationName: 'ledokku', // Usually your GitHub org/user name.
   projectName: 'ledokku', // Usually your repo name.
   themeConfig: {
-    disableDarkMode: 'false',
+    colorMode: {
+      defaultMode: 'light',
+      disableSwitch: true,
+    },
     navbar: {
       title: 'Ledokku',
       links: [
