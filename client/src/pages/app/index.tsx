@@ -1,20 +1,52 @@
 import React, { useState } from 'react';
+import Select from 'react-select';
 import { Header } from '../../modules/layout/Header';
 import {
   useAppByIdQuery,
   useDatabaseQuery,
   useLinkDatabaseMutation,
+  DatabaseTypes,
 } from '../../generated/graphql';
 import { useParams, Link } from 'react-router-dom';
-import { CSSTransition } from 'react-transition-group';
 import { TabNav, TabNavLink, Button, Spinner } from '../../ui';
+import { MongoIcon } from '../../ui/icons/MongoIcon';
+import { MySQLIcon } from '../../ui/icons/MySQLIcon';
+import { RedisIcon } from '../../ui/icons/RedisIcon';
+import { PostgreSQLIcon } from '../../ui/icons/PostgreSQLIcon';
+
+interface LabelProps {
+  name: string;
+  type: DatabaseTypes;
+}
+
+export const labelIcon = (type: DatabaseTypes) => {
+  if (type === 'MONGODB') {
+    return <MongoIcon className="mt-1 mr-2" size={20} />;
+  } else if (type === 'REDIS') {
+    return <RedisIcon className="mt-1 mr-2" size={20} />;
+  } else if (type === 'MYSQL') {
+    return <MySQLIcon className="mt-1 mr-2" size={20} />;
+  } else if (type === 'POSTGRESQL') {
+    return <PostgreSQLIcon className="mt-1 mr-2" size={20} />;
+  }
+};
+
+export const Label = ({ name, type }: LabelProps) => (
+  <div className="flex flex-row h-6 mt-1 mb-1">
+    {labelIcon(type)}
+    <p>
+      {name}
+      {''}
+    </p>
+  </div>
+);
 
 export const App = () => {
   const { id: appId } = useParams();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   const [selectedDb, setSelectedDb] = useState({
-    name: 'Select DB to link',
-    id: '',
+    value: { name: '', id: '', type: '' },
+    label: 'Please select db',
   });
   const [
     linkDatabaseMutation,
@@ -54,6 +86,12 @@ export const App = () => {
     // TODO nice 404
     return <p>App not found.</p>;
   }
+  const dbOptions = databases.map((db) => {
+    return {
+      value: { name: db.name, id: db.id, type: db.type },
+      label: <Label type={db.type} name={db.name} />,
+    };
+  });
 
   const handleConnect = async (databaseId: string, appId: string) => {
     try {
@@ -66,7 +104,7 @@ export const App = () => {
         },
       });
     } catch (e) {
-      //
+      //TODO - REACT TOSTIFY
     }
   };
 
@@ -143,88 +181,35 @@ export const App = () => {
               </React.Fragment>
             ) : (
               <React.Fragment>
-                <div
-                  className="w-64 rounded-md bg-white shadow-xs mt-3"
-                  role="menu"
-                  aria-orientation="vertical"
-                  aria-labelledby="database-link-menu"
-                >
-                  <div className="border-t border-gray-100" />
+                <Select
+                  value={selectedDb}
+                  onChange={setSelectedDb}
+                  className="mt-3 w-80"
+                  options={dbOptions}
+                  placeholder={selectedDb}
+                  isSearchable={false}
+                  aria-labeledby="database-select-dropdown"
+                />
 
-                  <div
-                    className="flex px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer rounded-md shadow-lg"
-                    onClick={() => {
-                      setIsMenuOpen(!isMenuOpen);
-                    }}
-                  >
-                    <span className="flex-1"> {selectedDb.name}</span>
-                    <div className="ml-20 -mr-2  w-6">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20"
-                      >
-                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-                <CSSTransition
-                  in={isMenuOpen}
-                  timeout={0}
-                  classNames={{
-                    enter:
-                      'transition ease-out duration-100 transform opacity-0 scale-95',
-                    enterActive: 'transform opacity-100 scale-100',
-                    exit:
-                      'transition ease-in duration-75 transform opacity-100 scale-100',
-                    exitActive: 'transform opacity-0 scale-95',
-                  }}
-                  unmountOnExit
-                >
-                  <div className="origin-top-right -mt-1 w-64 rounded-md shadow-lg">
-                    <div
-                      className="rounded-md bg-white shadow-xs"
-                      role="menu"
-                      aria-orientation="vertical"
-                      aria-labelledby="database-link-menu"
-                    >
-                      <div className="border-t border-gray-100" />
-                      <div className="py-1">
-                        {databases.map((db) => (
-                          <React.Fragment>
-                            <div
-                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-                              role="menuitem"
-                              onClick={() => {
-                                setSelectedDb({ name: db.name, id: db.id });
-                                setIsMenuOpen(!isMenuOpen);
-                              }}
-                            >
-                              {db.name}
-                            </div>
-                            <div className="border-t border-gray-100" />
-                          </React.Fragment>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </CSSTransition>
                 {databaseLinkError && (
                   <p className="text-red-500 text-sm font-semibold">
                     {databaseLinkError.graphQLErrors[0].message}
                   </p>
                 )}
+
                 <Button
                   color="grey"
                   width="large"
                   className="mt-2"
-                  disabled={!selectedDb.id || databaseLinkLoading}
-                  onClick={() => handleConnect(selectedDb.id, appId)}
+                  disabled={!selectedDb.value.id || databaseLinkLoading}
+                  onClick={() => {
+                    handleConnect(selectedDb.value.id, appId);
+                  }}
                 >
                   {databaseLinkLoading &&
                   !databaseLinkData &&
                   !databaseLinkError ? (
-                    <Spinner size="small" />
+                    <Spinner size="extraSmall" />
                   ) : (
                     'Link database'
                   )}
