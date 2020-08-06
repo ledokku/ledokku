@@ -6,16 +6,14 @@ import {
   useLinkDatabaseMutation,
 } from '../../generated/graphql';
 import { useParams, Link } from 'react-router-dom';
-import { CSSTransition } from 'react-transition-group';
+import Select from 'react-select';
 import { TabNav, TabNavLink, Button, Spinner } from '../../ui';
-import { dbLinkingGraphQLErrorParse } from '../utils';
 
 export const Database = () => {
   const { id: databaseId } = useParams();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedApp, setSelectedApp] = useState({
-    name: 'Select app to link',
-    id: '',
+    value: { name: '', id: '' },
+    label: 'Please select app',
   });
   const [
     linkDatabaseMutation,
@@ -54,6 +52,13 @@ export const Database = () => {
     return <p>Database not found.</p>;
   }
 
+  const appOptions = apps.map((app) => {
+    return {
+      value: { name: app.name, id: app.id },
+      label: app.name,
+    };
+  });
+
   const handleConnect = async (databaseId: string, appId: string) => {
     try {
       await linkDatabaseMutation({
@@ -65,7 +70,7 @@ export const Database = () => {
         },
       });
     } catch (e) {
-      //
+      //TODO - REACT TOSTIFY
     }
   };
 
@@ -138,86 +143,29 @@ export const Database = () => {
               </React.Fragment>
             ) : (
               <React.Fragment>
-                <div
-                  className=" w-64 rounded-md bg-white shadow-xs mt-3"
-                  role="menu"
-                  aria-orientation="vertical"
-                  aria-labelledby="app-link-menu"
-                >
-                  <div className="border-t border-gray-100" />
+                <Select
+                  value={selectedApp}
+                  onChange={setSelectedApp}
+                  className="mt-3 w-80"
+                  options={appOptions}
+                  placeholder={selectedApp}
+                  isSearchable={false}
+                  aria-labelledby="app-select-dropdown"
+                />
 
-                  <div
-                    className="flex px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer rounded-md shadow-lg"
-                    onClick={() => {
-                      setIsMenuOpen(!isMenuOpen);
-                    }}
-                  >
-                    <span className="flex-1">{selectedApp.name}</span>
-                    <div className="ml-20 -mr-2 w-6">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20"
-                      >
-                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-                <CSSTransition
-                  in={isMenuOpen}
-                  timeout={0}
-                  classNames={{
-                    enter:
-                      'transition ease-out duration-100 transform opacity-0 scale-95',
-                    enterActive: 'transform opacity-100 scale-100',
-                    exit:
-                      'transition ease-in duration-75 transform opacity-100 scale-100',
-                    exitActive: 'transform opacity-0 scale-95',
-                  }}
-                  unmountOnExit
-                >
-                  <div className="origin-top-right -mt-1 w-64 rounded-md shadow-lg">
-                    <div
-                      className="rounded-md bg-white shadow-xs"
-                      role="menu"
-                      aria-orientation="vertical"
-                      aria-labelledby="app-link-menu"
-                    >
-                      <div className="border-t border-gray-100" />
-                      <div className="py-1">
-                        {apps.map((app) => (
-                          <React.Fragment>
-                            <div
-                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-                              role="menuitem"
-                              onClick={() => {
-                                setSelectedApp({ name: app.name, id: app.id });
-                                setIsMenuOpen(!isMenuOpen);
-                              }}
-                            >
-                              {app.name}
-                            </div>
-                            <div className="border-t border-gray-100" />
-                          </React.Fragment>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </CSSTransition>
                 {databaseLinkError && (
                   <p className="text-red-500 text-sm font-semibold">
-                    {dbLinkingGraphQLErrorParse(
-                      databaseLinkError.message,
-                      true
-                    )}
+                    {databaseLinkError.graphQLErrors[0].message}
                   </p>
                 )}
                 <Button
                   color="grey"
                   width="large"
                   className="mt-2"
-                  disabled={!selectedApp.id || databaseLinkLoading}
-                  onClick={() => handleConnect(databaseId, selectedApp.id)}
+                  disabled={!selectedApp.value.id || databaseLinkLoading}
+                  onClick={() =>
+                    handleConnect(databaseId, selectedApp.value.id)
+                  }
                 >
                   {databaseLinkLoading &&
                   !databaseLinkData &&

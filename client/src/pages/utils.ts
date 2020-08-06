@@ -12,14 +12,3 @@ export const dbTypeToDokkuPlugin = (dbType: DatabaseTypes) => {
       return 'mysql';
   }
 };
-
-export const dbLinkingGraphQLErrorParse = (
-  grapqhlErrorMessage: string,
-  isDatabaseView: boolean
-) => {
-  if (grapqhlErrorMessage.includes('is already linked to an app with id')) {
-    return `Your ${
-      isDatabaseView ? 'database' : 'app'
-    } is already linked to this ${isDatabaseView ? 'app' : 'database'}`;
-  }
-};
