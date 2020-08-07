@@ -6,6 +6,8 @@ import {
   useDatabaseQuery,
   useLinkDatabaseMutation,
   DatabaseTypes,
+  useDatabasesLinkedToAppQuery,
+  DatabaseDocument,
 } from '../../generated/graphql';
 import { useParams, Link } from 'react-router-dom';
 import { TabNav, TabNavLink, Button, Spinner } from '../../ui';
@@ -82,7 +84,7 @@ export const App = () => {
 
   // // TODO display error
 
-  if (loading) {
+  if (loading || dbsLinkedToAppDataLoading) {
     // TODO nice loading
     return <p>Loading...</p>;
   }
@@ -95,7 +97,14 @@ export const App = () => {
     // TODO nice 404
     return <p>App not found.</p>;
   }
-  const dbOptions = databases.map((db) => {
+
+  const linkedDatabases = dbsLinkedToAppData.databasesLinkedToApp.databases;
+  const linkedIds = linkedDatabases.map((db) => db.id);
+  const notLinkedDatabases = databases.filter((db) => {
+    return linkedIds.indexOf(db.id) === -1;
+  });
+
+  const dbOptions = notLinkedDatabases.map((db) => {
     return {
       value: { name: db.name, id: db.id, type: db.type },
       label: <Label type={db.type} name={db.name} />,
@@ -111,6 +120,11 @@ export const App = () => {
             appId,
           },
         },
+        refetchQueries: [
+          {
+            query: DatabaseDocument,
+          },
+        ],
       });
     } catch (e) {
       //TODO - REACT TOSTIFY
@@ -223,6 +237,32 @@ export const App = () => {
                     'Link database'
                   )}
                 </Button>
+                {!dbsLinkedToAppDataLoading &&
+                  dbsLinkedToAppData &&
+                  dbsLinkedToAppData.databasesLinkedToApp && (
+                    <React.Fragment>
+                      <h2 className="mb-1 mt-3 font-semibold">
+                        Linked databases
+                      </h2>
+                      {dbsLinkedToAppData.databasesLinkedToApp.databases.map(
+                        (database) => (
+                          <div className="w-64" key={database.id}>
+                            <Link
+                              to={`/database/${database.id}`}
+                              className="py-2 block"
+                            >
+                              <div className="flex items-center py-3 px-2 shadow hover:shadow-md transition-shadow duration-100 ease-in-out rounded bg-white">
+                                <Label
+                                  name={database.name}
+                                  type={database.type}
+                                />
+                              </div>
+                            </Link>
+                          </div>
+                        )
+                      )}
+                    </React.Fragment>
+                  )}
               </React.Fragment>
             )}
           </div>
