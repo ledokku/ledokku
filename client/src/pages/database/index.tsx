@@ -4,6 +4,7 @@ import {
   useDatabaseByIdQuery,
   useAppsQuery,
   useLinkDatabaseMutation,
+  useAppsLinkedToDatabaseQuery,
 } from '../../generated/graphql';
 import { useParams, Link } from 'react-router-dom';
 import Select from 'react-select';
@@ -13,7 +14,7 @@ export const Database = () => {
   const { id: databaseId } = useParams();
   const [selectedApp, setSelectedApp] = useState({
     value: { name: '', id: '' },
-    label: 'Please select app',
+    label: 'Please select an app',
   });
   const [
     linkDatabaseMutation,
@@ -25,6 +26,15 @@ export const Database = () => {
   ] = useLinkDatabaseMutation();
 
   const { data: appsData } = useAppsQuery();
+
+  const {
+    data: appsLinkedToDbData,
+    loading: appsLinkedToDbLoading,
+  } = useAppsLinkedToDatabaseQuery({
+    variables: {
+      databaseId,
+    },
+  });
   const { data, loading /* error */ } = useDatabaseByIdQuery({
     variables: {
       databaseId,
@@ -39,7 +49,7 @@ export const Database = () => {
 
   // // TODO display error
 
-  if (loading) {
+  if (loading || appsLinkedToDbLoading) {
     // TODO nice loading
     return <p>Loading...</p>;
   }
@@ -52,7 +62,13 @@ export const Database = () => {
     return <p>Database not found.</p>;
   }
 
-  const appOptions = apps.map((app) => {
+  const linkedApps = appsLinkedToDbData.appsLinkedToDatabase.apps;
+  const linkedIds = linkedApps.map((db) => db.id);
+  const notLinkedApps = apps.filter((db) => {
+    return linkedIds.indexOf(db.id) === -1;
+  });
+
+  const appOptions = notLinkedApps.map((app) => {
     return {
       value: { name: app.name, id: app.id },
       label: app.name,
@@ -152,6 +168,9 @@ export const Database = () => {
                   placeholder={selectedApp}
                   isSearchable={false}
                   aria-labelledby="app-select-dropdown"
+                  noOptionsMessage={() =>
+                    'All of your apps are already linked to this database'
+                  }
                 />
 
                 {databaseLinkError && (
@@ -176,6 +195,24 @@ export const Database = () => {
                     'Link app'
                   )}
                 </Button>
+                {!appsLinkedToDbLoading &&
+                  appsLinkedToDbData &&
+                  appsLinkedToDbData.appsLinkedToDatabase.apps && (
+                    <React.Fragment>
+                      <h2 className="mb-1 mt-3 font-semibold">Linked apps</h2>
+                      {appsLinkedToDbData.appsLinkedToDatabase.apps.map(
+                        (app) => (
+                          <div className="w-64" key={app.id}>
+                            <Link to={`/app/${app.id}`} className="py-2 block">
+                              <div className="flex items-center py-3 px-2 shadow hover:shadow-md transition-shadow duration-100 ease-in-out rounded bg-white">
+                                {app.name}
+                              </div>
+                            </Link>
+                          </div>
+                        )
+                      )}
+                    </React.Fragment>
+                  )}
               </React.Fragment>
             )}
           </div>

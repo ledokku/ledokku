@@ -5,43 +5,11 @@ import {
   useAppByIdQuery,
   useDatabaseQuery,
   useLinkDatabaseMutation,
-  DatabaseTypes,
   useDatabasesLinkedToAppQuery,
   DatabaseDocument,
 } from '../../generated/graphql';
 import { useParams, Link } from 'react-router-dom';
-import { TabNav, TabNavLink, Button, Spinner } from '../../ui';
-import { MongoIcon } from '../../ui/icons/MongoIcon';
-import { MySQLIcon } from '../../ui/icons/MySQLIcon';
-import { RedisIcon } from '../../ui/icons/RedisIcon';
-import { PostgreSQLIcon } from '../../ui/icons/PostgreSQLIcon';
-
-interface LabelProps {
-  name: string;
-  type: DatabaseTypes;
-}
-
-export const labelIcon = (type: DatabaseTypes) => {
-  if (type === 'MONGODB') {
-    return <MongoIcon className="mt-1 mr-2" size={20} />;
-  } else if (type === 'REDIS') {
-    return <RedisIcon className="mt-1 mr-2" size={20} />;
-  } else if (type === 'MYSQL') {
-    return <MySQLIcon className="mt-1 mr-2" size={20} />;
-  } else if (type === 'POSTGRESQL') {
-    return <PostgreSQLIcon className="mt-1 mr-2" size={20} />;
-  }
-};
-
-export const Label = ({ name, type }: LabelProps) => (
-  <div className="flex flex-row h-6 mt-1 mb-1">
-    {labelIcon(type)}
-    <p>
-      {name}
-      {''}
-    </p>
-  </div>
-);
+import { TabNav, TabNavLink, Button, Spinner, DatabaseLabel } from '../../ui';
 
 export const App = () => {
   const { id: appId } = useParams();
@@ -107,7 +75,7 @@ export const App = () => {
   const dbOptions = notLinkedDatabases.map((db) => {
     return {
       value: { name: db.name, id: db.id, type: db.type },
-      label: <Label type={db.type} name={db.name} />,
+      label: <DatabaseLabel type={db.type} name={db.name} />,
     };
   });
 
@@ -212,6 +180,9 @@ export const App = () => {
                   placeholder={selectedDb}
                   isSearchable={false}
                   aria-labelledby="database-select-dropdown"
+                  noOptionsMessage={() =>
+                    'All of your databases are already linked to this app'
+                  }
                 />
 
                 {databaseLinkError && (
@@ -252,7 +223,7 @@ export const App = () => {
                               className="py-2 block"
                             >
                               <div className="flex items-center py-3 px-2 shadow hover:shadow-md transition-shadow duration-100 ease-in-out rounded bg-white">
-                                <Label
+                                <DatabaseLabel
                                   name={database.name}
                                   type={database.type}
                                 />

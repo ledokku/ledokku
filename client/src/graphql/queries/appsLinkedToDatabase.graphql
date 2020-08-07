@@ -1,0 +1,8 @@
+query appsLinkedToDatabase($databaseId: String!) {
+  appsLinkedToDatabase(databaseId: $databaseId) {
+    apps {
+      id
+      name
+    }
+  }
+}

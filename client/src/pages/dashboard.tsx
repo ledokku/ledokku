@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 import { useDashboardQuery } from '../generated/graphql';
 import { NodeIcon } from '../ui/icons/NodeIcon';
 import { Header } from '../modules/layout/Header';
-import { TabNav, TabNavLink, Button } from '../ui';
-import { PostgreSQLIcon } from '../ui/icons/PostgreSQLIcon';
+import { TabNav, TabNavLink, Button, DatabaseLabel } from '../ui';
 
 export const Dashboard = () => {
   // const history = useHistory();
@@ -57,8 +56,7 @@ export const Dashboard = () => {
               <div key={database.id}>
                 <Link to={`/database/${database.id}`} className="py-2 block">
                   <div className="flex items-center py-3 px-2 shadow hover:shadow-md transition-shadow duration-100 ease-in-out rounded bg-white">
-                    <PostgreSQLIcon size={24} className="mr-2" />
-                    <p>{database.name}</p>
+                    <DatabaseLabel name={database.name} type={database.type} />
                   </div>
                 </Link>
               </div>

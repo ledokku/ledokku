@@ -20,16 +20,16 @@ export const databasesLinkedToApp: QueryResolvers['databasesLinkedToApp'] = asyn
     throw new Error(`App with ID ${appId} not found`);
   }
 
-  const conncectedDatabases = await prisma.app.findOne({
-    where: {
-      id: appId,
-    },
-    select: {
-      databases: true,
-    },
-  });
-
-  const databases = conncectedDatabases.databases;
+  const databases = await prisma.app
+    .findOne({
+      where: {
+        id: appId,
+      },
+      select: {
+        databases: true,
+      },
+    })
+    .databases();
 
   return { databases };
 };
