@@ -1,11 +1,63 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Select from 'react-select';
 import { Header } from '../../modules/layout/Header';
-import { useAppByIdQuery } from '../../generated/graphql';
-import { useParams } from 'react-router-dom';
-import { TabNav, TabNavLink } from '../../ui';
+import {
+  useAppByIdQuery,
+  useDatabaseQuery,
+  useLinkDatabaseMutation,
+  DatabaseTypes,
+} from '../../generated/graphql';
+import { useParams, Link } from 'react-router-dom';
+import { TabNav, TabNavLink, Button, Spinner } from '../../ui';
+import { MongoIcon } from '../../ui/icons/MongoIcon';
+import { MySQLIcon } from '../../ui/icons/MySQLIcon';
+import { RedisIcon } from '../../ui/icons/RedisIcon';
+import { PostgreSQLIcon } from '../../ui/icons/PostgreSQLIcon';
+
+interface LabelProps {
+  name: string;
+  type: DatabaseTypes;
+}
+
+export const labelIcon = (type: DatabaseTypes) => {
+  if (type === 'MONGODB') {
+    return <MongoIcon className="mt-1 mr-2" size={20} />;
+  } else if (type === 'REDIS') {
+    return <RedisIcon className="mt-1 mr-2" size={20} />;
+  } else if (type === 'MYSQL') {
+    return <MySQLIcon className="mt-1 mr-2" size={20} />;
+  } else if (type === 'POSTGRESQL') {
+    return <PostgreSQLIcon className="mt-1 mr-2" size={20} />;
+  }
+};
+
+export const Label = ({ name, type }: LabelProps) => (
+  <div className="flex flex-row h-6 mt-1 mb-1">
+    {labelIcon(type)}
+    <p>
+      {name}
+      {''}
+    </p>
+  </div>
+);
 
 export const App = () => {
   const { id: appId } = useParams();
+
+  const [selectedDb, setSelectedDb] = useState({
+    value: { name: '', id: '', type: '' },
+    label: 'Please select db',
+  });
+  const [
+    linkDatabaseMutation,
+    {
+      data: databaseLinkData,
+      loading: databaseLinkLoading,
+      error: databaseLinkError,
+    },
+  ] = useLinkDatabaseMutation();
+
+  const { data: databaseData } = useDatabaseQuery();
 
   const { data, loading /* error */ } = useAppByIdQuery({
     variables: {
@@ -26,12 +78,36 @@ export const App = () => {
     return <p>Loading...</p>;
   }
 
+  const { databases } = databaseData;
+
   const { app } = data;
 
   if (!app) {
     // TODO nice 404
     return <p>App not found.</p>;
   }
+  const dbOptions = databases.map((db) => {
+    return {
+      value: { name: db.name, id: db.id, type: db.type },
+      label: <Label type={db.type} name={db.name} />,
+    };
+  });
+
+  const handleConnect = async (databaseId: string, appId: string) => {
+    try {
+      await linkDatabaseMutation({
+        variables: {
+          input: {
+            databaseId,
+            appId,
+          },
+        },
+      });
+      // TODO  - REACT TOASTIFY
+    } catch (e) {
+      //TODO - REACT TOASTIFY
+    }
+  };
 
   return (
     <div>
@@ -90,15 +166,57 @@ export const App = () => {
 
           <div className="w-full">
             <h1 className="font-bold text-lg font-bold py-5">Databases</h1>
-            <div className="mt-4 mb-4">
-              <h2 className="text-gray-400">
-                {`Here you can modify databases linked to:`}
-                <span className="text-gray-900"> {app.name}</span> app
-              </h2>
-            </div>
-            <button className="mt-4 bg-gray-900 hover:bg-blue text-white  font-bold hover:text-white py-2 px-4 border hover:border-transparent rounded-lg">
-              Connect database
-            </button>
+            {databases.length === 0 ? (
+              <React.Fragment>
+                <div className="mt-4 mb-4">
+                  <h2 className="text-gray-400">
+                    Currently you haven't created any databases, to do so
+                    proceed with the database creation flow
+                  </h2>
+                </div>
+                <Link to="/create-database">
+                  <Button width="large" color={'grey'}>
+                    Create a database
+                  </Button>
+                </Link>
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
+                <Select
+                  value={selectedDb}
+                  onChange={setSelectedDb}
+                  className="mt-3 w-80"
+                  options={dbOptions}
+                  placeholder={selectedDb}
+                  isSearchable={false}
+                  aria-labelledby="database-select-dropdown"
+                />
+
+                {databaseLinkError && (
+                  <p className="text-red-500 text-sm font-semibold">
+                    {databaseLinkError.graphQLErrors[0].message}
+                  </p>
+                )}
+
+                <Button
+                  color="grey"
+                  width="large"
+                  className="mt-2"
+                  disabled={!selectedDb.value.id || databaseLinkLoading}
+                  onClick={() => {
+                    handleConnect(selectedDb.value.id, appId);
+                  }}
+                >
+                  {databaseLinkLoading &&
+                  !databaseLinkData &&
+                  !databaseLinkError ? (
+                    <Spinner size="extraSmall" />
+                  ) : (
+                    'Link database'
+                  )}
+                </Button>
+              </React.Fragment>
+            )}
           </div>
         </div>
       </div>

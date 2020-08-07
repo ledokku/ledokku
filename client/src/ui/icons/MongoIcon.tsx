@@ -2,7 +2,8 @@ import React from 'react';
 
 interface IconProps {
   opacity?: number;
-  size?: 24 | 40;
+  size?: number;
+  className?: string;
 }
 
 export const MongoIcon: React.FC<IconProps> = ({
