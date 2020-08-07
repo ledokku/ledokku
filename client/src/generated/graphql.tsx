@@ -122,6 +122,9 @@ export type DatabasesLinkedToAppResult = {
 
 export type IsDatabaseLinkedResult = {
   __typename?: 'IsDatabaseLinkedResult';
+}
+export type DatabaseLinkedResult = {
+  __typename?: 'DatabaseLinkedResult';
   isLinked: Scalars['Boolean'];
 };
 
@@ -195,6 +198,7 @@ export type Query = {
   databaseLogs: DatabaseLogsResult;
   databasesLinkedToApp: DatabasesLinkedToAppResult;
   isDatabaseLinked: IsDatabaseLinkedResult;
+  databaseLinked: DatabaseLinkedResult;
   envVars: EnvVarsResult;
 };
 

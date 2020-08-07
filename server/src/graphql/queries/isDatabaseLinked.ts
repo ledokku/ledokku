@@ -25,8 +25,6 @@ export const isDatabaseLinked: QueryResolvers['isDatabaseLinked'] = async (
     })
     .apps();
 
-  console.log(linkedApps);
-
   const isLinked = linkedApps.length === 1;
 
   return { isLinked };

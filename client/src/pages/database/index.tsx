@@ -69,8 +69,9 @@ export const Database = () => {
           },
         },
       });
+      // TODO - REACT - TOASTIFY
     } catch (e) {
-      //TODO - REACT TOSTIFY
+      //TODO - REACT TOASTIFY
     }
   };
 
