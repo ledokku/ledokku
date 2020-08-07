@@ -103,8 +103,9 @@ export const App = () => {
           },
         },
       });
+      // TODO  - REACT TOASTIFY
     } catch (e) {
-      //TODO - REACT TOSTIFY
+      //TODO - REACT TOASTIFY
     }
   };
 
