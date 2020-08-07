@@ -199,7 +199,10 @@ export const Database = () => {
                   appsLinkedToDbData &&
                   appsLinkedToDbData.appsLinkedToDatabase.apps && (
                     <React.Fragment>
-                      <h2 className="mb-1 mt-3 font-semibold">Linked apps</h2>
+                      <h2 className="mb-1 mt-3 font-semibold">
+                        {appsLinkedToDbData.appsLinkedToDatabase.apps.length >
+                          0 && 'Linked apps'}
+                      </h2>
                       {appsLinkedToDbData.appsLinkedToDatabase.apps.map(
                         (app) => (
                           <div className="w-64" key={app.id}>

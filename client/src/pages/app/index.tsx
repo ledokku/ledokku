@@ -213,7 +213,8 @@ export const App = () => {
                   dbsLinkedToAppData.databasesLinkedToApp && (
                     <React.Fragment>
                       <h2 className="mb-1 mt-3 font-semibold">
-                        Linked databases
+                        {dbsLinkedToAppData.databasesLinkedToApp.databases
+                          .length > 0 && 'Linked databases'}
                       </h2>
                       {dbsLinkedToAppData.databasesLinkedToApp.databases.map(
                         (database) => (
