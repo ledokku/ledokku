@@ -6,7 +6,7 @@ import {
   useDatabaseQuery,
   useLinkDatabaseMutation,
   useDatabasesLinkedToAppQuery,
-  DatabaseDocument,
+  DatabasesLinkedToAppDocument,
 } from '../../generated/graphql';
 import { useParams, Link } from 'react-router-dom';
 import { TabNav, TabNavLink, Button, Spinner, DatabaseLabel } from '../../ui';
@@ -90,7 +90,8 @@ export const App = () => {
         },
         refetchQueries: [
           {
-            query: DatabaseDocument,
+            query: DatabasesLinkedToAppDocument,
+            variables: { appId },
           },
         ],
       });
