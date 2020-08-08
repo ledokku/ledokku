@@ -5,11 +5,13 @@ import {
   useAppsQuery,
   useLinkDatabaseMutation,
   useAppsLinkedToDatabaseQuery,
-  AppsDocument,
+  AppsLinkedToDatabaseDocument,
+  useUnlinkDatabaseMutation,
+  DatabasesLinkedToAppDocument,
 } from '../../generated/graphql';
 import { useParams, Link } from 'react-router-dom';
 import Select from 'react-select';
-import { TabNav, TabNavLink, Button, Spinner } from '../../ui';
+import { TabNav, TabNavLink, Button, Spinner, Modal } from '../../ui';
 
 export const Database = () => {
   const { id: databaseId } = useParams();
@@ -17,6 +19,8 @@ export const Database = () => {
     value: { name: '', id: '' },
     label: 'Please select an app',
   });
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [
     linkDatabaseMutation,
     {
@@ -25,6 +29,15 @@ export const Database = () => {
       error: databaseLinkError,
     },
   ] = useLinkDatabaseMutation();
+
+  const [
+    unlinkDatabaseMutation,
+    {
+      data: databaseUnlinkData,
+      loading: databasUnlinkLoading,
+      error: databaseUnlinkError,
+    },
+  ] = useUnlinkDatabaseMutation();
 
   const { data: appsData } = useAppsQuery();
 
@@ -76,6 +89,33 @@ export const Database = () => {
     };
   });
 
+  const handleUnlink = async (databaseId: string, appId: string) => {
+    try {
+      console.log(databaseId, appId);
+      await unlinkDatabaseMutation({
+        variables: {
+          input: {
+            databaseId,
+            appId,
+          },
+        },
+        refetchQueries: [
+          {
+            query: DatabasesLinkedToAppDocument,
+            variables: { appId },
+          },
+          {
+            query: AppsLinkedToDatabaseDocument,
+            variables: { databaseId },
+          },
+        ],
+      });
+      setIsModalOpen(false);
+    } catch (e) {
+      //TODO - REACT TOSTIFY
+    }
+  };
+
   const handleConnect = async (databaseId: string, appId: string) => {
     try {
       await linkDatabaseMutation({
@@ -85,7 +125,13 @@ export const Database = () => {
             appId,
           },
         },
-        refetchQueries: [{ query: AppsDocument }],
+        refetchQueries: [
+          { query: AppsLinkedToDatabaseDocument, variables: { databaseId } },
+        ],
+      });
+      setSelectedApp({
+        value: { name: '', id: '' },
+        label: 'Please select an app',
       });
       // TODO - REACT - TOASTIFY
     } catch (e) {
@@ -207,12 +253,52 @@ export const Database = () => {
                       </h2>
                       {appsLinkedToDbData.appsLinkedToDatabase.apps.map(
                         (app) => (
-                          <div className="w-64" key={app.id}>
-                            <Link to={`/app/${app.id}`} className="py-2 block">
-                              <div className="flex items-center py-3 px-2 shadow hover:shadow-md transition-shadow duration-100 ease-in-out rounded bg-white">
-                                {app.name}
-                              </div>
-                            </Link>
+                          <div className="flex flex-row">
+                            <div className="w-64" key={app.id}>
+                              <Link
+                                to={`/app/${app.id}`}
+                                className="py-2 block"
+                              >
+                                <div className="flex items-center py-3 px-2 shadow hover:shadow-md transition-shadow duration-100 ease-in-out rounded bg-white">
+                                  {app.name}
+                                </div>
+                              </Link>
+                            </div>
+                            <Button
+                              className="mt-4 ml-2 h-10"
+                              width="normal"
+                              color="red"
+                              onClick={() => setIsModalOpen(true)}
+                            >
+                              Unlink
+                            </Button>
+                            {isModalOpen && (
+                              <Modal
+                                closeModalButton={'Cancel'}
+                                ctaButton={`Unlink`}
+                                mainText={
+                                  databasUnlinkLoading ? (
+                                    <p>
+                                      Unlinking <b>{app.name}</b> from{' '}
+                                      <b>{database.name}</b>, the process
+                                      usually takes around one minute to
+                                      complete.
+                                    </p>
+                                  ) : (
+                                    <p>
+                                      Are you sure, you want to unlink{' '}
+                                      <b>{app.name}</b> from{' '}
+                                      <b>{database.name}</b>?
+                                    </p>
+                                  )
+                                }
+                                header={'Unlink app'}
+                                closeModal={() => setIsModalOpen(false)}
+                                ctaFn={() => handleUnlink(databaseId, app.id)}
+                                isWarningModal={true}
+                                isCtaLoading={databasUnlinkLoading}
+                              />
+                            )}
                           </div>
                         )
                       )}

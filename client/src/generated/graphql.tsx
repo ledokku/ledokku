@@ -78,6 +78,11 @@ export type LinkDatabaseResult = {
   result: Scalars['Boolean'];
 };
 
+export type UnlinkDatabaseResult = {
+  __typename?: 'UnlinkDatabaseResult';
+  result: Scalars['Boolean'];
+};
+
 export type DokkuPlugin = {
   __typename?: 'DokkuPlugin';
   name: Scalars['String'];
@@ -182,6 +187,11 @@ export type LinkDatabaseInput = {
   databaseId: Scalars['String'];
 };
 
+export type UnlinkDatabaseInput = {
+  appId: Scalars['String'];
+  databaseId: Scalars['String'];
+};
+
 export type DestroyDatabaseInput = {
   databaseId: Scalars['String'];
 };
@@ -265,6 +275,7 @@ export type Mutation = {
   destroyApp: DestroyAppResult;
   destroyDatabase: DestroyDatabaseResult;
   linkDatabase: LinkDatabaseResult;
+  unlinkDatabase: UnlinkDatabaseResult;
 };
 
 
@@ -305,6 +316,11 @@ export type MutationDestroyDatabaseArgs = {
 
 export type MutationLinkDatabaseArgs = {
   input: LinkDatabaseInput;
+};
+
+
+export type MutationUnlinkDatabaseArgs = {
+  input: UnlinkDatabaseInput;
 };
 
 export type CacheControlScope = 
@@ -409,6 +425,19 @@ export type SetEnvVarMutation = (
   & { setEnvVar: (
     { __typename?: 'SetEnvVarResult' }
     & Pick<SetEnvVarResult, 'result'>
+  ) }
+);
+
+export type UnlinkDatabaseMutationVariables = Exact<{
+  input: UnlinkDatabaseInput;
+}>;
+
+
+export type UnlinkDatabaseMutation = (
+  { __typename?: 'Mutation' }
+  & { unlinkDatabase: (
+    { __typename?: 'UnlinkDatabaseResult' }
+    & Pick<UnlinkDatabaseResult, 'result'>
   ) }
 );
 
@@ -833,6 +862,38 @@ export function useSetEnvVarMutation(baseOptions?: ApolloReactHooks.MutationHook
 export type SetEnvVarMutationHookResult = ReturnType<typeof useSetEnvVarMutation>;
 export type SetEnvVarMutationResult = ApolloReactCommon.MutationResult<SetEnvVarMutation>;
 export type SetEnvVarMutationOptions = ApolloReactCommon.BaseMutationOptions<SetEnvVarMutation, SetEnvVarMutationVariables>;
+export const UnlinkDatabaseDocument = gql`
+    mutation unlinkDatabase($input: UnlinkDatabaseInput!) {
+  unlinkDatabase(input: $input) {
+    result
+  }
+}
+    `;
+export type UnlinkDatabaseMutationFn = ApolloReactCommon.MutationFunction<UnlinkDatabaseMutation, UnlinkDatabaseMutationVariables>;
+
+/**
+ * __useUnlinkDatabaseMutation__
+ *
+ * To run a mutation, you first call `useUnlinkDatabaseMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUnlinkDatabaseMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [unlinkDatabaseMutation, { data, loading, error }] = useUnlinkDatabaseMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUnlinkDatabaseMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UnlinkDatabaseMutation, UnlinkDatabaseMutationVariables>) {
+        return ApolloReactHooks.useMutation<UnlinkDatabaseMutation, UnlinkDatabaseMutationVariables>(UnlinkDatabaseDocument, baseOptions);
+      }
+export type UnlinkDatabaseMutationHookResult = ReturnType<typeof useUnlinkDatabaseMutation>;
+export type UnlinkDatabaseMutationResult = ApolloReactCommon.MutationResult<UnlinkDatabaseMutation>;
+export type UnlinkDatabaseMutationOptions = ApolloReactCommon.BaseMutationOptions<UnlinkDatabaseMutation, UnlinkDatabaseMutationVariables>;
 export const UnsetEnvVarDocument = gql`
     mutation unsetEnvVar($key: String!, $appId: String!) {
   unsetEnvVar(input: {key: $key, appId: $appId}) {

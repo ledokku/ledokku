@@ -4,7 +4,7 @@ import cx from 'classnames';
 interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
   iconStart?: React.ReactNode;
   iconEnd?: React.ReactNode;
-  color: 'red' | 'grey';
+  color: 'red' | 'grey' | 'transparent';
   width: 'normal' | 'large';
 }
 
@@ -22,10 +22,11 @@ export const Button = ({
     {...props}
     type={type === 'submit' ? 'submit' : 'button'}
     className={cx(
-      'py-2 px-10 bg-gray-900 hover:bg-blue text-white  font-bold  rounded-lg flex justify-center',
+      'py-2 px-10 hover:bg-blue text-white  font-bold  rounded-lg flex justify-center',
       {
         'bg-gray-900': color === 'grey',
         'bg-red-500': color === 'red',
+        'bg-gray-100': color === 'transparent',
         'opacity-50 cursor-not-allowed': props.disabled,
         'hover:text-white border hover:border-transparent': !props.disabled,
         'w-64': width === 'large',
