@@ -5,6 +5,7 @@ import {
   useAppsQuery,
   useLinkDatabaseMutation,
   useAppsLinkedToDatabaseQuery,
+  AppsDocument,
 } from '../../generated/graphql';
 import { useParams, Link } from 'react-router-dom';
 import Select from 'react-select';
@@ -84,6 +85,7 @@ export const Database = () => {
             appId,
           },
         },
+        refetchQueries: [{ query: AppsDocument }],
       });
       // TODO - REACT - TOASTIFY
     } catch (e) {
