@@ -89,6 +89,10 @@ export const Database = () => {
           { query: AppsLinkedToDatabaseDocument, variables: { databaseId } },
         ],
       });
+      setSelectedApp({
+        value: { name: '', id: '' },
+        label: 'Please select an app',
+      });
       // TODO - REACT - TOASTIFY
     } catch (e) {
       //TODO - REACT TOASTIFY

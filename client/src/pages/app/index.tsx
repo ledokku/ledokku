@@ -95,6 +95,10 @@ export const App = () => {
           },
         ],
       });
+      setSelectedDb({
+        value: { name: '', id: '', type: '' },
+        label: 'Please select db',
+      });
     } catch (e) {
       //TODO - REACT TOSTIFY
     }
