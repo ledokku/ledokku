@@ -33,9 +33,10 @@ export const Database = () => {
   const [
     unlinkDatabaseMutation,
     {
-      data: databaseUnlinkData,
+      // COMMENTED OUT UNTIL WE INTEGRATE TOASTIFY
+      // data: databaseUnlinkData,
       loading: databasUnlinkLoading,
-      error: databaseUnlinkError,
+      // error: databaseUnlinkError,
     },
   ] = useUnlinkDatabaseMutation();
 
@@ -110,6 +111,7 @@ export const Database = () => {
           },
         ],
       });
+      // TODO - REACT - TOASTIFY
       setIsModalOpen(false);
     } catch (e) {
       //TODO - REACT TOSTIFY
