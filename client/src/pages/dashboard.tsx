@@ -48,6 +48,11 @@ export const Dashboard = () => {
         <main className="grid grid-cols-1 md:grid-cols-12 md:col-gap-20">
           <div className="col-span-7 mt-4">
             <h1 className="text-lg font-bold py-2">Apps</h1>
+            {data?.apps.length === 0 ? (
+              <div className="text-gray-400 text-sm mt-2">
+                No apps deployed.{' '}
+              </div>
+            ) : null}
             {data?.apps.map((app) => (
               <div key={app.id} className="py-3 border-b border-gray-200">
                 <div className="mb-1 text-gray-900 font-medium">
@@ -63,6 +68,11 @@ export const Dashboard = () => {
             ))}
 
             <h1 className="text-lg font-bold pb-2 pt-5">Databases</h1>
+            {data?.databases.length === 0 ? (
+              <div className="text-gray-400 text-sm mt-2">
+                No databases created.
+              </div>
+            ) : null}
             {data?.databases.map((database) => (
               <div key={database.id} className="py-3 border-b border-gray-200">
                 <div className="mb-1 text-gray-900 font-medium">
