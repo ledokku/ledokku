@@ -30,8 +30,6 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
         variables: { key: name, appId },
         refetchQueries: [{ query: EnvVarsDocument, variables: { appId } }],
       });
-
-      console.log(data);
     } catch (error) {
       // TODO catch errors
       console.log(error);
