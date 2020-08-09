@@ -167,42 +167,66 @@ export const App = () => {
               </React.Fragment>
             ) : (
               <React.Fragment>
-                <Select
-                  value={selectedDb}
-                  onChange={setSelectedDb}
-                  className="mt-3 w-80"
-                  options={dbOptions}
-                  placeholder={selectedDb}
-                  isSearchable={false}
-                  aria-labelledby="database-select-dropdown"
-                  noOptionsMessage={() =>
-                    'All of your databases are already linked to this app'
-                  }
-                />
+                {notLinkedDatabases.length !== 0 ? (
+                  <div>
+                    <Select
+                      value={selectedDb}
+                      onChange={setSelectedDb}
+                      className="mt-3 w-80"
+                      options={dbOptions}
+                      placeholder={selectedDb}
+                      isSearchable={false}
+                      aria-labelledby="database-select-dropdown"
+                      noOptionsMessage={() =>
+                        'All of your databases are already linked to this app'
+                      }
+                    />
 
-                {databaseLinkError && (
-                  <p className="text-red-500 text-sm font-semibold">
-                    {databaseLinkError.graphQLErrors[0].message}
-                  </p>
+                    {databaseLinkError && (
+                      <p className="text-red-500 text-sm font-semibold">
+                        {databaseLinkError.graphQLErrors[0].message}
+                      </p>
+                    )}
+
+                    <Button
+                      color="grey"
+                      width="large"
+                      className="mt-2"
+                      disabled={!selectedDb.value.id || databaseLinkLoading}
+                      onClick={() => {
+                        handleConnect(selectedDb.value.id, appId);
+                      }}
+                    >
+                      {databaseLinkLoading &&
+                      !databaseLinkData &&
+                      !databaseLinkError ? (
+                        <Spinner size="extraSmall" />
+                      ) : (
+                        'Link database'
+                      )}
+                    </Button>
+                  </div>
+                ) : (
+                  <React.Fragment>
+                    <p className="mt-3 mb-3 text-cool-gray-400">
+                      All your databases are already linked to this app! If you
+                      want to create more databases proceed with create database
+                      flow.
+                    </p>
+                    <div className="ml-80">
+                      <Link to="/create-database">
+                        <Button
+                          color={'grey'}
+                          variant="outline"
+                          className="text-sm mr-3"
+                        >
+                          Create database
+                        </Button>
+                      </Link>
+                    </div>
+                  </React.Fragment>
                 )}
 
-                <Button
-                  color="grey"
-                  width="large"
-                  className="mt-2"
-                  disabled={!selectedDb.value.id || databaseLinkLoading}
-                  onClick={() => {
-                    handleConnect(selectedDb.value.id, appId);
-                  }}
-                >
-                  {databaseLinkLoading &&
-                  !databaseLinkData &&
-                  !databaseLinkError ? (
-                    <Spinner size="extraSmall" />
-                  ) : (
-                    'Link database'
-                  )}
-                </Button>
                 {!loading && data && data.app && (
                   <React.Fragment>
                     <h2 className="mb-1 mt-3 font-semibold">
