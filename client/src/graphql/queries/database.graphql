@@ -3,5 +3,9 @@ query databaseById($databaseId: String!) {
     id
     name
     type
+    apps {
+      id
+      name
+    }
   }
 }

@@ -24,6 +24,7 @@ export type App = {
   name: Scalars['String'];
   githubRepoUrl: Scalars['String'];
   createdAt: Scalars['DateTime'];
+  databases?: Maybe<Array<Maybe<Database>>>;
 };
 
 export type AppBuild = {
@@ -44,6 +45,7 @@ export type Database = {
   name: Scalars['String'];
   type: DatabaseTypes;
   createdAt: Scalars['DateTime'];
+  apps?: Maybe<Array<Maybe<App>>>;
 };
 
 export type DatabaseTypes = 
@@ -113,16 +115,6 @@ export type DatabaseInfoResult = {
 export type DatabaseLogsResult = {
   __typename?: 'DatabaseLogsResult';
   logs: Array<Maybe<Scalars['String']>>;
-};
-
-export type DatabasesLinkedToAppResult = {
-  __typename?: 'DatabasesLinkedToAppResult';
-  databases: Array<Maybe<Database>>;
-};
-
-export type AppsLinkedToDatabaseResult = {
-  __typename?: 'AppsLinkedToDatabaseResult';
-  apps: Array<Maybe<App>>;
 };
 
 export type IsDatabaseLinkedResult = {
@@ -198,8 +190,6 @@ export type Query = {
   appLogs: AppLogsResult;
   databaseInfo: DatabaseInfoResult;
   databaseLogs: DatabaseLogsResult;
-  databasesLinkedToApp: DatabasesLinkedToAppResult;
-  appsLinkedToDatabase: AppsLinkedToDatabaseResult;
   isDatabaseLinked: IsDatabaseLinkedResult;
   envVars: EnvVarsResult;
 };
@@ -231,16 +221,6 @@ export type QueryDatabaseInfoArgs = {
 
 
 export type QueryDatabaseLogsArgs = {
-  databaseId: Scalars['String'];
-};
-
-
-export type QueryDatabasesLinkedToAppArgs = {
-  appId: Scalars['String'];
-};
-
-
-export type QueryAppsLinkedToDatabaseArgs = {
   databaseId: Scalars['String'];
 };
 
@@ -411,8 +391,6 @@ export type ResolversTypes = {
   AppLogsResult: ResolverTypeWrapper<AppLogsResult>;
   DatabaseInfoResult: ResolverTypeWrapper<DatabaseInfoResult>;
   DatabaseLogsResult: ResolverTypeWrapper<DatabaseLogsResult>;
-  DatabasesLinkedToAppResult: ResolverTypeWrapper<DatabasesLinkedToAppResult>;
-  AppsLinkedToDatabaseResult: ResolverTypeWrapper<AppsLinkedToDatabaseResult>;
   IsDatabaseLinkedResult: ResolverTypeWrapper<IsDatabaseLinkedResult>;
   EnvVar: ResolverTypeWrapper<EnvVar>;
   EnvVarsResult: ResolverTypeWrapper<EnvVarsResult>;
@@ -452,8 +430,6 @@ export type ResolversParentTypes = {
   AppLogsResult: AppLogsResult;
   DatabaseInfoResult: DatabaseInfoResult;
   DatabaseLogsResult: DatabaseLogsResult;
-  DatabasesLinkedToAppResult: DatabasesLinkedToAppResult;
-  AppsLinkedToDatabaseResult: AppsLinkedToDatabaseResult;
   IsDatabaseLinkedResult: IsDatabaseLinkedResult;
   EnvVar: EnvVar;
   EnvVarsResult: EnvVarsResult;
@@ -480,6 +456,7 @@ export type AppResolvers<ContextType = any, ParentType extends ResolversParentTy
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   githubRepoUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  databases?: Resolver<Maybe<Array<Maybe<ResolversTypes['Database']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
@@ -494,6 +471,7 @@ export type DatabaseResolvers<ContextType = any, ParentType extends ResolversPar
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['DatabaseTypes'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  apps?: Resolver<Maybe<Array<Maybe<ResolversTypes['App']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
@@ -560,16 +538,6 @@ export type DatabaseLogsResultResolvers<ContextType = any, ParentType extends Re
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
-export type DatabasesLinkedToAppResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['DatabasesLinkedToAppResult'] = ResolversParentTypes['DatabasesLinkedToAppResult']> = {
-  databases?: Resolver<Array<Maybe<ResolversTypes['Database']>>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-};
-
-export type AppsLinkedToDatabaseResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['AppsLinkedToDatabaseResult'] = ResolversParentTypes['AppsLinkedToDatabaseResult']> = {
-  apps?: Resolver<Array<Maybe<ResolversTypes['App']>>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
-};
-
 export type IsDatabaseLinkedResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['IsDatabaseLinkedResult'] = ResolversParentTypes['IsDatabaseLinkedResult']> = {
   isLinked?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
@@ -608,8 +576,6 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   appLogs?: Resolver<ResolversTypes['AppLogsResult'], ParentType, ContextType, RequireFields<QueryAppLogsArgs, 'appId'>>;
   databaseInfo?: Resolver<ResolversTypes['DatabaseInfoResult'], ParentType, ContextType, RequireFields<QueryDatabaseInfoArgs, 'databaseId'>>;
   databaseLogs?: Resolver<ResolversTypes['DatabaseLogsResult'], ParentType, ContextType, RequireFields<QueryDatabaseLogsArgs, 'databaseId'>>;
-  databasesLinkedToApp?: Resolver<ResolversTypes['DatabasesLinkedToAppResult'], ParentType, ContextType, RequireFields<QueryDatabasesLinkedToAppArgs, 'appId'>>;
-  appsLinkedToDatabase?: Resolver<ResolversTypes['AppsLinkedToDatabaseResult'], ParentType, ContextType, RequireFields<QueryAppsLinkedToDatabaseArgs, 'databaseId'>>;
   isDatabaseLinked?: Resolver<ResolversTypes['IsDatabaseLinkedResult'], ParentType, ContextType, RequireFields<QueryIsDatabaseLinkedArgs, 'databaseId' | 'appId'>>;
   envVars?: Resolver<ResolversTypes['EnvVarsResult'], ParentType, ContextType, RequireFields<QueryEnvVarsArgs, 'appId'>>;
 };
@@ -646,8 +612,6 @@ export type Resolvers<ContextType = any> = {
   AppLogsResult?: AppLogsResultResolvers<ContextType>;
   DatabaseInfoResult?: DatabaseInfoResultResolvers<ContextType>;
   DatabaseLogsResult?: DatabaseLogsResultResolvers<ContextType>;
-  DatabasesLinkedToAppResult?: DatabasesLinkedToAppResultResolvers<ContextType>;
-  AppsLinkedToDatabaseResult?: AppsLinkedToDatabaseResultResolvers<ContextType>;
   IsDatabaseLinkedResult?: IsDatabaseLinkedResultResolvers<ContextType>;
   EnvVar?: EnvVarResolvers<ContextType>;
   EnvVarsResult?: EnvVarsResultResolvers<ContextType>;

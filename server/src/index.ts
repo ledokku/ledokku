@@ -21,6 +21,7 @@ const typeDefs = gql`
     name: String!
     githubRepoUrl: String!
     createdAt: DateTime!
+    databases: [Database]
   }
 
   type AppBuild {
@@ -40,6 +41,7 @@ const typeDefs = gql`
     name: String!
     type: DatabaseTypes!
     createdAt: DateTime!
+    apps: [App]
   }
 
   enum DatabaseTypes {
@@ -98,14 +100,6 @@ const typeDefs = gql`
 
   type DatabaseLogsResult {
     logs: [String]!
-  }
-
-  type DatabasesLinkedToAppResult {
-    databases: [Database]!
-  }
-
-  type AppsLinkedToDatabaseResult {
-    apps: [App]!
   }
 
   type IsDatabaseLinkedResult {
@@ -175,8 +169,6 @@ const typeDefs = gql`
     appLogs(appId: String!): AppLogsResult!
     databaseInfo(databaseId: String!): DatabaseInfoResult!
     databaseLogs(databaseId: String!): DatabaseLogsResult!
-    databasesLinkedToApp(appId: String!): DatabasesLinkedToAppResult!
-    appsLinkedToDatabase(databaseId: String!): AppsLinkedToDatabaseResult!
     isDatabaseLinked(
       databaseId: String!
       appId: String!

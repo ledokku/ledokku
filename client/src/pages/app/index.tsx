@@ -5,8 +5,7 @@ import {
   useAppByIdQuery,
   useDatabaseQuery,
   useLinkDatabaseMutation,
-  useDatabasesLinkedToAppQuery,
-  DatabasesLinkedToAppDocument,
+  AppByIdDocument,
 } from '../../generated/graphql';
 import { useParams, Link } from 'react-router-dom';
 import { TabNav, TabNavLink, Button, Spinner, DatabaseLabel } from '../../ui';
@@ -29,15 +28,6 @@ export const App = () => {
 
   const { data: databaseData } = useDatabaseQuery();
 
-  const {
-    data: dbsLinkedToAppData,
-    loading: dbsLinkedToAppDataLoading,
-  } = useDatabasesLinkedToAppQuery({
-    variables: {
-      appId,
-    },
-  });
-
   const { data, loading /* error */ } = useAppByIdQuery({
     variables: {
       appId,
@@ -52,7 +42,7 @@ export const App = () => {
 
   // // TODO display error
 
-  if (loading || dbsLinkedToAppDataLoading) {
+  if (loading) {
     // TODO nice loading
     return <p>Loading...</p>;
   }
@@ -66,7 +56,7 @@ export const App = () => {
     return <p>App not found.</p>;
   }
 
-  const linkedDatabases = dbsLinkedToAppData.databasesLinkedToApp.databases;
+  const linkedDatabases = data.app.databases;
   const linkedIds = linkedDatabases.map((db) => db.id);
   const notLinkedDatabases = databases.filter((db) => {
     return linkedIds.indexOf(db.id) === -1;
@@ -90,7 +80,7 @@ export const App = () => {
         },
         refetchQueries: [
           {
-            query: DatabasesLinkedToAppDocument,
+            query: AppByIdDocument,
             variables: { appId },
           },
         ],
@@ -213,33 +203,28 @@ export const App = () => {
                     'Link database'
                   )}
                 </Button>
-                {!dbsLinkedToAppDataLoading &&
-                  dbsLinkedToAppData &&
-                  dbsLinkedToAppData.databasesLinkedToApp && (
-                    <React.Fragment>
-                      <h2 className="mb-1 mt-3 font-semibold">
-                        {dbsLinkedToAppData.databasesLinkedToApp.databases
-                          .length > 0 && 'Linked databases'}
-                      </h2>
-                      {dbsLinkedToAppData.databasesLinkedToApp.databases.map(
-                        (database) => (
-                          <div className="w-64" key={database.id}>
-                            <Link
-                              to={`/database/${database.id}`}
-                              className="py-2 block"
-                            >
-                              <div className="flex items-center py-3 px-2 shadow hover:shadow-md transition-shadow duration-100 ease-in-out rounded bg-white">
-                                <DatabaseLabel
-                                  name={database.name}
-                                  type={database.type}
-                                />
-                              </div>
-                            </Link>
+                {!loading && data && data.app && (
+                  <React.Fragment>
+                    <h2 className="mb-1 mt-3 font-semibold">
+                      {data.app.databases.length > 0 && 'Linked databases'}
+                    </h2>
+                    {data.app.databases.map((database) => (
+                      <div className="w-64" key={database.id}>
+                        <Link
+                          to={`/database/${database.id}`}
+                          className="py-2 block"
+                        >
+                          <div className="flex items-center py-3 px-2 shadow hover:shadow-md transition-shadow duration-100 ease-in-out rounded bg-white">
+                            <DatabaseLabel
+                              name={database.name}
+                              type={database.type}
+                            />
                           </div>
-                        )
-                      )}
-                    </React.Fragment>
-                  )}
+                        </Link>
+                      </div>
+                    ))}
+                  </React.Fragment>
+                )}
               </React.Fragment>
             )}
           </div>
