@@ -73,6 +73,11 @@ export type DestroyDatabaseResult = {
   result: Scalars['Boolean'];
 };
 
+export type LinkDatabaseResult = {
+  __typename?: 'LinkDatabaseResult';
+  result: Scalars['Boolean'];
+};
+
 export type DokkuPlugin = {
   __typename?: 'DokkuPlugin';
   name: Scalars['String'];
@@ -108,6 +113,11 @@ export type DatabaseInfoResult = {
 export type DatabaseLogsResult = {
   __typename?: 'DatabaseLogsResult';
   logs: Array<Maybe<Scalars['String']>>;
+};
+
+export type DatabaseLinkedResult = {
+  __typename?: 'DatabaseLinkedResult';
+  isLinked: Scalars['Boolean'];
 };
 
 export type EnvVar = {
@@ -157,6 +167,11 @@ export type DestroyAppInput = {
   appId: Scalars['String'];
 };
 
+export type LinkDatabaseInput = {
+  appId: Scalars['String'];
+  databaseId: Scalars['String'];
+};
+
 export type DestroyDatabaseInput = {
   databaseId: Scalars['String'];
 };
@@ -173,6 +188,7 @@ export type Query = {
   appLogs: AppLogsResult;
   databaseInfo: DatabaseInfoResult;
   databaseLogs: DatabaseLogsResult;
+  databaseLinked: DatabaseLinkedResult;
   envVars: EnvVarsResult;
 };
 
@@ -207,6 +223,12 @@ export type QueryDatabaseLogsArgs = {
 };
 
 
+export type QueryDatabaseLinkedArgs = {
+  databaseId: Scalars['String'];
+  appId: Scalars['String'];
+};
+
+
 export type QueryEnvVarsArgs = {
   appId: Scalars['String'];
 };
@@ -220,6 +242,7 @@ export type Mutation = {
   unsetEnvVar: UnsetEnvVarResult;
   destroyApp: DestroyAppResult;
   destroyDatabase: DestroyDatabaseResult;
+  linkDatabase: LinkDatabaseResult;
 };
 
 
@@ -255,6 +278,11 @@ export type MutationDestroyAppArgs = {
 
 export type MutationDestroyDatabaseArgs = {
   input: DestroyDatabaseInput;
+};
+
+
+export type MutationLinkDatabaseArgs = {
+  input: LinkDatabaseInput;
 };
 
 export type CacheControlScope = 
@@ -318,6 +346,19 @@ export type DestroyDatabaseMutation = (
   & { destroyDatabase: (
     { __typename?: 'DestroyDatabaseResult' }
     & Pick<DestroyDatabaseResult, 'result'>
+  ) }
+);
+
+export type LinkDatabaseMutationVariables = Exact<{
+  input: LinkDatabaseInput;
+}>;
+
+
+export type LinkDatabaseMutation = (
+  { __typename?: 'Mutation' }
+  & { linkDatabase: (
+    { __typename?: 'LinkDatabaseResult' }
+    & Pick<LinkDatabaseResult, 'result'>
   ) }
 );
 
@@ -389,6 +430,17 @@ export type AppLogsQuery = (
   ) }
 );
 
+export type AppsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AppsQuery = (
+  { __typename?: 'Query' }
+  & { apps: Array<(
+    { __typename?: 'App' }
+    & Pick<App, 'id' | 'name'>
+  )> }
+);
+
 export type DashboardQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -440,6 +492,17 @@ export type DatabaseLogsQuery = (
     { __typename?: 'DatabaseLogsResult' }
     & Pick<DatabaseLogsResult, 'logs'>
   ) }
+);
+
+export type DatabaseQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type DatabaseQuery = (
+  { __typename?: 'Query' }
+  & { databases: Array<(
+    { __typename?: 'Database' }
+    & Pick<Database, 'id' | 'name' | 'type'>
+  )> }
 );
 
 export type EnvVarsQueryVariables = Exact<{
@@ -618,6 +681,38 @@ export function useDestroyDatabaseMutation(baseOptions?: ApolloReactHooks.Mutati
 export type DestroyDatabaseMutationHookResult = ReturnType<typeof useDestroyDatabaseMutation>;
 export type DestroyDatabaseMutationResult = ApolloReactCommon.MutationResult<DestroyDatabaseMutation>;
 export type DestroyDatabaseMutationOptions = ApolloReactCommon.BaseMutationOptions<DestroyDatabaseMutation, DestroyDatabaseMutationVariables>;
+export const LinkDatabaseDocument = gql`
+    mutation linkDatabase($input: LinkDatabaseInput!) {
+  linkDatabase(input: $input) {
+    result
+  }
+}
+    `;
+export type LinkDatabaseMutationFn = ApolloReactCommon.MutationFunction<LinkDatabaseMutation, LinkDatabaseMutationVariables>;
+
+/**
+ * __useLinkDatabaseMutation__
+ *
+ * To run a mutation, you first call `useLinkDatabaseMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLinkDatabaseMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [linkDatabaseMutation, { data, loading, error }] = useLinkDatabaseMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useLinkDatabaseMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<LinkDatabaseMutation, LinkDatabaseMutationVariables>) {
+        return ApolloReactHooks.useMutation<LinkDatabaseMutation, LinkDatabaseMutationVariables>(LinkDatabaseDocument, baseOptions);
+      }
+export type LinkDatabaseMutationHookResult = ReturnType<typeof useLinkDatabaseMutation>;
+export type LinkDatabaseMutationResult = ApolloReactCommon.MutationResult<LinkDatabaseMutation>;
+export type LinkDatabaseMutationOptions = ApolloReactCommon.BaseMutationOptions<LinkDatabaseMutation, LinkDatabaseMutationVariables>;
 export const LoginWithGithubDocument = gql`
     mutation loginWithGithub($code: String!) {
   loginWithGithub(code: $code) {
@@ -786,6 +881,39 @@ export function useAppLogsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHook
 export type AppLogsQueryHookResult = ReturnType<typeof useAppLogsQuery>;
 export type AppLogsLazyQueryHookResult = ReturnType<typeof useAppLogsLazyQuery>;
 export type AppLogsQueryResult = ApolloReactCommon.QueryResult<AppLogsQuery, AppLogsQueryVariables>;
+export const AppsDocument = gql`
+    query apps {
+  apps {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useAppsQuery__
+ *
+ * To run a query within a React component, call `useAppsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAppsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAppsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAppsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<AppsQuery, AppsQueryVariables>) {
+        return ApolloReactHooks.useQuery<AppsQuery, AppsQueryVariables>(AppsDocument, baseOptions);
+      }
+export function useAppsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<AppsQuery, AppsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<AppsQuery, AppsQueryVariables>(AppsDocument, baseOptions);
+        }
+export type AppsQueryHookResult = ReturnType<typeof useAppsQuery>;
+export type AppsLazyQueryHookResult = ReturnType<typeof useAppsLazyQuery>;
+export type AppsQueryResult = ApolloReactCommon.QueryResult<AppsQuery, AppsQueryVariables>;
 export const DashboardDocument = gql`
     query dashboard {
   apps {
@@ -925,6 +1053,40 @@ export function useDatabaseLogsLazyQuery(baseOptions?: ApolloReactHooks.LazyQuer
 export type DatabaseLogsQueryHookResult = ReturnType<typeof useDatabaseLogsQuery>;
 export type DatabaseLogsLazyQueryHookResult = ReturnType<typeof useDatabaseLogsLazyQuery>;
 export type DatabaseLogsQueryResult = ApolloReactCommon.QueryResult<DatabaseLogsQuery, DatabaseLogsQueryVariables>;
+export const DatabaseDocument = gql`
+    query database {
+  databases {
+    id
+    name
+    type
+  }
+}
+    `;
+
+/**
+ * __useDatabaseQuery__
+ *
+ * To run a query within a React component, call `useDatabaseQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDatabaseQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDatabaseQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useDatabaseQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<DatabaseQuery, DatabaseQueryVariables>) {
+        return ApolloReactHooks.useQuery<DatabaseQuery, DatabaseQueryVariables>(DatabaseDocument, baseOptions);
+      }
+export function useDatabaseLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<DatabaseQuery, DatabaseQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<DatabaseQuery, DatabaseQueryVariables>(DatabaseDocument, baseOptions);
+        }
+export type DatabaseQueryHookResult = ReturnType<typeof useDatabaseQuery>;
+export type DatabaseLazyQueryHookResult = ReturnType<typeof useDatabaseLazyQuery>;
+export type DatabaseQueryResult = ApolloReactCommon.QueryResult<DatabaseQuery, DatabaseQueryVariables>;
 export const EnvVarsDocument = gql`
     query envVars($appId: String!) {
   envVars(appId: $appId) {

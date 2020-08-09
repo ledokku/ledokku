@@ -1,12 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Header } from '../../modules/layout/Header';
-import { useDatabaseByIdQuery } from '../../generated/graphql';
-import { useParams } from 'react-router-dom';
-import { TabNav, TabNavLink } from '../../ui';
+import {
+  useDatabaseByIdQuery,
+  useAppsQuery,
+  useLinkDatabaseMutation,
+} from '../../generated/graphql';
+import { useParams, Link } from 'react-router-dom';
+import Select from 'react-select';
+import { TabNav, TabNavLink, Button, Spinner } from '../../ui';
 
 export const Database = () => {
   const { id: databaseId } = useParams();
+  const [selectedApp, setSelectedApp] = useState({
+    value: { name: '', id: '' },
+    label: 'Please select app',
+  });
+  const [
+    linkDatabaseMutation,
+    {
+      data: databaseLinkData,
+      loading: databaseLinkLoading,
+      error: databaseLinkError,
+    },
+  ] = useLinkDatabaseMutation();
 
+  const { data: appsData } = useAppsQuery();
   const { data, loading /* error */ } = useDatabaseByIdQuery({
     variables: {
       databaseId,
@@ -27,11 +45,35 @@ export const Database = () => {
   }
 
   const { database } = data;
+  const { apps } = appsData;
 
   if (!database) {
     // TODO nice 404
     return <p>Database not found.</p>;
   }
+
+  const appOptions = apps.map((app) => {
+    return {
+      value: { name: app.name, id: app.id },
+      label: app.name,
+    };
+  });
+
+  const handleConnect = async (databaseId: string, appId: string) => {
+    try {
+      await linkDatabaseMutation({
+        variables: {
+          input: {
+            databaseId,
+            appId,
+          },
+        },
+      });
+      // TODO - REACT - TOASTIFY
+    } catch (e) {
+      //TODO - REACT TOASTIFY
+    }
+  };
 
   return (
     <div>
@@ -86,15 +128,56 @@ export const Database = () => {
 
           <div className="w-full">
             <h1 className="font-bold text-lg font-bold py-5">Apps</h1>
-            <div className="mt-4 mb-4">
-              <h2 className="text-gray-400">
-                {`Here you can modify apps linked to:`}
-                <span className="text-gray-900"> {database.name}</span> database
-              </h2>
-            </div>
-            <button className="mt-4 bg-gray-900 hover:bg-blue text-white  font-bold hover:text-white py-2 px-4 border hover:border-transparent rounded-lg">
-              Connect app
-            </button>
+            {apps.length === 0 ? (
+              <React.Fragment>
+                <div className="mt-3 mb-4">
+                  <h2 className="text-gray-400">
+                    Currently you haven't created apps, to do so proceed with
+                    the app creation flow
+                  </h2>
+                </div>
+                <Link to="/create-app">
+                  <Button width="large" color={'grey'}>
+                    Create an app
+                  </Button>
+                </Link>
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
+                <Select
+                  value={selectedApp}
+                  onChange={setSelectedApp}
+                  className="mt-3 w-80"
+                  options={appOptions}
+                  placeholder={selectedApp}
+                  isSearchable={false}
+                  aria-labelledby="app-select-dropdown"
+                />
+
+                {databaseLinkError && (
+                  <p className="text-red-500 text-sm font-semibold">
+                    {databaseLinkError.graphQLErrors[0].message}
+                  </p>
+                )}
+                <Button
+                  color="grey"
+                  width="large"
+                  className="mt-2"
+                  disabled={!selectedApp.value.id || databaseLinkLoading}
+                  onClick={() =>
+                    handleConnect(databaseId, selectedApp.value.id)
+                  }
+                >
+                  {databaseLinkLoading &&
+                  !databaseLinkData &&
+                  !databaseLinkError ? (
+                    <Spinner size="small" />
+                  ) : (
+                    'Link app'
+                  )}
+                </Button>
+              </React.Fragment>
+            )}
           </div>
         </div>
       </div>

@@ -1,0 +1,7 @@
+query database {
+  databases {
+    id
+    name
+    type
+  }
+}
