@@ -20,6 +20,7 @@ export const Dashboard = () => {
   return (
     <div>
       <Header />
+
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <TabNav>
           <TabNavLink to="/dashboard" selected>
