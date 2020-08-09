@@ -44,6 +44,7 @@ export type Database = {
   id: Scalars['ID'];
   name: Scalars['String'];
   type: DatabaseTypes;
+  createdAt: Scalars['DateTime'];
 };
 
 export type DatabaseTypes = 
@@ -115,8 +116,8 @@ export type DatabaseLogsResult = {
   logs: Array<Maybe<Scalars['String']>>;
 };
 
-export type DatabaseLinkedResult = {
-  __typename?: 'DatabaseLinkedResult';
+export type IsDatabaseLinkedResult = {
+  __typename?: 'IsDatabaseLinkedResult';
   isLinked: Scalars['Boolean'];
 };
 
@@ -188,7 +189,7 @@ export type Query = {
   appLogs: AppLogsResult;
   databaseInfo: DatabaseInfoResult;
   databaseLogs: DatabaseLogsResult;
-  databaseLinked: DatabaseLinkedResult;
+  isDatabaseLinked: IsDatabaseLinkedResult;
   envVars: EnvVarsResult;
 };
 
@@ -223,7 +224,7 @@ export type QueryDatabaseLogsArgs = {
 };
 
 
-export type QueryDatabaseLinkedArgs = {
+export type QueryIsDatabaseLinkedArgs = {
   databaseId: Scalars['String'];
   appId: Scalars['String'];
 };
@@ -448,10 +449,10 @@ export type DashboardQuery = (
   { __typename?: 'Query' }
   & { apps: Array<(
     { __typename?: 'App' }
-    & Pick<App, 'id' | 'name'>
+    & Pick<App, 'id' | 'name' | 'createdAt'>
   )>, databases: Array<(
     { __typename?: 'Database' }
-    & Pick<Database, 'id' | 'name' | 'type'>
+    & Pick<Database, 'id' | 'name' | 'type' | 'createdAt'>
   )> }
 );
 
@@ -919,11 +920,13 @@ export const DashboardDocument = gql`
   apps {
     id
     name
+    createdAt
   }
   databases {
     id
     name
     type
+    createdAt
   }
 }
     `;

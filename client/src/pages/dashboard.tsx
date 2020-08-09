@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import format from 'date-fns/format';
 import { useDashboardQuery } from '../generated/graphql';
 import { Header } from '../modules/layout/Header';
 import { TabNav, TabNavLink, Button } from '../ui';
@@ -62,7 +63,9 @@ export const Dashboard = () => {
                 </div>
                 <div className="flex justify-between text-gray-400 text-sm">
                   <div>ledokku/ledokku</div>
-                  <div>Last deploy 6h ago</div>
+                  <div>
+                    Created on {format(new Date(app.createdAt), 'MM/DD/YYYY')}
+                  </div>
                 </div>
               </div>
             ))}
@@ -105,7 +108,10 @@ export const Dashboard = () => {
                       </React.Fragment>
                     ) : undefined}
                   </div>
-                  <div>Created 1h ago</div>
+                  <div>
+                    Created on{' '}
+                    {format(new Date(database.createdAt), 'MM/DD/YYYY')}
+                  </div>
                 </div>
               </div>
             ))}
