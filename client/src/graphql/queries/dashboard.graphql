@@ -2,10 +2,12 @@ query dashboard {
   apps {
     id
     name
+    createdAt
   }
   databases {
     id
     name
     type
+    createdAt
   }
 }

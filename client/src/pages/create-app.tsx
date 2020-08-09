@@ -76,7 +76,6 @@ export const CreateApp = () => {
               <div className="flex justify-end mt-4">
                 <Button
                   color="grey"
-                  width="normal"
                   type="submit"
                   disabled={!formik.values.name || !formik.values.gitUrl}
                 >
