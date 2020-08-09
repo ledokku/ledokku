@@ -44,6 +44,7 @@ export type Database = {
   id: Scalars['ID'];
   name: Scalars['String'];
   type: DatabaseTypes;
+  createdAt: Scalars['DateTime'];
 };
 
 export type DatabaseTypes = 
@@ -486,10 +487,10 @@ export type DashboardQuery = (
   { __typename?: 'Query' }
   & { apps: Array<(
     { __typename?: 'App' }
-    & Pick<App, 'id' | 'name'>
+    & Pick<App, 'id' | 'name' | 'createdAt'>
   )>, databases: Array<(
     { __typename?: 'Database' }
-    & Pick<Database, 'id' | 'name' | 'type'>
+    & Pick<Database, 'id' | 'name' | 'type' | 'createdAt'>
   )> }
 );
 
@@ -1009,11 +1010,13 @@ export const DashboardDocument = gql`
   apps {
     id
     name
+    createdAt
   }
   databases {
     id
     name
     type
+    createdAt
   }
 }
     `;

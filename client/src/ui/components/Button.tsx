@@ -5,37 +5,46 @@ interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
   iconStart?: React.ReactNode;
   iconEnd?: React.ReactNode;
   color: 'red' | 'grey';
-  width: 'normal' | 'large';
+  variant?: 'solid' | 'outline';
 }
 
 export const Button = ({
   children,
   color,
-  width,
   className,
   iconEnd,
   iconStart,
   type,
+  variant = 'solid',
   ...props
 }: ButtonProps) => (
   <button
     {...props}
     type={type === 'submit' ? 'submit' : 'button'}
     className={cx(
-      'py-2 px-10 bg-gray-900 hover:bg-blue text-white  font-bold  rounded-lg flex justify-center',
-      {
-        'bg-gray-900': color === 'grey',
-        'bg-red-500': color === 'red',
-        'opacity-50 cursor-not-allowed': props.disabled,
-        'hover:text-white border hover:border-transparent': !props.disabled,
-        'w-64': width === 'large',
-        'w-32': width === 'normal',
-      },
+      'px-3 py-2 font-bold rounded-lg flex justify-center',
+      // solid variant styles
+      variant === 'solid'
+        ? {
+            'bg-gray-900 text-white transition-color duration-100 ease-in': true,
+            'bg-red-500': color === 'red',
+            'hover:text-white border hover:border-transparent': !props.disabled,
+            'opacity-50 cursor-not-allowed': props.disabled,
+          }
+        : undefined,
+      // outline variant styles
+      variant === 'outline'
+        ? {
+            'text-gray-900 border border-gray-200 transition-color duration-100 ease-in': true,
+            'hover:border-gray-900': !props.disabled,
+            'opacity-50 cursor-not-allowed': props.disabled,
+          }
+        : undefined,
       className
     )}
   >
-    {iconStart && <span className="-ml-4 mr-4 -px-4">{iconStart}</span>}
+    {iconStart && <span className="mr-3">{iconStart}</span>}
     {children}
-    {iconEnd && <span className="ml-6 -mr-4 -px-4">{iconEnd}</span>}
+    {iconEnd && <span className="ml-3">{iconEnd}</span>}
   </button>
 );
