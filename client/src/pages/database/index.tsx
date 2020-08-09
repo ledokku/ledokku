@@ -5,6 +5,7 @@ import {
   useAppsQuery,
   useLinkDatabaseMutation,
   DatabaseDocument,
+  AppsDocument,
 } from '../../generated/graphql';
 import { useParams, Link } from 'react-router-dom';
 import Select from 'react-select';
@@ -78,6 +79,7 @@ export const Database = () => {
         },
         refetchQueries: [
           { query: DatabaseDocument, variables: { databaseId } },
+          { query: AppsDocument, variables: { appId } },
         ],
       });
       setSelectedApp({
@@ -153,7 +155,7 @@ export const Database = () => {
                 </div>
                 <Link to="/create-app">
                   <Button width="large" color={'grey'}>
-                    Create an app
+                    Create app
                   </Button>
                 </Link>
               </React.Fragment>
@@ -199,7 +201,7 @@ export const Database = () => {
                   </div>
                 ) : (
                   <React.Fragment>
-                    <p className="mt-3 mb-3 text-cool-gray-400">
+                    <p className="mt-3 mb-3 mr-8 text-cool-gray-400">
                       All your apps are already linked to this database! If you
                       want to create more apps proceed with create app flow.
                     </p>
