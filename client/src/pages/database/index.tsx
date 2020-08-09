@@ -4,8 +4,7 @@ import {
   useDatabaseByIdQuery,
   useAppsQuery,
   useLinkDatabaseMutation,
-  DatabaseDocument,
-  AppsDocument,
+  DatabaseByIdDocument,
 } from '../../generated/graphql';
 import { useParams, Link } from 'react-router-dom';
 import Select from 'react-select';
@@ -78,8 +77,7 @@ export const Database = () => {
           },
         },
         refetchQueries: [
-          { query: DatabaseDocument, variables: { databaseId } },
-          { query: AppsDocument, variables: { appId } },
+          { query: DatabaseByIdDocument, variables: { databaseId } },
         ],
       });
       setSelectedApp({
