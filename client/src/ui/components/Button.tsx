@@ -27,7 +27,7 @@ export const Button = ({
       variant === 'solid'
         ? {
             'bg-gray-900 text-white transition-color duration-100 ease-in': true,
-            'bg-red-500': variant === 'solid' && color === 'red',
+            'bg-red-500': color === 'red',
             'hover:text-white border hover:border-transparent': !props.disabled,
             'opacity-50 cursor-not-allowed': props.disabled,
           }
