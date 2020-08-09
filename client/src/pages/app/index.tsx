@@ -255,7 +255,7 @@ export const App = () => {
                   {databaseLinkLoading &&
                   !databaseLinkData &&
                   !databaseLinkError ? (
-                    <Spinner size="extraSmall" />
+                    <Spinner size="small" />
                   ) : (
                     'Link database'
                   )}
