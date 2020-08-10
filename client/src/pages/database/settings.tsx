@@ -166,7 +166,6 @@ export const Settings = () => {
                     !formik.values.databaseName || !!formik.errors.databaseName
                   }
                   color="red"
-                  width="normal"
                 >
                   {destroyDbLoading ? <Spinner size="extraSmall" /> : 'Delete'}
                 </Button>
