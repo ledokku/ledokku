@@ -6,6 +6,7 @@ import jsonwebtoken from 'jsonwebtoken';
 import express from 'express';
 import path from 'path';
 import { Resolvers } from './generated/graphql';
+import { customResolvers } from './graphql/resolvers';
 import { mutations } from './graphql/mutations';
 import { config } from './config';
 import { app, http, io } from './server';
@@ -197,6 +198,7 @@ const apolloServer = new ApolloServer({
   typeDefs,
   resolvers: {
     ...resolvers,
+    ...customResolvers,
     DateTime: DateTimeResolver,
   },
   context: ({ req }) => {

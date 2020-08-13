@@ -12,7 +12,6 @@ export const database: QueryResolvers['database'] = async (
 
   const database = await prisma.database.findOne({
     where: { id: databaseId },
-    include: { apps: true },
   });
   return database.userId === userId ? database : null;
 };
