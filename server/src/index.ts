@@ -39,6 +39,7 @@ const typeDefs = gql`
     id: ID!
     name: String!
     type: DatabaseTypes!
+    createdAt: DateTime!
   }
 
   enum DatabaseTypes {

@@ -123,7 +123,6 @@ export const Settings = () => {
                 type="submit"
                 disabled={!formik.values.appName || !!formik.errors.appName}
                 color="red"
-                width="normal"
               >
                 Delete
               </Button>

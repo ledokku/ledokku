@@ -43,6 +43,7 @@ export type Database = {
   id: Scalars['ID'];
   name: Scalars['String'];
   type: DatabaseTypes;
+  createdAt: Scalars['DateTime'];
 };
 
 export type DatabaseTypes = 
@@ -512,6 +513,7 @@ export type DatabaseResolvers<ContextType = any, ParentType extends ResolversPar
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['DatabaseTypes'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
