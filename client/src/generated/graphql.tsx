@@ -105,7 +105,7 @@ export type UnsetEnvVarResult = {
 
 export type AppLogsResult = {
   __typename?: 'AppLogsResult';
-  logs: Scalars['String'];
+  logs: Array<Scalars['String']>;
 };
 
 export type DatabaseInfoResult = {

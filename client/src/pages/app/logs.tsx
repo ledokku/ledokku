@@ -66,14 +66,25 @@ export const Logs = () => {
           <h1 className="text-lg font-bold py-5">Logs</h1>
         </div>
         <Terminal className="pt-8 pb-16">
-          <div className="flex">
-            <p className="flex-1 typing items-center pl-2">{`App status:`}</p>
+          <div>
+            <p className=" typing items-center pl-2">{`Logs for ${app.name} app:`}</p>
             {!appLogsData && !appLogsLoading ? (
-              <span className="text-yellow-400">App is still deploying</span>
+              <p className="text-yellow-400">App is still deploying</p>
             ) : (
-              <span className="text-green-400">
-                {appLogsLoading ? 'Loading...' : appLogsData.appLogs.logs}
-              </span>
+              <div>
+                {appLogsLoading ? (
+                  <p className="pl-2 text-green-400">Loading...</p>
+                ) : (
+                  appLogsData.appLogs.logs.map((log) => (
+                    <p
+                      key={appLogsData.appLogs.logs.indexOf(log)}
+                      className="mt-1 text-green-400"
+                    >
+                      {log}
+                    </p>
+                  ))
+                )}
+              </div>
             )}
           </div>
         </Terminal>
