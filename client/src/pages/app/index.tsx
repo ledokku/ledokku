@@ -57,7 +57,10 @@ export const App = () => {
     },
   ] = useLinkDatabaseMutation();
 
-  const { data: databaseData } = useDatabaseQuery();
+  const {
+    data: databaseData,
+    loading: databaseDataLoading,
+  } = useDatabaseQuery();
 
   const { data, loading /* error */ } = useAppByIdQuery({
     variables: {
@@ -73,7 +76,7 @@ export const App = () => {
 
   // // TODO display error
 
-  if (loading) {
+  if (loading || databaseDataLoading) {
     // TODO nice loading
     return <p>Loading...</p>;
   }
