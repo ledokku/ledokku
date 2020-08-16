@@ -103,7 +103,7 @@ export type UnsetEnvVarResult = {
 
 export type AppLogsResult = {
   __typename?: 'AppLogsResult';
-  logs: Array<Maybe<Scalars['String']>>;
+  logs: Array<Scalars['String']>;
 };
 
 export type DatabaseInfoResult = {

@@ -102,7 +102,7 @@ export type UnsetEnvVarResult = {
 
 export type AppLogsResult = {
   __typename?: 'AppLogsResult';
-  logs: Array<Maybe<Scalars['String']>>;
+  logs: Array<Scalars['String']>;
 };
 
 export type DatabaseInfoResult = {
@@ -520,7 +520,7 @@ export type UnsetEnvVarResultResolvers<ContextType = any, ParentType extends Res
 };
 
 export type AppLogsResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['AppLogsResult'] = ResolversParentTypes['AppLogsResult']> = {
-  logs?: Resolver<Array<Maybe<ResolversTypes['String']>>, ParentType, ContextType>;
+  logs?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 

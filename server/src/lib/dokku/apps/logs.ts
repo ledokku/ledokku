@@ -1,14 +1,16 @@
 import NodeSsh from 'node-ssh';
 
 const parseLogsCommand = (commandResult: string) => {
+  // We split logs into array by new line
   const allLogs = commandResult.split('\n');
   const logs = [];
-  //We remove redundnat chars from good log & pick only 3rd item in array
-  //which is a good log
   allLogs.map((log) => {
+    // We remove long miliseconds part from timestamp so
+    // "2020-08-15T11:11:16.438958667Z" => "2020-08-15T11:11:16"
     const dotIndex = log.indexOf('.');
     const subStr = log.substring(dotIndex, dotIndex + 11);
     const logWitCleanTimeStamp = log.replace(subStr, '');
+    // We remove two chars that doesn't provide any useful information
     const cleanLog = logWitCleanTimeStamp.replace('36m', '');
     const newLog = cleanLog.replace('[0m', '');
     logs.push(newLog);

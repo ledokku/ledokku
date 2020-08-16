@@ -89,7 +89,7 @@ const typeDefs = gql`
   }
 
   type AppLogsResult {
-    logs: [String]!
+    logs: [String!]!
   }
 
   type DatabaseInfoResult {
