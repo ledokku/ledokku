@@ -5,41 +5,10 @@ import {
   useAppByIdQuery,
   useDatabaseQuery,
   useLinkDatabaseMutation,
-  DatabaseTypes,
+  AppByIdDocument,
 } from '../../generated/graphql';
 import { useParams, Link } from 'react-router-dom';
-import { TabNav, TabNavLink, Button, Spinner } from '../../ui';
-import { MongoIcon } from '../../ui/icons/MongoIcon';
-import { MySQLIcon } from '../../ui/icons/MySQLIcon';
-import { RedisIcon } from '../../ui/icons/RedisIcon';
-import { PostgreSQLIcon } from '../../ui/icons/PostgreSQLIcon';
-
-interface LabelProps {
-  name: string;
-  type: DatabaseTypes;
-}
-
-export const labelIcon = (type: DatabaseTypes) => {
-  if (type === 'MONGODB') {
-    return <MongoIcon className="mt-1 mr-2" size={20} />;
-  } else if (type === 'REDIS') {
-    return <RedisIcon className="mt-1 mr-2" size={20} />;
-  } else if (type === 'MYSQL') {
-    return <MySQLIcon className="mt-1 mr-2" size={20} />;
-  } else if (type === 'POSTGRESQL') {
-    return <PostgreSQLIcon className="mt-1 mr-2" size={20} />;
-  }
-};
-
-export const Label = ({ name, type }: LabelProps) => (
-  <div className="flex flex-row h-6 mt-1 mb-1">
-    {labelIcon(type)}
-    <p>
-      {name}
-      {''}
-    </p>
-  </div>
-);
+import { TabNav, TabNavLink, Button, Spinner, DatabaseLabel } from '../../ui';
 
 export const App = () => {
   const { id: appId } = useParams();
@@ -86,10 +55,17 @@ export const App = () => {
     // TODO nice 404
     return <p>App not found.</p>;
   }
-  const dbOptions = databases.map((db) => {
+
+  const linkedDatabases = data.app.databases;
+  const linkedIds = linkedDatabases.map((db) => db.id);
+  const notLinkedDatabases = databases.filter((db) => {
+    return linkedIds.indexOf(db.id) === -1;
+  });
+
+  const dbOptions = notLinkedDatabases.map((db) => {
     return {
       value: { name: db.name, id: db.id, type: db.type },
-      label: <Label type={db.type} name={db.name} />,
+      label: <DatabaseLabel type={db.type} name={db.name} />,
     };
   });
 
@@ -102,10 +78,19 @@ export const App = () => {
             appId,
           },
         },
+        refetchQueries: [
+          {
+            query: AppByIdDocument,
+            variables: { appId },
+          },
+        ],
       });
-      // TODO  - REACT TOASTIFY
+      setSelectedDb({
+        value: { name: '', id: '', type: '' },
+        label: 'Please select db',
+      });
     } catch (e) {
-      //TODO - REACT TOASTIFY
+      //TODO - REACT TOSTIFY
     }
   };
 
@@ -182,39 +167,88 @@ export const App = () => {
               </React.Fragment>
             ) : (
               <React.Fragment>
-                <Select
-                  value={selectedDb}
-                  onChange={setSelectedDb}
-                  className="mt-3 w-80"
-                  options={dbOptions}
-                  placeholder={selectedDb}
-                  isSearchable={false}
-                  aria-labelledby="database-select-dropdown"
-                />
+                {notLinkedDatabases.length !== 0 ? (
+                  <div>
+                    <Select
+                      value={selectedDb}
+                      onChange={setSelectedDb}
+                      className="mt-3 w-80"
+                      options={dbOptions}
+                      placeholder={selectedDb}
+                      isSearchable={false}
+                      aria-labelledby="database-select-dropdown"
+                      noOptionsMessage={() =>
+                        'All of your databases are already linked to this app'
+                      }
+                    />
 
-                {databaseLinkError && (
-                  <p className="text-red-500 text-sm font-semibold">
-                    {databaseLinkError.graphQLErrors[0].message}
-                  </p>
+                    {databaseLinkError && (
+                      <p className="text-red-500 text-sm font-semibold">
+                        {databaseLinkError.graphQLErrors[0].message}
+                      </p>
+                    )}
+
+                    <Button
+                      color="grey"
+                      width="large"
+                      className="mt-2"
+                      disabled={!selectedDb.value.id || databaseLinkLoading}
+                      onClick={() => {
+                        handleConnect(selectedDb.value.id, appId);
+                      }}
+                    >
+                      {databaseLinkLoading &&
+                      !databaseLinkData &&
+                      !databaseLinkError ? (
+                        <Spinner size="extraSmall" />
+                      ) : (
+                        'Link database'
+                      )}
+                    </Button>
+                  </div>
+                ) : (
+                  <React.Fragment>
+                    <p className="mt-3 mb-3 text-cool-gray-400">
+                      All your databases are already linked to this app! If you
+                      want to create more databases proceed with create database
+                      flow.
+                    </p>
+                    <div className="ml-80">
+                      <Link to="/create-database">
+                        <Button
+                          color={'grey'}
+                          variant="outline"
+                          className="text-sm mr-3"
+                        >
+                          Create database
+                        </Button>
+                      </Link>
+                    </div>
+                  </React.Fragment>
                 )}
 
-                <Button
-                  color="grey"
-                  width="large"
-                  className="mt-2"
-                  disabled={!selectedDb.value.id || databaseLinkLoading}
-                  onClick={() => {
-                    handleConnect(selectedDb.value.id, appId);
-                  }}
-                >
-                  {databaseLinkLoading &&
-                  !databaseLinkData &&
-                  !databaseLinkError ? (
-                    <Spinner size="extraSmall" />
-                  ) : (
-                    'Link database'
-                  )}
-                </Button>
+                {!loading && data && data.app && (
+                  <React.Fragment>
+                    <h2 className="mb-1 mt-3 font-semibold">
+                      {data.app.databases.length > 0 && 'Linked databases'}
+                    </h2>
+                    {data.app.databases.map((database) => (
+                      <div className="w-64" key={database.id}>
+                        <Link
+                          to={`/database/${database.id}`}
+                          className="py-2 block"
+                        >
+                          <div className="flex items-center py-3 px-2 shadow hover:shadow-md transition-shadow duration-100 ease-in-out rounded bg-white">
+                            <DatabaseLabel
+                              name={database.name}
+                              type={database.type}
+                            />
+                          </div>
+                        </Link>
+                      </div>
+                    ))}
+                  </React.Fragment>
+                )}
               </React.Fragment>
             )}
           </div>

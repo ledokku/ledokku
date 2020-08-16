@@ -4,5 +4,10 @@ query appById($appId: String!) {
     name
     githubRepoUrl
     createdAt
+    databases {
+      id
+      name
+      type
+    }
   }
 }

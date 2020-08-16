@@ -10,6 +10,8 @@ export const database: QueryResolvers['database'] = async (
     throw new Error('Unauthorized');
   }
 
-  const database = await prisma.database.findOne({ where: { id: databaseId } });
+  const database = await prisma.database.findOne({
+    where: { id: databaseId },
+  });
   return database.userId === userId ? database : null;
 };
