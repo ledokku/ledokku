@@ -192,13 +192,13 @@ const typeDefs = gql`
 const resolvers: Resolvers<{ userId?: string }> = {
   Query: queries,
   Mutation: mutations,
+  ...customResolvers,
 };
 
 const apolloServer = new ApolloServer({
   typeDefs,
   resolvers: {
     ...resolvers,
-    ...customResolvers,
     DateTime: DateTimeResolver,
   },
   context: ({ req }) => {

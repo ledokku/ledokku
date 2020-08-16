@@ -9,9 +9,6 @@ export const customResolvers = {
           where: {
             id: app.id,
           },
-          select: {
-            databases: true,
-          },
         })
         .databases();
 
@@ -24,9 +21,6 @@ export const customResolvers = {
         .findOne({
           where: {
             id: database.id,
-          },
-          select: {
-            apps: true,
           },
         })
         .apps();
