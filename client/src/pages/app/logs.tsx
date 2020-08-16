@@ -71,15 +71,20 @@ export const Logs = () => {
             {!appLogsData && !appLogsLoading ? (
               <p className="text-yellow-400">App is still deploying</p>
             ) : (
-              <p className="text-green-400">
+              <div>
                 {appLogsLoading ? (
-                  <p className="pl-2">Loading...</p>
+                  <p className="pl-2 text-green-400">Loading...</p>
                 ) : (
                   appLogsData.appLogs.logs.map((log) => (
-                    <p className="mt-1">{log}</p>
+                    <p
+                      key={appLogsData.appLogs.logs.indexOf(log)}
+                      className="mt-1 text-green-400"
+                    >
+                      {log}
+                    </p>
                   ))
                 )}
-              </p>
+              </div>
             )}
           </div>
         </Terminal>
