@@ -22,7 +22,7 @@ export const Button = ({
     {...props}
     type={type === 'submit' ? 'submit' : 'button'}
     className={cx(
-      'px-3 py-2 font-bold rounded-lg flex justify-center',
+      'px-3 py-2 font-bold rounded-lg flex justify-center min-w-7',
       // solid variant styles
       variant === 'solid'
         ? {

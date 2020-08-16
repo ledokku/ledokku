@@ -8,6 +8,11 @@ module.exports = {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans],
       },
     },
+    minWidth: {
+      '0': '0',
+      '7': '7rem',
+      full: '100%',
+    },
   },
   variants: {},
   plugins: [require('@tailwindcss/ui')],
