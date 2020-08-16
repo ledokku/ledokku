@@ -4,7 +4,7 @@ const parseLogsCommand = (commandResult: string) => {
   // We split logs into array by new line
   const allLogs = commandResult.split('\n');
   const logs = [];
-  allLogs.map((log) => {
+  allLogs.forEach((log) => {
     // We remove long miliseconds part from timestamp so
     // "2020-08-15T11:11:16.438958667Z" => "2020-08-15T11:11:16"
     const dotIndex = log.indexOf('.');
