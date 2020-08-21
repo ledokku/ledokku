@@ -50,7 +50,7 @@ export const App = () => {
 
   const {
     data: databaseData,
-    loading: databaseDataLoading,
+    // loading: databaseDataLoading,
   } = useDatabaseQuery();
 
   const {
