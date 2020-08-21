@@ -204,7 +204,7 @@ export const Database = () => {
                 </div>
                 <Link to="/create-app">
                   <Button width="large" color={'grey'}>
-                    Create an app
+                    Create app
                   </Button>
                 </Link>
               </React.Fragment>

@@ -6,6 +6,7 @@ import jsonwebtoken from 'jsonwebtoken';
 import express from 'express';
 import path from 'path';
 import { Resolvers } from './generated/graphql';
+import { customResolvers } from './graphql/resolvers';
 import { mutations } from './graphql/mutations';
 import { config } from './config';
 import { app, http, io } from './server';
@@ -21,6 +22,7 @@ const typeDefs = gql`
     name: String!
     githubRepoUrl: String!
     createdAt: DateTime!
+    databases: [Database]
   }
 
   type AppBuild {
@@ -40,6 +42,7 @@ const typeDefs = gql`
     name: String!
     type: DatabaseTypes!
     createdAt: DateTime!
+    apps: [App]
   }
 
   enum DatabaseTypes {
@@ -93,7 +96,7 @@ const typeDefs = gql`
   }
 
   type AppLogsResult {
-    logs: String!
+    logs: [String!]!
   }
 
   type DatabaseInfoResult {
@@ -209,6 +212,7 @@ const typeDefs = gql`
 const resolvers: Resolvers<{ userId?: string }> = {
   Query: queries,
   Mutation: mutations,
+  ...customResolvers,
 };
 
 const apolloServer = new ApolloServer({

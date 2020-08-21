@@ -48,7 +48,10 @@ export const App = () => {
     },
   ] = useUnlinkDatabaseMutation();
 
-  const { data: databaseData } = useDatabaseQuery();
+  const {
+    data: databaseData,
+    loading: databaseDataLoading,
+  } = useDatabaseQuery();
 
   const {
     data: dbsLinkedToAppData,
