@@ -80,7 +80,7 @@ export const Modal = ({
         </span>
         <span className="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
           <Button
-            color="transparent"
+            color="grey"
             width="normal"
             type="button"
             onClick={closeModal}
