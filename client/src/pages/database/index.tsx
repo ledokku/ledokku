@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Header } from '../../modules/layout/Header';
+import { UnlinkDatabase } from '../../modules/server/UnlinkDatabase';
 import {
   useDatabaseByIdQuery,
   useAppsQuery,
@@ -265,6 +266,11 @@ export const Database = () => {
                                   {app.name}
                                 </div>
                               </Link>
+                              <UnlinkDatabase
+                                databaseName={database.name}
+                                appName={app.name}
+                                databaseType={database.type}
+                              />
                             </div>
                             <Button
                               className="mt-4 ml-2 h-10"
@@ -274,6 +280,7 @@ export const Database = () => {
                             >
                               Unlink
                             </Button>
+
                             {isModalOpen && (
                               <Modal
                                 closeModalButton={'Cancel'}

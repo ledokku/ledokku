@@ -69,7 +69,6 @@ export const Modal = ({
         <span className="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
           <Button
             color="grey"
-            width="normal"
             type="button"
             onClick={ctaFn}
             disabled={isCtaLoading}
@@ -80,7 +79,8 @@ export const Modal = ({
         </span>
         <span className="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
           <Button
-            color="transparent"
+            variant="outline"
+            color="grey"
             width="normal"
             type="button"
             onClick={closeModal}
