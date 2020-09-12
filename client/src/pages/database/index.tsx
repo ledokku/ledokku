@@ -11,7 +11,7 @@ import Select from 'react-select';
 import { TabNav, TabNavLink, Button } from '../../ui';
 
 export const Database = () => {
-  const { id: databaseId } = useParams();
+  const { id: databaseId } = useParams<{ id: string }>();
   const [selectedApp, setSelectedApp] = useState({
     value: { name: '', id: '' },
     label: 'Please select an app',
@@ -35,7 +35,7 @@ export const Database = () => {
     skip: !databaseId,
   });
 
-  if (!data) {
+  if (!data || !appsData) {
     return null;
   }
 
@@ -55,9 +55,9 @@ export const Database = () => {
   }
 
   const linkedApps = database.apps;
-  const linkedIds = linkedApps.map((db) => db.id);
+  const linkedIds = linkedApps?.map((db) => db.id);
   const notLinkedApps = apps.filter((db) => {
-    return linkedIds.indexOf(db.id) === -1;
+    return linkedIds?.indexOf(db.id) === -1;
   });
 
   const appOptions = notLinkedApps.map((app) => {

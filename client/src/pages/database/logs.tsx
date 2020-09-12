@@ -19,7 +19,7 @@ export const LineOfLog = (props: LogProps) => (
 );
 
 export const Logs = () => {
-  const { id: databaseId } = useParams();
+  const { id: databaseId } = useParams<{ id: string }>();
 
   const { data, loading /* error */ } = useDatabaseByIdQuery({
     variables: {
@@ -85,10 +85,10 @@ export const Logs = () => {
           ) : databaseLogsLoading ? (
             'Loading...'
           ) : (
-            databaseLogsData.databaseLogs.logs.map((dblog) => (
+            databaseLogsData?.databaseLogs.logs.map((dblog) => (
               <LineOfLog
                 key={databaseLogsData.databaseLogs.logs.lastIndexOf(dblog)}
-                log={dblog}
+                log={dblog!}
               />
             ))
           )}

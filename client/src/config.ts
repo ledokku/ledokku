@@ -1,6 +1,8 @@
-export const config = window['runConfig']
+const runConfig: any = window['runConfig' as any];
+
+export const config = runConfig
   ? {
-      githubClientId: window['runConfig']['GITHUB_CLIENT_ID'],
+      githubClientId: runConfig['GITHUB_CLIENT_ID'],
       serverUrl: '',
       environment: process.env.NODE_ENV,
     }

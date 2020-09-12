@@ -22,7 +22,7 @@ export type App = {
   id: Scalars['ID'];
   name: Scalars['String'];
   createdAt: Scalars['DateTime'];
-  databases?: Maybe<Array<Maybe<Database>>>;
+  databases?: Maybe<Array<Database>>;
 };
 
 export type AppBuild = {
@@ -43,7 +43,7 @@ export type Database = {
   name: Scalars['String'];
   type: DatabaseTypes;
   createdAt: Scalars['DateTime'];
-  apps?: Maybe<Array<Maybe<App>>>;
+  apps?: Maybe<Array<App>>;
 };
 
 export type DatabaseTypes = 
@@ -451,7 +451,7 @@ export type AppResolvers<ContextType = any, ParentType extends ResolversParentTy
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
-  databases?: Resolver<Maybe<Array<Maybe<ResolversTypes['Database']>>>, ParentType, ContextType>;
+  databases?: Resolver<Maybe<Array<ResolversTypes['Database']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
@@ -466,7 +466,7 @@ export type DatabaseResolvers<ContextType = any, ParentType extends ResolversPar
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['DatabaseTypes'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
-  apps?: Resolver<Maybe<Array<Maybe<ResolversTypes['App']>>>, ParentType, ContextType>;
+  apps?: Resolver<Maybe<Array<ResolversTypes['App']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
