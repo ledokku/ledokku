@@ -8,7 +8,7 @@ import {
   AppByIdDocument,
 } from '../../generated/graphql';
 import { useParams, Link } from 'react-router-dom';
-import { TabNav, TabNavLink, Button, Spinner, DatabaseLabel } from '../../ui';
+import { TabNav, TabNavLink, Button, DatabaseLabel } from '../../ui';
 
 export const App = () => {
   const { id: appId } = useParams();
