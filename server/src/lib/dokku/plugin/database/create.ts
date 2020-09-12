@@ -1,7 +1,7 @@
-import NodeSsh from 'node-ssh';
+import { NodeSSH } from 'node-ssh';
 
 export const create = async (
-  ssh: NodeSsh,
+  ssh: NodeSSH,
   name: string,
   databaseType: string
 ) => {

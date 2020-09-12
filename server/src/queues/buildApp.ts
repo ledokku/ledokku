@@ -44,7 +44,7 @@ const worker = new Worker(
           select: {
             id: true,
             name: true,
-            githubRepoUrl: true,
+            // githubRepoUrl: true,
           },
         },
       },
@@ -109,7 +109,11 @@ const worker = new Worker(
     const appFolderPath = resolve(__dirname, '..', '..', '.ledokku', app.name);
 
     // First step is to clone the github repo
-    await execCommand('git', ['clone', app.githubRepoUrl, appFolderPath]);
+    await execCommand('git', [
+      'clone',
+      /* app.githubRepoUrl */ '',
+      appFolderPath,
+    ]);
 
     // Then we add the dokku remote that will trigger the build steps every time you commit
     await execCommand(

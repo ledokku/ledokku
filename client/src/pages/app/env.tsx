@@ -20,8 +20,14 @@ interface EnvFormProps {
 
 export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
   const [isEnvVarVisible, setEnvVarIsVisible] = useState(false);
-  const [setEnvVarMutation] = useSetEnvVarMutation();
-  const [unsetEnvVarMutation] = useUnsetEnvVarMutation();
+  const [
+    setEnvVarMutation,
+    { loading: setEnvVarLoading },
+  ] = useSetEnvVarMutation();
+  const [
+    unsetEnvVarMutation,
+    { loading: unsetEnvVarLoading },
+  ] = useUnsetEnvVarMutation();
 
   const handleDeleteEnvVar = async (event: any) => {
     event.preventDefault();
@@ -45,12 +51,10 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
     onSubmit: async (values) => {
       // TODO validate values
       try {
-        const data = await setEnvVarMutation({
+        await setEnvVarMutation({
           variables: { key: values.name, value: values.value, appId },
           refetchQueries: [{ query: EnvVarsDocument, variables: { appId } }],
         });
-
-        console.log(data);
 
         if (isNewVar) {
           formik.resetForm();
@@ -109,11 +113,16 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
           >
             <path d="M.2 10a11 11 0 0 1 19.6 0A11 11 0 0 1 .2 10zm9.8 4a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0-2a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" />
           </svg>
-          <Button type="submit" color="grey">
+          <Button isLoading={setEnvVarLoading} type="submit" color="grey">
             {isNewVar ? 'Add' : 'Save'}
           </Button>
           {!isNewVar && (
-            <Button className="ml-2" color="red" onClick={handleDeleteEnvVar}>
+            <Button
+              isLoading={unsetEnvVarLoading}
+              className="ml-2"
+              color="red"
+              onClick={handleDeleteEnvVar}
+            >
               Delete
             </Button>
           )}

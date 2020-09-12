@@ -190,14 +190,6 @@ export const App = () => {
                   </tr>
                   <tr className="bg-gray-100">
                     <td className="w-1/3 text-left py-3 px-4 font-semibold">
-                      GithubRepo
-                    </td>
-                    <td className="w-1/3 text-left py-3 px-4">
-                      {app.githubRepoUrl}
-                    </td>
-                  </tr>
-                  <tr className="bg-gray-100">
-                    <td className="w-1/3 text-left py-3 px-4 font-semibold">
                       Created at
                     </td>
                     <td className="w-1/3 text-left py-3 px-4">
