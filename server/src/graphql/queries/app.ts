@@ -9,5 +9,5 @@ export const app: QueryResolvers['app'] = async (_, { appId }, { userId }) => {
   const app = await prisma.app.findOne({
     where: { id: appId },
   });
-  return app.userId === userId ? app : null;
+  return app?.userId === userId ? app : null;
 };

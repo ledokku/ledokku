@@ -25,8 +25,6 @@ export const Logs = () => {
     variables: {
       databaseId,
     },
-    ssr: false,
-    skip: !databaseId,
   });
 
   const {
@@ -36,8 +34,6 @@ export const Logs = () => {
     variables: {
       databaseId,
     },
-    ssr: false,
-    skip: !databaseId,
     pollInterval: 15000,
   });
 

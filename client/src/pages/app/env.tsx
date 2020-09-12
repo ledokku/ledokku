@@ -138,8 +138,6 @@ export const Env = () => {
     variables: {
       appId,
     },
-    ssr: false,
-    skip: !appId,
   });
 
   const {

@@ -22,8 +22,6 @@ export const Settings = () => {
     variables: {
       appId,
     },
-    ssr: false,
-    skip: !appId,
   });
 
   const DeleteAppNameSchema = yup.object().shape({

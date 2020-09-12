@@ -31,8 +31,6 @@ export const Database = () => {
     variables: {
       databaseId,
     },
-    ssr: false,
-    skip: !databaseId,
   });
 
   if (!data || !appsData) {
