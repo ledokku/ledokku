@@ -23,7 +23,6 @@ export type App = {
   __typename?: 'App';
   id: Scalars['ID'];
   name: Scalars['String'];
-  githubRepoUrl?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
   databases?: Maybe<Array<Maybe<Database>>>;
 };
@@ -117,16 +116,6 @@ export type DatabaseLogsResult = {
   logs: Array<Maybe<Scalars['String']>>;
 };
 
-export type DatabasesLinkedToAppResult = {
-  __typename?: 'DatabasesLinkedToAppResult';
-  databases: Array<Maybe<Database>>;
-};
-
-export type AppsLinkedToDatabaseResult = {
-  __typename?: 'AppsLinkedToDatabaseResult';
-  apps: Array<Maybe<App>>;
-};
-
 export type IsDatabaseLinkedResult = {
   __typename?: 'IsDatabaseLinkedResult';
   isLinked: Scalars['Boolean'];
@@ -199,8 +188,6 @@ export type Query = {
   appLogs: AppLogsResult;
   databaseInfo: DatabaseInfoResult;
   databaseLogs: DatabaseLogsResult;
-  databasesLinkedToApp: DatabasesLinkedToAppResult;
-  appsLinkedToDatabase: AppsLinkedToDatabaseResult;
   isDatabaseLinked: IsDatabaseLinkedResult;
   envVars: EnvVarsResult;
 };
@@ -232,16 +219,6 @@ export type QueryDatabaseInfoArgs = {
 
 
 export type QueryDatabaseLogsArgs = {
-  databaseId: Scalars['String'];
-};
-
-
-export type QueryDatabasesLinkedToAppArgs = {
-  appId: Scalars['String'];
-};
-
-
-export type QueryAppsLinkedToDatabaseArgs = {
   databaseId: Scalars['String'];
 };
 
@@ -432,7 +409,7 @@ export type AppByIdQuery = (
   { __typename?: 'Query' }
   & { app?: Maybe<(
     { __typename?: 'App' }
-    & Pick<App, 'id' | 'name' | 'githubRepoUrl' | 'createdAt'>
+    & Pick<App, 'id' | 'name' | 'createdAt'>
     & { databases?: Maybe<Array<Maybe<(
       { __typename?: 'Database' }
       & Pick<Database, 'id' | 'name' | 'type'>
@@ -840,7 +817,6 @@ export const AppByIdDocument = gql`
   app(appId: $appId) {
     id
     name
-    githubRepoUrl
     createdAt
     databases {
       id

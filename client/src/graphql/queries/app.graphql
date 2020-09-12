@@ -2,7 +2,6 @@ query appById($appId: String!) {
   app(appId: $appId) {
     id
     name
-    githubRepoUrl
     createdAt
     databases {
       id

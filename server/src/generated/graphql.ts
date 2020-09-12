@@ -1,9 +1,8 @@
 /* eslint-disable */
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 export type Maybe<T> = T | null;
-export type Exact<T extends { [key: string]: any }> = { [K in keyof T]: T[K] };
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
-
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -22,7 +21,6 @@ export type App = {
   __typename?: 'App';
   id: Scalars['ID'];
   name: Scalars['String'];
-  githubRepoUrl?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
   databases?: Maybe<Array<Maybe<Database>>>;
 };
@@ -452,7 +450,6 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
 export type AppResolvers<ContextType = any, ParentType extends ResolversParentTypes['App'] = ResolversParentTypes['App']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  githubRepoUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   databases?: Resolver<Maybe<Array<Maybe<ResolversTypes['Database']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
