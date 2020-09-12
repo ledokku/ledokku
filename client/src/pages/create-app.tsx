@@ -43,8 +43,7 @@ export const CreateApp = () => {
         <h1 className="text-lg font-bold">Create a new app</h1>
         <div className="mt-4 mb-4">
           <h2 className="text-gray-400">
-            Enter app name and link to your github repository. Click create and
-            voila!
+            Enter app name, click create and voila!
           </h2>
         </div>
         <form onSubmit={formik.handleSubmit} className="mt-2">
