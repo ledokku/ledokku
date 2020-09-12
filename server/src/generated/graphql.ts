@@ -24,6 +24,7 @@ export type App = {
   name: Scalars['String'];
   githubRepoUrl?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
+  databases?: Maybe<Array<Maybe<Database>>>;
 };
 
 export type AppBuild = {
@@ -43,6 +44,8 @@ export type Database = {
   id: Scalars['ID'];
   name: Scalars['String'];
   type: DatabaseTypes;
+  createdAt: Scalars['DateTime'];
+  apps?: Maybe<Array<Maybe<App>>>;
 };
 
 export type DatabaseTypes = 
@@ -71,6 +74,11 @@ export type DestroyDatabaseResult = {
   result: Scalars['Boolean'];
 };
 
+export type LinkDatabaseResult = {
+  __typename?: 'LinkDatabaseResult';
+  result: Scalars['Boolean'];
+};
+
 export type DokkuPlugin = {
   __typename?: 'DokkuPlugin';
   name: Scalars['String'];
@@ -95,7 +103,7 @@ export type UnsetEnvVarResult = {
 
 export type AppLogsResult = {
   __typename?: 'AppLogsResult';
-  logs: Scalars['String'];
+  logs: Array<Scalars['String']>;
 };
 
 export type DatabaseInfoResult = {
@@ -106,6 +114,11 @@ export type DatabaseInfoResult = {
 export type DatabaseLogsResult = {
   __typename?: 'DatabaseLogsResult';
   logs: Array<Maybe<Scalars['String']>>;
+};
+
+export type IsDatabaseLinkedResult = {
+  __typename?: 'IsDatabaseLinkedResult';
+  isLinked: Scalars['Boolean'];
 };
 
 export type EnvVar = {
@@ -154,6 +167,11 @@ export type DestroyAppInput = {
   appId: Scalars['String'];
 };
 
+export type LinkDatabaseInput = {
+  appId: Scalars['String'];
+  databaseId: Scalars['String'];
+};
+
 export type DestroyDatabaseInput = {
   databaseId: Scalars['String'];
 };
@@ -170,6 +188,7 @@ export type Query = {
   appLogs: AppLogsResult;
   databaseInfo: DatabaseInfoResult;
   databaseLogs: DatabaseLogsResult;
+  isDatabaseLinked: IsDatabaseLinkedResult;
   envVars: EnvVarsResult;
 };
 
@@ -204,6 +223,12 @@ export type QueryDatabaseLogsArgs = {
 };
 
 
+export type QueryIsDatabaseLinkedArgs = {
+  databaseId: Scalars['String'];
+  appId: Scalars['String'];
+};
+
+
 export type QueryEnvVarsArgs = {
   appId: Scalars['String'];
 };
@@ -217,6 +242,7 @@ export type Mutation = {
   unsetEnvVar: UnsetEnvVarResult;
   destroyApp: DestroyAppResult;
   destroyDatabase: DestroyDatabaseResult;
+  linkDatabase: LinkDatabaseResult;
 };
 
 
@@ -252,6 +278,11 @@ export type MutationDestroyAppArgs = {
 
 export type MutationDestroyDatabaseArgs = {
   input: DestroyDatabaseInput;
+};
+
+
+export type MutationLinkDatabaseArgs = {
+  input: LinkDatabaseInput;
 };
 
 export type CacheControlScope = 
@@ -350,6 +381,7 @@ export type ResolversTypes = {
   DestroyAppResult: ResolverTypeWrapper<DestroyAppResult>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   DestroyDatabaseResult: ResolverTypeWrapper<DestroyDatabaseResult>;
+  LinkDatabaseResult: ResolverTypeWrapper<LinkDatabaseResult>;
   DokkuPlugin: ResolverTypeWrapper<DokkuPlugin>;
   DokkuPluginResult: ResolverTypeWrapper<DokkuPluginResult>;
   SetEnvVarResult: ResolverTypeWrapper<SetEnvVarResult>;
@@ -357,6 +389,7 @@ export type ResolversTypes = {
   AppLogsResult: ResolverTypeWrapper<AppLogsResult>;
   DatabaseInfoResult: ResolverTypeWrapper<DatabaseInfoResult>;
   DatabaseLogsResult: ResolverTypeWrapper<DatabaseLogsResult>;
+  IsDatabaseLinkedResult: ResolverTypeWrapper<IsDatabaseLinkedResult>;
   EnvVar: ResolverTypeWrapper<EnvVar>;
   EnvVarsResult: ResolverTypeWrapper<EnvVarsResult>;
   SetupResult: ResolverTypeWrapper<SetupResult>;
@@ -366,6 +399,7 @@ export type ResolversTypes = {
   SetEnvVarInput: SetEnvVarInput;
   UnsetEnvVarInput: UnsetEnvVarInput;
   DestroyAppInput: DestroyAppInput;
+  LinkDatabaseInput: LinkDatabaseInput;
   DestroyDatabaseInput: DestroyDatabaseInput;
   Query: ResolverTypeWrapper<{}>;
   Mutation: ResolverTypeWrapper<{}>;
@@ -386,6 +420,7 @@ export type ResolversParentTypes = {
   DestroyAppResult: DestroyAppResult;
   Boolean: Scalars['Boolean'];
   DestroyDatabaseResult: DestroyDatabaseResult;
+  LinkDatabaseResult: LinkDatabaseResult;
   DokkuPlugin: DokkuPlugin;
   DokkuPluginResult: DokkuPluginResult;
   SetEnvVarResult: SetEnvVarResult;
@@ -393,6 +428,7 @@ export type ResolversParentTypes = {
   AppLogsResult: AppLogsResult;
   DatabaseInfoResult: DatabaseInfoResult;
   DatabaseLogsResult: DatabaseLogsResult;
+  IsDatabaseLinkedResult: IsDatabaseLinkedResult;
   EnvVar: EnvVar;
   EnvVarsResult: EnvVarsResult;
   SetupResult: SetupResult;
@@ -402,6 +438,7 @@ export type ResolversParentTypes = {
   SetEnvVarInput: SetEnvVarInput;
   UnsetEnvVarInput: UnsetEnvVarInput;
   DestroyAppInput: DestroyAppInput;
+  LinkDatabaseInput: LinkDatabaseInput;
   DestroyDatabaseInput: DestroyDatabaseInput;
   Query: {};
   Mutation: {};
@@ -417,6 +454,7 @@ export type AppResolvers<ContextType = any, ParentType extends ResolversParentTy
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   githubRepoUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  databases?: Resolver<Maybe<Array<Maybe<ResolversTypes['Database']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
@@ -430,6 +468,8 @@ export type DatabaseResolvers<ContextType = any, ParentType extends ResolversPar
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['DatabaseTypes'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  apps?: Resolver<Maybe<Array<Maybe<ResolversTypes['App']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
@@ -449,6 +489,11 @@ export type DestroyAppResultResolvers<ContextType = any, ParentType extends Reso
 };
 
 export type DestroyDatabaseResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['DestroyDatabaseResult'] = ResolversParentTypes['DestroyDatabaseResult']> = {
+  result?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type LinkDatabaseResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['LinkDatabaseResult'] = ResolversParentTypes['LinkDatabaseResult']> = {
   result?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
@@ -476,7 +521,7 @@ export type UnsetEnvVarResultResolvers<ContextType = any, ParentType extends Res
 };
 
 export type AppLogsResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['AppLogsResult'] = ResolversParentTypes['AppLogsResult']> = {
-  logs?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  logs?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
@@ -487,6 +532,11 @@ export type DatabaseInfoResultResolvers<ContextType = any, ParentType extends Re
 
 export type DatabaseLogsResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['DatabaseLogsResult'] = ResolversParentTypes['DatabaseLogsResult']> = {
   logs?: Resolver<Array<Maybe<ResolversTypes['String']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type IsDatabaseLinkedResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['IsDatabaseLinkedResult'] = ResolversParentTypes['IsDatabaseLinkedResult']> = {
+  isLinked?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
@@ -523,6 +573,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   appLogs?: Resolver<ResolversTypes['AppLogsResult'], ParentType, ContextType, RequireFields<QueryAppLogsArgs, 'appId'>>;
   databaseInfo?: Resolver<ResolversTypes['DatabaseInfoResult'], ParentType, ContextType, RequireFields<QueryDatabaseInfoArgs, 'databaseId'>>;
   databaseLogs?: Resolver<ResolversTypes['DatabaseLogsResult'], ParentType, ContextType, RequireFields<QueryDatabaseLogsArgs, 'databaseId'>>;
+  isDatabaseLinked?: Resolver<ResolversTypes['IsDatabaseLinkedResult'], ParentType, ContextType, RequireFields<QueryIsDatabaseLinkedArgs, 'databaseId' | 'appId'>>;
   envVars?: Resolver<ResolversTypes['EnvVarsResult'], ParentType, ContextType, RequireFields<QueryEnvVarsArgs, 'appId'>>;
 };
 
@@ -534,6 +585,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   unsetEnvVar?: Resolver<ResolversTypes['UnsetEnvVarResult'], ParentType, ContextType, RequireFields<MutationUnsetEnvVarArgs, 'input'>>;
   destroyApp?: Resolver<ResolversTypes['DestroyAppResult'], ParentType, ContextType, RequireFields<MutationDestroyAppArgs, 'input'>>;
   destroyDatabase?: Resolver<ResolversTypes['DestroyDatabaseResult'], ParentType, ContextType, RequireFields<MutationDestroyDatabaseArgs, 'input'>>;
+  linkDatabase?: Resolver<ResolversTypes['LinkDatabaseResult'], ParentType, ContextType, RequireFields<MutationLinkDatabaseArgs, 'input'>>;
 };
 
 export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
@@ -549,6 +601,7 @@ export type Resolvers<ContextType = any> = {
   CreateAppResult?: CreateAppResultResolvers<ContextType>;
   DestroyAppResult?: DestroyAppResultResolvers<ContextType>;
   DestroyDatabaseResult?: DestroyDatabaseResultResolvers<ContextType>;
+  LinkDatabaseResult?: LinkDatabaseResultResolvers<ContextType>;
   DokkuPlugin?: DokkuPluginResolvers<ContextType>;
   DokkuPluginResult?: DokkuPluginResultResolvers<ContextType>;
   SetEnvVarResult?: SetEnvVarResultResolvers<ContextType>;
@@ -556,6 +609,7 @@ export type Resolvers<ContextType = any> = {
   AppLogsResult?: AppLogsResultResolvers<ContextType>;
   DatabaseInfoResult?: DatabaseInfoResultResolvers<ContextType>;
   DatabaseLogsResult?: DatabaseLogsResultResolvers<ContextType>;
+  IsDatabaseLinkedResult?: IsDatabaseLinkedResultResolvers<ContextType>;
   EnvVar?: EnvVarResolvers<ContextType>;
   EnvVarsResult?: EnvVarsResultResolvers<ContextType>;
   SetupResult?: SetupResultResolvers<ContextType>;

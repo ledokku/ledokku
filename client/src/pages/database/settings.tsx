@@ -9,7 +9,7 @@ import {
   DashboardDocument,
   useDatabaseInfoQuery,
 } from '../../generated/graphql';
-import { TabNav, TabNavLink, Button, Spinner, Terminal } from '../../ui';
+import { TabNav, TabNavLink, Button, Terminal } from '../../ui';
 
 interface InfoProps {
   infoLine: string;
@@ -162,13 +162,13 @@ export const Settings = () => {
                 )}
                 <Button
                   type="submit"
+                  isLoading={destroyDbLoading}
                   disabled={
                     !formik.values.databaseName || !!formik.errors.databaseName
                   }
                   color="red"
-                  width="normal"
                 >
-                  {destroyDbLoading ? <Spinner size="extraSmall" /> : 'Delete'}
+                  Delete
                 </Button>
               </div>
             </form>

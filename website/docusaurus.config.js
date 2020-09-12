@@ -7,17 +7,19 @@ module.exports = {
   organizationName: 'ledokku', // Usually your GitHub org/user name.
   projectName: 'ledokku', // Usually your repo name.
   themeConfig: {
-    disableDarkMode: 'false',
+    colorMode: {
+      defaultMode: 'light',
+      disableSwitch: true,
+    },
     navbar: {
       title: 'Ledokku',
-      links: [
+      items: [
         {
           to: 'docs/introduction',
           activeBasePath: 'docs',
           label: 'Docs',
           position: 'left',
         },
-        { to: 'blog', label: 'Blog', position: 'left' },
         {
           href: 'https://github.com/ledokku/ledokku',
           label: 'GitHub',
@@ -57,10 +59,6 @@ module.exports = {
         {
           title: 'More',
           items: [
-            {
-              label: 'Blog',
-              to: 'blog',
-            },
             {
               label: 'GitHub',
               href: 'https://github.com/ledokku/ledokku',

@@ -6,6 +6,7 @@ import jsonwebtoken from 'jsonwebtoken';
 import express from 'express';
 import path from 'path';
 import { Resolvers } from './generated/graphql';
+import { customResolvers } from './graphql/resolvers';
 import { mutations } from './graphql/mutations';
 import { config } from './config';
 import { app, http, io } from './server';
@@ -21,6 +22,7 @@ const typeDefs = gql`
     name: String!
     githubRepoUrl: String
     createdAt: DateTime!
+    databases: [Database]
   }
 
   type AppBuild {
@@ -39,6 +41,8 @@ const typeDefs = gql`
     id: ID!
     name: String!
     type: DatabaseTypes!
+    createdAt: DateTime!
+    apps: [App]
   }
 
   enum DatabaseTypes {
@@ -65,6 +69,10 @@ const typeDefs = gql`
     result: Boolean!
   }
 
+  type LinkDatabaseResult {
+    result: Boolean!
+  }
+
   type DokkuPlugin {
     name: String!
     version: String!
@@ -84,7 +92,7 @@ const typeDefs = gql`
   }
 
   type AppLogsResult {
-    logs: String!
+    logs: [String!]!
   }
 
   type DatabaseInfoResult {
@@ -93,6 +101,10 @@ const typeDefs = gql`
 
   type DatabaseLogsResult {
     logs: [String]!
+  }
+
+  type IsDatabaseLinkedResult {
+    isLinked: Boolean!
   }
 
   type EnvVar {
@@ -137,6 +149,11 @@ const typeDefs = gql`
     appId: String!
   }
 
+  input LinkDatabaseInput {
+    appId: String!
+    databaseId: String!
+  }
+
   input DestroyDatabaseInput {
     databaseId: String!
   }
@@ -152,6 +169,10 @@ const typeDefs = gql`
     appLogs(appId: String!): AppLogsResult!
     databaseInfo(databaseId: String!): DatabaseInfoResult!
     databaseLogs(databaseId: String!): DatabaseLogsResult!
+    isDatabaseLinked(
+      databaseId: String!
+      appId: String!
+    ): IsDatabaseLinkedResult!
     envVars(appId: String!): EnvVarsResult!
   }
 
@@ -163,12 +184,14 @@ const typeDefs = gql`
     unsetEnvVar(input: UnsetEnvVarInput!): UnsetEnvVarResult!
     destroyApp(input: DestroyAppInput!): DestroyAppResult!
     destroyDatabase(input: DestroyDatabaseInput!): DestroyDatabaseResult!
+    linkDatabase(input: LinkDatabaseInput!): LinkDatabaseResult!
   }
 `;
 
 const resolvers: Resolvers<{ userId?: string }> = {
   Query: queries,
   Mutation: mutations,
+  ...customResolvers,
 };
 
 const apolloServer = new ApolloServer({

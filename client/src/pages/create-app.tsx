@@ -7,7 +7,7 @@ import { Button } from '../ui';
 
 export const CreateApp = () => {
   const history = useHistory();
-  const [createAppMutation] = useCreateAppMutation();
+  const [createAppMutation, { loading }] = useCreateAppMutation();
   const formik = useFormik<{ name: string }>({
     initialValues: {
       name: '',
@@ -62,9 +62,9 @@ export const CreateApp = () => {
           <div className="mt-4">
             <Button
               color="grey"
-              width="normal"
               type="submit"
               disabled={!formik.values.name}
+              isLoading={loading}
             >
               Create
             </Button>

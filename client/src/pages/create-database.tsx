@@ -175,19 +175,11 @@ export const CreateDatabase = () => {
             <Button
               type="submit"
               color="grey"
-              width="normal"
-              disabled={
-                data?.isPluginInstalled.isPluginInstalled === false ||
-                loading ||
-                createDbLoading
-              }
+              disabled={data?.isPluginInstalled.isPluginInstalled === false}
+              isLoading={createDbLoading || loading}
               iconEnd={<ArrowRight />}
             >
-              {createDbLoading ? (
-                <Spinner className="mt-1" size="extraSmall" />
-              ) : (
-                'Create'
-              )}
+              Create
             </Button>
           </div>
         </form>
