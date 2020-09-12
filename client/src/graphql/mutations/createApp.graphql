@@ -3,8 +3,5 @@ mutation createApp($name: String!) {
     app {
       id
     }
-    # appBuild {
-    #   id
-    # }
   }
 }

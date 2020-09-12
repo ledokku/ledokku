@@ -26,8 +26,6 @@ model App {
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @default(now())
   name          String
-  githubRepoUrl String?
-  githubId      String?
   user          User       @relation(fields: [userId], references: [id])
   userId        String
   appBuild      AppBuild[]
