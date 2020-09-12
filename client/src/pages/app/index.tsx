@@ -8,7 +8,7 @@ import {
   DatabaseTypes,
 } from '../../generated/graphql';
 import { useParams, Link } from 'react-router-dom';
-import { TabNav, TabNavLink, Button, Spinner } from '../../ui';
+import { TabNav, TabNavLink, Button } from '../../ui';
 import { MongoIcon } from '../../ui/icons/MongoIcon';
 import { MySQLIcon } from '../../ui/icons/MySQLIcon';
 import { RedisIcon } from '../../ui/icons/RedisIcon';

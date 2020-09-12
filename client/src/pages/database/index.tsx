@@ -7,7 +7,7 @@ import {
 } from '../../generated/graphql';
 import { useParams, Link } from 'react-router-dom';
 import Select from 'react-select';
-import { TabNav, TabNavLink, Button, Spinner } from '../../ui';
+import { TabNav, TabNavLink, Button } from '../../ui';
 
 export const Database = () => {
   const { id: databaseId } = useParams();

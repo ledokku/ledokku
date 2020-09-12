@@ -9,7 +9,7 @@ import {
   DashboardDocument,
   useDatabaseInfoQuery,
 } from '../../generated/graphql';
-import { TabNav, TabNavLink, Button, Spinner, Terminal } from '../../ui';
+import { TabNav, TabNavLink, Button, Terminal } from '../../ui';
 
 interface InfoProps {
   infoLine: string;
