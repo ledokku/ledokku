@@ -25,6 +25,7 @@ export type App = {
   name: Scalars['String'];
   githubRepoUrl: Scalars['String'];
   createdAt: Scalars['DateTime'];
+  databases?: Maybe<Array<Maybe<Database>>>;
 };
 
 export type AppBuild = {
@@ -45,6 +46,7 @@ export type Database = {
   name: Scalars['String'];
   type: DatabaseTypes;
   createdAt: Scalars['DateTime'];
+  apps?: Maybe<Array<Maybe<App>>>;
 };
 
 export type DatabaseTypes = 
@@ -103,7 +105,7 @@ export type UnsetEnvVarResult = {
 
 export type AppLogsResult = {
   __typename?: 'AppLogsResult';
-  logs: Scalars['String'];
+  logs: Array<Scalars['String']>;
 };
 
 export type DatabaseInfoResult = {
@@ -114,6 +116,16 @@ export type DatabaseInfoResult = {
 export type DatabaseLogsResult = {
   __typename?: 'DatabaseLogsResult';
   logs: Array<Maybe<Scalars['String']>>;
+};
+
+export type DatabasesLinkedToAppResult = {
+  __typename?: 'DatabasesLinkedToAppResult';
+  databases: Array<Maybe<Database>>;
+};
+
+export type AppsLinkedToDatabaseResult = {
+  __typename?: 'AppsLinkedToDatabaseResult';
+  apps: Array<Maybe<App>>;
 };
 
 export type IsDatabaseLinkedResult = {
@@ -189,6 +201,8 @@ export type Query = {
   appLogs: AppLogsResult;
   databaseInfo: DatabaseInfoResult;
   databaseLogs: DatabaseLogsResult;
+  databasesLinkedToApp: DatabasesLinkedToAppResult;
+  appsLinkedToDatabase: AppsLinkedToDatabaseResult;
   isDatabaseLinked: IsDatabaseLinkedResult;
   envVars: EnvVarsResult;
 };
@@ -220,6 +234,16 @@ export type QueryDatabaseInfoArgs = {
 
 
 export type QueryDatabaseLogsArgs = {
+  databaseId: Scalars['String'];
+};
+
+
+export type QueryDatabasesLinkedToAppArgs = {
+  appId: Scalars['String'];
+};
+
+
+export type QueryAppsLinkedToDatabaseArgs = {
   databaseId: Scalars['String'];
 };
 
@@ -415,6 +439,10 @@ export type AppByIdQuery = (
   & { app?: Maybe<(
     { __typename?: 'App' }
     & Pick<App, 'id' | 'name' | 'githubRepoUrl' | 'createdAt'>
+    & { databases?: Maybe<Array<Maybe<(
+      { __typename?: 'Database' }
+      & Pick<Database, 'id' | 'name' | 'type'>
+    )>>> }
   )> }
 );
 
@@ -466,6 +494,10 @@ export type DatabaseByIdQuery = (
   & { database?: Maybe<(
     { __typename?: 'Database' }
     & Pick<Database, 'id' | 'name' | 'type'>
+    & { apps?: Maybe<Array<Maybe<(
+      { __typename?: 'App' }
+      & Pick<App, 'id' | 'name'>
+    )>>> }
   )> }
 );
 
@@ -820,6 +852,11 @@ export const AppByIdDocument = gql`
     name
     githubRepoUrl
     createdAt
+    databases {
+      id
+      name
+      type
+    }
   }
 }
     `;
@@ -961,6 +998,10 @@ export const DatabaseByIdDocument = gql`
     id
     name
     type
+    apps {
+      id
+      name
+    }
   }
 }
     `;
