@@ -1,4 +1,4 @@
-import NodeSsh from 'node-ssh';
+import { NodeSSH } from 'node-ssh';
 
 const parsePluginListCommand = (commandResult: string) => {
   const plugins = commandResult.split('\n');
@@ -18,7 +18,7 @@ const parsePluginListCommand = (commandResult: string) => {
   };
 };
 
-export const list = async (ssh: NodeSsh) => {
+export const list = async (ssh: NodeSSH) => {
   const resultPluginList = await ssh.execCommand('plugin:list');
   if (resultPluginList.code === 1) {
     console.error(resultPluginList);

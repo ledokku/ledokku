@@ -1,7 +1,7 @@
-import NodeSsh from 'node-ssh';
+import { NodeSSH } from 'node-ssh';
 
 export const set = async (
-  ssh: NodeSsh,
+  ssh: NodeSSH,
   name: string,
   key: string,
   value: string

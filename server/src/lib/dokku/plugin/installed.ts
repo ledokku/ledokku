@@ -1,7 +1,7 @@
-import NodeSsh from 'node-ssh';
+import { NodeSSH } from 'node-ssh';
 
 export const installed = async (
-  ssh: NodeSsh,
+  ssh: NodeSSH,
   pluginName: string
 ): Promise<boolean> => {
   const resultPluginInstalled = await ssh.execCommand(

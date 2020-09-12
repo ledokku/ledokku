@@ -1,4 +1,4 @@
-import NodeSsh from 'node-ssh';
+import { NodeSSH } from 'node-ssh';
 
 const parseDatabaseInfoCommand = (commandResult: string) => {
   const databaseLogs = commandResult.split('\n');
@@ -14,7 +14,7 @@ const parseDatabaseInfoCommand = (commandResult: string) => {
 };
 
 export const info = async (
-  ssh: NodeSsh,
+  ssh: NodeSSH,
   databaseName: string,
   databaseType: string
 ) => {

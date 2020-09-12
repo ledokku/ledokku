@@ -1,7 +1,7 @@
-import NodeSsh from 'node-ssh';
+import { NodeSSH } from 'node-ssh';
 
 export const destroy = async (
-  ssh: NodeSsh,
+  ssh: NodeSSH,
   databaseName: string,
   databaseType: string
 ) => {

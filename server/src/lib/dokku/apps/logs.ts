@@ -1,4 +1,4 @@
-import NodeSsh from 'node-ssh';
+import { NodeSSH } from 'node-ssh';
 
 const parseLogsCommand = (commandResult: string) => {
   // We split logs into array by new line
@@ -18,7 +18,7 @@ const parseLogsCommand = (commandResult: string) => {
   return logs;
 };
 
-export const logs = async (ssh: NodeSsh, name: string) => {
+export const logs = async (ssh: NodeSSH, name: string) => {
   const resultAppLogs = await ssh.execCommand(`logs ${name}`);
   if (resultAppLogs.code === 1) {
     throw new Error(resultAppLogs.stderr);
