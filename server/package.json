@@ -24,7 +24,7 @@
     "graphql": "15.3.0",
     "graphql-scalars": "1.2.6",
     "jsonwebtoken": "8.5.1",
-    "node-fetch": "2.6.0",
+    "node-fetch": "2.6.1",
     "node-ssh": "10.0.2",
     "socket.io": "2.3.0",
     "sshpk": "1.16.1",
