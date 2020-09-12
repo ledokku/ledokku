@@ -1,4 +1,4 @@
-client/.next
+client/build
 client/src/generated
 server/.ledokku
 server/.build
