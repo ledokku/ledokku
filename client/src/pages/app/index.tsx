@@ -220,23 +220,6 @@ export const App = () => {
                     </div>
                   </React.Fragment>
                 )}
-
-                <Button
-                  color="grey"
-                  width="large"
-                  className="mt-2"
-                  isLoading={
-                    databaseLinkLoading &&
-                    !databaseLinkData &&
-                    !databaseLinkError
-                  }
-                  disabled={!selectedDb.value.id}
-                  onClick={() => {
-                    handleConnect(selectedDb.value.id, appId);
-                  }}
-                >
-                  Link database
-                </Button>
               </React.Fragment>
             )}
           </div>
