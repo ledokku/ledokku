@@ -188,7 +188,7 @@ export const Database = () => {
                         !databaseLinkData &&
                         !databaseLinkError
                       }
-                      disabled={!selectedApp.value.id || databaseLinkLoading}
+                      disabled={!selectedApp.value.id}
                       onClick={() =>
                         handleConnect(databaseId, selectedApp.value.id)
                       }

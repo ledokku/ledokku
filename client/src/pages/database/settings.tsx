@@ -164,9 +164,7 @@ export const Settings = () => {
                   type="submit"
                   isLoading={destroyDbLoading}
                   disabled={
-                    !formik.values.databaseName ||
-                    !!formik.errors.databaseName ||
-                    destroyDbLoading
+                    !formik.values.databaseName || !!formik.errors.databaseName
                   }
                   color="red"
                 >

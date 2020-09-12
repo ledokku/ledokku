@@ -175,12 +175,8 @@ export const CreateDatabase = () => {
             <Button
               type="submit"
               color="grey"
-              disabled={
-                data?.isPluginInstalled.isPluginInstalled === false ||
-                loading ||
-                createDbLoading
-              }
-              isLoading={createDbLoading}
+              disabled={data?.isPluginInstalled.isPluginInstalled === false}
+              isLoading={createDbLoading || loading}
               iconEnd={<ArrowRight />}
             >
               Create

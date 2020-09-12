@@ -23,6 +23,7 @@ export const Button = ({
 }: ButtonProps) => (
   <button
     {...props}
+    disabled={isLoading}
     type={type === 'submit' ? 'submit' : 'button'}
     className={cx(
       'px-3 py-2 font-bold rounded-lg flex justify-center',

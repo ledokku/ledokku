@@ -124,11 +124,7 @@ export const Settings = () => {
               )}
               <Button
                 type="submit"
-                disabled={
-                  !formik.values.appName ||
-                  !!formik.errors.appName ||
-                  destroyAppMutationLoading
-                }
+                disabled={!formik.values.appName || !!formik.errors.appName}
                 color="red"
                 isLoading={destroyAppMutationLoading}
               >

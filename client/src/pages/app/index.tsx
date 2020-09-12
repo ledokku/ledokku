@@ -195,18 +195,17 @@ export const App = () => {
                       color="grey"
                       width="large"
                       className="mt-2"
-                      disabled={!selectedDb.value.id || databaseLinkLoading}
+                      isLoading={
+                        databaseLinkLoading &&
+                        !databaseLinkData &&
+                        !databaseLinkError
+                      }
+                      disabled={!selectedDb.value.id}
                       onClick={() => {
                         handleConnect(selectedDb.value.id, appId);
                       }}
                     >
-                      {databaseLinkLoading &&
-                      !databaseLinkData &&
-                      !databaseLinkError ? (
-                        <Spinner size="extraSmall" />
-                      ) : (
-                        'Link database'
-                      )}
+                      Link database
                     </Button>
                   </div>
                 ) : (
@@ -239,7 +238,7 @@ export const App = () => {
                     !databaseLinkData &&
                     !databaseLinkError
                   }
-                  disabled={!selectedDb.value.id || databaseLinkLoading}
+                  disabled={!selectedDb.value.id}
                   onClick={() => {
                     handleConnect(selectedDb.value.id, appId);
                   }}
