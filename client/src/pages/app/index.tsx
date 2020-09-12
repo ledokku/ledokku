@@ -8,7 +8,7 @@ import {
   AppByIdDocument,
 } from '../../generated/graphql';
 import { useParams, Link } from 'react-router-dom';
-import { TabNav, TabNavLink, Button, Spinner, DatabaseLabel } from '../../ui';
+import { TabNav, TabNavLink, Button, DatabaseLabel } from '../../ui';
 
 export const App = () => {
   const { id: appId } = useParams();
@@ -195,18 +195,17 @@ export const App = () => {
                       color="grey"
                       width="large"
                       className="mt-2"
-                      disabled={!selectedDb.value.id || databaseLinkLoading}
+                      isLoading={
+                        databaseLinkLoading &&
+                        !databaseLinkData &&
+                        !databaseLinkError
+                      }
+                      disabled={!selectedDb.value.id}
                       onClick={() => {
                         handleConnect(selectedDb.value.id, appId);
                       }}
                     >
-                      {databaseLinkLoading &&
-                      !databaseLinkData &&
-                      !databaseLinkError ? (
-                        <Spinner size="extraSmall" />
-                      ) : (
-                        'Link database'
-                      )}
+                      Link database
                     </Button>
                   </div>
                 ) : (
@@ -230,28 +229,22 @@ export const App = () => {
                   </React.Fragment>
                 )}
 
-                {!loading && data && data.app && (
-                  <React.Fragment>
-                    <h2 className="mb-1 mt-3 font-semibold">
-                      {data.app.databases.length > 0 && 'Linked databases'}
-                    </h2>
-                    {data.app.databases.map((database) => (
-                      <div className="w-64" key={database.id}>
-                        <Link
-                          to={`/database/${database.id}`}
-                          className="py-2 block"
-                        >
-                          <div className="flex items-center py-3 px-2 shadow hover:shadow-md transition-shadow duration-100 ease-in-out rounded bg-white">
-                            <DatabaseLabel
-                              name={database.name}
-                              type={database.type}
-                            />
-                          </div>
-                        </Link>
-                      </div>
-                    ))}
-                  </React.Fragment>
-                )}
+                <Button
+                  color="grey"
+                  width="large"
+                  className="mt-2"
+                  isLoading={
+                    databaseLinkLoading &&
+                    !databaseLinkData &&
+                    !databaseLinkError
+                  }
+                  disabled={!selectedDb.value.id}
+                  onClick={() => {
+                    handleConnect(selectedDb.value.id, appId);
+                  }}
+                >
+                  Link database
+                </Button>
               </React.Fragment>
             )}
           </div>

@@ -13,7 +13,10 @@ import { TabNav, TabNavLink, Button } from '../../ui';
 export const Settings = () => {
   const { id: appId } = useParams();
   let history = useHistory();
-  const [destroyAppMutation] = useDestroyAppMutation();
+  const [
+    destroyAppMutation,
+    { loading: destroyAppMutationLoading },
+  ] = useDestroyAppMutation();
 
   const { data, loading /* error */ } = useAppByIdQuery({
     variables: {
@@ -123,6 +126,7 @@ export const Settings = () => {
                 type="submit"
                 disabled={!formik.values.appName || !!formik.errors.appName}
                 color="red"
+                isLoading={destroyAppMutationLoading}
               >
                 Delete
               </Button>

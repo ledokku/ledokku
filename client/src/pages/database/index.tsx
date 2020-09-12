@@ -8,7 +8,7 @@ import {
 } from '../../generated/graphql';
 import { useParams, Link } from 'react-router-dom';
 import Select from 'react-select';
-import { TabNav, TabNavLink, Button, Spinner } from '../../ui';
+import { TabNav, TabNavLink, Button } from '../../ui';
 
 export const Database = () => {
   const { id: databaseId } = useParams();
@@ -183,18 +183,17 @@ export const Database = () => {
                       color="grey"
                       width="large"
                       className="mt-2"
-                      disabled={!selectedApp.value.id || databaseLinkLoading}
+                      isLoading={
+                        databaseLinkLoading &&
+                        !databaseLinkData &&
+                        !databaseLinkError
+                      }
+                      disabled={!selectedApp.value.id}
                       onClick={() =>
                         handleConnect(databaseId, selectedApp.value.id)
                       }
                     >
-                      {databaseLinkLoading &&
-                      !databaseLinkData &&
-                      !databaseLinkError ? (
-                        <Spinner size="small" />
-                      ) : (
-                        'Link app'
-                      )}
+                      Link app
                     </Button>
                   </div>
                 ) : (
