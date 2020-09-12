@@ -7,7 +7,7 @@ import { Button } from '../ui';
 
 export const CreateApp = () => {
   const history = useHistory();
-  const [createAppMutation] = useCreateAppMutation();
+  const [createAppMutation, { loading }] = useCreateAppMutation();
   const formik = useFormik<{ name: string; gitUrl: string }>({
     initialValues: {
       name: '',
@@ -77,7 +77,10 @@ export const CreateApp = () => {
                 <Button
                   color="grey"
                   type="submit"
-                  disabled={!formik.values.name || !formik.values.gitUrl}
+                  disabled={
+                    !formik.values.name || !formik.values.gitUrl || loading
+                  }
+                  isLoading={loading}
                 >
                   Create
                 </Button>

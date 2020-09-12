@@ -180,13 +180,10 @@ export const CreateDatabase = () => {
                 loading ||
                 createDbLoading
               }
+              isLoading={createDbLoading}
               iconEnd={<ArrowRight />}
             >
-              {createDbLoading ? (
-                <Spinner className="mt-1" size="extraSmall" />
-              ) : (
-                'Create'
-              )}
+              Create
             </Button>
           </div>
         </form>

@@ -167,14 +167,13 @@ export const Database = () => {
                   onClick={() =>
                     handleConnect(databaseId, selectedApp.value.id)
                   }
+                  isLoading={
+                    databaseLinkLoading &&
+                    !databaseLinkData &&
+                    !databaseLinkError
+                  }
                 >
-                  {databaseLinkLoading &&
-                  !databaseLinkData &&
-                  !databaseLinkError ? (
-                    <Spinner size="extraSmall" />
-                  ) : (
-                    'Link app'
-                  )}
+                  Link app
                 </Button>
               </React.Fragment>
             )}

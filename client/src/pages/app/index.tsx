@@ -202,18 +202,17 @@ export const App = () => {
                   color="grey"
                   width="large"
                   className="mt-2"
+                  isLoading={
+                    databaseLinkLoading &&
+                    !databaseLinkData &&
+                    !databaseLinkError
+                  }
                   disabled={!selectedDb.value.id || databaseLinkLoading}
                   onClick={() => {
                     handleConnect(selectedDb.value.id, appId);
                   }}
                 >
-                  {databaseLinkLoading &&
-                  !databaseLinkData &&
-                  !databaseLinkError ? (
-                    <Spinner size="extraSmall" />
-                  ) : (
-                    'Link database'
-                  )}
+                  Link database
                 </Button>
               </React.Fragment>
             )}

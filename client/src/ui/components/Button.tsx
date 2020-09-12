@@ -1,11 +1,13 @@
 import React from 'react';
 import cx from 'classnames';
+import { Spinner } from './Spinner';
 
 interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
   iconStart?: React.ReactNode;
   iconEnd?: React.ReactNode;
   color: 'red' | 'grey';
   variant?: 'solid' | 'outline';
+  isLoading?: boolean;
 }
 
 export const Button = ({
@@ -14,6 +16,7 @@ export const Button = ({
   className,
   iconEnd,
   iconStart,
+  isLoading,
   type,
   variant = 'solid',
   ...props
@@ -22,7 +25,7 @@ export const Button = ({
     {...props}
     type={type === 'submit' ? 'submit' : 'button'}
     className={cx(
-      'px-3 py-2 font-bold rounded-lg flex justify-center min-w-7',
+      'px-3 py-2 font-bold rounded-lg flex justify-center',
       // solid variant styles
       variant === 'solid'
         ? {
@@ -44,7 +47,15 @@ export const Button = ({
     )}
   >
     {iconStart && <span className="mr-3">{iconStart}</span>}
-    {children}
+    {isLoading ? (
+      <React.Fragment>
+        <Spinner size="extraSmall" />
+        <span className="ml-2 opacity-50"> {children}</span>
+      </React.Fragment>
+    ) : (
+      children
+    )}
+
     {iconEnd && <span className="ml-3">{iconEnd}</span>}
   </button>
 );

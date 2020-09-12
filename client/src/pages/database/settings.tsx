@@ -162,12 +162,15 @@ export const Settings = () => {
                 )}
                 <Button
                   type="submit"
+                  isLoading={destroyDbLoading}
                   disabled={
-                    !formik.values.databaseName || !!formik.errors.databaseName
+                    !formik.values.databaseName ||
+                    !!formik.errors.databaseName ||
+                    destroyDbLoading
                   }
                   color="red"
                 >
-                  {destroyDbLoading ? <Spinner size="extraSmall" /> : 'Delete'}
+                  Delete
                 </Button>
               </div>
             </form>
