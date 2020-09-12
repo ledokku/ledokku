@@ -1,7 +1,7 @@
 import { MutationResolvers } from '../../generated/graphql';
 import { prisma } from '../../prisma';
 import { dokku } from '../../lib/dokku';
-import { buildAppQueue } from '../../queues/buildApp';
+// import { buildAppQueue } from '../../queues/buildApp';
 import { sshConnect } from '../../lib/ssh';
 import { appNameSchema } from '../utils';
 
@@ -26,8 +26,6 @@ export const createApp: MutationResolvers['createApp'] = async (
   const app = await prisma.app.create({
     data: {
       name: input.name,
-      githubRepoUrl: input.gitUrl,
-      githubId: 'TODO',
       user: {
         connect: {
           id: userId,
@@ -36,24 +34,25 @@ export const createApp: MutationResolvers['createApp'] = async (
     },
   });
 
-  const appBuild = await prisma.appBuild.create({
-    data: {
-      status: 'PENDING',
-      user: {
-        connect: {
-          id: userId,
-        },
-      },
-      app: {
-        connect: {
-          id: app.id,
-        },
-      },
-    },
-  });
+  // TODO enable again once we start the github app autodeployment
+  // const appBuild = await prisma.appBuild.create({
+  //   data: {
+  //     status: 'PENDING',
+  //     user: {
+  //       connect: {
+  //         id: userId,
+  //       },
+  //     },
+  //     app: {
+  //       connect: {
+  //         id: app.id,
+  //       },
+  //     },
+  //   },
+  // });
 
-  // We trigger the queue that will add dokku to the server
-  await buildAppQueue.add('build-app', { buildId: appBuild.id });
+  // // We trigger the queue that will add dokku to the server
+  // await buildAppQueue.add('build-app', { buildId: appBuild.id });
 
-  return { app, appBuild };
+  return { app };
 };

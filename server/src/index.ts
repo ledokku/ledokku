@@ -20,7 +20,6 @@ const typeDefs = gql`
   type App {
     id: ID!
     name: String!
-    githubRepoUrl: String!
     createdAt: DateTime!
     databases: [Database]
   }
@@ -58,7 +57,6 @@ const typeDefs = gql`
 
   type CreateAppResult {
     app: App!
-    appBuild: AppBuild!
   }
 
   type DestroyAppResult {
@@ -127,7 +125,6 @@ const typeDefs = gql`
 
   input CreateAppInput {
     name: String!
-    gitUrl: String!
   }
 
   input CreateDatabaseInput {

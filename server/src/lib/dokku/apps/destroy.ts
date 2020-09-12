@@ -1,6 +1,6 @@
-import NodeSsh from 'node-ssh';
+import { NodeSSH } from 'node-ssh';
 
-export const destroy = async (ssh: NodeSsh, appName: string) => {
+export const destroy = async (ssh: NodeSSH, appName: string) => {
   const resultAppsDestroy = await ssh.execCommand(
     `--force apps:destroy ${appName}`
   );

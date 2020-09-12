@@ -1,6 +1,6 @@
-import NodeSsh from 'node-ssh';
+import { NodeSSH } from 'node-ssh';
 
-export const create = async (ssh: NodeSsh, appName: string) => {
+export const create = async (ssh: NodeSSH, appName: string) => {
   const resultAppsCreate = await ssh.execCommand(`apps:create ${appName}`);
   if (resultAppsCreate.code === 1) {
     console.error(resultAppsCreate);

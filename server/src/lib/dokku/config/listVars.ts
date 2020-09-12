@@ -1,4 +1,4 @@
-import NodeSsh from 'node-ssh';
+import { NodeSSH } from 'node-ssh';
 
 const parseEnvVarsCommand = (commandResult: string) => {
   const envVars = commandResult.split('\n');
@@ -15,7 +15,7 @@ const parseEnvVarsCommand = (commandResult: string) => {
   });
 };
 
-export const listVars = async (ssh: NodeSsh, name: string) => {
+export const listVars = async (ssh: NodeSSH, name: string) => {
   const resultListEnv = await ssh.execCommand(`config ${name}`);
 
   if (resultListEnv.code === 1) {

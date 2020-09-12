@@ -23,7 +23,6 @@ export type App = {
   __typename?: 'App';
   id: Scalars['ID'];
   name: Scalars['String'];
-  githubRepoUrl: Scalars['String'];
   createdAt: Scalars['DateTime'];
   databases?: Maybe<Array<Maybe<Database>>>;
 };
@@ -63,7 +62,6 @@ export type LoginResult = {
 export type CreateAppResult = {
   __typename?: 'CreateAppResult';
   app: App;
-  appBuild: AppBuild;
 };
 
 export type DestroyAppResult = {
@@ -118,16 +116,6 @@ export type DatabaseLogsResult = {
   logs: Array<Maybe<Scalars['String']>>;
 };
 
-export type DatabasesLinkedToAppResult = {
-  __typename?: 'DatabasesLinkedToAppResult';
-  databases: Array<Maybe<Database>>;
-};
-
-export type AppsLinkedToDatabaseResult = {
-  __typename?: 'AppsLinkedToDatabaseResult';
-  apps: Array<Maybe<App>>;
-};
-
 export type IsDatabaseLinkedResult = {
   __typename?: 'IsDatabaseLinkedResult';
   isLinked: Scalars['Boolean'];
@@ -157,7 +145,6 @@ export type IsPluginInstalledResult = {
 
 export type CreateAppInput = {
   name: Scalars['String'];
-  gitUrl: Scalars['String'];
 };
 
 export type CreateDatabaseInput = {
@@ -201,8 +188,6 @@ export type Query = {
   appLogs: AppLogsResult;
   databaseInfo: DatabaseInfoResult;
   databaseLogs: DatabaseLogsResult;
-  databasesLinkedToApp: DatabasesLinkedToAppResult;
-  appsLinkedToDatabase: AppsLinkedToDatabaseResult;
   isDatabaseLinked: IsDatabaseLinkedResult;
   envVars: EnvVarsResult;
 };
@@ -234,16 +219,6 @@ export type QueryDatabaseInfoArgs = {
 
 
 export type QueryDatabaseLogsArgs = {
-  databaseId: Scalars['String'];
-};
-
-
-export type QueryDatabasesLinkedToAppArgs = {
-  appId: Scalars['String'];
-};
-
-
-export type QueryAppsLinkedToDatabaseArgs = {
   databaseId: Scalars['String'];
 };
 
@@ -317,7 +292,6 @@ export type CacheControlScope =
 
 export type CreateAppMutationVariables = Exact<{
   name: Scalars['String'];
-  gitUrl: Scalars['String'];
 }>;
 
 
@@ -328,9 +302,6 @@ export type CreateAppMutation = (
     & { app: (
       { __typename?: 'App' }
       & Pick<App, 'id'>
-    ), appBuild: (
-      { __typename?: 'AppBuild' }
-      & Pick<AppBuild, 'id'>
     ) }
   ) }
 );
@@ -438,7 +409,7 @@ export type AppByIdQuery = (
   { __typename?: 'Query' }
   & { app?: Maybe<(
     { __typename?: 'App' }
-    & Pick<App, 'id' | 'name' | 'githubRepoUrl' | 'createdAt'>
+    & Pick<App, 'id' | 'name' | 'createdAt'>
     & { databases?: Maybe<Array<Maybe<(
       { __typename?: 'Database' }
       & Pick<Database, 'id' | 'name' | 'type'>
@@ -580,12 +551,9 @@ export type SetupQuery = (
 
 
 export const CreateAppDocument = gql`
-    mutation createApp($name: String!, $gitUrl: String!) {
-  createApp(input: {name: $name, gitUrl: $gitUrl}) {
+    mutation createApp($name: String!) {
+  createApp(input: {name: $name}) {
     app {
-      id
-    }
-    appBuild {
       id
     }
   }
@@ -607,7 +575,6 @@ export type CreateAppMutationFn = ApolloReactCommon.MutationFunction<CreateAppMu
  * const [createAppMutation, { data, loading, error }] = useCreateAppMutation({
  *   variables: {
  *      name: // value for 'name'
- *      gitUrl: // value for 'gitUrl'
  *   },
  * });
  */
@@ -850,7 +817,6 @@ export const AppByIdDocument = gql`
   app(appId: $appId) {
     id
     name
-    githubRepoUrl
     createdAt
     databases {
       id
