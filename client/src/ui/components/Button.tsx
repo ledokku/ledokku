@@ -50,7 +50,7 @@ export const Button = ({
     {isLoading ? (
       <React.Fragment>
         <Spinner size="extraSmall" />
-        <span className="ml-2 opacity-50"> {children}</span>
+        <span className="ml-2 opacity-50">{children}</span>
       </React.Fragment>
     ) : (
       children
