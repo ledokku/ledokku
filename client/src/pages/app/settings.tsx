@@ -11,7 +11,7 @@ import { useFormik } from 'formik';
 import { TabNav, TabNavLink, Button } from '../../ui';
 
 export const Settings = () => {
-  const { id: appId } = useParams();
+  const { id: appId } = useParams<{ id: string }>();
   let history = useHistory();
   const [
     destroyAppMutation,
@@ -33,7 +33,7 @@ export const Settings = () => {
       .test(
         'Equals app name',
         'Must match app name',
-        (val) => val === data.app.name
+        (val) => val === data?.app?.name
       ),
   });
 

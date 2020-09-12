@@ -24,7 +24,7 @@ export type App = {
   id: Scalars['ID'];
   name: Scalars['String'];
   createdAt: Scalars['DateTime'];
-  databases?: Maybe<Array<Maybe<Database>>>;
+  databases?: Maybe<Array<Database>>;
 };
 
 export type AppBuild = {
@@ -45,7 +45,7 @@ export type Database = {
   name: Scalars['String'];
   type: DatabaseTypes;
   createdAt: Scalars['DateTime'];
-  apps?: Maybe<Array<Maybe<App>>>;
+  apps?: Maybe<Array<App>>;
 };
 
 export type DatabaseTypes = 
@@ -410,10 +410,10 @@ export type AppByIdQuery = (
   & { app?: Maybe<(
     { __typename?: 'App' }
     & Pick<App, 'id' | 'name' | 'createdAt'>
-    & { databases?: Maybe<Array<Maybe<(
+    & { databases?: Maybe<Array<(
       { __typename?: 'Database' }
       & Pick<Database, 'id' | 'name' | 'type'>
-    )>>> }
+    )>> }
   )> }
 );
 
@@ -465,10 +465,10 @@ export type DatabaseByIdQuery = (
   & { database?: Maybe<(
     { __typename?: 'Database' }
     & Pick<Database, 'id' | 'name' | 'type'>
-    & { apps?: Maybe<Array<Maybe<(
+    & { apps?: Maybe<Array<(
       { __typename?: 'App' }
       & Pick<App, 'id' | 'name'>
-    )>>> }
+    )>> }
   )> }
 );
 

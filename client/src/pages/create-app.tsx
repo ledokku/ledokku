@@ -26,7 +26,9 @@ export const CreateApp = () => {
             },
           ],
         });
-        history.push(`/app/${data.data.createApp.app.id}`);
+        if (data?.data) {
+          history.push(`/app/${data.data.createApp.app.id}`);
+        }
       } catch (error) {
         // TODO catch errors
         console.log(error);

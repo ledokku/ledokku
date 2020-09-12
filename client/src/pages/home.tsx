@@ -32,7 +32,7 @@ export const Home = () => {
           variables: { code: githubCode },
         });
         // TODO handle errors
-        if (data.data) {
+        if (data.data?.loginWithGithub) {
           login(data.data.loginWithGithub.token);
           history.push('/dashboard');
         }
