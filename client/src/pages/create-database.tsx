@@ -16,7 +16,14 @@ import { RedisIcon } from '../ui/icons/RedisIcon';
 import { Header } from '../modules/layout/Header';
 
 import { dbTypeToDokkuPlugin } from './utils';
-import { Button, Terminal, Spinner } from '../ui';
+import {
+  Button,
+  Terminal,
+  Spinner,
+  Alert,
+  AlertTitle,
+  AlertDescription,
+} from '../ui';
 
 interface DatabaseBoxProps {
   label: string;
@@ -50,7 +57,7 @@ export const CreateDatabase = () => {
   ] = useCreateDatabaseMutation();
   const [
     isDokkuPluginInstalled,
-    { data, loading },
+    { data, loading, error: isDokkuPluginInstalledError },
   ] = useIsPluginInstalledLazyQuery({
     // we poll every 5 sec
     pollInterval: 5000,
@@ -107,6 +114,14 @@ export const CreateDatabase = () => {
                 <Spinner size="small" />
               </div>
             )}
+            {isDokkuPluginInstalledError ? (
+              <Alert status="error">
+                <AlertTitle>Request failed</AlertTitle>
+                <AlertDescription>
+                  {isDokkuPluginInstalledError.message}
+                </AlertDescription>
+              </Alert>
+            ) : null}
             {data?.isPluginInstalled.isPluginInstalled === false && !loading && (
               <React.Fragment>
                 <p className="mt-3">
