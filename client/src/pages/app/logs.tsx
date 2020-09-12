@@ -7,7 +7,7 @@ import { TabNav, TabNavLink, Terminal } from '../../ui';
 export const Logs = () => {
   const { id: appId } = useParams<{ id: string }>();
 
-  const { data, loading, error: appError } = useAppByIdQuery({
+  const { data, loading } = useAppByIdQuery({
     variables: {
       appId,
     },
@@ -56,12 +56,6 @@ export const Logs = () => {
           <TabNavLink to={`/app/${app.id}/settings`}>Settings</TabNavLink>
         </TabNav>
       </div>
-
-      {appError ? (
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          {appError.message}
-        </div>
-      ) : null}
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 gap-4 mt-10">
