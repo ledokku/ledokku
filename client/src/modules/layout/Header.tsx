@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { CSSTransition } from 'react-transition-group';
+import { Transition } from '@tailwindui/react';
 import { useAuth } from '../auth/AuthContext';
 
 export const Header = () => {
@@ -34,19 +34,14 @@ export const Header = () => {
                 )}
               </button>
             </div>
-
-            <CSSTransition
-              in={isMenuOpen}
-              timeout={100}
-              classNames={{
-                enter:
-                  'transition ease-out duration-100 transform opacity-0 scale-95',
-                enterActive: 'transform opacity-100 scale-100',
-                exit:
-                  'transition ease-in duration-75 transform opacity-100 scale-100',
-                exitActive: 'transform opacity-0 scale-95',
-              }}
-              unmountOnExit
+            <Transition
+              show={isMenuOpen}
+              enter="transition ease-out duration-100"
+              enterFrom="transform opacity-0 scale-95"
+              enterTo="transform opacity-100 scale-100"
+              leave="transition ease-in duration-75"
+              leaveFrom="transform opacity-100 scale-100"
+              leaveTo="transform opacity-0 scale-95"
             >
               <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg">
                 <div
@@ -88,7 +83,7 @@ export const Header = () => {
                   </div>
                 </div>
               </div>
-            </CSSTransition>
+            </Transition>
           </div>
         </div>
       </div>
