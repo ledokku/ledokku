@@ -250,69 +250,63 @@ export const App = () => {
                 >
                   Link database
                 </Button>
-                {!dbsLinkedToAppDataLoading &&
-                  dbsLinkedToAppData &&
-                  dbsLinkedToAppData.databasesLinkedToApp && (
-                    <React.Fragment>
-                      <h2 className="mb-1 mt-3 font-semibold">
-                        {dbsLinkedToAppData.databasesLinkedToApp.databases
-                          .length > 0 && 'Linked databases'}
-                      </h2>
-                      {dbsLinkedToAppData.databasesLinkedToApp.databases.map(
-                        (database) => (
-                          <div className="flex flex-row">
-                            <div className="w-64" key={database.id}>
-                              <Link
-                                to={`/database/${database.id}`}
-                                className="py-2 block"
-                              >
-                                <div className="flex items-center py-3 px-2 shadow hover:shadow-md transition-shadow duration-100 ease-in-out rounded bg-white">
-                                  <DatabaseLabel
-                                    name={database.name}
-                                    type={database.type}
-                                  />
-                                </div>
-                              </Link>
-                            </div>
-                            <Button
-                              className="mt-4 ml-2 h-10"
-                              width="normal"
-                              color="red"
-                              onClick={() => setIsModalOpen(true)}
-                            >
-                              Unlink
-                            </Button>
-                            {isModalOpen && (
-                              <Modal
-                                closeModalButton={'Cancel'}
-                                ctaButton={`Unlink`}
-                                mainText={
-                                  databasUnlinkLoading ? (
-                                    <p>
-                                      Unlinking <b>{database.name}</b> from{' '}
-                                      <b>{app.name}</b>, the process usually
-                                      takes around one minute to complete.
-                                    </p>
-                                  ) : (
-                                    <p>
-                                      Are you sure, you want to unlink{' '}
-                                      <b>{database.name}</b> from{' '}
-                                      <b>{app.name}</b>?
-                                    </p>
-                                  )
-                                }
-                                header={'Unlink database'}
-                                closeModal={() => setIsModalOpen(false)}
-                                ctaFn={() => handleUnlink(database.id, appId)}
-                                isWarningModal={true}
-                                isCtaLoading={databasUnlinkLoading}
+                {!dbsLinkedToAppDataLoading && linkedDatabases && (
+                  <React.Fragment>
+                    <h2 className="mb-1 mt-3 font-semibold">
+                      {linkedDatabases.length > 0 && 'Linked databases'}
+                    </h2>
+                    {linkedDatabases.map((database) => (
+                      <div className="flex flex-row">
+                        <div className="w-64" key={database.id}>
+                          <Link
+                            to={`/database/${database.id}`}
+                            className="py-2 block"
+                          >
+                            <div className="flex items-center py-3 px-2 shadow hover:shadow-md transition-shadow duration-100 ease-in-out rounded bg-white">
+                              <DatabaseLabel
+                                name={database.name}
+                                type={database.type}
                               />
-                            )}
-                          </div>
-                        )
-                      )}
-                    </React.Fragment>
-                  )}
+                            </div>
+                          </Link>
+                        </div>
+                        <Button
+                          className="mt-4 ml-2 h-10"
+                          width="normal"
+                          color="red"
+                          onClick={() => setIsModalOpen(true)}
+                        >
+                          Unlink
+                        </Button>
+                        {isModalOpen && (
+                          <Modal
+                            closeModalButton={'Cancel'}
+                            ctaButton={`Unlink`}
+                            mainText={
+                              databasUnlinkLoading ? (
+                                <p>
+                                  Unlinking <b>{database.name}</b> from{' '}
+                                  <b>{app.name}</b>, the process usually takes
+                                  around one minute to complete.
+                                </p>
+                              ) : (
+                                <p>
+                                  Are you sure, you want to unlink{' '}
+                                  <b>{database.name}</b> from <b>{app.name}</b>?
+                                </p>
+                              )
+                            }
+                            header={'Unlink database'}
+                            closeModal={() => setIsModalOpen(false)}
+                            ctaFn={() => handleUnlink(database.id, appId)}
+                            isWarningModal={true}
+                            isCtaLoading={databasUnlinkLoading}
+                          />
+                        )}
+                      </div>
+                    ))}
+                  </React.Fragment>
+                )}
               </React.Fragment>
             )}
           </div>
