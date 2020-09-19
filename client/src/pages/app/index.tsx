@@ -242,18 +242,13 @@ export const App = () => {
                   color="grey"
                   width="large"
                   className="mt-2"
-                  disabled={!selectedDb.value.id || databaseLinkLoading}
+                  disabled={!selectedDb.value.id}
+                  isLoading={databaseLinkLoading}
                   onClick={() => {
                     handleConnect(selectedDb.value.id, appId);
                   }}
                 >
-                  {databaseLinkLoading &&
-                  !databaseLinkData &&
-                  !databaseLinkError ? (
-                    <Spinner size="small" />
-                  ) : (
-                    'Link database'
-                  )}
+                  Link database
                 </Button>
                 {!dbsLinkedToAppDataLoading &&
                   dbsLinkedToAppData &&

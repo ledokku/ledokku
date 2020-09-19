@@ -121,6 +121,16 @@ export type DatabaseLogsResult = {
   logs: Array<Maybe<Scalars['String']>>;
 };
 
+export type DatabasesLinkedToAppResult = {
+  __typename?: 'DatabasesLinkedToAppResult';
+  databases: Array<Maybe<Database>>;
+};
+
+export type AppsLinkedToDatabaseResult = {
+  __typename?: 'AppsLinkedToDatabaseResult';
+  apps: Array<Maybe<App>>;
+};
+
 export type IsDatabaseLinkedResult = {
   __typename?: 'IsDatabaseLinkedResult';
   isLinked: Scalars['Boolean'];
@@ -198,6 +208,8 @@ export type Query = {
   appLogs: AppLogsResult;
   databaseInfo: DatabaseInfoResult;
   databaseLogs: DatabaseLogsResult;
+  databasesLinkedToApp: DatabasesLinkedToAppResult;
+  appsLinkedToDatabase: AppsLinkedToDatabaseResult;
   isDatabaseLinked: IsDatabaseLinkedResult;
   envVars: EnvVarsResult;
 };
@@ -233,6 +245,16 @@ export type QueryDatabaseLogsArgs = {
 };
 
 
+export type QueryDatabasesLinkedToAppArgs = {
+  appId: Scalars['String'];
+};
+
+
+export type QueryAppsLinkedToDatabaseArgs = {
+  databaseId: Scalars['String'];
+};
+
+
 export type QueryIsDatabaseLinkedArgs = {
   databaseId: Scalars['String'];
   appId: Scalars['String'];
@@ -241,6 +263,11 @@ export type QueryIsDatabaseLinkedArgs = {
 
 export type QueryEnvVarsArgs = {
   appId: Scalars['String'];
+};
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  unlinkDatabaseLogs?: Maybe<Array<Scalars['String']>>;
 };
 
 export type Mutation = {
@@ -608,6 +635,14 @@ export type SetupQuery = (
     { __typename?: 'SetupResult' }
     & Pick<SetupResult, 'canConnectSsh' | 'sshPublicKey'>
   ) }
+);
+
+export type UnlinkDatabaseLogsSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UnlinkDatabaseLogsSubscription = (
+  { __typename?: 'Subscription' }
+  & Pick<Subscription, 'unlinkDatabaseLogs'>
 );
 
 
@@ -1365,3 +1400,29 @@ export function useSetupLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOp
 export type SetupQueryHookResult = ReturnType<typeof useSetupQuery>;
 export type SetupLazyQueryHookResult = ReturnType<typeof useSetupLazyQuery>;
 export type SetupQueryResult = ApolloReactCommon.QueryResult<SetupQuery, SetupQueryVariables>;
+export const UnlinkDatabaseLogsDocument = gql`
+    subscription UnlinkDatabaseLogs {
+  unlinkDatabaseLogs
+}
+    `;
+
+/**
+ * __useUnlinkDatabaseLogsSubscription__
+ *
+ * To run a query within a React component, call `useUnlinkDatabaseLogsSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useUnlinkDatabaseLogsSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUnlinkDatabaseLogsSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUnlinkDatabaseLogsSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<UnlinkDatabaseLogsSubscription, UnlinkDatabaseLogsSubscriptionVariables>) {
+        return ApolloReactHooks.useSubscription<UnlinkDatabaseLogsSubscription, UnlinkDatabaseLogsSubscriptionVariables>(UnlinkDatabaseLogsDocument, baseOptions);
+      }
+export type UnlinkDatabaseLogsSubscriptionHookResult = ReturnType<typeof useUnlinkDatabaseLogsSubscription>;
+export type UnlinkDatabaseLogsSubscriptionResult = ApolloReactCommon.SubscriptionResult<UnlinkDatabaseLogsSubscription>;

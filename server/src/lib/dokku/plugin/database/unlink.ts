@@ -1,7 +1,7 @@
 import NodeSsh from 'node-ssh';
 
 export const unlink = async (
-  ssh: NodeSsh,
+  ssh: any,
   databaseName: string,
   databaseType: string,
   appName: string

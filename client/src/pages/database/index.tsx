@@ -8,12 +8,14 @@ import {
   AppsLinkedToDatabaseDocument,
   useUnlinkDatabaseMutation,
   DatabasesLinkedToAppDocument,
+  useUnlinkDatabaseLogsSubscription,
 } from '../../generated/graphql';
 import { useParams, Link } from 'react-router-dom';
 import Select from 'react-select';
-import { TabNav, TabNavLink, Button, Spinner, Modal } from '../../ui';
+import { TabNav, TabNavLink, Button, Modal } from '../../ui';
 
 export const Database = () => {
+  // @ts-ignore
   const { id: databaseId } = useParams();
   const [selectedApp, setSelectedApp] = useState({
     value: { name: '', id: '' },
@@ -39,6 +41,14 @@ export const Database = () => {
       // error: databaseUnlinkError,
     },
   ] = useUnlinkDatabaseMutation();
+
+  const {
+    data: unlinkDbSubscriptionData,
+    loading: unlinkDbSucsriptionDataLoading,
+    error,
+  } = useUnlinkDatabaseLogsSubscription();
+
+  console.log('unlinkDbSubscription', unlinkDbSubscriptionData);
 
   const { data: appsData } = useAppsQuery();
 
@@ -232,18 +242,17 @@ export const Database = () => {
                   color="grey"
                   width="large"
                   className="mt-2"
+                  isLoading={
+                    databaseLinkLoading &&
+                    !databaseLinkData &&
+                    !databaseLinkError
+                  }
                   disabled={!selectedApp.value.id || databaseLinkLoading}
                   onClick={() =>
                     handleConnect(databaseId, selectedApp.value.id)
                   }
                 >
-                  {databaseLinkLoading &&
-                  !databaseLinkData &&
-                  !databaseLinkError ? (
-                    <Spinner size="small" />
-                  ) : (
-                    'Link app'
-                  )}
+                  Link app
                 </Button>
                 {!appsLinkedToDbLoading &&
                   appsLinkedToDbData &&

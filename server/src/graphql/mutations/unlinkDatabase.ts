@@ -1,8 +1,8 @@
+import { unlinkDatabaseQueue } from './../../queues/unlinkDatabase';
 import { dbTypeToDokkuPlugin } from './../utils';
 import { MutationResolvers } from '../../generated/graphql';
+
 import { prisma } from '../../prisma';
-import { dokku } from '../../lib/dokku';
-import { sshConnect } from '../../lib/ssh';
 
 export const unlinkDatabase: MutationResolvers['unlinkDatabase'] = async (
   _,
@@ -61,17 +61,13 @@ export const unlinkDatabase: MutationResolvers['unlinkDatabase'] = async (
 
   const dbType = dbTypeToDokkuPlugin(database.type);
 
-  const ssh = await sshConnect();
+  // const ssh = await sshConnect();
 
-  await dokku.database.unlink(ssh, database.name, dbType, app.name);
+  // await dokku.database.unlink(ssh, database.name, dbType, app.name);
 
-  await prisma.database.update({
-    where: { id: database.id },
-    data: {
-      apps: {
-        disconnect: { id: appId },
-      },
-    },
+  await unlinkDatabaseQueue.add('unlink-database', {
+    app,
+    database,
   });
 
   return { result: true };

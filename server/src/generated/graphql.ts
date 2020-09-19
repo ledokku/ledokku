@@ -263,6 +263,11 @@ export type QueryEnvVarsArgs = {
   appId: Scalars['String'];
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  unlinkDatabaseLogs?: Maybe<Array<Scalars['String']>>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   loginWithGithub?: Maybe<LoginResult>;
@@ -442,6 +447,7 @@ export type ResolversTypes = {
   UnlinkDatabaseInput: UnlinkDatabaseInput;
   DestroyDatabaseInput: DestroyDatabaseInput;
   Query: ResolverTypeWrapper<{}>;
+  Subscription: ResolverTypeWrapper<{}>;
   Mutation: ResolverTypeWrapper<{}>;
   CacheControlScope: CacheControlScope;
   Upload: ResolverTypeWrapper<Scalars['Upload']>;
@@ -485,6 +491,7 @@ export type ResolversParentTypes = {
   UnlinkDatabaseInput: UnlinkDatabaseInput;
   DestroyDatabaseInput: DestroyDatabaseInput;
   Query: {};
+  Subscription: {};
   Mutation: {};
   Upload: Scalars['Upload'];
 };
@@ -637,6 +644,10 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   envVars?: Resolver<ResolversTypes['EnvVarsResult'], ParentType, ContextType, RequireFields<QueryEnvVarsArgs, 'appId'>>;
 };
 
+export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
+  unlinkDatabaseLogs?: SubscriptionResolver<Maybe<Array<ResolversTypes['String']>>, "unlinkDatabaseLogs", ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   loginWithGithub?: Resolver<Maybe<ResolversTypes['LoginResult']>, ParentType, ContextType, RequireFields<MutationLoginWithGithubArgs, 'code'>>;
   createApp?: Resolver<ResolversTypes['CreateAppResult'], ParentType, ContextType, RequireFields<MutationCreateAppArgs, 'input'>>;
@@ -679,6 +690,7 @@ export type Resolvers<ContextType = any> = {
   SetupResult?: SetupResultResolvers<ContextType>;
   IsPluginInstalledResult?: IsPluginInstalledResultResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Subscription?: SubscriptionResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Upload?: GraphQLScalarType;
 };

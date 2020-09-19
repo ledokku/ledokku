@@ -1,17 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createGlobalStyle } from 'styled-components';
-import { ApolloClient } from 'apollo-client';
 import { from } from 'apollo-link';
 import { createHttpLink } from 'apollo-link-http';
-import { setContext } from 'apollo-link-context';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { onError } from 'apollo-link-error';
-import { ApolloProvider } from '@apollo/react-hooks';
+import { setContext } from '@apollo/link-context';
+import { onError } from '@apollo/link-error';
+
+import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks';
 import './generated/index.css';
 import { config } from './config';
 import { AuthProvider } from './modules/auth/AuthContext';
 import { Router } from './Router';
+import {
+  split,
+  HttpLink,
+  ApolloProvider,
+  ApolloClient,
+  InMemoryCache,
+} from '@apollo/client';
+import { getMainDefinition } from '@apollo/client/utilities';
+import { WebSocketLink } from '@apollo/client/link/ws';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -22,8 +30,15 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-const httpLink = createHttpLink({
+const httpLink = new HttpLink({
   uri: `${config.serverUrl}/graphql`,
+});
+
+const wsLink = new WebSocketLink({
+  uri: `ws://localhost:4000/`,
+  options: {
+    reconnect: true,
+  },
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -50,14 +65,26 @@ const errorLink = onError(({ graphQLErrors }) => {
   }
 });
 
-const apolloClient = new ApolloClient({
-  link: from([authLink, errorLink, httpLink]),
+const splitLink = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === 'OperationDefinition' &&
+      definition.operation === 'subscription'
+    );
+  },
+  wsLink,
+  httpLink
+);
+
+const client = new ApolloClient({
+  link: splitLink,
   cache: new InMemoryCache(),
 });
 
 ReactDOM.render(
   <React.StrictMode>
-    <ApolloProvider client={apolloClient}>
+    <ApolloProvider client={client}>
       <AuthProvider>
         <GlobalStyle />
         <Router />
