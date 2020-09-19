@@ -23,7 +23,7 @@ export const LineOfInfo = (props: InfoProps) => (
 );
 
 export const Settings = () => {
-  const { id: databaseId } = useParams();
+  const { id: databaseId } = useParams<{ id: string }>();
   let history = useHistory();
   const [
     destroyDatabaseMutation,
@@ -56,7 +56,7 @@ export const Settings = () => {
       .test(
         'Equals database name',
         'Must match database name',
-        (val) => val === data.database.name
+        (val) => val === data?.database?.name
       ),
   });
 
@@ -131,8 +131,8 @@ export const Settings = () => {
               ) : databaseInfoLoading ? (
                 'Loading...'
               ) : (
-                databaseInfoData.databaseInfo.info.map((infoLine) => (
-                  <LineOfInfo infoLine={infoLine} />
+                databaseInfoData?.databaseInfo.info.map((infoLine) => (
+                  <LineOfInfo infoLine={infoLine!} />
                 ))
               )}
             </Terminal>

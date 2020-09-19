@@ -5,7 +5,7 @@ import { useAppByIdQuery, useAppLogsQuery } from '../../generated/graphql';
 import { TabNav, TabNavLink, Terminal } from '../../ui';
 
 export const Logs = () => {
-  const { id: appId } = useParams();
+  const { id: appId } = useParams<{ id: string }>();
 
   const { data, loading /* error */ } = useAppByIdQuery({
     variables: {
@@ -75,7 +75,7 @@ export const Logs = () => {
                 {appLogsLoading ? (
                   <p className="pl-2 text-green-400">Loading...</p>
                 ) : (
-                  appLogsData.appLogs.logs.map((log) => (
+                  appLogsData?.appLogs.logs.map((log) => (
                     <p
                       key={appLogsData.appLogs.logs.indexOf(log)}
                       className="mt-1 text-green-400"

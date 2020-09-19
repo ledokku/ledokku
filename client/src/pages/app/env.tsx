@@ -133,7 +133,7 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
 };
 
 export const Env = () => {
-  const { id: appId } = useParams();
+  const { id: appId } = useParams<{ id: string }>();
   const { data, loading /* error */ } = useAppByIdQuery({
     variables: {
       appId,
@@ -194,30 +194,27 @@ export const Env = () => {
           </h2>
         </div>
 
-        {!envVarLoading &&
-          !envVarError &&
-          envVarData.envVars &&
-          envVarData.envVars.envVars && (
-            <React.Fragment>
-              {envVarData.envVars.envVars.map((envVar) => {
-                return (
-                  <EnvForm
-                    key={envVar.key}
-                    name={envVar.key}
-                    value={envVar.value}
-                    appId={appId}
-                  />
-                );
-              })}
-              <EnvForm
-                key="newVar"
-                name=""
-                value=""
-                appId={appId}
-                isNewVar={true}
-              />
-            </React.Fragment>
-          )}
+        {!envVarLoading && !envVarError && envVarData?.envVars.envVars && (
+          <React.Fragment>
+            {envVarData.envVars.envVars.map((envVar) => {
+              return (
+                <EnvForm
+                  key={envVar.key}
+                  name={envVar.key}
+                  value={envVar.value}
+                  appId={appId}
+                />
+              );
+            })}
+            <EnvForm
+              key="newVar"
+              name=""
+              value=""
+              appId={appId}
+              isNewVar={true}
+            />
+          </React.Fragment>
+        )}
       </div>
     </div>
   );

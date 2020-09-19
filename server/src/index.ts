@@ -22,7 +22,7 @@ const typeDefs = gql`
     id: ID!
     name: String!
     createdAt: DateTime!
-    databases: [Database]
+    databases: [Database!]
   }
 
   type AppBuild {
@@ -42,7 +42,7 @@ const typeDefs = gql`
     name: String!
     type: DatabaseTypes!
     createdAt: DateTime!
-    apps: [App]
+    apps: [App!]
   }
 
   enum DatabaseTypes {

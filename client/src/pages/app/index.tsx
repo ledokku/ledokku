@@ -21,7 +21,7 @@ import {
 } from '../../ui';
 
 export const App = () => {
-  const { id: appId } = useParams();
+  const { id: appId } = useParams<{ id: string }>();
 
   const [selectedDb, setSelectedDb] = useState({
     value: { name: '', id: '', type: '' },
@@ -70,7 +70,7 @@ export const App = () => {
     skip: !appId,
   });
 
-  if (!data) {
+  if (!data || !databaseData) {
     return null;
   }
 
@@ -90,10 +90,10 @@ export const App = () => {
     return <p>App not found.</p>;
   }
 
-  const linkedDatabases = dbsLinkedToAppData.databasesLinkedToApp.databases;
-  const linkedIds = linkedDatabases.map((db) => db.id);
+  const linkedDatabases = app.databases;
+  const linkedIds = linkedDatabases?.map((db) => db.id);
   const notLinkedDatabases = databases.filter((db) => {
-    return linkedIds.indexOf(db.id) === -1;
+    return linkedIds?.indexOf(db.id) === -1;
   });
 
   const dbOptions = notLinkedDatabases.map((db) => {
