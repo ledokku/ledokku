@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spinner, Button } from './';
+import { Button } from './';
 
 interface ModalProps {
   closeModalButton: string;

@@ -43,8 +43,8 @@ export const Database = () => {
 
   const {
     data: unlinkDbSubscriptionData,
-    loading: unlinkDbSucsriptionDataLoading,
-    error,
+    // loading: unlinkDbSubcsriptionDataLoading,
+    // error,
   } = useUnlinkDatabaseLogsSubscription();
 
   console.log('unlinkDbSubscription', unlinkDbSubscriptionData);
@@ -52,7 +52,7 @@ export const Database = () => {
   const { data: appsData } = useAppsQuery();
 
   const {
-    data: appsLinkedToDbData,
+    // data: appsLinkedToDbData,
     loading: appsLinkedToDbLoading,
   } = useAppsLinkedToDatabaseQuery({
     variables: {

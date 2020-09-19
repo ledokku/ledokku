@@ -11,14 +11,7 @@ import {
   AppsLinkedToDatabaseDocument,
 } from '../../generated/graphql';
 import { useParams, Link } from 'react-router-dom';
-import {
-  TabNav,
-  TabNavLink,
-  Button,
-  Spinner,
-  DatabaseLabel,
-  Modal,
-} from '../../ui';
+import { TabNav, TabNavLink, Button, DatabaseLabel, Modal } from '../../ui';
 
 export const App = () => {
   const { id: appId } = useParams<{ id: string }>();
@@ -32,7 +25,7 @@ export const App = () => {
   const [
     linkDatabaseMutation,
     {
-      data: databaseLinkData,
+      // data: databaseLinkData,
       loading: databaseLinkLoading,
       error: databaseLinkError,
     },
@@ -54,7 +47,7 @@ export const App = () => {
   } = useDatabaseQuery();
 
   const {
-    data: dbsLinkedToAppData,
+    // data: dbsLinkedToAppData,
     loading: dbsLinkedToAppDataLoading,
   } = useDatabasesLinkedToAppQuery({
     variables: {
