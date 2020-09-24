@@ -1,13 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createGlobalStyle } from 'styled-components';
-import { ApolloClient } from 'apollo-client';
-import { from } from 'apollo-link';
-import { createHttpLink } from 'apollo-link-http';
-import { setContext } from 'apollo-link-context';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { onError } from 'apollo-link-error';
-import { ApolloProvider } from '@apollo/react-hooks';
+import {
+  ApolloClient,
+  createHttpLink,
+  InMemoryCache,
+  from,
+  ApolloProvider,
+} from '@apollo/client';
+
+import { setContext } from '@apollo/client/link/context';
+import { onError } from '@apollo/client/link/error';
 import './generated/index.css';
 import { config } from './config';
 import { AuthProvider } from './modules/auth/AuthContext';
