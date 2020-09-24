@@ -185,8 +185,6 @@ const typeDefs = gql`
     appLogs(appId: String!): AppLogsResult!
     databaseInfo(databaseId: String!): DatabaseInfoResult!
     databaseLogs(databaseId: String!): DatabaseLogsResult!
-    databasesLinkedToApp(appId: String!): DatabasesLinkedToAppResult!
-    appsLinkedToDatabase(databaseId: String!): AppsLinkedToDatabaseResult!
     isDatabaseLinked(
       databaseId: String!
       appId: String!

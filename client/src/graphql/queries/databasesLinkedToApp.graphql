@@ -1,9 +1,0 @@
-query databasesLinkedToApp($appId: String!) {
-  databasesLinkedToApp(appId: $appId) {
-    databases {
-      id
-      name
-      type
-    }
-  }
-}

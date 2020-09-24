@@ -206,8 +206,6 @@ export type Query = {
   appLogs: AppLogsResult;
   databaseInfo: DatabaseInfoResult;
   databaseLogs: DatabaseLogsResult;
-  databasesLinkedToApp: DatabasesLinkedToAppResult;
-  appsLinkedToDatabase: AppsLinkedToDatabaseResult;
   isDatabaseLinked: IsDatabaseLinkedResult;
   envVars: EnvVarsResult;
 };
@@ -239,16 +237,6 @@ export type QueryDatabaseInfoArgs = {
 
 
 export type QueryDatabaseLogsArgs = {
-  databaseId: Scalars['String'];
-};
-
-
-export type QueryDatabasesLinkedToAppArgs = {
-  appId: Scalars['String'];
-};
-
-
-export type QueryAppsLinkedToDatabaseArgs = {
   databaseId: Scalars['String'];
 };
 
@@ -638,8 +626,6 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   appLogs?: Resolver<ResolversTypes['AppLogsResult'], ParentType, ContextType, RequireFields<QueryAppLogsArgs, 'appId'>>;
   databaseInfo?: Resolver<ResolversTypes['DatabaseInfoResult'], ParentType, ContextType, RequireFields<QueryDatabaseInfoArgs, 'databaseId'>>;
   databaseLogs?: Resolver<ResolversTypes['DatabaseLogsResult'], ParentType, ContextType, RequireFields<QueryDatabaseLogsArgs, 'databaseId'>>;
-  databasesLinkedToApp?: Resolver<ResolversTypes['DatabasesLinkedToAppResult'], ParentType, ContextType, RequireFields<QueryDatabasesLinkedToAppArgs, 'appId'>>;
-  appsLinkedToDatabase?: Resolver<ResolversTypes['AppsLinkedToDatabaseResult'], ParentType, ContextType, RequireFields<QueryAppsLinkedToDatabaseArgs, 'databaseId'>>;
   isDatabaseLinked?: Resolver<ResolversTypes['IsDatabaseLinkedResult'], ParentType, ContextType, RequireFields<QueryIsDatabaseLinkedArgs, 'databaseId' | 'appId'>>;
   envVars?: Resolver<ResolversTypes['EnvVarsResult'], ParentType, ContextType, RequireFields<QueryEnvVarsArgs, 'appId'>>;
 };

@@ -208,8 +208,6 @@ export type Query = {
   appLogs: AppLogsResult;
   databaseInfo: DatabaseInfoResult;
   databaseLogs: DatabaseLogsResult;
-  databasesLinkedToApp: DatabasesLinkedToAppResult;
-  appsLinkedToDatabase: AppsLinkedToDatabaseResult;
   isDatabaseLinked: IsDatabaseLinkedResult;
   envVars: EnvVarsResult;
 };
@@ -241,16 +239,6 @@ export type QueryDatabaseInfoArgs = {
 
 
 export type QueryDatabaseLogsArgs = {
-  databaseId: Scalars['String'];
-};
-
-
-export type QueryDatabasesLinkedToAppArgs = {
-  appId: Scalars['String'];
-};
-
-
-export type QueryAppsLinkedToDatabaseArgs = {
   databaseId: Scalars['String'];
 };
 
@@ -497,22 +485,6 @@ export type AppsQuery = (
   )> }
 );
 
-export type AppsLinkedToDatabaseQueryVariables = Exact<{
-  databaseId: Scalars['String'];
-}>;
-
-
-export type AppsLinkedToDatabaseQuery = (
-  { __typename?: 'Query' }
-  & { appsLinkedToDatabase: (
-    { __typename?: 'AppsLinkedToDatabaseResult' }
-    & { apps: Array<Maybe<(
-      { __typename?: 'App' }
-      & Pick<App, 'id' | 'name'>
-    )>> }
-  ) }
-);
-
 export type DashboardQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -579,22 +551,6 @@ export type DatabaseQuery = (
     { __typename?: 'Database' }
     & Pick<Database, 'id' | 'name' | 'type'>
   )> }
-);
-
-export type DatabasesLinkedToAppQueryVariables = Exact<{
-  appId: Scalars['String'];
-}>;
-
-
-export type DatabasesLinkedToAppQuery = (
-  { __typename?: 'Query' }
-  & { databasesLinkedToApp: (
-    { __typename?: 'DatabasesLinkedToAppResult' }
-    & { databases: Array<Maybe<(
-      { __typename?: 'Database' }
-      & Pick<Database, 'id' | 'name' | 'type'>
-    )>> }
-  ) }
 );
 
 export type EnvVarsQueryVariables = Exact<{
@@ -1046,42 +1002,6 @@ export function useAppsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOpt
 export type AppsQueryHookResult = ReturnType<typeof useAppsQuery>;
 export type AppsLazyQueryHookResult = ReturnType<typeof useAppsLazyQuery>;
 export type AppsQueryResult = ApolloReactCommon.QueryResult<AppsQuery, AppsQueryVariables>;
-export const AppsLinkedToDatabaseDocument = gql`
-    query appsLinkedToDatabase($databaseId: String!) {
-  appsLinkedToDatabase(databaseId: $databaseId) {
-    apps {
-      id
-      name
-    }
-  }
-}
-    `;
-
-/**
- * __useAppsLinkedToDatabaseQuery__
- *
- * To run a query within a React component, call `useAppsLinkedToDatabaseQuery` and pass it any options that fit your needs.
- * When your component renders, `useAppsLinkedToDatabaseQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useAppsLinkedToDatabaseQuery({
- *   variables: {
- *      databaseId: // value for 'databaseId'
- *   },
- * });
- */
-export function useAppsLinkedToDatabaseQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<AppsLinkedToDatabaseQuery, AppsLinkedToDatabaseQueryVariables>) {
-        return ApolloReactHooks.useQuery<AppsLinkedToDatabaseQuery, AppsLinkedToDatabaseQueryVariables>(AppsLinkedToDatabaseDocument, baseOptions);
-      }
-export function useAppsLinkedToDatabaseLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<AppsLinkedToDatabaseQuery, AppsLinkedToDatabaseQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<AppsLinkedToDatabaseQuery, AppsLinkedToDatabaseQueryVariables>(AppsLinkedToDatabaseDocument, baseOptions);
-        }
-export type AppsLinkedToDatabaseQueryHookResult = ReturnType<typeof useAppsLinkedToDatabaseQuery>;
-export type AppsLinkedToDatabaseLazyQueryHookResult = ReturnType<typeof useAppsLinkedToDatabaseLazyQuery>;
-export type AppsLinkedToDatabaseQueryResult = ApolloReactCommon.QueryResult<AppsLinkedToDatabaseQuery, AppsLinkedToDatabaseQueryVariables>;
 export const DashboardDocument = gql`
     query dashboard {
   apps {
@@ -1261,43 +1181,6 @@ export function useDatabaseLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHoo
 export type DatabaseQueryHookResult = ReturnType<typeof useDatabaseQuery>;
 export type DatabaseLazyQueryHookResult = ReturnType<typeof useDatabaseLazyQuery>;
 export type DatabaseQueryResult = ApolloReactCommon.QueryResult<DatabaseQuery, DatabaseQueryVariables>;
-export const DatabasesLinkedToAppDocument = gql`
-    query databasesLinkedToApp($appId: String!) {
-  databasesLinkedToApp(appId: $appId) {
-    databases {
-      id
-      name
-      type
-    }
-  }
-}
-    `;
-
-/**
- * __useDatabasesLinkedToAppQuery__
- *
- * To run a query within a React component, call `useDatabasesLinkedToAppQuery` and pass it any options that fit your needs.
- * When your component renders, `useDatabasesLinkedToAppQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useDatabasesLinkedToAppQuery({
- *   variables: {
- *      appId: // value for 'appId'
- *   },
- * });
- */
-export function useDatabasesLinkedToAppQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<DatabasesLinkedToAppQuery, DatabasesLinkedToAppQueryVariables>) {
-        return ApolloReactHooks.useQuery<DatabasesLinkedToAppQuery, DatabasesLinkedToAppQueryVariables>(DatabasesLinkedToAppDocument, baseOptions);
-      }
-export function useDatabasesLinkedToAppLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<DatabasesLinkedToAppQuery, DatabasesLinkedToAppQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<DatabasesLinkedToAppQuery, DatabasesLinkedToAppQueryVariables>(DatabasesLinkedToAppDocument, baseOptions);
-        }
-export type DatabasesLinkedToAppQueryHookResult = ReturnType<typeof useDatabasesLinkedToAppQuery>;
-export type DatabasesLinkedToAppLazyQueryHookResult = ReturnType<typeof useDatabasesLinkedToAppLazyQuery>;
-export type DatabasesLinkedToAppQueryResult = ApolloReactCommon.QueryResult<DatabasesLinkedToAppQuery, DatabasesLinkedToAppQueryVariables>;
 export const EnvVarsDocument = gql`
     query envVars($appId: String!) {
   envVars(appId: $appId) {
