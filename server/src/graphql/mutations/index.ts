@@ -6,6 +6,7 @@ import { createApp } from './createApp';
 import { destroyApp } from './destroyApp';
 import { destroyDatabase } from './destroyDatabase';
 import { linkDatabase } from './linkDatabase';
+import { unlinkDatabase } from './unlinkDatabase';
 
 export const mutations = {
   loginWithGithub,
@@ -16,4 +17,5 @@ export const mutations = {
   destroyApp,
   destroyDatabase,
   linkDatabase,
+  unlinkDatabase,
 };

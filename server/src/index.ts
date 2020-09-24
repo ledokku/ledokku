@@ -72,6 +72,10 @@ const typeDefs = gql`
     result: Boolean!
   }
 
+  type UnlinkDatabaseResult {
+    result: Boolean!
+  }
+
   type DokkuPlugin {
     name: String!
     version: String!
@@ -133,6 +137,11 @@ const typeDefs = gql`
     type: DatabaseTypes!
   }
 
+  input UnlinkDatabaseInput {
+    appId: String!
+    databaseId: String!
+  }
+
   input SetEnvVarInput {
     appId: String!
     key: String!
@@ -188,6 +197,7 @@ const typeDefs = gql`
     destroyApp(input: DestroyAppInput!): DestroyAppResult!
     destroyDatabase(input: DestroyDatabaseInput!): DestroyDatabaseResult!
     linkDatabase(input: LinkDatabaseInput!): LinkDatabaseResult!
+    unlinkDatabase(input: UnlinkDatabaseInput!): UnlinkDatabaseResult!
   }
 `;
 
