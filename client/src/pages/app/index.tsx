@@ -220,6 +220,25 @@ export const App = () => {
                     </div>
                   </React.Fragment>
                 )}
+                {!loading && app && app.databases && (
+                  <React.Fragment>
+                    <h2 className="mb-1 mt-3 font-semibold">
+                      {app.databases.length > 0 && 'Linked databases'}
+                    </h2>
+                    {app.databases.map((database) => (
+                      <div className="w-64" key={database.id}>
+                        <Link
+                          to={`/database/${database.id}`}
+                          className="py-2 block"
+                        >
+                          <div className="flex items-center py-3 px-2 shadow hover:shadow-md transition-shadow duration-100 ease-in-out rounded bg-white">
+                            {database.name}
+                          </div>
+                        </Link>
+                      </div>
+                    ))}
+                  </React.Fragment>
+                )}
               </React.Fragment>
             )}
           </div>
