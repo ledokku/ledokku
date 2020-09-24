@@ -1,6 +1,7 @@
 /* eslint-disable */
 import gql from 'graphql-tag';
-import { ApolloProvider} from '@apollo/client';
+import * as ApolloReactCommon from '@apollo/client';
+import * as ApolloReactHooks from '@apollo/client';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: any }> = { [K in keyof T]: T[K] };
 
