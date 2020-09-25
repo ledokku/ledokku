@@ -33,7 +33,6 @@
     "formik": "2.1.5",
     "graphql": "15.3.0",
     "jwt-decode": "2.2.0",
-    "polished": "3.6.5",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-feather": "2.0.8",
