@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
+import AnsiUp from 'ansi_up';
 import { Header } from '../../modules/layout/Header';
 import { useAppByIdQuery, useAppLogsQuery } from '../../generated/graphql';
 import {
@@ -34,6 +35,18 @@ export const Logs = () => {
     // we fetch status every 2 min 30 sec
     pollInterval: 15000,
   });
+
+  const memoizedLogsHtml = useMemo(() => {
+    if (!appLogsData?.appLogs.logs) {
+      return null;
+    }
+    const data = appLogsData.appLogs.logs.map((log) => {
+      const ansiIUp = new AnsiUp();
+      const html = ansiIUp.ansi_to_html(log);
+      return html;
+    });
+    return data;
+  }, [appLogsData]);
 
   if (!data) {
     return null;
@@ -83,15 +96,10 @@ export const Logs = () => {
             </AlertDescription>
           </Alert>
         ) : null}
-        {!appLogsLoading && appLogsData ? (
-          <Terminal className="pt-8 pb-16">
-            {appLogsData.appLogs.logs.map((log) => (
-              <p
-                key={appLogsData.appLogs.logs.indexOf(log)}
-                className="mt-1 text-green-400"
-              >
-                {log}
-              </p>
+        {memoizedLogsHtml ? (
+          <Terminal className="mb-8">
+            {memoizedLogsHtml.map((html, index) => (
+              <p key={index} dangerouslySetInnerHTML={{ __html: html }}></p>
             ))}
           </Terminal>
         ) : null}
