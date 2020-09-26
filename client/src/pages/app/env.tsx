@@ -72,7 +72,7 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
   return (
     //TODO Handle visual feedback on changing env
     //TODO Provide infos about env vars
-    <form onSubmit={formik.handleSubmit} className="mt-2">
+    <form onSubmit={formik.handleSubmit} autoComplete="off" className="mt-2">
       <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4">
         <div className="mt-8">
           <input
@@ -186,7 +186,7 @@ export const Env = () => {
       </div>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="mt-16 text-lg font-semibold">Set env variables</h1>
+        <h1 className="text-lg font-bold py-5 mt-10">Set env variables</h1>
         <div className="mt-4 mb-4">
           <h2 className="text-gray-400">
             Before modifying any of these, make sure you are familiar with dokku
