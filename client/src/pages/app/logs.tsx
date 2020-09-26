@@ -23,7 +23,7 @@ export const Logs = () => {
   const {
     data: appLogsData,
     loading: appLogsLoading,
-    /* error: appLogsError, */
+    error: appLogsError,
   } = useAppLogsQuery({
     variables: {
       appId,
@@ -85,6 +85,12 @@ export const Logs = () => {
           <p className="text-gray-400 text-sm">Loading...</p>
         ) : null}
 
+        {appLogsError ? (
+          <Alert status="error">
+            <AlertDescription>{appLogsError.message}</AlertDescription>
+          </Alert>
+        ) : null}
+
         {!appLogsLoading && !appLogsData ? (
           <Alert status="info">
             <AlertDescription>
@@ -94,6 +100,7 @@ export const Logs = () => {
             </AlertDescription>
           </Alert>
         ) : null}
+
         {memoizedLogsHtml ? (
           <Terminal className="mb-8">
             {memoizedLogsHtml.map((html, index) => (
