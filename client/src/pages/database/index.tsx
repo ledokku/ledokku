@@ -41,15 +41,7 @@ export const Database = () => {
     pollInterval: 25000,
   });
 
-  const [
-    unlinkDatabaseMutation,
-    {
-      // COMMENTED OUT UNTIL WE INTEGRATE TOASTIFY
-      // data: databaseUnlinkData,
-      // loading: databasUnlinkLoading,
-      // error: databaseUnlinkError,
-    },
-  ] = useUnlinkDatabaseMutation();
+  const [unlinkDatabaseMutation] = useUnlinkDatabaseMutation();
 
   const {
     data: subscriptionData,
