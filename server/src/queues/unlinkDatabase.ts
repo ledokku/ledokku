@@ -48,11 +48,7 @@ const worker = new Worker(
 
     const arrayOfLogs = res.stdout.split('\n');
 
-    arrayOfLogs.forEach((log) => {
-      pubsub.publish('DATABASE_UNLINKED', {
-        unlinkDatabaseLogs: [log],
-      });
-    });
+    pubsub.publish('DATABASE_UNLINKED', { unlinkDatabaseLogs: arrayOfLogs });
 
     console.log('res stdout', res.stdout);
 

@@ -9,6 +9,7 @@ interface ModalProps {
   closeModal: () => void;
   ctaFn: () => void;
   isCtaLoading: boolean;
+  isCtaDisabled?: boolean;
   isWarningModal: boolean;
 }
 
@@ -18,6 +19,7 @@ export const Modal = ({
   mainText,
   header,
   isCtaLoading,
+  isCtaDisabled,
   isWarningModal,
   ctaFn,
   closeModal,
@@ -60,7 +62,9 @@ export const Modal = ({
               {header}
             </h3>
             <div className="mt-2">
-              <p className="text-sm leading-5 text-gray-500">{mainText}</p>
+              <p className="mt-5 text-sm leading-5 text-gray-500 break-words">
+                {mainText}
+              </p>
             </div>
           </div>
         </div>
@@ -73,6 +77,7 @@ export const Modal = ({
             type="button"
             onClick={ctaFn}
             isLoading={isCtaLoading}
+            disabled={isCtaDisabled}
           >
             {ctaButton}
           </Button>
