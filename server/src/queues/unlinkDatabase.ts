@@ -1,9 +1,7 @@
 import { dbTypeToDokkuPlugin } from './../graphql/utils';
-
 import { Worker, Queue } from 'bullmq';
 import createDebug from 'debug';
 import { pubsub } from './../index';
-
 import { config } from '../config';
 import { sshConnect } from '../lib/ssh';
 import { prisma } from '../prisma';
@@ -52,12 +50,22 @@ const worker = new Worker(
     const ssh = await sshConnect();
 
     const res = await ssh.execCommand(
-      `${dbType}:unlink ${database.name} ${app.name}`
+      `${dbType}:unlink ${database.name} ${app.name}`,
+      {
+        onStdout: (chunk) => {
+          pubsub.publish('DATABASE_UNLINKED', {
+            unlinkDatabaseLogs: [chunk.toString()],
+          });
+        },
+        onStderr: (chunk) => {
+          pubsub.publish('DATABASE_UNLINKED', {
+            unlinkDatabaseLogs: [chunk.toString()],
+          });
+        },
+      }
     );
 
     const arrayOfLogs = res.stdout.split('\n');
-
-    pubsub.publish('DATABASE_UNLINKED', { unlinkDatabaseLogs: arrayOfLogs });
 
     await prisma.database.update({
       where: { id: database.id },

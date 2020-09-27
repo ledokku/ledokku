@@ -15,6 +15,7 @@ import { TabNav, TabNavLink, Button, Modal, Terminal } from '../../ui';
 export const Database = () => {
   const { id: databaseId } = useParams<{ id: string }>();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [arrayOfLogs, setArrayOfLogs] = useState<string[]>([]);
   const [isTerminalVisible, setIsTerminalVisible] = useState(false);
   const [unlinkLoading, setUnlinkLoading] = useState(false);
   const [selectedApp, setSelectedApp] = useState({
@@ -32,13 +33,12 @@ export const Database = () => {
 
   const { data: appsData } = useAppsQuery();
 
-  const { data, loading /* error */ } = useDatabaseByIdQuery({
+  const { data, loading, refetch /* error */ } = useDatabaseByIdQuery({
     variables: {
       databaseId,
     },
     ssr: false,
     skip: !databaseId,
-    pollInterval: 25000,
   });
 
   const [unlinkDatabaseMutation] = useUnlinkDatabaseMutation();
@@ -46,7 +46,15 @@ export const Database = () => {
   const {
     data: subscriptionData,
     // loading: subscriptionLoading,
-  } = useUnlinkDatabaseLogsSubscription();
+  } = useUnlinkDatabaseLogsSubscription({
+    onSubscriptionData: (data) => {
+      const logsExist = data.subscriptionData.data?.unlinkDatabaseLogs?.[0];
+      if (logsExist)
+        setArrayOfLogs((currentLogs) => {
+          return [...currentLogs, logsExist];
+        });
+    },
+  });
 
   if (!data || !appsData) {
     return null;
@@ -284,33 +292,16 @@ export const Database = () => {
                                     Unlinking <b>{app.name}</b> from{' '}
                                     <b>{database.name}</b>!
                                   </p>
-                                  <Terminal
-                                    className={
-                                      subscriptionData &&
-                                      subscriptionData.unlinkDatabaseLogs &&
-                                      subscriptionData.unlinkDatabaseLogs
-                                        .length > 0
-                                        ? '-ml-14 w-5/6 break-words'
-                                        : '-ml-14 w-6/6 break-words'
-                                    }
-                                  >
+                                  <Terminal className={'-ml-13 w-6/6'}>
                                     <p className="text-green-400 mb-2">
                                       Unlinking process usually takes a couple
                                       of minutes. Breathe in, breathe out, logs
                                       are about to appear below:
                                     </p>
 
-                                    {subscriptionData &&
-                                      subscriptionData.unlinkDatabaseLogs &&
-                                      subscriptionData.unlinkDatabaseLogs
-                                        .length > 0 &&
-                                      subscriptionData.unlinkDatabaseLogs.map(
-                                        (log) => (
-                                          <p className="text-s leading-5">
-                                            {log}
-                                          </p>
-                                        )
-                                      )}
+                                    {arrayOfLogs.map((log) => (
+                                      <p className="text-s leading-5">{log}</p>
+                                    ))}
                                   </Terminal>
                                 </React.Fragment>
                               ) : (
@@ -322,6 +313,7 @@ export const Database = () => {
                             }
                             header={'Unlink database'}
                             closeModal={() => {
+                              refetch({ databaseId });
                               setIsModalOpen(false);
                               setUnlinkLoading(false);
                             }}
