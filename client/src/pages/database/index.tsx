@@ -46,14 +46,14 @@ export const Database = () => {
     {
       // COMMENTED OUT UNTIL WE INTEGRATE TOASTIFY
       // data: databaseUnlinkData,
-      loading: databasUnlinkLoading,
+      // loading: databasUnlinkLoading,
       // error: databaseUnlinkError,
     },
   ] = useUnlinkDatabaseMutation();
 
   const {
     data: subscriptionData,
-    loading: subscriptionLoading,
+    // loading: subscriptionLoading,
   } = useUnlinkDatabaseLogsSubscription();
 
   if (!data || !appsData) {
