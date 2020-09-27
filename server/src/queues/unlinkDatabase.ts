@@ -1,5 +1,5 @@
 import { dbTypeToDokkuPlugin } from './../graphql/utils';
-import { Database, App } from '../generated/graphql';
+
 import { Worker, Queue } from 'bullmq';
 import createDebug from 'debug';
 import { pubsub } from './../index';
@@ -12,8 +12,8 @@ const queueName = 'unlink-database';
 const debug = createDebug(`queue:${queueName}`);
 
 interface QueueArgs {
-  appId: String;
-  databaseId: String;
+  appId: string;
+  databaseId: string;
 }
 
 export const unlinkDatabaseQueue = new Queue<QueueArgs>(queueName, {
