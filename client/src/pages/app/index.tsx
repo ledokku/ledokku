@@ -40,11 +40,7 @@ export const App = () => {
   ] = useLinkDatabaseMutation();
 
   const [unlinkDatabaseMutation] = useUnlinkDatabaseMutation();
-
-  const {
-    data: subscriptionData,
-    // loading: subscriptionLoading,
-  } = useUnlinkDatabaseLogsSubscription({
+  useUnlinkDatabaseLogsSubscription({
     onSubscriptionData: (data) => {
       const logsExist = data.subscriptionData.data?.unlinkDatabaseLogs?.[0];
       if (logsExist)
