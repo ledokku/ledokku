@@ -12,8 +12,8 @@ const queueName = 'unlink-database';
 const debug = createDebug(`queue:${queueName}`);
 
 interface QueueArgs {
-  app: App;
-  database: Database;
+  appId: String;
+  databaseId: String;
 }
 
 export const unlinkDatabaseQueue = new Queue<QueueArgs>(queueName, {
@@ -30,11 +30,20 @@ export const unlinkDatabaseQueue = new Queue<QueueArgs>(queueName, {
 const worker = new Worker(
   queueName,
   async (job) => {
-    const { app, database } = job.data;
+    const { appId, databaseId } = job.data;
+    const app = await prisma.app.findOne({
+      where: {
+        id: appId,
+      },
+    });
+
+    const database = await prisma.database.findOne({
+      where: {
+        id: databaseId,
+      },
+    });
+
     debug(
-      `starting unlinkDatabaseQueue for ${database.type} database ${database.name} from  ${app.name} app`
-    );
-    console.log(
       `starting unlinkDatabaseQueue for ${database.type} database ${database.name} from  ${app.name} app`
     );
 
@@ -50,8 +59,6 @@ const worker = new Worker(
 
     pubsub.publish('DATABASE_UNLINKED', { unlinkDatabaseLogs: arrayOfLogs });
 
-    console.log('res stdout', res.stdout);
-
     await prisma.database.update({
       where: { id: database.id },
       data: {
@@ -61,9 +68,6 @@ const worker = new Worker(
       },
     });
 
-    console.log(
-      `finishing unlinkDatabaseQueue for ${database.type} database ${database.name} from  ${app.name} app`
-    );
     debug(
       `finishing unlinkDatabaseQueue for ${database.type} database ${database.name} from  ${app.name} app`
     );

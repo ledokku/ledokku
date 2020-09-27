@@ -15,8 +15,8 @@ export const unlinkDatabase: MutationResolvers['unlinkDatabase'] = async (
 
   const { databaseId, appId } = input;
 
-  const [database, app] = await Promise.all([
-    prisma.database.findOne({
+  const database = await prisma.database
+    .findOne({
       where: {
         id: databaseId,
       },
@@ -27,15 +27,12 @@ export const unlinkDatabase: MutationResolvers['unlinkDatabase'] = async (
           },
         },
       },
-    }),
-    prisma.app.findOne({
-      where: {
-        id: appId,
-      },
-    }),
-  ]).catch((e) => {
-    throw new Error(`failed to get data from db due to:${e}`);
-  });
+    })
+    .catch((e) => {
+      throw new Error(`failed to get data from db due to:${e}`);
+    });
+
+  const app = database.apps[0];
 
   if (!app) {
     throw new Error(`App with ID ${appId} not found`);
@@ -60,8 +57,8 @@ export const unlinkDatabase: MutationResolvers['unlinkDatabase'] = async (
   }
 
   await unlinkDatabaseQueue.add('unlink-database', {
-    app,
-    database,
+    appId,
+    databaseId,
   });
 
   return { result: true };

@@ -74,14 +74,14 @@ const splitLink = split(
   httpLink
 );
 
-const client = new ApolloClient({
+const apolloClient = new ApolloClient({
   link: from([authLink, errorLink, splitLink]),
   cache: new InMemoryCache(),
 });
 
 ReactDOM.render(
   <React.StrictMode>
-    <ApolloProvider client={client}>
+    <ApolloProvider client={apolloClient}>
       <AuthProvider>
         <GlobalStyle />
         <Router />
