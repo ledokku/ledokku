@@ -18,6 +18,10 @@ import {
   Modal,
   Terminal,
 } from '../../ui';
+import { PostgreSQLIcon } from '../../ui/icons/PostgreSQLIcon';
+import { MongoIcon } from '../../ui/icons/MongoIcon';
+import { RedisIcon } from '../../ui/icons/RedisIcon';
+import { MySQLIcon } from '../../ui/icons/MySQLIcon';
 
 export const App = () => {
   const { id: appId } = useParams<{ id: string }>();
@@ -325,6 +329,26 @@ export const App = () => {
                           className="py-2 block"
                         >
                           <div className="w-64 flex items-center py-3 px-2 shadow hover:shadow-md transition-shadow duration-100 ease-in-out rounded bg-white">
+                            {database.type === 'POSTGRESQL' ? (
+                              <React.Fragment>
+                                <PostgreSQLIcon size={16} className="mr-1" />
+                              </React.Fragment>
+                            ) : undefined}
+                            {database.type === 'MONGODB' ? (
+                              <React.Fragment>
+                                <MongoIcon size={16} className="mr-1" />
+                              </React.Fragment>
+                            ) : undefined}
+                            {database.type === 'REDIS' ? (
+                              <React.Fragment>
+                                <RedisIcon size={16} className="mr-1" />
+                              </React.Fragment>
+                            ) : undefined}
+                            {database.type === 'MYSQL' ? (
+                              <React.Fragment>
+                                <MySQLIcon size={16} className="mr-1" />
+                              </React.Fragment>
+                            ) : undefined}
                             {database.name}
                           </div>
                         </Link>
