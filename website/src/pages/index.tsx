@@ -100,10 +100,16 @@ function Home() {
                 <img alt="App view" src="img/app1.png" />
               </div>
               <div>
+                <img alt="Delete app view" src="img/unlinklogs.png" />
+              </div>
+              <div>
+                <img alt="Delete app view" src="img/applogs.png" />
+              </div>
+              <div>
                 <img alt="Environment variables view" src="img/env1.png" />
               </div>
               <div>
-                <img alt="Delete app view" src="img/delete1.png" />
+                <img alt="Environment variables view" src="img/delete1.png" />
               </div>
             </Carousel>
           </div>

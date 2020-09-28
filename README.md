@@ -2,11 +2,11 @@
 
 ### Dashboard preview
 
-![Dashboard](/images/Dashboard1.png)
+![Dashboard](/images/dashboard1.png)
 
 ### App info preview
 
-![App](/images/App1.png)
+![App](/images/app1.png)
 
 Ledokku is a beautiful UI powered by [dokku](http://dokku.viewdocs.io/dokku/)
 
