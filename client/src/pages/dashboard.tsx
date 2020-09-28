@@ -46,7 +46,7 @@ export const Dashboard = () => {
             </Button>
           </Link>
         </div>
-        <main className="grid grid-cols-1 md:grid-cols-12 md:gap-x-20">
+        <main className="grid grid-cols-1 gap-6 md:grid-cols-12 md:gap-x-20">
           <div className="col-span-7 mt-4">
             <h1 className="text-lg font-bold py-2">Apps</h1>
             {data?.apps.length === 0 ? (
@@ -116,7 +116,7 @@ export const Dashboard = () => {
               </div>
             ))}
           </div>
-          <div className="col-span-5 mt-4 ml-10">
+          <div className="col-span-5 mt-4">
             <h1 className="text-lg font-bold py-5">Latest activity</h1>
             <p className="text-gray-400 text-sm">Coming soon</p>
           </div>
