@@ -116,7 +116,7 @@ export const Dashboard = () => {
               </div>
             ))}
           </div>
-          <div className="col-span-5 mt-4">
+          <div className="col-span-5 mt-4 ml-10">
             <h1 className="text-lg font-bold py-5">Latest activity</h1>
             <p className="text-gray-400 text-sm">Coming soon</p>
           </div>
