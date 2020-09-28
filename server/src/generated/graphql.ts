@@ -244,6 +244,7 @@ export type QueryEnvVarsArgs = {
 export type Subscription = {
   __typename?: 'Subscription';
   unlinkDatabaseLogs?: Maybe<Array<Scalars['String']>>;
+  linkDatabaseLogs?: Maybe<Array<Scalars['String']>>;
 };
 
 export type Mutation = {
@@ -608,6 +609,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
   unlinkDatabaseLogs?: SubscriptionResolver<Maybe<Array<ResolversTypes['String']>>, "unlinkDatabaseLogs", ParentType, ContextType>;
+  linkDatabaseLogs?: SubscriptionResolver<Maybe<Array<ResolversTypes['String']>>, "linkDatabaseLogs", ParentType, ContextType>;
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {

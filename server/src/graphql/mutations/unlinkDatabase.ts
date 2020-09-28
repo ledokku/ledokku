@@ -1,7 +1,5 @@
 import { unlinkDatabaseQueue } from './../../queues/unlinkDatabase';
-import { dbTypeToDokkuPlugin } from './../utils';
 import { MutationResolvers } from '../../generated/graphql';
-
 import { prisma } from '../../prisma';
 
 export const unlinkDatabase: MutationResolvers['unlinkDatabase'] = async (

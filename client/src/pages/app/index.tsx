@@ -6,8 +6,8 @@ import {
   useDatabaseQuery,
   useLinkDatabaseMutation,
   useUnlinkDatabaseMutation,
-  AppByIdDocument,
   useUnlinkDatabaseLogsSubscription,
+  useLinkDatabaseLogsSubscription,
 } from '../../generated/graphql';
 import { useParams, Link } from 'react-router-dom';
 import {
@@ -18,13 +18,20 @@ import {
   Modal,
   Terminal,
 } from '../../ui';
+import { PostgreSQLIcon } from '../../ui/icons/PostgreSQLIcon';
+import { MongoIcon } from '../../ui/icons/MongoIcon';
+import { RedisIcon } from '../../ui/icons/RedisIcon';
+import { MySQLIcon } from '../../ui/icons/MySQLIcon';
 
 export const App = () => {
   const { id: appId } = useParams<{ id: string }>();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [arrayOfLogs, setArrayOfLogs] = useState<string[]>([]);
+  const [isUnlinkModalOpen, setIsUnlinkModalOpen] = useState(false);
+  const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
+  const [arrayOfLinkLogs, setArrayOfLinkLogs] = useState<string[]>([]);
+  const [arrayOfUnlinkLogs, setArrayOfUnlinkLogs] = useState<string[]>([]);
   const [isTerminalVisible, setIsTerminalVisible] = useState(false);
   const [unlinkLoading, setUnlinkLoading] = useState(false);
+  const [linkLoading, setLinkLoading] = useState(false);
 
   const [selectedDb, setSelectedDb] = useState({
     value: { name: '', id: '', type: '' },
@@ -44,9 +51,20 @@ export const App = () => {
     onSubscriptionData: (data) => {
       const logsExist = data.subscriptionData.data?.unlinkDatabaseLogs?.[0];
       if (logsExist)
-        setArrayOfLogs((currentLogs) => {
+        setArrayOfUnlinkLogs((currentLogs) => {
           return [...currentLogs, logsExist];
         });
+    },
+  });
+
+  useLinkDatabaseLogsSubscription({
+    onSubscriptionData: (data) => {
+      const logsExist = data.subscriptionData.data?.linkDatabaseLogs?.[0];
+      if (logsExist) {
+        setArrayOfLinkLogs((currentLogs) => {
+          return [...currentLogs, logsExist];
+        });
+      }
     },
   });
 
@@ -122,17 +140,13 @@ export const App = () => {
             appId,
           },
         },
-        refetchQueries: [
-          {
-            query: AppByIdDocument,
-            variables: { appId },
-          },
-        ],
       });
       setSelectedDb({
         value: { name: '', id: '', type: '' },
         label: 'Please select db',
       });
+      setIsTerminalVisible(true);
+      setLinkLoading(true);
     } catch (e) {
       //TODO - REACT TOSTIFY
     }
@@ -235,11 +249,53 @@ export const App = () => {
                       }
                       disabled={!selectedDb.value.id}
                       onClick={() => {
-                        handleConnect(selectedDb.value.id, appId);
+                        setIsLinkModalOpen(true);
                       }}
                     >
                       Link database
                     </Button>
+                    {isLinkModalOpen && (
+                      <Modal
+                        closeModalButton={'Close'}
+                        ctaButton={`Link`}
+                        isCtaLoading={isTerminalVisible ? false : linkLoading}
+                        isCtaDisabled={isTerminalVisible}
+                        mainText={
+                          isTerminalVisible ? (
+                            <React.Fragment>
+                              <p className="mb-2 ">
+                                Linking <b>{selectedDb.value.name}</b> with{' '}
+                                <b>{app.name}</b>!
+                              </p>
+                              <Terminal className={'-ml-13 w-6/6'}>
+                                <p className="text-green-400 mb-2">
+                                  Linking process usually takes a couple of
+                                  minutes. Breathe in, breathe out, logs are
+                                  about to appear below:
+                                </p>
+                                {arrayOfLinkLogs.map((log) => (
+                                  <p className="text-s leading-5">{log}</p>
+                                ))}
+                              </Terminal>
+                            </React.Fragment>
+                          ) : (
+                            <p>
+                              Are you sure, you want to link{' '}
+                              <b>{selectedDb.value.name}</b> to{' '}
+                              <b>{app.name}</b>?
+                            </p>
+                          )
+                        }
+                        header={'Link database'}
+                        closeModal={() => {
+                          setIsLinkModalOpen(false);
+                          refetch({ appId });
+                          setLinkLoading(false);
+                        }}
+                        ctaFn={() => handleConnect(selectedDb.value.id, appId)}
+                        isWarningModal={true}
+                      />
+                    )}
                   </div>
                 ) : (
                   <React.Fragment>
@@ -273,6 +329,26 @@ export const App = () => {
                           className="py-2 block"
                         >
                           <div className="w-64 flex items-center py-3 px-2 shadow hover:shadow-md transition-shadow duration-100 ease-in-out rounded bg-white">
+                            {database.type === 'POSTGRESQL' ? (
+                              <React.Fragment>
+                                <PostgreSQLIcon size={16} className="mr-1" />
+                              </React.Fragment>
+                            ) : undefined}
+                            {database.type === 'MONGODB' ? (
+                              <React.Fragment>
+                                <MongoIcon size={16} className="mr-1" />
+                              </React.Fragment>
+                            ) : undefined}
+                            {database.type === 'REDIS' ? (
+                              <React.Fragment>
+                                <RedisIcon size={16} className="mr-1" />
+                              </React.Fragment>
+                            ) : undefined}
+                            {database.type === 'MYSQL' ? (
+                              <React.Fragment>
+                                <MySQLIcon size={16} className="mr-1" />
+                              </React.Fragment>
+                            ) : undefined}
                             {database.name}
                           </div>
                         </Link>
@@ -281,13 +357,13 @@ export const App = () => {
                           className="mt-4 ml-2 h-10"
                           color="red"
                           onClick={() => {
-                            setIsModalOpen(true);
+                            setIsUnlinkModalOpen(true);
                           }}
                         >
                           Unlink
                         </Button>
 
-                        {isModalOpen && (
+                        {isUnlinkModalOpen && (
                           <Modal
                             closeModalButton={'Close'}
                             ctaButton={`Unlink`}
@@ -308,7 +384,7 @@ export const App = () => {
                                       of minutes. Breathe in, breathe out, logs
                                       are about to appear below:
                                     </p>
-                                    {arrayOfLogs.map((log) => (
+                                    {arrayOfUnlinkLogs.map((log) => (
                                       <p className="text-s leading-5">{log}</p>
                                     ))}
                                   </Terminal>
@@ -322,7 +398,7 @@ export const App = () => {
                             }
                             header={'Unlink database'}
                             closeModal={() => {
-                              setIsModalOpen(false);
+                              setIsUnlinkModalOpen(false);
                               refetch({ appId });
                               setUnlinkLoading(false);
                             }}
