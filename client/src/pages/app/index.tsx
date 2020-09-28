@@ -291,6 +291,7 @@ export const App = () => {
                           setIsLinkModalOpen(false);
                           refetch({ appId });
                           setLinkLoading(false);
+                          setIsTerminalVisible(false);
                         }}
                         ctaFn={() => handleConnect(selectedDb.value.id, appId)}
                         isWarningModal={true}
@@ -401,6 +402,7 @@ export const App = () => {
                               setIsUnlinkModalOpen(false);
                               refetch({ appId });
                               setUnlinkLoading(false);
+                              setIsTerminalVisible(false);
                             }}
                             ctaFn={() => handleUnlink(database.id, appId)}
                             isWarningModal={true}
