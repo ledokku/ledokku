@@ -1,8 +1,6 @@
-import { dbTypeToDokkuPlugin } from './../utils';
+import { linkDatabaseQueue } from '../../queues/linkDatabase';
 import { MutationResolvers } from '../../generated/graphql';
 import { prisma } from '../../prisma';
-import { dokku } from '../../lib/dokku';
-import { sshConnect } from '../../lib/ssh';
 
 export const linkDatabase: MutationResolvers['linkDatabase'] = async (
   _,
@@ -59,19 +57,9 @@ export const linkDatabase: MutationResolvers['linkDatabase'] = async (
     );
   }
 
-  const dbType = dbTypeToDokkuPlugin(database.type);
-
-  const ssh = await sshConnect();
-
-  await dokku.database.link(ssh, database.name, dbType, app.name);
-
-  await prisma.database.update({
-    where: { id: database.id },
-    data: {
-      apps: {
-        connect: { id: appId },
-      },
-    },
+  await linkDatabaseQueue.add('link-database', {
+    appId,
+    databaseId,
   });
 
   return { result: true };

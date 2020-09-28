@@ -246,6 +246,7 @@ export type QueryEnvVarsArgs = {
 export type Subscription = {
   __typename?: 'Subscription';
   unlinkDatabaseLogs?: Maybe<Array<Scalars['String']>>;
+  linkDatabaseLogs?: Maybe<Array<Scalars['String']>>;
 };
 
 export type Mutation = {
@@ -581,6 +582,14 @@ export type SetupQuery = (
     { __typename?: 'SetupResult' }
     & Pick<SetupResult, 'canConnectSsh' | 'sshPublicKey'>
   ) }
+);
+
+export type LinkDatabaseLogsSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LinkDatabaseLogsSubscription = (
+  { __typename?: 'Subscription' }
+  & Pick<Subscription, 'linkDatabaseLogs'>
 );
 
 export type UnlinkDatabaseLogsSubscriptionVariables = Exact<{ [key: string]: never; }>;
@@ -1273,6 +1282,32 @@ export function useSetupLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOp
 export type SetupQueryHookResult = ReturnType<typeof useSetupQuery>;
 export type SetupLazyQueryHookResult = ReturnType<typeof useSetupLazyQuery>;
 export type SetupQueryResult = ApolloReactCommon.QueryResult<SetupQuery, SetupQueryVariables>;
+export const LinkDatabaseLogsDocument = gql`
+    subscription LinkDatabaseLogs {
+  linkDatabaseLogs
+}
+    `;
+
+/**
+ * __useLinkDatabaseLogsSubscription__
+ *
+ * To run a query within a React component, call `useLinkDatabaseLogsSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useLinkDatabaseLogsSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useLinkDatabaseLogsSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useLinkDatabaseLogsSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<LinkDatabaseLogsSubscription, LinkDatabaseLogsSubscriptionVariables>) {
+        return ApolloReactHooks.useSubscription<LinkDatabaseLogsSubscription, LinkDatabaseLogsSubscriptionVariables>(LinkDatabaseLogsDocument, baseOptions);
+      }
+export type LinkDatabaseLogsSubscriptionHookResult = ReturnType<typeof useLinkDatabaseLogsSubscription>;
+export type LinkDatabaseLogsSubscriptionResult = ApolloReactCommon.SubscriptionResult<LinkDatabaseLogsSubscription>;
 export const UnlinkDatabaseLogsDocument = gql`
     subscription UnlinkDatabaseLogs {
   unlinkDatabaseLogs

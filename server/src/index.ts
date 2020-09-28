@@ -186,6 +186,7 @@ const typeDefs = gql`
 
   type Subscription {
     unlinkDatabaseLogs: [String!]
+    linkDatabaseLogs: [String!]
   }
 
   type Mutation {
@@ -203,6 +204,7 @@ const typeDefs = gql`
 
 export const pubsub = new PubSub();
 export const DATABASE_UNLINKED = 'DATABASE_UNLINKED';
+export const DATABASE_LINKED = 'DATABASE_LINKED';
 
 const resolvers: Resolvers<{ userId?: string }> = {
   Query: queries,
@@ -211,6 +213,10 @@ const resolvers: Resolvers<{ userId?: string }> = {
     unlinkDatabaseLogs: {
       // Additional event labels can be passed to asyncIterator creation
       subscribe: () => pubsub.asyncIterator([DATABASE_UNLINKED]),
+    },
+    linkDatabaseLogs: {
+      // Additional event labels can be passed to asyncIterator creation
+      subscribe: () => pubsub.asyncIterator([DATABASE_LINKED]),
     },
   },
   ...customResolvers,
