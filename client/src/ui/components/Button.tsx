@@ -32,16 +32,17 @@ export const Button = ({
         ? {
             'bg-gray-900 text-white transition-color duration-100 ease-in': true,
             'bg-red-500': color === 'red',
-            'hover:text-white border hover:border-transparent': !props.disabled,
-            'opacity-50 cursor-not-allowed': props.disabled,
+            'hover:text-white border hover:border-transparent':
+              !props.disabled || isLoading,
+            'opacity-50 cursor-not-allowed': props.disabled || isLoading,
           }
         : undefined,
       // outline variant styles
       variant === 'outline'
         ? {
             'text-gray-900 border border-gray-200 transition-color duration-100 ease-in': true,
-            'hover:border-gray-900': !props.disabled,
-            'opacity-50 cursor-not-allowed': props.disabled,
+            'hover:border-gray-900': !props.disabled || isLoading,
+            'opacity-50 cursor-not-allowed': props.disabled || isLoading,
           }
         : undefined,
       className

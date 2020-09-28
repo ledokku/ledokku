@@ -5,13 +5,26 @@ import {
   useAppByIdQuery,
   useDatabaseQuery,
   useLinkDatabaseMutation,
+  useUnlinkDatabaseMutation,
   AppByIdDocument,
+  useUnlinkDatabaseLogsSubscription,
 } from '../../generated/graphql';
 import { useParams, Link } from 'react-router-dom';
-import { TabNav, TabNavLink, Button, DatabaseLabel } from '../../ui';
+import {
+  TabNav,
+  TabNavLink,
+  Button,
+  DatabaseLabel,
+  Modal,
+  Terminal,
+} from '../../ui';
 
 export const App = () => {
   const { id: appId } = useParams<{ id: string }>();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [arrayOfLogs, setArrayOfLogs] = useState<string[]>([]);
+  const [isTerminalVisible, setIsTerminalVisible] = useState(false);
+  const [unlinkLoading, setUnlinkLoading] = useState(false);
 
   const [selectedDb, setSelectedDb] = useState({
     value: { name: '', id: '', type: '' },
@@ -26,12 +39,23 @@ export const App = () => {
     },
   ] = useLinkDatabaseMutation();
 
+  const [unlinkDatabaseMutation] = useUnlinkDatabaseMutation();
+  useUnlinkDatabaseLogsSubscription({
+    onSubscriptionData: (data) => {
+      const logsExist = data.subscriptionData.data?.unlinkDatabaseLogs?.[0];
+      if (logsExist)
+        setArrayOfLogs((currentLogs) => {
+          return [...currentLogs, logsExist];
+        });
+    },
+  });
+
   const {
     data: databaseData,
     loading: databaseDataLoading,
   } = useDatabaseQuery();
 
-  const { data, loading /* error */ } = useAppByIdQuery({
+  const { data, loading, refetch /* error */ } = useAppByIdQuery({
     variables: {
       appId,
     },
@@ -71,6 +95,23 @@ export const App = () => {
       label: <DatabaseLabel type={db.type} name={db.name} />,
     };
   });
+
+  const handleUnlink = async (databaseId: string, appId: string) => {
+    try {
+      await unlinkDatabaseMutation({
+        variables: {
+          input: {
+            databaseId,
+            appId,
+          },
+        },
+      });
+      setIsTerminalVisible(true);
+      setUnlinkLoading(true);
+    } catch (e) {
+      //TODO - REACT TOSTIFY
+    }
+  };
 
   const handleConnect = async (databaseId: string, appId: string) => {
     try {
@@ -218,6 +259,79 @@ export const App = () => {
                         </Button>
                       </Link>
                     </div>
+                  </React.Fragment>
+                )}
+                {!loading && app && app.databases && (
+                  <React.Fragment>
+                    <h2 className="mb-1 mt-3 font-semibold">
+                      {app.databases.length > 0 && 'Linked databases'}
+                    </h2>
+                    {app.databases.map((database) => (
+                      <div className="flex flex-row justify-start">
+                        <Link
+                          to={`/database/${database.id}`}
+                          className="py-2 block"
+                        >
+                          <div className="w-64 flex items-center py-3 px-2 shadow hover:shadow-md transition-shadow duration-100 ease-in-out rounded bg-white">
+                            {database.name}
+                          </div>
+                        </Link>
+                        <Button
+                          width="normal"
+                          className="mt-4 ml-2 h-10"
+                          color="red"
+                          onClick={() => {
+                            setIsModalOpen(true);
+                          }}
+                        >
+                          Unlink
+                        </Button>
+
+                        {isModalOpen && (
+                          <Modal
+                            closeModalButton={'Close'}
+                            ctaButton={`Unlink`}
+                            isCtaLoading={
+                              isTerminalVisible ? false : unlinkLoading
+                            }
+                            isCtaDisabled={isTerminalVisible}
+                            mainText={
+                              isTerminalVisible ? (
+                                <React.Fragment>
+                                  <p className="mb-2 ">
+                                    Unlinking <b>{database.name}</b> from{' '}
+                                    <b>{app.name}</b>!
+                                  </p>
+                                  <Terminal className={'-ml-13 w-6/6'}>
+                                    <p className="text-green-400 mb-2">
+                                      Unlinking process usually takes a couple
+                                      of minutes. Breathe in, breathe out, logs
+                                      are about to appear below:
+                                    </p>
+                                    {arrayOfLogs.map((log) => (
+                                      <p className="text-s leading-5">{log}</p>
+                                    ))}
+                                  </Terminal>
+                                </React.Fragment>
+                              ) : (
+                                <p>
+                                  Are you sure, you want to unlink{' '}
+                                  <b>{database.name}</b> from <b>{app.name}</b>?
+                                </p>
+                              )
+                            }
+                            header={'Unlink database'}
+                            closeModal={() => {
+                              setIsModalOpen(false);
+                              refetch({ appId });
+                              setUnlinkLoading(false);
+                            }}
+                            ctaFn={() => handleUnlink(database.id, appId)}
+                            isWarningModal={true}
+                          />
+                        )}
+                      </div>
+                    ))}
                   </React.Fragment>
                 )}
               </React.Fragment>

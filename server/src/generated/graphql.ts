@@ -77,6 +77,11 @@ export type LinkDatabaseResult = {
   result: Scalars['Boolean'];
 };
 
+export type UnlinkDatabaseResult = {
+  __typename?: 'UnlinkDatabaseResult';
+  result: Scalars['Boolean'];
+};
+
 export type DokkuPlugin = {
   __typename?: 'DokkuPlugin';
   name: Scalars['String'];
@@ -148,6 +153,11 @@ export type CreateAppInput = {
 export type CreateDatabaseInput = {
   name: Scalars['String'];
   type: DatabaseTypes;
+};
+
+export type UnlinkDatabaseInput = {
+  appId: Scalars['String'];
+  databaseId: Scalars['String'];
 };
 
 export type SetEnvVarInput = {
@@ -231,6 +241,11 @@ export type QueryEnvVarsArgs = {
   appId: Scalars['String'];
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  unlinkDatabaseLogs?: Maybe<Array<Scalars['String']>>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   loginWithGithub?: Maybe<LoginResult>;
@@ -241,6 +256,7 @@ export type Mutation = {
   destroyApp: DestroyAppResult;
   destroyDatabase: DestroyDatabaseResult;
   linkDatabase: LinkDatabaseResult;
+  unlinkDatabase: UnlinkDatabaseResult;
 };
 
 
@@ -281,6 +297,11 @@ export type MutationDestroyDatabaseArgs = {
 
 export type MutationLinkDatabaseArgs = {
   input: LinkDatabaseInput;
+};
+
+
+export type MutationUnlinkDatabaseArgs = {
+  input: UnlinkDatabaseInput;
 };
 
 export type CacheControlScope = 
@@ -380,6 +401,7 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   DestroyDatabaseResult: ResolverTypeWrapper<DestroyDatabaseResult>;
   LinkDatabaseResult: ResolverTypeWrapper<LinkDatabaseResult>;
+  UnlinkDatabaseResult: ResolverTypeWrapper<UnlinkDatabaseResult>;
   DokkuPlugin: ResolverTypeWrapper<DokkuPlugin>;
   DokkuPluginResult: ResolverTypeWrapper<DokkuPluginResult>;
   SetEnvVarResult: ResolverTypeWrapper<SetEnvVarResult>;
@@ -394,12 +416,14 @@ export type ResolversTypes = {
   IsPluginInstalledResult: ResolverTypeWrapper<IsPluginInstalledResult>;
   CreateAppInput: CreateAppInput;
   CreateDatabaseInput: CreateDatabaseInput;
+  UnlinkDatabaseInput: UnlinkDatabaseInput;
   SetEnvVarInput: SetEnvVarInput;
   UnsetEnvVarInput: UnsetEnvVarInput;
   DestroyAppInput: DestroyAppInput;
   LinkDatabaseInput: LinkDatabaseInput;
   DestroyDatabaseInput: DestroyDatabaseInput;
   Query: ResolverTypeWrapper<{}>;
+  Subscription: ResolverTypeWrapper<{}>;
   Mutation: ResolverTypeWrapper<{}>;
   CacheControlScope: CacheControlScope;
   Upload: ResolverTypeWrapper<Scalars['Upload']>;
@@ -419,6 +443,7 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
   DestroyDatabaseResult: DestroyDatabaseResult;
   LinkDatabaseResult: LinkDatabaseResult;
+  UnlinkDatabaseResult: UnlinkDatabaseResult;
   DokkuPlugin: DokkuPlugin;
   DokkuPluginResult: DokkuPluginResult;
   SetEnvVarResult: SetEnvVarResult;
@@ -433,12 +458,14 @@ export type ResolversParentTypes = {
   IsPluginInstalledResult: IsPluginInstalledResult;
   CreateAppInput: CreateAppInput;
   CreateDatabaseInput: CreateDatabaseInput;
+  UnlinkDatabaseInput: UnlinkDatabaseInput;
   SetEnvVarInput: SetEnvVarInput;
   UnsetEnvVarInput: UnsetEnvVarInput;
   DestroyAppInput: DestroyAppInput;
   LinkDatabaseInput: LinkDatabaseInput;
   DestroyDatabaseInput: DestroyDatabaseInput;
   Query: {};
+  Subscription: {};
   Mutation: {};
   Upload: Scalars['Upload'];
 };
@@ -491,6 +518,11 @@ export type DestroyDatabaseResultResolvers<ContextType = any, ParentType extends
 };
 
 export type LinkDatabaseResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['LinkDatabaseResult'] = ResolversParentTypes['LinkDatabaseResult']> = {
+  result?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type UnlinkDatabaseResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['UnlinkDatabaseResult'] = ResolversParentTypes['UnlinkDatabaseResult']> = {
   result?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
@@ -574,6 +606,10 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   envVars?: Resolver<ResolversTypes['EnvVarsResult'], ParentType, ContextType, RequireFields<QueryEnvVarsArgs, 'appId'>>;
 };
 
+export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
+  unlinkDatabaseLogs?: SubscriptionResolver<Maybe<Array<ResolversTypes['String']>>, "unlinkDatabaseLogs", ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   loginWithGithub?: Resolver<Maybe<ResolversTypes['LoginResult']>, ParentType, ContextType, RequireFields<MutationLoginWithGithubArgs, 'code'>>;
   createApp?: Resolver<ResolversTypes['CreateAppResult'], ParentType, ContextType, RequireFields<MutationCreateAppArgs, 'input'>>;
@@ -583,6 +619,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   destroyApp?: Resolver<ResolversTypes['DestroyAppResult'], ParentType, ContextType, RequireFields<MutationDestroyAppArgs, 'input'>>;
   destroyDatabase?: Resolver<ResolversTypes['DestroyDatabaseResult'], ParentType, ContextType, RequireFields<MutationDestroyDatabaseArgs, 'input'>>;
   linkDatabase?: Resolver<ResolversTypes['LinkDatabaseResult'], ParentType, ContextType, RequireFields<MutationLinkDatabaseArgs, 'input'>>;
+  unlinkDatabase?: Resolver<ResolversTypes['UnlinkDatabaseResult'], ParentType, ContextType, RequireFields<MutationUnlinkDatabaseArgs, 'input'>>;
 };
 
 export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
@@ -599,6 +636,7 @@ export type Resolvers<ContextType = any> = {
   DestroyAppResult?: DestroyAppResultResolvers<ContextType>;
   DestroyDatabaseResult?: DestroyDatabaseResultResolvers<ContextType>;
   LinkDatabaseResult?: LinkDatabaseResultResolvers<ContextType>;
+  UnlinkDatabaseResult?: UnlinkDatabaseResultResolvers<ContextType>;
   DokkuPlugin?: DokkuPluginResolvers<ContextType>;
   DokkuPluginResult?: DokkuPluginResultResolvers<ContextType>;
   SetEnvVarResult?: SetEnvVarResultResolvers<ContextType>;
@@ -612,6 +650,7 @@ export type Resolvers<ContextType = any> = {
   SetupResult?: SetupResultResolvers<ContextType>;
   IsPluginInstalledResult?: IsPluginInstalledResultResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Subscription?: SubscriptionResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Upload?: GraphQLScalarType;
 };
