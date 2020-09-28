@@ -10,7 +10,7 @@ import { Resolvers } from './generated/graphql';
 import { customResolvers } from './graphql/resolvers';
 import { mutations } from './graphql/mutations';
 import { config } from './config';
-import { app, http, io } from './server';
+import { app, http } from './server';
 import { queries } from './graphql/queries';
 
 app.use(express.static(path.join(__dirname, '..', '..', 'client', 'build')));
@@ -271,10 +271,6 @@ app.get('*', (_, res) => {
   res.sendFile(
     path.join(__dirname, '..', '..', 'client', 'build', 'index.html')
   );
-});
-
-io.on('connection', function () {
-  console.log('a user connected');
 });
 
 http.listen({ port: 4000 }, () => {

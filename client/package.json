@@ -40,7 +40,6 @@
     "react-feather": "2.0.8",
     "react-router-dom": "5.2.0",
     "react-select": "3.1.0",
-    "socket.io-client": "2.3.0",
     "styled-components": "5.1.1",
     "yup": "0.29.2"
   },

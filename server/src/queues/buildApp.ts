@@ -3,7 +3,6 @@ import createDebug from 'debug';
 import { resolve, join } from 'path';
 import execa from 'execa';
 import { config } from '../config';
-import { io } from '../server';
 import { prisma } from '../prisma';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 
@@ -68,7 +67,7 @@ const worker = new Worker(
       logs.push(log);
       clearTimeout(logTimerId);
       logTimerId = setTimeout(() => {
-        io.emit(`app-build:${appBuild.id}`, logs);
+        // io.emit(`app-build:${appBuild.id}`, logs);
         logs = [];
       }, 500);
     };
@@ -88,13 +87,13 @@ const worker = new Worker(
       options: { cwd?: string } = {}
     ) => {
       debug('execCommand', command, args);
-      io.emit(`app-build:${appBuild.id}`, [
-        {
-          // TODO concat args to command
-          message: command,
-          type: 'command',
-        },
-      ]);
+      // io.emit(`app-build:${appBuild.id}`, [
+      //   {
+      //     // TODO concat args to command
+      //     message: command,
+      //     type: 'command',
+      //   },
+      // ]);
       const subprocess = execa(command, args, options);
       subprocess.stdout.on('data', onStdout);
       subprocess.stderr.on('data', onStderr);
