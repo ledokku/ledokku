@@ -6,7 +6,7 @@ import {
   useLinkDatabaseMutation,
   useUnlinkDatabaseMutation,
   useUnlinkDatabaseLogsSubscription,
-  DatabaseByIdDocument,
+  useLinkDatabaseLogsSubscription,
 } from '../../generated/graphql';
 import { useParams, Link } from 'react-router-dom';
 import Select from 'react-select';
@@ -14,10 +14,14 @@ import { TabNav, TabNavLink, Button, Modal, Terminal } from '../../ui';
 
 export const Database = () => {
   const { id: databaseId } = useParams<{ id: string }>();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [arrayOfLogs, setArrayOfLogs] = useState<string[]>([]);
+  const [isUnlinkModalOpen, setIsUnlinkModalOpen] = useState(false);
+  const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
+  const [arrayOfUnlinkLogs, setArrayOfUnlinkLogs] = useState<string[]>([]);
+  const [arrayOfLinkLogs, setArrayOfLinkLogs] = useState<string[]>([]);
   const [isTerminalVisible, setIsTerminalVisible] = useState(false);
   const [unlinkLoading, setUnlinkLoading] = useState(false);
+  const [linkLoading, setLinkLoading] = useState(false);
+
   const [selectedApp, setSelectedApp] = useState({
     value: { name: '', id: '' },
     label: 'Please select an app',
@@ -47,9 +51,20 @@ export const Database = () => {
     onSubscriptionData: (data) => {
       const logsExist = data.subscriptionData.data?.unlinkDatabaseLogs?.[0];
       if (logsExist)
-        setArrayOfLogs((currentLogs) => {
+        setArrayOfUnlinkLogs((currentLogs) => {
           return [...currentLogs, logsExist];
         });
+    },
+  });
+
+  useLinkDatabaseLogsSubscription({
+    onSubscriptionData: (data) => {
+      const logsExist = data.subscriptionData.data?.linkDatabaseLogs?.[0];
+      if (logsExist) {
+        setArrayOfLinkLogs((currentLogs) => {
+          return [...currentLogs, logsExist];
+        });
+      }
     },
   });
 
@@ -111,14 +126,13 @@ export const Database = () => {
             appId,
           },
         },
-        refetchQueries: [
-          { query: DatabaseByIdDocument, variables: { databaseId } },
-        ],
       });
       setSelectedApp({
         value: { name: '', id: '' },
         label: 'Please select an app',
       });
+      setIsTerminalVisible(true);
+      setLinkLoading(true);
       // TODO - REACT - TOASTIFY
     } catch (e) {
       //TODO - REACT TOASTIFY
@@ -224,12 +238,54 @@ export const Database = () => {
                         !databaseLinkError
                       }
                       disabled={!selectedApp.value.id}
-                      onClick={() =>
-                        handleConnect(databaseId, selectedApp.value.id)
-                      }
+                      onClick={() => setIsLinkModalOpen(true)}
                     >
                       Link app
                     </Button>
+                    {isLinkModalOpen && (
+                      <Modal
+                        closeModalButton={'Close'}
+                        ctaButton={`Link`}
+                        isCtaLoading={isTerminalVisible ? false : linkLoading}
+                        isCtaDisabled={isTerminalVisible}
+                        mainText={
+                          isTerminalVisible ? (
+                            <React.Fragment>
+                              <p className="mb-2 ">
+                                Linking <b>{selectedApp.value.name}</b> with{' '}
+                                <b>{database.name}</b>!
+                              </p>
+                              <Terminal className={'-ml-13 w-6/6'}>
+                                <p className="text-green-400 mb-2">
+                                  Linking process usually takes a couple of
+                                  minutes. Breathe in, breathe out, logs are
+                                  about to appear below:
+                                </p>
+                                {arrayOfLinkLogs.map((log) => (
+                                  <p className="text-s leading-5">{log}</p>
+                                ))}
+                              </Terminal>
+                            </React.Fragment>
+                          ) : (
+                            <p>
+                              Are you sure, you want to link{' '}
+                              <b>{selectedApp.value.name}</b> to{' '}
+                              <b>{database.name}</b>?
+                            </p>
+                          )
+                        }
+                        header={'Link app'}
+                        closeModal={() => {
+                          setIsLinkModalOpen(false);
+                          refetch({ databaseId });
+                          setLinkLoading(false);
+                        }}
+                        ctaFn={() =>
+                          handleConnect(database.id, selectedApp.value.id)
+                        }
+                        isWarningModal={true}
+                      />
+                    )}
                   </div>
                 ) : (
                   <React.Fragment>
@@ -268,13 +324,13 @@ export const Database = () => {
                           className="mt-4 ml-2 h-10"
                           color="red"
                           onClick={() => {
-                            setIsModalOpen(true);
+                            setIsUnlinkModalOpen(true);
                           }}
                         >
                           Unlink
                         </Button>
 
-                        {isModalOpen && (
+                        {isUnlinkModalOpen && (
                           <Modal
                             closeModalButton={'Close'}
                             ctaButton={`Unlink`}
@@ -296,7 +352,7 @@ export const Database = () => {
                                       are about to appear below:
                                     </p>
 
-                                    {arrayOfLogs.map((log) => (
+                                    {arrayOfUnlinkLogs.map((log) => (
                                       <p className="text-s leading-5">{log}</p>
                                     ))}
                                   </Terminal>
@@ -308,10 +364,10 @@ export const Database = () => {
                                 </p>
                               )
                             }
-                            header={'Unlink database'}
+                            header={'Unlink app'}
                             closeModal={() => {
                               refetch({ databaseId });
-                              setIsModalOpen(false);
+                              setIsUnlinkModalOpen(false);
                               setUnlinkLoading(false);
                             }}
                             ctaFn={() => handleUnlink(database.id, app.id)}

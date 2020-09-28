@@ -6,7 +6,6 @@ import {
   useDatabaseQuery,
   useLinkDatabaseMutation,
   useUnlinkDatabaseMutation,
-  AppByIdDocument,
   useUnlinkDatabaseLogsSubscription,
   useLinkDatabaseLogsSubscription,
 } from '../../generated/graphql';
