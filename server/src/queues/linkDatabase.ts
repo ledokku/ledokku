@@ -42,7 +42,7 @@ const worker = new Worker(
     });
 
     debug(
-      `starting link for ${database.type} database ${database.name} from  ${app.name} app`
+      `starting linkDatabaseQueue for ${database.type} database ${database.name} from  ${app.name} app`
     );
 
     const dbType = dbTypeToDokkuPlugin(database.type);
@@ -64,8 +64,6 @@ const worker = new Worker(
         },
       }
     );
-
-    console.log('res', res);
 
     await prisma.database.update({
       where: { id: database.id },
