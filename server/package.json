@@ -28,7 +28,6 @@
     "jsonwebtoken": "8.5.1",
     "node-fetch": "2.6.1",
     "node-ssh": "11.0.0",
-    "socket.io": "2.3.0",
     "sshpk": "1.16.1",
     "yup": "0.29.2"
   },
@@ -41,7 +40,6 @@
     "@types/jsonwebtoken": "8.5.0",
     "@types/node": "14.0.27",
     "@types/node-ssh": "7.0.0",
-    "@types/socket.io": "2.1.10",
     "@types/yup": "0.29.3",
     "nodemon": "2.0.4",
     "ts-node": "8.10.2",
