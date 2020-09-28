@@ -16,6 +16,14 @@ First we need to create a new app for ledokku.
 dokku apps:create ledokku
 ```
 
+To keep the same ssh key when you update ledokku we need to create a persistent storage for the ssh key.
+
+```sh
+mkdir /var/lib/dokku/data/storage/ledokku-ssh/
+chown dokku:dokku /var/lib/dokku/data/storage/ledokku-ssh/
+dokku storage:mount ledokku /var/lib/dokku/data/storage/ledokku-ssh/:/root/.ssh
+```
+
 Create a new Redis database.
 
 ```sh
