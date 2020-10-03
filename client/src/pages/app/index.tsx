@@ -16,6 +16,9 @@ import {
   Button,
   DatabaseLabel,
   Modal,
+  ModalTitle,
+  ModalDescription,
+  ModalButton,
   Terminal,
 } from '../../ui';
 import { PostgreSQLIcon } from '../../ui/icons/PostgreSQLIcon';
@@ -29,6 +32,7 @@ export const App = () => {
   const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
   const [arrayOfLinkLogs, setArrayOfLinkLogs] = useState<string[]>([]);
   const [arrayOfUnlinkLogs, setArrayOfUnlinkLogs] = useState<string[]>([]);
+  const [databaseAboutToUnlink, setdatabaseAboutToUnlink] = useState<string>();
   const [isTerminalVisible, setIsTerminalVisible] = useState(false);
   const [unlinkLoading, setUnlinkLoading] = useState(false);
   const [linkLoading, setLinkLoading] = useState(false);
@@ -255,26 +259,28 @@ export const App = () => {
                       Link database
                     </Button>
                     {isLinkModalOpen && (
-                      <Modal
-                        closeModalButton={'Close'}
-                        ctaButton={`Link`}
-                        isCtaLoading={isTerminalVisible ? false : linkLoading}
-                        isCtaDisabled={isTerminalVisible}
-                        mainText={
-                          isTerminalVisible ? (
+                      <Modal>
+                        <ModalTitle>Link database</ModalTitle>
+                        <ModalDescription>
+                          {isTerminalVisible ? (
                             <React.Fragment>
                               <p className="mb-2 ">
                                 Linking <b>{selectedDb.value.name}</b> with{' '}
                                 <b>{app.name}</b>!
                               </p>
-                              <Terminal className={'-ml-13 w-6/6'}>
+                              <Terminal className={'w-6/6'}>
                                 <p className="text-green-400 mb-2">
                                   Linking process usually takes a couple of
                                   minutes. Breathe in, breathe out, logs are
                                   about to appear below:
                                 </p>
                                 {arrayOfLinkLogs.map((log) => (
-                                  <p className="text-s leading-5">{log}</p>
+                                  <p
+                                    key={arrayOfLinkLogs.indexOf(log)}
+                                    className="text-s leading-5"
+                                  >
+                                    {log}
+                                  </p>
                                 ))}
                               </Terminal>
                             </React.Fragment>
@@ -284,18 +290,24 @@ export const App = () => {
                               <b>{selectedDb.value.name}</b> to{' '}
                               <b>{app.name}</b>?
                             </p>
-                          )
-                        }
-                        header={'Link database'}
-                        closeModal={() => {
-                          setIsLinkModalOpen(false);
-                          refetch({ appId });
-                          setLinkLoading(false);
-                          setIsTerminalVisible(false);
-                        }}
-                        ctaFn={() => handleConnect(selectedDb.value.id, appId)}
-                        isWarningModal={true}
-                      />
+                          )}
+                        </ModalDescription>
+                        <ModalButton
+                          ctaFn={() =>
+                            handleConnect(selectedDb.value.id, appId)
+                          }
+                          ctaText={'Link'}
+                          otherButtonText={'Cancel'}
+                          isCtaLoading={isTerminalVisible ? false : linkLoading}
+                          isCtaDisabled={isTerminalVisible}
+                          closeModal={() => {
+                            setIsLinkModalOpen(false);
+                            refetch({ appId });
+                            setLinkLoading(false);
+                            setIsTerminalVisible(false);
+                          }}
+                        />
+                      </Modal>
                     )}
                   </div>
                 ) : (
@@ -324,7 +336,10 @@ export const App = () => {
                       {app.databases.length > 0 && 'Linked databases'}
                     </h2>
                     {app.databases.map((database) => (
-                      <div className="flex flex-row justify-start">
+                      <div
+                        key={app.databases?.indexOf(database)}
+                        className="flex flex-row justify-start"
+                      >
                         <Link
                           to={`/database/${database.id}`}
                           className="py-2 block"
@@ -359,54 +374,63 @@ export const App = () => {
                           color="red"
                           onClick={() => {
                             setIsUnlinkModalOpen(true);
+                            setdatabaseAboutToUnlink(database.name);
                           }}
                         >
                           Unlink
                         </Button>
 
                         {isUnlinkModalOpen && (
-                          <Modal
-                            closeModalButton={'Close'}
-                            ctaButton={`Unlink`}
-                            isCtaLoading={
-                              isTerminalVisible ? false : unlinkLoading
-                            }
-                            isCtaDisabled={isTerminalVisible}
-                            mainText={
-                              isTerminalVisible ? (
+                          <Modal>
+                            <ModalTitle>Unlink database</ModalTitle>
+                            <ModalDescription>
+                              {isTerminalVisible ? (
                                 <React.Fragment>
                                   <p className="mb-2 ">
-                                    Unlinking <b>{database.name}</b> from{' '}
-                                    <b>{app.name}</b>!
+                                    Unlinking <b>{app.name}</b>
+                                    from <b>{databaseAboutToUnlink}</b>!
                                   </p>
-                                  <Terminal className={'-ml-13 w-6/6'}>
+                                  <Terminal className={'w-6/6'}>
                                     <p className="text-green-400 mb-2">
                                       Unlinking process usually takes a couple
                                       of minutes. Breathe in, breathe out, logs
                                       are about to appear below:
                                     </p>
                                     {arrayOfUnlinkLogs.map((log) => (
-                                      <p className="text-s leading-5">{log}</p>
+                                      <p
+                                        key={arrayOfUnlinkLogs.indexOf(log)}
+                                        className="text-s leading-5"
+                                      >
+                                        {log}
+                                      </p>
                                     ))}
                                   </Terminal>
                                 </React.Fragment>
                               ) : (
                                 <p>
                                   Are you sure, you want to unlink{' '}
-                                  <b>{database.name}</b> from <b>{app.name}</b>?
+                                  <b>{app.name} </b>
+                                  from <b>{databaseAboutToUnlink}</b> ?
                                 </p>
-                              )
-                            }
-                            header={'Unlink database'}
-                            closeModal={() => {
-                              setIsUnlinkModalOpen(false);
-                              refetch({ appId });
-                              setUnlinkLoading(false);
-                              setIsTerminalVisible(false);
-                            }}
-                            ctaFn={() => handleUnlink(database.id, appId)}
-                            isWarningModal={true}
-                          />
+                              )}
+                            </ModalDescription>
+                            <ModalButton
+                              ctaFn={() => handleUnlink(database.id, appId)}
+                              ctaText={'Unlink'}
+                              otherButtonText={'Cancel'}
+                              isCtaLoading={
+                                isTerminalVisible ? false : unlinkLoading
+                              }
+                              isCtaDisabled={isTerminalVisible}
+                              closeModal={() => {
+                                setIsUnlinkModalOpen(false);
+                                refetch({ appId });
+                                setUnlinkLoading(false);
+                                setIsTerminalVisible(false);
+                                setdatabaseAboutToUnlink('');
+                              }}
+                            />
+                          </Modal>
                         )}
                       </div>
                     ))}
