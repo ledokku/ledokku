@@ -2,6 +2,7 @@ import React from 'react';
 import * as yup from 'yup';
 import { useParams, useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
+import { toast } from 'react-toastify';
 import { Header } from '../../modules/layout/Header';
 import {
   useDatabaseByIdQuery,
@@ -80,11 +81,10 @@ export const Settings = () => {
             },
           ],
         });
+        toast.success('Database deleted successfully');
         history.push('/dashboard');
       } catch (error) {
-        // TODO catch errors
-        console.log(error);
-        alert(error);
+        toast.error(error.message);
       }
     },
   });

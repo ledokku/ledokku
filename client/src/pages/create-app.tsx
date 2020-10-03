@@ -4,6 +4,7 @@ import { useFormik } from 'formik';
 import { useCreateAppMutation, DashboardDocument } from '../generated/graphql';
 import { Header } from '../modules/layout/Header';
 import { Button } from '../ui';
+import { toast } from 'react-toastify';
 
 export const CreateApp = () => {
   const history = useHistory();
@@ -27,12 +28,11 @@ export const CreateApp = () => {
           ],
         });
         if (data?.data) {
+          toast.success('App created successfully');
           history.push(`/app/${data.data.createApp.app.id}`);
         }
       } catch (error) {
-        // TODO catch errors
-        console.log(error);
-        alert(error);
+        toast.error(error.message);
       }
     },
   });

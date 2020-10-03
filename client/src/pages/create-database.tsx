@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { ArrowRight } from 'react-feather';
+import { toast } from 'react-toastify';
 import cx from 'classnames';
 import {
   useCreateDatabaseMutation,
@@ -80,12 +81,11 @@ export const CreateDatabase = () => {
             },
           ],
         });
+        toast.success('Database created successfully');
         // TODO redirect to database page once ready
         history.push('/dashboard');
       } catch (error) {
-        // TODO catch errors
-        console.log(error);
-        alert(error);
+        toast.error(error.message);
       }
     },
   });

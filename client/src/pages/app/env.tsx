@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { Header } from '../../modules/layout/Header';
 import {
   useAppByIdQuery,
@@ -37,9 +38,7 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
         refetchQueries: [{ query: EnvVarsDocument, variables: { appId } }],
       });
     } catch (error) {
-      // TODO catch errors
-      console.log(error);
-      alert(error);
+      toast.error(error.message);
     }
   };
 
@@ -62,9 +61,7 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
 
         // TODO give feedback about setting success
       } catch (error) {
-        // TODO catch errors
-        console.log(error);
-        alert(error);
+        toast.error(error.message);
       }
     },
   });
