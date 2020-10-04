@@ -1,6 +1,7 @@
 import React from 'react';
 import * as yup from 'yup';
 import { useHistory, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { Header } from '../../modules/layout/Header';
 import {
   useAppByIdQuery,
@@ -57,11 +58,10 @@ export const Settings = () => {
             },
           ],
         });
+        toast.success('App deleted successfully');
         history.push('/dashboard');
       } catch (error) {
-        // TODO catch errors
-        console.log(error);
-        alert(error);
+        toast.error(error.message);
       }
     },
   });

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 import { Header } from '../../modules/layout/Header';
 import {
   useDatabaseByIdQuery,
@@ -105,7 +106,7 @@ export const Database = () => {
       setIsTerminalVisible(true);
       setUnlinkLoading(true);
     } catch (e) {
-      //TODO - REACT TOSTIFY
+      toast.error(e.message);
     }
   };
 
@@ -145,7 +146,7 @@ export const Database = () => {
       setLinkLoading(true);
       // TODO - REACT - TOASTIFY
     } catch (e) {
-      //TODO - REACT TOASTIFY
+      toast.error(e.message);
     }
   };
 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Select from 'react-select';
+import { toast } from 'react-toastify';
 import { Header } from '../../modules/layout/Header';
 import {
   useAppByIdQuery,
@@ -131,7 +132,7 @@ export const App = () => {
       setIsTerminalVisible(true);
       setUnlinkLoading(true);
     } catch (e) {
-      //TODO - REACT TOSTIFY
+      toast.error(e.message);
     }
   };
 
@@ -152,7 +153,7 @@ export const App = () => {
       setIsTerminalVisible(true);
       setLinkLoading(true);
     } catch (e) {
-      //TODO - REACT TOSTIFY
+      toast.error(e.message);
     }
   };
 
