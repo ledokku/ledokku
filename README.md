@@ -18,9 +18,8 @@ And link them with wide most popular dbs : **postgresql, mongodb, redis**.
 ## Just few clicks in within and your app is live
 
 - Install Ledokku on your Dokku server
-- Select which app you want to deploy from Github
+- Deploy your app using the Dokku workflow
 - Create and link your db (PostgreSQL, mongoDB, redis)
-- Link your custom domain
 - App is live 🎉🎉🎉
 
 ## Our vision
@@ -34,12 +33,9 @@ To get initial feedback we are working on the MVP state where current Dokku user
 ## MVP features
 
 - Beautiful web ui
-- Auto deployment from Github on every commit
 - Common app management (create, delete, stop)
-- Real time deployment logs
 - Env variables management (set, unset, edit)
 - Databases management (create, delete, link)
-- Domains management
 - Explore app logs
 
 ### Built with
