@@ -23,6 +23,7 @@ git add "./server/package.json"
 git add "./client/package.json"
 git add "./website/docs/installation.mdx"
 git commit -m "${RELEASE_COMMIT_MESSAGE}"
+git push --set-upstream origin "release/v${NEW_VERSION}"
 
 # Create a new release pull request
 gh pr create --title "${RELEASE_COMMIT_MESSAGE}" --body ""
