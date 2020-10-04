@@ -7152,6 +7152,11 @@ doctrine@^3.0.0:
   dependencies:
     esutils "^2.0.2"
 
+docusaurus-plugin-fathom@1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/docusaurus-plugin-fathom/-/docusaurus-plugin-fathom-1.1.0.tgz#d338d4f115c8f699c56d8f1e2413d75a2f244dc3"
+  integrity sha512-MVMYb2daXLho8Foaxl2ipTCH3RWEmV5plQytGa8tMk3LOiWcZ5S9TcOhcAB9W5b9ZeebyotWYXpTnsLyXgKFgA==
+
 dom-converter@^0.2:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/dom-converter/-/dom-converter-0.2.0.tgz#6721a9daee2e293682955b6afe416771627bb768"
