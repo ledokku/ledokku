@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
+import * as yup from 'yup';
 import { ArrowRight } from 'react-feather';
 import { toast } from 'react-toastify';
 import cx from 'classnames';
@@ -24,7 +25,17 @@ import {
   Alert,
   AlertTitle,
   AlertDescription,
+  FormLabel,
+  FormInput,
+  FormHelper,
 } from '../ui';
+
+const createDatabaseSchema = yup.object().shape({
+  name: yup
+    .string()
+    .required()
+    .matches(/^[a-z0-9-]+$/),
+});
 
 interface DatabaseBoxProps {
   label: string;
@@ -68,6 +79,7 @@ export const CreateDatabase = () => {
       name: '',
       type: 'POSTGRESQL',
     },
+    validationSchema: createDatabaseSchema,
     onSubmit: async (values) => {
       // TODO validate name
       try {
@@ -141,17 +153,23 @@ export const CreateDatabase = () => {
               </React.Fragment>
             )}
             {data?.isPluginInstalled.isPluginInstalled === true && !loading && (
-              <React.Fragment>
-                <label className="block mb-2">Database name:</label>
-                <input
-                  autoComplete="off"
-                  className="block w-full max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
-                  id="name"
-                  name="name"
-                  value={formik.values.name}
-                  onChange={formik.handleChange}
-                />
-              </React.Fragment>
+              <div className="grid grid-cols-1 md:grid-cols-3">
+                <div>
+                  <FormLabel>Database name:</FormLabel>
+                  <FormInput
+                    autoComplete="off"
+                    id="name"
+                    name="name"
+                    value={formik.values.name}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={Boolean(formik.errors.name && formik.touched.name)}
+                  />
+                  {formik.errors.name && formik.touched.name ? (
+                    <FormHelper status="error">{formik.errors.name}</FormHelper>
+                  ) : null}
+                </div>
+              </div>
             )}
           </div>
 
