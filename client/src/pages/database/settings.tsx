@@ -10,7 +10,14 @@ import {
   DashboardDocument,
   useDatabaseInfoQuery,
 } from '../../generated/graphql';
-import { TabNav, TabNavLink, Button, Terminal } from '../../ui';
+import {
+  TabNav,
+  TabNavLink,
+  Button,
+  Terminal,
+  FormInput,
+  FormHelper,
+} from '../../ui';
 
 interface InfoProps {
   infoLine: string;
@@ -142,34 +149,41 @@ export const Settings = () => {
 
             <h2 className="text-gray-400 w-6/6">
               This action cannot be undone. This will permanently delete{' '}
-              {database.name} app and everything related to it. Please type{' '}
+              {database.name} database and everything related to it. Please type{' '}
               <b>{database.name}</b> to confirm deletion.
             </h2>
             <form onSubmit={formik.handleSubmit}>
-              <div className="mt-4">
-                <input
-                  autoComplete="off"
-                  className="mb-2 block w-full max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
-                  id="databaseName"
-                  name="databaseName"
-                  value={formik.values.databaseName}
-                  onChange={formik.handleChange}
-                />
-                {!!formik.errors && (
-                  <p className="text-red-500 text-sm font-semibold">
-                    {formik.errors.databaseName}
-                  </p>
-                )}
-                <Button
-                  type="submit"
-                  isLoading={destroyDbLoading}
-                  disabled={
-                    !formik.values.databaseName || !!formik.errors.databaseName
-                  }
-                  color="red"
-                >
-                  Delete
-                </Button>
+              <div className="grid md:grid-cols-3">
+                <div className="mt-4">
+                  <FormInput
+                    autoComplete="off"
+                    id="databaseName"
+                    name="databaseName"
+                    value={formik.values.databaseName}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={Boolean(
+                      formik.errors.databaseName && formik.touched.databaseName
+                    )}
+                  />
+                  {formik.errors.databaseName && formik.errors.databaseName ? (
+                    <FormHelper status="error">
+                      {formik.errors.databaseName}
+                    </FormHelper>
+                  ) : null}
+                  <Button
+                    type="submit"
+                    isLoading={destroyDbLoading}
+                    disabled={
+                      !formik.values.databaseName ||
+                      !!formik.errors.databaseName
+                    }
+                    color="red"
+                    className="mt-2"
+                  >
+                    Delete
+                  </Button>
+                </div>
               </div>
             </form>
           </div>
