@@ -9,7 +9,7 @@ import {
   DashboardDocument,
 } from '../../generated/graphql';
 import { useFormik } from 'formik';
-import { TabNav, TabNavLink, Button } from '../../ui';
+import { TabNav, TabNavLink, Button, FormInput, FormHelper } from '../../ui';
 
 export const Settings = () => {
   const { id: appId } = useParams<{ id: string }>();
@@ -99,39 +99,44 @@ export const Settings = () => {
       </div>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 gap-4 mt-10">
-          <h1 className="text-lg font-bold py-5">App settings</h1>
-
-          <h2 className="text-gray-400 w-2/6">
-            This action cannot be undone. This will permanently delete{' '}
-            {app.name} app and everything related to it. Please type{' '}
-            <b>{app.name}</b> to confirm deletion.
-          </h2>
-          <form onSubmit={formik.handleSubmit}>
-            <div className="mt-4">
-              <input
-                autoComplete="off"
-                className="mb-2 block w-full max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
-                id="appNme"
-                name="appName"
-                value={formik.values.appName}
-                onChange={formik.handleChange}
-              />
-              {!!formik.errors && (
-                <p className="text-red-500 text-sm font-semibold">
-                  {formik.errors.appName}
-                </p>
-              )}
-              <Button
-                type="submit"
-                disabled={!formik.values.appName || !!formik.errors.appName}
-                color="red"
-                isLoading={destroyAppMutationLoading}
-              >
-                Delete
-              </Button>
-            </div>
-          </form>
+        <div className="grid md:grid-cols-3 mt-10">
+          <div>
+            <h1 className="text-lg font-bold py-5">App settings</h1>
+            <h2 className="text-gray-400">
+              This action cannot be undone. This will permanently delete{' '}
+              {app.name} app and everything related to it. Please type{' '}
+              <b>{app.name}</b> to confirm deletion.
+            </h2>
+            <form onSubmit={formik.handleSubmit}>
+              <div className="mt-4">
+                <FormInput
+                  autoComplete="off"
+                  id="appNme"
+                  name="appName"
+                  value={formik.values.appName}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={Boolean(
+                    formik.errors.appName && formik.touched.appName
+                  )}
+                />
+                {formik.errors.appName && formik.errors.appName ? (
+                  <FormHelper status="error">
+                    {formik.errors.appName}
+                  </FormHelper>
+                ) : null}
+                <Button
+                  type="submit"
+                  disabled={!formik.values.appName || !!formik.errors.appName}
+                  color="red"
+                  isLoading={destroyAppMutationLoading}
+                  className="mt-2"
+                >
+                  Delete
+                </Button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
