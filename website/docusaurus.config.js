@@ -7,6 +7,9 @@ module.exports = {
   organizationName: 'ledokku', // Usually your GitHub org/user name.
   projectName: 'ledokku', // Usually your repo name.
   themeConfig: {
+    fathomAnalytics: {
+      siteId: 'AFIEKRUK',
+    },
     colorMode: {
       defaultMode: 'light',
       disableSwitch: true,
@@ -91,4 +94,5 @@ module.exports = {
       },
     ],
   ],
+  plugins: [require.resolve('docusaurus-plugin-fathom')],
 };
