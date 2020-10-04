@@ -91,7 +91,7 @@ export const Logs = () => {
           </Alert>
         ) : null}
 
-        {!appLogsLoading && !appLogsData ? (
+        {!appLogsLoading && !appLogsError && !appLogsData ? (
           <Alert status="info">
             <AlertDescription>
               There are no logs for {app.name}.
