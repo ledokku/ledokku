@@ -14,10 +14,7 @@ To get initial feedback we are working the MVP state where current Dokku users w
 ## MVP features
 
 - Beautiful web ui
-- Auto deployment from Github on every commit
 - Common app management (create, delete, stop)
-- Real time deployment logs
 - Env variables management (set, unset, edit)
 - Databases management (create, delete, link)
-- Domains management
 - Explore app logs
