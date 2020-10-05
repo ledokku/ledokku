@@ -16,9 +16,16 @@ jq --arg version ${NEW_VERSION} '.version = $version' server/package.json > "tmp
 jq --arg version ${NEW_VERSION} '.version = $version' client/package.json > "tmp.txt" && mv "tmp.txt" client/package.json
 sed "s|${CURRENT_PACKAGE_VERSION}|${NEW_VERSION}|g" website/docs/installation.mdx > "tmp.txt" && mv "tmp.txt" website/docs/installation.mdx
 
+# Generate CHANGELOG.md
+yarn conventional-changelog -p conventionalcommits -n ./conventional-changelog.config.json -i CHANGELOG.md -s
+# We append the header in the changelog file manually as there is no git tag yet
+echo "## $NEW_VERSION ($(date +%Y-%m-%d)) $(cat CHANGELOG.md)" > CHANGELOG.md
+yarn prettier --write './CHANGELOG.md'
+
 # git commit
 RELEASE_COMMIT_MESSAGE="chore: publish v${NEW_VERSION}"
 git checkout -b "release/v${NEW_VERSION}"
+git add "./CHANGELOG.md"
 git add "./server/package.json"
 git add "./client/package.json"
 git add "./website/docs/installation.mdx"
