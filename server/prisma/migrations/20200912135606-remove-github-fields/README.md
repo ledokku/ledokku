@@ -37,5 +37,3 @@ migration 20200628123314-link-databases-to-app..20200912135606-remove-github-fie
    appBuild      AppBuild[]
    databases     Database[] @relation(references: [id])
 ```
-
-
