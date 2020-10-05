@@ -1,7 +1,7 @@
 {
   "name": "ledokku-server",
   "private": true,
-  "version": "0.0.2",
+  "version": "0.0.3",
   "license": "MIT",
   "scripts": {
     "dev": "yarn prisma:migrate && yarn prisma:generate && nodemon 'src/index.ts' --exec 'ts-node' src/index.ts -e ts,graphql",
