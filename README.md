@@ -1,4 +1,4 @@
-# Ledokku - deploy your apps within seconds
+# Ledokku - beautiful web UI for all things Dokkku
 
 ### Dashboard preview
 
@@ -13,9 +13,9 @@ Ledokku is a beautiful UI powered by [dokku](http://dokku.viewdocs.io/dokku/)
 With us you will be able to deploy apps written in:
 **node.js, php, ruby and many more**.
 
-And link them with wide most popular dbs : **postgresql, mongodb, redis**.
+And link them with most popular dbs : **postgresql, mongodb, redis**.
 
-## Just few clicks in within and your app is live
+## Just few clicks and your app is live
 
 - Install Ledokku on your Dokku server
 - Deploy your app using the Dokku workflow
