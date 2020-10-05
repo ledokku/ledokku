@@ -15,17 +15,17 @@ const features = [
     description: (
       <>
         Ledokku provides a beautiful and intuitive web interface that lets you
-        manage your Dokku server.
+        manage all things Dokku.
       </>
     ),
   },
   {
-    title: <>Deploy your app in no time</>,
+    title: <>Deploy and monitor</>,
     imageUrl: 'img/undraw_deploy.svg',
     description: (
       <>
-        By providing native Github auto deployments, Ledokku shifts away all the
-        manual configuration.
+        Deploy your app with usual Dokku flow, monitor both app and database
+        logs and manage connections between the two.
       </>
     ),
   },

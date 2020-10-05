@@ -1,6 +1,6 @@
 module.exports = {
   title: 'Ledokku',
-  tagline: 'Deploy your apps blazing fast',
+  tagline: 'Beautiful web UI for all things Dokku',
   url: 'https://www.ledokku.com',
   baseUrl: '/',
   favicon: 'img/favicon.ico',
