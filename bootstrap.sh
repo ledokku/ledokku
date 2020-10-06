@@ -13,6 +13,26 @@ ensure-dokku() {
   fi
 }
 
+# Check if dokku redis plugin is intalled and otherwise install it
+install-redis() {
+  if sudo dokku plugin:installed redis; then
+    echo "=> Redis plugin already installed skipping"
+  else
+    echo "=> Installing redis plugin"
+    sudo dokku plugin:install https://github.com/dokku/dokku-redis.git redis
+  fi
+}
+
+# Check if dokku postgres plugin is intalled and otherwise install it
+install-postgres() {
+  if sudo dokku plugin:installed postgres; then
+    echo "=> Postgres plugin already installed skipping"
+  else
+    echo "=> Installing postgres plugin"
+    sudo dokku plugin:install https://github.com/dokku/dokku-postgres.git postgres
+  fi
+}
+
 main() {
   ensure-dokku
 
@@ -37,21 +57,8 @@ main() {
   chown dokku:dokku /var/lib/dokku/data/storage/ledokku-ssh/
   dokku storage:mount ledokku /var/lib/dokku/data/storage/ledokku-ssh/:/root/.ssh
 
-  # Install redis plugin if necessary
-  if sudo dokku plugin:installed redis; then
-    echo "=> Redis plugin already installed skipping"
-  else
-    echo "=> Installing redis plugin"
-    sudo dokku plugin:install https://github.com/dokku/dokku-redis.git redis
-  fi
-  
-  # Install postgres plugin if necessary
-  if sudo dokku plugin:installed postgres; then
-    echo "=> Postgres plugin already installed skipping"
-  else
-    echo "=> Installing postgres plugin"
-    sudo dokku plugin:install https://github.com/dokku/dokku-postgres.git postgres
-  fi
+  install-redis
+  install-postgres
 
   # We create the required databases
   echo "=> Creating databases"
