@@ -75,10 +75,11 @@ main() {
   docker tag ledokku/ledokku:0.1.0 dokku/ledokku:0.1.0
   dokku tags:deploy ledokku 0.1.0
 
+  echo "=== 🐳 ==="
   echo "Installation succesful"
-  echo "Open your browser to visit the app"
-
-  # TODO nice ascii art saying installation was successful
+  echo "Open you server ip in your browser with the port 4000"
+  echo "http://${DOKKU_SSH_HOST}:4000"
+  echo "=== 🐳 ==="
 }
 
 main
