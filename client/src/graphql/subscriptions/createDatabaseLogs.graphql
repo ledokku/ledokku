@@ -1,3 +1,6 @@
 subscription CreateDatabaseLogs {
-  createDatabaseLogs
+  createDatabaseLogs {
+    message
+    type
+  }
 }

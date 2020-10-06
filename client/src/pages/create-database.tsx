@@ -9,8 +9,8 @@ import {
   useCreateDatabaseMutation,
   DatabaseTypes,
   useIsPluginInstalledLazyQuery,
-  DashboardDocument,
   useCreateDatabaseLogsSubscription,
+  RealTimeLog,
 } from '../generated/graphql';
 import { PostgreSQLIcon } from '../ui/icons/PostgreSQLIcon';
 import { MySQLIcon } from '../ui/icons/MySQLIcon';
@@ -69,21 +69,29 @@ const DatabaseBox = ({ label, selected, icon, onClick }: DatabaseBoxProps) => {
 export const CreateDatabase = () => {
   const history = useHistory();
   const [isCreateDbModalOpen, setIsCreateDbModalOpen] = useState(false);
-  const [arrayOfCreateDbLogs, setArrayofCreateDbLogs] = useState<string[]>([]);
+  const [arrayOfCreateDbLogs, setArrayofCreateDbLogs] = useState<RealTimeLog[]>(
+    []
+  );
   const [isCreateDbLoading, setCreateDbLoading] = useState(false);
   const [isTerminalVisible, setIsTerminalVisible] = useState(false);
-  const [
-    createDatabaseMutation,
-    { loading: createDbLoading },
-  ] = useCreateDatabaseMutation();
+  const [createDatabaseMutation] = useCreateDatabaseMutation();
+  const [isDbCreationSuccess, setIsDbCreationSuccess] = useState(false);
 
   useCreateDatabaseLogsSubscription({
     onSubscriptionData: (data) => {
-      const logsExist = data.subscriptionData.data?.createDatabaseLogs?.[0];
-      if (logsExist)
+      const logsExist = data.subscriptionData.data?.createDatabaseLogs;
+
+      if (logsExist) {
         setArrayofCreateDbLogs((currentLogs) => {
           return [...currentLogs, logsExist];
         });
+        if (
+          logsExist.type === 'end' &&
+          logsExist.message === 'Successfully created DB'
+        ) {
+          setIsDbCreationSuccess(true);
+        }
+      }
     },
   });
   const [
@@ -106,11 +114,6 @@ export const CreateDatabase = () => {
           variables: {
             input: { name: values.name, type: values.type },
           },
-          refetchQueries: [
-            {
-              query: DashboardDocument,
-            },
-          ],
         });
         // TODO redirect to dashboard if no errors in logs
         setIsTerminalVisible(true);
@@ -122,6 +125,18 @@ export const CreateDatabase = () => {
   });
 
   const isPluginInstalled = data?.isPluginInstalled.isPluginInstalled;
+
+  const handleOnClose = (result: boolean) => {
+    setIsCreateDbModalOpen(false);
+    setCreateDbLoading(false);
+    setIsTerminalVisible(false);
+    if (result === true) {
+      toast.success('Database created successfully');
+      history.push('dashboard');
+    } else {
+      toast.error('Failed to create a database');
+    }
+  };
 
   useEffect(() => {
     isDokkuPluginInstalled({
@@ -225,11 +240,9 @@ export const CreateDatabase = () => {
 
           <div className="mt-12 flex justify-end">
             <Button
-              // type="submit"
               onClick={() => setIsCreateDbModalOpen(true)}
               color="grey"
               disabled={data?.isPluginInstalled.isPluginInstalled === false}
-              isLoading={createDbLoading || loading}
               iconEnd={<ArrowRight />}
             >
               Create
@@ -253,9 +266,15 @@ export const CreateDatabase = () => {
                         {arrayOfCreateDbLogs.map((log) => (
                           <p
                             key={arrayOfCreateDbLogs.indexOf(log)}
-                            className="text-s leading-5"
+                            className={
+                              log.message === 'Successfully created DB'
+                                ? 'text-s text-green-400 leading-5'
+                                : log.message === 'Failed to create DB'
+                                ? 'text-s text-red-400 leading-5'
+                                : 'text-s leading-5'
+                            }
                           >
-                            {log}
+                            {log.message}
                           </p>
                         ))}
                       </Terminal>
@@ -271,13 +290,9 @@ export const CreateDatabase = () => {
                   ctaFn={() => formik.handleSubmit()}
                   ctaText={'Create'}
                   otherButtonText={'Cancel'}
-                  isCtaLoading={isTerminalVisible ? false : createDbLoading}
+                  isCtaLoading={isTerminalVisible ? false : isCreateDbLoading}
                   isCtaDisabled={isTerminalVisible}
-                  closeModal={() => {
-                    setIsCreateDbModalOpen(false);
-                    setCreateDbLoading(false);
-                    setIsTerminalVisible(false);
-                  }}
+                  closeModal={() => handleOnClose(isDbCreationSuccess)}
                 />
               </Modal>
             )}

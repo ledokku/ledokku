@@ -54,6 +54,12 @@ export type DatabaseTypes =
   | 'MONGODB'
   | 'MYSQL';
 
+export type RealTimeLog = {
+  __typename?: 'RealTimeLog';
+  message?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+};
+
 export type LoginResult = {
   __typename?: 'LoginResult';
   token: Scalars['String'];
@@ -252,7 +258,7 @@ export type Subscription = {
   __typename?: 'Subscription';
   unlinkDatabaseLogs?: Maybe<Array<Scalars['String']>>;
   linkDatabaseLogs?: Maybe<Array<Scalars['String']>>;
-  createDatabaseLogs?: Maybe<Array<Scalars['String']>>;
+  createDatabaseLogs: RealTimeLog;
 };
 
 export type Mutation = {
@@ -595,7 +601,10 @@ export type CreateDatabaseLogsSubscriptionVariables = Exact<{ [key: string]: nev
 
 export type CreateDatabaseLogsSubscription = (
   { __typename?: 'Subscription' }
-  & Pick<Subscription, 'createDatabaseLogs'>
+  & { createDatabaseLogs: (
+    { __typename?: 'RealTimeLog' }
+    & Pick<RealTimeLog, 'message' | 'type'>
+  ) }
 );
 
 export type LinkDatabaseLogsSubscriptionVariables = Exact<{ [key: string]: never; }>;
@@ -1297,7 +1306,10 @@ export type SetupLazyQueryHookResult = ReturnType<typeof useSetupLazyQuery>;
 export type SetupQueryResult = ApolloReactCommon.QueryResult<SetupQuery, SetupQueryVariables>;
 export const CreateDatabaseLogsDocument = gql`
     subscription CreateDatabaseLogs {
-  createDatabaseLogs
+  createDatabaseLogs {
+    message
+    type
+  }
 }
     `;
 
