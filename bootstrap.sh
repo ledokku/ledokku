@@ -28,7 +28,7 @@ main() {
   read -p "Enter Your Github Client Secret: " GITHUB_CLIENT_SECRET
   read -p "Enter Your Server IP: " DOKKU_SSH_HOST
 
-  # First we creat the app
+  # First we create the app
   dokku apps:create ledokku
 
   # Create volume necessary for the ssh key
@@ -39,18 +39,19 @@ main() {
   # Install redis plugin if necessary
   sudo dokku plugin:installed redis
   if [ $? -eq 1 ]; then
-    echo "Installing redis plugin"
+    echo "=> Installing redis plugin"
     sudo dokku plugin:install https://github.com/dokku/dokku-redis.git redis
   fi
   
   # Install postgres plugin if necessary
   sudo dokku plugin:installed postgres
   if [ $? -eq 1 ]; then
-    echo "Installing postgres plugin"
+    echo "=> Installing postgres plugin"
     sudo dokku plugin:install https://github.com/dokku/dokku-postgres.git postgres
   fi
 
   # We create the required databases
+  echo "=> Creating databases"
   dokku redis:create ledokku
   dokku redis:link ledokku ledokku
   dokku postgres:create ledokku
@@ -66,6 +67,7 @@ main() {
   dokku config:set ledokku JWT_SECRET="${JWT_SECRET}"
 
   # Now it's finally time to install ledokku
+  echo "=> Installation"
   docker pull ledokku/ledokku:0.1.0
   docker tag ledokku/ledokku:0.1.0 dokku/ledokku:0.1.0
   dokku tags:deploy ledokku 0.1.0
