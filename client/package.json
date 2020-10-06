@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@apollo/client": "3.2.1",
-    "@tailwindui/react": "0.1.1",
+    "@headlessui/react": "0.2.0",
     "subscriptions-transport-ws": "0.9.18",
     "ansi_up": "4.0.4",
     "classnames": "2.2.6",
