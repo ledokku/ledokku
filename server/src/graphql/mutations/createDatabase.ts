@@ -1,3 +1,4 @@
+import { createDatabaseQueue } from './../../queues/createDatabase';
 import { dbTypeToDokkuPlugin } from '../utils';
 import * as yup from 'yup';
 import { MutationResolvers } from '../../generated/graphql';
@@ -40,21 +41,11 @@ export const createDatabase: MutationResolvers['createDatabase'] = async (
     throw new Error(`Database ${input.type} is not installed`);
   }
 
-  const dbType = dbTypeToDokkuPlugin(input.type);
-
-  await dokku.database.create(ssh, input.name, dbType);
-
-  const database = await prisma.database.create({
-    data: {
-      name: input.name,
-      type: input.type,
-      user: {
-        connect: {
-          id: userId,
-        },
-      },
-    },
+  await createDatabaseQueue.add('create-database', {
+    databaseName: input.name,
+    databaseType: input.type,
+    userId,
   });
 
-  return database;
+  return { result: true };
 };

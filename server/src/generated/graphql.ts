@@ -104,6 +104,11 @@ export type UnsetEnvVarResult = {
   result: Scalars['Boolean'];
 };
 
+export type CreateDatabaseResult = {
+  __typename?: 'CreateDatabaseResult';
+  result: Scalars['Boolean'];
+};
+
 export type AppLogsResult = {
   __typename?: 'AppLogsResult';
   logs: Array<Scalars['String']>;
@@ -245,13 +250,14 @@ export type Subscription = {
   __typename?: 'Subscription';
   unlinkDatabaseLogs?: Maybe<Array<Scalars['String']>>;
   linkDatabaseLogs?: Maybe<Array<Scalars['String']>>;
+  createDatabaseLogs?: Maybe<Array<Scalars['String']>>;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
   loginWithGithub?: Maybe<LoginResult>;
   createApp: CreateAppResult;
-  createDatabase: Database;
+  createDatabase: CreateDatabaseResult;
   setEnvVar: SetEnvVarResult;
   unsetEnvVar: UnsetEnvVarResult;
   destroyApp: DestroyAppResult;
@@ -407,6 +413,7 @@ export type ResolversTypes = {
   DokkuPluginResult: ResolverTypeWrapper<DokkuPluginResult>;
   SetEnvVarResult: ResolverTypeWrapper<SetEnvVarResult>;
   UnsetEnvVarResult: ResolverTypeWrapper<UnsetEnvVarResult>;
+  CreateDatabaseResult: ResolverTypeWrapper<CreateDatabaseResult>;
   AppLogsResult: ResolverTypeWrapper<AppLogsResult>;
   DatabaseInfoResult: ResolverTypeWrapper<DatabaseInfoResult>;
   DatabaseLogsResult: ResolverTypeWrapper<DatabaseLogsResult>;
@@ -449,6 +456,7 @@ export type ResolversParentTypes = {
   DokkuPluginResult: DokkuPluginResult;
   SetEnvVarResult: SetEnvVarResult;
   UnsetEnvVarResult: UnsetEnvVarResult;
+  CreateDatabaseResult: CreateDatabaseResult;
   AppLogsResult: AppLogsResult;
   DatabaseInfoResult: DatabaseInfoResult;
   DatabaseLogsResult: DatabaseLogsResult;
@@ -550,6 +558,11 @@ export type UnsetEnvVarResultResolvers<ContextType = any, ParentType extends Res
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
+export type CreateDatabaseResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateDatabaseResult'] = ResolversParentTypes['CreateDatabaseResult']> = {
+  result?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
 export type AppLogsResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['AppLogsResult'] = ResolversParentTypes['AppLogsResult']> = {
   logs?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
@@ -610,12 +623,13 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
   unlinkDatabaseLogs?: SubscriptionResolver<Maybe<Array<ResolversTypes['String']>>, "unlinkDatabaseLogs", ParentType, ContextType>;
   linkDatabaseLogs?: SubscriptionResolver<Maybe<Array<ResolversTypes['String']>>, "linkDatabaseLogs", ParentType, ContextType>;
+  createDatabaseLogs?: SubscriptionResolver<Maybe<Array<ResolversTypes['String']>>, "createDatabaseLogs", ParentType, ContextType>;
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   loginWithGithub?: Resolver<Maybe<ResolversTypes['LoginResult']>, ParentType, ContextType, RequireFields<MutationLoginWithGithubArgs, 'code'>>;
   createApp?: Resolver<ResolversTypes['CreateAppResult'], ParentType, ContextType, RequireFields<MutationCreateAppArgs, 'input'>>;
-  createDatabase?: Resolver<ResolversTypes['Database'], ParentType, ContextType, RequireFields<MutationCreateDatabaseArgs, 'input'>>;
+  createDatabase?: Resolver<ResolversTypes['CreateDatabaseResult'], ParentType, ContextType, RequireFields<MutationCreateDatabaseArgs, 'input'>>;
   setEnvVar?: Resolver<ResolversTypes['SetEnvVarResult'], ParentType, ContextType, RequireFields<MutationSetEnvVarArgs, 'input'>>;
   unsetEnvVar?: Resolver<ResolversTypes['UnsetEnvVarResult'], ParentType, ContextType, RequireFields<MutationUnsetEnvVarArgs, 'input'>>;
   destroyApp?: Resolver<ResolversTypes['DestroyAppResult'], ParentType, ContextType, RequireFields<MutationDestroyAppArgs, 'input'>>;
@@ -643,6 +657,7 @@ export type Resolvers<ContextType = any> = {
   DokkuPluginResult?: DokkuPluginResultResolvers<ContextType>;
   SetEnvVarResult?: SetEnvVarResultResolvers<ContextType>;
   UnsetEnvVarResult?: UnsetEnvVarResultResolvers<ContextType>;
+  CreateDatabaseResult?: CreateDatabaseResultResolvers<ContextType>;
   AppLogsResult?: AppLogsResultResolvers<ContextType>;
   DatabaseInfoResult?: DatabaseInfoResultResolvers<ContextType>;
   DatabaseLogsResult?: DatabaseLogsResultResolvers<ContextType>;
