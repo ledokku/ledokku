@@ -12,7 +12,7 @@ import { destroy as destroyDb } from './plugin/database/destroy';
 import { info } from './plugin/database/info';
 import { logs as databaseLogs } from './plugin/database/logs';
 import { list as databaseList } from './plugin/database/list';
-import { links as databaseLinks} from './plugin/database/links'
+import { links as databaseLinks } from './plugin/database/links';
 
 export const dokku = {
   apps: { create, logs, destroy, list: appList },
