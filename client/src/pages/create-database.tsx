@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -10,6 +10,7 @@ import {
   DatabaseTypes,
   useIsPluginInstalledLazyQuery,
   DashboardDocument,
+  useCreateDatabaseLogsSubscription,
 } from '../generated/graphql';
 import { PostgreSQLIcon } from '../ui/icons/PostgreSQLIcon';
 import { MySQLIcon } from '../ui/icons/MySQLIcon';
@@ -28,6 +29,10 @@ import {
   FormLabel,
   FormInput,
   FormHelper,
+  Modal,
+  ModalDescription,
+  ModalTitle,
+  ModalButton,
 } from '../ui';
 
 const createDatabaseSchema = yup.object().shape({
@@ -63,10 +68,24 @@ const DatabaseBox = ({ label, selected, icon, onClick }: DatabaseBoxProps) => {
 
 export const CreateDatabase = () => {
   const history = useHistory();
+  const [isCreateDbModalOpen, setIsCreateDbModalOpen] = useState(false);
+  const [arrayOfCreateDbLogs, setArrayofCreateDbLogs] = useState<string[]>([]);
+  const [isCreateDbLoading, setCreateDbLoading] = useState(false);
+  const [isTerminalVisible, setIsTerminalVisible] = useState(false);
   const [
     createDatabaseMutation,
     { loading: createDbLoading },
   ] = useCreateDatabaseMutation();
+
+  useCreateDatabaseLogsSubscription({
+    onSubscriptionData: (data) => {
+      const logsExist = data.subscriptionData.data?.createDatabaseLogs?.[0];
+      if (logsExist)
+        setArrayofCreateDbLogs((currentLogs) => {
+          return [...currentLogs, logsExist];
+        });
+    },
+  });
   const [
     isDokkuPluginInstalled,
     { data, loading, error: isDokkuPluginInstalledError },
@@ -93,9 +112,9 @@ export const CreateDatabase = () => {
             },
           ],
         });
-        toast.success('Database created successfully');
-        // TODO redirect to database page once ready
-        history.push('/dashboard');
+        // TODO redirect to dashboard if no errors in logs
+        setIsTerminalVisible(true);
+        setCreateDbLoading(true);
       } catch (error) {
         toast.error(error.message);
       }
@@ -206,7 +225,8 @@ export const CreateDatabase = () => {
 
           <div className="mt-12 flex justify-end">
             <Button
-              type="submit"
+              // type="submit"
+              onClick={() => setIsCreateDbModalOpen(true)}
               color="grey"
               disabled={data?.isPluginInstalled.isPluginInstalled === false}
               isLoading={createDbLoading || loading}
@@ -214,6 +234,53 @@ export const CreateDatabase = () => {
             >
               Create
             </Button>
+            {isCreateDbModalOpen && (
+              <Modal>
+                <ModalTitle>Create database</ModalTitle>
+                <ModalDescription>
+                  {isTerminalVisible ? (
+                    <React.Fragment>
+                      <p className="mb-2 ">
+                        Creating <b>{formik.values.type}</b> database{' '}
+                        <b>{formik.values.name}</b>
+                      </p>
+                      <Terminal className={'w-6/6'}>
+                        <p className="text-green-400 mb-2">
+                          Creating database usually takes a couple of minutes.
+                          Breathe in, breathe out, logs are about to appear
+                          below:
+                        </p>
+                        {arrayOfCreateDbLogs.map((log) => (
+                          <p
+                            key={arrayOfCreateDbLogs.indexOf(log)}
+                            className="text-s leading-5"
+                          >
+                            {log}
+                          </p>
+                        ))}
+                      </Terminal>
+                    </React.Fragment>
+                  ) : (
+                    <p>
+                      You are about to create {formik.values.type} database{' '}
+                      <b>{formik.values.name}</b>?
+                    </p>
+                  )}
+                </ModalDescription>
+                <ModalButton
+                  ctaFn={() => formik.handleSubmit()}
+                  ctaText={'Create'}
+                  otherButtonText={'Cancel'}
+                  isCtaLoading={isTerminalVisible ? false : createDbLoading}
+                  isCtaDisabled={isTerminalVisible}
+                  closeModal={() => {
+                    setIsCreateDbModalOpen(false);
+                    setCreateDbLoading(false);
+                    setIsTerminalVisible(false);
+                  }}
+                />
+              </Modal>
+            )}
           </div>
         </form>
       </div>
