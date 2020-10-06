@@ -12,6 +12,7 @@ import { mutations } from './graphql/mutations';
 import { config } from './config';
 import { app, http } from './server';
 import { queries } from './graphql/queries';
+import { synchroniseServerQueue } from './queues/synchroniseServer';
 
 app.use(express.static(path.join(__dirname, '..', '..', 'client', 'build')));
 
@@ -280,4 +281,7 @@ http.listen({ port: 4000 }, () => {
   console.log(
     `🚀 Subscriptions ready at ws://localhost:4000${apolloServer.subscriptionsPath}`
   );
+
+  // When the server boot we start the synchronisation with dokku
+  synchroniseServerQueue.add('synchronise-server', {});
 });
