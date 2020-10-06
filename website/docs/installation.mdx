@@ -71,14 +71,14 @@ dokku config:set ledokku JWT_SECRET="SUPER_SECURE_SECRET"
 Now pull the latest version of ledokku from the docker registry and tag it.
 
 ```sh
-docker pull ledokku/ledokku:0.0.3
-docker tag ledokku/ledokku:0.0.3 dokku/ledokku:0.0.3
+docker pull ledokku/ledokku:0.1.0
+docker tag ledokku/ledokku:0.1.0 dokku/ledokku:0.1.0
 ```
 
 Finally we deploy the tag to start our ledokku server.
 
 ```sh
-dokku tags:deploy ledokku 0.0.3
+dokku tags:deploy ledokku 0.1.0
 ```
 
 :::note

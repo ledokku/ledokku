@@ -1,3 +1,18 @@
+## 0.1.0 (2020-10-06)
+
+### Features
+
+- synchronise ledokku with existing dokku server ([#169](https://github.com/ledokku/ledokku/issues/169)) ([8167987](https://github.com/ledokku/ledokku/commit/816798750dddf081b4b8f53a152431c5ecbd193f))
+- use accessible dropdown for the top right profile menu ([#171](https://github.com/ledokku/ledokku/issues/171)) ([2754bff](https://github.com/ledokku/ledokku/commit/2754bff1d4515688af928518cbbde163f4beea05))
+
+### Documentation
+
+- point to the dokku documentation to deploy an app ([#163](https://github.com/ledokku/ledokku/issues/163)) ([566e751](https://github.com/ledokku/ledokku/commit/566e751185e3f0a9bc4e6872deb066a0c2802fb4))
+
+### Miscellaneous Chores
+
+- update website text, pics and github readme ([#164](https://github.com/ledokku/ledokku/issues/164)) ([b65b5b6](https://github.com/ledokku/ledokku/commit/b65b5b6b9b8e2da8ef9098866d5124fb3bd7fea0))
+
 ## 0.0.3 (2020-10-05)
 
 ### Features
