@@ -38,15 +38,21 @@ const worker = new Worker(
     );
 
     const ssh = await sshConnect();
-    await ssh.execCommand(`${dbType}:create ${databaseName}`, {
+    const res = await ssh.execCommand(`${dbType}:create ${databaseName}`, {
       onStdout: (chunk) => {
         pubsub.publish('DATABASE_CREATED', {
-          createDatabaseLogs: [chunk.toString()],
+          createDatabaseLogs: {
+            message: chunk.toString(),
+            type: 'stdout',
+          },
         });
       },
       onStderr: (chunk) => {
         pubsub.publish('DATABASE_CREATED', {
-          createDatabaseLogs: [chunk.toString()],
+          createDatabaseLogs: {
+            message: chunk.toString(),
+            type: 'stderr',
+          },
         });
       },
     });
@@ -66,13 +72,24 @@ const worker = new Worker(
     debug(
       `finishing createDatabase queue for ${dbType} database called ${databaseName}`
     );
+    pubsub.publish('DATABASE_CREATED', {
+      createDatabaseLogs: {
+        message: 'Successfully created DB',
+        type: 'end',
+      },
+    });
   },
   { connection: config.redisClient }
 );
 
 worker.on('failed', async (job, err) => {
   const { databaseType, databaseName } = job.data;
-
+  pubsub.publish('DATABASE_CREATED', {
+    createDatabaseLogs: {
+      message: 'Failed to create DB',
+      type: 'end',
+    },
+  });
   debug(
     `${job.id} has failed for for ${databaseType} database ${databaseName}  : ${err.message}`
   );

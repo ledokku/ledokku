@@ -52,6 +52,12 @@ export type DatabaseTypes =
   | 'MONGODB'
   | 'MYSQL';
 
+export type RealTimeLog = {
+  __typename?: 'RealTimeLog';
+  message?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+};
+
 export type LoginResult = {
   __typename?: 'LoginResult';
   token: Scalars['String'];
@@ -250,7 +256,7 @@ export type Subscription = {
   __typename?: 'Subscription';
   unlinkDatabaseLogs?: Maybe<Array<Scalars['String']>>;
   linkDatabaseLogs?: Maybe<Array<Scalars['String']>>;
-  createDatabaseLogs?: Maybe<Array<Scalars['String']>>;
+  createDatabaseLogs: RealTimeLog;
 };
 
 export type Mutation = {
@@ -402,6 +408,7 @@ export type ResolversTypes = {
   AppBuildStatus: AppBuildStatus;
   Database: ResolverTypeWrapper<Database>;
   DatabaseTypes: DatabaseTypes;
+  RealTimeLog: ResolverTypeWrapper<RealTimeLog>;
   LoginResult: ResolverTypeWrapper<LoginResult>;
   CreateAppResult: ResolverTypeWrapper<CreateAppResult>;
   DestroyAppResult: ResolverTypeWrapper<DestroyAppResult>;
@@ -445,6 +452,7 @@ export type ResolversParentTypes = {
   String: Scalars['String'];
   AppBuild: AppBuild;
   Database: Database;
+  RealTimeLog: RealTimeLog;
   LoginResult: LoginResult;
   CreateAppResult: CreateAppResult;
   DestroyAppResult: DestroyAppResult;
@@ -503,6 +511,12 @@ export type DatabaseResolvers<ContextType = any, ParentType extends ResolversPar
   type?: Resolver<ResolversTypes['DatabaseTypes'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   apps?: Resolver<Maybe<Array<ResolversTypes['App']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
+export type RealTimeLogResolvers<ContextType = any, ParentType extends ResolversParentTypes['RealTimeLog'] = ResolversParentTypes['RealTimeLog']> = {
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
@@ -623,7 +637,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
   unlinkDatabaseLogs?: SubscriptionResolver<Maybe<Array<ResolversTypes['String']>>, "unlinkDatabaseLogs", ParentType, ContextType>;
   linkDatabaseLogs?: SubscriptionResolver<Maybe<Array<ResolversTypes['String']>>, "linkDatabaseLogs", ParentType, ContextType>;
-  createDatabaseLogs?: SubscriptionResolver<Maybe<Array<ResolversTypes['String']>>, "createDatabaseLogs", ParentType, ContextType>;
+  createDatabaseLogs?: SubscriptionResolver<ResolversTypes['RealTimeLog'], "createDatabaseLogs", ParentType, ContextType>;
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
@@ -647,6 +661,7 @@ export type Resolvers<ContextType = any> = {
   App?: AppResolvers<ContextType>;
   AppBuild?: AppBuildResolvers<ContextType>;
   Database?: DatabaseResolvers<ContextType>;
+  RealTimeLog?: RealTimeLogResolvers<ContextType>;
   LoginResult?: LoginResultResolvers<ContextType>;
   CreateAppResult?: CreateAppResultResolvers<ContextType>;
   DestroyAppResult?: DestroyAppResultResolvers<ContextType>;

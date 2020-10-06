@@ -52,6 +52,11 @@ const typeDefs = gql`
     MYSQL
   }
 
+  type RealTimeLog {
+    message: String
+    type: String
+  }
+
   type LoginResult {
     token: String!
   }
@@ -191,7 +196,7 @@ const typeDefs = gql`
   type Subscription {
     unlinkDatabaseLogs: [String!]
     linkDatabaseLogs: [String!]
-    createDatabaseLogs: [String!]
+    createDatabaseLogs: RealTimeLog!
   }
 
   type Mutation {
