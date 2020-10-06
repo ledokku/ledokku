@@ -37,19 +37,18 @@ main() {
   chown dokku:dokku /var/lib/dokku/data/storage/ledokku-ssh/
   dokku storage:mount ledokku /var/lib/dokku/data/storage/ledokku-ssh/:/root/.ssh
 
-  # TODO remove log
-  echo "check plugins"
-
   # Install redis plugin if necessary
-  sudo dokku plugin:installed redis
-  if [ $? -eq 1 ]; then
+  if sudo dokku plugin:installed redis; then
+    echo "=> Redis plugin already installed skipping"
+  else
     echo "=> Installing redis plugin"
     sudo dokku plugin:install https://github.com/dokku/dokku-redis.git redis
   fi
   
   # Install postgres plugin if necessary
-  sudo dokku plugin:installed postgres
-  if [ $? -eq 1 ]; then
+  if sudo dokku plugin:installed postgres; then
+    echo "=> Postgres plugin already installed skipping"
+  else
     echo "=> Installing postgres plugin"
     sudo dokku plugin:install https://github.com/dokku/dokku-postgres.git postgres
   fi
