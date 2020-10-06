@@ -32,9 +32,13 @@ main() {
   dokku apps:create ledokku
 
   # Create volume necessary for the ssh key
+  echo "=> Creating volume"
   mkdir /var/lib/dokku/data/storage/ledokku-ssh/
   chown dokku:dokku /var/lib/dokku/data/storage/ledokku-ssh/
   dokku storage:mount ledokku /var/lib/dokku/data/storage/ledokku-ssh/:/root/.ssh
+
+  # TODO remove log
+  echo "check plugins"
 
   # Install redis plugin if necessary
   sudo dokku plugin:installed redis
