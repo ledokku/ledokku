@@ -6,5 +6,6 @@ module.exports = {
       'getting-started',
       'installation',
     ],
+    Advanced: ['advanced/manual-installation'],
   },
 };
