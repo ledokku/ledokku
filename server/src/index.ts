@@ -247,15 +247,13 @@ const apolloServer = new ApolloServer({
           userId: string;
         };
         const userId = decoded.userId;
-        try {
-          await prisma.user.findOne({
-            where: {
-              id: userId,
-            },
-          });
-        } catch (e) {
-          throw new Error("User doesn't exist in our db");
-        }
+
+        const userInDb = await prisma.user.findOne({
+          where: {
+            id: userId,
+          },
+        });
+        if (!userInDb) throw new Error("User doesn't exist in our db");
       } catch (e) {
         throw new Error('Invalid token');
       }
