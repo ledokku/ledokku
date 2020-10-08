@@ -223,12 +223,30 @@ const resolvers: Resolvers<{ userId?: string }> = {
   ...customResolvers,
 };
 
+interface SubscriptionContext {
+  token?: string;
+}
+
 const apolloServer = new ApolloServer({
   typeDefs,
   resolvers: {
     ...resolvers,
     DateTime: DateTimeResolver,
   },
+  subscriptions: {
+    onConnect: (context: SubscriptionContext) => {
+      if (!context.token) {
+        throw new Error('Missing auth token');
+      }
+      try {
+        jsonwebtoken.verify(context.token, config.jwtSecret);
+        // TODO ARTURS : FIND USER FN FOR EXTRA LAYER OF SECURITY
+      } catch (e) {
+        throw new Error('Invalid token');
+      }
+    },
+  },
+
   context: ({ req, connection }) => {
     if (connection) {
       return connection.context;
