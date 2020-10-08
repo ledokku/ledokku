@@ -231,14 +231,16 @@ const apolloServer = new ApolloServer({
   },
   subscriptions: {
     onConnect: (context: any, {}, {}) => {
+      if (!context.token) {
+        throw new Error('Missing auth token');
+      }
       try {
         if (context && context.token) {
-          const decoded = jsonwebtoken.verify(context.token, config.jwtSecret);
-
-          return;
+          jsonwebtoken.verify(context.token, config.jwtSecret);
+          // TODO ARTURS : FIND USER FN FOR EXTRA LAYER OF SECURITY
         }
       } catch (e) {
-        console.log('error');
+        throw new Error('Invalid token');
       }
     },
   },
