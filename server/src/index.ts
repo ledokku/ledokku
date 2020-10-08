@@ -235,10 +235,8 @@ const apolloServer = new ApolloServer({
         throw new Error('Missing auth token');
       }
       try {
-        if (context && context.token) {
-          jsonwebtoken.verify(context.token, config.jwtSecret);
-          // TODO ARTURS : FIND USER FN FOR EXTRA LAYER OF SECURITY
-        }
+        jsonwebtoken.verify(context.token, config.jwtSecret);
+        // TODO ARTURS : FIND USER FN FOR EXTRA LAYER OF SECURITY
       } catch (e) {
         throw new Error('Invalid token');
       }
