@@ -1,10 +1,8 @@
 /* eslint-disable */
-import gql from 'graphql-tag';
-import * as ApolloReactCommon from '@apollo/client';
-import * as ApolloReactHooks from '@apollo/client';
+import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
-export type Exact<T extends { [key: string]: any }> = { [K in keyof T]: T[K] };
-
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -610,7 +608,7 @@ export const CreateAppDocument = gql`
   }
 }
     `;
-export type CreateAppMutationFn = ApolloReactCommon.MutationFunction<CreateAppMutation, CreateAppMutationVariables>;
+export type CreateAppMutationFn = Apollo.MutationFunction<CreateAppMutation, CreateAppMutationVariables>;
 
 /**
  * __useCreateAppMutation__
@@ -629,12 +627,12 @@ export type CreateAppMutationFn = ApolloReactCommon.MutationFunction<CreateAppMu
  *   },
  * });
  */
-export function useCreateAppMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateAppMutation, CreateAppMutationVariables>) {
-        return ApolloReactHooks.useMutation<CreateAppMutation, CreateAppMutationVariables>(CreateAppDocument, baseOptions);
+export function useCreateAppMutation(baseOptions?: Apollo.MutationHookOptions<CreateAppMutation, CreateAppMutationVariables>) {
+        return Apollo.useMutation<CreateAppMutation, CreateAppMutationVariables>(CreateAppDocument, baseOptions);
       }
 export type CreateAppMutationHookResult = ReturnType<typeof useCreateAppMutation>;
-export type CreateAppMutationResult = ApolloReactCommon.MutationResult<CreateAppMutation>;
-export type CreateAppMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateAppMutation, CreateAppMutationVariables>;
+export type CreateAppMutationResult = Apollo.MutationResult<CreateAppMutation>;
+export type CreateAppMutationOptions = Apollo.BaseMutationOptions<CreateAppMutation, CreateAppMutationVariables>;
 export const CreateDatabaseDocument = gql`
     mutation createDatabase($input: CreateDatabaseInput!) {
   createDatabase(input: $input) {
@@ -643,7 +641,7 @@ export const CreateDatabaseDocument = gql`
   }
 }
     `;
-export type CreateDatabaseMutationFn = ApolloReactCommon.MutationFunction<CreateDatabaseMutation, CreateDatabaseMutationVariables>;
+export type CreateDatabaseMutationFn = Apollo.MutationFunction<CreateDatabaseMutation, CreateDatabaseMutationVariables>;
 
 /**
  * __useCreateDatabaseMutation__
@@ -662,12 +660,12 @@ export type CreateDatabaseMutationFn = ApolloReactCommon.MutationFunction<Create
  *   },
  * });
  */
-export function useCreateDatabaseMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateDatabaseMutation, CreateDatabaseMutationVariables>) {
-        return ApolloReactHooks.useMutation<CreateDatabaseMutation, CreateDatabaseMutationVariables>(CreateDatabaseDocument, baseOptions);
+export function useCreateDatabaseMutation(baseOptions?: Apollo.MutationHookOptions<CreateDatabaseMutation, CreateDatabaseMutationVariables>) {
+        return Apollo.useMutation<CreateDatabaseMutation, CreateDatabaseMutationVariables>(CreateDatabaseDocument, baseOptions);
       }
 export type CreateDatabaseMutationHookResult = ReturnType<typeof useCreateDatabaseMutation>;
-export type CreateDatabaseMutationResult = ApolloReactCommon.MutationResult<CreateDatabaseMutation>;
-export type CreateDatabaseMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateDatabaseMutation, CreateDatabaseMutationVariables>;
+export type CreateDatabaseMutationResult = Apollo.MutationResult<CreateDatabaseMutation>;
+export type CreateDatabaseMutationOptions = Apollo.BaseMutationOptions<CreateDatabaseMutation, CreateDatabaseMutationVariables>;
 export const DestroyAppDocument = gql`
     mutation destroyApp($input: DestroyAppInput!) {
   destroyApp(input: $input) {
@@ -675,7 +673,7 @@ export const DestroyAppDocument = gql`
   }
 }
     `;
-export type DestroyAppMutationFn = ApolloReactCommon.MutationFunction<DestroyAppMutation, DestroyAppMutationVariables>;
+export type DestroyAppMutationFn = Apollo.MutationFunction<DestroyAppMutation, DestroyAppMutationVariables>;
 
 /**
  * __useDestroyAppMutation__
@@ -694,12 +692,12 @@ export type DestroyAppMutationFn = ApolloReactCommon.MutationFunction<DestroyApp
  *   },
  * });
  */
-export function useDestroyAppMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DestroyAppMutation, DestroyAppMutationVariables>) {
-        return ApolloReactHooks.useMutation<DestroyAppMutation, DestroyAppMutationVariables>(DestroyAppDocument, baseOptions);
+export function useDestroyAppMutation(baseOptions?: Apollo.MutationHookOptions<DestroyAppMutation, DestroyAppMutationVariables>) {
+        return Apollo.useMutation<DestroyAppMutation, DestroyAppMutationVariables>(DestroyAppDocument, baseOptions);
       }
 export type DestroyAppMutationHookResult = ReturnType<typeof useDestroyAppMutation>;
-export type DestroyAppMutationResult = ApolloReactCommon.MutationResult<DestroyAppMutation>;
-export type DestroyAppMutationOptions = ApolloReactCommon.BaseMutationOptions<DestroyAppMutation, DestroyAppMutationVariables>;
+export type DestroyAppMutationResult = Apollo.MutationResult<DestroyAppMutation>;
+export type DestroyAppMutationOptions = Apollo.BaseMutationOptions<DestroyAppMutation, DestroyAppMutationVariables>;
 export const DestroyDatabaseDocument = gql`
     mutation destroyDatabase($input: DestroyDatabaseInput!) {
   destroyDatabase(input: $input) {
@@ -707,7 +705,7 @@ export const DestroyDatabaseDocument = gql`
   }
 }
     `;
-export type DestroyDatabaseMutationFn = ApolloReactCommon.MutationFunction<DestroyDatabaseMutation, DestroyDatabaseMutationVariables>;
+export type DestroyDatabaseMutationFn = Apollo.MutationFunction<DestroyDatabaseMutation, DestroyDatabaseMutationVariables>;
 
 /**
  * __useDestroyDatabaseMutation__
@@ -726,12 +724,12 @@ export type DestroyDatabaseMutationFn = ApolloReactCommon.MutationFunction<Destr
  *   },
  * });
  */
-export function useDestroyDatabaseMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DestroyDatabaseMutation, DestroyDatabaseMutationVariables>) {
-        return ApolloReactHooks.useMutation<DestroyDatabaseMutation, DestroyDatabaseMutationVariables>(DestroyDatabaseDocument, baseOptions);
+export function useDestroyDatabaseMutation(baseOptions?: Apollo.MutationHookOptions<DestroyDatabaseMutation, DestroyDatabaseMutationVariables>) {
+        return Apollo.useMutation<DestroyDatabaseMutation, DestroyDatabaseMutationVariables>(DestroyDatabaseDocument, baseOptions);
       }
 export type DestroyDatabaseMutationHookResult = ReturnType<typeof useDestroyDatabaseMutation>;
-export type DestroyDatabaseMutationResult = ApolloReactCommon.MutationResult<DestroyDatabaseMutation>;
-export type DestroyDatabaseMutationOptions = ApolloReactCommon.BaseMutationOptions<DestroyDatabaseMutation, DestroyDatabaseMutationVariables>;
+export type DestroyDatabaseMutationResult = Apollo.MutationResult<DestroyDatabaseMutation>;
+export type DestroyDatabaseMutationOptions = Apollo.BaseMutationOptions<DestroyDatabaseMutation, DestroyDatabaseMutationVariables>;
 export const LinkDatabaseDocument = gql`
     mutation linkDatabase($input: LinkDatabaseInput!) {
   linkDatabase(input: $input) {
@@ -739,7 +737,7 @@ export const LinkDatabaseDocument = gql`
   }
 }
     `;
-export type LinkDatabaseMutationFn = ApolloReactCommon.MutationFunction<LinkDatabaseMutation, LinkDatabaseMutationVariables>;
+export type LinkDatabaseMutationFn = Apollo.MutationFunction<LinkDatabaseMutation, LinkDatabaseMutationVariables>;
 
 /**
  * __useLinkDatabaseMutation__
@@ -758,12 +756,12 @@ export type LinkDatabaseMutationFn = ApolloReactCommon.MutationFunction<LinkData
  *   },
  * });
  */
-export function useLinkDatabaseMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<LinkDatabaseMutation, LinkDatabaseMutationVariables>) {
-        return ApolloReactHooks.useMutation<LinkDatabaseMutation, LinkDatabaseMutationVariables>(LinkDatabaseDocument, baseOptions);
+export function useLinkDatabaseMutation(baseOptions?: Apollo.MutationHookOptions<LinkDatabaseMutation, LinkDatabaseMutationVariables>) {
+        return Apollo.useMutation<LinkDatabaseMutation, LinkDatabaseMutationVariables>(LinkDatabaseDocument, baseOptions);
       }
 export type LinkDatabaseMutationHookResult = ReturnType<typeof useLinkDatabaseMutation>;
-export type LinkDatabaseMutationResult = ApolloReactCommon.MutationResult<LinkDatabaseMutation>;
-export type LinkDatabaseMutationOptions = ApolloReactCommon.BaseMutationOptions<LinkDatabaseMutation, LinkDatabaseMutationVariables>;
+export type LinkDatabaseMutationResult = Apollo.MutationResult<LinkDatabaseMutation>;
+export type LinkDatabaseMutationOptions = Apollo.BaseMutationOptions<LinkDatabaseMutation, LinkDatabaseMutationVariables>;
 export const LoginWithGithubDocument = gql`
     mutation loginWithGithub($code: String!) {
   loginWithGithub(code: $code) {
@@ -771,7 +769,7 @@ export const LoginWithGithubDocument = gql`
   }
 }
     `;
-export type LoginWithGithubMutationFn = ApolloReactCommon.MutationFunction<LoginWithGithubMutation, LoginWithGithubMutationVariables>;
+export type LoginWithGithubMutationFn = Apollo.MutationFunction<LoginWithGithubMutation, LoginWithGithubMutationVariables>;
 
 /**
  * __useLoginWithGithubMutation__
@@ -790,12 +788,12 @@ export type LoginWithGithubMutationFn = ApolloReactCommon.MutationFunction<Login
  *   },
  * });
  */
-export function useLoginWithGithubMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<LoginWithGithubMutation, LoginWithGithubMutationVariables>) {
-        return ApolloReactHooks.useMutation<LoginWithGithubMutation, LoginWithGithubMutationVariables>(LoginWithGithubDocument, baseOptions);
+export function useLoginWithGithubMutation(baseOptions?: Apollo.MutationHookOptions<LoginWithGithubMutation, LoginWithGithubMutationVariables>) {
+        return Apollo.useMutation<LoginWithGithubMutation, LoginWithGithubMutationVariables>(LoginWithGithubDocument, baseOptions);
       }
 export type LoginWithGithubMutationHookResult = ReturnType<typeof useLoginWithGithubMutation>;
-export type LoginWithGithubMutationResult = ApolloReactCommon.MutationResult<LoginWithGithubMutation>;
-export type LoginWithGithubMutationOptions = ApolloReactCommon.BaseMutationOptions<LoginWithGithubMutation, LoginWithGithubMutationVariables>;
+export type LoginWithGithubMutationResult = Apollo.MutationResult<LoginWithGithubMutation>;
+export type LoginWithGithubMutationOptions = Apollo.BaseMutationOptions<LoginWithGithubMutation, LoginWithGithubMutationVariables>;
 export const SetEnvVarDocument = gql`
     mutation setEnvVar($key: String!, $value: String!, $appId: String!) {
   setEnvVar(input: {key: $key, value: $value, appId: $appId}) {
@@ -803,7 +801,7 @@ export const SetEnvVarDocument = gql`
   }
 }
     `;
-export type SetEnvVarMutationFn = ApolloReactCommon.MutationFunction<SetEnvVarMutation, SetEnvVarMutationVariables>;
+export type SetEnvVarMutationFn = Apollo.MutationFunction<SetEnvVarMutation, SetEnvVarMutationVariables>;
 
 /**
  * __useSetEnvVarMutation__
@@ -824,12 +822,12 @@ export type SetEnvVarMutationFn = ApolloReactCommon.MutationFunction<SetEnvVarMu
  *   },
  * });
  */
-export function useSetEnvVarMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SetEnvVarMutation, SetEnvVarMutationVariables>) {
-        return ApolloReactHooks.useMutation<SetEnvVarMutation, SetEnvVarMutationVariables>(SetEnvVarDocument, baseOptions);
+export function useSetEnvVarMutation(baseOptions?: Apollo.MutationHookOptions<SetEnvVarMutation, SetEnvVarMutationVariables>) {
+        return Apollo.useMutation<SetEnvVarMutation, SetEnvVarMutationVariables>(SetEnvVarDocument, baseOptions);
       }
 export type SetEnvVarMutationHookResult = ReturnType<typeof useSetEnvVarMutation>;
-export type SetEnvVarMutationResult = ApolloReactCommon.MutationResult<SetEnvVarMutation>;
-export type SetEnvVarMutationOptions = ApolloReactCommon.BaseMutationOptions<SetEnvVarMutation, SetEnvVarMutationVariables>;
+export type SetEnvVarMutationResult = Apollo.MutationResult<SetEnvVarMutation>;
+export type SetEnvVarMutationOptions = Apollo.BaseMutationOptions<SetEnvVarMutation, SetEnvVarMutationVariables>;
 export const UnlinkDatabaseDocument = gql`
     mutation unlinkDatabase($input: UnlinkDatabaseInput!) {
   unlinkDatabase(input: $input) {
@@ -837,7 +835,7 @@ export const UnlinkDatabaseDocument = gql`
   }
 }
     `;
-export type UnlinkDatabaseMutationFn = ApolloReactCommon.MutationFunction<UnlinkDatabaseMutation, UnlinkDatabaseMutationVariables>;
+export type UnlinkDatabaseMutationFn = Apollo.MutationFunction<UnlinkDatabaseMutation, UnlinkDatabaseMutationVariables>;
 
 /**
  * __useUnlinkDatabaseMutation__
@@ -856,12 +854,12 @@ export type UnlinkDatabaseMutationFn = ApolloReactCommon.MutationFunction<Unlink
  *   },
  * });
  */
-export function useUnlinkDatabaseMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UnlinkDatabaseMutation, UnlinkDatabaseMutationVariables>) {
-        return ApolloReactHooks.useMutation<UnlinkDatabaseMutation, UnlinkDatabaseMutationVariables>(UnlinkDatabaseDocument, baseOptions);
+export function useUnlinkDatabaseMutation(baseOptions?: Apollo.MutationHookOptions<UnlinkDatabaseMutation, UnlinkDatabaseMutationVariables>) {
+        return Apollo.useMutation<UnlinkDatabaseMutation, UnlinkDatabaseMutationVariables>(UnlinkDatabaseDocument, baseOptions);
       }
 export type UnlinkDatabaseMutationHookResult = ReturnType<typeof useUnlinkDatabaseMutation>;
-export type UnlinkDatabaseMutationResult = ApolloReactCommon.MutationResult<UnlinkDatabaseMutation>;
-export type UnlinkDatabaseMutationOptions = ApolloReactCommon.BaseMutationOptions<UnlinkDatabaseMutation, UnlinkDatabaseMutationVariables>;
+export type UnlinkDatabaseMutationResult = Apollo.MutationResult<UnlinkDatabaseMutation>;
+export type UnlinkDatabaseMutationOptions = Apollo.BaseMutationOptions<UnlinkDatabaseMutation, UnlinkDatabaseMutationVariables>;
 export const UnsetEnvVarDocument = gql`
     mutation unsetEnvVar($key: String!, $appId: String!) {
   unsetEnvVar(input: {key: $key, appId: $appId}) {
@@ -869,7 +867,7 @@ export const UnsetEnvVarDocument = gql`
   }
 }
     `;
-export type UnsetEnvVarMutationFn = ApolloReactCommon.MutationFunction<UnsetEnvVarMutation, UnsetEnvVarMutationVariables>;
+export type UnsetEnvVarMutationFn = Apollo.MutationFunction<UnsetEnvVarMutation, UnsetEnvVarMutationVariables>;
 
 /**
  * __useUnsetEnvVarMutation__
@@ -889,12 +887,12 @@ export type UnsetEnvVarMutationFn = ApolloReactCommon.MutationFunction<UnsetEnvV
  *   },
  * });
  */
-export function useUnsetEnvVarMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UnsetEnvVarMutation, UnsetEnvVarMutationVariables>) {
-        return ApolloReactHooks.useMutation<UnsetEnvVarMutation, UnsetEnvVarMutationVariables>(UnsetEnvVarDocument, baseOptions);
+export function useUnsetEnvVarMutation(baseOptions?: Apollo.MutationHookOptions<UnsetEnvVarMutation, UnsetEnvVarMutationVariables>) {
+        return Apollo.useMutation<UnsetEnvVarMutation, UnsetEnvVarMutationVariables>(UnsetEnvVarDocument, baseOptions);
       }
 export type UnsetEnvVarMutationHookResult = ReturnType<typeof useUnsetEnvVarMutation>;
-export type UnsetEnvVarMutationResult = ApolloReactCommon.MutationResult<UnsetEnvVarMutation>;
-export type UnsetEnvVarMutationOptions = ApolloReactCommon.BaseMutationOptions<UnsetEnvVarMutation, UnsetEnvVarMutationVariables>;
+export type UnsetEnvVarMutationResult = Apollo.MutationResult<UnsetEnvVarMutation>;
+export type UnsetEnvVarMutationOptions = Apollo.BaseMutationOptions<UnsetEnvVarMutation, UnsetEnvVarMutationVariables>;
 export const AppByIdDocument = gql`
     query appById($appId: String!) {
   app(appId: $appId) {
@@ -926,15 +924,15 @@ export const AppByIdDocument = gql`
  *   },
  * });
  */
-export function useAppByIdQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<AppByIdQuery, AppByIdQueryVariables>) {
-        return ApolloReactHooks.useQuery<AppByIdQuery, AppByIdQueryVariables>(AppByIdDocument, baseOptions);
+export function useAppByIdQuery(baseOptions?: Apollo.QueryHookOptions<AppByIdQuery, AppByIdQueryVariables>) {
+        return Apollo.useQuery<AppByIdQuery, AppByIdQueryVariables>(AppByIdDocument, baseOptions);
       }
-export function useAppByIdLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<AppByIdQuery, AppByIdQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<AppByIdQuery, AppByIdQueryVariables>(AppByIdDocument, baseOptions);
+export function useAppByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AppByIdQuery, AppByIdQueryVariables>) {
+          return Apollo.useLazyQuery<AppByIdQuery, AppByIdQueryVariables>(AppByIdDocument, baseOptions);
         }
 export type AppByIdQueryHookResult = ReturnType<typeof useAppByIdQuery>;
 export type AppByIdLazyQueryHookResult = ReturnType<typeof useAppByIdLazyQuery>;
-export type AppByIdQueryResult = ApolloReactCommon.QueryResult<AppByIdQuery, AppByIdQueryVariables>;
+export type AppByIdQueryResult = Apollo.QueryResult<AppByIdQuery, AppByIdQueryVariables>;
 export const AppLogsDocument = gql`
     query appLogs($appId: String!) {
   appLogs(appId: $appId) {
@@ -959,15 +957,15 @@ export const AppLogsDocument = gql`
  *   },
  * });
  */
-export function useAppLogsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<AppLogsQuery, AppLogsQueryVariables>) {
-        return ApolloReactHooks.useQuery<AppLogsQuery, AppLogsQueryVariables>(AppLogsDocument, baseOptions);
+export function useAppLogsQuery(baseOptions?: Apollo.QueryHookOptions<AppLogsQuery, AppLogsQueryVariables>) {
+        return Apollo.useQuery<AppLogsQuery, AppLogsQueryVariables>(AppLogsDocument, baseOptions);
       }
-export function useAppLogsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<AppLogsQuery, AppLogsQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<AppLogsQuery, AppLogsQueryVariables>(AppLogsDocument, baseOptions);
+export function useAppLogsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AppLogsQuery, AppLogsQueryVariables>) {
+          return Apollo.useLazyQuery<AppLogsQuery, AppLogsQueryVariables>(AppLogsDocument, baseOptions);
         }
 export type AppLogsQueryHookResult = ReturnType<typeof useAppLogsQuery>;
 export type AppLogsLazyQueryHookResult = ReturnType<typeof useAppLogsLazyQuery>;
-export type AppLogsQueryResult = ApolloReactCommon.QueryResult<AppLogsQuery, AppLogsQueryVariables>;
+export type AppLogsQueryResult = Apollo.QueryResult<AppLogsQuery, AppLogsQueryVariables>;
 export const AppsDocument = gql`
     query apps {
   apps {
@@ -992,15 +990,15 @@ export const AppsDocument = gql`
  *   },
  * });
  */
-export function useAppsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<AppsQuery, AppsQueryVariables>) {
-        return ApolloReactHooks.useQuery<AppsQuery, AppsQueryVariables>(AppsDocument, baseOptions);
+export function useAppsQuery(baseOptions?: Apollo.QueryHookOptions<AppsQuery, AppsQueryVariables>) {
+        return Apollo.useQuery<AppsQuery, AppsQueryVariables>(AppsDocument, baseOptions);
       }
-export function useAppsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<AppsQuery, AppsQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<AppsQuery, AppsQueryVariables>(AppsDocument, baseOptions);
+export function useAppsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AppsQuery, AppsQueryVariables>) {
+          return Apollo.useLazyQuery<AppsQuery, AppsQueryVariables>(AppsDocument, baseOptions);
         }
 export type AppsQueryHookResult = ReturnType<typeof useAppsQuery>;
 export type AppsLazyQueryHookResult = ReturnType<typeof useAppsLazyQuery>;
-export type AppsQueryResult = ApolloReactCommon.QueryResult<AppsQuery, AppsQueryVariables>;
+export type AppsQueryResult = Apollo.QueryResult<AppsQuery, AppsQueryVariables>;
 export const DashboardDocument = gql`
     query dashboard {
   apps {
@@ -1032,15 +1030,15 @@ export const DashboardDocument = gql`
  *   },
  * });
  */
-export function useDashboardQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<DashboardQuery, DashboardQueryVariables>) {
-        return ApolloReactHooks.useQuery<DashboardQuery, DashboardQueryVariables>(DashboardDocument, baseOptions);
+export function useDashboardQuery(baseOptions?: Apollo.QueryHookOptions<DashboardQuery, DashboardQueryVariables>) {
+        return Apollo.useQuery<DashboardQuery, DashboardQueryVariables>(DashboardDocument, baseOptions);
       }
-export function useDashboardLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<DashboardQuery, DashboardQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<DashboardQuery, DashboardQueryVariables>(DashboardDocument, baseOptions);
+export function useDashboardLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DashboardQuery, DashboardQueryVariables>) {
+          return Apollo.useLazyQuery<DashboardQuery, DashboardQueryVariables>(DashboardDocument, baseOptions);
         }
 export type DashboardQueryHookResult = ReturnType<typeof useDashboardQuery>;
 export type DashboardLazyQueryHookResult = ReturnType<typeof useDashboardLazyQuery>;
-export type DashboardQueryResult = ApolloReactCommon.QueryResult<DashboardQuery, DashboardQueryVariables>;
+export type DashboardQueryResult = Apollo.QueryResult<DashboardQuery, DashboardQueryVariables>;
 export const DatabaseByIdDocument = gql`
     query databaseById($databaseId: String!) {
   database(databaseId: $databaseId) {
@@ -1071,15 +1069,15 @@ export const DatabaseByIdDocument = gql`
  *   },
  * });
  */
-export function useDatabaseByIdQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<DatabaseByIdQuery, DatabaseByIdQueryVariables>) {
-        return ApolloReactHooks.useQuery<DatabaseByIdQuery, DatabaseByIdQueryVariables>(DatabaseByIdDocument, baseOptions);
+export function useDatabaseByIdQuery(baseOptions?: Apollo.QueryHookOptions<DatabaseByIdQuery, DatabaseByIdQueryVariables>) {
+        return Apollo.useQuery<DatabaseByIdQuery, DatabaseByIdQueryVariables>(DatabaseByIdDocument, baseOptions);
       }
-export function useDatabaseByIdLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<DatabaseByIdQuery, DatabaseByIdQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<DatabaseByIdQuery, DatabaseByIdQueryVariables>(DatabaseByIdDocument, baseOptions);
+export function useDatabaseByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DatabaseByIdQuery, DatabaseByIdQueryVariables>) {
+          return Apollo.useLazyQuery<DatabaseByIdQuery, DatabaseByIdQueryVariables>(DatabaseByIdDocument, baseOptions);
         }
 export type DatabaseByIdQueryHookResult = ReturnType<typeof useDatabaseByIdQuery>;
 export type DatabaseByIdLazyQueryHookResult = ReturnType<typeof useDatabaseByIdLazyQuery>;
-export type DatabaseByIdQueryResult = ApolloReactCommon.QueryResult<DatabaseByIdQuery, DatabaseByIdQueryVariables>;
+export type DatabaseByIdQueryResult = Apollo.QueryResult<DatabaseByIdQuery, DatabaseByIdQueryVariables>;
 export const DatabaseInfoDocument = gql`
     query databaseInfo($databaseId: String!) {
   databaseInfo(databaseId: $databaseId) {
@@ -1104,15 +1102,15 @@ export const DatabaseInfoDocument = gql`
  *   },
  * });
  */
-export function useDatabaseInfoQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<DatabaseInfoQuery, DatabaseInfoQueryVariables>) {
-        return ApolloReactHooks.useQuery<DatabaseInfoQuery, DatabaseInfoQueryVariables>(DatabaseInfoDocument, baseOptions);
+export function useDatabaseInfoQuery(baseOptions?: Apollo.QueryHookOptions<DatabaseInfoQuery, DatabaseInfoQueryVariables>) {
+        return Apollo.useQuery<DatabaseInfoQuery, DatabaseInfoQueryVariables>(DatabaseInfoDocument, baseOptions);
       }
-export function useDatabaseInfoLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<DatabaseInfoQuery, DatabaseInfoQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<DatabaseInfoQuery, DatabaseInfoQueryVariables>(DatabaseInfoDocument, baseOptions);
+export function useDatabaseInfoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DatabaseInfoQuery, DatabaseInfoQueryVariables>) {
+          return Apollo.useLazyQuery<DatabaseInfoQuery, DatabaseInfoQueryVariables>(DatabaseInfoDocument, baseOptions);
         }
 export type DatabaseInfoQueryHookResult = ReturnType<typeof useDatabaseInfoQuery>;
 export type DatabaseInfoLazyQueryHookResult = ReturnType<typeof useDatabaseInfoLazyQuery>;
-export type DatabaseInfoQueryResult = ApolloReactCommon.QueryResult<DatabaseInfoQuery, DatabaseInfoQueryVariables>;
+export type DatabaseInfoQueryResult = Apollo.QueryResult<DatabaseInfoQuery, DatabaseInfoQueryVariables>;
 export const DatabaseLogsDocument = gql`
     query databaseLogs($databaseId: String!) {
   databaseLogs(databaseId: $databaseId) {
@@ -1137,15 +1135,15 @@ export const DatabaseLogsDocument = gql`
  *   },
  * });
  */
-export function useDatabaseLogsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<DatabaseLogsQuery, DatabaseLogsQueryVariables>) {
-        return ApolloReactHooks.useQuery<DatabaseLogsQuery, DatabaseLogsQueryVariables>(DatabaseLogsDocument, baseOptions);
+export function useDatabaseLogsQuery(baseOptions?: Apollo.QueryHookOptions<DatabaseLogsQuery, DatabaseLogsQueryVariables>) {
+        return Apollo.useQuery<DatabaseLogsQuery, DatabaseLogsQueryVariables>(DatabaseLogsDocument, baseOptions);
       }
-export function useDatabaseLogsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<DatabaseLogsQuery, DatabaseLogsQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<DatabaseLogsQuery, DatabaseLogsQueryVariables>(DatabaseLogsDocument, baseOptions);
+export function useDatabaseLogsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DatabaseLogsQuery, DatabaseLogsQueryVariables>) {
+          return Apollo.useLazyQuery<DatabaseLogsQuery, DatabaseLogsQueryVariables>(DatabaseLogsDocument, baseOptions);
         }
 export type DatabaseLogsQueryHookResult = ReturnType<typeof useDatabaseLogsQuery>;
 export type DatabaseLogsLazyQueryHookResult = ReturnType<typeof useDatabaseLogsLazyQuery>;
-export type DatabaseLogsQueryResult = ApolloReactCommon.QueryResult<DatabaseLogsQuery, DatabaseLogsQueryVariables>;
+export type DatabaseLogsQueryResult = Apollo.QueryResult<DatabaseLogsQuery, DatabaseLogsQueryVariables>;
 export const DatabaseDocument = gql`
     query database {
   databases {
@@ -1171,15 +1169,15 @@ export const DatabaseDocument = gql`
  *   },
  * });
  */
-export function useDatabaseQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<DatabaseQuery, DatabaseQueryVariables>) {
-        return ApolloReactHooks.useQuery<DatabaseQuery, DatabaseQueryVariables>(DatabaseDocument, baseOptions);
+export function useDatabaseQuery(baseOptions?: Apollo.QueryHookOptions<DatabaseQuery, DatabaseQueryVariables>) {
+        return Apollo.useQuery<DatabaseQuery, DatabaseQueryVariables>(DatabaseDocument, baseOptions);
       }
-export function useDatabaseLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<DatabaseQuery, DatabaseQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<DatabaseQuery, DatabaseQueryVariables>(DatabaseDocument, baseOptions);
+export function useDatabaseLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DatabaseQuery, DatabaseQueryVariables>) {
+          return Apollo.useLazyQuery<DatabaseQuery, DatabaseQueryVariables>(DatabaseDocument, baseOptions);
         }
 export type DatabaseQueryHookResult = ReturnType<typeof useDatabaseQuery>;
 export type DatabaseLazyQueryHookResult = ReturnType<typeof useDatabaseLazyQuery>;
-export type DatabaseQueryResult = ApolloReactCommon.QueryResult<DatabaseQuery, DatabaseQueryVariables>;
+export type DatabaseQueryResult = Apollo.QueryResult<DatabaseQuery, DatabaseQueryVariables>;
 export const EnvVarsDocument = gql`
     query envVars($appId: String!) {
   envVars(appId: $appId) {
@@ -1207,15 +1205,15 @@ export const EnvVarsDocument = gql`
  *   },
  * });
  */
-export function useEnvVarsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<EnvVarsQuery, EnvVarsQueryVariables>) {
-        return ApolloReactHooks.useQuery<EnvVarsQuery, EnvVarsQueryVariables>(EnvVarsDocument, baseOptions);
+export function useEnvVarsQuery(baseOptions?: Apollo.QueryHookOptions<EnvVarsQuery, EnvVarsQueryVariables>) {
+        return Apollo.useQuery<EnvVarsQuery, EnvVarsQueryVariables>(EnvVarsDocument, baseOptions);
       }
-export function useEnvVarsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<EnvVarsQuery, EnvVarsQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<EnvVarsQuery, EnvVarsQueryVariables>(EnvVarsDocument, baseOptions);
+export function useEnvVarsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EnvVarsQuery, EnvVarsQueryVariables>) {
+          return Apollo.useLazyQuery<EnvVarsQuery, EnvVarsQueryVariables>(EnvVarsDocument, baseOptions);
         }
 export type EnvVarsQueryHookResult = ReturnType<typeof useEnvVarsQuery>;
 export type EnvVarsLazyQueryHookResult = ReturnType<typeof useEnvVarsLazyQuery>;
-export type EnvVarsQueryResult = ApolloReactCommon.QueryResult<EnvVarsQuery, EnvVarsQueryVariables>;
+export type EnvVarsQueryResult = Apollo.QueryResult<EnvVarsQuery, EnvVarsQueryVariables>;
 export const IsPluginInstalledDocument = gql`
     query isPluginInstalled($pluginName: String!) {
   isPluginInstalled(pluginName: $pluginName) {
@@ -1240,15 +1238,15 @@ export const IsPluginInstalledDocument = gql`
  *   },
  * });
  */
-export function useIsPluginInstalledQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<IsPluginInstalledQuery, IsPluginInstalledQueryVariables>) {
-        return ApolloReactHooks.useQuery<IsPluginInstalledQuery, IsPluginInstalledQueryVariables>(IsPluginInstalledDocument, baseOptions);
+export function useIsPluginInstalledQuery(baseOptions?: Apollo.QueryHookOptions<IsPluginInstalledQuery, IsPluginInstalledQueryVariables>) {
+        return Apollo.useQuery<IsPluginInstalledQuery, IsPluginInstalledQueryVariables>(IsPluginInstalledDocument, baseOptions);
       }
-export function useIsPluginInstalledLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<IsPluginInstalledQuery, IsPluginInstalledQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<IsPluginInstalledQuery, IsPluginInstalledQueryVariables>(IsPluginInstalledDocument, baseOptions);
+export function useIsPluginInstalledLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IsPluginInstalledQuery, IsPluginInstalledQueryVariables>) {
+          return Apollo.useLazyQuery<IsPluginInstalledQuery, IsPluginInstalledQueryVariables>(IsPluginInstalledDocument, baseOptions);
         }
 export type IsPluginInstalledQueryHookResult = ReturnType<typeof useIsPluginInstalledQuery>;
 export type IsPluginInstalledLazyQueryHookResult = ReturnType<typeof useIsPluginInstalledLazyQuery>;
-export type IsPluginInstalledQueryResult = ApolloReactCommon.QueryResult<IsPluginInstalledQuery, IsPluginInstalledQueryVariables>;
+export type IsPluginInstalledQueryResult = Apollo.QueryResult<IsPluginInstalledQuery, IsPluginInstalledQueryVariables>;
 export const SetupDocument = gql`
     query setup {
   setup {
@@ -1273,15 +1271,15 @@ export const SetupDocument = gql`
  *   },
  * });
  */
-export function useSetupQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SetupQuery, SetupQueryVariables>) {
-        return ApolloReactHooks.useQuery<SetupQuery, SetupQueryVariables>(SetupDocument, baseOptions);
+export function useSetupQuery(baseOptions?: Apollo.QueryHookOptions<SetupQuery, SetupQueryVariables>) {
+        return Apollo.useQuery<SetupQuery, SetupQueryVariables>(SetupDocument, baseOptions);
       }
-export function useSetupLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SetupQuery, SetupQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<SetupQuery, SetupQueryVariables>(SetupDocument, baseOptions);
+export function useSetupLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SetupQuery, SetupQueryVariables>) {
+          return Apollo.useLazyQuery<SetupQuery, SetupQueryVariables>(SetupDocument, baseOptions);
         }
 export type SetupQueryHookResult = ReturnType<typeof useSetupQuery>;
 export type SetupLazyQueryHookResult = ReturnType<typeof useSetupLazyQuery>;
-export type SetupQueryResult = ApolloReactCommon.QueryResult<SetupQuery, SetupQueryVariables>;
+export type SetupQueryResult = Apollo.QueryResult<SetupQuery, SetupQueryVariables>;
 export const LinkDatabaseLogsDocument = gql`
     subscription LinkDatabaseLogs {
   linkDatabaseLogs
@@ -1303,11 +1301,11 @@ export const LinkDatabaseLogsDocument = gql`
  *   },
  * });
  */
-export function useLinkDatabaseLogsSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<LinkDatabaseLogsSubscription, LinkDatabaseLogsSubscriptionVariables>) {
-        return ApolloReactHooks.useSubscription<LinkDatabaseLogsSubscription, LinkDatabaseLogsSubscriptionVariables>(LinkDatabaseLogsDocument, baseOptions);
+export function useLinkDatabaseLogsSubscription(baseOptions?: Apollo.SubscriptionHookOptions<LinkDatabaseLogsSubscription, LinkDatabaseLogsSubscriptionVariables>) {
+        return Apollo.useSubscription<LinkDatabaseLogsSubscription, LinkDatabaseLogsSubscriptionVariables>(LinkDatabaseLogsDocument, baseOptions);
       }
 export type LinkDatabaseLogsSubscriptionHookResult = ReturnType<typeof useLinkDatabaseLogsSubscription>;
-export type LinkDatabaseLogsSubscriptionResult = ApolloReactCommon.SubscriptionResult<LinkDatabaseLogsSubscription>;
+export type LinkDatabaseLogsSubscriptionResult = Apollo.SubscriptionResult<LinkDatabaseLogsSubscription>;
 export const UnlinkDatabaseLogsDocument = gql`
     subscription UnlinkDatabaseLogs {
   unlinkDatabaseLogs
@@ -1329,8 +1327,8 @@ export const UnlinkDatabaseLogsDocument = gql`
  *   },
  * });
  */
-export function useUnlinkDatabaseLogsSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<UnlinkDatabaseLogsSubscription, UnlinkDatabaseLogsSubscriptionVariables>) {
-        return ApolloReactHooks.useSubscription<UnlinkDatabaseLogsSubscription, UnlinkDatabaseLogsSubscriptionVariables>(UnlinkDatabaseLogsDocument, baseOptions);
+export function useUnlinkDatabaseLogsSubscription(baseOptions?: Apollo.SubscriptionHookOptions<UnlinkDatabaseLogsSubscription, UnlinkDatabaseLogsSubscriptionVariables>) {
+        return Apollo.useSubscription<UnlinkDatabaseLogsSubscription, UnlinkDatabaseLogsSubscriptionVariables>(UnlinkDatabaseLogsDocument, baseOptions);
       }
 export type UnlinkDatabaseLogsSubscriptionHookResult = ReturnType<typeof useUnlinkDatabaseLogsSubscription>;
-export type UnlinkDatabaseLogsSubscriptionResult = ApolloReactCommon.SubscriptionResult<UnlinkDatabaseLogsSubscription>;
+export type UnlinkDatabaseLogsSubscriptionResult = Apollo.SubscriptionResult<UnlinkDatabaseLogsSubscription>;
