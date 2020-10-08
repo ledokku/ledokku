@@ -46,6 +46,11 @@ const worker = new Worker(
     const dokkuApps = await dokku.apps.list(ssh);
 
     for (const dokkuApp of dokkuApps) {
+      // We skip the ledokku application as we don't want to see it in the dashboard
+      if (dokkuApp === 'ledokku') {
+        continue;
+      }
+
       const apps = await prisma.app.findMany({
         where: { name: dokkuApp },
         select: { name: true },
@@ -96,6 +101,11 @@ const worker = new Worker(
       const dokkuDatabases = await dokku.database.list(ssh, dbDokkuName);
 
       for (const dokkuDatabase of dokkuDatabases) {
+        // We skip the ledokku databases as we don't want to see them in the dashboard
+        if (dokkuDatabase === 'ledokku') {
+          continue;
+        }
+
         const databases = await prisma.database.findMany({
           where: { name: dokkuDatabase, type: databaseToCheck },
           select: { id: true, name: true },
