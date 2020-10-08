@@ -234,7 +234,6 @@ const apolloServer = new ApolloServer({
       try {
         if (context && context.token) {
           const decoded = jsonwebtoken.verify(context.token, config.jwtSecret);
-          console.log('decoded', decoded);
 
           return;
         }
