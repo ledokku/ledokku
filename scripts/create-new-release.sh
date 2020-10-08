@@ -14,7 +14,8 @@ CURRENT_PACKAGE_VERSION=$(jq -r ".version" server/package.json)
 # Replace old version with new version
 jq --arg version ${NEW_VERSION} '.version = $version' server/package.json > "tmp.txt" && mv "tmp.txt" server/package.json
 jq --arg version ${NEW_VERSION} '.version = $version' client/package.json > "tmp.txt" && mv "tmp.txt" client/package.json
-sed "s|${CURRENT_PACKAGE_VERSION}|${NEW_VERSION}|g" website/docs/installation.mdx > "tmp.txt" && mv "tmp.txt" website/docs/installation.mdx
+sed "s|${CURRENT_PACKAGE_VERSION}|${NEW_VERSION}|g" website/docs/installation.md > "tmp.txt" && mv "tmp.txt" website/docs/installation.md
+sed "s|${CURRENT_PACKAGE_VERSION}|${NEW_VERSION}|g" website/docs/advanced/manual-installation.mdx > "tmp.txt" && mv "tmp.txt" website/docs/advanced/manual-installation.mdx
 sed "s|${CURRENT_PACKAGE_VERSION}|${NEW_VERSION}|g" ledokku-bootstrap.sh > "tmp.txt" && mv "tmp.txt" ledokku-bootstrap.sh
 
 # Generate CHANGELOG.md
