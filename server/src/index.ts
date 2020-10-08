@@ -230,7 +230,8 @@ const apolloServer = new ApolloServer({
     DateTime: DateTimeResolver,
   },
   subscriptions: {
-    onConnect: (context: any, {}, {}) => {
+    // TODO ARTURS : FIX TYPES
+    onConnect: (context: any) => {
       if (!context.token) {
         throw new Error('Missing auth token');
       }
