@@ -223,6 +223,10 @@ const resolvers: Resolvers<{ userId?: string }> = {
   ...customResolvers,
 };
 
+interface SubscriptionContext {
+  token?: string;
+}
+
 const apolloServer = new ApolloServer({
   typeDefs,
   resolvers: {
@@ -230,8 +234,7 @@ const apolloServer = new ApolloServer({
     DateTime: DateTimeResolver,
   },
   subscriptions: {
-    // TODO ARTURS : FIX TYPES
-    onConnect: (context: any) => {
+    onConnect: (context: SubscriptionContext) => {
       if (!context.token) {
         throw new Error('Missing auth token');
       }
