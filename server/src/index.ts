@@ -229,6 +229,21 @@ const apolloServer = new ApolloServer({
     ...resolvers,
     DateTime: DateTimeResolver,
   },
+  subscriptions: {
+    onConnect: (context: any, {}, {}) => {
+      try {
+        if (context && context.token) {
+          const decoded = jsonwebtoken.verify(context.token, config.jwtSecret);
+          console.log('decoded', decoded);
+
+          return;
+        }
+      } catch (e) {
+        console.log('error');
+      }
+    },
+  },
+
   context: ({ req, connection }) => {
     if (connection) {
       return connection.context;
