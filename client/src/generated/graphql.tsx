@@ -1301,7 +1301,7 @@ export function useSetupLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Setu
         }
 export type SetupQueryHookResult = ReturnType<typeof useSetupQuery>;
 export type SetupLazyQueryHookResult = ReturnType<typeof useSetupLazyQuery>;
-export type SetupQueryResult = ApolloReactCommon.QueryResult<SetupQuery, SetupQueryVariables>;
+export type SetupQueryResult = Apollo.QueryResult<SetupQuery, SetupQueryVariables>;
 export const CreateDatabaseLogsDocument = gql`
     subscription CreateDatabaseLogs {
   createDatabaseLogs {
@@ -1326,11 +1326,11 @@ export const CreateDatabaseLogsDocument = gql`
  *   },
  * });
  */
-export function useCreateDatabaseLogsSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<CreateDatabaseLogsSubscription, CreateDatabaseLogsSubscriptionVariables>) {
-        return ApolloReactHooks.useSubscription<CreateDatabaseLogsSubscription, CreateDatabaseLogsSubscriptionVariables>(CreateDatabaseLogsDocument, baseOptions);
+export function useCreateDatabaseLogsSubscription(baseOptions?: Apollo.SubscriptionHookOptions<CreateDatabaseLogsSubscription, CreateDatabaseLogsSubscriptionVariables>) {
+        return Apollo.useSubscription<CreateDatabaseLogsSubscription, CreateDatabaseLogsSubscriptionVariables>(CreateDatabaseLogsDocument, baseOptions);
       }
 export type CreateDatabaseLogsSubscriptionHookResult = ReturnType<typeof useCreateDatabaseLogsSubscription>;
-export type CreateDatabaseLogsSubscriptionResult = ApolloReactCommon.SubscriptionResult<CreateDatabaseLogsSubscription>;
+export type CreateDatabaseLogsSubscriptionResult = Apollo.SubscriptionResult<CreateDatabaseLogsSubscription>;
 export const LinkDatabaseLogsDocument = gql`
     subscription LinkDatabaseLogs {
   linkDatabaseLogs
