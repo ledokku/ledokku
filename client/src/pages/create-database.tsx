@@ -103,7 +103,6 @@ export const CreateDatabase = () => {
     // we poll every 5 sec
     pollInterval: 5000,
   });
-
   const formik = useFormik<{ name: string; type: DatabaseTypes }>({
     initialValues: {
       name: '',
@@ -111,6 +110,7 @@ export const CreateDatabase = () => {
     },
     validationSchema: createDatabaseSchema,
     onSubmit: async (values) => {
+      // TODO validate name
       try {
         await createDatabaseMutation({
           variables: {
