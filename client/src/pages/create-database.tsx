@@ -47,6 +47,11 @@ interface DatabaseBoxProps {
   onClick?(): void;
 }
 
+enum DbCreationStatus {
+  FAILURE = 'Failure',
+  SUCCESS = 'Success',
+}
+
 const DatabaseBox = ({ label, selected, icon, onClick }: DatabaseBoxProps) => {
   return (
     <div
@@ -72,7 +77,9 @@ export const CreateDatabase = () => {
   );
   const [isTerminalVisible, setIsTerminalVisible] = useState(false);
   const [createDatabaseMutation] = useCreateDatabaseMutation();
-  const [isDbCreationSuccess, setIsDbCreationSuccess] = useState<string>();
+  const [isDbCreationSuccess, setIsDbCreationSuccess] = useState<
+    DbCreationStatus
+  >();
 
   useCreateDatabaseLogsSubscription({
     onSubscriptionData: (data) => {
@@ -86,12 +93,12 @@ export const CreateDatabase = () => {
           logsExist.type === 'end' &&
           logsExist.message === 'Successfully created DB'
         ) {
-          setIsDbCreationSuccess('Success');
+          setIsDbCreationSuccess(DbCreationStatus.SUCCESS);
         } else if (
           logsExist.type === 'end' &&
           logsExist.message === 'Failed to create DB'
         ) {
-          setIsDbCreationSuccess('Failure');
+          setIsDbCreationSuccess(DbCreationStatus.FAILURE);
         }
       }
     },
@@ -153,9 +160,9 @@ export const CreateDatabase = () => {
         pluginName: dbTypeToDokkuPlugin(formik.values.type),
       },
     });
-    isDbCreationSuccess === 'Failure'
+    isDbCreationSuccess === DbCreationStatus.FAILURE
       ? toast.error('Failed to create database')
-      : isDbCreationSuccess === 'Success' &&
+      : isDbCreationSuccess === DbCreationStatus.SUCCESS &&
         toast.success('Database created successfully');
   }, [
     formik.values.type,
@@ -198,7 +205,8 @@ export const CreateDatabase = () => {
                 ))}
               </Terminal>
 
-              {!!isDbCreationSuccess && isDbCreationSuccess === 'Success' ? (
+              {!!isDbCreationSuccess &&
+              isDbCreationSuccess === DbCreationStatus.SUCCESS ? (
                 <div className="mt-12 flex justify-end">
                   <Button
                     onClick={() => handleNext()}
@@ -208,7 +216,8 @@ export const CreateDatabase = () => {
                     Next
                   </Button>
                 </div>
-              ) : !!isDbCreationSuccess && isDbCreationSuccess === 'Failure' ? (
+              ) : !!isDbCreationSuccess &&
+                isDbCreationSuccess === DbCreationStatus.FAILURE ? (
                 <div className="mt-12 flex justify-start">
                   <Button
                     onClick={() => {
