@@ -66,7 +66,7 @@ const DatabaseBox = ({ label, selected, icon, onClick }: DatabaseBoxProps) => {
 
 export const CreateDatabase = () => {
   const history = useHistory();
-  const { subscribeToMore, data: databasesData } = useDatabaseQuery();
+  const { subscribeToMore } = useDatabaseQuery();
   const [arrayOfCreateDbLogs, setArrayofCreateDbLogs] = useState<RealTimeLog[]>(
     []
   );
