@@ -72,12 +72,21 @@ const worker = new Worker(
     debug(
       `finishing createDatabase queue for ${dbType} database called ${databaseName}`
     );
-    pubsub.publish('DATABASE_CREATED', {
-      createDatabaseLogs: {
-        message: 'Successfully created DB',
-        type: 'end',
-      },
-    });
+    if (!res.stderr) {
+      pubsub.publish('DATABASE_CREATED', {
+        createDatabaseLogs: {
+          message: 'Successfully created DB',
+          type: 'end',
+        },
+      });
+    } else if (res.stderr) {
+      pubsub.publish('DATABASE_CREATED', {
+        createDatabaseLogs: {
+          message: 'Failed to create DB',
+          type: 'end',
+        },
+      });
+    }
   },
   { connection: config.redisClient }
 );
