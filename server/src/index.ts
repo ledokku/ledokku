@@ -12,6 +12,8 @@ import { mutations } from './graphql/mutations';
 import { config } from './config';
 import { app, http } from './server';
 import { queries } from './graphql/queries';
+import { synchroniseServerQueue } from './queues/synchroniseServer';
+import { prisma } from './prisma';
 
 app.use(express.static(path.join(__dirname, '..', '..', 'client', 'build')));
 
@@ -235,12 +237,42 @@ const resolvers: Resolvers<{ userId?: string }> = {
   ...customResolvers,
 };
 
+interface SubscriptionContext {
+  token?: string;
+}
+
 const apolloServer = new ApolloServer({
   typeDefs,
   resolvers: {
     ...resolvers,
     DateTime: DateTimeResolver,
   },
+  subscriptions: {
+    onConnect: async (context: SubscriptionContext) => {
+      if (!context.token) {
+        throw new Error('Missing auth token');
+      }
+      try {
+        const decoded = jsonwebtoken.verify(
+          context.token,
+          config.jwtSecret
+        ) as {
+          userId: string;
+        };
+        const userId = decoded.userId;
+
+        const userInDb = await prisma.user.findOne({
+          where: {
+            id: userId,
+          },
+        });
+        if (!userInDb) throw new Error("User doesn't exist in our db");
+      } catch (e) {
+        throw new Error('Invalid token');
+      }
+    },
+  },
+
   context: ({ req, connection }) => {
     if (connection) {
       return connection.context;
@@ -293,4 +325,7 @@ http.listen({ port: 4000 }, () => {
   console.log(
     `🚀 Subscriptions ready at ws://localhost:4000${apolloServer.subscriptionsPath}`
   );
+
+  // When the server boot we start the synchronisation with dokku
+  synchroniseServerQueue.add('synchronise-server', {});
 });

@@ -4,6 +4,7 @@ import jsonwebtoken from 'jsonwebtoken';
 import { config } from '../../config';
 import { MutationResolvers } from '../../generated/graphql';
 import { prisma } from '../../prisma';
+import { synchroniseServerQueue } from '../../queues/synchroniseServer';
 
 export const loginWithGithub: MutationResolvers['loginWithGithub'] = async (
   _,
@@ -82,6 +83,9 @@ export const loginWithGithub: MutationResolvers['loginWithGithub'] = async (
         githubId: githubUser.node_id,
       },
     });
+
+    // When we create a new user we can start the dokku synchronisation
+    await synchroniseServerQueue.add('synchronise-server', {});
   }
 
   const jwtToken = jsonwebtoken.sign(

@@ -36,6 +36,11 @@ const wsLink = new WebSocketLink({
   uri: `${config.serverWsUrl}/graphql`,
   options: {
     reconnect: true,
+    connectionParams: () => {
+      return {
+        token: localStorage.getItem('accessToken'),
+      };
+    },
   },
 });
 

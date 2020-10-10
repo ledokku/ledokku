@@ -23,7 +23,14 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     user?: JwtUser;
   }>(() => {
     const token = localStorage.getItem('accessToken');
-    const decodedToken = token ? jwtDecode<JwtUser>(token) : undefined;
+    let decodedToken;
+    if (token) {
+      try {
+        decodedToken = jwtDecode<JwtUser>(token);
+      } catch (e) {
+        //Invalid token
+      }
+    }
     return {
       loggedIn: Boolean(token),
       user: decodedToken
