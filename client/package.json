@@ -4,9 +4,9 @@
   "version": "0.1.0",
   "license": "MIT",
   "scripts": {
-    "dev": "npm run watch:css && SKIP_PREFLIGHT_CHECK=true react-scripts start",
+    "dev": "npm run watch:css && SKIP_PREFLIGHT_CHECK=true craco start",
     "build": "npm run build:css && SKIP_PREFLIGHT_CHECK=true craco build",
-    "test": "react-scripts test",
+    "test": "craco test",
     "build:css": "postcss src/styles/index.css -o src/generated/index.css",
     "watch:css": "postcss src/styles/index.css -o src/generated/index.css",
     "generate": "graphql-codegen --config codegen.yml"
