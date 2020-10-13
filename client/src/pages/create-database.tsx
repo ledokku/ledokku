@@ -134,6 +134,7 @@ export const CreateDatabase = () => {
   const isPluginInstalled = data?.isPluginInstalled.isPluginInstalled;
 
   const handleNext = () => {
+    setIsTerminalVisible(false);
     try {
       subscribeToMore({
         document: DatabaseDocument,
