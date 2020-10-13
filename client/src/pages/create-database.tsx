@@ -33,13 +33,6 @@ import {
   FormHelper,
 } from '../ui';
 
-const createDatabaseSchema = yup.object().shape({
-  name: yup
-    .string()
-    .required()
-    .matches(/^[a-z0-9-]+$/),
-});
-
 interface DatabaseBoxProps {
   label: string;
   selected: boolean;
@@ -71,7 +64,7 @@ const DatabaseBox = ({ label, selected, icon, onClick }: DatabaseBoxProps) => {
 
 export const CreateDatabase = () => {
   const history = useHistory();
-  const { subscribeToMore } = useDatabaseQuery();
+  const { subscribeToMore, data: databaseQueryData } = useDatabaseQuery();
   const [arrayOfCreateDbLogs, setArrayofCreateDbLogs] = useState<RealTimeLog[]>(
     []
   );
@@ -103,6 +96,35 @@ export const CreateDatabase = () => {
       }
     },
   });
+
+  const createDatabaseSchema = yup.object().shape({
+    type: yup
+      .string()
+      .oneOf(['POSTGRESQL', 'MYSQL', 'MONGODB', 'REDIS'])
+      .required(),
+    name: yup
+      .string()
+      .required('Database name is required')
+      .matches(/^[a-z0-9-]+$/)
+      .when(['type'], {
+        is: (val) => val === 'POSTGRESQL',
+        // val === databaseQueryData?.databases.find((db) => db.type === val),
+        then: yup
+          .string()
+          .required('Database name is required')
+          .matches(/^[a-z0-9-]+$/)
+          .test(
+            'Name exists',
+            'Database with this name already exists',
+            (val) => !databaseQueryData?.databases.find((db) => db.name === val)
+          ),
+        otherwise: yup
+          .string()
+          .required('Database name is required')
+          .matches(/^[a-z0-9-]+$/),
+      }),
+  });
+
   const [
     isDokkuPluginInstalled,
     { data, loading, error: isDokkuPluginInstalledError },
@@ -115,9 +137,9 @@ export const CreateDatabase = () => {
       name: '',
       type: 'POSTGRESQL',
     },
+    validateOnChange: true,
     validationSchema: createDatabaseSchema,
     onSubmit: async (values) => {
-      // TODO validate name
       try {
         await createDatabaseMutation({
           variables: {
@@ -286,7 +308,7 @@ export const CreateDatabase = () => {
                             formik.errors.name && formik.touched.name
                           )}
                         />
-                        {formik.errors.name && formik.touched.name ? (
+                        {formik.errors.name ? (
                           <FormHelper status="error">
                             {formik.errors.name}
                           </FormHelper>
@@ -331,7 +353,11 @@ export const CreateDatabase = () => {
                 <Button
                   onClick={() => formik.handleSubmit()}
                   color="grey"
-                  disabled={data?.isPluginInstalled.isPluginInstalled === false}
+                  disabled={
+                    data?.isPluginInstalled.isPluginInstalled === false ||
+                    !formik.values.name ||
+                    !!formik.errors.name
+                  }
                   iconEnd={<ArrowRight />}
                 >
                   Create

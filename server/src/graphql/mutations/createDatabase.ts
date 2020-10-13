@@ -25,6 +25,15 @@ export const createDatabase: MutationResolvers['createDatabase'] = async (
     throw new Error('Unauthorized');
   }
 
+  const databases = await prisma.database.findMany();
+
+  const isDbNameTaken = databases.find(
+    (db) => db.name === input.name && db.type === input.type
+  );
+
+  if (isDbNameTaken) {
+    throw new Error('Database name already taken');
+  }
   // We make sure the name is valid to avoid security risks
   createDatabaseSchema.validateSync({ name: input.name });
 
