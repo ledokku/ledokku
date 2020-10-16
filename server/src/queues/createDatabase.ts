@@ -57,7 +57,7 @@ const worker = new Worker(
       },
     });
 
-    await prisma.database.create({
+    const createdDb = await prisma.database.create({
       data: {
         name: databaseName,
         type: databaseType,
@@ -75,7 +75,7 @@ const worker = new Worker(
     if (!res.stderr) {
       pubsub.publish('DATABASE_CREATED', {
         createDatabaseLogs: {
-          message: 'Successfully created DB',
+          message: `Successfully created DB with ID: ${createdDb.id}`,
           type: 'end',
         },
       });

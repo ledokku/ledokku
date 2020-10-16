@@ -10,9 +10,7 @@ import {
   DatabaseTypes,
   useIsPluginInstalledLazyQuery,
   useCreateDatabaseLogsSubscription,
-  useDatabaseQuery,
   RealTimeLog,
-  DatabaseDocument,
 } from '../generated/graphql';
 import { PostgreSQLIcon } from '../ui/icons/PostgreSQLIcon';
 import { MySQLIcon } from '../ui/icons/MySQLIcon';
@@ -64,7 +62,6 @@ const DatabaseBox = ({ label, selected, icon, onClick }: DatabaseBoxProps) => {
 
 export const CreateDatabase = () => {
   const history = useHistory();
-  const { subscribeToMore, data: databaseQueryData } = useDatabaseQuery();
   const [arrayOfCreateDbLogs, setArrayofCreateDbLogs] = useState<RealTimeLog[]>(
     []
   );
@@ -84,7 +81,7 @@ export const CreateDatabase = () => {
         });
         if (
           logsExist.type === 'end' &&
-          logsExist.message === 'Successfully created DB'
+          logsExist.message?.includes('Successfully created DB')
         ) {
           setIsDbCreationSuccess(DbCreationStatus.SUCCESS);
         } else if (
@@ -155,25 +152,19 @@ export const CreateDatabase = () => {
 
   const isPluginInstalled = data?.isPluginInstalled.isPluginInstalled;
 
+  const retrieveDbId = (logs: RealTimeLog[]) => {
+    const lastLog = logs[logs.length - 1];
+    const dbId = lastLog.message?.substring(
+      lastLog.message.indexOf(':') + 2,
+      lastLog.message.length
+    );
+    return dbId;
+  };
+
   const handleNext = () => {
-    try {
-      subscribeToMore({
-        document: DatabaseDocument,
-        updateQuery: (prev, { subscriptionData }) => {
-          const dbArrayLength = subscriptionData.data.databases.length;
-          if (!subscriptionData.data) return prev;
-          const newFeedItem = subscriptionData.data.databases;
-          history.push(
-            `database/${subscriptionData.data.databases[dbArrayLength - 1].id}`
-          );
-          return Object.assign({}, prev, {
-            databases: [newFeedItem, ...prev.databases],
-          });
-        },
-      });
-    } catch (e) {
-      toast.error(e);
-    }
+    setIsTerminalVisible(false);
+    const dbId = retrieveDbId(arrayOfCreateDbLogs);
+    history.push(`database/${dbId}`);
   };
 
   useEffect(() => {
