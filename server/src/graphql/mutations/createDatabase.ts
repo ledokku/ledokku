@@ -31,10 +31,11 @@ export const createDatabase: MutationResolvers['createDatabase'] = async (
   const databases = await prisma.database.findMany({
     where: {
       name: input.name,
+      type: input.type,
     },
   });
 
-  const isDbNameTaken = databases.find((db) => db.type === input.type);
+  const isDbNameTaken = !!databases[0];
 
   if (isDbNameTaken) {
     throw new Error('Database name already taken');
