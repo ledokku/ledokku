@@ -12,3 +12,11 @@ export const dbTypeToDokkuPlugin = (dbType: DatabaseTypes) => {
       return 'mysql';
   }
 };
+
+export const debounce = (callBack: any, delay: any) => {
+  let timeout: any;
+  return function () {
+    clearTimeout(timeout);
+    timeout = setTimeout(callBack, delay);
+  };
+};

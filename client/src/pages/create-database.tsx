@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback, ChangeEvent } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
+import { debounce } from 'lodash';
 import * as yup from 'yup';
 import { ArrowRight, ArrowLeft } from 'react-feather';
 import { toast } from 'react-toastify';
@@ -11,6 +12,7 @@ import {
   useIsPluginInstalledLazyQuery,
   useCreateDatabaseLogsSubscription,
   RealTimeLog,
+  useDatabaseLazyQuery,
 } from '../generated/graphql';
 import { PostgreSQLIcon } from '../ui/icons/PostgreSQLIcon';
 import { MySQLIcon } from '../ui/icons/MySQLIcon';
@@ -62,6 +64,7 @@ const DatabaseBox = ({ label, selected, icon, onClick }: DatabaseBoxProps) => {
 
 export const CreateDatabase = () => {
   const history = useHistory();
+  const [getDbs, { data: dataDb }] = useDatabaseLazyQuery();
   const [arrayOfCreateDbLogs, setArrayofCreateDbLogs] = useState<RealTimeLog[]>(
     []
   );
@@ -102,24 +105,7 @@ export const CreateDatabase = () => {
     name: yup
       .string()
       .required('Database name is required')
-      .matches(/^[a-z0-9-]+$/)
-      .when(['type'], {
-        is: (val) => val === 'POSTGRESQL',
-        // val === databaseQueryData?.databases.find((db) => db.type === val),
-        then: yup
-          .string()
-          .required('Database name is required')
-          .matches(/^[a-z0-9-]+$/)
-          .test(
-            'Name exists',
-            'Database with this name already exists',
-            (val) => !databaseQueryData?.databases.find((db) => db.name === val)
-          ),
-        otherwise: yup
-          .string()
-          .required('Database name is required')
-          .matches(/^[a-z0-9-]+$/),
-      }),
+      .matches(/^[a-z0-9-]+$/),
   });
 
   const [
@@ -167,22 +153,47 @@ export const CreateDatabase = () => {
     history.push(`database/${dbId}`);
   };
 
+  const validateName = (name: string, type: string) => {
+    getDbs();
+    const doesNameExist = dataDb?.databases.find(
+      (db) => db.name === name && db.type === type
+    );
+    doesNameExist &&
+      formik.setFieldError(
+        'name',
+        `You already have ${formik.values.type} db with this name`
+      );
+  };
+
+  const debouncedValidate = useCallback(
+    debounce(
+      (event: React.ChangeEvent<any>) =>
+        validateName(event.target.value, formik.values.type),
+      500
+    ),
+    [dataDb, formik.values.type]
+  );
+
+  const handleChange = async (e: React.ChangeEvent<any>) => {
+    formik.handleChange(e);
+    debouncedValidate(e);
+  };
+  // Effect for checking whether plugin is installed
   useEffect(() => {
     isDokkuPluginInstalled({
       variables: {
         pluginName: dbTypeToDokkuPlugin(formik.values.type),
       },
     });
+  }, [formik.values.type, isPluginInstalled, isDokkuPluginInstalled]);
+
+  // Effect for db creation
+  useEffect(() => {
     isDbCreationSuccess === DbCreationStatus.FAILURE
       ? toast.error('Failed to create database')
       : isDbCreationSuccess === DbCreationStatus.SUCCESS &&
         toast.success('Database created successfully');
-  }, [
-    formik.values.type,
-    isPluginInstalled,
-    isDokkuPluginInstalled,
-    isDbCreationSuccess,
-  ]);
+  }, [isDbCreationSuccess]);
 
   return (
     <React.Fragment>
@@ -246,7 +257,11 @@ export const CreateDatabase = () => {
               ) : null}
             </React.Fragment>
           ) : (
-            <form onSubmit={formik.handleSubmit} className="mt-8">
+            <form
+              onSubmit={formik.handleSubmit}
+              onChange={handleChange}
+              className="mt-8"
+            >
               <div className="mt-12">
                 {loading && (
                   <div className="flex justify-center ">
@@ -293,7 +308,7 @@ export const CreateDatabase = () => {
                           id="name"
                           name="name"
                           value={formik.values.name}
-                          onChange={formik.handleChange}
+                          onChange={handleChange}
                           onBlur={formik.handleBlur}
                           error={Boolean(
                             formik.errors.name && formik.touched.name
