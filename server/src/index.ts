@@ -54,6 +54,11 @@ const typeDefs = gql`
     MYSQL
   }
 
+  type RealTimeLog {
+    message: String
+    type: String
+  }
+
   type LoginResult {
     token: String!
   }
@@ -93,6 +98,10 @@ const typeDefs = gql`
   }
 
   type UnsetEnvVarResult {
+    result: Boolean!
+  }
+
+  type CreateDatabaseResult {
     result: Boolean!
   }
 
@@ -189,12 +198,13 @@ const typeDefs = gql`
   type Subscription {
     unlinkDatabaseLogs: [String!]
     linkDatabaseLogs: [String!]
+    createDatabaseLogs: RealTimeLog!
   }
 
   type Mutation {
     loginWithGithub(code: String!): LoginResult
     createApp(input: CreateAppInput!): CreateAppResult!
-    createDatabase(input: CreateDatabaseInput!): Database!
+    createDatabase(input: CreateDatabaseInput!): CreateDatabaseResult!
     setEnvVar(input: SetEnvVarInput!): SetEnvVarResult!
     unsetEnvVar(input: UnsetEnvVarInput!): UnsetEnvVarResult!
     destroyApp(input: DestroyAppInput!): DestroyAppResult!
@@ -207,6 +217,7 @@ const typeDefs = gql`
 export const pubsub = new PubSub();
 export const DATABASE_UNLINKED = 'DATABASE_UNLINKED';
 export const DATABASE_LINKED = 'DATABASE_LINKED';
+export const DATABASE_CREATED = 'DATABASE_CREATED';
 
 const resolvers: Resolvers<{ userId?: string }> = {
   Query: queries,
@@ -217,8 +228,10 @@ const resolvers: Resolvers<{ userId?: string }> = {
       subscribe: () => pubsub.asyncIterator([DATABASE_UNLINKED]),
     },
     linkDatabaseLogs: {
-      // Additional event labels can be passed to asyncIterator creation
       subscribe: () => pubsub.asyncIterator([DATABASE_LINKED]),
+    },
+    createDatabaseLogs: {
+      subscribe: () => pubsub.asyncIterator([DATABASE_CREATED]),
     },
   },
   ...customResolvers,

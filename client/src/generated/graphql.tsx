@@ -52,6 +52,12 @@ export type DatabaseTypes =
   | 'MONGODB'
   | 'MYSQL';
 
+export type RealTimeLog = {
+  __typename?: 'RealTimeLog';
+  message?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+};
+
 export type LoginResult = {
   __typename?: 'LoginResult';
   token: Scalars['String'];
@@ -101,6 +107,11 @@ export type SetEnvVarResult = {
 
 export type UnsetEnvVarResult = {
   __typename?: 'UnsetEnvVarResult';
+  result: Scalars['Boolean'];
+};
+
+export type CreateDatabaseResult = {
+  __typename?: 'CreateDatabaseResult';
   result: Scalars['Boolean'];
 };
 
@@ -245,13 +256,14 @@ export type Subscription = {
   __typename?: 'Subscription';
   unlinkDatabaseLogs?: Maybe<Array<Scalars['String']>>;
   linkDatabaseLogs?: Maybe<Array<Scalars['String']>>;
+  createDatabaseLogs: RealTimeLog;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
   loginWithGithub?: Maybe<LoginResult>;
   createApp: CreateAppResult;
-  createDatabase: Database;
+  createDatabase: CreateDatabaseResult;
   setEnvVar: SetEnvVarResult;
   unsetEnvVar: UnsetEnvVarResult;
   destroyApp: DestroyAppResult;
@@ -334,8 +346,8 @@ export type CreateDatabaseMutationVariables = Exact<{
 export type CreateDatabaseMutation = (
   { __typename?: 'Mutation' }
   & { createDatabase: (
-    { __typename?: 'Database' }
-    & Pick<Database, 'id' | 'name'>
+    { __typename?: 'CreateDatabaseResult' }
+    & Pick<CreateDatabaseResult, 'result'>
   ) }
 );
 
@@ -582,6 +594,17 @@ export type SetupQuery = (
   ) }
 );
 
+export type CreateDatabaseLogsSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CreateDatabaseLogsSubscription = (
+  { __typename?: 'Subscription' }
+  & { createDatabaseLogs: (
+    { __typename?: 'RealTimeLog' }
+    & Pick<RealTimeLog, 'message' | 'type'>
+  ) }
+);
+
 export type LinkDatabaseLogsSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -636,8 +659,7 @@ export type CreateAppMutationOptions = Apollo.BaseMutationOptions<CreateAppMutat
 export const CreateDatabaseDocument = gql`
     mutation createDatabase($input: CreateDatabaseInput!) {
   createDatabase(input: $input) {
-    id
-    name
+    result
   }
 }
     `;
@@ -1280,6 +1302,35 @@ export function useSetupLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Setu
 export type SetupQueryHookResult = ReturnType<typeof useSetupQuery>;
 export type SetupLazyQueryHookResult = ReturnType<typeof useSetupLazyQuery>;
 export type SetupQueryResult = Apollo.QueryResult<SetupQuery, SetupQueryVariables>;
+export const CreateDatabaseLogsDocument = gql`
+    subscription CreateDatabaseLogs {
+  createDatabaseLogs {
+    message
+    type
+  }
+}
+    `;
+
+/**
+ * __useCreateDatabaseLogsSubscription__
+ *
+ * To run a query within a React component, call `useCreateDatabaseLogsSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useCreateDatabaseLogsSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCreateDatabaseLogsSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCreateDatabaseLogsSubscription(baseOptions?: Apollo.SubscriptionHookOptions<CreateDatabaseLogsSubscription, CreateDatabaseLogsSubscriptionVariables>) {
+        return Apollo.useSubscription<CreateDatabaseLogsSubscription, CreateDatabaseLogsSubscriptionVariables>(CreateDatabaseLogsDocument, baseOptions);
+      }
+export type CreateDatabaseLogsSubscriptionHookResult = ReturnType<typeof useCreateDatabaseLogsSubscription>;
+export type CreateDatabaseLogsSubscriptionResult = Apollo.SubscriptionResult<CreateDatabaseLogsSubscription>;
 export const LinkDatabaseLogsDocument = gql`
     subscription LinkDatabaseLogs {
   linkDatabaseLogs
