@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
-import { debounce } from 'lodash';
 import * as yup from 'yup';
 import { ArrowRight, ArrowLeft } from 'react-feather';
 import { toast } from 'react-toastify';
@@ -99,7 +98,19 @@ export const CreateDatabase = () => {
     name: yup
       .string()
       .required('Database name is required')
-      .matches(/^[a-z0-9-]+$/),
+      .matches(/^[a-z0-9-]+$/)
+      .when('type', (type: DatabaseTypes) => {
+        return yup
+          .string()
+          .test(
+            'Name already exists',
+            `You already have created ${type} database with this name`,
+            (name) =>
+              !dataDb?.databases.find(
+                (db) => db.name === name && type === db.type
+              )
+          );
+      }),
   });
 
   const [
@@ -138,30 +149,6 @@ export const CreateDatabase = () => {
     history.push(`database/${dbId}`);
   };
 
-  const validateName = (name: string, type: string) => {
-    const doesNameExist = dataDb?.databases.find(
-      (db) => db.name === name && db.type === type
-    );
-    doesNameExist &&
-      formik.setFieldError(
-        'name',
-        `You already have ${formik.values.type} db with this name`
-      );
-  };
-
-  const debouncedValidate = useCallback(
-    debounce(
-      (event: React.ChangeEvent<any>) =>
-        validateName(event.target.value, formik.values.type),
-      500
-    ),
-    [dataDb, formik.values.type]
-  );
-
-  const handleChange = async (e: React.ChangeEvent<any>) => {
-    formik.handleChange(e);
-    debouncedValidate(e);
-  };
   // Effect for checking whether plugin is installed
   useEffect(() => {
     isDokkuPluginInstalled({
@@ -237,7 +224,7 @@ export const CreateDatabase = () => {
           ) : (
             <form
               onSubmit={formik.handleSubmit}
-              onChange={handleChange}
+              onChange={formik.handleChange}
               className="mt-8"
             >
               <div className="mt-12">
@@ -286,7 +273,7 @@ export const CreateDatabase = () => {
                           id="name"
                           name="name"
                           value={formik.values.name}
-                          onChange={handleChange}
+                          onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                           error={Boolean(
                             formik.errors.name && formik.touched.name
