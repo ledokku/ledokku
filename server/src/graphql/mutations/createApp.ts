@@ -14,18 +14,20 @@ export const createApp: MutationResolvers['createApp'] = async (
     throw new Error('Unauthorized');
   }
 
-  const apps = await prisma.app.findMany();
+  // We make sure the name is valid to avoid security risks
+  appNameSchema.validateSync({ name: input.name });
 
-  const isAppNameTaken = apps.find((app) => app.name === input.name);
+  const apps = await prisma.app.findMany({
+    where: {
+      name: input.name,
+    },
+  });
+
+  const isAppNameTaken = !!apps[0];
 
   if (isAppNameTaken) {
     throw new Error('App name already taken');
   }
-
-  // We make sure the name is valid to avoid security risks
-  appNameSchema.validateSync({ name: input.name });
-
-  // TODO check name of the app is unique per server
 
   const ssh = await sshConnect();
 
