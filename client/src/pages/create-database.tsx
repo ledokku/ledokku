@@ -11,6 +11,7 @@ import {
   useIsPluginInstalledLazyQuery,
   useCreateDatabaseLogsSubscription,
   RealTimeLog,
+  useDatabaseQuery,
 } from '../generated/graphql';
 import { PostgreSQLIcon } from '../ui/icons/PostgreSQLIcon';
 import { MySQLIcon } from '../ui/icons/MySQLIcon';
@@ -30,13 +31,6 @@ import {
   FormInput,
   FormHelper,
 } from '../ui';
-
-const createDatabaseSchema = yup.object().shape({
-  name: yup
-    .string()
-    .required()
-    .matches(/^[a-z0-9-]+$/),
-});
 
 interface DatabaseBoxProps {
   label: string;
@@ -69,6 +63,7 @@ const DatabaseBox = ({ label, selected, icon, onClick }: DatabaseBoxProps) => {
 
 export const CreateDatabase = () => {
   const history = useHistory();
+  const { data: dataDb } = useDatabaseQuery();
   const [arrayOfCreateDbLogs, setArrayofCreateDbLogs] = useState<RealTimeLog[]>(
     []
   );
@@ -94,6 +89,30 @@ export const CreateDatabase = () => {
       }
     },
   });
+
+  const createDatabaseSchema = yup.object().shape({
+    type: yup
+      .string()
+      .oneOf(['POSTGRESQL', 'MYSQL', 'MONGODB', 'REDIS'])
+      .required(),
+    name: yup
+      .string()
+      .required('Database name is required')
+      .matches(/^[a-z0-9-]+$/)
+      .when('type', (type: DatabaseTypes) => {
+        return yup
+          .string()
+          .test(
+            'Name already exists',
+            `You already have created ${type} database with this name`,
+            (name) =>
+              !dataDb?.databases.find(
+                (db) => db.name === name && type === db.type
+              )
+          );
+      }),
+  });
+
   const [
     isDokkuPluginInstalled,
     { data, loading, error: isDokkuPluginInstalledError },
@@ -106,9 +125,9 @@ export const CreateDatabase = () => {
       name: '',
       type: 'POSTGRESQL',
     },
+    validateOnChange: true,
     validationSchema: createDatabaseSchema,
     onSubmit: async (values) => {
-      // TODO validate name
       try {
         await createDatabaseMutation({
           variables: {
@@ -130,22 +149,22 @@ export const CreateDatabase = () => {
     history.push(`database/${dbId}`);
   };
 
+  // Effect for checking whether plugin is installed
   useEffect(() => {
     isDokkuPluginInstalled({
       variables: {
         pluginName: dbTypeToDokkuPlugin(formik.values.type),
       },
     });
+  }, [formik.values.type, isPluginInstalled, isDokkuPluginInstalled]);
+
+  // Effect for db creation
+  useEffect(() => {
     isDbCreationSuccess === DbCreationStatus.FAILURE
       ? toast.error('Failed to create database')
       : isDbCreationSuccess === DbCreationStatus.SUCCESS &&
         toast.success('Database created successfully');
-  }, [
-    formik.values.type,
-    isPluginInstalled,
-    isDokkuPluginInstalled,
-    isDbCreationSuccess,
-  ]);
+  }, [isDbCreationSuccess]);
 
   return (
     <React.Fragment>
@@ -256,7 +275,7 @@ export const CreateDatabase = () => {
                             formik.errors.name && formik.touched.name
                           )}
                         />
-                        {formik.errors.name && formik.touched.name ? (
+                        {formik.errors.name ? (
                           <FormHelper status="error">
                             {formik.errors.name}
                           </FormHelper>
@@ -301,7 +320,12 @@ export const CreateDatabase = () => {
                 <Button
                   onClick={() => formik.handleSubmit()}
                   color="grey"
-                  disabled={data?.isPluginInstalled.isPluginInstalled === false}
+                  disabled={
+                    data?.isPluginInstalled.isPluginInstalled === false ||
+                    !formik.values.name ||
+                    !!formik.errors.name ||
+                    !dataDb?.databases
+                  }
                   iconEnd={<ArrowRight />}
                 >
                   Create
