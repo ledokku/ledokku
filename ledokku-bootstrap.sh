@@ -34,15 +34,19 @@ install-postgres() {
 }
 
 main() {
-  ensure-dokku
-
   echo "=== 🐳 ==="
   echo "Welcome to installation helper of Ledokku"
-  echo
+  echo "=== 🐳 ==="
+
+  ensure-dokku
+
+  # First we get the user ip so we can change the variables that we print later
+  read -p "Enter Your Server IP: " DOKKU_SSH_HOST
+
+  echo "=== 🐳 ==="
   echo "In your browser open https://github.com/settings/developers and click on the \"New OAuth App\" button."
   echo
-  echo "Add a name, a homepage url, and in the field \"Authorization callback URL\" set the value to your server ip address and port 4000."
-  echo "(eg: http://123.123.123.123:4000)"
+  echo "Add a name, a homepage url, and in the field \"Authorization callback URL\" set the value to \"http://"$DOKKU_SSH_HOST":4000\"."
   echo
   echo "Then click the \"Register application\" button. You should now be able to see the client id and client secret of the app."
   echo "=== 🐳 ==="
@@ -50,7 +54,6 @@ main() {
   # Get variables from the user
   read -p "Enter Your Github Client ID: " GITHUB_CLIENT_ID
   read -p "Enter Your Github Client Secret: " GITHUB_CLIENT_SECRET
-  read -p "Enter Your Server IP: " DOKKU_SSH_HOST
 
   # First we create the app
   dokku apps:create ledokku
