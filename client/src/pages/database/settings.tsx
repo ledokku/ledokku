@@ -127,8 +127,8 @@ export const Settings = () => {
             {!databaseInfoLoading && databaseInfos
               ? databaseInfos.map((info) => (
                   <div key={info.name} className="py-2">
-                    <div className="text-gray-900 font-medium">{info.name}</div>
-                    <div className="text-gray-500">{info.value}</div>
+                    <div className="font-semibold">{info.name}</div>
+                    <div>{info.value}</div>
                   </div>
                 ))
               : null}
