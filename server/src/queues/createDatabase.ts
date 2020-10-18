@@ -4,6 +4,7 @@ import createDebug from 'debug';
 import { pubsub } from './../index';
 import { config } from '../config';
 import { sshConnect } from '../lib/ssh';
+import { dokku } from '../lib/dokku';
 import { prisma } from '../prisma';
 
 const queueName = 'create-database';
@@ -38,24 +39,30 @@ const worker = new Worker(
     );
 
     const ssh = await sshConnect();
-    const res = await ssh.execCommand(`${dbType}:create ${databaseName}`, {
-      onStdout: (chunk) => {
-        pubsub.publish('DATABASE_CREATED', {
-          createDatabaseLogs: {
-            message: chunk.toString(),
-            type: 'stdout',
-          },
-        });
-      },
-      onStderr: (chunk) => {
-        pubsub.publish('DATABASE_CREATED', {
-          createDatabaseLogs: {
-            message: chunk.toString(),
-            type: 'stderr',
-          },
-        });
-      },
-    });
+    const res = await dokku.database.create(
+      ssh,
+      databaseName,
+      dbType,
+
+      {
+        onStdout: (chunk) => {
+          pubsub.publish('DATABASE_CREATED', {
+            createDatabaseLogs: {
+              message: chunk.toString(),
+              type: 'stdout',
+            },
+          });
+        },
+        onStderr: (chunk) => {
+          pubsub.publish('DATABASE_CREATED', {
+            createDatabaseLogs: {
+              message: chunk.toString(),
+              type: 'stderr',
+            },
+          });
+        },
+      }
+    );
 
     const createdDb = await prisma.database.create({
       data: {
@@ -75,15 +82,15 @@ const worker = new Worker(
     if (!res.stderr) {
       pubsub.publish('DATABASE_CREATED', {
         createDatabaseLogs: {
-          message: `Successfully created DB with ID: ${createdDb.id}`,
-          type: 'end',
+          message: createdDb.id,
+          type: 'end:success',
         },
       });
     } else if (res.stderr) {
       pubsub.publish('DATABASE_CREATED', {
         createDatabaseLogs: {
-          message: 'Failed to create DB',
-          type: 'end',
+          message: 'Failed to create db',
+          type: 'end:failure',
         },
       });
     }
@@ -96,7 +103,7 @@ worker.on('failed', async (job, err) => {
   pubsub.publish('DATABASE_CREATED', {
     createDatabaseLogs: {
       message: 'Failed to create DB',
-      type: 'end',
+      type: 'end:failure',
     },
   });
   debug(
