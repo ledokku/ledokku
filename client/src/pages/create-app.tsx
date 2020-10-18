@@ -34,9 +34,7 @@ export const CreateApp = () => {
 
     validateOnChange: true,
     validationSchema: createAppSchema,
-    // TODO yup validation
     onSubmit: async (values) => {
-      // TODO validate name
       try {
         const data = await createAppMutation({
           variables: {
@@ -75,7 +73,6 @@ export const CreateApp = () => {
               <FormLabel>App name: </FormLabel>
               <FormInput
                 autoComplete="off"
-                // className="inline w-full max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
                 id="name"
                 name="name"
                 placeholder="Name"
