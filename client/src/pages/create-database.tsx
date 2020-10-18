@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, ChangeEvent } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { debounce } from 'lodash';
@@ -12,7 +12,7 @@ import {
   useIsPluginInstalledLazyQuery,
   useCreateDatabaseLogsSubscription,
   RealTimeLog,
-  useDatabaseLazyQuery,
+  useDatabaseQuery,
 } from '../generated/graphql';
 import { PostgreSQLIcon } from '../ui/icons/PostgreSQLIcon';
 import { MySQLIcon } from '../ui/icons/MySQLIcon';
@@ -64,7 +64,7 @@ const DatabaseBox = ({ label, selected, icon, onClick }: DatabaseBoxProps) => {
 
 export const CreateDatabase = () => {
   const history = useHistory();
-  const [getDbs, { data: dataDb }] = useDatabaseLazyQuery();
+  const { data: dataDb } = useDatabaseQuery();
   const [arrayOfCreateDbLogs, setArrayofCreateDbLogs] = useState<RealTimeLog[]>(
     []
   );
@@ -139,7 +139,6 @@ export const CreateDatabase = () => {
   };
 
   const validateName = (name: string, type: string) => {
-    getDbs();
     const doesNameExist = dataDb?.databases.find(
       (db) => db.name === name && db.type === type
     );
@@ -341,7 +340,8 @@ export const CreateDatabase = () => {
                   disabled={
                     data?.isPluginInstalled.isPluginInstalled === false ||
                     !formik.values.name ||
-                    !!formik.errors.name
+                    !!formik.errors.name ||
+                    !dataDb?.databases
                   }
                   iconEnd={<ArrowRight />}
                 >
