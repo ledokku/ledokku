@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import format from 'date-fns/format';
 import { useDashboardQuery } from '../generated/graphql';
@@ -11,16 +11,14 @@ import { MySQLIcon } from '../ui/icons/MySQLIcon';
 
 export const Dashboard = () => {
   // const history = useHistory();
-  const { data, refetch /* loading, error */ } = useDashboardQuery({});
+  const { data /* loading, error */ } = useDashboardQuery({
+    fetchPolicy: 'cache-and-network',
+  });
 
   // TODO show loading
   // TODO handle error
 
   // TODO if no apps or dbs show onboarding screen
-
-  useEffect(() => {
-    refetch();
-  }, [data, refetch]);
 
   return (
     <div>

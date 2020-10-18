@@ -82,15 +82,9 @@ export const CreateDatabase = () => {
         setArrayofCreateDbLogs((currentLogs) => {
           return [...currentLogs, logsExist];
         });
-        if (
-          logsExist.type === 'end' &&
-          logsExist.message?.includes('Successfully created DB')
-        ) {
+        if (logsExist.type === 'end:success') {
           setIsDbCreationSuccess(DbCreationStatus.SUCCESS);
-        } else if (
-          logsExist.type === 'end' &&
-          logsExist.message === 'Failed to create DB'
-        ) {
+        } else if (logsExist.type === 'end:failure') {
           setIsDbCreationSuccess(DbCreationStatus.FAILURE);
         }
       }
@@ -138,18 +132,9 @@ export const CreateDatabase = () => {
 
   const isPluginInstalled = data?.isPluginInstalled.isPluginInstalled;
 
-  const retrieveDbId = (logs: RealTimeLog[]) => {
-    const lastLog = logs[logs.length - 1];
-    const dbId = lastLog.message?.substring(
-      lastLog.message.indexOf(':') + 2,
-      lastLog.message.length
-    );
-    return dbId;
-  };
-
   const handleNext = () => {
     setIsTerminalVisible(false);
-    const dbId = retrieveDbId(arrayOfCreateDbLogs);
+    const dbId = arrayOfCreateDbLogs[arrayOfCreateDbLogs.length - 1].message;
     history.push(`database/${dbId}`);
   };
 
@@ -208,21 +193,15 @@ export const CreateDatabase = () => {
                 Creating <b>{formik.values.type}</b> database{' '}
                 <b>{formik.values.name}</b>
               </p>
+              <p className="text-gray-500 mb-2">
+                Creating database usually takes a couple of minutes. Breathe in,
+                breathe out, logs are about to appear below:
+              </p>
               <Terminal className={'w-6/6'}>
-                <p className="text-green-400 mb-2">
-                  Creating database usually takes a couple of minutes. Breathe
-                  in, breathe out, logs are about to appear below:
-                </p>
                 {arrayOfCreateDbLogs.map((log) => (
                   <p
                     key={arrayOfCreateDbLogs.indexOf(log)}
-                    className={
-                      log.message === 'Successfully created DB'
-                        ? 'text-s text-green-400 leading-5'
-                        : log.message === 'Failed to create DB'
-                        ? 'text-s text-red-400 leading-5'
-                        : 'text-s leading-5'
-                    }
+                    className={'text-s leading-5'}
                   >
                     {log.message}
                   </p>

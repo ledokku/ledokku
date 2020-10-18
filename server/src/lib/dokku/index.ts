@@ -12,6 +12,7 @@ import { info } from './plugin/database/info';
 import { logs as databaseLogs } from './plugin/database/logs';
 import { list as databaseList } from './plugin/database/list';
 import { links as databaseLinks } from './plugin/database/links';
+import { create as createDatabase } from './plugin/database/create';
 
 export const dokku = {
   apps: { create, logs, destroy, list: appList },
@@ -23,5 +24,6 @@ export const dokku = {
     logs: databaseLogs,
     list: databaseList,
     listLinks: databaseLinks,
+    create: createDatabase,
   },
 };
