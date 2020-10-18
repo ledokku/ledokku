@@ -222,11 +222,7 @@ export const CreateDatabase = () => {
               ) : null}
             </React.Fragment>
           ) : (
-            <form
-              onSubmit={formik.handleSubmit}
-              onChange={formik.handleChange}
-              className="mt-8"
-            >
+            <form onSubmit={formik.handleSubmit} className="mt-8">
               <div className="mt-12">
                 {loading && (
                   <div className="flex justify-center ">
