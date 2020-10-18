@@ -10,25 +10,7 @@ import {
   DashboardDocument,
   useDatabaseInfoQuery,
 } from '../../generated/graphql';
-import {
-  TabNav,
-  TabNavLink,
-  Button,
-  Terminal,
-  FormInput,
-  FormHelper,
-} from '../../ui';
-
-interface InfoProps {
-  infoLine: string;
-}
-
-export const LineOfInfo = (props: InfoProps) => (
-  <React.Fragment>
-    <br />
-    <p className="text-green-400 w-5/6">{props.infoLine}</p>
-  </React.Fragment>
-);
+import { TabNav, TabNavLink, Button, FormInput, FormHelper } from '../../ui';
 
 export const Settings = () => {
   const { id: databaseId } = useParams<{ id: string }>();
@@ -114,6 +96,14 @@ export const Settings = () => {
     return <p>Database not found.</p>;
   }
 
+  const databaseInfos = databaseInfoData?.databaseInfo.info
+    .map((data) => data.trim())
+    .map((info) => {
+      const name = info.split(':')[0];
+      const value = info.substring(info.indexOf(':') + 1).trim();
+      return { name, value };
+    });
+
   return (
     <div>
       <Header />
@@ -127,22 +117,21 @@ export const Settings = () => {
         </TabNav>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 gap-4 mt-10">
           <div className="col-span-2 w-5/5">
-            <h1 className="text-lg font-bold py-5">Info</h1>
-            <Terminal className="pt-8 pb-16">
-              <p className=" typing items-center ">{` ${database.name} database info:`}</p>
-              {!databaseInfoData && !databaseInfoLoading ? (
-                <span className="text-yellow-400">Database info loading</span>
-              ) : databaseInfoLoading ? (
-                'Loading...'
-              ) : (
-                databaseInfoData?.databaseInfo.info.map((infoLine) => (
-                  <LineOfInfo infoLine={infoLine!} />
+            <h1 className="text-lg font-bold py-5">Info for {database.name}</h1>
+            {databaseInfoLoading ? (
+              <p className="text-gray-400 text-sm">Loading...</p>
+            ) : null}
+            {!databaseInfoLoading && databaseInfos
+              ? databaseInfos.map((info) => (
+                  <div key={info.name} className="py-2">
+                    <div className="text-gray-900 font-medium">{info.name}</div>
+                    <div className="text-gray-500">{info.value}</div>
+                  </div>
                 ))
-              )}
-            </Terminal>
+              : null}
           </div>
           <div className="w-3/3 mb-6">
             <h1 className="text-lg font-bold py-5">Database settings</h1>

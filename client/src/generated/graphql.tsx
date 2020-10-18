@@ -111,7 +111,7 @@ export type AppLogsResult = {
 
 export type DatabaseInfoResult = {
   __typename?: 'DatabaseInfoResult';
-  info: Array<Maybe<Scalars['String']>>;
+  info: Array<Scalars['String']>;
 };
 
 export type DatabaseLogsResult = {

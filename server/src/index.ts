@@ -101,7 +101,7 @@ const typeDefs = gql`
   }
 
   type DatabaseInfoResult {
-    info: [String]!
+    info: [String!]!
   }
 
   type DatabaseLogsResult {
