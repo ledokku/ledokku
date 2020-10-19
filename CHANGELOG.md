@@ -1,3 +1,9 @@
+## 0.2.1 (2020-10-19)
+
+### Bug Fixes
+
+- upgrade prisma to 2.9.0 to fix SIGABRT issue ([#189](https://github.com/ledokku/ledokku/issues/189)) ([ce54a0d](https://github.com/ledokku/ledokku/commit/ce54a0d3a501514c686cec8c23c5d8b8ff1ce11b))
+
 ## 0.2.0 (2020-10-18)
 
 ### Features
