@@ -22,6 +22,10 @@ And link them with most popular dbs : **postgresql, mongodb, redis**.
 - Create and link your db (PostgreSQL, mongoDB, redis)
 - App is live 🎉🎉🎉
 
+## Getting started guide
+
+Want to try Ledokku out yourself? Head to our [getting started guide](https://www.ledokku.com/docs/getting-started)
+
 ## Our vision
 
 We started to work on this because current deployment solutions were expensive or hard to configure. With Ledokku we plan to provide a solution where deployment experience is smooth, enjoyable and affordable.
@@ -37,10 +41,6 @@ To get initial feedback we are working on the MVP state where current Dokku user
 - Env variables management (set, unset, edit)
 - Databases management (create, delete, link)
 - Explore app logs
-
-## Getting started guide
-
-Want to try Ledokku out yourself? Head to our [getting started guide](https://www.ledokku.com/docs/getting-started)
 
 ### Built with
 
