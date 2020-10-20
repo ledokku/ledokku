@@ -38,6 +38,10 @@ To get initial feedback we are working on the MVP state where current Dokku user
 - Databases management (create, delete, link)
 - Explore app logs
 
+## Getting started guide
+
+Want to try Ledokku out yourself? Head to our [getting started guide](https://www.ledokku.com/docs/getting-started)
+
 ### Built with
 
 - Dokku 🐳
