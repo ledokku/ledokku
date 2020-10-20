@@ -4,6 +4,7 @@ import createDebug from 'debug';
 import { pubsub } from './../index';
 import { config } from '../config';
 import { sshConnect } from '../lib/ssh';
+import { dokku } from '../lib/dokku';
 import { prisma } from '../prisma';
 
 const queueName = 'link-database';
@@ -48,22 +49,18 @@ const worker = new Worker(
     const dbType = dbTypeToDokkuPlugin(database.type);
 
     const ssh = await sshConnect();
-
-    const res = await ssh.execCommand(
-      `${dbType}:link ${database.name} ${app.name}`,
-      {
-        onStdout: (chunk) => {
-          pubsub.publish('DATABASE_LINKED', {
-            linkDatabaseLogs: [chunk.toString()],
-          });
-        },
-        onStderr: (chunk) => {
-          pubsub.publish('DATABASE_LINKED', {
-            linkkDatabaseLogs: [chunk.toString()],
-          });
-        },
-      }
-    );
+    await dokku.database.link(ssh, database.name, dbType, app.name, {
+      onStdout: (chunk) => {
+        pubsub.publish('DATABASE_LINKED', {
+          linkDatabaseLogs: [chunk.toString()],
+        });
+      },
+      onStderr: (chunk) => {
+        pubsub.publish('DATABASE_LINKED', {
+          linkkDatabaseLogs: [chunk.toString()],
+        });
+      },
+    });
 
     await prisma.database.update({
       where: { id: database.id },

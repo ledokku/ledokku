@@ -4,6 +4,7 @@ import createDebug from 'debug';
 import { pubsub } from './../index';
 import { config } from '../config';
 import { sshConnect } from '../lib/ssh';
+import { dokku } from '../lib/dokku';
 import { prisma } from '../prisma';
 
 const queueName = 'unlink-database';
@@ -48,24 +49,18 @@ const worker = new Worker(
     const dbType = dbTypeToDokkuPlugin(database.type);
 
     const ssh = await sshConnect();
-
-    const res = await ssh.execCommand(
-      `${dbType}:unlink ${database.name} ${app.name}`,
-      {
-        onStdout: (chunk) => {
-          pubsub.publish('DATABASE_UNLINKED', {
-            unlinkDatabaseLogs: [chunk.toString()],
-          });
-        },
-        onStderr: (chunk) => {
-          pubsub.publish('DATABASE_UNLINKED', {
-            unlinkDatabaseLogs: [chunk.toString()],
-          });
-        },
-      }
-    );
-
-    const arrayOfLogs = res.stdout.split('\n');
+    await dokku.database.unlink(ssh, database.name, dbType, app.name, {
+      onStdout: (chunk) => {
+        pubsub.publish('DATABASE_UNLINKED', {
+          unlinkDatabaseLogs: [chunk.toString()],
+        });
+      },
+      onStderr: (chunk) => {
+        pubsub.publish('DATABASE_UNLINKED', {
+          unlinkDatabaseLogs: [chunk.toString()],
+        });
+      },
+    });
 
     await prisma.database.update({
       where: { id: database.id },
