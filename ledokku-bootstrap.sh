@@ -40,15 +40,7 @@ main() {
   DOKKU_SSH_HOST=$(curl ifconfig.co)
 
   echo "=== 🐳 ==="
-  cat << EOF
- _                _         _     _           
-| |              | |       | |   | |          
-| |      ___   __| |  ___  | | __| | __ _   _ 
-| |     / _ \ / _` | / _ \ | |/ /| |/ /| | | |
-| |____|  __/| (_| || (_) ||   < |   < | |_| |
-\_____/ \___| \__,_| \___/ |_|\_\|_|\_\ \__,_|
-EOF
-
+  echo -e " _                _         _     _           \n\| \|              \| \|       \| \|   \| \|          \n\| \|      ___   __\| \|  ___  \| \| __\| \| __ _   _ \n\| \|     / _ \\ / _\` \| / _ \\ \| \|/ /\| \|/ /\| \| \| \|\n\| \|____\|  __/\| \(_\| \|\| \(_\) \|\|   \< \|   \< \| \|_\| \|\n\\_____/ \\___\| \\__,_\| \\___/ \|_\|\\_\\\|_\|\\_\\ \\__,_\|"
   echo "Welcome to installation helper of Ledokku"
   echo
   echo "In your browser open https://github.com/settings/developers and click on the \"New OAuth App\" button."
