@@ -84,6 +84,7 @@ export const App = () => {
     variables: {
       appId,
     },
+    fetchPolicy: 'cache-and-network',
     ssr: false,
     skip: !appId,
   });
