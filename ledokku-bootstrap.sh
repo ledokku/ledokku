@@ -34,16 +34,27 @@ install-postgres() {
 }
 
 main() {
-  echo "=== 🐳 ==="
-  echo "Welcome to installation helper of Ledokku"
-  echo "=== 🐳 ==="
-
   ensure-dokku
 
   # First we get the user ip so we can use it in the text we print later
   DOKKU_SSH_HOST=$(curl ifconfig.co)
 
   echo "=== 🐳 ==="
+  cat << EOF
+
+ _                _         _     _           
+| |              | |       | |   | |          
+| |      ___   __| |  ___  | | __| | __ _   _ 
+| |     / _ \ / _` | / _ \ | |/ /| |/ /| | | |
+| |____|  __/| (_| || (_) ||   < |   < | |_| |
+\_____/ \___| \__,_| \___/ |_|\_\|_|\_\ \__,_|
+                                              
+                                              
+
+EOF
+
+  echo "Welcome to installation helper of Ledokku"
+  echo
   echo "In your browser open https://github.com/settings/developers and click on the \"New OAuth App\" button."
   echo
   echo "Add a name, a homepage url, and in the field \"Authorization callback URL\" set the value to \"http://"$DOKKU_SSH_HOST":4000\"."
