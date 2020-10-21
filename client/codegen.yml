@@ -4,15 +4,12 @@ documents: 'src/**/*.graphql'
 generates:
   src/generated/graphql.tsx:
     plugins:
-      - add: '/* eslint-disable */'
+      - add:
+          content: '/* eslint-disable */'
       - 'typescript'
       - 'typescript-operations'
       - 'typescript-react-apollo'
     config:
-      reactApolloVersion: 3
-      withComponent: false
-      withHOC: false
-      withHooks: true
       enumsAsTypes: true
       scalars:
         DateTime: string

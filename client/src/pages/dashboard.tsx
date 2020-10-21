@@ -11,7 +11,9 @@ import { MySQLIcon } from '../ui/icons/MySQLIcon';
 
 export const Dashboard = () => {
   // const history = useHistory();
-  const { data /* loading, error */ } = useDashboardQuery({});
+  const { data /* loading, error */ } = useDashboardQuery({
+    fetchPolicy: 'cache-and-network',
+  });
 
   // TODO show loading
   // TODO handle error

@@ -13,6 +13,7 @@ import { config } from './config';
 import { app, http } from './server';
 import { queries } from './graphql/queries';
 import { synchroniseServerQueue } from './queues/synchroniseServer';
+import { prisma } from './prisma';
 
 app.use(express.static(path.join(__dirname, '..', '..', 'client', 'build')));
 
@@ -51,6 +52,11 @@ const typeDefs = gql`
     POSTGRESQL
     MONGODB
     MYSQL
+  }
+
+  type RealTimeLog {
+    message: String
+    type: String
   }
 
   type LoginResult {
@@ -95,12 +101,16 @@ const typeDefs = gql`
     result: Boolean!
   }
 
+  type CreateDatabaseResult {
+    result: Boolean!
+  }
+
   type AppLogsResult {
     logs: [String!]!
   }
 
   type DatabaseInfoResult {
-    info: [String]!
+    info: [String!]!
   }
 
   type DatabaseLogsResult {
@@ -188,12 +198,13 @@ const typeDefs = gql`
   type Subscription {
     unlinkDatabaseLogs: [String!]
     linkDatabaseLogs: [String!]
+    createDatabaseLogs: RealTimeLog!
   }
 
   type Mutation {
     loginWithGithub(code: String!): LoginResult
     createApp(input: CreateAppInput!): CreateAppResult!
-    createDatabase(input: CreateDatabaseInput!): Database!
+    createDatabase(input: CreateDatabaseInput!): CreateDatabaseResult!
     setEnvVar(input: SetEnvVarInput!): SetEnvVarResult!
     unsetEnvVar(input: UnsetEnvVarInput!): UnsetEnvVarResult!
     destroyApp(input: DestroyAppInput!): DestroyAppResult!
@@ -206,6 +217,7 @@ const typeDefs = gql`
 export const pubsub = new PubSub();
 export const DATABASE_UNLINKED = 'DATABASE_UNLINKED';
 export const DATABASE_LINKED = 'DATABASE_LINKED';
+export const DATABASE_CREATED = 'DATABASE_CREATED';
 
 const resolvers: Resolvers<{ userId?: string }> = {
   Query: queries,
@@ -216,12 +228,18 @@ const resolvers: Resolvers<{ userId?: string }> = {
       subscribe: () => pubsub.asyncIterator([DATABASE_UNLINKED]),
     },
     linkDatabaseLogs: {
-      // Additional event labels can be passed to asyncIterator creation
       subscribe: () => pubsub.asyncIterator([DATABASE_LINKED]),
+    },
+    createDatabaseLogs: {
+      subscribe: () => pubsub.asyncIterator([DATABASE_CREATED]),
     },
   },
   ...customResolvers,
 };
+
+interface SubscriptionContext {
+  token?: string;
+}
 
 const apolloServer = new ApolloServer({
   typeDefs,
@@ -229,6 +247,32 @@ const apolloServer = new ApolloServer({
     ...resolvers,
     DateTime: DateTimeResolver,
   },
+  subscriptions: {
+    onConnect: async (context: SubscriptionContext) => {
+      if (!context.token) {
+        throw new Error('Missing auth token');
+      }
+      try {
+        const decoded = jsonwebtoken.verify(
+          context.token,
+          config.jwtSecret
+        ) as {
+          userId: string;
+        };
+        const userId = decoded.userId;
+
+        const userInDb = await prisma.user.findOne({
+          where: {
+            id: userId,
+          },
+        });
+        if (!userInDb) throw new Error("User doesn't exist in our db");
+      } catch (e) {
+        throw new Error('Invalid token');
+      }
+    },
+  },
+
   context: ({ req, connection }) => {
     if (connection) {
       return connection.context;

@@ -1,3 +1,27 @@
+## 0.2.1 (2020-10-19)
+
+### Bug Fixes
+
+- upgrade prisma to 2.9.0 to fix SIGABRT issue ([#189](https://github.com/ledokku/ledokku/issues/189)) ([ce54a0d](https://github.com/ledokku/ledokku/commit/ce54a0d3a501514c686cec8c23c5d8b8ff1ce11b))
+
+## 0.2.0 (2020-10-18)
+
+### Features
+
+- **client:** improve database info view ([#185](https://github.com/ledokku/ledokku/issues/185)) ([5eb088e](https://github.com/ledokku/ledokku/commit/5eb088e9c8215ea1c756dc890478dc36527661db))
+- show real time logs on db creation ([#172](https://github.com/ledokku/ledokku/issues/172)) ([81ee614](https://github.com/ledokku/ledokku/commit/81ee6143334724f38eec3ecc7bb2682f2d7cfe54))
+- **server:** add extra validation for subscription connection ([#180](https://github.com/ledokku/ledokku/issues/180)) ([6789f21](https://github.com/ledokku/ledokku/commit/6789f21e6515f37a6eb679a2a1a9fac70aa3f5e7))
+- add ws auth ([#177](https://github.com/ledokku/ledokku/issues/177)) ([0ad5ff7](https://github.com/ledokku/ledokku/commit/0ad5ff702acdc2bedea372ae305cfb8a04fc3643))
+
+### Bug Fixes
+
+- exclude ledokku when synchronising apps and dbs ([#178](https://github.com/ledokku/ledokku/issues/178)) ([efb92a0](https://github.com/ledokku/ledokku/commit/efb92a021ef546911bf52fe967e9757b5220fb6f))
+
+### Miscellaneous Chores
+
+- add name validation on db/app creation ([#183](https://github.com/ledokku/ledokku/issues/183)) ([599fbed](https://github.com/ledokku/ledokku/commit/599fbed20072efbb86597abb577e412c18261a28))
+- upgrade dependencies ([#179](https://github.com/ledokku/ledokku/issues/179)) ([270beb8](https://github.com/ledokku/ledokku/commit/270beb82e644681f96d52693429be4609d4f2552))
+
 ## 0.1.0 (2020-10-06)
 
 ### Features
