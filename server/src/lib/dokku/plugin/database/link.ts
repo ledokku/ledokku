@@ -5,7 +5,7 @@ export const link = async (
   databaseName: string,
   databaseType: string,
   appName: string,
-  options: SSHExecOptions
+  options?: SSHExecOptions
 ) => {
   const resultDatabaseLink = await ssh.execCommand(
     `${databaseType}:link ${databaseName} ${appName}`,

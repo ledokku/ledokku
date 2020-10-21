@@ -5,7 +5,7 @@ export const unlink = async (
   databaseName: string,
   databaseType: string,
   appName: string,
-  options: SSHExecOptions
+  options?: SSHExecOptions
 ) => {
   const resultDatabaseUnLink = await ssh.execCommand(
     `${databaseType}:unlink ${databaseName} ${appName}`,
