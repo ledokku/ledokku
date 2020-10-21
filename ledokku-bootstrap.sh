@@ -40,8 +40,8 @@ main() {
 
   ensure-dokku
 
-  # First we get the user ip so we can change the variables that we print later
-  read -p "Enter Your Server IP: " DOKKU_SSH_HOST
+  # First we get the user ip so we can use it in the text we print later
+  DOKKU_SSH_HOST=$(curl ifconfig.co)
 
   echo "=== 🐳 ==="
   echo "In your browser open https://github.com/settings/developers and click on the \"New OAuth App\" button."
