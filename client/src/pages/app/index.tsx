@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
+import { useHistory } from 'react-router-dom';
 import { Header } from '../../modules/layout/Header';
 import {
   useAppByIdQuery,
@@ -28,6 +29,7 @@ import { RedisIcon } from '../../ui/icons/RedisIcon';
 import { MySQLIcon } from '../../ui/icons/MySQLIcon';
 
 export const App = () => {
+  const history = useHistory();
   const { id: appId } = useParams<{ id: string }>();
   const [isUnlinkModalOpen, setIsUnlinkModalOpen] = useState(false);
   const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
@@ -111,6 +113,9 @@ export const App = () => {
   const notLinkedDatabases = databases.filter((db) => {
     return linkedIds?.indexOf(db.id) === -1;
   });
+  // Hacky way to add create new database to link db select
+  notLinkedDatabases.length > 0 &&
+    notLinkedDatabases.push({ name: 'Create new database' } as any);
 
   const dbOptions = notLinkedDatabases.map((db) => {
     return {
@@ -226,7 +231,11 @@ export const App = () => {
                   <div>
                     <Select
                       value={selectedDb}
-                      onChange={setSelectedDb}
+                      onChange={
+                        selectedDb.value.name !== 'Create-database'
+                          ? setSelectedDb
+                          : history.push('/create-database')
+                      }
                       className="mt-3 w-80"
                       options={dbOptions}
                       placeholder={selectedDb}
