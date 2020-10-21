@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://github.com/ledokku/ledokku/compare/v0.2.1...v0.3.0) (2020-10-21)
+
+### Features
+
+- create interactive bootstrap script to install ledokku ([#175](https://github.com/ledokku/ledokku/issues/175)) ([51e24ec](https://github.com/ledokku/ledokku/commit/51e24ec0b50ffd18a64a3645e4a8732e7ec4a603))
+- **client:** add db creation option to link db select ([#201](https://github.com/ledokku/ledokku/issues/201)) ([07c6518](https://github.com/ledokku/ledokku/commit/07c65180205c8787707aa5521ca3823b10206828))
+- **server:** recreate link and unlink functions in dokku lib ([#200](https://github.com/ledokku/ledokku/issues/200)) ([f7d417f](https://github.com/ledokku/ledokku/commit/f7d417f5b07a1184e9259b4bb599e54b023a3a35))
+
+### Miscellaneous Chores
+
+- add changelog to website ([#202](https://github.com/ledokku/ledokku/issues/202)) ([25e76c9](https://github.com/ledokku/ledokku/commit/25e76c92c448a8c20caeb832acfc615ba0ddf30e))
+- **docs:** add link to getting started guide to README ([#194](https://github.com/ledokku/ledokku/issues/194)) ([b24ff75](https://github.com/ledokku/ledokku/commit/b24ff759cd3a74709d8751a4b51b723c1c0ddc44))
+
 ## 0.2.1 (2020-10-19)
 
 ### Bug Fixes
