@@ -6157,6 +6157,16 @@ concat-stream@^1.5.0:
     readable-stream "^2.2.2"
     typedarray "^0.0.6"
 
+concat-stream@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/concat-stream/-/concat-stream-2.0.0.tgz#414cf5af790a48c60ab9be4527d56d5e41133cb1"
+  integrity sha512-MWufYdFw53ccGjCA+Ol7XJYpAlW6/prSMzuPOTRnJGcGzuhLn4Scrz7qf6o8bROZ514ltazcIFJZevcfbo0x7A==
+  dependencies:
+    buffer-from "^1.0.0"
+    inherits "^2.0.3"
+    readable-stream "^3.0.2"
+    typedarray "^0.0.6"
+
 configstore@^5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/configstore/-/configstore-5.0.1.tgz#d365021b5df4b98cdd187d6a3b0e3f6a7cc5ed96"
@@ -6240,17 +6250,6 @@ conventional-changelog-atom@^2.0.7:
   dependencies:
     q "^1.5.1"
 
-conventional-changelog-cli@2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/conventional-changelog-cli/-/conventional-changelog-cli-2.1.0.tgz#5da5be32203ca8382815afc85b7f9151115d5e97"
-  integrity sha512-hZ8EcpxV4LcGOZwH+U5LJQDnyA4o/uyUdmIGzmFZMB4caujavvDBo/iTgVihk0m1QKkEhJgulagrILSm1JCakA==
-  dependencies:
-    add-stream "^1.0.0"
-    conventional-changelog "^3.1.23"
-    lodash "^4.17.15"
-    meow "^7.0.0"
-    tempfile "^3.0.0"
-
 conventional-changelog-codemirror@^2.0.7:
   version "2.0.7"
   resolved "https://registry.yarnpkg.com/conventional-changelog-codemirror/-/conventional-changelog-codemirror-2.0.7.tgz#d6b6a8ce2707710c5a036e305037547fb9e15bfb"
@@ -6258,7 +6257,12 @@ conventional-changelog-codemirror@^2.0.7:
   dependencies:
     q "^1.5.1"
 
-conventional-changelog-conventionalcommits@^4.4.0:
+conventional-changelog-config-spec@2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/conventional-changelog-config-spec/-/conventional-changelog-config-spec-2.1.0.tgz#874a635287ef8b581fd8558532bf655d4fb59f2d"
+  integrity sha512-IpVePh16EbbB02V+UA+HQnnPIohgXvJRxHcS5+Uwk4AT5LjzCZJm5sp/yqs5C6KZJ1jMsV4paEV13BN1pvDuxQ==
+
+conventional-changelog-conventionalcommits@4.4.0, conventional-changelog-conventionalcommits@^4.4.0:
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/conventional-changelog-conventionalcommits/-/conventional-changelog-conventionalcommits-4.4.0.tgz#8d96687141c9bbd725a89b95c04966d364194cd4"
   integrity sha512-ybvx76jTh08tpaYrYn/yd0uJNLt5yMrb1BphDe4WBredMlvPisvMghfpnJb6RmRNcqXeuhR6LfGZGewbkRm9yA==
@@ -6345,7 +6349,7 @@ conventional-changelog-writer@^4.0.17:
     split "^1.0.0"
     through2 "^3.0.0"
 
-conventional-changelog@^3.1.23:
+conventional-changelog@3.1.23:
   version "3.1.23"
   resolved "https://registry.yarnpkg.com/conventional-changelog/-/conventional-changelog-3.1.23.tgz#d696408021b579a3814aba79b38729ed86478aea"
   integrity sha512-sScUu2NHusjRC1dPc5p8/b3kT78OYr95/Bx7Vl8CPB8tF2mG1xei5iylDTRjONV5hTlzt+Cn/tBWrKdd299b7A==
@@ -6382,6 +6386,20 @@ conventional-commits-parser@^3.1.0:
     split2 "^2.0.0"
     through2 "^3.0.0"
     trim-off-newlines "^1.0.0"
+
+conventional-recommended-bump@6.0.10:
+  version "6.0.10"
+  resolved "https://registry.yarnpkg.com/conventional-recommended-bump/-/conventional-recommended-bump-6.0.10.tgz#ac2fb3e31bad2aeda80086b345bf0c52edd1d1b3"
+  integrity sha512-2ibrqAFMN3ZA369JgVoSbajdD/BHN6zjY7DZFKTHzyzuQejDUCjQ85S5KHxCRxNwsbDJhTPD5hOKcis/jQhRgg==
+  dependencies:
+    concat-stream "^2.0.0"
+    conventional-changelog-preset-loader "^2.3.4"
+    conventional-commits-filter "^2.0.6"
+    conventional-commits-parser "^3.1.0"
+    git-raw-commits "2.0.0"
+    git-semver-tags "^4.1.0"
+    meow "^7.0.0"
+    q "^1.5.1"
 
 convert-source-map@1.7.0, convert-source-map@^1.4.0, convert-source-map@^1.5.0, convert-source-map@^1.7.0:
   version "1.7.0"
@@ -7187,6 +7205,11 @@ detect-newline@^2.1.0:
   resolved "https://registry.yarnpkg.com/detect-newline/-/detect-newline-2.1.0.tgz#f41f1c10be4b00e87b5f13da680759f2c5bfd3e2"
   integrity sha1-9B8cEL5LAOh7XxPaaAdZ8sW/0+I=
 
+detect-newline@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/detect-newline/-/detect-newline-3.1.0.tgz#576f5dfc63ae1a192ff192d8ad3af6308991b651"
+  integrity sha512-TLz+x/vEXm/Y7P7wn1EJFNLxYpUD4TgMosxY6fAVJUnJMbupHBOncxyWUG9OpTaH9EBD7uFI5LfEgmMOc54DsA==
+
 detect-node@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/detect-node/-/detect-node-2.0.4.tgz#014ee8f8f669c5c58023da64b8179c083a28c46c"
@@ -7412,6 +7435,14 @@ dotenv@8.2.0, dotenv@^8.2.0:
   version "8.2.0"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-8.2.0.tgz#97e619259ada750eea3e4ea3e26bceea5424b16a"
   integrity sha512-8sJ78ElpbDJBHNeBzUbUVLsqKdccaa/BXF1uPTw3GrvQTBgrQrtObr2mUrE38vzYd8cEv+m/JBfDLioYcfXoaw==
+
+dotgitignore@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/dotgitignore/-/dotgitignore-2.1.0.tgz#a4b15a4e4ef3cf383598aaf1dfa4a04bcc089b7b"
+  integrity sha512-sCm11ak2oY6DglEPpCB8TixLjWAxd3kJTs6UIcSasNYxXdFPV+YKlye92c8H4kKFqV5qYMIh7d+cYecEg0dIkA==
+  dependencies:
+    find-up "^3.0.0"
+    minimatch "^3.0.4"
 
 duplexer3@^0.1.4:
   version "0.1.4"
@@ -8357,7 +8388,7 @@ figures@^2.0.0:
   dependencies:
     escape-string-regexp "^1.0.5"
 
-figures@^3.0.0, figures@^3.2.0:
+figures@^3.0.0, figures@^3.1.0, figures@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/figures/-/figures-3.2.0.tgz#625c18bd293c604dc4a8ddb2febf0c88341746af"
   integrity sha512-yaduQFRKLXYOGgEn6AZau90j3ggSOyiqXU0F9JZfeXYhNa+Jk4X+s45A2zg5jns87GAFa34BBm2kXw4XpNcbdg==
@@ -8639,6 +8670,13 @@ from2@^2.1.0:
     inherits "^2.0.1"
     readable-stream "^2.0.0"
 
+fs-access@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/fs-access/-/fs-access-1.0.1.tgz#d6a87f262271cefebec30c553407fb995da8777a"
+  integrity sha1-1qh/JiJxzv6+wwxVNAf7mV2od3o=
+  dependencies:
+    null-check "^1.0.0"
+
 fs-capacitor@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/fs-capacitor/-/fs-capacitor-2.0.4.tgz#5a22e72d40ae5078b4fe64fe4d08c0d3fc88ad3c"
@@ -8827,7 +8865,7 @@ git-remote-origin-url@^2.0.0:
     gitconfiglocal "^1.0.0"
     pify "^2.3.0"
 
-git-semver-tags@^4.1.0:
+git-semver-tags@^4.0.0, git-semver-tags@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/git-semver-tags/-/git-semver-tags-4.1.0.tgz#0146c9bc24ee96104c99f443071c8c2d7dc848e3"
   integrity sha512-TcxAGeo03HdErzKzi4fDD+xEL7gi8r2Y5YSxH6N2XYdVSV5UkBwfrt7Gqo1b+uSHCjy/sa9Y6BBBxxFLxfbhTg==
@@ -12462,6 +12500,11 @@ nth-check@^1.0.2, nth-check@~1.0.1:
   dependencies:
     boolbase "~1.0.0"
 
+null-check@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/null-check/-/null-check-1.0.0.tgz#977dffd7176012b9ec30d2a39db5cf72a0439edd"
+  integrity sha1-l33/1xdgErnsMNKjnbXPcqBDnt0=
+
 null-loader@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/null-loader/-/null-loader-3.0.0.tgz#3e2b6c663c5bda8c73a54357d8fa0708dc61b245"
@@ -14694,7 +14737,7 @@ read-pkg@^5.2.0:
     string_decoder "~1.1.1"
     util-deprecate "~1.0.1"
 
-"readable-stream@2 || 3", readable-stream@^3.0.6, readable-stream@^3.1.1, readable-stream@^3.6.0:
+"readable-stream@2 || 3", readable-stream@^3.0.2, readable-stream@^3.0.6, readable-stream@^3.1.1, readable-stream@^3.6.0:
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-3.6.0.tgz#337bbda3adc0706bd3e024426a286d4b4b2c9198"
   integrity sha512-BViHy7LKeTz4oNnkcLJ+lVSL6vpiFeX6/d3oSH8zCW7UxP2onchk+vTGB143xuFjHS3deTgkKoXXymXqymiIdA==
@@ -15502,7 +15545,7 @@ semver@7.0.0:
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.0.0.tgz#5f3ca35761e47e05b206c6daff2cf814f0316b8e"
   integrity sha512-+GB6zVA9LWh6zovYQLALHwv5rb2PHGlJi3lfiqIHxR0uuwCgefcOJc59v9fv1w8GbStwxuuqqAjI9NMAOOgq1A==
 
-semver@^7.2.1, semver@^7.3.2:
+semver@^7.1.1, semver@^7.2.1, semver@^7.3.2:
   version "7.3.2"
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.3.2.tgz#604962b052b81ed0786aae84389ffba70ffd3938"
   integrity sha512-OrOb32TeeambH6UrhtShmF7CRDqhL6/5XpPNp2DuRH6+9QLw/orhp72j87v8Qa1ScDkvrrBNpZcDejAirJmfXQ==
@@ -16047,6 +16090,27 @@ standard-as-callback@^2.0.1:
   resolved "https://registry.yarnpkg.com/standard-as-callback/-/standard-as-callback-2.0.1.tgz#ed8bb25648e15831759b6023bdb87e6b60b38126"
   integrity sha512-NQOxSeB8gOI5WjSaxjBgog2QFw55FV8TkS6Y07BiB3VJ8xNTvUYm0wl0s8ObgQ5NhdpnNfigMIKjgPESzgr4tg==
 
+standard-version@9.0.0:
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/standard-version/-/standard-version-9.0.0.tgz#814055add91eec8679a773768927f927183fc818"
+  integrity sha512-eRR04IscMP3xW9MJTykwz13HFNYs8jS33AGuDiBKgfo5YrO0qX0Nxb4rjupVwT5HDYL/aR+MBEVLjlmVFmFEDQ==
+  dependencies:
+    chalk "^2.4.2"
+    conventional-changelog "3.1.23"
+    conventional-changelog-config-spec "2.1.0"
+    conventional-changelog-conventionalcommits "4.4.0"
+    conventional-recommended-bump "6.0.10"
+    detect-indent "^6.0.0"
+    detect-newline "^3.1.0"
+    dotgitignore "^2.1.0"
+    figures "^3.1.0"
+    find-up "^4.1.0"
+    fs-access "^1.0.1"
+    git-semver-tags "^4.0.0"
+    semver "^7.1.1"
+    stringify-package "^1.0.1"
+    yargs "^15.3.1"
+
 state-toggle@^1.0.0:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/state-toggle/-/state-toggle-1.0.3.tgz#e123b16a88e143139b09c6852221bc9815917dfe"
@@ -16230,6 +16294,11 @@ stringify-object@^3.3.0:
     get-own-enumerable-property-symbols "^3.0.0"
     is-obj "^1.0.1"
     is-regexp "^1.0.0"
+
+stringify-package@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/stringify-package/-/stringify-package-1.0.1.tgz#e5aa3643e7f74d0f28628b72f3dad5cecfc3ba85"
+  integrity sha512-sa4DUQsYciMP1xhKWGuFM04fB0LG/9DlluZoSVywUMRNvzid6XucHK0/90xGxRoHrAaROrcHK1aPKaijCtSrhg==
 
 strip-ansi@6.0.0, strip-ansi@^6.0.0:
   version "6.0.0"
@@ -16509,19 +16578,6 @@ tar@^6.0.2:
     minizlib "^2.1.1"
     mkdirp "^1.0.3"
     yallist "^4.0.0"
-
-temp-dir@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/temp-dir/-/temp-dir-2.0.0.tgz#bde92b05bdfeb1516e804c9c00ad45177f31321e"
-  integrity sha512-aoBAniQmmwtcKp/7BzsH8Cxzv8OL736p7v1ihGb5e9DJ9kTwGWHrQrVB5+lfVDzfGrdRzXch+ig7LHaY1JTOrg==
-
-tempfile@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/tempfile/-/tempfile-3.0.0.tgz#5376a3492de7c54150d0cc0612c3f00e2cdaf76c"
-  integrity sha512-uNFCg478XovRi85iD42egu+eSFUmmka750Jy7L5tfHI5hQKKtbPnxaSaXAbBqCDYrw3wx4tXjKwci4/QmsZJxw==
-  dependencies:
-    temp-dir "^2.0.0"
-    uuid "^3.3.2"
 
 term-size@^2.1.0:
   version "2.2.0"
