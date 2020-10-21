@@ -3,6 +3,7 @@ module.exports = {
     Documentation: [
       'introduction',
       'what-is-ledokku',
+      'changelog',
       'getting-started',
       'installation',
     ],
