@@ -87,13 +87,14 @@ main() {
   docker tag ledokku/ledokku:0.3.0 dokku/ledokku:0.3.0
   dokku tags:deploy ledokku 0.3.0
 
-  # We setup a rule that allows access to port 4000
-  ufw allow 4000
-
   echo "=== 🐳 ==="
   echo "Installation succesful"
   echo "Open you server ip in your browser with the port 4000"
   echo "http://${DOKKU_SSH_HOST}:4000"
+  echo "=== 🚧 ==="
+  echo "If it is not connecting, try running this command on your server:"
+  echo "ufw allow 4000"
+  echo "=== 🚧 ==="
   echo "=== 🐳 ==="
 }
 
