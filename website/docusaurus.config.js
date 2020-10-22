@@ -10,6 +10,7 @@ module.exports = {
     fathomAnalytics: {
       siteId: 'AFIEKRUK',
     },
+    image: 'img/twitterCardImage.png',
     colorMode: {
       defaultMode: 'light',
       disableSwitch: true,
