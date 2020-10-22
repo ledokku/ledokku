@@ -39,6 +39,7 @@ yarn prettier
 RELEASE_COMMIT_MESSAGE="chore: publish v${NEW_VERSION}"
 git checkout -b "release/v${NEW_VERSION}"
 git add "./CHANGELOG.md"
+git add "./ledokku-bootstrap.sh"
 git add "./server/package.json"
 git add "./client/package.json"
 git add "./website/docs/installation.md"
