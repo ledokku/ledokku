@@ -8,6 +8,16 @@ hide_title: true
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.1](https://github.com/ledokku/ledokku/compare/v0.3.0...v0.3.1) (2020-10-22)
+
+### Features
+
+- **bootstrap:** add rule that allows access port 4000 ([#205](https://github.com/ledokku/ledokku/issues/205)) ([6bf87a3](https://github.com/ledokku/ledokku/commit/6bf87a39469a405166ac51179eaacb6ffd774f8f))
+
+### Documentation
+
+- fix installation link version ([#204](https://github.com/ledokku/ledokku/issues/204)) ([17bc375](https://github.com/ledokku/ledokku/commit/17bc375367a1ec4e9932097df891a6c93c208b64))
+
 ## [0.3.0](https://github.com/ledokku/ledokku/compare/v0.2.1...v0.3.0) (2020-10-21)
 
 ### Features
