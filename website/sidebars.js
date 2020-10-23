@@ -8,6 +8,6 @@ module.exports = {
       'installation',
       'upgrade'
     ],
-    Advanced: ['advanced/manual-installation'],
+    Advanced: ['advanced/manual-installation', 'advanced/configuration'],
   },
 };
