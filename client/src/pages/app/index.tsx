@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import Select from 'react-select';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
+import { Listbox, Transition } from '@headlessui/react';
 import { Header } from '../../modules/layout/Header';
 import {
   useAppByIdQuery,
@@ -230,45 +230,130 @@ export const App = () => {
               <React.Fragment>
                 {notLinkedDatabases.length !== 0 ? (
                   <div>
-                    <Select
-                      value={selectedDb}
-                      onChange={
-                        selectedDb.value.name !== 'Create-database'
-                          ? setSelectedDb
-                          : history.push('/create-database')
-                      }
-                      className="mt-3 w-80"
-                      options={dbOptions}
-                      placeholder={selectedDb}
-                      isSearchable={false}
-                      aria-labelledby="database-select-dropdown"
-                      noOptionsMessage={() =>
-                        'All of your databases are already linked to this app'
-                      }
-                    />
+                    <div className="justify-start mt-3 w-80">
+                      <div className="w-full max-w-xs mx-auto">
+                        <Listbox
+                          as="div"
+                          value={selectedDb}
+                          // TODO FIX TYPES
+                          //@ts-ignore
+                          onChange={
+                            selectedDb.value.name !== 'Create new database'
+                              ? setSelectedDb
+                              : history.push('/create-database')
+                          }
+                        >
+                          {({ open }) => (
+                            <div className="relative z-10">
+                              <span className="inline-block w-full rounded-md shadow-sm">
+                                <Listbox.Button className="cursor-default relative w-full rounded-md border border-gray-300 bg-white pl-3 pr-10 py-2 text-left focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                                  <span className="bloc truncate">
+                                    {selectedDb.label}
+                                  </span>
+                                  <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                                    <svg
+                                      className="h-5 w-5 text-gray-400"
+                                      viewBox="0 0 20 20"
+                                      fill="none"
+                                      stroke="currentColor"
+                                    >
+                                      <path
+                                        d="M7 7l3-3 3 3m0 6l-3 3-3-3"
+                                        strokeWidth="1.5"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                      />
+                                    </svg>
+                                  </span>
+                                </Listbox.Button>
+                              </span>
 
-                    {databaseLinkError && (
-                      <p className="text-red-500 text-sm font-semibold">
-                        {databaseLinkError.graphQLErrors[0].message}
-                      </p>
-                    )}
+                              <Transition
+                                show={open}
+                                leave="transition ease-in duration-100"
+                                leaveFrom="opacity-100"
+                                leaveTo="opacity-0"
+                                className="absolute mt-1 w-full rounded-md bg-white shadow-lg"
+                              >
+                                <Listbox.Options className="max-h-60 rounded-md py-1 text-base leading-6 shadow-xs overflow-auto focus:outline-none sm:text-sm sm:leading-5">
+                                  {dbOptions.map((db) => (
+                                    <Listbox.Option
+                                      key={dbOptions.indexOf(db)}
+                                      value={db as any}
+                                    >
+                                      {({ selected, active }) => (
+                                        <div
+                                          className={`${
+                                            active
+                                              ? 'text-white bg-gray-900'
+                                              : 'text-gray-900'
+                                          } cursor-default select-none relative py-1 pl-4 pr-4`}
+                                        >
+                                          <span
+                                            className={`${
+                                              selected
+                                                ? 'font-semibold'
+                                                : 'font-normal'
+                                            }`}
+                                          >
+                                            {db.label}
+                                          </span>
+                                          {selected && (
+                                            <span
+                                              className={`${
+                                                active
+                                                  ? 'text-white'
+                                                  : 'text-gray-600'
+                                              } absolute left-0 flex items-center pl-1.5`}
+                                            >
+                                              <svg
+                                                className="h-5 w-5"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 20 20"
+                                                fill="currentColor"
+                                              >
+                                                <path
+                                                  fillRule="evenodd"
+                                                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                  clipRule="evenodd"
+                                                />
+                                              </svg>
+                                            </span>
+                                          )}
+                                        </div>
+                                      )}
+                                    </Listbox.Option>
+                                  ))}
+                                </Listbox.Options>
+                              </Transition>
+                            </div>
+                          )}
+                        </Listbox>
+                        {databaseLinkError && (
+                          <p className="text-red-500 text-sm font-semibold">
+                            {databaseLinkError.graphQLErrors[0].message}
+                          </p>
+                        )}
 
-                    <Button
-                      color="grey"
-                      width="large"
-                      className="mt-2"
-                      isLoading={
-                        databaseLinkLoading &&
-                        !databaseLinkData &&
-                        !databaseLinkError
-                      }
-                      disabled={!selectedDb.value.id}
-                      onClick={() => {
-                        setIsLinkModalOpen(true);
-                      }}
-                    >
-                      Link database
-                    </Button>
+                        <Button
+                          color="grey"
+                          width="large"
+                          className="mt-2"
+                          isLoading={
+                            databaseLinkLoading &&
+                            !databaseLinkData &&
+                            !databaseLinkError
+                          }
+                          disabled={!selectedDb.value.id}
+                          onClick={() => {
+                            setIsLinkModalOpen(true);
+                          }}
+                        >
+                          Link database
+                        </Button>
+                      </div>
+                    </div>
+
                     {isLinkModalOpen && (
                       <Modal>
                         <ModalTitle>Link database</ModalTitle>
