@@ -16,6 +16,7 @@ jq --arg version ${NEW_VERSION} '.version = $version' server/package.json > "tmp
 jq --arg version ${NEW_VERSION} '.version = $version' client/package.json > "tmp.txt" && mv "tmp.txt" client/package.json
 sed "s|${CURRENT_PACKAGE_VERSION}|${NEW_VERSION}|g" website/docs/installation.md > "tmp.txt" && mv "tmp.txt" website/docs/installation.md
 sed "s|${CURRENT_PACKAGE_VERSION}|${NEW_VERSION}|g" website/docs/advanced/manual-installation.mdx > "tmp.txt" && mv "tmp.txt" website/docs/advanced/manual-installation.mdx
+sed "s|${CURRENT_PACKAGE_VERSION}|${NEW_VERSION}|g" website/docs/upgrade.md > "tmp.txt" && mv "tmp.txt" website/docs/upgrade.md
 sed "s|${CURRENT_PACKAGE_VERSION}|${NEW_VERSION}|g" ledokku-bootstrap.sh > "tmp.txt" && mv "tmp.txt" ledokku-bootstrap.sh
 chmod +x ./ledokku-bootstrap.sh
 
@@ -44,6 +45,7 @@ git add "./server/package.json"
 git add "./client/package.json"
 git add "./website/docs/installation.md"
 git add "./website/docs/advanced/manual-installation.mdx"
+git add "./website/docs/upgrade.md"
 git add "./website/docs/changelog.md"
 git commit -m "${RELEASE_COMMIT_MESSAGE}"
 git push --set-upstream origin "release/v${NEW_VERSION}"
