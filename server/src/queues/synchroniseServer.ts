@@ -1,5 +1,6 @@
 import { Worker, Queue } from 'bullmq';
 import createDebug from 'debug';
+import Redis from 'ioredis';
 import { config } from '../config';
 import { sshConnect } from '../lib/ssh';
 import { dokku } from '../lib/dokku';
@@ -8,13 +9,14 @@ import { dbTypeToDokkuPlugin } from '../graphql/utils';
 import { DatabaseTypes } from '../generated/graphql';
 
 const queueName = 'synchronise-server';
+const redisClient = new Redis(config.redisUrl);
 
 export const synchroniseServerQueue = new Queue(queueName, {
   defaultJobOptions: {
     // Max timeout 20 minutes
     timeout: 1.2e6,
   },
-  connection: config.redisClient,
+  connection: redisClient,
 });
 
 /**
@@ -172,7 +174,7 @@ const worker = new Worker(
     debug(`finished`);
     console.log('Finished synchronisation with Dokku');
   },
-  { connection: config.redisClient }
+  { connection: redisClient }
 );
 
 worker.on('failed', async (job, err) => {
