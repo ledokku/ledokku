@@ -86,7 +86,6 @@ export const config = {
   githubClientId: process.env.GITHUB_CLIENT_ID,
   githubClientSecret: process.env.GITHUB_CLIENT_SECRET,
   redisUrl: process.env.REDIS_URL,
-  redisClient: new Redis(process.env.REDIS_URL),
   dokkuSshHost: process.env.DOKKU_SSH_HOST,
   dokkuSshPort: process.env.DOKKU_SSH_PORT ? +process.env.DOKKU_SSH_PORT : 22,
   privateKey,

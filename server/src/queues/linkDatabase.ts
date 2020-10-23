@@ -1,6 +1,7 @@
 import { dbTypeToDokkuPlugin } from './../graphql/utils';
 import { Worker, Queue } from 'bullmq';
 import createDebug from 'debug';
+import Redis from 'ioredis';
 import { pubsub } from './../index';
 import { config } from '../config';
 import { sshConnect } from '../lib/ssh';
@@ -9,6 +10,7 @@ import { prisma } from '../prisma';
 
 const queueName = 'link-database';
 const debug = createDebug(`queue:${queueName}`);
+const redisClient = new Redis(config.redisUrl);
 
 interface QueueArgs {
   appId: string;
@@ -20,7 +22,7 @@ export const linkDatabaseQueue = new Queue<QueueArgs>(queueName, {
     // Max timeout 20 minutes
     timeout: 1.2e6,
   },
-  connection: config.redisClient,
+  connection: redisClient,
 });
 
 /**
@@ -75,7 +77,7 @@ const worker = new Worker(
       `finishing linkDatabaseQueue for ${database.type} database ${database.name} from  ${app.name} app`
     );
   },
-  { connection: config.redisClient }
+  { connection: redisClient }
 );
 
 worker.on('failed', async (job, err) => {
