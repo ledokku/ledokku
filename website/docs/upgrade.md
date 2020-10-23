@@ -11,4 +11,4 @@ docker tag ledokku/ledokku:0.3.1 dokku/ledokku:0.3.1
 dokku tags:deploy ledokku 0.3.1
 ```
 
-Now you can enjoy the latest version of ledokku!
+You can now enjoy the latest version of ledokku!
