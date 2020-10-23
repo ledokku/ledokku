@@ -236,6 +236,7 @@ export const App = () => {
                           as="div"
                           value={selectedDb}
                           // TODO FIX TYPES
+                          // https://github.com/tailwindlabs/headlessui/issues/121
                           //@ts-ignore
                           onChange={
                             selectedDb.value.name !== 'Create new database'
