@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import Select from 'react-select';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
+import { Listbox, Transition } from '@headlessui/react';
 import { Header } from '../../modules/layout/Header';
 import {
   useAppByIdQuery,
@@ -229,24 +229,67 @@ export const App = () => {
             ) : (
               <React.Fragment>
                 {notLinkedDatabases.length !== 0 ? (
-                  <div>
-                    <Select
+                  <div className="relative">
+                    <Listbox
+                      as="div"
                       value={selectedDb}
-                      onChange={
-                        selectedDb.value.name !== 'Create-database'
-                          ? setSelectedDb
-                          : history.push('/create-database')
-                      }
-                      className="mt-3 w-80"
-                      options={dbOptions}
-                      placeholder={selectedDb}
-                      isSearchable={false}
-                      aria-labelledby="database-select-dropdown"
-                      noOptionsMessage={() =>
-                        'All of your databases are already linked to this app'
-                      }
-                    />
-
+                      //@ts-ignore
+                      onChange={setSelectedDb}
+                    >
+                      {({ open }) => (
+                        <React.Fragment>
+                          <Listbox.Button className="pl-1.5 py-1.5 flex flex-start justify-between mt-3 w-80 rounded-md shadow-sm border border-gray-300">
+                            {selectedDb.label}
+                            <svg
+                              className="mt-1 h-5 w-5 text-gray-400"
+                              viewBox="0 0 20 20"
+                              fill="none"
+                              stroke="currentColor"
+                            >
+                              <path
+                                d="M7 7l3-3 3 3m0 6l-3 3-3-3"
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          </Listbox.Button>
+                          {open && (
+                            <Transition
+                              show={open}
+                              enter="transition ease-out duration-100"
+                              enterFrom="transform opacity-0 scale-95"
+                              enterTo="transform opacity-100 scale-100"
+                              leave="transition ease-in duration-75"
+                              leaveFrom="transform opacity-100 scale-100"
+                              leaveTo="transform opacity-0 scale-95"
+                            >
+                              <Listbox.Options className="bg-white absolute mt-2 w-80">
+                                {dbOptions.map((db) => (
+                                  <Listbox.Option
+                                    className="py-2 block"
+                                    key={dbOptions.indexOf(db)}
+                                    value={db as any}
+                                  >
+                                    {({ active }) => (
+                                      <p
+                                        className={`${
+                                          active
+                                            ? 'bg-gray-200 pl-2  py-1'
+                                            : 'bg-white text-black pl-2 py-1'
+                                        }`}
+                                      >
+                                        {db.label}
+                                      </p>
+                                    )}
+                                  </Listbox.Option>
+                                ))}
+                              </Listbox.Options>
+                            </Transition>
+                          )}
+                        </React.Fragment>
+                      )}
+                    </Listbox>
                     {databaseLinkError && (
                       <p className="text-red-500 text-sm font-semibold">
                         {databaseLinkError.graphQLErrors[0].message}
