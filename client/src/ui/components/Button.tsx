@@ -8,7 +8,6 @@ interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
   color: 'red' | 'grey';
   variant?: 'solid' | 'outline';
   isLoading?: boolean;
-  isDisabledBelowDropdown?: boolean;
 }
 
 export const Button = ({
@@ -18,7 +17,6 @@ export const Button = ({
   iconEnd,
   iconStart,
   isLoading,
-  isDisabledBelowDropdown = false,
   type,
   variant = 'solid',
   ...props
