@@ -229,7 +229,7 @@ export const App = () => {
             ) : (
               <React.Fragment>
                 {notLinkedDatabases.length !== 0 ? (
-                  <div className="relative">
+                  <div>
                     <Listbox
                       as="div"
                       value={selectedDb}
