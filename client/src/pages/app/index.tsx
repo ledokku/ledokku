@@ -265,25 +265,28 @@ export const App = () => {
                               leaveTo="transform opacity-0 scale-95"
                             >
                               <Listbox.Options className="bg-white absolute mt-2 w-80">
-                                {dbOptions.map((db) => (
-                                  <Listbox.Option
-                                    className="py-2 block"
-                                    key={dbOptions.indexOf(db)}
-                                    value={db as any}
-                                  >
-                                    {({ active }) => (
-                                      <p
-                                        className={`${
-                                          active
-                                            ? 'bg-gray-200 pl-2  py-1'
-                                            : 'bg-white text-black pl-2 py-1'
-                                        }`}
+                                {dbOptions.map(
+                                  (db) =>
+                                    db.value.id !== selectedDb.value.id && (
+                                      <Listbox.Option
+                                        className="py-2 block"
+                                        key={dbOptions.indexOf(db)}
+                                        value={db as any}
                                       >
-                                        {db.label}
-                                      </p>
-                                    )}
-                                  </Listbox.Option>
-                                ))}
+                                        {({ active }) => (
+                                          <p
+                                            className={`${
+                                              active
+                                                ? 'bg-gray-200 pl-2  py-1'
+                                                : 'bg-white text-black pl-2 py-1'
+                                            }`}
+                                          >
+                                            {db.label}
+                                          </p>
+                                        )}
+                                      </Listbox.Option>
+                                    )
+                                )}
                               </Listbox.Options>
                             </Transition>
                           )}
