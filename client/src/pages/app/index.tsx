@@ -42,7 +42,7 @@ export const App = () => {
 
   const [selectedDb, setSelectedDb] = useState({
     value: { name: '', id: '', type: '' },
-    label: 'Please select db',
+    label: 'Please select database',
   });
   const [
     linkDatabaseMutation,
@@ -154,7 +154,7 @@ export const App = () => {
       });
       setSelectedDb({
         value: { name: '', id: '', type: '' },
-        label: 'Please select db',
+        label: 'Please select database',
       });
       setIsTerminalVisible(true);
       setLinkLoading(true);
