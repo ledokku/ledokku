@@ -18,7 +18,7 @@ export const Button = ({
   iconEnd,
   iconStart,
   isLoading,
-  isDisabledBelowDropdown,
+  isDisabledBelowDropdown = false,
   type,
   variant = 'solid',
   ...props
@@ -32,15 +32,11 @@ export const Button = ({
       // solid variant styles
       variant === 'solid'
         ? {
-            'bg-gray-900 text-white transition-color duration-100 ease-in':
-              true && !props.disabled,
+            'bg-gray-900 text-white transition-color duration-100 ease-in': true,
             'bg-red-500': color === 'red',
             'hover:text-white border hover:border-transparent':
               !props.disabled || isLoading,
-            'bg-gray-400 text-white cursor-not-allowed': isDisabledBelowDropdown,
-            'opacity-50 text-white cursor-not-allowed':
-              (props.disabled && !isDisabledBelowDropdown) ||
-              (isLoading && !isDisabledBelowDropdown),
+            'opacity-50 cursor-not-allowed': props.disabled || isLoading,
           }
         : undefined,
       // outline variant styles

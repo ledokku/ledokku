@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
 import { Listbox, Transition } from '@headlessui/react';
+import cx from 'classnames';
 import { Header } from '../../modules/layout/Header';
 import {
   useAppByIdQuery,
@@ -182,7 +183,7 @@ export const App = () => {
         <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4 mt-10">
           <div>
             <h1 className="text-lg font-bold py-5">App info</h1>
-            <div className="mt-3 bg-gray-100 shadow overflow-hidden rounded-lg border-b border-gray-200">
+            <div className="bg-gray-100 shadow overflow-hidden rounded-lg border-b border-gray-200">
               <table className="mt-4 mb-4 min-w-full bg-white">
                 <tbody className="text-gray-700">
                   <tr className="bg-gray-100">
@@ -241,22 +242,26 @@ export const App = () => {
                       }
                     >
                       {({ open }) => (
-                        <React.Fragment>
-                          <Listbox.Button className="pl-1.5 py-1.5 flex flex-start justify-between mt-3 w-80 rounded-md shadow-sm border border-gray-300">
-                            {selectedDb.label}
-                            <svg
-                              className="mt-1 h-5 w-5 text-gray-400"
-                              viewBox="0 0 20 20"
-                              fill="none"
-                              stroke="currentColor"
-                            >
-                              <path
-                                d="M7 7l3-3 3 3m0 6l-3 3-3-3"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                            </svg>
+                        <div className="relative w-80">
+                          <Listbox.Button className="cursor-default relative w-full rounded-md border border-gray-300 bg-white pl-3 pr-10 py-2 text-left focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                            <span className="block truncate">
+                              {selectedDb.label}
+                            </span>
+                            <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                              <svg
+                                className="h-5 w-5 text-gray-400"
+                                viewBox="0 0 20 20"
+                                fill="none"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  d="M7 7l3-3 3 3m0 6l-3 3-3-3"
+                                  strokeWidth="1.5"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                />
+                              </svg>
+                            </span>
                           </Listbox.Button>
                           {open && (
                             <Transition
@@ -267,26 +272,31 @@ export const App = () => {
                               leave="transition ease-in duration-75"
                               leaveFrom="transform opacity-100 scale-100"
                               leaveTo="transform opacity-0 scale-95"
+                              className="absolute mt-1 w-full rounded-md bg-white shadow-lg z-10"
                             >
-                              <Listbox.Options className="bg-white absolute mt-2 w-80">
+                              <Listbox.Options
+                                static
+                                className="max-h-60 rounded-md py-1 text-base leading-6 shadow-xs overflow-auto focus:outline-none sm:text-sm sm:leading-5"
+                              >
                                 {dbOptions.map(
                                   (db) =>
                                     db.value.id !== selectedDb.value.id && (
                                       <Listbox.Option
-                                        className="py-2 block"
                                         key={dbOptions.indexOf(db)}
                                         value={db as any}
                                       >
                                         {({ active }) => (
-                                          <p
-                                            className={`${
-                                              active
-                                                ? 'bg-gray-200 pl-2  py-1'
-                                                : 'bg-white text-black pl-2 py-1'
-                                            }`}
+                                          <div
+                                            className={cx(
+                                              'cursor-default select-none relative py-2 px-4',
+                                              {
+                                                'bg-gray-200': active,
+                                                'bg-white text-black': !active,
+                                              }
+                                            )}
                                           >
                                             {db.label}
-                                          </p>
+                                          </div>
                                         )}
                                       </Listbox.Option>
                                     )
@@ -294,7 +304,7 @@ export const App = () => {
                               </Listbox.Options>
                             </Transition>
                           )}
-                        </React.Fragment>
+                        </div>
                       )}
                     </Listbox>
                     {databaseLinkError && (
@@ -307,7 +317,7 @@ export const App = () => {
                       color="grey"
                       width="large"
                       className="mt-2"
-                      isDisabledBelowDropdown={true}
+                      // isDisabledBelowDropdown={true}
                       isLoading={
                         databaseLinkLoading &&
                         !databaseLinkData &&
