@@ -122,7 +122,7 @@ export type AppLogsResult = {
 
 export type DatabaseInfoResult = {
   __typename?: 'DatabaseInfoResult';
-  info: Array<Maybe<Scalars['String']>>;
+  info: Array<Scalars['String']>;
 };
 
 export type DatabaseLogsResult = {
@@ -517,7 +517,7 @@ export type DatabaseResolvers<ContextType = any, ParentType extends ResolversPar
 export type RealTimeLogResolvers<ContextType = any, ParentType extends ResolversParentTypes['RealTimeLog'] = ResolversParentTypes['RealTimeLog']> = {
   message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type LoginResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['LoginResult'] = ResolversParentTypes['LoginResult']> = {
@@ -574,7 +574,7 @@ export type UnsetEnvVarResultResolvers<ContextType = any, ParentType extends Res
 
 export type CreateDatabaseResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateDatabaseResult'] = ResolversParentTypes['CreateDatabaseResult']> = {
   result?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type AppLogsResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['AppLogsResult'] = ResolversParentTypes['AppLogsResult']> = {
@@ -583,7 +583,7 @@ export type AppLogsResultResolvers<ContextType = any, ParentType extends Resolve
 };
 
 export type DatabaseInfoResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['DatabaseInfoResult'] = ResolversParentTypes['DatabaseInfoResult']> = {
-  info?: Resolver<Array<Maybe<ResolversTypes['String']>>, ParentType, ContextType>;
+  info?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
