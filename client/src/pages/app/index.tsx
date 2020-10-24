@@ -234,7 +234,11 @@ export const App = () => {
                       as="div"
                       value={selectedDb}
                       //@ts-ignore
-                      onChange={setSelectedDb}
+                      onChange={
+                        selectedDb.value.name !== 'Create new database'
+                          ? setSelectedDb
+                          : history.push('/create-database')
+                      }
                     >
                       {({ open }) => (
                         <React.Fragment>
