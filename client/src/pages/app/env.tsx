@@ -185,7 +185,7 @@ export const Env = () => {
         </div>
 
         {!envVarLoading && !envVarError && envVarData?.envVars.envVars && (
-          <React.Fragment>
+          <div className="mb-8">
             {envVarData.envVars.envVars.map((envVar) => {
               return (
                 <EnvForm
@@ -203,7 +203,7 @@ export const Env = () => {
               appId={appId}
               isNewVar={true}
             />
-          </React.Fragment>
+          </div>
         )}
       </div>
     </div>
