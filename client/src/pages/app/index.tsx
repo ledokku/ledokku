@@ -317,7 +317,6 @@ export const App = () => {
                       color="grey"
                       width="large"
                       className="mt-2"
-                      // isDisabledBelowDropdown={true}
                       isLoading={
                         databaseLinkLoading &&
                         !databaseLinkData &&
