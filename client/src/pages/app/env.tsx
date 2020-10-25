@@ -11,6 +11,7 @@ import {
 } from '../../generated/graphql';
 import { useFormik } from 'formik';
 import { TabNav, TabNavLink, Button } from '../../ui';
+import { TrashBinIcon } from '../../ui/icons/TrashBinIcon';
 
 interface EnvFormProps {
   name: string;
@@ -20,7 +21,7 @@ interface EnvFormProps {
 }
 
 export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
-  const [isEnvVarVisible, setEnvVarIsVisible] = useState(false);
+  const [inputType, setInputType] = useState('password');
   const [
     setEnvVarMutation,
     { loading: setEnvVarLoading },
@@ -74,7 +75,7 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
         <div className="mt-8">
           <input
             autoComplete="off"
-            className="inline w-full  max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
+            className="inline w-full tex  max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
             id={isNewVar ? 'newVarName' : name}
             name="name"
             placeholder="Name"
@@ -83,33 +84,22 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
             onChange={formik.handleChange}
           />
         </div>
-        <div className="mt-8 ">
+        <div className="mt-8">
           <input
             autoComplete="off"
-            className="inline w-full max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
+            onMouseOver={() => setInputType('text')}
+            onMouseLeave={() => setInputType('password')}
+            className={`inline w-full max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black`}
             id={isNewVar ? 'newVarValue' : value}
             name="value"
             placeholder="Value"
             key={value}
             value={formik.values.value}
             onChange={formik.handleChange}
-            type={isEnvVarVisible ? 'text' : 'password'}
+            type={inputType}
           />
         </div>
         <div className="flex items-end">
-          {}
-          <svg
-            onClick={() => setEnvVarIsVisible(!isEnvVarVisible)}
-            className={
-              isEnvVarVisible
-                ? 'fill-current text-red-500 h-8 w-8 mt-2 -ml-1.5 mr-5 mb-2'
-                : 'fill-current text-gray-900 h-8 w-8 mt-2 -ml-1.5 mr-5 mb-2'
-            }
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-          >
-            <path d="M.2 10a11 11 0 0 1 19.6 0A11 11 0 0 1 .2 10zm9.8 4a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0-2a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" />
-          </svg>
           <Button isLoading={setEnvVarLoading} type="submit" color="grey">
             {isNewVar ? 'Add' : 'Save'}
           </Button>
@@ -119,8 +109,9 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
               className="ml-2"
               color="red"
               onClick={handleDeleteEnvVar}
+              variant="outline"
             >
-              Delete
+              <TrashBinIcon size={24} />
             </Button>
           )}
         </div>
