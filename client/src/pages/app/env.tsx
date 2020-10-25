@@ -87,8 +87,10 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
         <div className="mt-8">
           <input
             autoComplete="off"
-            onMouseOver={() => setInputType('text')}
+            onMouseEnter={() => setInputType('text')}
             onMouseLeave={() => setInputType('password')}
+            onFocus={() => setInputType('text')}
+            onBlur={() => setInputType('password')}
             className={`inline w-full max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black`}
             id={isNewVar ? 'newVarValue' : value}
             name="value"
