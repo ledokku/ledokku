@@ -254,8 +254,8 @@ export type QueryEnvVarsArgs = {
 
 export type Subscription = {
   __typename?: 'Subscription';
-  unlinkDatabaseLogs?: Maybe<Array<Scalars['String']>>;
-  linkDatabaseLogs?: Maybe<Array<Scalars['String']>>;
+  unlinkDatabaseLogs: RealTimeLog;
+  linkDatabaseLogs: RealTimeLog;
   createDatabaseLogs: RealTimeLog;
 };
 
@@ -610,7 +610,10 @@ export type LinkDatabaseLogsSubscriptionVariables = Exact<{ [key: string]: never
 
 export type LinkDatabaseLogsSubscription = (
   { __typename?: 'Subscription' }
-  & Pick<Subscription, 'linkDatabaseLogs'>
+  & { linkDatabaseLogs: (
+    { __typename?: 'RealTimeLog' }
+    & Pick<RealTimeLog, 'message' | 'type'>
+  ) }
 );
 
 export type UnlinkDatabaseLogsSubscriptionVariables = Exact<{ [key: string]: never; }>;
@@ -618,7 +621,10 @@ export type UnlinkDatabaseLogsSubscriptionVariables = Exact<{ [key: string]: nev
 
 export type UnlinkDatabaseLogsSubscription = (
   { __typename?: 'Subscription' }
-  & Pick<Subscription, 'unlinkDatabaseLogs'>
+  & { unlinkDatabaseLogs: (
+    { __typename?: 'RealTimeLog' }
+    & Pick<RealTimeLog, 'message' | 'type'>
+  ) }
 );
 
 
@@ -1333,7 +1339,10 @@ export type CreateDatabaseLogsSubscriptionHookResult = ReturnType<typeof useCrea
 export type CreateDatabaseLogsSubscriptionResult = Apollo.SubscriptionResult<CreateDatabaseLogsSubscription>;
 export const LinkDatabaseLogsDocument = gql`
     subscription LinkDatabaseLogs {
-  linkDatabaseLogs
+  linkDatabaseLogs {
+    message
+    type
+  }
 }
     `;
 
@@ -1359,7 +1368,10 @@ export type LinkDatabaseLogsSubscriptionHookResult = ReturnType<typeof useLinkDa
 export type LinkDatabaseLogsSubscriptionResult = Apollo.SubscriptionResult<LinkDatabaseLogsSubscription>;
 export const UnlinkDatabaseLogsDocument = gql`
     subscription UnlinkDatabaseLogs {
-  unlinkDatabaseLogs
+  unlinkDatabaseLogs {
+    message
+    type
+  }
 }
     `;
 

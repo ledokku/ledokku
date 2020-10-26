@@ -8,6 +8,7 @@ import {
   useUnlinkDatabaseMutation,
   useUnlinkDatabaseLogsSubscription,
   useLinkDatabaseLogsSubscription,
+  RealTimeLog,
 } from '../../generated/graphql';
 import { useParams, Link } from 'react-router-dom';
 import Select from 'react-select';
@@ -26,10 +27,13 @@ export const Database = () => {
   const { id: databaseId } = useParams<{ id: string }>();
   const [isUnlinkModalOpen, setIsUnlinkModalOpen] = useState(false);
   const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
-  const [arrayOfUnlinkLogs, setArrayOfUnlinkLogs] = useState<string[]>([]);
-  const [arrayOfLinkLogs, setArrayOfLinkLogs] = useState<string[]>([]);
+  const [arrayOfUnlinkLogs, setArrayOfUnlinkLogs] = useState<RealTimeLog[]>([]);
+  const [arrayOfLinkLogs, setArrayOfLinkLogs] = useState<RealTimeLog[]>([]);
   const [appAboutToUnlink, setAppAboutToUnlink] = useState<string>();
   const [isTerminalVisible, setIsTerminalVisible] = useState(false);
+  const [processStatus, setProcessStatus] = useState<
+    'running' | 'notStarted' | 'finished'
+  >('notStarted');
   const [unlinkLoading, setUnlinkLoading] = useState(false);
   const [linkLoading, setLinkLoading] = useState(false);
 
@@ -60,21 +64,34 @@ export const Database = () => {
 
   useUnlinkDatabaseLogsSubscription({
     onSubscriptionData: (data) => {
-      const logsExist = data.subscriptionData.data?.unlinkDatabaseLogs?.[0];
-      if (logsExist)
+      const logsExist = data.subscriptionData.data?.unlinkDatabaseLogs;
+      if (logsExist) {
         setArrayOfUnlinkLogs((currentLogs) => {
           return [...currentLogs, logsExist];
         });
+        if (
+          logsExist.type === 'end:success' ||
+          logsExist.type === 'end:failure'
+        ) {
+          setProcessStatus('finished');
+        }
+      }
     },
   });
 
   useLinkDatabaseLogsSubscription({
     onSubscriptionData: (data) => {
-      const logsExist = data.subscriptionData.data?.linkDatabaseLogs?.[0];
+      const logsExist = data.subscriptionData.data?.linkDatabaseLogs;
       if (logsExist) {
         setArrayOfLinkLogs((currentLogs) => {
           return [...currentLogs, logsExist];
         });
+        if (
+          logsExist.type === 'end:success' ||
+          logsExist.type === 'end:failure'
+        ) {
+          setProcessStatus('finished');
+        }
       }
     },
   });
@@ -263,18 +280,18 @@ export const Database = () => {
                                 Linking <b>{selectedApp.value.name}</b> with{' '}
                                 <b>{database.name}</b>!
                               </p>
+                              <p className="text-gray-500 mb-2">
+                                Linking process usually takes a couple of
+                                minutes. Breathe in, breathe out, logs are about
+                                to appear below:
+                              </p>
                               <Terminal className={'w-6/6'}>
-                                <p className="text-green-400 mb-2">
-                                  Linking process usually takes a couple of
-                                  minutes. Breathe in, breathe out, logs are
-                                  about to appear below:
-                                </p>
                                 {arrayOfLinkLogs.map((log) => (
                                   <p
                                     key={arrayOfLinkLogs.indexOf(log)}
                                     className="text-s leading-5"
                                   >
-                                    {log}
+                                    {log.message}
                                   </p>
                                 ))}
                               </Terminal>
@@ -288,18 +305,21 @@ export const Database = () => {
                           )}
                         </ModalDescription>
                         <ModalButton
-                          ctaFn={() =>
-                            handleConnect(databaseId, selectedApp.value.id)
-                          }
+                          ctaFn={() => {
+                            setProcessStatus('running');
+                            handleConnect(databaseId, selectedApp.value.id);
+                          }}
                           ctaText={'Link'}
                           otherButtonText={'Cancel'}
                           isCtaLoading={isTerminalVisible ? false : linkLoading}
                           isCtaDisabled={isTerminalVisible}
+                          isOtherButtonDisabled={processStatus === 'running'}
                           closeModal={() => {
                             setIsLinkModalOpen(false);
                             refetch({ databaseId });
                             setLinkLoading(false);
                             setIsTerminalVisible(false);
+                            setProcessStatus('notStarted');
                           }}
                         />
                       </Modal>
@@ -362,18 +382,18 @@ export const Database = () => {
                                     Unlinking <b>{database.name}</b> from{' '}
                                     <b>{appAboutToUnlink}</b>!
                                   </p>
+                                  <p className="text-gray-500 mb-2">
+                                    Unlinking process usually takes a couple of
+                                    minutes. Breathe in, breathe out, logs are
+                                    about to appear below:
+                                  </p>
                                   <Terminal className={'w-6/6'}>
-                                    <p className="text-green-400 mb-2">
-                                      Unlinking process usually takes a couple
-                                      of minutes. Breathe in, breathe out, logs
-                                      are about to appear below:
-                                    </p>
                                     {arrayOfUnlinkLogs.map((log) => (
                                       <p
                                         key={arrayOfUnlinkLogs.indexOf(log)}
                                         className="text-s leading-5"
                                       >
-                                        {log}
+                                        {log.message}
                                       </p>
                                     ))}
                                   </Terminal>
@@ -387,11 +407,17 @@ export const Database = () => {
                               )}
                             </ModalDescription>
                             <ModalButton
-                              ctaFn={() => handleUnlink(database.id, app.id)}
+                              ctaFn={() => {
+                                setProcessStatus('running');
+                                handleUnlink(database.id, app.id);
+                              }}
                               ctaText={'Unlink'}
                               otherButtonText={'Cancel'}
                               isCtaLoading={
                                 isTerminalVisible ? false : unlinkLoading
+                              }
+                              isOtherButtonDisabled={
+                                processStatus === 'running'
                               }
                               isCtaDisabled={isTerminalVisible}
                               closeModal={() => {
@@ -400,6 +426,7 @@ export const Database = () => {
                                 setUnlinkLoading(false);
                                 setIsTerminalVisible(false);
                                 setAppAboutToUnlink('');
+                                setProcessStatus('notStarted');
                               }}
                             />
                           </Modal>

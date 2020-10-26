@@ -1,3 +1,6 @@
 subscription UnlinkDatabaseLogs {
-  unlinkDatabaseLogs
+  unlinkDatabaseLogs {
+    message
+    type
+  }
 }

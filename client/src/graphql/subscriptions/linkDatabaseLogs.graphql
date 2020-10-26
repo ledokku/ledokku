@@ -1,3 +1,6 @@
 subscription LinkDatabaseLogs {
-  linkDatabaseLogs
+  linkDatabaseLogs {
+    message
+    type
+  }
 }

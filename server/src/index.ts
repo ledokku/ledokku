@@ -196,8 +196,8 @@ const typeDefs = gql`
   }
 
   type Subscription {
-    unlinkDatabaseLogs: [String!]
-    linkDatabaseLogs: [String!]
+    unlinkDatabaseLogs: RealTimeLog!
+    linkDatabaseLogs: RealTimeLog!
     createDatabaseLogs: RealTimeLog!
   }
 
