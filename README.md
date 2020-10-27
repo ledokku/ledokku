@@ -1,4 +1,4 @@
-# Ledokku - beautiful web UI for all things Dokkku
+# Ledokku - beautiful web UI for all things Dokku
 
 ### Dashboard preview
 
