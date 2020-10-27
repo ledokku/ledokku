@@ -50,6 +50,7 @@ interface ModalButtonProps {
   className?: string;
   ctaText: string;
   otherButtonText?: string;
+  isOtherButtonDisabled?: boolean;
   isCtaLoading: boolean;
   isCtaDisabled?: boolean;
   closeModal: () => void;
@@ -60,6 +61,7 @@ export const ModalButton = ({
   ctaText,
   className,
   otherButtonText,
+  isOtherButtonDisabled,
   isCtaLoading,
   isCtaDisabled,
   closeModal,
@@ -67,7 +69,11 @@ export const ModalButton = ({
 }: ModalButtonProps) => (
   <div className={cx('mt-8 flex justify-end space-x-3', className)}>
     {otherButtonText && (
-      <Button disabled={isCtaLoading} onClick={closeModal} color="grey">
+      <Button
+        disabled={isCtaLoading || isOtherButtonDisabled}
+        onClick={closeModal}
+        color="grey"
+      >
         {otherButtonText}
       </Button>
     )}

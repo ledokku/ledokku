@@ -51,18 +51,30 @@ const worker = new Worker(
     const dbType = dbTypeToDokkuPlugin(database.type);
 
     const ssh = await sshConnect();
-    await dokku.database.unlink(ssh, database.name, dbType, app.name, {
-      onStdout: (chunk) => {
-        pubsub.publish('DATABASE_UNLINKED', {
-          unlinkDatabaseLogs: [chunk.toString()],
-        });
-      },
-      onStderr: (chunk) => {
-        pubsub.publish('DATABASE_UNLINKED', {
-          unlinkDatabaseLogs: [chunk.toString()],
-        });
-      },
-    });
+    const res = await dokku.database.unlink(
+      ssh,
+      database.name,
+      dbType,
+      app.name,
+      {
+        onStdout: (chunk) => {
+          pubsub.publish('DATABASE_UNLINKED', {
+            unlinkDatabaseLogs: {
+              message: chunk.toString(),
+              type: 'stdout',
+            },
+          });
+        },
+        onStderr: (chunk) => {
+          pubsub.publish('DATABASE_UNLINKED', {
+            unlinkDatabaseLogs: {
+              message: chunk.toString(),
+              type: 'stderr',
+            },
+          });
+        },
+      }
+    );
 
     await prisma.database.update({
       where: { id: database.id },
@@ -76,6 +88,21 @@ const worker = new Worker(
     debug(
       `finishing unlinkDatabaseQueue for ${database.type} database ${database.name} from  ${app.name} app`
     );
+    if (!res.stderr) {
+      pubsub.publish('DATABASE_UNLINKED', {
+        unlinkDatabaseLogs: {
+          message: '',
+          type: 'end:success',
+        },
+      });
+    } else if (res.stderr) {
+      pubsub.publish('DATABASE_UNLINKED', {
+        unlinkDatabaseLogs: {
+          message: '',
+          type: 'end:failure',
+        },
+      });
+    }
   },
   { connection: redisClient }
 );
