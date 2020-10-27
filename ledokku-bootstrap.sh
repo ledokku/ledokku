@@ -83,9 +83,9 @@ main() {
 
   # Now it's finally time to install ledokku
   echo "=> Installation"
-  docker pull ledokku/ledokku:0.3.1
-  docker tag ledokku/ledokku:0.3.1 dokku/ledokku:0.3.1
-  dokku tags:deploy ledokku 0.3.1
+  docker pull ledokku/ledokku:0.3.2
+  docker tag ledokku/ledokku:0.3.2 dokku/ledokku:0.3.2
+  dokku tags:deploy ledokku 0.3.2
 
   echo "=== 🐳 ==="
   echo "Installation succesful"
