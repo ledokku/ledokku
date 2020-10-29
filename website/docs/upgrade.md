@@ -6,9 +6,9 @@ title: How to upgrade
 To upgrade ledokku, all you have to do is to run the following command on your server:
 
 ```sh
-docker pull ledokku/ledokku:0.3.2
-docker tag ledokku/ledokku:0.3.2 dokku/ledokku:0.3.2
-dokku tags:deploy ledokku 0.3.2
+docker pull ledokku/ledokku:0.3.3
+docker tag ledokku/ledokku:0.3.3 dokku/ledokku:0.3.3
+dokku tags:deploy ledokku 0.3.3
 ```
 
 You can now enjoy the latest version of ledokku!

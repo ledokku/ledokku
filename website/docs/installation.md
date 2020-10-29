@@ -9,7 +9,7 @@ If you do not have a dokku server for now, please follow [the getting started gu
 :::
 
 ```sh
-wget https://raw.githubusercontent.com/ledokku/ledokku/v0.3.2/ledokku-bootstrap.sh
+wget https://raw.githubusercontent.com/ledokku/ledokku/v0.3.3/ledokku-bootstrap.sh
 sudo bash ledokku-bootstrap.sh
 ```
 
