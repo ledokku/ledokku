@@ -4,29 +4,9 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [0.3.3](https://github.com/ledokku/ledokku/compare/v0.3.1...v0.3.3) (2020-10-29)
 
-### Features
-
-- **docs:** add documentation for uninstalling Ledokku ([#216](https://github.com/ledokku/ledokku/issues/216)) ([1557db8](https://github.com/ledokku/ledokku/commit/1557db8ff4b32af8ee3f07d87fecb69daa9e1147))
-
 ### Bug Fixes
 
 - fix publish script missing release prefix ([#225](https://github.com/ledokku/ledokku/issues/225)) ([6d987c5](https://github.com/ledokku/ledokku/commit/6d987c5ecf99f097dc94c593fff58aef4c386ea2))
-- **readme:** fix typo in the readme title ([#222](https://github.com/ledokku/ledokku/issues/222)) ([337121b](https://github.com/ledokku/ledokku/commit/337121b83ff615811de6abcb7c74806feb5a230c))
-- **server:** fix max listeners exceeded warning ([#212](https://github.com/ledokku/ledokku/issues/212)) ([1fc5b7b](https://github.com/ledokku/ledokku/commit/1fc5b7b6aa06294b74e8b32e0fe32154f202bd0d))
-
-### Documentation
-
-- create "how to upgrade" guide ([#210](https://github.com/ledokku/ledokku/issues/210)) ([903dd08](https://github.com/ledokku/ledokku/commit/903dd081ba55af8a826f11a185d1a3d702610721))
-- create configuration guide ([#211](https://github.com/ledokku/ledokku/issues/211)) ([dfbda1b](https://github.com/ledokku/ledokku/commit/dfbda1b69cb91810a8bca60caa902d05485dd0f9))
-
-### Miscellaneous Chores
-
-- publish v0.3.2 ([#224](https://github.com/ledokku/ledokku/issues/224)) ([d63bc5b](https://github.com/ledokku/ledokku/commit/d63bc5bce815667e28824918297bb584404d1d7a))
-- **client:** switch dropdown from react-select to headless UI ([#215](https://github.com/ledokku/ledokku/issues/215)) ([2eaae4d](https://github.com/ledokku/ledokku/commit/2eaae4d79a24a7b385e17a90957bba1fae54ad82))
-- **client:** update app env var UI ([#218](https://github.com/ledokku/ledokku/issues/218)) ([3edc363](https://github.com/ledokku/ledokku/commit/3edc363bf6874fe09c0c2652deb05a13c85c71b4))
-- **client:** update UI for db/app link and unlink logs ([#221](https://github.com/ledokku/ledokku/issues/221)) ([0e1558e](https://github.com/ledokku/ledokku/commit/0e1558e8624309b6125b58f87f87c42bad3b6ec2))
-- add changelog link to release description ([#209](https://github.com/ledokku/ledokku/issues/209)) ([95622b1](https://github.com/ledokku/ledokku/commit/95622b1212886d8ce122ef427ae1653a06e7fd3c))
-- **website:** add twitter card image for website ([#208](https://github.com/ledokku/ledokku/issues/208)) ([b34f8e8](https://github.com/ledokku/ledokku/commit/b34f8e8efce661e064ef86b36fd14a10f30bae6c))
 
 ### [0.3.2](https://github.com/ledokku/ledokku/compare/v0.3.1...v0.3.2) (2020-10-27)
 
