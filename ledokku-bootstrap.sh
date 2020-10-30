@@ -87,14 +87,14 @@ main() {
   docker tag ledokku/ledokku:0.3.3 dokku/ledokku:0.3.3
   dokku tags:deploy ledokku 0.3.3
 
+  # After app is deployed last step is to properly setup the ports
+  dokku proxy:ports-add ledokku http:80:4000
+  dokku proxy:ports-remove ledokku http:4000:4000
+
   echo "=== 🐳 ==="
-  echo "Installation succesful"
-  echo "Open you server ip in your browser with the port 4000"
-  echo "http://${DOKKU_SSH_HOST}:4000"
-  echo "=== 🚧 ==="
-  echo "If it is not connecting, try running this command on your server:"
-  echo "ufw allow 4000"
-  echo "=== 🚧 ==="
+  echo "Ledooku was successfully installed"
+  echo "Open you server ip in your browser"
+  echo "http://${DOKKU_SSH_HOST}"
   echo "=== 🐳 ==="
 }
 
