@@ -10,6 +10,7 @@ import {
 } from '../../generated/graphql';
 import { useFormik } from 'formik';
 import { TabNav, TabNavLink, Button, FormInput, FormHelper } from '../../ui';
+import { AppProxyPorts } from '../../modules/appProxyPorts/AppProxyPorts';
 
 export const Settings = () => {
   const { id: appId } = useParams<{ id: string }>();
@@ -99,14 +100,23 @@ export const Settings = () => {
       </div>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-3 mt-10">
+        <div className="grid md:grid-cols-2 mt-10">
           <div>
-            <h1 className="text-lg font-bold py-5">App settings</h1>
-            <h2 className="text-gray-400">
+            <div className="py-5">
+              <h1 className="text-lg font-bold">App settings</h1>
+              <p className="text-gray-400 text-sm">
+                Update the settings of your app.
+              </p>
+            </div>
+
+            <AppProxyPorts appId={app.id} />
+
+            <h1 className="text-md font-bold py-5">Delete app</h1>
+            <p className="text-gray-400">
               This action cannot be undone. This will permanently delete{' '}
               {app.name} app and everything related to it. Please type{' '}
               <b>{app.name}</b> to confirm deletion.
-            </h2>
+            </p>
             <form onSubmit={formik.handleSubmit}>
               <div className="mt-4">
                 <FormInput

@@ -139,6 +139,12 @@ const typeDefs = gql`
     isPluginInstalled: Boolean!
   }
 
+  type AppProxyPort {
+    scheme: String!
+    host: String!
+    container: String!
+  }
+
   input CreateAppInput {
     name: String!
   }
@@ -193,6 +199,7 @@ const typeDefs = gql`
       appId: String!
     ): IsDatabaseLinkedResult!
     envVars(appId: String!): EnvVarsResult!
+    appProxyPorts(appId: String!): [AppProxyPort!]!
   }
 
   type Subscription {

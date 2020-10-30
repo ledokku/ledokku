@@ -15,6 +15,7 @@ import { links as databaseLinks } from './plugin/database/links';
 import { link } from './plugin/database/link';
 import { unlink } from './plugin/database/unlink';
 import { create as createDatabase } from './plugin/database/create';
+import { proxyPorts } from './proxy/ports';
 
 export const dokku = {
   apps: { create, logs, destroy, list: appList },
@@ -29,5 +30,8 @@ export const dokku = {
     create: createDatabase,
     link,
     unlink,
+  },
+  proxy: {
+    ports: proxyPorts,
   },
 };

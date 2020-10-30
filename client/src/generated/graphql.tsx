@@ -157,6 +157,13 @@ export type IsPluginInstalledResult = {
   isPluginInstalled: Scalars['Boolean'];
 };
 
+export type AppProxyPort = {
+  __typename?: 'AppProxyPort';
+  scheme: Scalars['String'];
+  host: Scalars['String'];
+  container: Scalars['String'];
+};
+
 export type CreateAppInput = {
   name: Scalars['String'];
 };
@@ -209,6 +216,7 @@ export type Query = {
   databaseLogs: DatabaseLogsResult;
   isDatabaseLinked: IsDatabaseLinkedResult;
   envVars: EnvVarsResult;
+  appProxyPorts: Array<AppProxyPort>;
 };
 
 
@@ -249,6 +257,11 @@ export type QueryIsDatabaseLinkedArgs = {
 
 
 export type QueryEnvVarsArgs = {
+  appId: Scalars['String'];
+};
+
+
+export type QueryAppProxyPortsArgs = {
   appId: Scalars['String'];
 };
 
@@ -473,6 +486,19 @@ export type AppLogsQuery = (
     { __typename?: 'AppLogsResult' }
     & Pick<AppLogsResult, 'logs'>
   ) }
+);
+
+export type AppProxyPortsQueryVariables = Exact<{
+  appId: Scalars['String'];
+}>;
+
+
+export type AppProxyPortsQuery = (
+  { __typename?: 'Query' }
+  & { appProxyPorts: Array<(
+    { __typename?: 'AppProxyPort' }
+    & Pick<AppProxyPort, 'scheme' | 'host' | 'container'>
+  )> }
 );
 
 export type AppsQueryVariables = Exact<{ [key: string]: never; }>;
@@ -994,6 +1020,41 @@ export function useAppLogsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ap
 export type AppLogsQueryHookResult = ReturnType<typeof useAppLogsQuery>;
 export type AppLogsLazyQueryHookResult = ReturnType<typeof useAppLogsLazyQuery>;
 export type AppLogsQueryResult = Apollo.QueryResult<AppLogsQuery, AppLogsQueryVariables>;
+export const AppProxyPortsDocument = gql`
+    query appProxyPorts($appId: String!) {
+  appProxyPorts(appId: $appId) {
+    scheme
+    host
+    container
+  }
+}
+    `;
+
+/**
+ * __useAppProxyPortsQuery__
+ *
+ * To run a query within a React component, call `useAppProxyPortsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAppProxyPortsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAppProxyPortsQuery({
+ *   variables: {
+ *      appId: // value for 'appId'
+ *   },
+ * });
+ */
+export function useAppProxyPortsQuery(baseOptions?: Apollo.QueryHookOptions<AppProxyPortsQuery, AppProxyPortsQueryVariables>) {
+        return Apollo.useQuery<AppProxyPortsQuery, AppProxyPortsQueryVariables>(AppProxyPortsDocument, baseOptions);
+      }
+export function useAppProxyPortsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AppProxyPortsQuery, AppProxyPortsQueryVariables>) {
+          return Apollo.useLazyQuery<AppProxyPortsQuery, AppProxyPortsQueryVariables>(AppProxyPortsDocument, baseOptions);
+        }
+export type AppProxyPortsQueryHookResult = ReturnType<typeof useAppProxyPortsQuery>;
+export type AppProxyPortsLazyQueryHookResult = ReturnType<typeof useAppProxyPortsLazyQuery>;
+export type AppProxyPortsQueryResult = Apollo.QueryResult<AppProxyPortsQuery, AppProxyPortsQueryVariables>;
 export const AppsDocument = gql`
     query apps {
   apps {

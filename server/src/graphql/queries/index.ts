@@ -10,6 +10,7 @@ import { isPluginInstalled } from './isPluginInstalled';
 import { databaseInfo } from './databaseInfo';
 import { databaseLogs } from './databaseLogs';
 import { isDatabaseLinked } from './isDatabaseLinked';
+import { appProxyPorts } from './appProxyPorts';
 
 export const queries = {
   app,
@@ -24,4 +25,5 @@ export const queries = {
   envVars,
   setup,
   isPluginInstalled,
+  appProxyPorts,
 };
