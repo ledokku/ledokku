@@ -44,7 +44,7 @@ main() {
   echo
   echo "In your browser open https://github.com/settings/developers and click on the \"New OAuth App\" button."
   echo
-  echo "Add a name, a homepage url, and in the field \"Authorization callback URL\" set the value to \"http://"$DOKKU_SSH_HOST":4000\"."
+  echo "Add a name, a homepage url, and in the field \"Authorization callback URL\" set the value to \"http://"$DOKKU_SSH_HOST"\"."
   echo
   echo "Then click the \"Register application\" button. You should now be able to see the client id and client secret of the app."
   echo "=== 🐳 ==="

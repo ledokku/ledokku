@@ -50,7 +50,7 @@ dokku postgres:link ledokku ledokku
 
 In your browser open https://github.com/settings/developers and click on the "New OAuth App" button.
 
-Add a name, a homepage url, and in the field "Authorization callback URL" set the value to your ledokku ip address and port 4000. (eg: http://123.123.123.123:4000)
+Add a name, a homepage url, and in the field "Authorization callback URL" set the value to your ledokku ip address. (eg: http://123.123.123.123)
 
 <img alt="Github Oauth app setup" src={useBaseUrl('/img/githubApp.png')} />
 
@@ -81,27 +81,9 @@ Finally we deploy the tag to start our ledokku server.
 dokku tags:deploy ledokku 0.3.3
 ```
 
-:::note
-Before setting up the domain DNS in order to verify that the installation was successful, we need to open the port 4000. To do so, run the following command:
-
-```sh
-sudo ufw allow 4000
-```
-
-:::
-
-Now open you server ip in your browser with the port 4000 (eg: http://123.123.123.123:4000).
+Now open you server ip in your browser (eg: http://123.123.123.123).
 
 You should be able to see the ledokku admin 🎉.
-
-:::note
-We saw that the server is running properly, so we can remove the rule from the firewall.
-
-```sh
-sudo ufw deny 4000
-```
-
-:::
 
 Congrats, the ledokku app is running on your server 👏.
 
