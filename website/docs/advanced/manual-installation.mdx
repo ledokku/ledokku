@@ -81,6 +81,13 @@ Finally we deploy the tag to start our ledokku server.
 dokku tags:deploy ledokku 0.3.3
 ```
 
+After the app is deployed last step is to setup the proxy port.
+
+```sh
+dokku proxy:ports-add ledokku http:80:4000
+dokku proxy:ports-remove ledokku http:4000:4000
+```
+
 Now open you server ip in your browser (eg: http://123.123.123.123).
 
 You should be able to see the ledokku admin 🎉.
