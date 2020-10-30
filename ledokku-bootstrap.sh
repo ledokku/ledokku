@@ -36,10 +36,13 @@ install-postgres() {
 main() {
   ensure-dokku
 
+  # Set latest version or use the one provided by the user
+  LEDOKKU_TAG=${LEDOKKU_TAG:-"0.3.3"}
+
   # First we get the user ip so we can use it in the text we print later
   DOKKU_SSH_HOST=$(curl ifconfig.co)
 
-  echo "=== 🐳 ==="
+  echo "=== 🐳 ledokku:${LEDOKKU_TAG} ==="
   echo "Welcome to installation helper of Ledokku"
   echo
   echo "In your browser open https://github.com/settings/developers and click on the \"New OAuth App\" button."
@@ -83,9 +86,9 @@ main() {
 
   # Now it's finally time to install ledokku
   echo "=> Installation"
-  docker pull ledokku/ledokku:0.3.3
-  docker tag ledokku/ledokku:0.3.3 dokku/ledokku:0.3.3
-  dokku tags:deploy ledokku 0.3.3
+  docker pull ledokku/ledokku:${LEDOKKU_TAG}
+  docker tag ledokku/ledokku:${LEDOKKU_TAG} dokku/ledokku:${LEDOKKU_TAG}
+  dokku tags:deploy ledokku ${LEDOKKU_TAG}
 
   echo "=== 🐳 ==="
   echo "Installation succesful"
