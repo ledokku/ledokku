@@ -1,5 +1,6 @@
 import React from 'react';
 import { useAppProxyPortsQuery } from '../../generated/graphql';
+import { Button } from '../../ui';
 
 interface AppProxyPortsProps {
   appId: string;
@@ -67,6 +68,10 @@ export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
           </tbody>
         </table>
       ) : null}
+
+      <Button color="grey" variant="outline" className="text-sm mt-3">
+        Add port mapping
+      </Button>
     </React.Fragment>
   );
 };
