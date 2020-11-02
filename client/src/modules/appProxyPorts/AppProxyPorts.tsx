@@ -1,5 +1,9 @@
 import React from 'react';
-import { useAppProxyPortsQuery } from '../../generated/graphql';
+import {
+  useAppProxyPortsQuery,
+  useRemoveAppProxyPortMutation,
+  AppProxyPort,
+} from '../../generated/graphql';
 import { Button } from '../../ui';
 
 interface AppProxyPortsProps {
@@ -10,12 +14,32 @@ export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
   const {
     data: appProxyPortsData,
     loading: appProxyPortsLoading,
-    error,
+    // TODO display error
+    // error: appProxyPortsError,
+    refetch: appProxyPortsRefetch,
   } = useAppProxyPortsQuery({
     variables: { appId },
   });
+  const [removeAppProxyPortMutation] = useRemoveAppProxyPortMutation();
 
-  console.log(appProxyPortsData, error);
+  const handleRemovePort = async (proxyPort: AppProxyPort) => {
+    const ok = window.confirm(
+      'Do you really want to confirm this port mapping?'
+    );
+    if (ok) {
+      await removeAppProxyPortMutation({
+        variables: {
+          input: {
+            appId,
+            scheme: proxyPort.scheme,
+            host: proxyPort.host,
+            container: proxyPort.container,
+          },
+        },
+      });
+      appProxyPortsRefetch();
+    }
+  };
 
   return (
     <React.Fragment>
@@ -59,7 +83,10 @@ export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
                   {proxyPort.container}
                 </td>
                 <td className="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
-                  <button className="text-red-600 hover:text-red-800">
+                  <button
+                    className="text-red-600 hover:text-red-800"
+                    onClick={() => handleRemovePort(proxyPort)}
+                  >
                     Delete
                   </button>
                 </td>

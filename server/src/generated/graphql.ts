@@ -202,6 +202,13 @@ export type DestroyDatabaseInput = {
   databaseId: Scalars['String'];
 };
 
+export type RemoveAppProxyPortInput = {
+  appId: Scalars['String'];
+  scheme: Scalars['String'];
+  host: Scalars['String'];
+  container: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   setup: SetupResult;
@@ -283,6 +290,7 @@ export type Mutation = {
   destroyDatabase: DestroyDatabaseResult;
   linkDatabase: LinkDatabaseResult;
   unlinkDatabase: UnlinkDatabaseResult;
+  removeAppProxyPort?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -328,6 +336,11 @@ export type MutationLinkDatabaseArgs = {
 
 export type MutationUnlinkDatabaseArgs = {
   input: UnlinkDatabaseInput;
+};
+
+
+export type MutationRemoveAppProxyPortArgs = {
+  input: RemoveAppProxyPortInput;
 };
 
 export type CacheControlScope = 
@@ -451,6 +464,7 @@ export type ResolversTypes = {
   DestroyAppInput: DestroyAppInput;
   LinkDatabaseInput: LinkDatabaseInput;
   DestroyDatabaseInput: DestroyDatabaseInput;
+  RemoveAppProxyPortInput: RemoveAppProxyPortInput;
   Query: ResolverTypeWrapper<{}>;
   Subscription: ResolverTypeWrapper<{}>;
   Mutation: ResolverTypeWrapper<{}>;
@@ -496,6 +510,7 @@ export type ResolversParentTypes = {
   DestroyAppInput: DestroyAppInput;
   LinkDatabaseInput: LinkDatabaseInput;
   DestroyDatabaseInput: DestroyDatabaseInput;
+  RemoveAppProxyPortInput: RemoveAppProxyPortInput;
   Query: {};
   Subscription: {};
   Mutation: {};
@@ -673,6 +688,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   destroyDatabase?: Resolver<ResolversTypes['DestroyDatabaseResult'], ParentType, ContextType, RequireFields<MutationDestroyDatabaseArgs, 'input'>>;
   linkDatabase?: Resolver<ResolversTypes['LinkDatabaseResult'], ParentType, ContextType, RequireFields<MutationLinkDatabaseArgs, 'input'>>;
   unlinkDatabase?: Resolver<ResolversTypes['UnlinkDatabaseResult'], ParentType, ContextType, RequireFields<MutationUnlinkDatabaseArgs, 'input'>>;
+  removeAppProxyPort?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveAppProxyPortArgs, 'input'>>;
 };
 
 export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {

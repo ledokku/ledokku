@@ -202,6 +202,13 @@ export type DestroyDatabaseInput = {
   databaseId: Scalars['String'];
 };
 
+export type RemoveAppProxyPortInput = {
+  appId: Scalars['String'];
+  scheme: Scalars['String'];
+  host: Scalars['String'];
+  container: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   setup: SetupResult;
@@ -283,6 +290,7 @@ export type Mutation = {
   destroyDatabase: DestroyDatabaseResult;
   linkDatabase: LinkDatabaseResult;
   unlinkDatabase: UnlinkDatabaseResult;
+  removeAppProxyPort?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -328,6 +336,11 @@ export type MutationLinkDatabaseArgs = {
 
 export type MutationUnlinkDatabaseArgs = {
   input: UnlinkDatabaseInput;
+};
+
+
+export type MutationRemoveAppProxyPortArgs = {
+  input: RemoveAppProxyPortInput;
 };
 
 export type CacheControlScope = 
@@ -414,6 +427,16 @@ export type LoginWithGithubMutation = (
     { __typename?: 'LoginResult' }
     & Pick<LoginResult, 'token'>
   )> }
+);
+
+export type RemoveAppProxyPortMutationVariables = Exact<{
+  input: RemoveAppProxyPortInput;
+}>;
+
+
+export type RemoveAppProxyPortMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'removeAppProxyPort'>
 );
 
 export type SetEnvVarMutationVariables = Exact<{
@@ -848,6 +871,36 @@ export function useLoginWithGithubMutation(baseOptions?: Apollo.MutationHookOpti
 export type LoginWithGithubMutationHookResult = ReturnType<typeof useLoginWithGithubMutation>;
 export type LoginWithGithubMutationResult = Apollo.MutationResult<LoginWithGithubMutation>;
 export type LoginWithGithubMutationOptions = Apollo.BaseMutationOptions<LoginWithGithubMutation, LoginWithGithubMutationVariables>;
+export const RemoveAppProxyPortDocument = gql`
+    mutation removeAppProxyPort($input: RemoveAppProxyPortInput!) {
+  removeAppProxyPort(input: $input)
+}
+    `;
+export type RemoveAppProxyPortMutationFn = Apollo.MutationFunction<RemoveAppProxyPortMutation, RemoveAppProxyPortMutationVariables>;
+
+/**
+ * __useRemoveAppProxyPortMutation__
+ *
+ * To run a mutation, you first call `useRemoveAppProxyPortMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveAppProxyPortMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeAppProxyPortMutation, { data, loading, error }] = useRemoveAppProxyPortMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useRemoveAppProxyPortMutation(baseOptions?: Apollo.MutationHookOptions<RemoveAppProxyPortMutation, RemoveAppProxyPortMutationVariables>) {
+        return Apollo.useMutation<RemoveAppProxyPortMutation, RemoveAppProxyPortMutationVariables>(RemoveAppProxyPortDocument, baseOptions);
+      }
+export type RemoveAppProxyPortMutationHookResult = ReturnType<typeof useRemoveAppProxyPortMutation>;
+export type RemoveAppProxyPortMutationResult = Apollo.MutationResult<RemoveAppProxyPortMutation>;
+export type RemoveAppProxyPortMutationOptions = Apollo.BaseMutationOptions<RemoveAppProxyPortMutation, RemoveAppProxyPortMutationVariables>;
 export const SetEnvVarDocument = gql`
     mutation setEnvVar($key: String!, $value: String!, $appId: String!) {
   setEnvVar(input: {key: $key, value: $value, appId: $appId}) {
