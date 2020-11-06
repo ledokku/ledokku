@@ -183,6 +183,12 @@ const typeDefs = gql`
     databaseId: String!
   }
 
+  input AddAppProxyPortInput {
+    appId: String!
+    host: String!
+    container: String!
+  }
+
   input RemoveAppProxyPortInput {
     appId: String!
     scheme: String!
@@ -225,6 +231,7 @@ const typeDefs = gql`
     destroyDatabase(input: DestroyDatabaseInput!): DestroyDatabaseResult!
     linkDatabase(input: LinkDatabaseInput!): LinkDatabaseResult!
     unlinkDatabase(input: UnlinkDatabaseInput!): UnlinkDatabaseResult!
+    addAppProxyPort(input: AddAppProxyPortInput!): Boolean
     removeAppProxyPort(input: RemoveAppProxyPortInput!): Boolean
   }
 `;

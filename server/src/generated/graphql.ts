@@ -202,6 +202,12 @@ export type DestroyDatabaseInput = {
   databaseId: Scalars['String'];
 };
 
+export type AddAppProxyPortInput = {
+  appId: Scalars['String'];
+  host: Scalars['String'];
+  container: Scalars['String'];
+};
+
 export type RemoveAppProxyPortInput = {
   appId: Scalars['String'];
   scheme: Scalars['String'];
@@ -290,6 +296,7 @@ export type Mutation = {
   destroyDatabase: DestroyDatabaseResult;
   linkDatabase: LinkDatabaseResult;
   unlinkDatabase: UnlinkDatabaseResult;
+  addAppProxyPort?: Maybe<Scalars['Boolean']>;
   removeAppProxyPort?: Maybe<Scalars['Boolean']>;
 };
 
@@ -336,6 +343,11 @@ export type MutationLinkDatabaseArgs = {
 
 export type MutationUnlinkDatabaseArgs = {
   input: UnlinkDatabaseInput;
+};
+
+
+export type MutationAddAppProxyPortArgs = {
+  input: AddAppProxyPortInput;
 };
 
 
@@ -464,6 +476,7 @@ export type ResolversTypes = {
   DestroyAppInput: DestroyAppInput;
   LinkDatabaseInput: LinkDatabaseInput;
   DestroyDatabaseInput: DestroyDatabaseInput;
+  AddAppProxyPortInput: AddAppProxyPortInput;
   RemoveAppProxyPortInput: RemoveAppProxyPortInput;
   Query: ResolverTypeWrapper<{}>;
   Subscription: ResolverTypeWrapper<{}>;
@@ -510,6 +523,7 @@ export type ResolversParentTypes = {
   DestroyAppInput: DestroyAppInput;
   LinkDatabaseInput: LinkDatabaseInput;
   DestroyDatabaseInput: DestroyDatabaseInput;
+  AddAppProxyPortInput: AddAppProxyPortInput;
   RemoveAppProxyPortInput: RemoveAppProxyPortInput;
   Query: {};
   Subscription: {};
@@ -688,6 +702,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   destroyDatabase?: Resolver<ResolversTypes['DestroyDatabaseResult'], ParentType, ContextType, RequireFields<MutationDestroyDatabaseArgs, 'input'>>;
   linkDatabase?: Resolver<ResolversTypes['LinkDatabaseResult'], ParentType, ContextType, RequireFields<MutationLinkDatabaseArgs, 'input'>>;
   unlinkDatabase?: Resolver<ResolversTypes['UnlinkDatabaseResult'], ParentType, ContextType, RequireFields<MutationUnlinkDatabaseArgs, 'input'>>;
+  addAppProxyPort?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddAppProxyPortArgs, 'input'>>;
   removeAppProxyPort?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveAppProxyPortArgs, 'input'>>;
 };
 

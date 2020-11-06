@@ -1,16 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   useAppProxyPortsQuery,
   useRemoveAppProxyPortMutation,
   AppProxyPort,
 } from '../../generated/graphql';
 import { Button } from '../../ui';
+import { AddAppProxyPorts } from './AddAppProxyPorts';
 
 interface AppProxyPortsProps {
   appId: string;
 }
 
 export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
+  const [isAddModalOpen, setIsAddModalOpen] = useState(true);
   const {
     data: appProxyPortsData,
     loading: appProxyPortsLoading,
@@ -37,7 +39,7 @@ export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
           },
         },
       });
-      appProxyPortsRefetch();
+      await appProxyPortsRefetch();
     }
   };
 
@@ -96,9 +98,21 @@ export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
         </table>
       ) : null}
 
-      <Button color="grey" variant="outline" className="text-sm mt-3">
+      <Button
+        color="grey"
+        variant="outline"
+        className="text-sm mt-3"
+        onClick={() => setIsAddModalOpen(true)}
+      >
         Add port mapping
       </Button>
+
+      <AddAppProxyPorts
+        appId={appId}
+        appProxyPortsRefetch={appProxyPortsRefetch}
+        open={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+      />
     </React.Fragment>
   );
 };

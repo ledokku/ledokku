@@ -202,6 +202,12 @@ export type DestroyDatabaseInput = {
   databaseId: Scalars['String'];
 };
 
+export type AddAppProxyPortInput = {
+  appId: Scalars['String'];
+  host: Scalars['String'];
+  container: Scalars['String'];
+};
+
 export type RemoveAppProxyPortInput = {
   appId: Scalars['String'];
   scheme: Scalars['String'];
@@ -290,6 +296,7 @@ export type Mutation = {
   destroyDatabase: DestroyDatabaseResult;
   linkDatabase: LinkDatabaseResult;
   unlinkDatabase: UnlinkDatabaseResult;
+  addAppProxyPort?: Maybe<Scalars['Boolean']>;
   removeAppProxyPort?: Maybe<Scalars['Boolean']>;
 };
 
@@ -339,6 +346,11 @@ export type MutationUnlinkDatabaseArgs = {
 };
 
 
+export type MutationAddAppProxyPortArgs = {
+  input: AddAppProxyPortInput;
+};
+
+
 export type MutationRemoveAppProxyPortArgs = {
   input: RemoveAppProxyPortInput;
 };
@@ -347,6 +359,16 @@ export type CacheControlScope =
   | 'PUBLIC'
   | 'PRIVATE';
 
+
+export type AddAppProxyPortMutationVariables = Exact<{
+  input: AddAppProxyPortInput;
+}>;
+
+
+export type AddAppProxyPortMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'addAppProxyPort'>
+);
 
 export type CreateAppMutationVariables = Exact<{
   name: Scalars['String'];
@@ -677,6 +699,36 @@ export type UnlinkDatabaseLogsSubscription = (
 );
 
 
+export const AddAppProxyPortDocument = gql`
+    mutation addAppProxyPort($input: AddAppProxyPortInput!) {
+  addAppProxyPort(input: $input)
+}
+    `;
+export type AddAppProxyPortMutationFn = Apollo.MutationFunction<AddAppProxyPortMutation, AddAppProxyPortMutationVariables>;
+
+/**
+ * __useAddAppProxyPortMutation__
+ *
+ * To run a mutation, you first call `useAddAppProxyPortMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddAppProxyPortMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addAppProxyPortMutation, { data, loading, error }] = useAddAppProxyPortMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAddAppProxyPortMutation(baseOptions?: Apollo.MutationHookOptions<AddAppProxyPortMutation, AddAppProxyPortMutationVariables>) {
+        return Apollo.useMutation<AddAppProxyPortMutation, AddAppProxyPortMutationVariables>(AddAppProxyPortDocument, baseOptions);
+      }
+export type AddAppProxyPortMutationHookResult = ReturnType<typeof useAddAppProxyPortMutation>;
+export type AddAppProxyPortMutationResult = Apollo.MutationResult<AddAppProxyPortMutation>;
+export type AddAppProxyPortMutationOptions = Apollo.BaseMutationOptions<AddAppProxyPortMutation, AddAppProxyPortMutationVariables>;
 export const CreateAppDocument = gql`
     mutation createApp($name: String!) {
   createApp(input: {name: $name}) {
