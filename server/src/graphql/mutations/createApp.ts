@@ -36,11 +36,6 @@ export const createApp: MutationResolvers['createApp'] = async (
   const app = await prisma.app.create({
     data: {
       name: input.name,
-      user: {
-        connect: {
-          id: userId,
-        },
-      },
     },
   });
 
