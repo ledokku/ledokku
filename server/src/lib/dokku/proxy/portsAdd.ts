@@ -14,6 +14,4 @@ export const proxyPortsAdd = async (
   if (resultProxyPorts.code === 1) {
     throw new Error(resultProxyPorts.stderr);
   }
-
-  console.log(resultProxyPorts.stdout);
 };
