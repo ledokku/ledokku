@@ -65,11 +65,6 @@ const worker = new Worker(
         await prisma.app.create({
           data: {
             name: dokkuApp,
-            user: {
-              connect: {
-                id: user.id,
-              },
-            },
           },
         });
       }
@@ -120,11 +115,6 @@ const worker = new Worker(
             data: {
               name: dokkuDatabase,
               type: databaseToCheck,
-              user: {
-                connect: {
-                  id: user.id,
-                },
-              },
             },
           });
         }

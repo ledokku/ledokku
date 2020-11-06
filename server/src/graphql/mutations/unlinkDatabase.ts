@@ -40,12 +40,6 @@ export const unlinkDatabase: MutationResolvers['unlinkDatabase'] = async (
     throw new Error(`Database with ID ${databaseId} not found`);
   }
 
-  if (app.userId !== userId || database.userId !== userId) {
-    throw new Error(
-      `App with ID ${appId} or database with ID ${databaseId} does not belong to ${userId}`
-    );
-  }
-
   const isLinked = database.apps.length === 1;
 
   if (!isLinked) {

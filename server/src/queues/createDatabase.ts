@@ -70,11 +70,6 @@ const worker = new Worker(
       data: {
         name: databaseName,
         type: databaseType,
-        user: {
-          connect: {
-            id: userId,
-          },
-        },
       },
     });
 
