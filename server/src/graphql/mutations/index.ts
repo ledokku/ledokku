@@ -7,6 +7,8 @@ import { destroyApp } from './destroyApp';
 import { destroyDatabase } from './destroyDatabase';
 import { linkDatabase } from './linkDatabase';
 import { unlinkDatabase } from './unlinkDatabase';
+import { addAppProxyPort } from './addAppProxyPort';
+import { removeAppProxyPort } from './removeAppProxyPort';
 
 export const mutations = {
   loginWithGithub,
@@ -18,4 +20,6 @@ export const mutations = {
   destroyDatabase,
   linkDatabase,
   unlinkDatabase,
+  addAppProxyPort,
+  removeAppProxyPort,
 };

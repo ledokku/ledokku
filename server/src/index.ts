@@ -139,6 +139,12 @@ const typeDefs = gql`
     isPluginInstalled: Boolean!
   }
 
+  type AppProxyPort {
+    scheme: String!
+    host: String!
+    container: String!
+  }
+
   input CreateAppInput {
     name: String!
   }
@@ -177,6 +183,19 @@ const typeDefs = gql`
     databaseId: String!
   }
 
+  input AddAppProxyPortInput {
+    appId: String!
+    host: String!
+    container: String!
+  }
+
+  input RemoveAppProxyPortInput {
+    appId: String!
+    scheme: String!
+    host: String!
+    container: String!
+  }
+
   type Query {
     setup: SetupResult!
     apps: [App!]!
@@ -193,6 +212,7 @@ const typeDefs = gql`
       appId: String!
     ): IsDatabaseLinkedResult!
     envVars(appId: String!): EnvVarsResult!
+    appProxyPorts(appId: String!): [AppProxyPort!]!
   }
 
   type Subscription {
@@ -211,6 +231,8 @@ const typeDefs = gql`
     destroyDatabase(input: DestroyDatabaseInput!): DestroyDatabaseResult!
     linkDatabase(input: LinkDatabaseInput!): LinkDatabaseResult!
     unlinkDatabase(input: UnlinkDatabaseInput!): UnlinkDatabaseResult!
+    addAppProxyPort(input: AddAppProxyPortInput!): Boolean
+    removeAppProxyPort(input: RemoveAppProxyPortInput!): Boolean
   }
 `;
 

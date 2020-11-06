@@ -157,6 +157,13 @@ export type IsPluginInstalledResult = {
   isPluginInstalled: Scalars['Boolean'];
 };
 
+export type AppProxyPort = {
+  __typename?: 'AppProxyPort';
+  scheme: Scalars['String'];
+  host: Scalars['String'];
+  container: Scalars['String'];
+};
+
 export type CreateAppInput = {
   name: Scalars['String'];
 };
@@ -195,6 +202,19 @@ export type DestroyDatabaseInput = {
   databaseId: Scalars['String'];
 };
 
+export type AddAppProxyPortInput = {
+  appId: Scalars['String'];
+  host: Scalars['String'];
+  container: Scalars['String'];
+};
+
+export type RemoveAppProxyPortInput = {
+  appId: Scalars['String'];
+  scheme: Scalars['String'];
+  host: Scalars['String'];
+  container: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   setup: SetupResult;
@@ -209,6 +229,7 @@ export type Query = {
   databaseLogs: DatabaseLogsResult;
   isDatabaseLinked: IsDatabaseLinkedResult;
   envVars: EnvVarsResult;
+  appProxyPorts: Array<AppProxyPort>;
 };
 
 
@@ -252,6 +273,11 @@ export type QueryEnvVarsArgs = {
   appId: Scalars['String'];
 };
 
+
+export type QueryAppProxyPortsArgs = {
+  appId: Scalars['String'];
+};
+
 export type Subscription = {
   __typename?: 'Subscription';
   unlinkDatabaseLogs: RealTimeLog;
@@ -270,6 +296,8 @@ export type Mutation = {
   destroyDatabase: DestroyDatabaseResult;
   linkDatabase: LinkDatabaseResult;
   unlinkDatabase: UnlinkDatabaseResult;
+  addAppProxyPort?: Maybe<Scalars['Boolean']>;
+  removeAppProxyPort?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -315,6 +343,16 @@ export type MutationLinkDatabaseArgs = {
 
 export type MutationUnlinkDatabaseArgs = {
   input: UnlinkDatabaseInput;
+};
+
+
+export type MutationAddAppProxyPortArgs = {
+  input: AddAppProxyPortInput;
+};
+
+
+export type MutationRemoveAppProxyPortArgs = {
+  input: RemoveAppProxyPortInput;
 };
 
 export type CacheControlScope = 
@@ -429,6 +467,7 @@ export type ResolversTypes = {
   EnvVarsResult: ResolverTypeWrapper<EnvVarsResult>;
   SetupResult: ResolverTypeWrapper<SetupResult>;
   IsPluginInstalledResult: ResolverTypeWrapper<IsPluginInstalledResult>;
+  AppProxyPort: ResolverTypeWrapper<AppProxyPort>;
   CreateAppInput: CreateAppInput;
   CreateDatabaseInput: CreateDatabaseInput;
   UnlinkDatabaseInput: UnlinkDatabaseInput;
@@ -437,6 +476,8 @@ export type ResolversTypes = {
   DestroyAppInput: DestroyAppInput;
   LinkDatabaseInput: LinkDatabaseInput;
   DestroyDatabaseInput: DestroyDatabaseInput;
+  AddAppProxyPortInput: AddAppProxyPortInput;
+  RemoveAppProxyPortInput: RemoveAppProxyPortInput;
   Query: ResolverTypeWrapper<{}>;
   Subscription: ResolverTypeWrapper<{}>;
   Mutation: ResolverTypeWrapper<{}>;
@@ -473,6 +514,7 @@ export type ResolversParentTypes = {
   EnvVarsResult: EnvVarsResult;
   SetupResult: SetupResult;
   IsPluginInstalledResult: IsPluginInstalledResult;
+  AppProxyPort: AppProxyPort;
   CreateAppInput: CreateAppInput;
   CreateDatabaseInput: CreateDatabaseInput;
   UnlinkDatabaseInput: UnlinkDatabaseInput;
@@ -481,6 +523,8 @@ export type ResolversParentTypes = {
   DestroyAppInput: DestroyAppInput;
   LinkDatabaseInput: LinkDatabaseInput;
   DestroyDatabaseInput: DestroyDatabaseInput;
+  AddAppProxyPortInput: AddAppProxyPortInput;
+  RemoveAppProxyPortInput: RemoveAppProxyPortInput;
   Query: {};
   Subscription: {};
   Mutation: {};
@@ -619,6 +663,13 @@ export type IsPluginInstalledResultResolvers<ContextType = any, ParentType exten
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type AppProxyPortResolvers<ContextType = any, ParentType extends ResolversParentTypes['AppProxyPort'] = ResolversParentTypes['AppProxyPort']> = {
+  scheme?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  host?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  container?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   setup?: Resolver<ResolversTypes['SetupResult'], ParentType, ContextType>;
   apps?: Resolver<Array<ResolversTypes['App']>, ParentType, ContextType>;
@@ -632,6 +683,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   databaseLogs?: Resolver<ResolversTypes['DatabaseLogsResult'], ParentType, ContextType, RequireFields<QueryDatabaseLogsArgs, 'databaseId'>>;
   isDatabaseLinked?: Resolver<ResolversTypes['IsDatabaseLinkedResult'], ParentType, ContextType, RequireFields<QueryIsDatabaseLinkedArgs, 'databaseId' | 'appId'>>;
   envVars?: Resolver<ResolversTypes['EnvVarsResult'], ParentType, ContextType, RequireFields<QueryEnvVarsArgs, 'appId'>>;
+  appProxyPorts?: Resolver<Array<ResolversTypes['AppProxyPort']>, ParentType, ContextType, RequireFields<QueryAppProxyPortsArgs, 'appId'>>;
 };
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
@@ -650,6 +702,8 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   destroyDatabase?: Resolver<ResolversTypes['DestroyDatabaseResult'], ParentType, ContextType, RequireFields<MutationDestroyDatabaseArgs, 'input'>>;
   linkDatabase?: Resolver<ResolversTypes['LinkDatabaseResult'], ParentType, ContextType, RequireFields<MutationLinkDatabaseArgs, 'input'>>;
   unlinkDatabase?: Resolver<ResolversTypes['UnlinkDatabaseResult'], ParentType, ContextType, RequireFields<MutationUnlinkDatabaseArgs, 'input'>>;
+  addAppProxyPort?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddAppProxyPortArgs, 'input'>>;
+  removeAppProxyPort?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveAppProxyPortArgs, 'input'>>;
 };
 
 export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
@@ -681,6 +735,7 @@ export type Resolvers<ContextType = any> = {
   EnvVarsResult?: EnvVarsResultResolvers<ContextType>;
   SetupResult?: SetupResultResolvers<ContextType>;
   IsPluginInstalledResult?: IsPluginInstalledResultResolvers<ContextType>;
+  AppProxyPort?: AppProxyPortResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
