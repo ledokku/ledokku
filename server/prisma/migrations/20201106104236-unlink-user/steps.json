@@ -1,0 +1,35 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "DeleteField",
+      "model": "App",
+      "field": "user"
+    },
+    {
+      "tag": "DeleteField",
+      "model": "App",
+      "field": "userId"
+    },
+    {
+      "tag": "DeleteField",
+      "model": "AppBuild",
+      "field": "user"
+    },
+    {
+      "tag": "DeleteField",
+      "model": "AppBuild",
+      "field": "userId"
+    },
+    {
+      "tag": "DeleteField",
+      "model": "Database",
+      "field": "user"
+    },
+    {
+      "tag": "DeleteField",
+      "model": "Database",
+      "field": "userId"
+    }
+  ]
+}

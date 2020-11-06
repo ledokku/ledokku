@@ -65,7 +65,7 @@ export const loginWithGithub: MutationResolvers['loginWithGithub'] = async (
     // We limit to only one user per server for now
     // This can be fixed later by allowing user to invite other users for example
     const nbUsers = await prisma.user.count();
-    if (nbUsers >= 1) {
+    if (nbUsers >= config.numberUsersAllowed) {
       throw new Error('Unauthorized');
     }
 
