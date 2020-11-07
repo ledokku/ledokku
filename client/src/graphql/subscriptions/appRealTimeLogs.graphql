@@ -1,0 +1,6 @@
+subscription AppRealTimeLogs {
+  appRealTimeLogs {
+    message
+    type
+  }
+}

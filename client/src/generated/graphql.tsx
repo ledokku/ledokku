@@ -157,6 +157,12 @@ export type IsPluginInstalledResult = {
   isPluginInstalled: Scalars['Boolean'];
 };
 
+export type StartAppLogsResult = {
+  __typename?: 'StartAppLogsResult';
+  realtimeAppLogsStarted: Scalars['Boolean'];
+  queueId: Scalars['String'];
+};
+
 export type CreateAppInput = {
   name: Scalars['String'];
 };
@@ -193,6 +199,10 @@ export type LinkDatabaseInput = {
 
 export type DestroyDatabaseInput = {
   databaseId: Scalars['String'];
+};
+
+export type StartAppLogsInput = {
+  appId: Scalars['String'];
 };
 
 export type Query = {
@@ -257,6 +267,7 @@ export type Subscription = {
   unlinkDatabaseLogs: RealTimeLog;
   linkDatabaseLogs: RealTimeLog;
   createDatabaseLogs: RealTimeLog;
+  appRealTimeLogs: RealTimeLog;
 };
 
 export type Mutation = {
@@ -270,6 +281,7 @@ export type Mutation = {
   destroyDatabase: DestroyDatabaseResult;
   linkDatabase: LinkDatabaseResult;
   unlinkDatabase: UnlinkDatabaseResult;
+  startAppLogs: StartAppLogsResult;
 };
 
 
@@ -315,6 +327,11 @@ export type MutationLinkDatabaseArgs = {
 
 export type MutationUnlinkDatabaseArgs = {
   input: UnlinkDatabaseInput;
+};
+
+
+export type MutationStartAppLogsArgs = {
+  input: StartAppLogsInput;
 };
 
 export type CacheControlScope = 
@@ -415,6 +432,19 @@ export type SetEnvVarMutation = (
   & { setEnvVar: (
     { __typename?: 'SetEnvVarResult' }
     & Pick<SetEnvVarResult, 'result'>
+  ) }
+);
+
+export type StartAppLogsMutationVariables = Exact<{
+  input: StartAppLogsInput;
+}>;
+
+
+export type StartAppLogsMutation = (
+  { __typename?: 'Mutation' }
+  & { startAppLogs: (
+    { __typename?: 'StartAppLogsResult' }
+    & Pick<StartAppLogsResult, 'realtimeAppLogsStarted' | 'queueId'>
   ) }
 );
 
@@ -591,6 +621,17 @@ export type SetupQuery = (
   & { setup: (
     { __typename?: 'SetupResult' }
     & Pick<SetupResult, 'canConnectSsh' | 'sshPublicKey'>
+  ) }
+);
+
+export type AppRealTimeLogsSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AppRealTimeLogsSubscription = (
+  { __typename?: 'Subscription' }
+  & { appRealTimeLogs: (
+    { __typename?: 'RealTimeLog' }
+    & Pick<RealTimeLog, 'message' | 'type'>
   ) }
 );
 
@@ -856,6 +897,39 @@ export function useSetEnvVarMutation(baseOptions?: Apollo.MutationHookOptions<Se
 export type SetEnvVarMutationHookResult = ReturnType<typeof useSetEnvVarMutation>;
 export type SetEnvVarMutationResult = Apollo.MutationResult<SetEnvVarMutation>;
 export type SetEnvVarMutationOptions = Apollo.BaseMutationOptions<SetEnvVarMutation, SetEnvVarMutationVariables>;
+export const StartAppLogsDocument = gql`
+    mutation startAppLogs($input: StartAppLogsInput!) {
+  startAppLogs(input: $input) {
+    realtimeAppLogsStarted
+    queueId
+  }
+}
+    `;
+export type StartAppLogsMutationFn = Apollo.MutationFunction<StartAppLogsMutation, StartAppLogsMutationVariables>;
+
+/**
+ * __useStartAppLogsMutation__
+ *
+ * To run a mutation, you first call `useStartAppLogsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStartAppLogsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [startAppLogsMutation, { data, loading, error }] = useStartAppLogsMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useStartAppLogsMutation(baseOptions?: Apollo.MutationHookOptions<StartAppLogsMutation, StartAppLogsMutationVariables>) {
+        return Apollo.useMutation<StartAppLogsMutation, StartAppLogsMutationVariables>(StartAppLogsDocument, baseOptions);
+      }
+export type StartAppLogsMutationHookResult = ReturnType<typeof useStartAppLogsMutation>;
+export type StartAppLogsMutationResult = Apollo.MutationResult<StartAppLogsMutation>;
+export type StartAppLogsMutationOptions = Apollo.BaseMutationOptions<StartAppLogsMutation, StartAppLogsMutationVariables>;
 export const UnlinkDatabaseDocument = gql`
     mutation unlinkDatabase($input: UnlinkDatabaseInput!) {
   unlinkDatabase(input: $input) {
@@ -1308,6 +1382,35 @@ export function useSetupLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Setu
 export type SetupQueryHookResult = ReturnType<typeof useSetupQuery>;
 export type SetupLazyQueryHookResult = ReturnType<typeof useSetupLazyQuery>;
 export type SetupQueryResult = Apollo.QueryResult<SetupQuery, SetupQueryVariables>;
+export const AppRealTimeLogsDocument = gql`
+    subscription AppRealTimeLogs {
+  appRealTimeLogs {
+    message
+    type
+  }
+}
+    `;
+
+/**
+ * __useAppRealTimeLogsSubscription__
+ *
+ * To run a query within a React component, call `useAppRealTimeLogsSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useAppRealTimeLogsSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAppRealTimeLogsSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAppRealTimeLogsSubscription(baseOptions?: Apollo.SubscriptionHookOptions<AppRealTimeLogsSubscription, AppRealTimeLogsSubscriptionVariables>) {
+        return Apollo.useSubscription<AppRealTimeLogsSubscription, AppRealTimeLogsSubscriptionVariables>(AppRealTimeLogsDocument, baseOptions);
+      }
+export type AppRealTimeLogsSubscriptionHookResult = ReturnType<typeof useAppRealTimeLogsSubscription>;
+export type AppRealTimeLogsSubscriptionResult = Apollo.SubscriptionResult<AppRealTimeLogsSubscription>;
 export const CreateDatabaseLogsDocument = gql`
     subscription CreateDatabaseLogs {
   createDatabaseLogs {

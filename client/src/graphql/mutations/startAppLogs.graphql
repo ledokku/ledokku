@@ -1,0 +1,6 @@
+mutation startAppLogs($input: StartAppLogsInput!) {
+  startAppLogs(input: $input) {
+    realtimeAppLogsStarted
+    queueId
+  }
+}
