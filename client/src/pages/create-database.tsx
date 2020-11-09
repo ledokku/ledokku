@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { ArrowRight, ArrowLeft } from 'react-feather';
@@ -62,7 +62,9 @@ const DatabaseBox = ({ label, selected, icon, onClick }: DatabaseBoxProps) => {
 };
 
 export const CreateDatabase = () => {
+  const location = useLocation();
   const history = useHistory();
+
   const { data: dataDb } = useDatabaseQuery();
   const [arrayOfCreateDbLogs, setArrayofCreateDbLogs] = useState<RealTimeLog[]>(
     []
@@ -122,7 +124,7 @@ export const CreateDatabase = () => {
   });
   const formik = useFormik<{ name: string; type: DatabaseTypes }>({
     initialValues: {
-      name: '',
+      name: location.state ? (location.state as string) : '',
       type: 'POSTGRESQL',
     },
     validateOnChange: true,
