@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.4.0](https://github.com/ledokku/ledokku/compare/v0.3.3...v0.4.0) (2020-11-10)
+
+### For new Ledokku users
+Ledokku from now on will run on port 80, instead of 4000.
+
+### For existing Ledokku users 
+If you want to have same port behaviour as decribed ☝️ , you will need to run these commands :
+```sh
+dokku proxy:ports-add ledokku http:80:4000
+dokku proxy:ports-remove ledokku http:4000:4000
+```
+
+### Features
+
+- **client:** pre populate db name on creation ([#235](https://github.com/ledokku/ledokku/issues/235)) ([65c8c0c](https://github.com/ledokku/ledokku/commit/65c8c0c98dc5e7ce425e434ea0d57e1ed16a3fd3))
+- add app port mapping management ([#231](https://github.com/ledokku/ledokku/issues/231)) ([ad4dd4e](https://github.com/ledokku/ledokku/commit/ad4dd4ea7f8fc13bfc7c82319c0ed43826c94e94))
+- allow to install custom ledokku version via bootstrap script ([#229](https://github.com/ledokku/ledokku/issues/229)) ([7088aee](https://github.com/ledokku/ledokku/commit/7088aeed19476cd00c6cd05b2cd9048183f8068d))
+- configure number of users allowed per server ([#233](https://github.com/ledokku/ledokku/issues/233)) ([57e199b](https://github.com/ledokku/ledokku/commit/57e199b5a77cb2f4ad48abbd8494fe1bb8a9a754))
+- ledokku listen on port 80 instead of 4000 on production ([#230](https://github.com/ledokku/ledokku/issues/230)) ([e0424a7](https://github.com/ledokku/ledokku/commit/e0424a7676064a38bf639873abdd8828f6f0934d))
+
+### Miscellaneous Chores
+
+- **client:** switch port condition to false ([#236](https://github.com/ledokku/ledokku/issues/236)) ([2a8caab](https://github.com/ledokku/ledokku/commit/2a8caab44595d583ae210634cefed4ae4fb81a55))
+
 ### [0.3.3](https://github.com/ledokku/ledokku/compare/v0.3.1...v0.3.3) (2020-10-29)
 
 ### Bug Fixes
