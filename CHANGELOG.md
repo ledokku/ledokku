@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [0.4.0](https://github.com/ledokku/ledokku/compare/v0.3.3...v0.4.0) (2020-11-10)
 
+### For new Ledokku users
+Ledokku from now on will run on port 80, instead of 4000.
+
+### For existing Ledokku users 
+If you want to have same port behaviour as decribed ☝️ , you will need to run these commands :
+```sh
+dokku proxy:ports-add ledokku http:80:4000
+dokku proxy:ports-remove ledokku http:4000:4000
+```
+
 ### Features
 
 - **client:** pre populate db name on creation ([#235](https://github.com/ledokku/ledokku/issues/235)) ([65c8c0c](https://github.com/ledokku/ledokku/commit/65c8c0c98dc5e7ce425e434ea0d57e1ed16a3fd3))
