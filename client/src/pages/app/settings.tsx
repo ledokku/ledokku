@@ -43,10 +43,7 @@ export const Settings = () => {
     { loading: destroyAppMutationLoading },
   ] = useDestroyAppMutation();
 
-  const [
-    restartAppMutation,
-    { loading: restartAppMutationLoading },
-  ] = useRestartAppMutation();
+  const [restartAppMutation] = useRestartAppMutation();
 
   const { data, loading /* error */, refetch } = useAppByIdQuery({
     variables: {
@@ -172,7 +169,7 @@ export const Settings = () => {
 
             <AppProxyPorts appId={app.id} />
             <h1 className="text-md font-bold mt-6">Restart app</h1>
-            <p className="text-gray-400 ">
+            <p className="text-gray-400">
               Restart your dokku app and see logs in real time.
             </p>
 
