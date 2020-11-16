@@ -12,7 +12,7 @@ interface AppProxyPortsProps {
 }
 
 export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
-  const [isAddModalOpen, setIsAddModalOpen] = useState(true);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const {
     data: appProxyPortsData,
     loading: appProxyPortsLoading,

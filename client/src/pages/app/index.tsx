@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link, useParams } from 'react-router-dom';
 import { Listbox, Transition } from '@headlessui/react';
 import cx from 'classnames';
 import { Header } from '../../modules/layout/Header';
@@ -13,7 +13,7 @@ import {
   useLinkDatabaseLogsSubscription,
   RealTimeLog,
 } from '../../generated/graphql';
-import { useParams, Link } from 'react-router-dom';
+
 import {
   TabNav,
   TabNavLink,
@@ -239,7 +239,12 @@ export const App = () => {
                     proceed with the database creation flow
                   </h2>
                 </div>
-                <Link to="/create-database">
+                <Link
+                  to={{
+                    pathname: '/create-database/',
+                    state: app.name,
+                  }}
+                >
                   <Button width="large" color={'grey'}>
                     Create a database
                   </Button>
@@ -256,7 +261,10 @@ export const App = () => {
                       onChange={
                         selectedDb.value.name !== 'Create new database'
                           ? setSelectedDb
-                          : history.push('/create-database')
+                          : history.push({
+                              pathname: '/create-database',
+                              state: app.name,
+                            })
                       }
                     >
                       {({ open }) => (
