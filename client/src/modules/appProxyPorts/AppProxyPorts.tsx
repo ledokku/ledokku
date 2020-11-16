@@ -122,8 +122,12 @@ export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
                       }}
                       ctaText={'Delete'}
                       otherButtonText={'Cancel'}
-                      isCtaLoading={removeAppPortLoading}
-                      isCtaDisabled={removeAppPortLoading}
+                      isCtaLoading={
+                        removeAppPortLoading || processStatus === 'running'
+                      }
+                      isCtaDisabled={
+                        removeAppPortLoading || processStatus === 'running'
+                      }
                       isOtherButtonDisabled={removeAppPortLoading}
                       closeModal={() => {
                         setIsDeleteModalOpen(false);
