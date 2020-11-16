@@ -21,7 +21,7 @@ export const Settings = () => {
     { loading: destroyAppMutationLoading },
   ] = useDestroyAppMutation();
 
-  const { data, loading /* error */, refetch } = useAppByIdQuery({
+  const { data, loading /* error */ } = useAppByIdQuery({
     variables: {
       appId,
     },
