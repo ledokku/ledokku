@@ -11,6 +11,7 @@ import {
 import { useFormik } from 'formik';
 import { TabNav, TabNavLink, Button, FormInput, FormHelper } from '../../ui';
 import { AppProxyPorts } from '../../modules/appProxyPorts/AppProxyPorts';
+import { AppRestart } from '../../modules/app/AppRestart';
 
 export const Settings = () => {
   const { id: appId } = useParams<{ id: string }>();
@@ -108,9 +109,8 @@ export const Settings = () => {
                 Update the settings of your app.
               </p>
             </div>
-
             <AppProxyPorts appId={app.id} />
-
+            <AppRestart appId={app.id} />
             <h1 className="text-md font-bold py-5">Delete app</h1>
             <p className="text-gray-400">
               This action cannot be undone. This will permanently delete{' '}

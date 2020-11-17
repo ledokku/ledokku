@@ -4,7 +4,7 @@ export const create = async (
   ssh: NodeSSH,
   name: string,
   databaseType: string,
-  options: SSHExecOptions
+  options?: SSHExecOptions
 ) => {
   const resultDatabaseCreate = await ssh.execCommand(
     `${databaseType}:create ${name}`,

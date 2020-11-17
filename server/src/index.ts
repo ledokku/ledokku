@@ -71,6 +71,10 @@ const typeDefs = gql`
     result: Boolean!
   }
 
+  type RestartAppResult {
+    result: Boolean!
+  }
+
   type DestroyDatabaseResult {
     result: Boolean!
   }
@@ -149,6 +153,10 @@ const typeDefs = gql`
     name: String!
   }
 
+  input RestartAppInput {
+    appId: String!
+  }
+
   input CreateDatabaseInput {
     name: String!
     type: DatabaseTypes!
@@ -219,6 +227,7 @@ const typeDefs = gql`
     unlinkDatabaseLogs: RealTimeLog!
     linkDatabaseLogs: RealTimeLog!
     createDatabaseLogs: RealTimeLog!
+    appRestartLogs: RealTimeLog!
   }
 
   type Mutation {
@@ -228,6 +237,7 @@ const typeDefs = gql`
     setEnvVar(input: SetEnvVarInput!): SetEnvVarResult!
     unsetEnvVar(input: UnsetEnvVarInput!): UnsetEnvVarResult!
     destroyApp(input: DestroyAppInput!): DestroyAppResult!
+    restartApp(input: RestartAppInput!): RestartAppResult!
     destroyDatabase(input: DestroyDatabaseInput!): DestroyDatabaseResult!
     linkDatabase(input: LinkDatabaseInput!): LinkDatabaseResult!
     unlinkDatabase(input: UnlinkDatabaseInput!): UnlinkDatabaseResult!
@@ -240,6 +250,7 @@ export const pubsub = new PubSub();
 export const DATABASE_UNLINKED = 'DATABASE_UNLINKED';
 export const DATABASE_LINKED = 'DATABASE_LINKED';
 export const DATABASE_CREATED = 'DATABASE_CREATED';
+export const APP_RESTARTED = 'APP_RESTARTED';
 
 const resolvers: Resolvers<{ userId?: string }> = {
   Query: queries,
@@ -254,6 +265,9 @@ const resolvers: Resolvers<{ userId?: string }> = {
     },
     createDatabaseLogs: {
       subscribe: () => pubsub.asyncIterator([DATABASE_CREATED]),
+    },
+    appRestartLogs: {
+      subscribe: () => pubsub.asyncIterator([APP_RESTARTED]),
     },
   },
   ...customResolvers,
