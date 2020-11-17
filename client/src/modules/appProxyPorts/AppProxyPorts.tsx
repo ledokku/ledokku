@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 import {
   useAppProxyPortsQuery,
   useRemoveAppProxyPortMutation,
   AppProxyPort,
 } from '../../generated/graphql';
-import { Button } from '../../ui';
+import {
+  Button,
+  Modal,
+  ModalTitle,
+  ModalButton,
+  ModalDescription,
+} from '../../ui';
 import { AddAppProxyPorts } from './AddAppProxyPorts';
 
 interface AppProxyPortsProps {
@@ -13,6 +20,10 @@ interface AppProxyPortsProps {
 
 export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [processStatus, setProcessStatus] = useState<
+    'running' | 'notStarted' | 'finished'
+  >('notStarted');
   const {
     data: appProxyPortsData,
     loading: appProxyPortsLoading,
@@ -22,13 +33,13 @@ export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
   } = useAppProxyPortsQuery({
     variables: { appId },
   });
-  const [removeAppProxyPortMutation] = useRemoveAppProxyPortMutation();
+  const [
+    removeAppProxyPortMutation,
+    { loading: removeAppPortLoading },
+  ] = useRemoveAppProxyPortMutation();
 
   const handleRemovePort = async (proxyPort: AppProxyPort) => {
-    const ok = window.confirm(
-      'Do you really want to confirm this port mapping?'
-    );
-    if (ok) {
+    try {
       await removeAppProxyPortMutation({
         variables: {
           input: {
@@ -39,7 +50,11 @@ export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
           },
         },
       });
+      setIsDeleteModalOpen(false);
+      toast.success('Port mapping deleted successfully');
       await appProxyPortsRefetch();
+    } catch (error) {
+      toast.error(error.message);
     }
   };
 
@@ -74,25 +89,54 @@ export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {appProxyPortsData.appProxyPorts.map((proxyPort, index) => (
-              <tr key={index}>
-                <td className="px-6 py-4 whitespace-no-wrap">
-                  {proxyPort.scheme}
-                </td>
-                <td className="px-6 py-4 whitespace-no-wrap">
-                  {proxyPort.host}
-                </td>
-                <td className="px-6 py-4 whitespace-no-wrap">
-                  {proxyPort.container}
-                </td>
-                <td className="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
-                  <button
-                    className="text-red-600 hover:text-red-800"
-                    onClick={() => handleRemovePort(proxyPort)}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
+              <React.Fragment>
+                <tr key={index}>
+                  <td className="px-6 py-4 whitespace-no-wrap">
+                    {proxyPort.scheme}
+                  </td>
+                  <td className="px-6 py-4 whitespace-no-wrap">
+                    {proxyPort.host}
+                  </td>
+                  <td className="px-6 py-4 whitespace-no-wrap">
+                    {proxyPort.container}
+                  </td>
+                  <td className="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
+                    <button
+                      className="text-red-600 hover:text-red-800"
+                      onClick={() => setIsDeleteModalOpen(true)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+                {isDeleteModalOpen && (
+                  <Modal>
+                    <ModalTitle>Delete port</ModalTitle>
+                    <ModalDescription>
+                      <p>Are you sure, you want to delete this port mapping?</p>
+                    </ModalDescription>
+                    <ModalButton
+                      ctaFn={() => {
+                        setProcessStatus('running');
+                        handleRemovePort(proxyPort);
+                      }}
+                      ctaText={'Delete'}
+                      otherButtonText={'Cancel'}
+                      isCtaLoading={
+                        removeAppPortLoading || processStatus === 'running'
+                      }
+                      isCtaDisabled={
+                        removeAppPortLoading || processStatus === 'running'
+                      }
+                      isOtherButtonDisabled={removeAppPortLoading}
+                      closeModal={() => {
+                        setIsDeleteModalOpen(false);
+                        setProcessStatus('notStarted');
+                      }}
+                    />
+                  </Modal>
+                )}
+              </React.Fragment>
             ))}
           </tbody>
         </table>
