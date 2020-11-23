@@ -73,6 +73,11 @@ export type DestroyAppResult = {
   result: Scalars['Boolean'];
 };
 
+export type RestartAppResult = {
+  __typename?: 'RestartAppResult';
+  result: Scalars['Boolean'];
+};
+
 export type DestroyDatabaseResult = {
   __typename?: 'DestroyDatabaseResult';
   result: Scalars['Boolean'];
@@ -157,8 +162,19 @@ export type IsPluginInstalledResult = {
   isPluginInstalled: Scalars['Boolean'];
 };
 
+export type AppProxyPort = {
+  __typename?: 'AppProxyPort';
+  scheme: Scalars['String'];
+  host: Scalars['String'];
+  container: Scalars['String'];
+};
+
 export type CreateAppInput = {
   name: Scalars['String'];
+};
+
+export type RestartAppInput = {
+  appId: Scalars['String'];
 };
 
 export type CreateDatabaseInput = {
@@ -195,6 +211,19 @@ export type DestroyDatabaseInput = {
   databaseId: Scalars['String'];
 };
 
+export type AddAppProxyPortInput = {
+  appId: Scalars['String'];
+  host: Scalars['String'];
+  container: Scalars['String'];
+};
+
+export type RemoveAppProxyPortInput = {
+  appId: Scalars['String'];
+  scheme: Scalars['String'];
+  host: Scalars['String'];
+  container: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   setup: SetupResult;
@@ -209,6 +238,7 @@ export type Query = {
   databaseLogs: DatabaseLogsResult;
   isDatabaseLinked: IsDatabaseLinkedResult;
   envVars: EnvVarsResult;
+  appProxyPorts: Array<AppProxyPort>;
 };
 
 
@@ -252,11 +282,17 @@ export type QueryEnvVarsArgs = {
   appId: Scalars['String'];
 };
 
+
+export type QueryAppProxyPortsArgs = {
+  appId: Scalars['String'];
+};
+
 export type Subscription = {
   __typename?: 'Subscription';
-  unlinkDatabaseLogs?: Maybe<Array<Scalars['String']>>;
-  linkDatabaseLogs?: Maybe<Array<Scalars['String']>>;
+  unlinkDatabaseLogs: RealTimeLog;
+  linkDatabaseLogs: RealTimeLog;
   createDatabaseLogs: RealTimeLog;
+  appRestartLogs: RealTimeLog;
 };
 
 export type Mutation = {
@@ -267,9 +303,12 @@ export type Mutation = {
   setEnvVar: SetEnvVarResult;
   unsetEnvVar: UnsetEnvVarResult;
   destroyApp: DestroyAppResult;
+  restartApp: RestartAppResult;
   destroyDatabase: DestroyDatabaseResult;
   linkDatabase: LinkDatabaseResult;
   unlinkDatabase: UnlinkDatabaseResult;
+  addAppProxyPort?: Maybe<Scalars['Boolean']>;
+  removeAppProxyPort?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -303,6 +342,11 @@ export type MutationDestroyAppArgs = {
 };
 
 
+export type MutationRestartAppArgs = {
+  input: RestartAppInput;
+};
+
+
 export type MutationDestroyDatabaseArgs = {
   input: DestroyDatabaseInput;
 };
@@ -315,6 +359,16 @@ export type MutationLinkDatabaseArgs = {
 
 export type MutationUnlinkDatabaseArgs = {
   input: UnlinkDatabaseInput;
+};
+
+
+export type MutationAddAppProxyPortArgs = {
+  input: AddAppProxyPortInput;
+};
+
+
+export type MutationRemoveAppProxyPortArgs = {
+  input: RemoveAppProxyPortInput;
 };
 
 export type CacheControlScope = 
@@ -413,6 +467,7 @@ export type ResolversTypes = {
   CreateAppResult: ResolverTypeWrapper<CreateAppResult>;
   DestroyAppResult: ResolverTypeWrapper<DestroyAppResult>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  RestartAppResult: ResolverTypeWrapper<RestartAppResult>;
   DestroyDatabaseResult: ResolverTypeWrapper<DestroyDatabaseResult>;
   LinkDatabaseResult: ResolverTypeWrapper<LinkDatabaseResult>;
   UnlinkDatabaseResult: ResolverTypeWrapper<UnlinkDatabaseResult>;
@@ -429,7 +484,9 @@ export type ResolversTypes = {
   EnvVarsResult: ResolverTypeWrapper<EnvVarsResult>;
   SetupResult: ResolverTypeWrapper<SetupResult>;
   IsPluginInstalledResult: ResolverTypeWrapper<IsPluginInstalledResult>;
+  AppProxyPort: ResolverTypeWrapper<AppProxyPort>;
   CreateAppInput: CreateAppInput;
+  RestartAppInput: RestartAppInput;
   CreateDatabaseInput: CreateDatabaseInput;
   UnlinkDatabaseInput: UnlinkDatabaseInput;
   SetEnvVarInput: SetEnvVarInput;
@@ -437,6 +494,8 @@ export type ResolversTypes = {
   DestroyAppInput: DestroyAppInput;
   LinkDatabaseInput: LinkDatabaseInput;
   DestroyDatabaseInput: DestroyDatabaseInput;
+  AddAppProxyPortInput: AddAppProxyPortInput;
+  RemoveAppProxyPortInput: RemoveAppProxyPortInput;
   Query: ResolverTypeWrapper<{}>;
   Subscription: ResolverTypeWrapper<{}>;
   Mutation: ResolverTypeWrapper<{}>;
@@ -457,6 +516,7 @@ export type ResolversParentTypes = {
   CreateAppResult: CreateAppResult;
   DestroyAppResult: DestroyAppResult;
   Boolean: Scalars['Boolean'];
+  RestartAppResult: RestartAppResult;
   DestroyDatabaseResult: DestroyDatabaseResult;
   LinkDatabaseResult: LinkDatabaseResult;
   UnlinkDatabaseResult: UnlinkDatabaseResult;
@@ -473,7 +533,9 @@ export type ResolversParentTypes = {
   EnvVarsResult: EnvVarsResult;
   SetupResult: SetupResult;
   IsPluginInstalledResult: IsPluginInstalledResult;
+  AppProxyPort: AppProxyPort;
   CreateAppInput: CreateAppInput;
+  RestartAppInput: RestartAppInput;
   CreateDatabaseInput: CreateDatabaseInput;
   UnlinkDatabaseInput: UnlinkDatabaseInput;
   SetEnvVarInput: SetEnvVarInput;
@@ -481,6 +543,8 @@ export type ResolversParentTypes = {
   DestroyAppInput: DestroyAppInput;
   LinkDatabaseInput: LinkDatabaseInput;
   DestroyDatabaseInput: DestroyDatabaseInput;
+  AddAppProxyPortInput: AddAppProxyPortInput;
+  RemoveAppProxyPortInput: RemoveAppProxyPortInput;
   Query: {};
   Subscription: {};
   Mutation: {};
@@ -531,6 +595,11 @@ export type CreateAppResultResolvers<ContextType = any, ParentType extends Resol
 };
 
 export type DestroyAppResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['DestroyAppResult'] = ResolversParentTypes['DestroyAppResult']> = {
+  result?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type RestartAppResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['RestartAppResult'] = ResolversParentTypes['RestartAppResult']> = {
   result?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -619,6 +688,13 @@ export type IsPluginInstalledResultResolvers<ContextType = any, ParentType exten
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type AppProxyPortResolvers<ContextType = any, ParentType extends ResolversParentTypes['AppProxyPort'] = ResolversParentTypes['AppProxyPort']> = {
+  scheme?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  host?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  container?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   setup?: Resolver<ResolversTypes['SetupResult'], ParentType, ContextType>;
   apps?: Resolver<Array<ResolversTypes['App']>, ParentType, ContextType>;
@@ -632,12 +708,14 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   databaseLogs?: Resolver<ResolversTypes['DatabaseLogsResult'], ParentType, ContextType, RequireFields<QueryDatabaseLogsArgs, 'databaseId'>>;
   isDatabaseLinked?: Resolver<ResolversTypes['IsDatabaseLinkedResult'], ParentType, ContextType, RequireFields<QueryIsDatabaseLinkedArgs, 'databaseId' | 'appId'>>;
   envVars?: Resolver<ResolversTypes['EnvVarsResult'], ParentType, ContextType, RequireFields<QueryEnvVarsArgs, 'appId'>>;
+  appProxyPorts?: Resolver<Array<ResolversTypes['AppProxyPort']>, ParentType, ContextType, RequireFields<QueryAppProxyPortsArgs, 'appId'>>;
 };
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
-  unlinkDatabaseLogs?: SubscriptionResolver<Maybe<Array<ResolversTypes['String']>>, "unlinkDatabaseLogs", ParentType, ContextType>;
-  linkDatabaseLogs?: SubscriptionResolver<Maybe<Array<ResolversTypes['String']>>, "linkDatabaseLogs", ParentType, ContextType>;
+  unlinkDatabaseLogs?: SubscriptionResolver<ResolversTypes['RealTimeLog'], "unlinkDatabaseLogs", ParentType, ContextType>;
+  linkDatabaseLogs?: SubscriptionResolver<ResolversTypes['RealTimeLog'], "linkDatabaseLogs", ParentType, ContextType>;
   createDatabaseLogs?: SubscriptionResolver<ResolversTypes['RealTimeLog'], "createDatabaseLogs", ParentType, ContextType>;
+  appRestartLogs?: SubscriptionResolver<ResolversTypes['RealTimeLog'], "appRestartLogs", ParentType, ContextType>;
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
@@ -647,9 +725,12 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   setEnvVar?: Resolver<ResolversTypes['SetEnvVarResult'], ParentType, ContextType, RequireFields<MutationSetEnvVarArgs, 'input'>>;
   unsetEnvVar?: Resolver<ResolversTypes['UnsetEnvVarResult'], ParentType, ContextType, RequireFields<MutationUnsetEnvVarArgs, 'input'>>;
   destroyApp?: Resolver<ResolversTypes['DestroyAppResult'], ParentType, ContextType, RequireFields<MutationDestroyAppArgs, 'input'>>;
+  restartApp?: Resolver<ResolversTypes['RestartAppResult'], ParentType, ContextType, RequireFields<MutationRestartAppArgs, 'input'>>;
   destroyDatabase?: Resolver<ResolversTypes['DestroyDatabaseResult'], ParentType, ContextType, RequireFields<MutationDestroyDatabaseArgs, 'input'>>;
   linkDatabase?: Resolver<ResolversTypes['LinkDatabaseResult'], ParentType, ContextType, RequireFields<MutationLinkDatabaseArgs, 'input'>>;
   unlinkDatabase?: Resolver<ResolversTypes['UnlinkDatabaseResult'], ParentType, ContextType, RequireFields<MutationUnlinkDatabaseArgs, 'input'>>;
+  addAppProxyPort?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddAppProxyPortArgs, 'input'>>;
+  removeAppProxyPort?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveAppProxyPortArgs, 'input'>>;
 };
 
 export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
@@ -665,6 +746,7 @@ export type Resolvers<ContextType = any> = {
   LoginResult?: LoginResultResolvers<ContextType>;
   CreateAppResult?: CreateAppResultResolvers<ContextType>;
   DestroyAppResult?: DestroyAppResultResolvers<ContextType>;
+  RestartAppResult?: RestartAppResultResolvers<ContextType>;
   DestroyDatabaseResult?: DestroyDatabaseResultResolvers<ContextType>;
   LinkDatabaseResult?: LinkDatabaseResultResolvers<ContextType>;
   UnlinkDatabaseResult?: UnlinkDatabaseResultResolvers<ContextType>;
@@ -681,6 +763,7 @@ export type Resolvers<ContextType = any> = {
   EnvVarsResult?: EnvVarsResultResolvers<ContextType>;
   SetupResult?: SetupResultResolvers<ContextType>;
   IsPluginInstalledResult?: IsPluginInstalledResultResolvers<ContextType>;
+  AppProxyPort?: AppProxyPortResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;

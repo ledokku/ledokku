@@ -1,0 +1,5 @@
+mutation restartApp($input: RestartAppInput!) {
+  restartApp(input: $input) {
+    result
+  }
+}

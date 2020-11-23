@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import Select from 'react-select';
 import { toast } from 'react-toastify';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link, useParams } from 'react-router-dom';
+import { Listbox, Transition } from '@headlessui/react';
+import cx from 'classnames';
 import { Header } from '../../modules/layout/Header';
 import {
   useAppByIdQuery,
@@ -10,8 +11,9 @@ import {
   useUnlinkDatabaseMutation,
   useUnlinkDatabaseLogsSubscription,
   useLinkDatabaseLogsSubscription,
+  RealTimeLog,
 } from '../../generated/graphql';
-import { useParams, Link } from 'react-router-dom';
+
 import {
   TabNav,
   TabNavLink,
@@ -33,16 +35,19 @@ export const App = () => {
   const { id: appId } = useParams<{ id: string }>();
   const [isUnlinkModalOpen, setIsUnlinkModalOpen] = useState(false);
   const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
-  const [arrayOfLinkLogs, setArrayOfLinkLogs] = useState<string[]>([]);
-  const [arrayOfUnlinkLogs, setArrayOfUnlinkLogs] = useState<string[]>([]);
+  const [arrayOfLinkLogs, setArrayOfLinkLogs] = useState<RealTimeLog[]>([]);
+  const [arrayOfUnlinkLogs, setArrayOfUnlinkLogs] = useState<RealTimeLog[]>([]);
   const [databaseAboutToUnlink, setdatabaseAboutToUnlink] = useState<string>();
   const [isTerminalVisible, setIsTerminalVisible] = useState(false);
+  const [processStatus, setProcessStatus] = useState<
+    'running' | 'notStarted' | 'finished'
+  >('notStarted');
   const [unlinkLoading, setUnlinkLoading] = useState(false);
   const [linkLoading, setLinkLoading] = useState(false);
 
   const [selectedDb, setSelectedDb] = useState({
     value: { name: '', id: '', type: '' },
-    label: 'Please select db',
+    label: 'Please select database',
   });
   const [
     linkDatabaseMutation,
@@ -56,21 +61,35 @@ export const App = () => {
   const [unlinkDatabaseMutation] = useUnlinkDatabaseMutation();
   useUnlinkDatabaseLogsSubscription({
     onSubscriptionData: (data) => {
-      const logsExist = data.subscriptionData.data?.unlinkDatabaseLogs?.[0];
-      if (logsExist)
+      const logsExist = data.subscriptionData.data?.unlinkDatabaseLogs;
+      if (logsExist) {
         setArrayOfUnlinkLogs((currentLogs) => {
           return [...currentLogs, logsExist];
         });
+        if (
+          logsExist.type === 'end:success' ||
+          logsExist.type === 'end:failure'
+        ) {
+          setProcessStatus('finished');
+        }
+      }
     },
   });
 
   useLinkDatabaseLogsSubscription({
     onSubscriptionData: (data) => {
-      const logsExist = data.subscriptionData.data?.linkDatabaseLogs?.[0];
+      const logsExist = data.subscriptionData.data?.linkDatabaseLogs;
       if (logsExist) {
         setArrayOfLinkLogs((currentLogs) => {
           return [...currentLogs, logsExist];
         });
+
+        if (
+          logsExist.type === 'end:success' ||
+          logsExist.type === 'end:failure'
+        ) {
+          setProcessStatus('finished');
+        }
       }
     },
   });
@@ -154,7 +173,7 @@ export const App = () => {
       });
       setSelectedDb({
         value: { name: '', id: '', type: '' },
-        label: 'Please select db',
+        label: 'Please select database',
       });
       setIsTerminalVisible(true);
       setLinkLoading(true);
@@ -182,7 +201,7 @@ export const App = () => {
         <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4 mt-10">
           <div>
             <h1 className="text-lg font-bold py-5">App info</h1>
-            <div className="mt-3 bg-gray-100 shadow overflow-hidden rounded-lg border-b border-gray-200">
+            <div className="bg-gray-100 shadow overflow-hidden rounded-lg border-b border-gray-200">
               <table className="mt-4 mb-4 min-w-full bg-white">
                 <tbody className="text-gray-700">
                   <tr className="bg-gray-100">
@@ -220,7 +239,12 @@ export const App = () => {
                     proceed with the database creation flow
                   </h2>
                 </div>
-                <Link to="/create-database">
+                <Link
+                  to={{
+                    pathname: '/create-database/',
+                    state: app.name,
+                  }}
+                >
                   <Button width="large" color={'grey'}>
                     Create a database
                   </Button>
@@ -230,23 +254,85 @@ export const App = () => {
               <React.Fragment>
                 {notLinkedDatabases.length !== 0 ? (
                   <div>
-                    <Select
+                    <Listbox
+                      as="div"
                       value={selectedDb}
+                      //@ts-ignore
                       onChange={
-                        selectedDb.value.name !== 'Create-database'
+                        selectedDb.value.name !== 'Create new database'
                           ? setSelectedDb
-                          : history.push('/create-database')
+                          : history.push({
+                              pathname: '/create-database',
+                              state: app.name,
+                            })
                       }
-                      className="mt-3 w-80"
-                      options={dbOptions}
-                      placeholder={selectedDb}
-                      isSearchable={false}
-                      aria-labelledby="database-select-dropdown"
-                      noOptionsMessage={() =>
-                        'All of your databases are already linked to this app'
-                      }
-                    />
-
+                    >
+                      {({ open }) => (
+                        <div className="relative w-80">
+                          <Listbox.Button className="cursor-default relative w-full rounded-md border border-gray-300 bg-white pl-3 pr-10 py-2 text-left focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                            <span className="block truncate">
+                              {selectedDb.label}
+                            </span>
+                            <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                              <svg
+                                className="h-5 w-5 text-gray-400"
+                                viewBox="0 0 20 20"
+                                fill="none"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  d="M7 7l3-3 3 3m0 6l-3 3-3-3"
+                                  strokeWidth="1.5"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                />
+                              </svg>
+                            </span>
+                          </Listbox.Button>
+                          {open && (
+                            <Transition
+                              show={open}
+                              enter="transition ease-out duration-100"
+                              enterFrom="transform opacity-0 scale-95"
+                              enterTo="transform opacity-100 scale-100"
+                              leave="transition ease-in duration-75"
+                              leaveFrom="transform opacity-100 scale-100"
+                              leaveTo="transform opacity-0 scale-95"
+                              className="absolute mt-1 w-full rounded-md bg-white shadow-lg z-10"
+                            >
+                              <Listbox.Options
+                                static
+                                className="max-h-60 rounded-md py-1 text-base leading-6 shadow-xs overflow-auto focus:outline-none sm:text-sm sm:leading-5"
+                              >
+                                {dbOptions.map(
+                                  (db) =>
+                                    db.value.id !== selectedDb.value.id && (
+                                      <Listbox.Option
+                                        key={dbOptions.indexOf(db)}
+                                        value={db as any}
+                                      >
+                                        {({ active }) => (
+                                          <div
+                                            className={cx(
+                                              'cursor-default select-none relative py-2 px-4',
+                                              {
+                                                'bg-gray-200': active,
+                                                'bg-white text-black': !active,
+                                              }
+                                            )}
+                                          >
+                                            {db.label}
+                                          </div>
+                                        )}
+                                      </Listbox.Option>
+                                    )
+                                )}
+                              </Listbox.Options>
+                            </Transition>
+                          )}
+                        </div>
+                      )}
+                    </Listbox>
                     {databaseLinkError && (
                       <p className="text-red-500 text-sm font-semibold">
                         {databaseLinkError.graphQLErrors[0].message}
@@ -262,7 +348,7 @@ export const App = () => {
                         !databaseLinkData &&
                         !databaseLinkError
                       }
-                      disabled={!selectedDb.value.id}
+                      disabled={!selectedDb.value.id || linkLoading}
                       onClick={() => {
                         setIsLinkModalOpen(true);
                       }}
@@ -279,18 +365,18 @@ export const App = () => {
                                 Linking <b>{selectedDb.value.name}</b> with{' '}
                                 <b>{app.name}</b>!
                               </p>
+                              <p className="text-gray-500 mb-2">
+                                Linking process usually takes a couple of
+                                minutes. Breathe in, breathe out, logs are about
+                                to appear below:
+                              </p>
                               <Terminal className={'w-6/6'}>
-                                <p className="text-green-400 mb-2">
-                                  Linking process usually takes a couple of
-                                  minutes. Breathe in, breathe out, logs are
-                                  about to appear below:
-                                </p>
                                 {arrayOfLinkLogs.map((log) => (
                                   <p
                                     key={arrayOfLinkLogs.indexOf(log)}
                                     className="text-s leading-5"
                                   >
-                                    {log}
+                                    {log.message}
                                   </p>
                                 ))}
                               </Terminal>
@@ -304,18 +390,21 @@ export const App = () => {
                           )}
                         </ModalDescription>
                         <ModalButton
-                          ctaFn={() =>
-                            handleConnect(selectedDb.value.id, appId)
-                          }
+                          ctaFn={() => {
+                            setProcessStatus('running');
+                            handleConnect(selectedDb.value.id, appId);
+                          }}
                           ctaText={'Link'}
                           otherButtonText={'Cancel'}
                           isCtaLoading={isTerminalVisible ? false : linkLoading}
                           isCtaDisabled={isTerminalVisible}
+                          isOtherButtonDisabled={processStatus === 'running'}
                           closeModal={() => {
                             setIsLinkModalOpen(false);
                             refetch({ appId });
                             setLinkLoading(false);
                             setIsTerminalVisible(false);
+                            setProcessStatus('notStarted');
                           }}
                         />
                       </Modal>
@@ -401,18 +490,18 @@ export const App = () => {
                                     Unlinking <b>{app.name}</b>
                                     from <b>{databaseAboutToUnlink}</b>!
                                   </p>
+                                  <p className="text-gray-500 mb-2">
+                                    Unlinking process usually takes a couple of
+                                    minutes. Breathe in, breathe out, logs are
+                                    about to appear below:
+                                  </p>
                                   <Terminal className={'w-6/6'}>
-                                    <p className="text-green-400 mb-2">
-                                      Unlinking process usually takes a couple
-                                      of minutes. Breathe in, breathe out, logs
-                                      are about to appear below:
-                                    </p>
                                     {arrayOfUnlinkLogs.map((log) => (
                                       <p
                                         key={arrayOfUnlinkLogs.indexOf(log)}
                                         className="text-s leading-5"
                                       >
-                                        {log}
+                                        {log.message}
                                       </p>
                                     ))}
                                   </Terminal>
@@ -426,19 +515,26 @@ export const App = () => {
                               )}
                             </ModalDescription>
                             <ModalButton
-                              ctaFn={() => handleUnlink(database.id, appId)}
+                              ctaFn={() => {
+                                setProcessStatus('running');
+                                handleUnlink(database.id, appId);
+                              }}
                               ctaText={'Unlink'}
                               otherButtonText={'Cancel'}
+                              isOtherButtonDisabled={
+                                processStatus === 'running'
+                              }
                               isCtaLoading={
                                 isTerminalVisible ? false : unlinkLoading
                               }
-                              isCtaDisabled={isTerminalVisible}
+                              isCtaDisabled={isTerminalVisible === true}
                               closeModal={() => {
                                 setIsUnlinkModalOpen(false);
                                 refetch({ appId });
                                 setUnlinkLoading(false);
                                 setIsTerminalVisible(false);
                                 setdatabaseAboutToUnlink('');
+                                setProcessStatus('notStarted');
                               }}
                             />
                           </Modal>

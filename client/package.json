@@ -1,7 +1,7 @@
 {
   "name": "ledokku-client",
   "private": true,
-  "version": "0.3.1",
+  "version": "0.4.0",
   "license": "MIT",
   "scripts": {
     "dev": "npm run watch:css && SKIP_PREFLIGHT_CHECK=true react-scripts start",
@@ -42,7 +42,6 @@
     "react-dom": "17.0.1",
     "react-feather": "2.0.9",
     "react-router-dom": "5.2.0",
-    "react-select": "3.1.0",
     "styled-components": "5.2.0",
     "react-toastify": "6.0.9",
     "yup": "0.29.3"

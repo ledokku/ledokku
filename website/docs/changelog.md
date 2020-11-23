@@ -8,6 +8,60 @@ hide_title: true
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.4.0](https://github.com/ledokku/ledokku/compare/v0.3.3...v0.4.0) (2020-11-10)
+
+### For new Ledokku users
+Ledokku from now on will run on port 80, instead of 4000.
+
+### For existing Ledokku users 
+If you want to have same port behaviour as decribed ☝️ , you will need to run these commands :
+```sh
+dokku proxy:ports-add ledokku http:80:4000
+dokku proxy:ports-remove ledokku http:4000:4000
+```
+
+### Features
+
+- **client:** pre populate db name on creation ([#235](https://github.com/ledokku/ledokku/issues/235)) ([65c8c0c](https://github.com/ledokku/ledokku/commit/65c8c0c98dc5e7ce425e434ea0d57e1ed16a3fd3))
+- add app port mapping management ([#231](https://github.com/ledokku/ledokku/issues/231)) ([ad4dd4e](https://github.com/ledokku/ledokku/commit/ad4dd4ea7f8fc13bfc7c82319c0ed43826c94e94))
+- allow to install custom ledokku version via bootstrap script ([#229](https://github.com/ledokku/ledokku/issues/229)) ([7088aee](https://github.com/ledokku/ledokku/commit/7088aeed19476cd00c6cd05b2cd9048183f8068d))
+- configure number of users allowed per server ([#233](https://github.com/ledokku/ledokku/issues/233)) ([57e199b](https://github.com/ledokku/ledokku/commit/57e199b5a77cb2f4ad48abbd8494fe1bb8a9a754))
+- ledokku listen on port 80 instead of 4000 on production ([#230](https://github.com/ledokku/ledokku/issues/230)) ([e0424a7](https://github.com/ledokku/ledokku/commit/e0424a7676064a38bf639873abdd8828f6f0934d))
+
+### Miscellaneous Chores
+
+- **client:** switch port condition to false ([#236](https://github.com/ledokku/ledokku/issues/236)) ([2a8caab](https://github.com/ledokku/ledokku/commit/2a8caab44595d583ae210634cefed4ae4fb81a55))
+
+### [0.3.3](https://github.com/ledokku/ledokku/compare/v0.3.1...v0.3.3) (2020-10-29)
+
+### Bug Fixes
+
+- fix publish script missing release prefix ([#225](https://github.com/ledokku/ledokku/issues/225)) ([6d987c5](https://github.com/ledokku/ledokku/commit/6d987c5ecf99f097dc94c593fff58aef4c386ea2))
+
+### [0.3.2](https://github.com/ledokku/ledokku/compare/v0.3.1...v0.3.2) (2020-10-27)
+
+### Features
+
+- **docs:** add documentation for uninstalling Ledokku ([#216](https://github.com/ledokku/ledokku/issues/216)) ([1557db8](https://github.com/ledokku/ledokku/commit/1557db8ff4b32af8ee3f07d87fecb69daa9e1147))
+
+### Bug Fixes
+
+- **readme:** fix typo in the readme title ([#222](https://github.com/ledokku/ledokku/issues/222)) ([337121b](https://github.com/ledokku/ledokku/commit/337121b83ff615811de6abcb7c74806feb5a230c))
+- **server:** fix max listeners exceeded warning ([#212](https://github.com/ledokku/ledokku/issues/212)) ([1fc5b7b](https://github.com/ledokku/ledokku/commit/1fc5b7b6aa06294b74e8b32e0fe32154f202bd0d))
+
+### Documentation
+
+- create "how to upgrade" guide ([#210](https://github.com/ledokku/ledokku/issues/210)) ([903dd08](https://github.com/ledokku/ledokku/commit/903dd081ba55af8a826f11a185d1a3d702610721))
+- create configuration guide ([#211](https://github.com/ledokku/ledokku/issues/211)) ([dfbda1b](https://github.com/ledokku/ledokku/commit/dfbda1b69cb91810a8bca60caa902d05485dd0f9))
+
+### Miscellaneous Chores
+
+- **client:** switch dropdown from react-select to headless UI ([#215](https://github.com/ledokku/ledokku/issues/215)) ([2eaae4d](https://github.com/ledokku/ledokku/commit/2eaae4d79a24a7b385e17a90957bba1fae54ad82))
+- **client:** update app env var UI ([#218](https://github.com/ledokku/ledokku/issues/218)) ([3edc363](https://github.com/ledokku/ledokku/commit/3edc363bf6874fe09c0c2652deb05a13c85c71b4))
+- **client:** update UI for db/app link and unlink logs ([#221](https://github.com/ledokku/ledokku/issues/221)) ([0e1558e](https://github.com/ledokku/ledokku/commit/0e1558e8624309b6125b58f87f87c42bad3b6ec2))
+- add changelog link to release description ([#209](https://github.com/ledokku/ledokku/issues/209)) ([95622b1](https://github.com/ledokku/ledokku/commit/95622b1212886d8ce122ef427ae1653a06e7fd3c))
+- **website:** add twitter card image for website ([#208](https://github.com/ledokku/ledokku/issues/208)) ([b34f8e8](https://github.com/ledokku/ledokku/commit/b34f8e8efce661e064ef86b36fd14a10f30bae6c))
+
 ### [0.3.1](https://github.com/ledokku/ledokku/compare/v0.3.0...v0.3.1) (2020-10-22)
 
 ### Features

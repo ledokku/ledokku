@@ -71,6 +71,10 @@ const typeDefs = gql`
     result: Boolean!
   }
 
+  type RestartAppResult {
+    result: Boolean!
+  }
+
   type DestroyDatabaseResult {
     result: Boolean!
   }
@@ -139,8 +143,18 @@ const typeDefs = gql`
     isPluginInstalled: Boolean!
   }
 
+  type AppProxyPort {
+    scheme: String!
+    host: String!
+    container: String!
+  }
+
   input CreateAppInput {
     name: String!
+  }
+
+  input RestartAppInput {
+    appId: String!
   }
 
   input CreateDatabaseInput {
@@ -177,6 +191,19 @@ const typeDefs = gql`
     databaseId: String!
   }
 
+  input AddAppProxyPortInput {
+    appId: String!
+    host: String!
+    container: String!
+  }
+
+  input RemoveAppProxyPortInput {
+    appId: String!
+    scheme: String!
+    host: String!
+    container: String!
+  }
+
   type Query {
     setup: SetupResult!
     apps: [App!]!
@@ -193,12 +220,14 @@ const typeDefs = gql`
       appId: String!
     ): IsDatabaseLinkedResult!
     envVars(appId: String!): EnvVarsResult!
+    appProxyPorts(appId: String!): [AppProxyPort!]!
   }
 
   type Subscription {
-    unlinkDatabaseLogs: [String!]
-    linkDatabaseLogs: [String!]
+    unlinkDatabaseLogs: RealTimeLog!
+    linkDatabaseLogs: RealTimeLog!
     createDatabaseLogs: RealTimeLog!
+    appRestartLogs: RealTimeLog!
   }
 
   type Mutation {
@@ -208,9 +237,12 @@ const typeDefs = gql`
     setEnvVar(input: SetEnvVarInput!): SetEnvVarResult!
     unsetEnvVar(input: UnsetEnvVarInput!): UnsetEnvVarResult!
     destroyApp(input: DestroyAppInput!): DestroyAppResult!
+    restartApp(input: RestartAppInput!): RestartAppResult!
     destroyDatabase(input: DestroyDatabaseInput!): DestroyDatabaseResult!
     linkDatabase(input: LinkDatabaseInput!): LinkDatabaseResult!
     unlinkDatabase(input: UnlinkDatabaseInput!): UnlinkDatabaseResult!
+    addAppProxyPort(input: AddAppProxyPortInput!): Boolean
+    removeAppProxyPort(input: RemoveAppProxyPortInput!): Boolean
   }
 `;
 
@@ -218,6 +250,7 @@ export const pubsub = new PubSub();
 export const DATABASE_UNLINKED = 'DATABASE_UNLINKED';
 export const DATABASE_LINKED = 'DATABASE_LINKED';
 export const DATABASE_CREATED = 'DATABASE_CREATED';
+export const APP_RESTARTED = 'APP_RESTARTED';
 
 const resolvers: Resolvers<{ userId?: string }> = {
   Query: queries,
@@ -232,6 +265,9 @@ const resolvers: Resolvers<{ userId?: string }> = {
     },
     createDatabaseLogs: {
       subscribe: () => pubsub.asyncIterator([DATABASE_CREATED]),
+    },
+    appRestartLogs: {
+      subscribe: () => pubsub.asyncIterator([APP_RESTARTED]),
     },
   },
   ...customResolvers,

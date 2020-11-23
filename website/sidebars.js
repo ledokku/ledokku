@@ -6,7 +6,8 @@ module.exports = {
       'changelog',
       'getting-started',
       'installation',
-      'upgrade'
+      'upgrade',
+      'uninstall',
     ],
     Advanced: ['advanced/manual-installation', 'advanced/configuration'],
   },

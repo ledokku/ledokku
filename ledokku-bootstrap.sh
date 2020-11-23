@@ -36,15 +36,18 @@ install-postgres() {
 main() {
   ensure-dokku
 
+  # Set latest version or use the one provided by the user
+  LEDOKKU_TAG=${LEDOKKU_TAG:-"0.4.0"}
+
   # First we get the user ip so we can use it in the text we print later
   DOKKU_SSH_HOST=$(curl ifconfig.co)
 
-  echo "=== 🐳 ==="
+  echo "=== 🐳 ledokku:${LEDOKKU_TAG} ==="
   echo "Welcome to installation helper of Ledokku"
   echo
   echo "In your browser open https://github.com/settings/developers and click on the \"New OAuth App\" button."
   echo
-  echo "Add a name, a homepage url, and in the field \"Authorization callback URL\" set the value to \"http://"$DOKKU_SSH_HOST":4000\"."
+  echo "Add a name, a homepage url, and in the field \"Authorization callback URL\" set the value to \"http://"$DOKKU_SSH_HOST"\"."
   echo
   echo "Then click the \"Register application\" button. You should now be able to see the client id and client secret of the app."
   echo "=== 🐳 ==="
@@ -83,18 +86,18 @@ main() {
 
   # Now it's finally time to install ledokku
   echo "=> Installation"
-  docker pull ledokku/ledokku:0.3.1
-  docker tag ledokku/ledokku:0.3.1 dokku/ledokku:0.3.1
-  dokku tags:deploy ledokku 0.3.1
+  docker pull ledokku/ledokku:${LEDOKKU_TAG}
+  docker tag ledokku/ledokku:${LEDOKKU_TAG} dokku/ledokku:${LEDOKKU_TAG}
+  dokku tags:deploy ledokku ${LEDOKKU_TAG}
+
+  # After app is deployed last step is to properly setup the ports
+  dokku proxy:ports-add ledokku http:80:4000
+  dokku proxy:ports-remove ledokku http:4000:4000
 
   echo "=== 🐳 ==="
-  echo "Installation succesful"
-  echo "Open you server ip in your browser with the port 4000"
-  echo "http://${DOKKU_SSH_HOST}:4000"
-  echo "=== 🚧 ==="
-  echo "If it is not connecting, try running this command on your server:"
-  echo "ufw allow 4000"
-  echo "=== 🚧 ==="
+  echo "Ledooku was successfully installed"
+  echo "Open you server ip in your browser"
+  echo "http://${DOKKU_SSH_HOST}"
   echo "=== 🐳 ==="
 }
 

@@ -3,7 +3,6 @@ import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { generateKeyPairSync } from 'crypto';
 import sshpk from 'sshpk';
-import Redis from 'ioredis';
 
 const envSchema = yup.object({
   JWT_SECRET: yup
@@ -22,6 +21,8 @@ const envSchema = yup.object({
     .string()
     .required('Please provide a valid DOKKU_SSH_HOST env variable.'),
   DOKKU_SSH_PORT: yup.string(),
+  // Temporary solution until we have proper user management
+  NUMBER_USERS_ALLOWED: yup.string(),
 });
 
 try {
@@ -90,4 +91,7 @@ export const config = {
   dokkuSshPort: process.env.DOKKU_SSH_PORT ? +process.env.DOKKU_SSH_PORT : 22,
   privateKey,
   sshKeyPath,
+  numberUsersAllowed: process.env.NUMBER_USERS_ALLOWED
+    ? +process.env.NUMBER_USERS_ALLOWED
+    : 1,
 };

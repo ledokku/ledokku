@@ -73,6 +73,11 @@ export type DestroyAppResult = {
   result: Scalars['Boolean'];
 };
 
+export type RestartAppResult = {
+  __typename?: 'RestartAppResult';
+  result: Scalars['Boolean'];
+};
+
 export type DestroyDatabaseResult = {
   __typename?: 'DestroyDatabaseResult';
   result: Scalars['Boolean'];
@@ -157,8 +162,19 @@ export type IsPluginInstalledResult = {
   isPluginInstalled: Scalars['Boolean'];
 };
 
+export type AppProxyPort = {
+  __typename?: 'AppProxyPort';
+  scheme: Scalars['String'];
+  host: Scalars['String'];
+  container: Scalars['String'];
+};
+
 export type CreateAppInput = {
   name: Scalars['String'];
+};
+
+export type RestartAppInput = {
+  appId: Scalars['String'];
 };
 
 export type CreateDatabaseInput = {
@@ -195,6 +211,19 @@ export type DestroyDatabaseInput = {
   databaseId: Scalars['String'];
 };
 
+export type AddAppProxyPortInput = {
+  appId: Scalars['String'];
+  host: Scalars['String'];
+  container: Scalars['String'];
+};
+
+export type RemoveAppProxyPortInput = {
+  appId: Scalars['String'];
+  scheme: Scalars['String'];
+  host: Scalars['String'];
+  container: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   setup: SetupResult;
@@ -209,6 +238,7 @@ export type Query = {
   databaseLogs: DatabaseLogsResult;
   isDatabaseLinked: IsDatabaseLinkedResult;
   envVars: EnvVarsResult;
+  appProxyPorts: Array<AppProxyPort>;
 };
 
 
@@ -252,11 +282,17 @@ export type QueryEnvVarsArgs = {
   appId: Scalars['String'];
 };
 
+
+export type QueryAppProxyPortsArgs = {
+  appId: Scalars['String'];
+};
+
 export type Subscription = {
   __typename?: 'Subscription';
-  unlinkDatabaseLogs?: Maybe<Array<Scalars['String']>>;
-  linkDatabaseLogs?: Maybe<Array<Scalars['String']>>;
+  unlinkDatabaseLogs: RealTimeLog;
+  linkDatabaseLogs: RealTimeLog;
   createDatabaseLogs: RealTimeLog;
+  appRestartLogs: RealTimeLog;
 };
 
 export type Mutation = {
@@ -267,9 +303,12 @@ export type Mutation = {
   setEnvVar: SetEnvVarResult;
   unsetEnvVar: UnsetEnvVarResult;
   destroyApp: DestroyAppResult;
+  restartApp: RestartAppResult;
   destroyDatabase: DestroyDatabaseResult;
   linkDatabase: LinkDatabaseResult;
   unlinkDatabase: UnlinkDatabaseResult;
+  addAppProxyPort?: Maybe<Scalars['Boolean']>;
+  removeAppProxyPort?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -303,6 +342,11 @@ export type MutationDestroyAppArgs = {
 };
 
 
+export type MutationRestartAppArgs = {
+  input: RestartAppInput;
+};
+
+
 export type MutationDestroyDatabaseArgs = {
   input: DestroyDatabaseInput;
 };
@@ -317,10 +361,30 @@ export type MutationUnlinkDatabaseArgs = {
   input: UnlinkDatabaseInput;
 };
 
+
+export type MutationAddAppProxyPortArgs = {
+  input: AddAppProxyPortInput;
+};
+
+
+export type MutationRemoveAppProxyPortArgs = {
+  input: RemoveAppProxyPortInput;
+};
+
 export type CacheControlScope = 
   | 'PUBLIC'
   | 'PRIVATE';
 
+
+export type AddAppProxyPortMutationVariables = Exact<{
+  input: AddAppProxyPortInput;
+}>;
+
+
+export type AddAppProxyPortMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'addAppProxyPort'>
+);
 
 export type CreateAppMutationVariables = Exact<{
   name: Scalars['String'];
@@ -403,6 +467,29 @@ export type LoginWithGithubMutation = (
   )> }
 );
 
+export type RemoveAppProxyPortMutationVariables = Exact<{
+  input: RemoveAppProxyPortInput;
+}>;
+
+
+export type RemoveAppProxyPortMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'removeAppProxyPort'>
+);
+
+export type RestartAppMutationVariables = Exact<{
+  input: RestartAppInput;
+}>;
+
+
+export type RestartAppMutation = (
+  { __typename?: 'Mutation' }
+  & { restartApp: (
+    { __typename?: 'RestartAppResult' }
+    & Pick<RestartAppResult, 'result'>
+  ) }
+);
+
 export type SetEnvVarMutationVariables = Exact<{
   key: Scalars['String'];
   value: Scalars['String'];
@@ -473,6 +560,19 @@ export type AppLogsQuery = (
     { __typename?: 'AppLogsResult' }
     & Pick<AppLogsResult, 'logs'>
   ) }
+);
+
+export type AppProxyPortsQueryVariables = Exact<{
+  appId: Scalars['String'];
+}>;
+
+
+export type AppProxyPortsQuery = (
+  { __typename?: 'Query' }
+  & { appProxyPorts: Array<(
+    { __typename?: 'AppProxyPort' }
+    & Pick<AppProxyPort, 'scheme' | 'host' | 'container'>
+  )> }
 );
 
 export type AppsQueryVariables = Exact<{ [key: string]: never; }>;
@@ -610,7 +710,21 @@ export type LinkDatabaseLogsSubscriptionVariables = Exact<{ [key: string]: never
 
 export type LinkDatabaseLogsSubscription = (
   { __typename?: 'Subscription' }
-  & Pick<Subscription, 'linkDatabaseLogs'>
+  & { linkDatabaseLogs: (
+    { __typename?: 'RealTimeLog' }
+    & Pick<RealTimeLog, 'message' | 'type'>
+  ) }
+);
+
+export type AppRestartLogsSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AppRestartLogsSubscription = (
+  { __typename?: 'Subscription' }
+  & { appRestartLogs: (
+    { __typename?: 'RealTimeLog' }
+    & Pick<RealTimeLog, 'message' | 'type'>
+  ) }
 );
 
 export type UnlinkDatabaseLogsSubscriptionVariables = Exact<{ [key: string]: never; }>;
@@ -618,10 +732,43 @@ export type UnlinkDatabaseLogsSubscriptionVariables = Exact<{ [key: string]: nev
 
 export type UnlinkDatabaseLogsSubscription = (
   { __typename?: 'Subscription' }
-  & Pick<Subscription, 'unlinkDatabaseLogs'>
+  & { unlinkDatabaseLogs: (
+    { __typename?: 'RealTimeLog' }
+    & Pick<RealTimeLog, 'message' | 'type'>
+  ) }
 );
 
 
+export const AddAppProxyPortDocument = gql`
+    mutation addAppProxyPort($input: AddAppProxyPortInput!) {
+  addAppProxyPort(input: $input)
+}
+    `;
+export type AddAppProxyPortMutationFn = Apollo.MutationFunction<AddAppProxyPortMutation, AddAppProxyPortMutationVariables>;
+
+/**
+ * __useAddAppProxyPortMutation__
+ *
+ * To run a mutation, you first call `useAddAppProxyPortMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddAppProxyPortMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addAppProxyPortMutation, { data, loading, error }] = useAddAppProxyPortMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAddAppProxyPortMutation(baseOptions?: Apollo.MutationHookOptions<AddAppProxyPortMutation, AddAppProxyPortMutationVariables>) {
+        return Apollo.useMutation<AddAppProxyPortMutation, AddAppProxyPortMutationVariables>(AddAppProxyPortDocument, baseOptions);
+      }
+export type AddAppProxyPortMutationHookResult = ReturnType<typeof useAddAppProxyPortMutation>;
+export type AddAppProxyPortMutationResult = Apollo.MutationResult<AddAppProxyPortMutation>;
+export type AddAppProxyPortMutationOptions = Apollo.BaseMutationOptions<AddAppProxyPortMutation, AddAppProxyPortMutationVariables>;
 export const CreateAppDocument = gql`
     mutation createApp($name: String!) {
   createApp(input: {name: $name}) {
@@ -816,6 +963,68 @@ export function useLoginWithGithubMutation(baseOptions?: Apollo.MutationHookOpti
 export type LoginWithGithubMutationHookResult = ReturnType<typeof useLoginWithGithubMutation>;
 export type LoginWithGithubMutationResult = Apollo.MutationResult<LoginWithGithubMutation>;
 export type LoginWithGithubMutationOptions = Apollo.BaseMutationOptions<LoginWithGithubMutation, LoginWithGithubMutationVariables>;
+export const RemoveAppProxyPortDocument = gql`
+    mutation removeAppProxyPort($input: RemoveAppProxyPortInput!) {
+  removeAppProxyPort(input: $input)
+}
+    `;
+export type RemoveAppProxyPortMutationFn = Apollo.MutationFunction<RemoveAppProxyPortMutation, RemoveAppProxyPortMutationVariables>;
+
+/**
+ * __useRemoveAppProxyPortMutation__
+ *
+ * To run a mutation, you first call `useRemoveAppProxyPortMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveAppProxyPortMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeAppProxyPortMutation, { data, loading, error }] = useRemoveAppProxyPortMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useRemoveAppProxyPortMutation(baseOptions?: Apollo.MutationHookOptions<RemoveAppProxyPortMutation, RemoveAppProxyPortMutationVariables>) {
+        return Apollo.useMutation<RemoveAppProxyPortMutation, RemoveAppProxyPortMutationVariables>(RemoveAppProxyPortDocument, baseOptions);
+      }
+export type RemoveAppProxyPortMutationHookResult = ReturnType<typeof useRemoveAppProxyPortMutation>;
+export type RemoveAppProxyPortMutationResult = Apollo.MutationResult<RemoveAppProxyPortMutation>;
+export type RemoveAppProxyPortMutationOptions = Apollo.BaseMutationOptions<RemoveAppProxyPortMutation, RemoveAppProxyPortMutationVariables>;
+export const RestartAppDocument = gql`
+    mutation restartApp($input: RestartAppInput!) {
+  restartApp(input: $input) {
+    result
+  }
+}
+    `;
+export type RestartAppMutationFn = Apollo.MutationFunction<RestartAppMutation, RestartAppMutationVariables>;
+
+/**
+ * __useRestartAppMutation__
+ *
+ * To run a mutation, you first call `useRestartAppMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRestartAppMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [restartAppMutation, { data, loading, error }] = useRestartAppMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useRestartAppMutation(baseOptions?: Apollo.MutationHookOptions<RestartAppMutation, RestartAppMutationVariables>) {
+        return Apollo.useMutation<RestartAppMutation, RestartAppMutationVariables>(RestartAppDocument, baseOptions);
+      }
+export type RestartAppMutationHookResult = ReturnType<typeof useRestartAppMutation>;
+export type RestartAppMutationResult = Apollo.MutationResult<RestartAppMutation>;
+export type RestartAppMutationOptions = Apollo.BaseMutationOptions<RestartAppMutation, RestartAppMutationVariables>;
 export const SetEnvVarDocument = gql`
     mutation setEnvVar($key: String!, $value: String!, $appId: String!) {
   setEnvVar(input: {key: $key, value: $value, appId: $appId}) {
@@ -988,6 +1197,41 @@ export function useAppLogsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ap
 export type AppLogsQueryHookResult = ReturnType<typeof useAppLogsQuery>;
 export type AppLogsLazyQueryHookResult = ReturnType<typeof useAppLogsLazyQuery>;
 export type AppLogsQueryResult = Apollo.QueryResult<AppLogsQuery, AppLogsQueryVariables>;
+export const AppProxyPortsDocument = gql`
+    query appProxyPorts($appId: String!) {
+  appProxyPorts(appId: $appId) {
+    scheme
+    host
+    container
+  }
+}
+    `;
+
+/**
+ * __useAppProxyPortsQuery__
+ *
+ * To run a query within a React component, call `useAppProxyPortsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAppProxyPortsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAppProxyPortsQuery({
+ *   variables: {
+ *      appId: // value for 'appId'
+ *   },
+ * });
+ */
+export function useAppProxyPortsQuery(baseOptions?: Apollo.QueryHookOptions<AppProxyPortsQuery, AppProxyPortsQueryVariables>) {
+        return Apollo.useQuery<AppProxyPortsQuery, AppProxyPortsQueryVariables>(AppProxyPortsDocument, baseOptions);
+      }
+export function useAppProxyPortsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AppProxyPortsQuery, AppProxyPortsQueryVariables>) {
+          return Apollo.useLazyQuery<AppProxyPortsQuery, AppProxyPortsQueryVariables>(AppProxyPortsDocument, baseOptions);
+        }
+export type AppProxyPortsQueryHookResult = ReturnType<typeof useAppProxyPortsQuery>;
+export type AppProxyPortsLazyQueryHookResult = ReturnType<typeof useAppProxyPortsLazyQuery>;
+export type AppProxyPortsQueryResult = Apollo.QueryResult<AppProxyPortsQuery, AppProxyPortsQueryVariables>;
 export const AppsDocument = gql`
     query apps {
   apps {
@@ -1333,7 +1577,10 @@ export type CreateDatabaseLogsSubscriptionHookResult = ReturnType<typeof useCrea
 export type CreateDatabaseLogsSubscriptionResult = Apollo.SubscriptionResult<CreateDatabaseLogsSubscription>;
 export const LinkDatabaseLogsDocument = gql`
     subscription LinkDatabaseLogs {
-  linkDatabaseLogs
+  linkDatabaseLogs {
+    message
+    type
+  }
 }
     `;
 
@@ -1357,9 +1604,41 @@ export function useLinkDatabaseLogsSubscription(baseOptions?: Apollo.Subscriptio
       }
 export type LinkDatabaseLogsSubscriptionHookResult = ReturnType<typeof useLinkDatabaseLogsSubscription>;
 export type LinkDatabaseLogsSubscriptionResult = Apollo.SubscriptionResult<LinkDatabaseLogsSubscription>;
+export const AppRestartLogsDocument = gql`
+    subscription appRestartLogs {
+  appRestartLogs {
+    message
+    type
+  }
+}
+    `;
+
+/**
+ * __useAppRestartLogsSubscription__
+ *
+ * To run a query within a React component, call `useAppRestartLogsSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useAppRestartLogsSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAppRestartLogsSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAppRestartLogsSubscription(baseOptions?: Apollo.SubscriptionHookOptions<AppRestartLogsSubscription, AppRestartLogsSubscriptionVariables>) {
+        return Apollo.useSubscription<AppRestartLogsSubscription, AppRestartLogsSubscriptionVariables>(AppRestartLogsDocument, baseOptions);
+      }
+export type AppRestartLogsSubscriptionHookResult = ReturnType<typeof useAppRestartLogsSubscription>;
+export type AppRestartLogsSubscriptionResult = Apollo.SubscriptionResult<AppRestartLogsSubscription>;
 export const UnlinkDatabaseLogsDocument = gql`
     subscription UnlinkDatabaseLogs {
-  unlinkDatabaseLogs
+  unlinkDatabaseLogs {
+    message
+    type
+  }
 }
     `;
 
