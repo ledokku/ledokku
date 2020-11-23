@@ -17,7 +17,7 @@ export const Header = () => {
           <div className="relative">
             <Menu>
               {({ open }) => (
-                <React.Fragment>
+                <>
                   <Menu.Button className="max-w-xs flex items-center text-sm rounded-full text-white focus:outline-none focus:shadow-solid">
                     {user?.avatarUrl && (
                       <img
@@ -80,7 +80,7 @@ export const Header = () => {
                       </div>
                     </Menu.Items>
                   </Transition>
-                </React.Fragment>
+                </>
               )}
             </Menu>
           </div>

@@ -49,10 +49,10 @@ export const Button = ({
   >
     {iconStart && <span className="mr-3">{iconStart}</span>}
     {isLoading ? (
-      <React.Fragment>
+      <>
         <Spinner size="extraSmall" />
         <span className="ml-2 opacity-50">{children}</span>
-      </React.Fragment>
+      </>
     ) : (
       children
     )}

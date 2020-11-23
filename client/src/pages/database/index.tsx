@@ -222,7 +222,7 @@ export const Database = () => {
           <div className="w-full">
             <h1 className="font-bold text-lg font-bold py-5">Apps</h1>
             {apps.length === 0 ? (
-              <React.Fragment>
+              <>
                 <div className="mt-3 mb-4">
                   <h2 className="text-gray-400">
                     Currently you haven't created apps, to do so proceed with
@@ -234,9 +234,9 @@ export const Database = () => {
                     Create app
                   </Button>
                 </Link>
-              </React.Fragment>
+              </>
             ) : (
-              <React.Fragment>
+              <>
                 {notLinkedApps.length !== 0 ? (
                   <div>
                     <Listbox
@@ -336,7 +336,7 @@ export const Database = () => {
                         <ModalTitle>Link app</ModalTitle>
                         <ModalDescription>
                           {isTerminalVisible ? (
-                            <React.Fragment>
+                            <>
                               <p className="mb-2 ">
                                 Linking <b>{selectedApp.value.name}</b> with{' '}
                                 <b>{database.name}</b>!
@@ -356,7 +356,7 @@ export const Database = () => {
                                   </p>
                                 ))}
                               </Terminal>
-                            </React.Fragment>
+                            </>
                           ) : (
                             <p>
                               Are you sure, you want to link{' '}
@@ -387,7 +387,7 @@ export const Database = () => {
                     )}
                   </div>
                 ) : (
-                  <React.Fragment>
+                  <>
                     <p className="mt-3 mb-3 mr-8 text-cool-gray-400">
                       All your apps are already linked to this database! If you
                       want to create more apps proceed with create app flow.
@@ -403,11 +403,11 @@ export const Database = () => {
                         </Button>
                       </Link>
                     </div>
-                  </React.Fragment>
+                  </>
                 )}
 
                 {!loading && database && database.apps && (
-                  <React.Fragment>
+                  <>
                     <h2 className="mb-1 mt-3 font-semibold">
                       {database.apps.length > 0 && 'Linked apps'}
                     </h2>
@@ -438,7 +438,7 @@ export const Database = () => {
                             <ModalTitle>Unlink app</ModalTitle>
                             <ModalDescription>
                               {isTerminalVisible ? (
-                                <React.Fragment>
+                                <>
                                   <p className="mb-2 ">
                                     Unlinking <b>{database.name}</b> from{' '}
                                     <b>{appAboutToUnlink}</b>!
@@ -458,7 +458,7 @@ export const Database = () => {
                                       </p>
                                     ))}
                                   </Terminal>
-                                </React.Fragment>
+                                </>
                               ) : (
                                 <p>
                                   Are you sure, you want to unlink{' '}
@@ -494,9 +494,9 @@ export const Database = () => {
                         )}
                       </div>
                     ))}
-                  </React.Fragment>
+                  </>
                 )}
-              </React.Fragment>
+              </>
             )}
           </div>
         </div>
