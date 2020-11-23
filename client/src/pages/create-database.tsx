@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -169,14 +169,14 @@ export const CreateDatabase = () => {
   }, [isDbCreationSuccess]);
 
   return (
-    <React.Fragment>
+    <>
       <Header />
 
       <div className="max-w-5xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <h1 className="text-lg font-bold">Create a new database</h1>
         <div className="mt-12">
           {isTerminalVisible ? (
-            <React.Fragment>
+            <>
               <p className="mb-2 ">
                 Creating <b>{formik.values.type}</b> database{' '}
                 <b>{formik.values.name}</b>
@@ -222,7 +222,7 @@ export const CreateDatabase = () => {
                   </Button>
                 </div>
               ) : null}
-            </React.Fragment>
+            </>
           ) : (
             <form onSubmit={formik.handleSubmit} className="mt-8">
               <div className="mt-12">
@@ -241,7 +241,7 @@ export const CreateDatabase = () => {
                 ) : null}
                 {data?.isPluginInstalled.isPluginInstalled === false &&
                   !loading && (
-                    <React.Fragment>
+                    <>
                       <p className="mt-3">
                         {`Before creating a `}
                         <span className="font-bold">
@@ -259,7 +259,7 @@ export const CreateDatabase = () => {
                         Couple of seconds later you will be able to proceed
                         further.
                       </p>
-                    </React.Fragment>
+                    </>
                   )}
                 {data?.isPluginInstalled.isPluginInstalled === true &&
                   !loading && (
@@ -337,6 +337,6 @@ export const CreateDatabase = () => {
           )}
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };

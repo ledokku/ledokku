@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import format from 'date-fns/format';
 import { useDashboardQuery } from '../generated/graphql';
@@ -86,28 +85,28 @@ export const Dashboard = () => {
                 <div className="flex justify-between text-gray-400 text-sm">
                   <div className="flex items-center">
                     {database.type === 'POSTGRESQL' ? (
-                      <React.Fragment>
+                      <>
                         <PostgreSQLIcon size={16} className="mr-1" />
                         PostgreSQL
-                      </React.Fragment>
+                      </>
                     ) : undefined}
                     {database.type === 'MONGODB' ? (
-                      <React.Fragment>
+                      <>
                         <MongoIcon size={16} className="mr-1" />
                         Mongo
-                      </React.Fragment>
+                      </>
                     ) : undefined}
                     {database.type === 'REDIS' ? (
-                      <React.Fragment>
+                      <>
                         <RedisIcon size={16} className="mr-1" />
                         Redis
-                      </React.Fragment>
+                      </>
                     ) : undefined}
                     {database.type === 'MYSQL' ? (
-                      <React.Fragment>
+                      <>
                         <MySQLIcon size={16} className="mr-1" />
                         MySQL
-                      </React.Fragment>
+                      </>
                     ) : undefined}
                   </div>
                   <div>

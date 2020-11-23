@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 import {
   useAppProxyPortsQuery,
@@ -59,7 +59,7 @@ export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
   };
 
   return (
-    <React.Fragment>
+    <>
       <div className="py-5">
         <h1 className="text-md font-bold">Port Management</h1>
         <p className="text-gray-400 text-sm">
@@ -89,7 +89,7 @@ export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {appProxyPortsData.appProxyPorts.map((proxyPort, index) => (
-              <React.Fragment>
+              <>
                 <tr key={index}>
                   <td className="px-6 py-4 whitespace-no-wrap">
                     {proxyPort.scheme}
@@ -136,7 +136,7 @@ export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
                     />
                   </Modal>
                 )}
-              </React.Fragment>
+              </>
             ))}
           </tbody>
         </table>
@@ -157,6 +157,6 @@ export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
         open={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
       />
-    </React.Fragment>
+    </>
   );
 };

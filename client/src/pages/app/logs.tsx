@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import AnsiUp from 'ansi_up';
 import { Header } from '../../modules/layout/Header';

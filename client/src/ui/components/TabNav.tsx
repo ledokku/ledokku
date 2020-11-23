@@ -1,4 +1,3 @@
-import React from 'react';
 import cx from 'classnames';
 import { Link, LinkProps } from 'react-router-dom';
 

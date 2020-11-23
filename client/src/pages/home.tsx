@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useHistory, Redirect } from 'react-router-dom';
 import { GitHub } from 'react-feather';
 import { config } from '../config';
@@ -72,7 +72,7 @@ export const Home = () => {
       {(loading || loggingIn) && <Spinner size="small" className="mt-2" />}
 
       {data?.setup.canConnectSsh === true && !loggingIn && (
-        <React.Fragment>
+        <>
           <p className="mt-3 mb-3">Login to get started.</p>
 
           <Button
@@ -83,11 +83,11 @@ export const Home = () => {
           >
             Log in with Github
           </Button>
-        </React.Fragment>
+        </>
       )}
 
       {data?.setup.canConnectSsh === false && (
-        <React.Fragment>
+        <>
           <p className="mt-3">
             In order to setup the ssh connection, run the following command on
             your Dokku server.
@@ -96,7 +96,7 @@ export const Home = () => {
             {`echo "${data.setup.sshPublicKey}" | dokku ssh-keys:add ledokku`}
           </Terminal>
           <p className="mt-3">Once you are done, just refresh this page.</p>
-        </React.Fragment>
+        </>
       )}
     </div>
   );
