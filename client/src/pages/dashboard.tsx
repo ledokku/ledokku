@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import format from 'date-fns/format';
 import { useDashboardQuery } from '../generated/graphql';

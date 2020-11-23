@@ -1,4 +1,3 @@
-import React from 'react';
 import * as yup from 'yup';
 import { useHistory, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';

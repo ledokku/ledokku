@@ -1,4 +1,3 @@
-import React from 'react';
 import { Header } from '../modules/layout/Header';
 import { TabNav, TabNavLink } from '../ui';
 

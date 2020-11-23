@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useHistory, Link, useParams } from 'react-router-dom';
 import { Listbox, Transition } from '@headlessui/react';

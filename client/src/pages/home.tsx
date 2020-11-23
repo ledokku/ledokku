@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useHistory, Redirect } from 'react-router-dom';
 import { GitHub } from 'react-feather';
 import { config } from '../config';
