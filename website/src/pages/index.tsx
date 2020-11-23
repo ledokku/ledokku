@@ -1,5 +1,5 @@
 import React from 'react';
-import classnames from 'classnames';
+import classnames from 'clsx';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
