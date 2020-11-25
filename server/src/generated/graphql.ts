@@ -23,6 +23,12 @@ export type App = {
   name: Scalars['String'];
   createdAt: Scalars['DateTime'];
   databases?: Maybe<Array<Database>>;
+  domains?: Maybe<Domains>;
+};
+
+export type Domains = {
+  __typename?: 'Domains';
+  domains?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 export type AppBuild = {
@@ -229,6 +235,7 @@ export type Query = {
   setup: SetupResult;
   apps: Array<App>;
   app?: Maybe<App>;
+  domains?: Maybe<Domains>;
   database?: Maybe<Database>;
   databases: Array<Database>;
   isPluginInstalled: IsPluginInstalledResult;
@@ -243,6 +250,11 @@ export type Query = {
 
 
 export type QueryAppArgs = {
+  appId: Scalars['String'];
+};
+
+
+export type QueryDomainsArgs = {
   appId: Scalars['String'];
 };
 
@@ -458,6 +470,7 @@ export type ResolversTypes = {
   App: ResolverTypeWrapper<App>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  Domains: ResolverTypeWrapper<Domains>;
   AppBuild: ResolverTypeWrapper<AppBuild>;
   AppBuildStatus: AppBuildStatus;
   Database: ResolverTypeWrapper<Database>;
@@ -509,6 +522,7 @@ export type ResolversParentTypes = {
   App: App;
   ID: Scalars['ID'];
   String: Scalars['String'];
+  Domains: Domains;
   AppBuild: AppBuild;
   Database: Database;
   RealTimeLog: RealTimeLog;
@@ -560,6 +574,12 @@ export type AppResolvers<ContextType = any, ParentType extends ResolversParentTy
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   databases?: Resolver<Maybe<Array<ResolversTypes['Database']>>, ParentType, ContextType>;
+  domains?: Resolver<Maybe<ResolversTypes['Domains']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type DomainsResolvers<ContextType = any, ParentType extends ResolversParentTypes['Domains'] = ResolversParentTypes['Domains']> = {
+  domains?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -699,6 +719,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   setup?: Resolver<ResolversTypes['SetupResult'], ParentType, ContextType>;
   apps?: Resolver<Array<ResolversTypes['App']>, ParentType, ContextType>;
   app?: Resolver<Maybe<ResolversTypes['App']>, ParentType, ContextType, RequireFields<QueryAppArgs, 'appId'>>;
+  domains?: Resolver<Maybe<ResolversTypes['Domains']>, ParentType, ContextType, RequireFields<QueryDomainsArgs, 'appId'>>;
   database?: Resolver<Maybe<ResolversTypes['Database']>, ParentType, ContextType, RequireFields<QueryDatabaseArgs, 'databaseId'>>;
   databases?: Resolver<Array<ResolversTypes['Database']>, ParentType, ContextType>;
   isPluginInstalled?: Resolver<ResolversTypes['IsPluginInstalledResult'], ParentType, ContextType, RequireFields<QueryIsPluginInstalledArgs, 'pluginName'>>;
@@ -740,6 +761,7 @@ export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTyp
 export type Resolvers<ContextType = any> = {
   DateTime?: GraphQLScalarType;
   App?: AppResolvers<ContextType>;
+  Domains?: DomainsResolvers<ContextType>;
   AppBuild?: AppBuildResolvers<ContextType>;
   Database?: DatabaseResolvers<ContextType>;
   RealTimeLog?: RealTimeLogResolvers<ContextType>;

@@ -25,6 +25,11 @@ const typeDefs = gql`
     name: String!
     createdAt: DateTime!
     databases: [Database!]
+    domains: [Domain]
+  }
+
+  type Domains {
+    domain: String
   }
 
   type AppBuild {
@@ -208,6 +213,7 @@ const typeDefs = gql`
     setup: SetupResult!
     apps: [App!]!
     app(appId: String!): App
+    domains(appId: String!): [Domains]
     database(databaseId: String!): Database
     databases: [Database!]!
     isPluginInstalled(pluginName: String!): IsPluginInstalledResult!

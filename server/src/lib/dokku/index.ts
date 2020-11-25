@@ -19,6 +19,8 @@ import { proxyPorts } from './proxy/ports';
 import { proxyPortsAdd } from './proxy/portsAdd';
 import { proxyPortsRemove } from './proxy/portsRemove';
 import { restart } from './process/restart';
+import { add } from './domains/add';
+import { report } from './domains/report';
 
 export const dokku = {
   apps: { create, logs, destroy, list: appList },
@@ -41,5 +43,9 @@ export const dokku = {
   },
   process: {
     restart,
+  },
+  domains: {
+    add,
+    report,
   },
 };
