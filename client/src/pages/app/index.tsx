@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useHistory, Link, useParams } from 'react-router-dom';
 import { Listbox, Transition } from '@headlessui/react';
@@ -232,7 +232,7 @@ export const App = () => {
           <div className="w-full">
             <h1 className="font-bold text-lg font-bold py-5">Databases</h1>
             {databases.length === 0 ? (
-              <React.Fragment>
+              <>
                 <div className="mt-4 mb-4">
                   <h2 className="text-gray-400">
                     Currently you haven't created any databases, to do so
@@ -249,9 +249,9 @@ export const App = () => {
                     Create a database
                   </Button>
                 </Link>
-              </React.Fragment>
+              </>
             ) : (
-              <React.Fragment>
+              <>
                 {notLinkedDatabases.length !== 0 ? (
                   <div>
                     <Listbox
@@ -360,7 +360,7 @@ export const App = () => {
                         <ModalTitle>Link database</ModalTitle>
                         <ModalDescription>
                           {isTerminalVisible ? (
-                            <React.Fragment>
+                            <>
                               <p className="mb-2 ">
                                 Linking <b>{selectedDb.value.name}</b> with{' '}
                                 <b>{app.name}</b>!
@@ -380,7 +380,7 @@ export const App = () => {
                                   </p>
                                 ))}
                               </Terminal>
-                            </React.Fragment>
+                            </>
                           ) : (
                             <p>
                               Are you sure, you want to link{' '}
@@ -411,7 +411,7 @@ export const App = () => {
                     )}
                   </div>
                 ) : (
-                  <React.Fragment>
+                  <>
                     <p className="mt-3 mb-3 text-cool-gray-400">
                       All your databases are already linked to this app! If you
                       want to create more databases proceed with create database
@@ -428,10 +428,10 @@ export const App = () => {
                         </Button>
                       </Link>
                     </div>
-                  </React.Fragment>
+                  </>
                 )}
                 {!loading && app && app.databases && (
-                  <React.Fragment>
+                  <>
                     <h2 className="mb-1 mt-3 font-semibold">
                       {app.databases.length > 0 && 'Linked databases'}
                     </h2>
@@ -446,24 +446,24 @@ export const App = () => {
                         >
                           <div className="w-64 flex items-center py-3 px-2 shadow hover:shadow-md transition-shadow duration-100 ease-in-out rounded bg-white">
                             {database.type === 'POSTGRESQL' ? (
-                              <React.Fragment>
+                              <>
                                 <PostgreSQLIcon size={16} className="mr-1" />
-                              </React.Fragment>
+                              </>
                             ) : undefined}
                             {database.type === 'MONGODB' ? (
-                              <React.Fragment>
+                              <>
                                 <MongoIcon size={16} className="mr-1" />
-                              </React.Fragment>
+                              </>
                             ) : undefined}
                             {database.type === 'REDIS' ? (
-                              <React.Fragment>
+                              <>
                                 <RedisIcon size={16} className="mr-1" />
-                              </React.Fragment>
+                              </>
                             ) : undefined}
                             {database.type === 'MYSQL' ? (
-                              <React.Fragment>
+                              <>
                                 <MySQLIcon size={16} className="mr-1" />
-                              </React.Fragment>
+                              </>
                             ) : undefined}
                             {database.name}
                           </div>
@@ -485,7 +485,7 @@ export const App = () => {
                             <ModalTitle>Unlink database</ModalTitle>
                             <ModalDescription>
                               {isTerminalVisible ? (
-                                <React.Fragment>
+                                <>
                                   <p className="mb-2 ">
                                     Unlinking <b>{app.name}</b>
                                     from <b>{databaseAboutToUnlink}</b>!
@@ -505,7 +505,7 @@ export const App = () => {
                                       </p>
                                     ))}
                                   </Terminal>
-                                </React.Fragment>
+                                </>
                               ) : (
                                 <p>
                                   Are you sure, you want to unlink{' '}
@@ -541,9 +541,9 @@ export const App = () => {
                         )}
                       </div>
                     ))}
-                  </React.Fragment>
+                  </>
                 )}
-              </React.Fragment>
+              </>
             )}
           </div>
         </div>

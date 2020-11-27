@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 import {
   useAppByIdQuery,
@@ -92,7 +92,7 @@ export const AppRestart = ({ appId }: AppRestartProps) => {
   }
 
   return (
-    <React.Fragment>
+    <>
       <h1 className="text-md font-bold mt-6">Restart app</h1>
       <p className="text-gray-400">
         Restart your dokku app and see logs in real time.
@@ -112,7 +112,7 @@ export const AppRestart = ({ appId }: AppRestartProps) => {
           <ModalTitle>Restart app</ModalTitle>
           <ModalDescription>
             {isTerminalVisible ? (
-              <React.Fragment>
+              <>
                 <p className="mb-2 ">Restarting {app.name}</p>
                 <p className="text-gray-500 mb-2">
                   Restarting the app usually takes couple of minutes. Breathe
@@ -128,7 +128,7 @@ export const AppRestart = ({ appId }: AppRestartProps) => {
                     </p>
                   ))}
                 </Terminal>
-              </React.Fragment>
+              </>
             ) : (
               <p>{`Are you sure, you want to restart ${app.name} app ?`}</p>
             )}
@@ -153,6 +153,6 @@ export const AppRestart = ({ appId }: AppRestartProps) => {
           />
         </Modal>
       )}
-    </React.Fragment>
+    </>
   );
 };

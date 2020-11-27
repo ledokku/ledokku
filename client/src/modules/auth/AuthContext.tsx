@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 import jwtDecode from 'jwt-decode';
 
 interface JwtUser {
@@ -6,7 +6,7 @@ interface JwtUser {
   avatarUrl: string;
 }
 
-const AuthContext = React.createContext<{
+const AuthContext = createContext<{
   loggedIn: boolean;
   user?: JwtUser;
   login(token: string): void;
@@ -73,6 +73,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   );
 };
 
-const useAuth = () => React.useContext(AuthContext);
+const useAuth = () => useContext(AuthContext);
 
 export { AuthProvider, useAuth };
