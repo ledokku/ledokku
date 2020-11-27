@@ -7,11 +7,17 @@
     "test:lint": "eslint 'server/**/*.{ts,tsx}'",
     "prettier": "prettier --write '**/*.{js,ts,tsx,md,css}'"
   },
-  "workspaces": [
-    "client",
-    "server",
-    "website"
-  ],
+  "workspaces": {
+    "packages": [
+      "client",
+      "server",
+      "website"
+    ],
+    "nohoist": [
+      "**/@tailwindcss/*",
+      "**/@tailwindcss/*/**"
+    ]
+  },
   "prettier": {
     "singleQuote": true
   },

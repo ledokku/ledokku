@@ -302,7 +302,7 @@ export const App = () => {
                             >
                               <Listbox.Options
                                 static
-                                className="max-h-60 rounded-md py-1 text-base leading-6 shadow-xs overflow-auto focus:outline-none sm:text-sm sm:leading-5"
+                                className="max-h-60 rounded-md py-1 text-base leading-6 ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm sm:leading-5"
                               >
                                 {dbOptions.map(
                                   (db) =>
