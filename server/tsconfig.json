@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "ES2019",
     "lib": ["dom", "esnext"],
     "outDir": "build",
     "allowJs": false,
@@ -11,7 +11,8 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "importHelpers": true
   },
   "exclude": ["node_modules"],
   "include": ["src/**/*.ts"]
