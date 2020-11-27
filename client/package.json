@@ -44,7 +44,7 @@
     "react-router-dom": "5.2.0",
     "styled-components": "5.2.0",
     "react-toastify": "6.0.9",
-    "yup": "0.29.3"
+    "yup": "0.31.0"
   },
   "devDependencies": {
     "@graphql-codegen/add": "2.0.1",
@@ -62,7 +62,7 @@
     "@types/react-router-dom": "5.1.6",
     "@types/react-transition-group": "4.4.0",
     "@types/styled-components": "5.1.4",
-    "@types/yup": "0.29.8",
+    "@types/yup": "0.29.9",
     "postcss-cli": "7.1.1",
     "postcss-preset-env": "6.7.0",
     "react-scripts": "4.0.1",
