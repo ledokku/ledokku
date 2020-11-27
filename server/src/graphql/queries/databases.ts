@@ -10,6 +10,6 @@ export const databases: QueryResolvers['databases'] = async (
     throw new Error('Unauthorized');
   }
 
-  const databases = await prisma.database.findMany({ where: { userId } });
+  const databases = await prisma.database.findMany();
   return databases;
 };
