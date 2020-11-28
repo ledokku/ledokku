@@ -40,13 +40,11 @@ export const Settings = () => {
       ),
   });
 
-  const { data: domainsRes } = useDomainsQuery({
+  const { data: domainsData } = useDomainsQuery({
     variables: {
       appId,
     },
   });
-
-  console.log(domainsRes);
 
   const formik = useFormik<{ appName: string }>({
     initialValues: {
