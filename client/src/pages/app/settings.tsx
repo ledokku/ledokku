@@ -5,6 +5,7 @@ import { Header } from '../../modules/layout/Header';
 import {
   useAppByIdQuery,
   useDestroyAppMutation,
+  useDomainsQuery,
   DashboardDocument,
 } from '../../generated/graphql';
 import { useFormik } from 'formik';
@@ -38,6 +39,14 @@ export const Settings = () => {
         (val) => val === data?.app?.name
       ),
   });
+
+  const { data: domainsRes } = useDomainsQuery({
+    variables: {
+      appId,
+    },
+  });
+
+  console.log(domainsRes);
 
   const formik = useFormik<{ appName: string }>({
     initialValues: {
