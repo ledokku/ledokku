@@ -5,7 +5,6 @@ import { Header } from '../../modules/layout/Header';
 import {
   useAppByIdQuery,
   useDestroyAppMutation,
-  useDomainsQuery,
   DashboardDocument,
 } from '../../generated/graphql';
 import { useFormik } from 'formik';
