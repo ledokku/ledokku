@@ -35,6 +35,7 @@ export const AddAppDomain = ({ appId, appDomainsRefetch }: AddDomainProps) => {
 
         await appDomainsRefetch();
         toast.success('Domain added successfully');
+        formik.resetForm();
       } catch (error) {
         toast.error(error.message);
       }
