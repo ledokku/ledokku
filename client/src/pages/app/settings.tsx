@@ -12,6 +12,7 @@ import { useFormik } from 'formik';
 import { TabNav, TabNavLink, Button, FormInput, FormHelper } from '../../ui';
 import { AppProxyPorts } from '../../modules/appProxyPorts/AppProxyPorts';
 import { AppRestart } from '../../modules/app/AppRestart';
+import { AppDomains } from '../../modules/domains/AppDomains';
 
 export const Settings = () => {
   const { id: appId } = useParams<{ id: string }>();
@@ -152,6 +153,9 @@ export const Settings = () => {
                 </Button>
               </div>
             </form>
+          </div>
+          <div className="ml-5 py-20">
+            <AppDomains appId={appId} />
           </div>
         </div>
       </div>
