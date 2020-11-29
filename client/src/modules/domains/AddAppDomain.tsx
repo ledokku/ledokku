@@ -2,7 +2,7 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { toast } from 'react-toastify';
 import { useAddDomainMutation } from '../../generated/graphql';
-import { FormHelper, FormInput, FormLabel, Button } from '../../ui';
+import { FormHelper, FormInput, Button } from '../../ui';
 
 const addAppDomainYupSchema = yup.object().shape({
   domainName: yup.string().required('Domain name is required'),
