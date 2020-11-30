@@ -78,6 +78,11 @@ export type RestartAppResult = {
   result: Scalars['Boolean'];
 };
 
+export type RebuildAppResult = {
+  __typename?: 'RebuildAppResult';
+  result: Scalars['Boolean'];
+};
+
 export type DestroyDatabaseResult = {
   __typename?: 'DestroyDatabaseResult';
   result: Scalars['Boolean'];
@@ -174,6 +179,10 @@ export type CreateAppInput = {
 };
 
 export type RestartAppInput = {
+  appId: Scalars['String'];
+};
+
+export type RebuildAppInput = {
   appId: Scalars['String'];
 };
 
@@ -293,6 +302,7 @@ export type Subscription = {
   linkDatabaseLogs: RealTimeLog;
   createDatabaseLogs: RealTimeLog;
   appRestartLogs: RealTimeLog;
+  appRebuildLogs: RealTimeLog;
 };
 
 export type Mutation = {
@@ -304,6 +314,7 @@ export type Mutation = {
   unsetEnvVar: UnsetEnvVarResult;
   destroyApp: DestroyAppResult;
   restartApp: RestartAppResult;
+  rebuildApp: RebuildAppResult;
   destroyDatabase: DestroyDatabaseResult;
   linkDatabase: LinkDatabaseResult;
   unlinkDatabase: UnlinkDatabaseResult;
@@ -344,6 +355,11 @@ export type MutationDestroyAppArgs = {
 
 export type MutationRestartAppArgs = {
   input: RestartAppInput;
+};
+
+
+export type MutationRebuildAppArgs = {
+  input: RebuildAppInput;
 };
 
 
@@ -465,6 +481,19 @@ export type LoginWithGithubMutation = (
     { __typename?: 'LoginResult' }
     & Pick<LoginResult, 'token'>
   )> }
+);
+
+export type RebuildAppMutationVariables = Exact<{
+  input: RebuildAppInput;
+}>;
+
+
+export type RebuildAppMutation = (
+  { __typename?: 'Mutation' }
+  & { rebuildApp: (
+    { __typename?: 'RebuildAppResult' }
+    & Pick<RebuildAppResult, 'result'>
+  ) }
 );
 
 export type RemoveAppProxyPortMutationVariables = Exact<{
@@ -711,6 +740,17 @@ export type LinkDatabaseLogsSubscriptionVariables = Exact<{ [key: string]: never
 export type LinkDatabaseLogsSubscription = (
   { __typename?: 'Subscription' }
   & { linkDatabaseLogs: (
+    { __typename?: 'RealTimeLog' }
+    & Pick<RealTimeLog, 'message' | 'type'>
+  ) }
+);
+
+export type AppRebuildLogsSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AppRebuildLogsSubscription = (
+  { __typename?: 'Subscription' }
+  & { appRebuildLogs: (
     { __typename?: 'RealTimeLog' }
     & Pick<RealTimeLog, 'message' | 'type'>
   ) }
@@ -963,6 +1003,38 @@ export function useLoginWithGithubMutation(baseOptions?: Apollo.MutationHookOpti
 export type LoginWithGithubMutationHookResult = ReturnType<typeof useLoginWithGithubMutation>;
 export type LoginWithGithubMutationResult = Apollo.MutationResult<LoginWithGithubMutation>;
 export type LoginWithGithubMutationOptions = Apollo.BaseMutationOptions<LoginWithGithubMutation, LoginWithGithubMutationVariables>;
+export const RebuildAppDocument = gql`
+    mutation rebuildApp($input: RebuildAppInput!) {
+  rebuildApp(input: $input) {
+    result
+  }
+}
+    `;
+export type RebuildAppMutationFn = Apollo.MutationFunction<RebuildAppMutation, RebuildAppMutationVariables>;
+
+/**
+ * __useRebuildAppMutation__
+ *
+ * To run a mutation, you first call `useRebuildAppMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRebuildAppMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [rebuildAppMutation, { data, loading, error }] = useRebuildAppMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useRebuildAppMutation(baseOptions?: Apollo.MutationHookOptions<RebuildAppMutation, RebuildAppMutationVariables>) {
+        return Apollo.useMutation<RebuildAppMutation, RebuildAppMutationVariables>(RebuildAppDocument, baseOptions);
+      }
+export type RebuildAppMutationHookResult = ReturnType<typeof useRebuildAppMutation>;
+export type RebuildAppMutationResult = Apollo.MutationResult<RebuildAppMutation>;
+export type RebuildAppMutationOptions = Apollo.BaseMutationOptions<RebuildAppMutation, RebuildAppMutationVariables>;
 export const RemoveAppProxyPortDocument = gql`
     mutation removeAppProxyPort($input: RemoveAppProxyPortInput!) {
   removeAppProxyPort(input: $input)
@@ -1604,6 +1676,35 @@ export function useLinkDatabaseLogsSubscription(baseOptions?: Apollo.Subscriptio
       }
 export type LinkDatabaseLogsSubscriptionHookResult = ReturnType<typeof useLinkDatabaseLogsSubscription>;
 export type LinkDatabaseLogsSubscriptionResult = Apollo.SubscriptionResult<LinkDatabaseLogsSubscription>;
+export const AppRebuildLogsDocument = gql`
+    subscription appRebuildLogs {
+  appRebuildLogs {
+    message
+    type
+  }
+}
+    `;
+
+/**
+ * __useAppRebuildLogsSubscription__
+ *
+ * To run a query within a React component, call `useAppRebuildLogsSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useAppRebuildLogsSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAppRebuildLogsSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAppRebuildLogsSubscription(baseOptions?: Apollo.SubscriptionHookOptions<AppRebuildLogsSubscription, AppRebuildLogsSubscriptionVariables>) {
+        return Apollo.useSubscription<AppRebuildLogsSubscription, AppRebuildLogsSubscriptionVariables>(AppRebuildLogsDocument, baseOptions);
+      }
+export type AppRebuildLogsSubscriptionHookResult = ReturnType<typeof useAppRebuildLogsSubscription>;
+export type AppRebuildLogsSubscriptionResult = Apollo.SubscriptionResult<AppRebuildLogsSubscription>;
 export const AppRestartLogsDocument = gql`
     subscription appRestartLogs {
   appRestartLogs {
