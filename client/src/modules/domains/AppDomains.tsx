@@ -89,7 +89,7 @@ export const AppDomains = ({ appId }: AppDomainProps) => {
                 <p className="text-blue-600 mt-2">{domain}</p>
                 <div className="flex items-end">
                   <Button
-                    isLoading={removeDomainMutationLoading}
+                    disabled={removeDomainMutationLoading}
                     className="ml-2"
                     color="red"
                     onClick={() => handleRemoveDomain(domain)}

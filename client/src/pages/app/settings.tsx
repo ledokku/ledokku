@@ -111,6 +111,7 @@ export const Settings = () => {
             </div>
             <AppProxyPorts appId={app.id} />
             <AppRestart appId={app.id} />
+            <AppDomains appId={appId} />
             <h1 className="text-md font-bold py-5">Delete app</h1>
             <p className="text-gray-400">
               This action cannot be undone. This will permanently delete{' '}
@@ -146,9 +147,6 @@ export const Settings = () => {
                 </Button>
               </div>
             </form>
-          </div>
-          <div className="ml-5 py-20">
-            <AppDomains appId={appId} />
           </div>
         </div>
       </div>
