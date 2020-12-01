@@ -1,3 +1,6 @@
+import { removeDomain } from './removeDomain';
+import { addDomain } from './addDomain';
+import { setDomain } from './setDomain';
 import { unsetEnvVar } from './unsetEnvVar';
 import { setEnvVar } from './setEnvVar';
 import { loginWithGithub } from './loginWithGithub';
@@ -24,4 +27,7 @@ export const mutations = {
   unlinkDatabase,
   addAppProxyPort,
   removeAppProxyPort,
+  removeDomain,
+  addDomain,
+  setDomain,
 };

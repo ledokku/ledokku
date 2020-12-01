@@ -52,6 +52,11 @@ export type DatabaseTypes =
   | 'MONGODB'
   | 'MYSQL';
 
+export type Domains = {
+  __typename?: 'Domains';
+  domains: Array<Maybe<Scalars['String']>>;
+};
+
 export type RealTimeLog = {
   __typename?: 'RealTimeLog';
   message?: Maybe<Scalars['String']>;
@@ -151,6 +156,21 @@ export type EnvVarsResult = {
   envVars: Array<EnvVar>;
 };
 
+export type SetDomainResult = {
+  __typename?: 'SetDomainResult';
+  result: Scalars['Boolean'];
+};
+
+export type AddDomainResult = {
+  __typename?: 'AddDomainResult';
+  result: Scalars['Boolean'];
+};
+
+export type RemoveDomainResult = {
+  __typename?: 'RemoveDomainResult';
+  result: Scalars['Boolean'];
+};
+
 export type SetupResult = {
   __typename?: 'SetupResult';
   canConnectSsh: Scalars['Boolean'];
@@ -202,6 +222,21 @@ export type DestroyAppInput = {
   appId: Scalars['String'];
 };
 
+export type AddDomainInput = {
+  appId: Scalars['String'];
+  domainName: Scalars['String'];
+};
+
+export type RemoveDomainInput = {
+  appId: Scalars['String'];
+  domainName: Scalars['String'];
+};
+
+export type SetDomainInput = {
+  appId: Scalars['String'];
+  domainName: Scalars['String'];
+};
+
 export type LinkDatabaseInput = {
   appId: Scalars['String'];
   databaseId: Scalars['String'];
@@ -229,6 +264,7 @@ export type Query = {
   setup: SetupResult;
   apps: Array<App>;
   app?: Maybe<App>;
+  domains: Domains;
   database?: Maybe<Database>;
   databases: Array<Database>;
   isPluginInstalled: IsPluginInstalledResult;
@@ -243,6 +279,11 @@ export type Query = {
 
 
 export type QueryAppArgs = {
+  appId: Scalars['String'];
+};
+
+
+export type QueryDomainsArgs = {
   appId: Scalars['String'];
 };
 
@@ -298,6 +339,9 @@ export type Subscription = {
 export type Mutation = {
   __typename?: 'Mutation';
   loginWithGithub?: Maybe<LoginResult>;
+  addDomain: AddDomainResult;
+  removeDomain: RemoveDomainResult;
+  setDomain: SetDomainResult;
   createApp: CreateAppResult;
   createDatabase: CreateDatabaseResult;
   setEnvVar: SetEnvVarResult;
@@ -314,6 +358,21 @@ export type Mutation = {
 
 export type MutationLoginWithGithubArgs = {
   code: Scalars['String'];
+};
+
+
+export type MutationAddDomainArgs = {
+  input: AddDomainInput;
+};
+
+
+export type MutationRemoveDomainArgs = {
+  input: RemoveDomainInput;
+};
+
+
+export type MutationSetDomainArgs = {
+  input: SetDomainInput;
 };
 
 
@@ -462,6 +521,7 @@ export type ResolversTypes = {
   AppBuildStatus: AppBuildStatus;
   Database: ResolverTypeWrapper<Database>;
   DatabaseTypes: DatabaseTypes;
+  Domains: ResolverTypeWrapper<Domains>;
   RealTimeLog: ResolverTypeWrapper<RealTimeLog>;
   LoginResult: ResolverTypeWrapper<LoginResult>;
   CreateAppResult: ResolverTypeWrapper<CreateAppResult>;
@@ -482,6 +542,9 @@ export type ResolversTypes = {
   IsDatabaseLinkedResult: ResolverTypeWrapper<IsDatabaseLinkedResult>;
   EnvVar: ResolverTypeWrapper<EnvVar>;
   EnvVarsResult: ResolverTypeWrapper<EnvVarsResult>;
+  SetDomainResult: ResolverTypeWrapper<SetDomainResult>;
+  AddDomainResult: ResolverTypeWrapper<AddDomainResult>;
+  RemoveDomainResult: ResolverTypeWrapper<RemoveDomainResult>;
   SetupResult: ResolverTypeWrapper<SetupResult>;
   IsPluginInstalledResult: ResolverTypeWrapper<IsPluginInstalledResult>;
   AppProxyPort: ResolverTypeWrapper<AppProxyPort>;
@@ -492,6 +555,9 @@ export type ResolversTypes = {
   SetEnvVarInput: SetEnvVarInput;
   UnsetEnvVarInput: UnsetEnvVarInput;
   DestroyAppInput: DestroyAppInput;
+  AddDomainInput: AddDomainInput;
+  RemoveDomainInput: RemoveDomainInput;
+  SetDomainInput: SetDomainInput;
   LinkDatabaseInput: LinkDatabaseInput;
   DestroyDatabaseInput: DestroyDatabaseInput;
   AddAppProxyPortInput: AddAppProxyPortInput;
@@ -511,6 +577,7 @@ export type ResolversParentTypes = {
   String: Scalars['String'];
   AppBuild: AppBuild;
   Database: Database;
+  Domains: Domains;
   RealTimeLog: RealTimeLog;
   LoginResult: LoginResult;
   CreateAppResult: CreateAppResult;
@@ -531,6 +598,9 @@ export type ResolversParentTypes = {
   IsDatabaseLinkedResult: IsDatabaseLinkedResult;
   EnvVar: EnvVar;
   EnvVarsResult: EnvVarsResult;
+  SetDomainResult: SetDomainResult;
+  AddDomainResult: AddDomainResult;
+  RemoveDomainResult: RemoveDomainResult;
   SetupResult: SetupResult;
   IsPluginInstalledResult: IsPluginInstalledResult;
   AppProxyPort: AppProxyPort;
@@ -541,6 +611,9 @@ export type ResolversParentTypes = {
   SetEnvVarInput: SetEnvVarInput;
   UnsetEnvVarInput: UnsetEnvVarInput;
   DestroyAppInput: DestroyAppInput;
+  AddDomainInput: AddDomainInput;
+  RemoveDomainInput: RemoveDomainInput;
+  SetDomainInput: SetDomainInput;
   LinkDatabaseInput: LinkDatabaseInput;
   DestroyDatabaseInput: DestroyDatabaseInput;
   AddAppProxyPortInput: AddAppProxyPortInput;
@@ -575,6 +648,11 @@ export type DatabaseResolvers<ContextType = any, ParentType extends ResolversPar
   type?: Resolver<ResolversTypes['DatabaseTypes'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   apps?: Resolver<Maybe<Array<ResolversTypes['App']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type DomainsResolvers<ContextType = any, ParentType extends ResolversParentTypes['Domains'] = ResolversParentTypes['Domains']> = {
+  domains?: Resolver<Array<Maybe<ResolversTypes['String']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -677,6 +755,21 @@ export type EnvVarsResultResolvers<ContextType = any, ParentType extends Resolve
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type SetDomainResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['SetDomainResult'] = ResolversParentTypes['SetDomainResult']> = {
+  result?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AddDomainResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['AddDomainResult'] = ResolversParentTypes['AddDomainResult']> = {
+  result?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type RemoveDomainResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['RemoveDomainResult'] = ResolversParentTypes['RemoveDomainResult']> = {
+  result?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type SetupResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['SetupResult'] = ResolversParentTypes['SetupResult']> = {
   canConnectSsh?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   sshPublicKey?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -699,6 +792,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   setup?: Resolver<ResolversTypes['SetupResult'], ParentType, ContextType>;
   apps?: Resolver<Array<ResolversTypes['App']>, ParentType, ContextType>;
   app?: Resolver<Maybe<ResolversTypes['App']>, ParentType, ContextType, RequireFields<QueryAppArgs, 'appId'>>;
+  domains?: Resolver<ResolversTypes['Domains'], ParentType, ContextType, RequireFields<QueryDomainsArgs, 'appId'>>;
   database?: Resolver<Maybe<ResolversTypes['Database']>, ParentType, ContextType, RequireFields<QueryDatabaseArgs, 'databaseId'>>;
   databases?: Resolver<Array<ResolversTypes['Database']>, ParentType, ContextType>;
   isPluginInstalled?: Resolver<ResolversTypes['IsPluginInstalledResult'], ParentType, ContextType, RequireFields<QueryIsPluginInstalledArgs, 'pluginName'>>;
@@ -720,6 +814,9 @@ export type SubscriptionResolvers<ContextType = any, ParentType extends Resolver
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   loginWithGithub?: Resolver<Maybe<ResolversTypes['LoginResult']>, ParentType, ContextType, RequireFields<MutationLoginWithGithubArgs, 'code'>>;
+  addDomain?: Resolver<ResolversTypes['AddDomainResult'], ParentType, ContextType, RequireFields<MutationAddDomainArgs, 'input'>>;
+  removeDomain?: Resolver<ResolversTypes['RemoveDomainResult'], ParentType, ContextType, RequireFields<MutationRemoveDomainArgs, 'input'>>;
+  setDomain?: Resolver<ResolversTypes['SetDomainResult'], ParentType, ContextType, RequireFields<MutationSetDomainArgs, 'input'>>;
   createApp?: Resolver<ResolversTypes['CreateAppResult'], ParentType, ContextType, RequireFields<MutationCreateAppArgs, 'input'>>;
   createDatabase?: Resolver<ResolversTypes['CreateDatabaseResult'], ParentType, ContextType, RequireFields<MutationCreateDatabaseArgs, 'input'>>;
   setEnvVar?: Resolver<ResolversTypes['SetEnvVarResult'], ParentType, ContextType, RequireFields<MutationSetEnvVarArgs, 'input'>>;
@@ -742,6 +839,7 @@ export type Resolvers<ContextType = any> = {
   App?: AppResolvers<ContextType>;
   AppBuild?: AppBuildResolvers<ContextType>;
   Database?: DatabaseResolvers<ContextType>;
+  Domains?: DomainsResolvers<ContextType>;
   RealTimeLog?: RealTimeLogResolvers<ContextType>;
   LoginResult?: LoginResultResolvers<ContextType>;
   CreateAppResult?: CreateAppResultResolvers<ContextType>;
@@ -761,6 +859,9 @@ export type Resolvers<ContextType = any> = {
   IsDatabaseLinkedResult?: IsDatabaseLinkedResultResolvers<ContextType>;
   EnvVar?: EnvVarResolvers<ContextType>;
   EnvVarsResult?: EnvVarsResultResolvers<ContextType>;
+  SetDomainResult?: SetDomainResultResolvers<ContextType>;
+  AddDomainResult?: AddDomainResultResolvers<ContextType>;
+  RemoveDomainResult?: RemoveDomainResultResolvers<ContextType>;
   SetupResult?: SetupResultResolvers<ContextType>;
   IsPluginInstalledResult?: IsPluginInstalledResultResolvers<ContextType>;
   AppProxyPort?: AppProxyPortResolvers<ContextType>;
