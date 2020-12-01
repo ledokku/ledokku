@@ -54,6 +54,10 @@ const typeDefs = gql`
     MYSQL
   }
 
+  type Domains {
+    domains: [String]!
+  }
+
   type RealTimeLog {
     message: String
     type: String
@@ -138,6 +142,18 @@ const typeDefs = gql`
     envVars: [EnvVar!]!
   }
 
+  type SetDomainResult {
+    result: Boolean!
+  }
+
+  type AddDomainResult {
+    result: Boolean!
+  }
+
+  type RemoveDomainResult {
+    result: Boolean!
+  }
+
   type SetupResult {
     canConnectSsh: Boolean!
     sshPublicKey: String!
@@ -190,6 +206,21 @@ const typeDefs = gql`
     appId: String!
   }
 
+  input AddDomainInput {
+    appId: String!
+    domainName: String!
+  }
+
+  input RemoveDomainInput {
+    appId: String!
+    domainName: String!
+  }
+
+  input SetDomainInput {
+    appId: String!
+    domainName: String!
+  }
+
   input LinkDatabaseInput {
     appId: String!
     databaseId: String!
@@ -216,6 +247,7 @@ const typeDefs = gql`
     setup: SetupResult!
     apps: [App!]!
     app(appId: String!): App
+    domains(appId: String!): Domains!
     database(databaseId: String!): Database
     databases: [Database!]!
     isPluginInstalled(pluginName: String!): IsPluginInstalledResult!
@@ -241,6 +273,9 @@ const typeDefs = gql`
 
   type Mutation {
     loginWithGithub(code: String!): LoginResult
+    addDomain(input: AddDomainInput!): AddDomainResult!
+    removeDomain(input: RemoveDomainInput!): RemoveDomainResult!
+    setDomain(input: SetDomainInput!): SetDomainResult!
     createApp(input: CreateAppInput!): CreateAppResult!
     createDatabase(input: CreateDatabaseInput!): CreateDatabaseResult!
     setEnvVar(input: SetEnvVarInput!): SetEnvVarResult!

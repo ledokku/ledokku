@@ -52,6 +52,11 @@ export type DatabaseTypes =
   | 'MONGODB'
   | 'MYSQL';
 
+export type Domains = {
+  __typename?: 'Domains';
+  domains: Array<Maybe<Scalars['String']>>;
+};
+
 export type RealTimeLog = {
   __typename?: 'RealTimeLog';
   message?: Maybe<Scalars['String']>;
@@ -156,6 +161,21 @@ export type EnvVarsResult = {
   envVars: Array<EnvVar>;
 };
 
+export type SetDomainResult = {
+  __typename?: 'SetDomainResult';
+  result: Scalars['Boolean'];
+};
+
+export type AddDomainResult = {
+  __typename?: 'AddDomainResult';
+  result: Scalars['Boolean'];
+};
+
+export type RemoveDomainResult = {
+  __typename?: 'RemoveDomainResult';
+  result: Scalars['Boolean'];
+};
+
 export type SetupResult = {
   __typename?: 'SetupResult';
   canConnectSsh: Scalars['Boolean'];
@@ -211,6 +231,21 @@ export type DestroyAppInput = {
   appId: Scalars['String'];
 };
 
+export type AddDomainInput = {
+  appId: Scalars['String'];
+  domainName: Scalars['String'];
+};
+
+export type RemoveDomainInput = {
+  appId: Scalars['String'];
+  domainName: Scalars['String'];
+};
+
+export type SetDomainInput = {
+  appId: Scalars['String'];
+  domainName: Scalars['String'];
+};
+
 export type LinkDatabaseInput = {
   appId: Scalars['String'];
   databaseId: Scalars['String'];
@@ -238,6 +273,7 @@ export type Query = {
   setup: SetupResult;
   apps: Array<App>;
   app?: Maybe<App>;
+  domains: Domains;
   database?: Maybe<Database>;
   databases: Array<Database>;
   isPluginInstalled: IsPluginInstalledResult;
@@ -252,6 +288,11 @@ export type Query = {
 
 
 export type QueryAppArgs = {
+  appId: Scalars['String'];
+};
+
+
+export type QueryDomainsArgs = {
   appId: Scalars['String'];
 };
 
@@ -308,6 +349,9 @@ export type Subscription = {
 export type Mutation = {
   __typename?: 'Mutation';
   loginWithGithub?: Maybe<LoginResult>;
+  addDomain: AddDomainResult;
+  removeDomain: RemoveDomainResult;
+  setDomain: SetDomainResult;
   createApp: CreateAppResult;
   createDatabase: CreateDatabaseResult;
   setEnvVar: SetEnvVarResult;
@@ -325,6 +369,21 @@ export type Mutation = {
 
 export type MutationLoginWithGithubArgs = {
   code: Scalars['String'];
+};
+
+
+export type MutationAddDomainArgs = {
+  input: AddDomainInput;
+};
+
+
+export type MutationRemoveDomainArgs = {
+  input: RemoveDomainInput;
+};
+
+
+export type MutationSetDomainArgs = {
+  input: SetDomainInput;
 };
 
 
@@ -400,6 +459,19 @@ export type AddAppProxyPortMutationVariables = Exact<{
 export type AddAppProxyPortMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'addAppProxyPort'>
+);
+
+export type AddDomainMutationVariables = Exact<{
+  input: AddDomainInput;
+}>;
+
+
+export type AddDomainMutation = (
+  { __typename?: 'Mutation' }
+  & { addDomain: (
+    { __typename?: 'AddDomainResult' }
+    & Pick<AddDomainResult, 'result'>
+  ) }
 );
 
 export type CreateAppMutationVariables = Exact<{
@@ -506,6 +578,19 @@ export type RemoveAppProxyPortMutation = (
   & Pick<Mutation, 'removeAppProxyPort'>
 );
 
+export type RemoveDomainMutationVariables = Exact<{
+  input: RemoveDomainInput;
+}>;
+
+
+export type RemoveDomainMutation = (
+  { __typename?: 'Mutation' }
+  & { removeDomain: (
+    { __typename?: 'RemoveDomainResult' }
+    & Pick<RemoveDomainResult, 'result'>
+  ) }
+);
+
 export type RestartAppMutationVariables = Exact<{
   input: RestartAppInput;
 }>;
@@ -516,6 +601,19 @@ export type RestartAppMutation = (
   & { restartApp: (
     { __typename?: 'RestartAppResult' }
     & Pick<RestartAppResult, 'result'>
+  ) }
+);
+
+export type SetDomainMutationVariables = Exact<{
+  input: SetDomainInput;
+}>;
+
+
+export type SetDomainMutation = (
+  { __typename?: 'Mutation' }
+  & { setDomain: (
+    { __typename?: 'SetDomainResult' }
+    & Pick<SetDomainResult, 'result'>
   ) }
 );
 
@@ -683,6 +781,19 @@ export type DatabaseQuery = (
   )> }
 );
 
+export type DomainsQueryVariables = Exact<{
+  appId: Scalars['String'];
+}>;
+
+
+export type DomainsQuery = (
+  { __typename?: 'Query' }
+  & { domains: (
+    { __typename?: 'Domains' }
+    & Pick<Domains, 'domains'>
+  ) }
+);
+
 export type EnvVarsQueryVariables = Exact<{
   appId: Scalars['String'];
 }>;
@@ -809,6 +920,38 @@ export function useAddAppProxyPortMutation(baseOptions?: Apollo.MutationHookOpti
 export type AddAppProxyPortMutationHookResult = ReturnType<typeof useAddAppProxyPortMutation>;
 export type AddAppProxyPortMutationResult = Apollo.MutationResult<AddAppProxyPortMutation>;
 export type AddAppProxyPortMutationOptions = Apollo.BaseMutationOptions<AddAppProxyPortMutation, AddAppProxyPortMutationVariables>;
+export const AddDomainDocument = gql`
+    mutation addDomain($input: AddDomainInput!) {
+  addDomain(input: $input) {
+    result
+  }
+}
+    `;
+export type AddDomainMutationFn = Apollo.MutationFunction<AddDomainMutation, AddDomainMutationVariables>;
+
+/**
+ * __useAddDomainMutation__
+ *
+ * To run a mutation, you first call `useAddDomainMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddDomainMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addDomainMutation, { data, loading, error }] = useAddDomainMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAddDomainMutation(baseOptions?: Apollo.MutationHookOptions<AddDomainMutation, AddDomainMutationVariables>) {
+        return Apollo.useMutation<AddDomainMutation, AddDomainMutationVariables>(AddDomainDocument, baseOptions);
+      }
+export type AddDomainMutationHookResult = ReturnType<typeof useAddDomainMutation>;
+export type AddDomainMutationResult = Apollo.MutationResult<AddDomainMutation>;
+export type AddDomainMutationOptions = Apollo.BaseMutationOptions<AddDomainMutation, AddDomainMutationVariables>;
 export const CreateAppDocument = gql`
     mutation createApp($name: String!) {
   createApp(input: {name: $name}) {
@@ -1065,6 +1208,38 @@ export function useRemoveAppProxyPortMutation(baseOptions?: Apollo.MutationHookO
 export type RemoveAppProxyPortMutationHookResult = ReturnType<typeof useRemoveAppProxyPortMutation>;
 export type RemoveAppProxyPortMutationResult = Apollo.MutationResult<RemoveAppProxyPortMutation>;
 export type RemoveAppProxyPortMutationOptions = Apollo.BaseMutationOptions<RemoveAppProxyPortMutation, RemoveAppProxyPortMutationVariables>;
+export const RemoveDomainDocument = gql`
+    mutation removeDomain($input: RemoveDomainInput!) {
+  removeDomain(input: $input) {
+    result
+  }
+}
+    `;
+export type RemoveDomainMutationFn = Apollo.MutationFunction<RemoveDomainMutation, RemoveDomainMutationVariables>;
+
+/**
+ * __useRemoveDomainMutation__
+ *
+ * To run a mutation, you first call `useRemoveDomainMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveDomainMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeDomainMutation, { data, loading, error }] = useRemoveDomainMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useRemoveDomainMutation(baseOptions?: Apollo.MutationHookOptions<RemoveDomainMutation, RemoveDomainMutationVariables>) {
+        return Apollo.useMutation<RemoveDomainMutation, RemoveDomainMutationVariables>(RemoveDomainDocument, baseOptions);
+      }
+export type RemoveDomainMutationHookResult = ReturnType<typeof useRemoveDomainMutation>;
+export type RemoveDomainMutationResult = Apollo.MutationResult<RemoveDomainMutation>;
+export type RemoveDomainMutationOptions = Apollo.BaseMutationOptions<RemoveDomainMutation, RemoveDomainMutationVariables>;
 export const RestartAppDocument = gql`
     mutation restartApp($input: RestartAppInput!) {
   restartApp(input: $input) {
@@ -1097,6 +1272,38 @@ export function useRestartAppMutation(baseOptions?: Apollo.MutationHookOptions<R
 export type RestartAppMutationHookResult = ReturnType<typeof useRestartAppMutation>;
 export type RestartAppMutationResult = Apollo.MutationResult<RestartAppMutation>;
 export type RestartAppMutationOptions = Apollo.BaseMutationOptions<RestartAppMutation, RestartAppMutationVariables>;
+export const SetDomainDocument = gql`
+    mutation setDomain($input: SetDomainInput!) {
+  setDomain(input: $input) {
+    result
+  }
+}
+    `;
+export type SetDomainMutationFn = Apollo.MutationFunction<SetDomainMutation, SetDomainMutationVariables>;
+
+/**
+ * __useSetDomainMutation__
+ *
+ * To run a mutation, you first call `useSetDomainMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetDomainMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setDomainMutation, { data, loading, error }] = useSetDomainMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useSetDomainMutation(baseOptions?: Apollo.MutationHookOptions<SetDomainMutation, SetDomainMutationVariables>) {
+        return Apollo.useMutation<SetDomainMutation, SetDomainMutationVariables>(SetDomainDocument, baseOptions);
+      }
+export type SetDomainMutationHookResult = ReturnType<typeof useSetDomainMutation>;
+export type SetDomainMutationResult = Apollo.MutationResult<SetDomainMutation>;
+export type SetDomainMutationOptions = Apollo.BaseMutationOptions<SetDomainMutation, SetDomainMutationVariables>;
 export const SetEnvVarDocument = gql`
     mutation setEnvVar($key: String!, $value: String!, $appId: String!) {
   setEnvVar(input: {key: $key, value: $value, appId: $appId}) {
@@ -1516,6 +1723,39 @@ export function useDatabaseLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<D
 export type DatabaseQueryHookResult = ReturnType<typeof useDatabaseQuery>;
 export type DatabaseLazyQueryHookResult = ReturnType<typeof useDatabaseLazyQuery>;
 export type DatabaseQueryResult = Apollo.QueryResult<DatabaseQuery, DatabaseQueryVariables>;
+export const DomainsDocument = gql`
+    query domains($appId: String!) {
+  domains(appId: $appId) {
+    domains
+  }
+}
+    `;
+
+/**
+ * __useDomainsQuery__
+ *
+ * To run a query within a React component, call `useDomainsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDomainsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDomainsQuery({
+ *   variables: {
+ *      appId: // value for 'appId'
+ *   },
+ * });
+ */
+export function useDomainsQuery(baseOptions?: Apollo.QueryHookOptions<DomainsQuery, DomainsQueryVariables>) {
+        return Apollo.useQuery<DomainsQuery, DomainsQueryVariables>(DomainsDocument, baseOptions);
+      }
+export function useDomainsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DomainsQuery, DomainsQueryVariables>) {
+          return Apollo.useLazyQuery<DomainsQuery, DomainsQueryVariables>(DomainsDocument, baseOptions);
+        }
+export type DomainsQueryHookResult = ReturnType<typeof useDomainsQuery>;
+export type DomainsLazyQueryHookResult = ReturnType<typeof useDomainsLazyQuery>;
+export type DomainsQueryResult = Apollo.QueryResult<DomainsQuery, DomainsQueryVariables>;
 export const EnvVarsDocument = gql`
     query envVars($appId: String!) {
   envVars(appId: $appId) {
