@@ -11,6 +11,7 @@ import { useFormik } from 'formik';
 import { TabNav, TabNavLink, Button, FormInput, FormHelper } from '../../ui';
 import { AppProxyPorts } from '../../modules/appProxyPorts/AppProxyPorts';
 import { AppRestart } from '../../modules/app/AppRestart';
+import { AppRebuild } from '../../modules/app/AppRebuild';
 import { AppDomains } from '../../modules/domains/AppDomains';
 
 export const Settings = () => {
@@ -111,6 +112,7 @@ export const Settings = () => {
             </div>
             <AppProxyPorts appId={app.id} />
             <AppRestart appId={app.id} />
+            <AppRebuild appId={app.id} />
             <AppDomains appId={appId} />
             <h1 className="text-md font-bold py-5">Delete app</h1>
             <p className="text-gray-400">

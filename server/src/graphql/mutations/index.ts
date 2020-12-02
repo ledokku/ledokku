@@ -13,6 +13,7 @@ import { unlinkDatabase } from './unlinkDatabase';
 import { addAppProxyPort } from './addAppProxyPort';
 import { removeAppProxyPort } from './removeAppProxyPort';
 import { restartApp } from './restartApp';
+import { rebuildApp } from './rebuildApp';
 
 export const mutations = {
   loginWithGithub,
@@ -27,6 +28,7 @@ export const mutations = {
   unlinkDatabase,
   addAppProxyPort,
   removeAppProxyPort,
+  rebuildApp,
   removeDomain,
   addDomain,
   setDomain,
