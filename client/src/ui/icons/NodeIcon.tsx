@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface IconProps {
   opacity?: number;
   className?: string;

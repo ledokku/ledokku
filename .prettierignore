@@ -1,5 +1,6 @@
 client/build
 client/src/generated
 server/.ledokku
-server/.build
+server/build
 server/src/generated
+website/.docusaurus

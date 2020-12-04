@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 import jwtDecode from 'jwt-decode';
 
 interface JwtUser {
@@ -6,7 +6,7 @@ interface JwtUser {
   avatarUrl: string;
 }
 
-const AuthContext = React.createContext<{
+const AuthContext = createContext<{
   loggedIn: boolean;
   user?: JwtUser;
   login(token: string): void;
@@ -23,7 +23,14 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     user?: JwtUser;
   }>(() => {
     const token = localStorage.getItem('accessToken');
-    const decodedToken = token ? jwtDecode<JwtUser>(token) : undefined;
+    let decodedToken;
+    if (token) {
+      try {
+        decodedToken = jwtDecode<JwtUser>(token);
+      } catch (e) {
+        //Invalid token
+      }
+    }
     return {
       loggedIn: Boolean(token),
       user: decodedToken
@@ -66,6 +73,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   );
 };
 
-const useAuth = () => React.useContext(AuthContext);
+const useAuth = () => useContext(AuthContext);
 
 export { AuthProvider, useAuth };

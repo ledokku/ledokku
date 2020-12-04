@@ -10,6 +10,8 @@ import { isPluginInstalled } from './isPluginInstalled';
 import { databaseInfo } from './databaseInfo';
 import { databaseLogs } from './databaseLogs';
 import { isDatabaseLinked } from './isDatabaseLinked';
+import { appProxyPorts } from './appProxyPorts';
+import { domains } from './domains';
 
 export const queries = {
   app,
@@ -18,10 +20,12 @@ export const queries = {
   databases,
   databaseInfo,
   databaseLogs,
+  domains,
   isDatabaseLinked,
   dokkuPlugins,
   appLogs,
   envVars,
   setup,
   isPluginInstalled,
+  appProxyPorts,
 };

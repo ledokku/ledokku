@@ -1,4 +1,3 @@
-import React from 'react';
 import { MongoIcon } from '../icons/MongoIcon';
 import { MySQLIcon } from '../icons/MySQLIcon';
 import { RedisIcon } from '../icons/RedisIcon';

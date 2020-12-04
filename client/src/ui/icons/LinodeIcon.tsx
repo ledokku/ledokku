@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface IconProps {
   size?: 24 | 40;
 }

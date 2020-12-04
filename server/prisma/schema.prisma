@@ -26,8 +26,6 @@ model App {
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @default(now())
   name          String
-  user          User       @relation(fields: [userId], references: [id])
-  userId        String
   appBuild      AppBuild[]
   databases     Database[] @relation(references: [id])
 }
@@ -39,8 +37,6 @@ model AppBuild {
   status    AppBuildStatus
   app       App            @relation(fields: [appId], references: [id])
   appId     String
-  user      User           @relation(fields: [userId], references: [id])
-  userId    String
 }
 
 enum AppBuildStatus {
@@ -56,10 +52,7 @@ model Database {
   updatedAt DateTime @default(now())
   name      String
   type      DbTypes
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
   apps      App[]    @relation(references: [id])
-
 }
 
 enum DbTypes {

@@ -1,18 +1,21 @@
 {
   "name": "ledokku-client",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.4.0",
   "license": "MIT",
   "scripts": {
-    "dev": "npm run watch:css && SKIP_PREFLIGHT_CHECK=true react-scripts start",
-    "build": "npm run build:css && SKIP_PREFLIGHT_CHECK=true react-scripts build",
+    "dev": "yarn watch:css && SKIP_PREFLIGHT_CHECK=true react-scripts start",
+    "build": "yarn build:css && SKIP_PREFLIGHT_CHECK=true react-scripts build",
     "test": "react-scripts test",
     "build:css": "postcss src/styles/index.css -o src/generated/index.css",
     "watch:css": "postcss src/styles/index.css -o src/generated/index.css",
     "generate": "graphql-codegen --config codegen.yml"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "rules": {
+      "react/react-in-jsx-scope": "off"
+    }
   },
   "browserslist": {
     "production": [
@@ -27,48 +30,44 @@
     ]
   },
   "dependencies": {
-    "@apollo/react-hooks": "3.1.5",
-    "@tailwindui/react": "0.1.1",
-    "apollo-cache-inmemory": "1.6.6",
-    "apollo-client": "2.6.10",
-    "apollo-link-context": "1.0.20",
-    "apollo-link-error": "1.1.13",
-    "apollo-link-http": "1.5.17",
+    "@apollo/client": "3.2.5",
+    "@headlessui/react": "0.2.0",
+    "subscriptions-transport-ws": "0.9.18",
+    "ansi_up": "4.0.4",
     "classnames": "2.2.6",
-    "formik": "2.1.5",
+    "formik": "2.2.1",
     "graphql": "15.3.0",
     "jwt-decode": "2.2.0",
-    "polished": "3.6.5",
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
-    "react-feather": "2.0.8",
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
+    "react-feather": "2.0.9",
     "react-router-dom": "5.2.0",
-    "react-select": "3.1.0",
-    "socket.io-client": "2.3.0",
-    "styled-components": "5.1.1",
-    "yup": "0.29.2"
+    "styled-components": "5.2.1",
+    "react-toastify": "6.0.9",
+    "yup": "0.31.0"
   },
   "devDependencies": {
-    "@graphql-codegen/add": "1.17.6",
-    "@graphql-codegen/cli": "1.17.6",
-    "@graphql-codegen/typescript": "1.17.6",
-    "@graphql-codegen/typescript-operations": "1.17.6",
-    "@graphql-codegen/typescript-react-apollo": "1.17.6",
-    "@tailwindcss/ui": "0.6.0",
+    "@graphql-codegen/add": "2.0.1",
+    "@graphql-codegen/cli": "1.18.0",
+    "@graphql-codegen/typescript": "1.17.11",
+    "@graphql-codegen/typescript-operations": "1.17.8",
+    "@graphql-codegen/typescript-react-apollo": "2.0.7",
+    "@tailwindcss/forms": "0.2.1",
     "@types/classnames": "2.2.10",
     "@types/jwt-decode": "2.2.1",
-    "@types/node": "14.0.27",
-    "@types/react": "16.9.44",
-    "@types/react-dom": "16.9.8",
-    "@types/react-router-dom": "5.1.5",
+    "@types/react-toastify": "4.1.0",
+    "@types/node": "14.14.2",
+    "@types/react": "17.0.0",
+    "@types/react-dom": "17.0.0",
+    "@types/react-router-dom": "5.1.6",
     "@types/react-transition-group": "4.4.0",
-    "@types/socket.io-client": "1.4.33",
-    "@types/styled-components": "5.1.2",
-    "@types/yup": "0.29.3",
-    "postcss-cli": "7.1.1",
-    "postcss-preset-env": "6.7.0",
-    "react-scripts": "3.4.1",
-    "tailwindcss": "1.8.8",
-    "typescript": "3.9.7"
+    "@types/styled-components": "5.1.4",
+    "@types/yup": "0.29.9",
+    "autoprefixer": "10.0.2",
+    "postcss": "8.1.9",
+    "postcss-cli": "8.3.0",
+    "react-scripts": "4.0.1",
+    "tailwindcss": "2.0.1",
+    "typescript": "4.1.2"
   }
 }

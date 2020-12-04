@@ -5,39 +5,31 @@ import {
   useDatabaseByIdQuery,
   useDatabaseLogsQuery,
 } from '../../generated/graphql';
-import { TabNav, TabNavLink, Terminal } from '../../ui';
-
-interface LogProps {
-  log: string;
-}
-
-export const LineOfLog = (props: LogProps) => (
-  <React.Fragment>
-    <br />
-    <p className="text-green-400">{props.log}</p>
-  </React.Fragment>
-);
+import {
+  TabNav,
+  TabNavLink,
+  Terminal,
+  Alert,
+  AlertDescription,
+} from '../../ui';
 
 export const Logs = () => {
-  const { id: databaseId } = useParams();
+  const { id: databaseId } = useParams<{ id: string }>();
 
   const { data, loading /* error */ } = useDatabaseByIdQuery({
     variables: {
       databaseId,
     },
-    ssr: false,
-    skip: !databaseId,
   });
 
   const {
     data: databaseLogsData,
+    error: databaseLogsError,
     loading: databaseLogsLoading,
   } = useDatabaseLogsQuery({
     variables: {
       databaseId,
     },
-    ssr: false,
-    skip: !databaseId,
     pollInterval: 15000,
   });
 
@@ -74,25 +66,30 @@ export const Logs = () => {
         </TabNav>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 gap-4 mt-10">
-          <h1 className="text-lg font-bold py-5">Logs</h1>
+          <h1 className="text-lg font-bold py-5">Logs for {database.name}:</h1>
         </div>
-        <Terminal className="pt-8 pb-16">
-          <p className=" typing items-center ">{`Logs for ${database.name} database:`}</p>
-          {!databaseLogsData && !databaseLogsLoading ? (
-            <span className="text-yellow-400">Database logs loading</span>
-          ) : databaseLogsLoading ? (
-            'Loading...'
-          ) : (
-            databaseLogsData.databaseLogs.logs.map((dblog) => (
-              <LineOfLog
-                key={databaseLogsData.databaseLogs.logs.lastIndexOf(dblog)}
-                log={dblog}
-              />
-            ))
-          )}
-        </Terminal>
+
+        {databaseLogsLoading ? (
+          <p className="text-gray-400 text-sm">Loading...</p>
+        ) : null}
+
+        {databaseLogsError ? (
+          <Alert status="error">
+            <AlertDescription>{databaseLogsError.message}</AlertDescription>
+          </Alert>
+        ) : null}
+
+        {!databaseLogsLoading && !databaseLogsError && databaseLogsData ? (
+          <Terminal className="mb-8">
+            {databaseLogsData.databaseLogs.logs.map((dblog, index) => (
+              <React.Fragment key={index}>
+                {dblog ? <p>{dblog}</p> : <p>&nbsp;</p>}
+              </React.Fragment>
+            ))}
+          </Terminal>
+        ) : null}
       </div>
     </div>
   );

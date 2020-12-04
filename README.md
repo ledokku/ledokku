@@ -1,4 +1,4 @@
-# Ledokku - deploy your apps within seconds
+# Ledokku - beautiful web UI for all things Dokku
 
 ### Dashboard preview
 
@@ -13,33 +13,33 @@ Ledokku is a beautiful UI powered by [dokku](http://dokku.viewdocs.io/dokku/)
 With us you will be able to deploy apps written in:
 **node.js, php, ruby and many more**.
 
-And link them with wide most popular dbs : **postgresql, mongodb, redis**.
+And link them with most popular dbs : **postgresql, mongodb, redis**.
 
-## Just few clicks in within and your app is live
+## Just few clicks and your app is live
 
 - Install Ledokku on your Dokku server
-- Select which app you want to deploy from Github
+- Deploy your app using the Dokku workflow
 - Create and link your db (PostgreSQL, mongoDB, redis)
-- Link your custom domain
 - App is live 🎉🎉🎉
+
+## Getting started guide
+
+Want to try Ledokku out yourself? Head to our [getting started guide](https://www.ledokku.com/docs/getting-started)
 
 ## Our vision
 
-We started to work on this because current deployment solutions were expensive or hard to configure. With Ledokku we plan to provide a solution were deployment experience is smooth, enjoyable and affordable.
+We started to work on this because current deployment solutions were expensive or hard to configure. With Ledokku we plan to provide a solution where deployment experience is smooth, enjoyable and affordable.
 
 ## MVP
 
-To get initial feedback we are working the MVP state where current Dokku users will be able to use the web ui of Ledokku while keeping control on their server. It will allow us to gather feedback from active Dokku users and shape the future of Ledokku.
+To get initial feedback we are working on the MVP state where current Dokku users will be able to use the web ui of Ledokku while keeping control of their server. It will allow us to gather feedback from active Dokku users and shape the future of Ledokku.
 
 ## MVP features
 
 - Beautiful web ui
-- Auto deployment from Github on every commit
 - Common app management (create, delete, stop)
-- Real time deployment logs
 - Env variables management (set, unset, edit)
 - Databases management (create, delete, link)
-- Domains management
 - Explore app logs
 
 ### Built with

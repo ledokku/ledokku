@@ -1,12 +1,16 @@
 module.exports = {
   title: 'Ledokku',
-  tagline: 'Deploy your apps blazing fast',
+  tagline: 'Beautiful web UI for all things Dokku',
   url: 'https://www.ledokku.com',
   baseUrl: '/',
   favicon: 'img/favicon.ico',
   organizationName: 'ledokku', // Usually your GitHub org/user name.
   projectName: 'ledokku', // Usually your repo name.
   themeConfig: {
+    fathomAnalytics: {
+      siteId: 'AFIEKRUK',
+    },
+    image: 'img/twitterCardImage.png',
     colorMode: {
       defaultMode: 'light',
       disableSwitch: true,
@@ -91,4 +95,5 @@ module.exports = {
       },
     ],
   ],
+  plugins: [require.resolve('docusaurus-plugin-fathom')],
 };

@@ -1,11 +1,13 @@
 import { Worker, Queue } from 'bullmq';
 import createDebug from 'debug';
+import Redis from 'ioredis';
 import { config } from '../config';
 import { sshConnect } from '../lib/ssh';
 import { dokku } from '../lib/dokku';
 
 const queueName = 'set-env-var';
 const debug = createDebug(`queue:${queueName}`);
+const redisClient = new Redis(config.redisUrl);
 
 interface QueueArgs {
   appName: string;
@@ -18,7 +20,7 @@ export const setEnvVarQueue = new Queue<QueueArgs>(queueName, {
     // Max timeout 20 minutes
     timeout: 1.2e6,
   },
-  connection: config.redisClient,
+  connection: redisClient,
 });
 
 /**
@@ -36,7 +38,7 @@ const worker = new Worker(
 
     debug(`finished setEnvVarQueue for app:  ${appName} with ${key}=${value}`);
   },
-  { connection: config.redisClient }
+  { connection: redisClient }
 );
 
 worker.on('failed', async (job, err) => {

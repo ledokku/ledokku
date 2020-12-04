@@ -1,8 +1,6 @@
-import { dbTypeToDokkuPlugin } from './../utils';
+import { linkDatabaseQueue } from '../../queues/linkDatabase';
 import { MutationResolvers } from '../../generated/graphql';
 import { prisma } from '../../prisma';
-import { dokku } from '../../lib/dokku';
-import { sshConnect } from '../../lib/ssh';
 
 export const linkDatabase: MutationResolvers['linkDatabase'] = async (
   _,
@@ -45,12 +43,6 @@ export const linkDatabase: MutationResolvers['linkDatabase'] = async (
     throw new Error(`Database with ID ${databaseId} not found`);
   }
 
-  if (app.userId !== userId || database.userId !== userId) {
-    throw new Error(
-      `App with ID ${appId} or database with ID ${databaseId} does not belong to ${userId}`
-    );
-  }
-
   const isLinked = database.apps.length === 1;
 
   if (isLinked) {
@@ -59,19 +51,9 @@ export const linkDatabase: MutationResolvers['linkDatabase'] = async (
     );
   }
 
-  const dbType = dbTypeToDokkuPlugin(database.type);
-
-  const ssh = await sshConnect();
-
-  await dokku.database.link(ssh, database.name, dbType, app.name);
-
-  await prisma.database.update({
-    where: { id: database.id },
-    data: {
-      apps: {
-        connect: { id: appId },
-      },
-    },
+  await linkDatabaseQueue.add('link-database', {
+    appId,
+    databaseId,
   });
 
   return { result: true };

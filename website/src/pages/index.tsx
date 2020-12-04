@@ -1,5 +1,5 @@
 import React from 'react';
-import classnames from 'classnames';
+import classnames from 'clsx';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
@@ -15,17 +15,17 @@ const features = [
     description: (
       <>
         Ledokku provides a beautiful and intuitive web interface that lets you
-        manage your Dokku server.
+        manage all things Dokku.
       </>
     ),
   },
   {
-    title: <>Deploy your app in no time</>,
+    title: <>Deploy and monitor</>,
     imageUrl: 'img/undraw_deploy.svg',
     description: (
       <>
-        By providing native Github auto deployments, Ledokku shifts away all the
-        manual configuration.
+        Deploy your app with usual Dokku flow, monitor both app and database
+        logs and manage connections between the two.
       </>
     ),
   },
@@ -98,6 +98,12 @@ function Home() {
               </div>
               <div>
                 <img alt="App view" src="img/app1.png" />
+              </div>
+              <div>
+                <img alt="Unlink app logs view" src="img/unlinklogs.png" />
+              </div>
+              <div>
+                <img alt="App logs view" src="img/applogs.png" />
               </div>
               <div>
                 <img alt="Environment variables view" src="img/env1.png" />

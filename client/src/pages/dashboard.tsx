@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import format from 'date-fns/format';
 import { useDashboardQuery } from '../generated/graphql';
@@ -11,7 +10,9 @@ import { MySQLIcon } from '../ui/icons/MySQLIcon';
 
 export const Dashboard = () => {
   // const history = useHistory();
-  const { data /* loading, error */ } = useDashboardQuery({});
+  const { data /* loading, error */ } = useDashboardQuery({
+    fetchPolicy: 'cache-and-network',
+  });
 
   // TODO show loading
   // TODO handle error
@@ -46,7 +47,7 @@ export const Dashboard = () => {
             </Button>
           </Link>
         </div>
-        <main className="grid grid-cols-1 md:grid-cols-12 md:gap-x-20">
+        <main className="grid grid-cols-1 gap-6 md:grid-cols-12 md:gap-x-20">
           <div className="col-span-7 mt-4">
             <h1 className="text-lg font-bold py-2">Apps</h1>
             {data?.apps.length === 0 ? (
@@ -84,28 +85,28 @@ export const Dashboard = () => {
                 <div className="flex justify-between text-gray-400 text-sm">
                   <div className="flex items-center">
                     {database.type === 'POSTGRESQL' ? (
-                      <React.Fragment>
+                      <>
                         <PostgreSQLIcon size={16} className="mr-1" />
                         PostgreSQL
-                      </React.Fragment>
+                      </>
                     ) : undefined}
                     {database.type === 'MONGODB' ? (
-                      <React.Fragment>
+                      <>
                         <MongoIcon size={16} className="mr-1" />
                         Mongo
-                      </React.Fragment>
+                      </>
                     ) : undefined}
                     {database.type === 'REDIS' ? (
-                      <React.Fragment>
+                      <>
                         <RedisIcon size={16} className="mr-1" />
                         Redis
-                      </React.Fragment>
+                      </>
                     ) : undefined}
                     {database.type === 'MYSQL' ? (
-                      <React.Fragment>
+                      <>
                         <MySQLIcon size={16} className="mr-1" />
                         MySQL
-                      </React.Fragment>
+                      </>
                     ) : undefined}
                   </div>
                   <div>

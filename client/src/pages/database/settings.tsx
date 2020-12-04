@@ -1,7 +1,7 @@
-import React from 'react';
 import * as yup from 'yup';
 import { useParams, useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
+import { toast } from 'react-toastify';
 import { Header } from '../../modules/layout/Header';
 import {
   useDatabaseByIdQuery,
@@ -9,21 +9,10 @@ import {
   DashboardDocument,
   useDatabaseInfoQuery,
 } from '../../generated/graphql';
-import { TabNav, TabNavLink, Button, Terminal } from '../../ui';
-
-interface InfoProps {
-  infoLine: string;
-}
-
-export const LineOfInfo = (props: InfoProps) => (
-  <React.Fragment>
-    <br />
-    <p className="text-green-400 w-5/6">{props.infoLine}</p>
-  </React.Fragment>
-);
+import { TabNav, TabNavLink, Button, FormInput, FormHelper } from '../../ui';
 
 export const Settings = () => {
-  const { id: databaseId } = useParams();
+  const { id: databaseId } = useParams<{ id: string }>();
   let history = useHistory();
   const [
     destroyDatabaseMutation,
@@ -56,7 +45,7 @@ export const Settings = () => {
       .test(
         'Equals database name',
         'Must match database name',
-        (val) => val === data.database.name
+        (val) => val === data?.database?.name
       ),
   });
 
@@ -80,11 +69,10 @@ export const Settings = () => {
             },
           ],
         });
+        toast.success('Database deleted successfully');
         history.push('/dashboard');
       } catch (error) {
-        // TODO catch errors
-        console.log(error);
-        alert(error);
+        toast.error(error.message);
       }
     },
   });
@@ -107,6 +95,14 @@ export const Settings = () => {
     return <p>Database not found.</p>;
   }
 
+  const databaseInfos = databaseInfoData?.databaseInfo.info
+    .map((data) => data.trim())
+    .map((info) => {
+      const name = info.split(':')[0];
+      const value = info.substring(info.indexOf(':') + 1).trim();
+      return { name, value };
+    });
+
   return (
     <div>
       <Header />
@@ -120,56 +116,62 @@ export const Settings = () => {
         </TabNav>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 gap-4 mt-10">
           <div className="col-span-2 w-5/5">
-            <h1 className="text-lg font-bold py-5">Info</h1>
-            <Terminal className="pt-8 pb-16">
-              <p className=" typing items-center ">{` ${database.name} database info:`}</p>
-              {!databaseInfoData && !databaseInfoLoading ? (
-                <span className="text-yellow-400">Database info loading</span>
-              ) : databaseInfoLoading ? (
-                'Loading...'
-              ) : (
-                databaseInfoData.databaseInfo.info.map((infoLine) => (
-                  <LineOfInfo infoLine={infoLine} />
+            <h1 className="text-lg font-bold py-5">Info for {database.name}</h1>
+            {databaseInfoLoading ? (
+              <p className="text-gray-400 text-sm">Loading...</p>
+            ) : null}
+            {!databaseInfoLoading && databaseInfos
+              ? databaseInfos.map((info) => (
+                  <div key={info.name} className="py-2">
+                    <div className="font-semibold">{info.name}</div>
+                    <div>{info.value}</div>
+                  </div>
                 ))
-              )}
-            </Terminal>
+              : null}
           </div>
           <div className="w-3/3 mb-6">
             <h1 className="text-lg font-bold py-5">Database settings</h1>
 
             <h2 className="text-gray-400 w-6/6">
               This action cannot be undone. This will permanently delete{' '}
-              {database.name} app and everything related to it. Please type{' '}
+              {database.name} database and everything related to it. Please type{' '}
               <b>{database.name}</b> to confirm deletion.
             </h2>
             <form onSubmit={formik.handleSubmit}>
-              <div className="mt-4">
-                <input
-                  autoComplete="off"
-                  className="mb-2 block w-full max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
-                  id="databaseName"
-                  name="databaseName"
-                  value={formik.values.databaseName}
-                  onChange={formik.handleChange}
-                />
-                {!!formik.errors && (
-                  <p className="text-red-500 text-sm font-semibold">
-                    {formik.errors.databaseName}
-                  </p>
-                )}
-                <Button
-                  type="submit"
-                  isLoading={destroyDbLoading}
-                  disabled={
-                    !formik.values.databaseName || !!formik.errors.databaseName
-                  }
-                  color="red"
-                >
-                  Delete
-                </Button>
+              <div className="grid md:grid-cols-3">
+                <div className="mt-4">
+                  <FormInput
+                    autoComplete="off"
+                    id="databaseName"
+                    name="databaseName"
+                    value={formik.values.databaseName}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={Boolean(
+                      formik.errors.databaseName && formik.touched.databaseName
+                    )}
+                  />
+                  {formik.errors.databaseName && formik.errors.databaseName ? (
+                    <FormHelper status="error">
+                      {formik.errors.databaseName}
+                    </FormHelper>
+                  ) : null}
+                  <Button
+                    type="submit"
+                    isLoading={destroyDbLoading}
+                    disabled={
+                      !formik.values.databaseName ||
+                      !!formik.errors.databaseName
+                    }
+                    color="red"
+                    className="mt-2"
+                  >
+                    Delete
+                  </Button>
+                </div>
               </div>
             </form>
           </div>

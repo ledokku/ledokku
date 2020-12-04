@@ -2,13 +2,14 @@ import { Worker, Queue } from 'bullmq';
 import createDebug from 'debug';
 import { resolve, join } from 'path';
 import execa from 'execa';
+import Redis from 'ioredis';
 import { config } from '../config';
-import { io } from '../server';
 import { prisma } from '../prisma';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 
 const queueName = 'build-app';
 const debug = createDebug(`queue:${queueName}`);
+const redisClient = new Redis(config.redisUrl);
 
 interface RealtimeLog {
   message: string;
@@ -24,7 +25,7 @@ export const buildAppQueue = new Queue<QueueArgs>(queueName, {
     // Max timeout 20 minutes
     timeout: 1.2e6,
   },
-  connection: config.redisClient,
+  connection: redisClient,
 });
 
 /**
@@ -68,7 +69,7 @@ const worker = new Worker(
       logs.push(log);
       clearTimeout(logTimerId);
       logTimerId = setTimeout(() => {
-        io.emit(`app-build:${appBuild.id}`, logs);
+        // io.emit(`app-build:${appBuild.id}`, logs);
         logs = [];
       }, 500);
     };
@@ -88,13 +89,13 @@ const worker = new Worker(
       options: { cwd?: string } = {}
     ) => {
       debug('execCommand', command, args);
-      io.emit(`app-build:${appBuild.id}`, [
-        {
-          // TODO concat args to command
-          message: command,
-          type: 'command',
-        },
-      ]);
+      // io.emit(`app-build:${appBuild.id}`, [
+      //   {
+      //     // TODO concat args to command
+      //     message: command,
+      //     type: 'command',
+      //   },
+      // ]);
       const subprocess = execa(command, args, options);
       subprocess.stdout.on('data', onStdout);
       subprocess.stderr.on('data', onStderr);
@@ -156,7 +157,7 @@ const worker = new Worker(
     debug(`finished buildAppQueue for app id ${app.id}`);
     // TODO notify client via socket.io that build is finished
   },
-  { connection: config.redisClient }
+  { connection: redisClient }
 );
 
 worker.on('failed', async (job, err) => {

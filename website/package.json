@@ -3,22 +3,26 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "docusaurus": "docusaurus",
     "start": "docusaurus start",
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
-    "deploy": "docusaurus deploy"
+    "deploy": "docusaurus deploy",
+    "serve": "docusaurus serve",
+    "clear": "docusaurus clear"
   },
   "dependencies": {
-    "@docusaurus/core": "2.0.0-alpha.60",
-    "@docusaurus/preset-classic": "2.0.0-alpha.60",
-    "classnames": "2.2.6",
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
+    "@docusaurus/core": "2.0.0-alpha.68",
+    "@docusaurus/preset-classic": "2.0.0-alpha.68",
+    "clsx": "1.1.1",
+    "docusaurus-plugin-fathom": "1.1.0",
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
     "react-responsive-carousel": "3.2.9"
   },
   "browserslist": {
     "production": [
-      ">0.2%",
+      ">0.5%",
       "not dead",
       "not op_mini all"
     ],
