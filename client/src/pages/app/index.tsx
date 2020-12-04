@@ -198,6 +198,19 @@ export const App = () => {
       </div>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* TODO only if app is not deployed */}
+        <div className="mt-10 bg-blue-100 text-blue-700 rounded p-4 text-sm flex justify-between">
+          <p>Looks like your app was never deployed</p>
+          <a
+            href="http://dokku.viewdocs.io/dokku/deployment/application-deployment/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-bold"
+          >
+            Get started
+          </a>
+        </div>
+
         <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4 mt-10">
           <div>
             <h1 className="text-lg font-bold py-5">App info</h1>
