@@ -91,8 +91,8 @@ main() {
   dokku tags:deploy ledokku ${LEDOKKU_TAG}
 
   # After app is deployed last step is to properly setup the ports
-  dokku proxy:ports-add ledokku http:80.5.00
-  dokku proxy:ports-remove ledokku http:4000.5.00
+  dokku proxy:ports-add ledokku http:80:4000
+  dokku proxy:ports-remove ledokku http:4000:4000
 
   echo "=== 🐳 ==="
   echo "Ledooku was successfully installed"

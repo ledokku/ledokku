@@ -84,8 +84,8 @@ dokku tags:deploy ledokku 0.5.0
 After the app is deployed last step is to setup the proxy port.
 
 ```sh
-dokku proxy:ports-add ledokku http:80.5.00
-dokku proxy:ports-remove ledokku http:4000.5.00
+dokku proxy:ports-add ledokku http:80:4000
+dokku proxy:ports-remove ledokku http:4000:4000
 ```
 
 Now open you server ip in your browser (eg: http://123.123.123.123).
