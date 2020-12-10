@@ -2,13 +2,38 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.5.0](https://github.com/ledokku/ledokku/compare/v0.4.0...v0.5.0) (2020-12-10)
+
+### Features
+
+- **client:** add restart app functionality ([#238](https://github.com/ledokku/ledokku/issues/238)) ([f5ab08b](https://github.com/ledokku/ledokku/commit/f5ab08be7e411f92324a70855c7d65a5f797e651))
+- **client:** app domain managment ([#252](https://github.com/ledokku/ledokku/issues/252)) ([143607e](https://github.com/ledokku/ledokku/commit/143607e05c2942ffccb6b6a24f51950e388e92ae))
+- **client, server:** rebuild app functionality ([#254](https://github.com/ledokku/ledokku/issues/254)) ([c13cf43](https://github.com/ledokku/ledokku/commit/c13cf43e3173bb21d31c9ea6c42e3673bd268aba))
+
+### Bug Fixes
+
+- fix websocket connection failing when using https ([#256](https://github.com/ledokku/ledokku/issues/256)) ([b0dfcf8](https://github.com/ledokku/ledokku/commit/b0dfcf8ce47081f98993fd8a2343ef9cade675aa))
+
+### Miscellaneous Chores
+
+- **docs:** update the prisma migration part in contribution doc ([#253](https://github.com/ledokku/ledokku/issues/253)) ([d96bcc3](https://github.com/ledokku/ledokku/commit/d96bcc3b7a86934189ca4f08644d56935bbad868))
+- **server:** fix apps and databases query condition ([#251](https://github.com/ledokku/ledokku/issues/251)) ([cfaf576](https://github.com/ledokku/ledokku/commit/cfaf5764f33ff5afcf6dbe87df48a4912e266b36))
+- **server:** target node 12 for server compilation ([#249](https://github.com/ledokku/ledokku/issues/249)) ([3f6e810](https://github.com/ledokku/ledokku/commit/3f6e81023260aeb666309dfb8d097cc9a763bff9))
+- upgrade taiwind to v2 and polish styles ([#247](https://github.com/ledokku/ledokku/issues/247)) ([12d3b4a](https://github.com/ledokku/ledokku/commit/12d3b4a789de8730d31607a25bc2edc710bfe6cc))
+- upgrade yup to 0.31 ([#250](https://github.com/ledokku/ledokku/issues/250)) ([408ead1](https://github.com/ledokku/ledokku/commit/408ead1e21433187292d9b588393bf3f5b667205))
+- **client:** add modal to delete port ([#240](https://github.com/ledokku/ledokku/issues/240)) ([ef58a37](https://github.com/ledokku/ledokku/commit/ef58a3785579f1b4bdd9744b151cc1361d10b793))
+- **client:** upgrade to react 17 ([#217](https://github.com/ledokku/ledokku/issues/217)) ([5c39f04](https://github.com/ledokku/ledokku/commit/5c39f04d221f0ca8f0005fcae57b6e0eb341514d))
+
 ## [0.4.0](https://github.com/ledokku/ledokku/compare/v0.3.3...v0.4.0) (2020-11-10)
 
 ### For new Ledokku users
+
 Ledokku from now on will run on port 80, instead of 4000.
 
-### For existing Ledokku users 
+### For existing Ledokku users
+
 If you want to have same port behaviour as decribed ☝️ , you will need to run these commands :
+
 ```sh
 dokku proxy:ports-add ledokku http:80:4000
 dokku proxy:ports-remove ledokku http:4000:4000
