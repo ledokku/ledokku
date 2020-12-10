@@ -4,7 +4,10 @@ export const config = runConfig
   ? {
       githubClientId: runConfig['GITHUB_CLIENT_ID'],
       serverUrl: '',
-      serverWsUrl: `ws://${window.location.host}`,
+      // If app is loaded over https, we connect with wss
+      serverWsUrl: `${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${
+        window.location.host
+      }`,
       environment: process.env.NODE_ENV,
     }
   : {
