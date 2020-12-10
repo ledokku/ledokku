@@ -37,7 +37,7 @@ main() {
   ensure-dokku
 
   # Set latest version or use the one provided by the user
-  LEDOKKU_TAG=${LEDOKKU_TAG:-"0.4.0"}
+  LEDOKKU_TAG=${LEDOKKU_TAG:-"0.5.0"}
 
   # First we get the user ip so we can use it in the text we print later
   DOKKU_SSH_HOST=$(curl ifconfig.co)
