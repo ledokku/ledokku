@@ -137,6 +137,7 @@ export const Dashboard = () => {
               </div>
             ))}
           </GridItem>
+
           <GridItem colSpan={{ base: 12, md: 5 }}>
             <Heading as="h2" size="md" py={5}>
               Latest activity
