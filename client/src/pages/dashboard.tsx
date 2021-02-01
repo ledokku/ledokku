@@ -91,7 +91,6 @@ export const Dashboard = () => {
             <Heading as="h2" size="md" py={5} mt={8}>
               Databases
             </Heading>
-            {/* <h1 className="text-lg font-bold pb-2 pt-5">Databases</h1> */}
             {data?.databases.length === 0 ? (
               <div className="text-gray-400 text-sm mt-2">
                 No databases created.
