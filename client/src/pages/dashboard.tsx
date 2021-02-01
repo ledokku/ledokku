@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import format from 'date-fns/format';
-import { Heading, Text } from '@chakra-ui/react';
+import { Grid, GridItem, Heading, Text } from '@chakra-ui/react';
 import { useDashboardQuery } from '../generated/graphql';
 import { Header } from '../modules/layout/Header';
 import { TabNav, TabNavLink, Button } from '../ui';
@@ -48,8 +48,14 @@ export const Dashboard = () => {
             </Button>
           </Link>
         </div>
-        <main className="grid grid-cols-1 gap-6 md:grid-cols-12 md:gap-x-20">
-          <div className="col-span-7 mt-4">
+
+        <Grid
+          as="main"
+          templateColumns="repeat(12, 1fr)"
+          gap={{ base: 6, md: 20 }}
+          pt={4}
+        >
+          <GridItem colSpan={{ base: 12, md: 7 }}>
             <Heading as="h2" size="md" py={5}>
               Apps
             </Heading>
@@ -122,8 +128,8 @@ export const Dashboard = () => {
                 </div>
               </div>
             ))}
-          </div>
-          <div className="col-span-5 mt-4">
+          </GridItem>
+          <GridItem colSpan={{ base: 12, md: 5 }}>
             <Heading as="h2" size="md" py={5}>
               Latest activity
             </Heading>
@@ -134,8 +140,8 @@ export const Dashboard = () => {
             >
               Coming soon
             </Text>
-          </div>
-        </main>
+          </GridItem>
+        </Grid>
       </div>
     </div>
   );
