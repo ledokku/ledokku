@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useHistory, Redirect } from 'react-router-dom';
-import { GitHub } from 'react-feather';
+import { FiGithub } from 'react-icons/fi';
+import { Box, Heading, Text, Button, Spinner } from '@chakra-ui/react';
 import { config } from '../config';
 import {
   useSetupQuery,
   useLoginWithGithubMutation,
 } from '../generated/graphql';
 import { useAuth } from '../modules/auth/AuthContext';
-import { Terminal, Spinner, Button } from '../ui';
+import { Terminal } from '../ui';
 
 export const Home = () => {
   const history = useHistory();
@@ -64,22 +65,35 @@ export const Home = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center text-center max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h1 className="text-2xl font-bold">Ledokku</h1>
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+      minHeight="100vh"
+    >
+      <Heading as="h2" size="lg">
+        Ledokku
+      </Heading>
 
-      {error && <p className="mt-3 text-red-500">{error.message}</p>}
+      {error && (
+        <Text mt={4} color="red.500">
+          {error.message}
+        </Text>
+      )}
 
-      {(loading || loggingIn) && <Spinner size="small" className="mt-2" />}
+      {(loading || loggingIn) && <Spinner mt={4} />}
 
       {data?.setup.canConnectSsh === true && !loggingIn && (
         <>
-          <p className="mt-3 mb-3">Login to get started.</p>
+          <Text>Login to get started.</Text>
 
           <Button
-            color="grey"
+            mt={3}
+            colorScheme="gray"
             onClick={handleLogin}
-            iconStart={<GitHub />}
-            className="px-5"
+            leftIcon={<FiGithub size={18} />}
+            size="lg"
           >
             Log in with Github
           </Button>
@@ -88,16 +102,17 @@ export const Home = () => {
 
       {data?.setup.canConnectSsh === false && (
         <>
-          <p className="mt-3">
+          <Text mt={4}>
             In order to setup the ssh connection, run the following command on
             your Dokku server.
-          </p>
+          </Text>
+          {/* TODO migrate terminal to chakra-ui */}
           <Terminal className="break-all">
             {`echo "${data.setup.sshPublicKey}" | dokku ssh-keys:add ledokku`}
           </Terminal>
-          <p className="mt-3">Once you are done, just refresh this page.</p>
+          <Text mt={3}>Once you are done, just refresh this page.</Text>
         </>
       )}
-    </div>
+    </Box>
   );
 };

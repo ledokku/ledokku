@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { ChakraProvider } from '@chakra-ui/react';
 import { createGlobalStyle } from 'styled-components';
 import {
   split,
@@ -88,10 +89,12 @@ const apolloClient = new ApolloClient({
 ReactDOM.render(
   <React.StrictMode>
     <ApolloProvider client={apolloClient}>
-      <AuthProvider>
-        <GlobalStyle />
-        <Router />
-      </AuthProvider>
+      <ChakraProvider>
+        <AuthProvider>
+          <GlobalStyle />
+          <Router />
+        </AuthProvider>
+      </ChakraProvider>
     </ApolloProvider>
   </React.StrictMode>,
   document.getElementById('root')
