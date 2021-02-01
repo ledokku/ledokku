@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
+import { Container } from '@chakra-ui/react';
 import { useAuth } from '../auth/AuthContext';
 
 export const Header = () => {
@@ -7,7 +8,7 @@ export const Header = () => {
 
   return (
     <nav>
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Container maxW="5xl">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <h3 className="font-bold">
@@ -85,7 +86,7 @@ export const Header = () => {
             </Menu>
           </div>
         </div>
-      </div>
+      </Container>
     </nav>
   );
 };

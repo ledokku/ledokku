@@ -1,9 +1,17 @@
 import { Link } from 'react-router-dom';
 import format from 'date-fns/format';
-import { Grid, GridItem, Heading, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Grid,
+  GridItem,
+  Heading,
+  Text,
+  Button,
+  Container,
+} from '@chakra-ui/react';
 import { useDashboardQuery } from '../generated/graphql';
 import { Header } from '../modules/layout/Header';
-import { TabNav, TabNavLink, Button } from '../ui';
+import { TabNav, TabNavLink } from '../ui';
 import { PostgreSQLIcon } from '../ui/icons/PostgreSQLIcon';
 import { MongoIcon } from '../ui/icons/MongoIcon';
 import { RedisIcon } from '../ui/icons/RedisIcon';
@@ -24,7 +32,7 @@ export const Dashboard = () => {
     <div>
       <Header />
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Container maxW="5xl">
         <TabNav>
           <TabNavLink to="/dashboard" selected>
             Dashboard
@@ -33,21 +41,21 @@ export const Dashboard = () => {
           <TabNavLink to="/metrics">Metrics</TabNavLink>
           <TabNavLink to="/settings">Settings</TabNavLink>
         </TabNav>
-      </div>
+      </Container>
 
-      <div className="max-w-5xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-end pb-6">
+      <Container maxW="5xl" py={6}>
+        <Box display="flex" justifyContent="flex-end" pb={6}>
           <Link to="/create-database">
-            <Button color={'grey'} variant="outline" className="text-sm mr-3">
+            <Button colorScheme="gray" variant="outline" fontSize="sm" mr={3}>
               Create database
             </Button>
           </Link>
           <Link to="/create-app">
-            <Button color={'grey'} className="text-sm">
+            <Button colorScheme="gray" fontSize="sm">
               Create app
             </Button>
           </Link>
-        </div>
+        </Box>
 
         <Grid
           as="main"
@@ -142,7 +150,7 @@ export const Dashboard = () => {
             </Text>
           </GridItem>
         </Grid>
-      </div>
+      </Container>
     </div>
   );
 };
