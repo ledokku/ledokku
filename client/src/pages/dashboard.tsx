@@ -1,8 +1,17 @@
 import { Link } from 'react-router-dom';
 import format from 'date-fns/format';
+import {
+  Box,
+  Grid,
+  GridItem,
+  Heading,
+  Text,
+  Button,
+  Container,
+} from '@chakra-ui/react';
 import { useDashboardQuery } from '../generated/graphql';
 import { Header } from '../modules/layout/Header';
-import { TabNav, TabNavLink, Button } from '../ui';
+import { TabNav, TabNavLink } from '../ui';
 import { PostgreSQLIcon } from '../ui/icons/PostgreSQLIcon';
 import { MongoIcon } from '../ui/icons/MongoIcon';
 import { RedisIcon } from '../ui/icons/RedisIcon';
@@ -23,7 +32,8 @@ export const Dashboard = () => {
     <div>
       <Header />
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Container maxW="5xl">
+        {/* TODO migrate TabNav to chakra-ui */}
         <TabNav>
           <TabNavLink to="/dashboard" selected>
             Dashboard
@@ -32,97 +42,138 @@ export const Dashboard = () => {
           <TabNavLink to="/metrics">Metrics</TabNavLink>
           <TabNavLink to="/settings">Settings</TabNavLink>
         </TabNav>
-      </div>
+      </Container>
 
-      <div className="max-w-5xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-end pb-6">
+      <Container maxW="5xl" py={6}>
+        <Box display="flex" justifyContent="flex-end" pb={6}>
           <Link to="/create-database">
-            <Button color={'grey'} variant="outline" className="text-sm mr-3">
+            <Button colorScheme="gray" variant="outline" fontSize="sm" mr={3}>
               Create database
             </Button>
           </Link>
           <Link to="/create-app">
-            <Button color={'grey'} className="text-sm">
+            <Button colorScheme="gray" fontSize="sm">
               Create app
             </Button>
           </Link>
-        </div>
-        <main className="grid grid-cols-1 gap-6 md:grid-cols-12 md:gap-x-20">
-          <div className="col-span-7 mt-4">
-            <h1 className="text-lg font-bold py-2">Apps</h1>
+        </Box>
+
+        <Grid
+          as="main"
+          templateColumns="repeat(12, 1fr)"
+          gap={{ base: 6, md: 20 }}
+          pt={4}
+        >
+          <GridItem colSpan={{ base: 12, md: 7 }}>
+            <Heading as="h2" size="md" py={5}>
+              Apps
+            </Heading>
             {data?.apps.length === 0 ? (
-              <div className="text-gray-400 text-sm mt-2">
-                No apps deployed.{' '}
-              </div>
+              <Text fontSize="sm" color="gray.400">
+                No apps deployed.
+              </Text>
             ) : null}
             {data?.apps.map((app) => (
-              <div key={app.id} className="py-3 border-b border-gray-200">
-                <div className="mb-1 text-gray-900 font-medium">
-                  <Link to={`/app/${app.id}`}>
-                    <div>{app.name}</div>
-                  </Link>
-                </div>
-                <div className="flex justify-between text-gray-400 text-sm">
-                  <div>ledokku/ledokku</div>
-                  <div>
+              <Box
+                key={app.id}
+                py={3}
+                borderBottom={'1px'}
+                borderColor="gray.200"
+              >
+                <Box mb={1} color="gray.900" fontWeight="medium">
+                  <Link to={`/app/${app.id}`}>{app.name}</Link>
+                </Box>
+                <Box
+                  fontSize="sm"
+                  color="gray.400"
+                  display="flex"
+                  justifyContent="space-between"
+                >
+                  <Text>ledokku/ledokku</Text>
+                  <Text>
                     Created on {format(new Date(app.createdAt), 'MM/DD/YYYY')}
-                  </div>
-                </div>
-              </div>
+                  </Text>
+                </Box>
+              </Box>
             ))}
 
-            <h1 className="text-lg font-bold pb-2 pt-5">Databases</h1>
+            <Heading as="h2" size="md" py={5} mt={8}>
+              Databases
+            </Heading>
             {data?.databases.length === 0 ? (
-              <div className="text-gray-400 text-sm mt-2">
+              <Text fontSize="sm" color="gray.400">
                 No databases created.
-              </div>
+              </Text>
             ) : null}
             {data?.databases.map((database) => (
-              <div key={database.id} className="py-3 border-b border-gray-200">
-                <div className="mb-1 text-gray-900 font-medium">
+              <Box
+                key={database.id}
+                py={3}
+                borderBottom={'1px'}
+                borderColor="gray.200"
+              >
+                <Box mb={1} color="gray.900" fontWeight="medium">
                   <Link to={`/database/${database.id}`}>{database.name}</Link>
-                </div>
-                <div className="flex justify-between text-gray-400 text-sm">
-                  <div className="flex items-center">
+                </Box>
+                <Box
+                  fontSize="sm"
+                  color="gray.400"
+                  display="flex"
+                  justifyContent="space-between"
+                >
+                  <Text display="flex" alignItems="center">
                     {database.type === 'POSTGRESQL' ? (
                       <>
-                        <PostgreSQLIcon size={16} className="mr-1" />
+                        <Box mr={1} as="span">
+                          <PostgreSQLIcon size={16} />
+                        </Box>
                         PostgreSQL
                       </>
                     ) : undefined}
                     {database.type === 'MONGODB' ? (
                       <>
-                        <MongoIcon size={16} className="mr-1" />
+                        <Box mr={1} as="span">
+                          <MongoIcon size={16} />
+                        </Box>
                         Mongo
                       </>
                     ) : undefined}
                     {database.type === 'REDIS' ? (
                       <>
-                        <RedisIcon size={16} className="mr-1" />
+                        <Box mr={1} as="span">
+                          <RedisIcon size={16} />
+                        </Box>
                         Redis
                       </>
                     ) : undefined}
                     {database.type === 'MYSQL' ? (
                       <>
-                        <MySQLIcon size={16} className="mr-1" />
+                        <Box mr={1} as="span">
+                          <MySQLIcon size={16} />
+                        </Box>
                         MySQL
                       </>
                     ) : undefined}
-                  </div>
-                  <div>
+                  </Text>
+                  <Text>
                     Created on{' '}
                     {format(new Date(database.createdAt), 'MM/DD/YYYY')}
-                  </div>
-                </div>
-              </div>
+                  </Text>
+                </Box>
+              </Box>
             ))}
-          </div>
-          <div className="col-span-5 mt-4">
-            <h1 className="text-lg font-bold py-5">Latest activity</h1>
-            <p className="text-gray-400 text-sm">Coming soon</p>
-          </div>
-        </main>
-      </div>
+          </GridItem>
+
+          <GridItem colSpan={{ base: 12, md: 5 }}>
+            <Heading as="h2" size="md" py={5}>
+              Latest activity
+            </Heading>
+            <Text fontSize="sm" color="gray.400">
+              Coming soon
+            </Text>
+          </GridItem>
+        </Grid>
+      </Container>
     </div>
   );
 };
