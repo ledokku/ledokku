@@ -29,24 +29,25 @@ export const destroyApp: MutationResolvers['destroyApp'] = async (
 
   const ssh = await sshConnect();
 
+  // TODO enable again once we start the github app autodeployment
   // We find and delete all the related app builds
-  const allAppBuilds = await prisma.user
-    .findOne({
-      where: {
-        id: userId,
-      },
-    })
-    .AppBuild();
+  // const allAppBuilds = await prisma.user
+  //   .findOne({
+  //     where: {
+  //       id: userId,
+  //     },
+  //   })
+  //   .AppBuild();
 
-  const appBuildToDelete = allAppBuilds.filter(
-    (appBuild) => appBuild.appId === appToDelete.id
-  );
+  // const appBuildToDelete = allAppBuilds.filter(
+  //   (appBuild) => appBuild.appId === appToDelete.id
+  // );
 
-  await prisma.appBuild.delete({
-    where: {
-      id: appBuildToDelete[0].id,
-    },
-  });
+  // await prisma.appBuild.delete({
+  //   where: {
+  //     id: appBuildToDelete[0].id,
+  //   },
+  // });
 
   // TODO @arturs : check this issue and if cascade feature is delivered by prisma
   // implement it instead of looking for related fields "manually"
