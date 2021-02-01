@@ -33,6 +33,7 @@ export const Dashboard = () => {
       <Header />
 
       <Container maxW="5xl">
+        {/* TODO migrate TabNav to chakra-ui */}
         <TabNav>
           <TabNavLink to="/dashboard" selected>
             Dashboard
@@ -73,19 +74,27 @@ export const Dashboard = () => {
               </Text>
             ) : null}
             {data?.apps.map((app) => (
-              <div key={app.id} className="py-3 border-b border-gray-200">
-                <div className="mb-1 text-gray-900 font-medium">
-                  <Link to={`/app/${app.id}`}>
-                    <div>{app.name}</div>
-                  </Link>
-                </div>
-                <div className="flex justify-between text-gray-400 text-sm">
-                  <div>ledokku/ledokku</div>
-                  <div>
+              <Box
+                key={app.id}
+                py={3}
+                borderBottom={'1px'}
+                borderColor="gray.200"
+              >
+                <Box mb={1} color="gray.900" fontWeight="medium">
+                  <Link to={`/app/${app.id}`}>{app.name}</Link>
+                </Box>
+                <Box
+                  fontSize="sm"
+                  color="gray.400"
+                  display="flex"
+                  justifyContent="space-between"
+                >
+                  <Text>ledokku/ledokku</Text>
+                  <Text>
                     Created on {format(new Date(app.createdAt), 'MM/DD/YYYY')}
-                  </div>
-                </div>
-              </div>
+                  </Text>
+                </Box>
+              </Box>
             ))}
 
             <Heading as="h2" size="md" py={5} mt={8}>
@@ -97,43 +106,61 @@ export const Dashboard = () => {
               </Text>
             ) : null}
             {data?.databases.map((database) => (
-              <div key={database.id} className="py-3 border-b border-gray-200">
-                <div className="mb-1 text-gray-900 font-medium">
+              <Box
+                key={database.id}
+                py={3}
+                borderBottom={'1px'}
+                borderColor="gray.200"
+              >
+                <Box mb={1} color="gray.900" fontWeight="medium">
                   <Link to={`/database/${database.id}`}>{database.name}</Link>
-                </div>
-                <div className="flex justify-between text-gray-400 text-sm">
-                  <div className="flex items-center">
+                </Box>
+                <Box
+                  fontSize="sm"
+                  color="gray.400"
+                  display="flex"
+                  justifyContent="space-between"
+                >
+                  <Text display="flex" alignItems="center">
                     {database.type === 'POSTGRESQL' ? (
                       <>
-                        <PostgreSQLIcon size={16} className="mr-1" />
+                        <Box mr={1}>
+                          <PostgreSQLIcon size={16} />
+                        </Box>
                         PostgreSQL
                       </>
                     ) : undefined}
                     {database.type === 'MONGODB' ? (
                       <>
-                        <MongoIcon size={16} className="mr-1" />
+                        <Box mr={1}>
+                          <MongoIcon size={16} />
+                        </Box>
                         Mongo
                       </>
                     ) : undefined}
                     {database.type === 'REDIS' ? (
                       <>
-                        <RedisIcon size={16} className="mr-1" />
+                        <Box mr={1}>
+                          <RedisIcon size={16} />
+                        </Box>
                         Redis
                       </>
                     ) : undefined}
                     {database.type === 'MYSQL' ? (
                       <>
-                        <MySQLIcon size={16} className="mr-1" />
+                        <Box mr={1}>
+                          <MySQLIcon size={16} />
+                        </Box>
                         MySQL
                       </>
                     ) : undefined}
-                  </div>
-                  <div>
+                  </Text>
+                  <Text>
                     Created on{' '}
                     {format(new Date(database.createdAt), 'MM/DD/YYYY')}
-                  </div>
-                </div>
-              </div>
+                  </Text>
+                </Box>
+              </Box>
             ))}
           </GridItem>
 
