@@ -142,11 +142,7 @@ export const Dashboard = () => {
             <Heading as="h2" size="md" py={5}>
               Latest activity
             </Heading>
-            <Text
-              fontSize="sm"
-              color="gray.400"
-              // className="text-gray-400 text-sm"
-            >
+            <Text fontSize="sm" color="gray.400">
               Coming soon
             </Text>
           </GridItem>
