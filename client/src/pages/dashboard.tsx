@@ -124,7 +124,7 @@ export const Dashboard = () => {
                   <Text display="flex" alignItems="center">
                     {database.type === 'POSTGRESQL' ? (
                       <>
-                        <Box mr={1}>
+                        <Box mr={1} as="span">
                           <PostgreSQLIcon size={16} />
                         </Box>
                         PostgreSQL
@@ -132,7 +132,7 @@ export const Dashboard = () => {
                     ) : undefined}
                     {database.type === 'MONGODB' ? (
                       <>
-                        <Box mr={1}>
+                        <Box mr={1} as="span">
                           <MongoIcon size={16} />
                         </Box>
                         Mongo
@@ -140,7 +140,7 @@ export const Dashboard = () => {
                     ) : undefined}
                     {database.type === 'REDIS' ? (
                       <>
-                        <Box mr={1}>
+                        <Box mr={1} as="span">
                           <RedisIcon size={16} />
                         </Box>
                         Redis
@@ -148,7 +148,7 @@ export const Dashboard = () => {
                     ) : undefined}
                     {database.type === 'MYSQL' ? (
                       <>
-                        <Box mr={1}>
+                        <Box mr={1} as="span">
                           <MySQLIcon size={16} />
                         </Box>
                         MySQL
