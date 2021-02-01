@@ -8,6 +8,7 @@ import {
   MenuDivider,
   Heading,
   Box,
+  Image,
 } from '@chakra-ui/react';
 import { useAuth } from '../auth/AuthContext';
 
@@ -32,8 +33,10 @@ export const Header = () => {
             <Menu placement="bottom-end">
               <MenuButton>
                 {user?.avatarUrl && (
-                  <img
-                    className="h-8 w-8 rounded-full"
+                  <Image
+                    h={8}
+                    w={8}
+                    borderRadius="full"
                     src={user.avatarUrl}
                     alt="Avatar"
                   />
