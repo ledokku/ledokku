@@ -68,9 +68,9 @@ export const Dashboard = () => {
               Apps
             </Heading>
             {data?.apps.length === 0 ? (
-              <div className="text-gray-400 text-sm mt-2">
-                No apps deployed.{' '}
-              </div>
+              <Text fontSize="sm" color="gray.400">
+                No apps deployed.
+              </Text>
             ) : null}
             {data?.apps.map((app) => (
               <div key={app.id} className="py-3 border-b border-gray-200">
@@ -92,9 +92,9 @@ export const Dashboard = () => {
               Databases
             </Heading>
             {data?.databases.length === 0 ? (
-              <div className="text-gray-400 text-sm mt-2">
+              <Text fontSize="sm" color="gray.400">
                 No databases created.
-              </div>
+              </Text>
             ) : null}
             {data?.databases.map((database) => (
               <div key={database.id} className="py-3 border-b border-gray-200">
