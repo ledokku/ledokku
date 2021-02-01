@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import format from 'date-fns/format';
+import { Heading, Text } from '@chakra-ui/react';
 import { useDashboardQuery } from '../generated/graphql';
 import { Header } from '../modules/layout/Header';
 import { TabNav, TabNavLink, Button } from '../ui';
@@ -49,7 +50,9 @@ export const Dashboard = () => {
         </div>
         <main className="grid grid-cols-1 gap-6 md:grid-cols-12 md:gap-x-20">
           <div className="col-span-7 mt-4">
-            <h1 className="text-lg font-bold py-2">Apps</h1>
+            <Heading as="h2" size="md" py={5}>
+              Apps
+            </Heading>
             {data?.apps.length === 0 ? (
               <div className="text-gray-400 text-sm mt-2">
                 No apps deployed.{' '}
@@ -71,7 +74,10 @@ export const Dashboard = () => {
               </div>
             ))}
 
-            <h1 className="text-lg font-bold pb-2 pt-5">Databases</h1>
+            <Heading as="h2" size="md" py={5} mt={8}>
+              Databases
+            </Heading>
+            {/* <h1 className="text-lg font-bold pb-2 pt-5">Databases</h1> */}
             {data?.databases.length === 0 ? (
               <div className="text-gray-400 text-sm mt-2">
                 No databases created.
@@ -118,8 +124,16 @@ export const Dashboard = () => {
             ))}
           </div>
           <div className="col-span-5 mt-4">
-            <h1 className="text-lg font-bold py-5">Latest activity</h1>
-            <p className="text-gray-400 text-sm">Coming soon</p>
+            <Heading as="h2" size="md" py={5}>
+              Latest activity
+            </Heading>
+            <Text
+              fontSize="sm"
+              color="gray.400"
+              // className="text-gray-400 text-sm"
+            >
+              Coming soon
+            </Text>
           </div>
         </main>
       </div>
