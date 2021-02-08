@@ -68,7 +68,7 @@ const typeDefs = gql`
   }
 
   type CreateAppResult {
-    app: App!
+    result: Boolean!
   }
 
   type DestroyAppResult {
@@ -171,6 +171,8 @@ const typeDefs = gql`
 
   input CreateAppInput {
     name: String!
+    gitRepoUrl: String
+    branchName: String
   }
 
   input RestartAppInput {
@@ -269,6 +271,7 @@ const typeDefs = gql`
     createDatabaseLogs: RealTimeLog!
     appRestartLogs: RealTimeLog!
     appRebuildLogs: RealTimeLog!
+    appCreateLogs: RealTimeLog!
   }
 
   type Mutation {
@@ -297,6 +300,7 @@ export const DATABASE_LINKED = 'DATABASE_LINKED';
 export const DATABASE_CREATED = 'DATABASE_CREATED';
 export const APP_RESTARTED = 'APP_RESTARTED';
 export const APP_REBUILT = 'APP_REBUILT';
+export const APP_CREATED = 'APP_CREATED';
 
 const resolvers: Resolvers<{ userId?: string }> = {
   Query: queries,
@@ -317,6 +321,9 @@ const resolvers: Resolvers<{ userId?: string }> = {
     },
     appRebuildLogs: {
       subscribe: () => pubsub.asyncIterator([APP_REBUILT]),
+    },
+    appCreateLogs: {
+      subscribe: () => pubsub.asyncIterator([APP_CREATED]),
     },
   },
   ...customResolvers,

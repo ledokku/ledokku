@@ -70,7 +70,7 @@ export type LoginResult = {
 
 export type CreateAppResult = {
   __typename?: 'CreateAppResult';
-  app: App;
+  result: Scalars['Boolean'];
 };
 
 export type DestroyAppResult = {
@@ -196,6 +196,8 @@ export type AppProxyPort = {
 
 export type CreateAppInput = {
   name: Scalars['String'];
+  gitRepoUrl?: Maybe<Scalars['String']>;
+  branchName?: Maybe<Scalars['String']>;
 };
 
 export type RestartAppInput = {
@@ -344,6 +346,7 @@ export type Subscription = {
   createDatabaseLogs: RealTimeLog;
   appRestartLogs: RealTimeLog;
   appRebuildLogs: RealTimeLog;
+  appCreateLogs: RealTimeLog;
 };
 
 export type Mutation = {
@@ -541,8 +544,8 @@ export type ResolversTypes = {
   RealTimeLog: ResolverTypeWrapper<RealTimeLog>;
   LoginResult: ResolverTypeWrapper<LoginResult>;
   CreateAppResult: ResolverTypeWrapper<CreateAppResult>;
-  DestroyAppResult: ResolverTypeWrapper<DestroyAppResult>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  DestroyAppResult: ResolverTypeWrapper<DestroyAppResult>;
   RestartAppResult: ResolverTypeWrapper<RestartAppResult>;
   RebuildAppResult: ResolverTypeWrapper<RebuildAppResult>;
   DestroyDatabaseResult: ResolverTypeWrapper<DestroyDatabaseResult>;
@@ -599,8 +602,8 @@ export type ResolversParentTypes = {
   RealTimeLog: RealTimeLog;
   LoginResult: LoginResult;
   CreateAppResult: CreateAppResult;
-  DestroyAppResult: DestroyAppResult;
   Boolean: Scalars['Boolean'];
+  DestroyAppResult: DestroyAppResult;
   RestartAppResult: RestartAppResult;
   RebuildAppResult: RebuildAppResult;
   DestroyDatabaseResult: DestroyDatabaseResult;
@@ -688,7 +691,7 @@ export type LoginResultResolvers<ContextType = any, ParentType extends Resolvers
 };
 
 export type CreateAppResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateAppResult'] = ResolversParentTypes['CreateAppResult']> = {
-  app?: Resolver<ResolversTypes['App'], ParentType, ContextType>;
+  result?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -836,6 +839,7 @@ export type SubscriptionResolvers<ContextType = any, ParentType extends Resolver
   createDatabaseLogs?: SubscriptionResolver<ResolversTypes['RealTimeLog'], "createDatabaseLogs", ParentType, ContextType>;
   appRestartLogs?: SubscriptionResolver<ResolversTypes['RealTimeLog'], "appRestartLogs", ParentType, ContextType>;
   appRebuildLogs?: SubscriptionResolver<ResolversTypes['RealTimeLog'], "appRebuildLogs", ParentType, ContextType>;
+  appCreateLogs?: SubscriptionResolver<ResolversTypes['RealTimeLog'], "appCreateLogs", ParentType, ContextType>;
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {

@@ -1,7 +1,5 @@
-mutation createApp($name: String!) {
-  createApp(input: { name: $name }) {
-    app {
-      id
-    }
+mutation createApp($input: CreateAppInput!) {
+  createApp(input: $input) {
+    result
   }
 }

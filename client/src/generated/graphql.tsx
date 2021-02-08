@@ -70,7 +70,7 @@ export type LoginResult = {
 
 export type CreateAppResult = {
   __typename?: 'CreateAppResult';
-  app: App;
+  result: Scalars['Boolean'];
 };
 
 export type DestroyAppResult = {
@@ -196,6 +196,8 @@ export type AppProxyPort = {
 
 export type CreateAppInput = {
   name: Scalars['String'];
+  gitRepoUrl?: Maybe<Scalars['String']>;
+  branchName?: Maybe<Scalars['String']>;
 };
 
 export type RestartAppInput = {
@@ -344,6 +346,7 @@ export type Subscription = {
   createDatabaseLogs: RealTimeLog;
   appRestartLogs: RealTimeLog;
   appRebuildLogs: RealTimeLog;
+  appCreateLogs: RealTimeLog;
 };
 
 export type Mutation = {
@@ -475,7 +478,7 @@ export type AddDomainMutation = (
 );
 
 export type CreateAppMutationVariables = Exact<{
-  name: Scalars['String'];
+  input: CreateAppInput;
 }>;
 
 
@@ -483,10 +486,7 @@ export type CreateAppMutation = (
   { __typename?: 'Mutation' }
   & { createApp: (
     { __typename?: 'CreateAppResult' }
-    & { app: (
-      { __typename?: 'App' }
-      & Pick<App, 'id'>
-    ) }
+    & Pick<CreateAppResult, 'result'>
   ) }
 );
 
@@ -834,6 +834,17 @@ export type SetupQuery = (
   ) }
 );
 
+export type AppCreateLogsSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AppCreateLogsSubscription = (
+  { __typename?: 'Subscription' }
+  & { appCreateLogs: (
+    { __typename?: 'RealTimeLog' }
+    & Pick<RealTimeLog, 'message' | 'type'>
+  ) }
+);
+
 export type CreateDatabaseLogsSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -953,11 +964,9 @@ export type AddDomainMutationHookResult = ReturnType<typeof useAddDomainMutation
 export type AddDomainMutationResult = Apollo.MutationResult<AddDomainMutation>;
 export type AddDomainMutationOptions = Apollo.BaseMutationOptions<AddDomainMutation, AddDomainMutationVariables>;
 export const CreateAppDocument = gql`
-    mutation createApp($name: String!) {
-  createApp(input: {name: $name}) {
-    app {
-      id
-    }
+    mutation createApp($input: CreateAppInput!) {
+  createApp(input: $input) {
+    result
   }
 }
     `;
@@ -976,7 +985,7 @@ export type CreateAppMutationFn = Apollo.MutationFunction<CreateAppMutation, Cre
  * @example
  * const [createAppMutation, { data, loading, error }] = useCreateAppMutation({
  *   variables: {
- *      name: // value for 'name'
+ *      input: // value for 'input'
  *   },
  * });
  */
@@ -1858,6 +1867,35 @@ export function useSetupLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Setu
 export type SetupQueryHookResult = ReturnType<typeof useSetupQuery>;
 export type SetupLazyQueryHookResult = ReturnType<typeof useSetupLazyQuery>;
 export type SetupQueryResult = Apollo.QueryResult<SetupQuery, SetupQueryVariables>;
+export const AppCreateLogsDocument = gql`
+    subscription appCreateLogs {
+  appCreateLogs {
+    message
+    type
+  }
+}
+    `;
+
+/**
+ * __useAppCreateLogsSubscription__
+ *
+ * To run a query within a React component, call `useAppCreateLogsSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useAppCreateLogsSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAppCreateLogsSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAppCreateLogsSubscription(baseOptions?: Apollo.SubscriptionHookOptions<AppCreateLogsSubscription, AppCreateLogsSubscriptionVariables>) {
+        return Apollo.useSubscription<AppCreateLogsSubscription, AppCreateLogsSubscriptionVariables>(AppCreateLogsDocument, baseOptions);
+      }
+export type AppCreateLogsSubscriptionHookResult = ReturnType<typeof useAppCreateLogsSubscription>;
+export type AppCreateLogsSubscriptionResult = Apollo.SubscriptionResult<AppCreateLogsSubscription>;
 export const CreateDatabaseLogsDocument = gql`
     subscription CreateDatabaseLogs {
   createDatabaseLogs {

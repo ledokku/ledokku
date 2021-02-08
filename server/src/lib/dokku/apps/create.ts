@@ -6,4 +6,6 @@ export const create = async (ssh: NodeSSH, appName: string) => {
     console.error(resultAppsCreate);
     throw new Error(resultAppsCreate.stderr);
   }
+
+  return true;
 };
