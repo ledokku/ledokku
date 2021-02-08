@@ -128,7 +128,6 @@ export const CreateApp = () => {
                 breathe out, logs are about to appear below:
               </p>
               <Terminal className={'w-6/6'}>
-                {console.log(arrayOfCreateAppLogs)}
                 {arrayOfCreateAppLogs.map((log) => (
                   <p
                     key={arrayOfCreateAppLogs.indexOf(log)}
