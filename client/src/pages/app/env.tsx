@@ -12,6 +12,7 @@ import {
 import { useFormik } from 'formik';
 import { TabNav, TabNavLink, Button } from '../../ui';
 import { TrashBinIcon } from '../../ui/icons/TrashBinIcon';
+import { Container, Heading } from '@chakra-ui/react';
 
 interface EnvFormProps {
   name: string;
@@ -164,7 +165,7 @@ export const Env = () => {
   return (
     <div>
       <Header />
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Container maxW="5xl">
         <TabNav>
           <TabNavLink to={`/app/${app.id}`}>App</TabNavLink>
           <TabNavLink to={`/app/${app.id}/logs`}>Logs</TabNavLink>
@@ -173,10 +174,12 @@ export const Env = () => {
           </TabNavLink>
           <TabNavLink to={`/app/${app.id}/settings`}>Settings</TabNavLink>
         </TabNav>
-      </div>
+      </Container>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-lg font-bold py-5 mt-10">Set env variables</h1>
+      <Container maxW="5xl" mt={10}>
+        <Heading as="h2" size="md" py={5}>
+          Set env variables
+        </Heading>
         <div className="mt-4 mb-4">
           <h2 className="text-gray-400">
             Before modifying any of these, make sure you are familiar with dokku
@@ -205,7 +208,7 @@ export const Env = () => {
             />
           </div>
         )}
-      </div>
+      </Container>
     </div>
   );
 };

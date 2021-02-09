@@ -29,6 +29,7 @@ import { PostgreSQLIcon } from '../../ui/icons/PostgreSQLIcon';
 import { MongoIcon } from '../../ui/icons/MongoIcon';
 import { RedisIcon } from '../../ui/icons/RedisIcon';
 import { MySQLIcon } from '../../ui/icons/MySQLIcon';
+import { Container, Heading, Table, Tbody, Td, Tr } from '@chakra-ui/react';
 
 export const App = () => {
   const history = useHistory();
@@ -186,7 +187,7 @@ export const App = () => {
     <div>
       <Header />
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Container maxW="5xl">
         <TabNav>
           <TabNavLink to={`/app/${app.id}`} selected>
             App
@@ -195,42 +196,50 @@ export const App = () => {
           <TabNavLink to={`/app/${app.id}/env`}>Env setup</TabNavLink>
           <TabNavLink to={`/app/${app.id}/settings`}>Settings</TabNavLink>
         </TabNav>
-      </div>
+      </Container>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Container maxW="5xl" mt={10}>
         <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4 mt-10">
           <div>
-            <h1 className="text-lg font-bold py-5">App info</h1>
+            <Heading as="h2" size="md" py={5}>
+              App info
+            </Heading>
             <div className="bg-gray-100 shadow overflow-hidden rounded-lg border-b border-gray-200">
-              <table className="mt-4 mb-4 min-w-full bg-white">
-                <tbody className="text-gray-700">
-                  <tr className="bg-gray-100">
-                    <td className="w-1/3 text-left py-3 px-4 font-semibold">
+              <Table mt="4" mb="4" variant="simple">
+                <Tbody mt="10">
+                  <Tr py="4">
+                    <Td className="font-semibold" py="3" px="4">
                       App name
-                    </td>
-                    <td className="w-1/3 text-left py-3 px-4">{app.name}</td>
-                  </tr>
-                  <tr className="bg-gray-100">
-                    <td className="w-1/3 text-left py-3 px-4 font-semibold">
+                    </Td>
+                    <Td py="3" px="4">
+                      {app.name}
+                    </Td>
+                  </Tr>
+                  <Tr>
+                    <Td className="font-semibold" py="7" px="4">
                       id
-                    </td>
-                    <td className="w-3/4 text-left py-3 px-4">{app.id}</td>
-                  </tr>
-                  <tr className="bg-gray-100">
-                    <td className="w-1/3 text-left py-3 px-4 font-semibold">
+                    </Td>
+                    <Td w="1/3" py="3" px="4">
+                      {app.id}
+                    </Td>
+                  </Tr>
+                  <Tr>
+                    <Td className="font-semibold" py="3" px="4">
                       Created at
-                    </td>
-                    <td className="w-1/3 text-left py-3 px-4">
+                    </Td>
+                    <Td py="3" px="4">
                       {app.createdAt}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                    </Td>
+                  </Tr>
+                </Tbody>
+              </Table>
             </div>
           </div>
 
           <div className="w-full">
-            <h1 className="font-bold text-lg font-bold py-5">Databases</h1>
+            <Heading as="h2" size="md" py={5}>
+              Databases
+            </Heading>
             {databases.length === 0 ? (
               <>
                 <div className="mt-4 mb-4">
@@ -547,7 +556,7 @@ export const App = () => {
             )}
           </div>
         </div>
-      </div>
+      </Container>
     </div>
   );
 };

@@ -13,6 +13,7 @@ import { AppProxyPorts } from '../../modules/appProxyPorts/AppProxyPorts';
 import { AppRestart } from '../../modules/app/AppRestart';
 import { AppRebuild } from '../../modules/app/AppRebuild';
 import { AppDomains } from '../../modules/domains/AppDomains';
+import { Container, Heading } from '@chakra-ui/react';
 
 export const Settings = () => {
   const { id: appId } = useParams<{ id: string }>();
@@ -90,7 +91,7 @@ export const Settings = () => {
   return (
     <div>
       <Header />
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Container maxW="5xl">
         <TabNav>
           <TabNavLink to={`/app/${app.id}`}>App</TabNavLink>
           <TabNavLink to={`/app/${app.id}/logs`}>Logs</TabNavLink>
@@ -99,13 +100,15 @@ export const Settings = () => {
             Settings
           </TabNavLink>
         </TabNav>
-      </div>
+      </Container>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-2 mt-10">
+      <Container maxW="5xl">
+        <div className="grid md:grid-cols-2">
           <div>
-            <div className="py-5">
-              <h1 className="text-lg font-bold">App settings</h1>
+            <div className="pt-10 pb-2">
+              <Heading as="h2" size="md" pt={5} pb={2}>
+                App settings
+              </Heading>
               <p className="text-gray-400 text-sm">
                 Update the settings of your app.
               </p>
@@ -151,7 +154,7 @@ export const Settings = () => {
             </form>
           </div>
         </div>
-      </div>
+      </Container>
     </div>
   );
 };

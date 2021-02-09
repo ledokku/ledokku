@@ -10,6 +10,7 @@ import {
   Alert,
   AlertDescription,
 } from '../../ui';
+import { Container, Heading } from '@chakra-ui/react';
 
 export const Logs = () => {
   const { id: appId } = useParams<{ id: string }>();
@@ -65,7 +66,7 @@ export const Logs = () => {
   return (
     <div>
       <Header />
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Container maxW="5xl">
         <TabNav>
           <TabNavLink to={`/app/${app.id}`}>App</TabNavLink>
           <TabNavLink to={`/app/${app.id}/databases`} selected>
@@ -74,12 +75,12 @@ export const Logs = () => {
           <TabNavLink to={`/app/${app.id}/env`}>Env setup</TabNavLink>
           <TabNavLink to={`/app/${app.id}/settings`}>Settings</TabNavLink>
         </TabNav>
-      </div>
+      </Container>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-lg font-bold py-5 mt-10">
+      <Container maxW="5xl" mt={10}>
+        <Heading as="h2" size="md" py={5}>
           Logs for {app.name} app:
-        </h1>
+        </Heading>
 
         {appLogsLoading ? (
           <p className="text-gray-400 text-sm">Loading...</p>
@@ -108,7 +109,7 @@ export const Logs = () => {
             ))}
           </Terminal>
         ) : null}
-      </div>
+      </Container>
     </div>
   );
 };
