@@ -10,6 +10,7 @@ import {
   useDatabaseInfoQuery,
 } from '../../generated/graphql';
 import { TabNav, TabNavLink, Button, FormInput, FormHelper } from '../../ui';
+import { Container, Heading } from '@chakra-ui/react';
 
 export const Settings = () => {
   const { id: databaseId } = useParams<{ id: string }>();
@@ -106,7 +107,7 @@ export const Settings = () => {
   return (
     <div>
       <Header />
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Container maxW="5xl">
         <TabNav>
           <TabNavLink to={`/database/${database.id}`}>Database</TabNavLink>
           <TabNavLink to={`/database/${database.id}/logs`}>Logs</TabNavLink>
@@ -114,12 +115,14 @@ export const Settings = () => {
             Settings
           </TabNavLink>
         </TabNav>
-      </div>
+      </Container>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Container maxW="5xl" mt={10}>
         <div className="grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 gap-4 mt-10">
           <div className="col-span-2 w-5/5">
-            <h1 className="text-lg font-bold py-5">Info for {database.name}</h1>
+            <Heading as="h2" size="md" py={5}>
+              Info for {database.name}
+            </Heading>
             {databaseInfoLoading ? (
               <p className="text-gray-400 text-sm">Loading...</p>
             ) : null}
@@ -176,7 +179,7 @@ export const Settings = () => {
             </form>
           </div>
         </div>
-      </div>
+      </Container>
     </div>
   );
 };
