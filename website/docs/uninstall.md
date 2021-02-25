@@ -19,4 +19,4 @@ dokku postgres:destroy redis
 ### Uninstall both Ledokku and dokku
 
 If you want to get rid of Ledokku and are fine with removing dokku from your server as well,
-follow [this guide](http://dokku.viewdocs.io/dokku/getting-started/uninstalling/).
+follow [this guide](https://dokku.com/docs/getting-started/uninstalling/).
