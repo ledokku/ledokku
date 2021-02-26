@@ -71,14 +71,14 @@ dokku config:set ledokku JWT_SECRET="SUPER_SECURE_SECRET"
 Now pull the latest version of ledokku from the docker registry and tag it.
 
 ```sh
-docker pull ledokku/ledokku:0.5.0
-docker tag ledokku/ledokku:0.5.0 dokku/ledokku:0.5.0
+docker pull ledokku/ledokku:0.5.1
+docker tag ledokku/ledokku:0.5.1 dokku/ledokku:0.5.1
 ```
 
 Finally we deploy the tag to start our ledokku server.
 
 ```sh
-dokku tags:deploy ledokku 0.5.0
+dokku tags:deploy ledokku 0.5.1
 ```
 
 After the app is deployed last step is to setup the proxy port.
