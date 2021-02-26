@@ -23,6 +23,7 @@ import {
   ModalButton,
   Terminal,
 } from '../../ui';
+import { Container, Heading, Table, Tbody, Td, Tr } from '@chakra-ui/react';
 
 export const Database = () => {
   const { id: databaseId } = useParams<{ id: string }>();
@@ -172,7 +173,7 @@ export const Database = () => {
     <div>
       <Header />
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Container maxW="5xl">
         <TabNav>
           <TabNavLink to={`/database/${database.id}`} selected>
             Database
@@ -183,39 +184,43 @@ export const Database = () => {
             Settings
           </TabNavLink>
         </TabNav>
-      </div>
+      </Container>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Container maxW="5xl" mt={10}>
         <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4 mt-10">
           <div>
-            <h1 className="text-lg font-bold py-5">Database info</h1>
+            <Heading as="h2" size="md" py={5}>
+              Database info
+            </Heading>
             <div className="bg-gray-100 shadow overflow-hidden rounded-lg border-b border-gray-200">
-              <table className="mt-4 mb-4 min-w-full bg-white">
-                <tbody className="text-gray-700">
-                  <tr className="bg-gray-100">
-                    <td className="w-1/3 text-left py-3 px-4 font-semibold">
+              <Table mt="4" mb="4" variant="simple">
+                <Tbody mt="10">
+                  <Tr py="4">
+                    <Td className="font-semibold" py="3" px="4">
                       Database name
-                    </td>
-                    <td className="w-1/3 text-left py-3 px-4">
+                    </Td>
+                    <Td py="3" px="4">
                       {database.name}
-                    </td>
-                  </tr>
-                  <tr className="bg-gray-100">
-                    <td className="w-1/3 text-left py-3 px-4 font-semibold">
+                    </Td>
+                  </Tr>
+                  <Tr>
+                    <Td className="font-semibold" py="7" px="4">
                       id
-                    </td>
-                    <td className="w-3/4 text-left py-3 px-4">{database.id}</td>
-                  </tr>
-                  <tr className="bg-gray-100">
-                    <td className="w-1/3 text-left py-3 px-4 font-semibold">
+                    </Td>
+                    <Td w="1/3" py="3" px="4">
+                      {database.id}
+                    </Td>
+                  </Tr>
+                  <Tr>
+                    <Td className="font-semibold" py="3" px="4">
                       Type
-                    </td>
-                    <td className="w-1/3 text-left py-3 px-4">
+                    </Td>
+                    <Td py="3" px="4">
                       {database.type}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                    </Td>
+                  </Tr>
+                </Tbody>
+              </Table>
             </div>
           </div>
 
@@ -500,7 +505,7 @@ export const Database = () => {
             )}
           </div>
         </div>
-      </div>
+      </Container>
     </div>
   );
 };
