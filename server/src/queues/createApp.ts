@@ -50,7 +50,7 @@ const worker = new Worker(
       },
     });
 
-    if (dokkuApp) {
+    if (dokkuApp && gitRepoUrl) {
       const res = await dokku.git.sync(
         ssh,
         appName,

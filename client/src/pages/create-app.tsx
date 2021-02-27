@@ -59,7 +59,6 @@ export const CreateApp = () => {
       ),
     gitRepoUrl: yup
       .string()
-      .required('Git repository URL is required')
       .matches(
         /((git|ssh|http(s)?)|(git@[\w.]+))(:(\/\/)?)([\w.@:/\-~]+)(\.git)(\/)?/
       ),
@@ -239,7 +238,6 @@ export const CreateApp = () => {
                         disabled={
                           !formik.values.name ||
                           !!formik.errors.name ||
-                          !formik.values.gitRepoUrl ||
                           !!formik.errors.gitRepoUrl ||
                           !!formik.errors.gitBranch
                         }

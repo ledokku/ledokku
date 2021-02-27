@@ -14,6 +14,7 @@ import { app, http } from './server';
 import { queries } from './graphql/queries';
 import { synchroniseServerQueue } from './queues/synchroniseServer';
 import { prisma } from './prisma';
+import { githubPushWebhookHandler } from './lib/webhooks';
 
 app.use(express.static(path.join(__dirname, '..', '..', 'client', 'build')));
 
@@ -408,6 +409,10 @@ app.get('*', (_, res) => {
   res.sendFile(
     path.join(__dirname, '..', '..', 'client', 'build', 'index.html')
   );
+});
+
+app.post('/hook', (req, res) => {
+  githubPushWebhookHandler(req, res);
 });
 
 http.listen({ port: 4000 }, () => {
