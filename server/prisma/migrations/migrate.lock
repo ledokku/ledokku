@@ -1,6 +1,0 @@
-# Prisma Migrate lockfile v1
-
-20200510152117-init
-20200628123314-link-databases-to-app
-20200912135606-remove-github-fields
-20201106104236-unlink-user
