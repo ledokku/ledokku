@@ -52,7 +52,7 @@
     "react-toastify": "6.0.9",
     "styled-components": "5.2.1",
     "subscriptions-transport-ws": "0.9.18",
-    "yup": "0.31.0"
+    "yup": "0.32.9"
   },
   "devDependencies": {
     "@graphql-codegen/add": "2.0.2",
@@ -69,7 +69,6 @@
     "@types/react-toastify": "4.1.0",
     "@types/react-transition-group": "4.4.0",
     "@types/styled-components": "5.1.7",
-    "@types/yup": "0.29.9",
     "autoprefixer": "10.0.2",
     "postcss": "8.1.9",
     "postcss-cli": "8.3.0",

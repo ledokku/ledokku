@@ -2,6 +2,14 @@ import { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import {
+  Container,
+  FormControl,
+  FormErrorMessage,
+  FormHelperText,
+  Heading,
+  Input,
+} from '@chakra-ui/react';
 import { ArrowRight, ArrowLeft } from 'react-feather';
 import { toast } from 'react-toastify';
 import cx from 'classnames';
@@ -28,8 +36,6 @@ import {
   AlertTitle,
   AlertDescription,
   FormLabel,
-  FormInput,
-  FormHelper,
 } from '../ui';
 
 interface DatabaseBoxProps {
@@ -93,7 +99,7 @@ export const CreateDatabase = () => {
     },
   });
 
-  const createDatabaseSchema = yup.object().shape({
+  const createDatabaseSchema = yup.object({
     type: yup
       .string()
       .oneOf(['POSTGRESQL', 'MYSQL', 'MONGODB', 'REDIS'])
@@ -101,19 +107,19 @@ export const CreateDatabase = () => {
     name: yup
       .string()
       .required('Database name is required')
-      .matches(/^[a-z0-9-]+$/)
-      .when('type', (type: DatabaseTypes) => {
-        return yup
-          .string()
-          .test(
-            'Name already exists',
-            `You already have created ${type} database with this name`,
-            (name) =>
-              !dataDb?.databases.find(
-                (db) => db.name === name && type === db.type
-              )
-          );
-      }),
+      .matches(/^[a-z0-9-]+$/),
+    // .when('type', (type: DatabaseTypes) => {
+    //   return yup
+    //     .string()
+    //     .test(
+    //       'Name already exists',
+    //       `You already have created ${type} database with this name`,
+    //       (name) =>
+    //         !dataDb?.databases.find(
+    //           (db) => db.name === name && type === db.type
+    //         )
+    //     );
+    // }),
   });
 
   const [
@@ -169,12 +175,17 @@ export const CreateDatabase = () => {
         toast.success('Database created successfully');
   }, [isDbCreationSuccess]);
 
+  console.log(formik.errors);
+  console.log(formik.touched);
+
   return (
     <>
       <Header />
 
-      <div className="max-w-5xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <h1 className="text-lg font-bold">Create a new database</h1>
+      <Container maxW="5xl" my="4">
+        <Heading as="h2" size="md">
+          Create a new database
+        </Heading>
         <div className="mt-12">
           {isTerminalVisible ? (
             <>
@@ -264,27 +275,44 @@ export const CreateDatabase = () => {
                   )}
                 {data?.isPluginInstalled.isPluginInstalled === true &&
                   !loading && (
-                    <div className="grid grid-cols-1 md:grid-cols-3">
-                      <div>
-                        <FormLabel>Database name:</FormLabel>
-                        <FormInput
-                          autoComplete="off"
-                          id="name"
-                          name="name"
-                          value={formik.values.name}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                          error={Boolean(
-                            formik.errors.name && formik.touched.name
-                          )}
-                        />
-                        {formik.errors.name ? (
-                          <FormHelper status="error">
-                            {formik.errors.name}
-                          </FormHelper>
-                        ) : null}
-                      </div>
-                    </div>
+                    <FormControl
+                      id="name"
+                      isInvalid={Boolean(
+                        formik.errors.name && formik.touched.name
+                      )}
+                    >
+                      <FormLabel>Database name</FormLabel>
+                      <Input
+                        autoComplete="off"
+                        id="name"
+                        name="name"
+                        value={formik.values.name}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                      />
+                      <FormErrorMessage>{formik.errors.name}</FormErrorMessage>
+                    </FormControl>
+                    // <div className="grid grid-cols-1 md:grid-cols-3">
+                    //   <div>
+                    //     <FormLabel>Database name:</FormLabel>
+                    //     <FormInput
+                    //       autoComplete="off"
+                    //       id="name"
+                    //       name="name"
+                    //       value={formik.values.name}
+                    //       onChange={formik.handleChange}
+                    //       onBlur={formik.handleBlur}
+                    //       error={Boolean(
+                    //         formik.errors.name && formik.touched.name
+                    //       )}
+                    //     />
+                    //     {formik.errors.name ? (
+                    //       <FormHelper status="error">
+                    //         {formik.errors.name}
+                    //       </FormHelper>
+                    //     ) : null}
+                    //   </div>
+                    // </div>
                   )}
               </div>
 
@@ -323,12 +351,12 @@ export const CreateDatabase = () => {
                 <Button
                   onClick={() => formik.handleSubmit()}
                   color="grey"
-                  disabled={
-                    data?.isPluginInstalled.isPluginInstalled === false ||
-                    !formik.values.name ||
-                    !!formik.errors.name ||
-                    !dataDb?.databases
-                  }
+                  // disabled={
+                  //   data?.isPluginInstalled.isPluginInstalled === false ||
+                  //   !formik.values.name ||
+                  //   !!formik.errors.name ||
+                  //   !dataDb?.databases
+                  // }
                   iconEnd={<ArrowRight />}
                 >
                   Create
@@ -337,7 +365,7 @@ export const CreateDatabase = () => {
             </form>
           )}
         </div>
-      </div>
+      </Container>
     </>
   );
 };
