@@ -9,8 +9,7 @@ export const githubPushWebhookHandler = async (req: Request) => {
 
   const appToRedeploy = await prisma.app.findMany({
     where: {
-      //TODO MATCH WITH GIT REPO ID INSTEAD OF NAME
-      name: req.body.repository.name,
+      githubRepoId: req.body.repository.id.toString(),
     },
   });
 

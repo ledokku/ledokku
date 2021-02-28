@@ -1,6 +1,6 @@
-import { verifyWebhookSecret } from './lib/webhooks/utils';
 import dotenv from 'dotenv';
 dotenv.config();
+import fetch from 'node-fetch';
 import { ApolloServer, gql } from 'apollo-server-express';
 import { DateTimeResolver } from 'graphql-scalars';
 import jsonwebtoken from 'jsonwebtoken';
@@ -13,6 +13,7 @@ import { mutations } from './graphql/mutations';
 import { config } from './config';
 import { app, http } from './server';
 import { queries } from './graphql/queries';
+import { verifyWebhookSecret } from './lib/webhooks/utils';
 import { synchroniseServerQueue } from './queues/synchroniseServer';
 import { prisma } from './prisma';
 import { githubPushWebhookHandler } from './lib/webhooks/webhooks';

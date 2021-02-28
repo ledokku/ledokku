@@ -6,6 +6,7 @@ import { config } from '../config';
 import { sshConnect } from '../lib/ssh';
 import { dokku } from '../lib/dokku';
 import { prisma } from '../prisma';
+import fetch from 'node-fetch';
 
 const queueName = 'create-app';
 const debug = createDebug(`queue:${queueName}`);
@@ -42,11 +43,37 @@ const worker = new Worker(
 
     const ssh = await sshConnect();
 
+    //to do move this out to UTILS
+    const getRepoData = (gitRepoUrl: string) => {
+      const base = gitRepoUrl.replace('https://github.com/', '');
+      const split = base.split('/');
+      const owner = split[0];
+      const repoName = split[1].replace('.git', '');
+
+      return {
+        owner,
+        repoName,
+      };
+    };
+
+    const repoData = getRepoData(gitRepoUrl);
+
+    let repo;
+    try {
+      const res = await fetch(
+        `https://api.github.com/repos/${repoData.owner}/${repoData.repoName}`
+      );
+      repo = await res.json();
+    } catch (error) {
+      console.error(error);
+    }
+
     const dokkuApp = await dokku.apps.create(ssh, appName);
 
     const app = await prisma.app.create({
       data: {
         name: appName,
+        githubRepoId: repo.id.toString(),
       },
     });
 
