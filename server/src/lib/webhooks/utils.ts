@@ -1,4 +1,4 @@
-const crypto = require('crypto');
+import crypto from 'crypto';
 import { Request } from 'express';
 
 export const verifyWebhookSecret = (req: Request) => {
