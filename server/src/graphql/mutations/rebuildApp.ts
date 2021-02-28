@@ -13,7 +13,7 @@ export const rebuildApp: MutationResolvers['rebuildApp'] = async (
 
   const { appId } = input;
 
-  const app = await prisma.app.findOne({
+  const app = await prisma.app.findUnique({
     where: {
       id: appId,
     },

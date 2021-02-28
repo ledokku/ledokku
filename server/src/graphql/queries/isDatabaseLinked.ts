@@ -11,7 +11,7 @@ export const isDatabaseLinked: QueryResolvers['isDatabaseLinked'] = async (
   }
   // We query for link between particular db and particular app
   const linkedApps = await prisma.database
-    .findOne({
+    .findUnique({
       where: {
         id: databaseId,
       },

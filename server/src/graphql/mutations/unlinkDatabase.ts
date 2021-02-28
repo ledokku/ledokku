@@ -14,7 +14,7 @@ export const unlinkDatabase: MutationResolvers['unlinkDatabase'] = async (
   const { databaseId, appId } = input;
 
   const database = await prisma.database
-    .findOne({
+    .findUnique({
       where: {
         id: databaseId,
       },

@@ -13,7 +13,7 @@ export const setEnvVar: MutationResolvers['setEnvVar'] = async (
 
   const { appId, key, value } = input;
 
-  const app = await prisma.app.findOne({
+  const app = await prisma.app.findUnique({
     where: {
       id: appId,
     },
