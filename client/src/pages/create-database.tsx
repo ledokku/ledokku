@@ -71,9 +71,10 @@ export const CreateDatabase = () => {
   );
   const [isTerminalVisible, setIsTerminalVisible] = useState(false);
   const [createDatabaseMutation] = useCreateDatabaseMutation();
-  const [isDbCreationSuccess, setIsDbCreationSuccess] = useState<
-    DbCreationStatus
-  >();
+  const [
+    isDbCreationSuccess,
+    setIsDbCreationSuccess,
+  ] = useState<DbCreationStatus>();
 
   useCreateDatabaseLogsSubscription({
     onSubscriptionData: (data) => {
