@@ -1,3 +1,4 @@
+import { verifyWebhookSecret } from './lib/webhooks/utils';
 import dotenv from 'dotenv';
 dotenv.config();
 import { ApolloServer, gql } from 'apollo-server-express';
@@ -14,7 +15,7 @@ import { app, http } from './server';
 import { queries } from './graphql/queries';
 import { synchroniseServerQueue } from './queues/synchroniseServer';
 import { prisma } from './prisma';
-import { githubPushWebhookHandler } from './lib/webhooks';
+import { githubPushWebhookHandler } from './lib/webhooks/webhooks';
 
 app.use(express.static(path.join(__dirname, '..', '..', 'client', 'build')));
 
@@ -412,7 +413,13 @@ app.get('*', (_, res) => {
 });
 
 app.post('/hook', (req, res) => {
-  githubPushWebhookHandler(req, res);
+  const isWebhookVerified = verifyWebhookSecret(req);
+  if (!isWebhookVerified) {
+    res.status(400).send('Request not verified');
+  } else {
+    res.status(200).end();
+    githubPushWebhookHandler(req);
+  }
 });
 
 http.listen({ port: 4000 }, () => {
