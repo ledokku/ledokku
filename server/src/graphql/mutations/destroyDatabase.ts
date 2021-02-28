@@ -16,7 +16,7 @@ export const destroyDatabase: MutationResolvers['destroyDatabase'] = async (
   const { databaseId } = input;
 
   // We find database to delete
-  const databaseToDelete = await prisma.database.findOne({
+  const databaseToDelete = await prisma.database.findUnique({
     where: {
       id: databaseId,
     },

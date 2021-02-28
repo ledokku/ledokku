@@ -56,7 +56,7 @@ export const loginWithGithub: MutationResolvers['loginWithGithub'] = async (
   // We fetch the user informations
   const { data: githubUser } = await octokit.users.getAuthenticated();
 
-  let user = await prisma.user.findOne({
+  let user = await prisma.user.findUnique({
     where: { githubId: githubUser.node_id },
   });
 

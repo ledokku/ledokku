@@ -37,7 +37,7 @@ const worker = new Worker(
     const { buildId } = job.data;
     debug(`starting buildAppQueue for build id ${buildId}`);
 
-    const appBuild = await prisma.appBuild.findOne({
+    const appBuild = await prisma.appBuild.findUnique({
       where: { id: buildId },
       select: {
         id: true,

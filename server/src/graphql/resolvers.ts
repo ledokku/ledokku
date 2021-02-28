@@ -5,7 +5,7 @@ export const customResolvers = {
   App: {
     databases: async (app: App) => {
       const databases = await prisma.app
-        .findOne({
+        .findUnique({
           where: {
             id: app.id,
           },
@@ -18,7 +18,7 @@ export const customResolvers = {
   Database: {
     apps: async (database: Database) => {
       const apps = await prisma.database
-        .findOne({
+        .findUnique({
           where: {
             id: database.id,
           },

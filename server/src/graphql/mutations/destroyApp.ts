@@ -17,7 +17,7 @@ export const destroyApp: MutationResolvers['destroyApp'] = async (
   // TODO check name of the app is unique per server
 
   // We find app to delete
-  const appToDelete = await prisma.app.findOne({
+  const appToDelete = await prisma.app.findUnique({
     where: {
       id: appId,
     },
@@ -32,7 +32,7 @@ export const destroyApp: MutationResolvers['destroyApp'] = async (
   // TODO enable again once we start the github app autodeployment
   // We find and delete all the related app builds
   // const allAppBuilds = await prisma.user
-  //   .findOne({
+  //   .findUnique({
   //     where: {
   //       id: userId,
   //     },
