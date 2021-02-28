@@ -1,7 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useHistory, Redirect } from 'react-router-dom';
 import { FiGithub } from 'react-icons/fi';
-import { Box, Heading, Text, Button, Spinner } from '@chakra-ui/react';
+import {
+  Box,
+  Heading,
+  Text,
+  Button,
+  Spinner,
+  Container,
+} from '@chakra-ui/react';
 import { config } from '../config';
 import {
   useSetupQuery,
@@ -65,54 +72,56 @@ export const Home = () => {
   }
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-      minHeight="100vh"
-    >
-      <Heading as="h2" size="lg">
-        Ledokku
-      </Heading>
+    <Container maxW="5xl">
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        minHeight="100vh"
+      >
+        <Heading as="h2" size="lg">
+          Ledokku
+        </Heading>
 
-      {error && (
-        <Text mt={4} color="red.500">
-          {error.message}
-        </Text>
-      )}
-
-      {(loading || loggingIn) && <Spinner mt={4} />}
-
-      {data?.setup.canConnectSsh === true && !loggingIn && (
-        <>
-          <Text>Login to get started.</Text>
-
-          <Button
-            mt={3}
-            colorScheme="gray"
-            onClick={handleLogin}
-            leftIcon={<FiGithub size={18} />}
-            size="lg"
-          >
-            Log in with Github
-          </Button>
-        </>
-      )}
-
-      {data?.setup.canConnectSsh === false && (
-        <>
-          <Text mt={4}>
-            In order to setup the ssh connection, run the following command on
-            your Dokku server.
+        {error && (
+          <Text mt={4} color="red.500">
+            {error.message}
           </Text>
-          {/* TODO migrate terminal to chakra-ui */}
-          <Terminal className="break-all">
-            {`echo "${data.setup.sshPublicKey}" | dokku ssh-keys:add ledokku`}
-          </Terminal>
-          <Text mt={3}>Once you are done, just refresh this page.</Text>
-        </>
-      )}
-    </Box>
+        )}
+
+        {(loading || loggingIn) && <Spinner mt={4} />}
+
+        {data?.setup.canConnectSsh === true && !loggingIn && (
+          <>
+            <Text>Login to get started.</Text>
+
+            <Button
+              mt={3}
+              colorScheme="gray"
+              onClick={handleLogin}
+              leftIcon={<FiGithub size={18} />}
+              size="lg"
+            >
+              Log in with Github
+            </Button>
+          </>
+        )}
+
+        {data?.setup.canConnectSsh === false && (
+          <>
+            <Text mt={4}>
+              In order to setup the ssh connection, run the following command on
+              your Dokku server.
+            </Text>
+            {/* TODO migrate terminal to chakra-ui */}
+            <Terminal className="break-all">
+              {`echo "${data.setup.sshPublicKey}" | dokku ssh-keys:add ledokku`}
+            </Terminal>
+            <Text mt={3}>Once you are done, just refresh this page.</Text>
+          </>
+        )}
+      </Box>
+    </Container>
   );
 };
