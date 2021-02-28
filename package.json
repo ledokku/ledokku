@@ -15,7 +15,8 @@
     ],
     "nohoist": [
       "**/@tailwindcss/*",
-      "**/@tailwindcss/*/**"
+      "**/@tailwindcss/*/**",
+      "**/html-minifier-terser"
     ]
   },
   "prettier": {
