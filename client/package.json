@@ -12,7 +12,10 @@
     "generate": "graphql-codegen --config codegen.yml"
   },
   "eslintConfig": {
-    "extends": "react-app",
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ],
     "rules": {
       "react/react-in-jsx-scope": "off"
     }
