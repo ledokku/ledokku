@@ -9,6 +9,7 @@ import {
   FormHelperText,
   Heading,
   Input,
+  SimpleGrid,
 } from '@chakra-ui/react';
 import { ArrowRight, ArrowLeft } from 'react-feather';
 import { toast } from 'react-toastify';
@@ -175,9 +176,6 @@ export const CreateDatabase = () => {
         toast.success('Database created successfully');
   }, [isDbCreationSuccess]);
 
-  console.log(formik.errors);
-  console.log(formik.touched);
-
   return (
     <>
       <Header />
@@ -275,23 +273,27 @@ export const CreateDatabase = () => {
                   )}
                 {data?.isPluginInstalled.isPluginInstalled === true &&
                   !loading && (
-                    <FormControl
-                      id="name"
-                      isInvalid={Boolean(
-                        formik.errors.name && formik.touched.name
-                      )}
-                    >
-                      <FormLabel>Database name</FormLabel>
-                      <Input
-                        autoComplete="off"
+                    <SimpleGrid columns={{ sm: 1, md: 3 }}>
+                      <FormControl
                         id="name"
-                        name="name"
-                        value={formik.values.name}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                      />
-                      <FormErrorMessage>{formik.errors.name}</FormErrorMessage>
-                    </FormControl>
+                        isInvalid={Boolean(
+                          formik.errors.name && formik.touched.name
+                        )}
+                      >
+                        <FormLabel>Database name</FormLabel>
+                        <Input
+                          autoComplete="off"
+                          id="name"
+                          name="name"
+                          value={formik.values.name}
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                        />
+                        <FormErrorMessage>
+                          {formik.errors.name}
+                        </FormErrorMessage>
+                      </FormControl>
+                    </SimpleGrid>
                     // <div className="grid grid-cols-1 md:grid-cols-3">
                     //   <div>
                     //     <FormLabel>Database name:</FormLabel>
