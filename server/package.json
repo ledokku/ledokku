@@ -23,7 +23,7 @@
     "dotenv": "8.2.0",
     "execa": "4.0.3",
     "express": "4.17.1",
-    "graphql": "15.3.0",
+    "graphql": "15.5.0",
     "graphql-scalars": "1.4.0",
     "jsonwebtoken": "8.5.1",
     "node-fetch": "2.6.1",
