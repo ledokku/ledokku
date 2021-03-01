@@ -14,6 +14,10 @@ import {
   Alert,
   AlertTitle,
   AlertDescription,
+  Text,
+  FormLabel,
+  Button,
+  Box,
 } from '@chakra-ui/react';
 import { ArrowRight, ArrowLeft } from 'react-feather';
 import { toast } from 'react-toastify';
@@ -32,7 +36,7 @@ import { MongoIcon } from '../ui/icons/MongoIcon';
 import { RedisIcon } from '../ui/icons/RedisIcon';
 import { Header } from '../modules/layout/Header';
 import { dbTypeToDokkuPlugin } from './utils';
-import { Button, Terminal, FormLabel } from '../ui';
+import { Terminal } from '../ui';
 
 interface DatabaseBoxProps {
   label: string;
@@ -254,23 +258,23 @@ export const CreateDatabase = () => {
                 {data?.isPluginInstalled.isPluginInstalled === false &&
                   !loading && (
                     <>
-                      <p className="mt-3">
-                        {`Before creating a `}
-                        <span className="font-bold">
+                      <Text mt="3">
+                        Before creating a{' '}
+                        <Box fontWeight="bold" as="span">
                           {formik.values.type.toLowerCase()}
-                        </span>
-                        {` database, you will need to run this command on your
-           dokku server.`}
-                      </p>
+                        </Box>{' '}
+                        database, you will need to run this command on your
+                        dokku server.
+                      </Text>
                       <Terminal>{`sudo dokku plugin:install https://github.com/dokku/dokku-${dbTypeToDokkuPlugin(
                         formik.values.type
                       )}.git ${dbTypeToDokkuPlugin(
                         formik.values.type
                       )}`}</Terminal>
-                      <p className="mt-3">
+                      <Text mt="3">
                         Couple of seconds later you will be able to proceed
                         further.
-                      </p>
+                      </Text>
                     </>
                   )}
                 {data?.isPluginInstalled.isPluginInstalled === true &&
@@ -300,7 +304,7 @@ export const CreateDatabase = () => {
               </div>
 
               <div className="mt-12">
-                <label className="block mb-2">Choose your database</label>
+                <Text mb="2">Choose your database</Text>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <DatabaseBox
                     selected={formik.values.type === 'POSTGRESQL'}
@@ -332,15 +336,14 @@ export const CreateDatabase = () => {
 
               <div className="mt-12 flex justify-end">
                 <Button
-                  onClick={() => formik.handleSubmit()}
-                  color="grey"
-                  // disabled={
-                  //   data?.isPluginInstalled.isPluginInstalled === false ||
-                  //   !formik.values.name ||
-                  //   !!formik.errors.name ||
-                  //   !dataDb?.databases
-                  // }
-                  iconEnd={<ArrowRight />}
+                  isLoading={loading}
+                  disabled={
+                    data?.isPluginInstalled.isPluginInstalled === false ||
+                    !formik.values.name ||
+                    !!formik.errors.name ||
+                    !dataDb?.databases
+                  }
+                  rightIcon={<ArrowRight />}
                 >
                   Create
                 </Button>
