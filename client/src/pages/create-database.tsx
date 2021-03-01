@@ -18,6 +18,7 @@ import {
   FormLabel,
   Button,
   Box,
+  Grid,
 } from '@chakra-ui/react';
 import { ArrowRight, ArrowLeft } from 'react-feather';
 import { toast } from 'react-toastify';
@@ -183,58 +184,53 @@ export const CreateDatabase = () => {
         <Heading as="h2" size="md">
           Create a new database
         </Heading>
-        <div className="mt-12">
+        <Box mt="12">
           {isTerminalVisible ? (
             <>
-              <p className="mb-2 ">
+              <Text mb="2">
                 Creating <b>{formik.values.type}</b> database{' '}
                 <b>{formik.values.name}</b>
-              </p>
-              <p className="text-gray-500 mb-2">
+              </Text>
+              <Text mb="2" color="gray.500">
                 Creating database usually takes a couple of minutes. Breathe in,
                 breathe out, logs are about to appear below:
-              </p>
-              <Terminal className={'w-6/6'}>
+              </Text>
+              <Terminal>
                 {arrayOfCreateDbLogs.map((log) => (
-                  <p
-                    key={arrayOfCreateDbLogs.indexOf(log)}
-                    className={'text-s leading-5'}
-                  >
+                  <Text key={arrayOfCreateDbLogs.indexOf(log)} size="small">
                     {log.message}
-                  </p>
+                  </Text>
                 ))}
               </Terminal>
 
               {!!isDbCreationSuccess &&
               isDbCreationSuccess === DbCreationStatus.SUCCESS ? (
-                <div className="mt-12 flex justify-end">
+                <Box mt="12" display="flex" justifyContent="flex-end">
                   <Button
                     onClick={() => handleNext()}
-                    color="grey"
-                    iconEnd={<ArrowRight />}
+                    rightIcon={<ArrowRight />}
                   >
                     Next
                   </Button>
-                </div>
+                </Box>
               ) : !!isDbCreationSuccess &&
                 isDbCreationSuccess === DbCreationStatus.FAILURE ? (
-                <div className="mt-12 flex justify-start">
+                <Box mt="12" display="flex" justifyContent="flex-end">
                   <Button
                     onClick={() => {
                       setIsTerminalVisible(false);
                       formik.resetForm();
                     }}
-                    color="grey"
-                    iconEnd={<ArrowLeft />}
+                    rightIcon={<ArrowLeft />}
                   >
                     Back
                   </Button>
-                </div>
+                </Box>
               ) : null}
             </>
           ) : (
-            <form onSubmit={formik.handleSubmit} className="mt-8">
-              <div className="mt-12">
+            <Box as="form" mt="8" onSubmit={() => formik.handleSubmit()}>
+              <Box mt="12">
                 {loading && (
                   <Center>
                     <Spinner />
@@ -260,11 +256,8 @@ export const CreateDatabase = () => {
                     <>
                       <Text mt="3">
                         Before creating a{' '}
-                        <Box fontWeight="bold" as="span">
-                          {formik.values.type.toLowerCase()}
-                        </Box>{' '}
-                        database, you will need to run this command on your
-                        dokku server.
+                        <b>{formik.values.type.toLowerCase()}</b> database, you
+                        will need to run this command on your dokku server.
                       </Text>
                       <Terminal>{`sudo dokku plugin:install https://github.com/dokku/dokku-${dbTypeToDokkuPlugin(
                         formik.values.type
@@ -301,11 +294,17 @@ export const CreateDatabase = () => {
                       </FormControl>
                     </SimpleGrid>
                   )}
-              </div>
+              </Box>
 
-              <div className="mt-12">
+              <Box mt="12">
                 <Text mb="2">Choose your database</Text>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <Grid
+                  templateColumns={{
+                    base: 'repeat(2, minmax(0, 1fr))',
+                    md: 'repeat(4, minmax(0, 1fr))',
+                  }}
+                  gap="4"
+                >
                   <DatabaseBox
                     selected={formik.values.type === 'POSTGRESQL'}
                     label="PostgreSQL"
@@ -330,9 +329,8 @@ export const CreateDatabase = () => {
                     icon={<RedisIcon size={40} />}
                     onClick={() => formik.setFieldValue('type', 'REDIS')}
                   />
-                </div>
-                <div className="mt-2 text-gray-400"></div>
-              </div>
+                </Grid>
+              </Box>
 
               <Box mt="12" display="flex" justifyContent="flex-end">
                 <Button
@@ -349,9 +347,9 @@ export const CreateDatabase = () => {
                   Create
                 </Button>
               </Box>
-            </form>
+            </Box>
           )}
-        </div>
+        </Box>
       </Container>
     </>
   );
