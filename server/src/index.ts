@@ -1,6 +1,5 @@
 import dotenv from 'dotenv';
 dotenv.config();
-import fetch from 'node-fetch';
 import { ApolloServer, gql } from 'apollo-server-express';
 import { DateTimeResolver } from 'graphql-scalars';
 import jsonwebtoken from 'jsonwebtoken';
