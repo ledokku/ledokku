@@ -6,10 +6,13 @@ import {
   Container,
   FormControl,
   FormErrorMessage,
-  FormHelperText,
   Heading,
   Input,
   SimpleGrid,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
 } from '@chakra-ui/react';
 import { ArrowRight, ArrowLeft } from 'react-feather';
 import { toast } from 'react-toastify';
@@ -27,17 +30,8 @@ import { MySQLIcon } from '../ui/icons/MySQLIcon';
 import { MongoIcon } from '../ui/icons/MongoIcon';
 import { RedisIcon } from '../ui/icons/RedisIcon';
 import { Header } from '../modules/layout/Header';
-
 import { dbTypeToDokkuPlugin } from './utils';
-import {
-  Button,
-  Terminal,
-  Spinner,
-  Alert,
-  AlertTitle,
-  AlertDescription,
-  FormLabel,
-} from '../ui';
+import { Button, Terminal, Spinner, FormLabel } from '../ui';
 
 interface DatabaseBoxProps {
   label: string;
@@ -242,8 +236,15 @@ export const CreateDatabase = () => {
                   </div>
                 )}
                 {isDokkuPluginInstalledError ? (
-                  <Alert status="error">
-                    <AlertTitle>Request failed</AlertTitle>
+                  <Alert
+                    status="error"
+                    variant="top-accent"
+                    flexDirection="column"
+                    alignItems="flex-start"
+                    borderBottomRadius="base"
+                    boxShadow="md"
+                  >
+                    <AlertTitle mr={2}>Request failed</AlertTitle>
                     <AlertDescription>
                       {isDokkuPluginInstalledError.message}
                     </AlertDescription>
@@ -294,27 +295,6 @@ export const CreateDatabase = () => {
                         </FormErrorMessage>
                       </FormControl>
                     </SimpleGrid>
-                    // <div className="grid grid-cols-1 md:grid-cols-3">
-                    //   <div>
-                    //     <FormLabel>Database name:</FormLabel>
-                    //     <FormInput
-                    //       autoComplete="off"
-                    //       id="name"
-                    //       name="name"
-                    //       value={formik.values.name}
-                    //       onChange={formik.handleChange}
-                    //       onBlur={formik.handleBlur}
-                    //       error={Boolean(
-                    //         formik.errors.name && formik.touched.name
-                    //       )}
-                    //     />
-                    //     {formik.errors.name ? (
-                    //       <FormHelper status="error">
-                    //         {formik.errors.name}
-                    //       </FormHelper>
-                    //     ) : null}
-                    //   </div>
-                    // </div>
                   )}
               </div>
 
