@@ -107,22 +107,20 @@ export const CreateDatabase = () => {
       .string()
       .oneOf(['POSTGRESQL', 'MYSQL', 'MONGODB', 'REDIS'])
       .required(),
-    name: yup
-      .string()
-      .required('Database name is required')
-      .matches(/^[a-z0-9-]+$/),
-    // .when('type', (type: DatabaseTypes) => {
-    //   return yup
-    //     .string()
-    //     .test(
-    //       'Name already exists',
-    //       `You already have created ${type} database with this name`,
-    //       (name) =>
-    //         !dataDb?.databases.find(
-    //           (db) => db.name === name && type === db.type
-    //         )
-    //     );
-    // }),
+    name: yup.string().when('type', (type: DatabaseTypes) => {
+      return yup
+        .string()
+        .required('Database name is required')
+        .matches(/^[a-z0-9-]+$/)
+        .test(
+          'Name already exists',
+          `You already have created ${type} database with this name`,
+          (name) =>
+            !dataDb?.databases.find(
+              (db) => db.name === name && type === db.type
+            )
+        );
+    }),
   });
 
   const [
