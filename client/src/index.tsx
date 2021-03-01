@@ -20,6 +20,7 @@ import { config } from './config';
 import { AuthProvider } from './modules/auth/AuthContext';
 import { Router } from './Router';
 
+// TODO remove this after chakra migration is done
 const GlobalStyle = createGlobalStyle`
   body {
     text-rendering: optimizeLegibility;
