@@ -22,7 +22,6 @@ import {
 } from '@chakra-ui/react';
 import { ArrowRight, ArrowLeft } from 'react-feather';
 import { toast } from 'react-toastify';
-import cx from 'classnames';
 import {
   useCreateDatabaseMutation,
   DatabaseTypes,
@@ -53,18 +52,21 @@ enum DbCreationStatus {
 
 const DatabaseBox = ({ label, selected, icon, onClick }: DatabaseBoxProps) => {
   return (
-    <div
-      className={cx(
-        'flex flex-col items-center p-12 bg-white border border-grey rounded cursor-pointer opacity-50 transition duration-200',
-        {
-          'border-black opacity-100': selected,
-        }
-      )}
+    <Box
+      p="12"
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      border="1px"
+      borderColor={selected ? 'black' : 'gray.300'}
+      opacity={selected ? '100%' : '50%'}
+      cursor="pointer"
+      borderRadius="base"
       onClick={onClick}
     >
-      <div className="mb-2">{icon}</div>
+      <Box mb="2">{icon}</Box>
       <p>{label}</p>
-    </div>
+    </Box>
   );
 };
 
