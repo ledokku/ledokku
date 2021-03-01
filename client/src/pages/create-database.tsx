@@ -9,8 +9,9 @@ import {
   Heading,
   Input,
   SimpleGrid,
+  Spinner,
+  Center,
   Alert,
-  AlertIcon,
   AlertTitle,
   AlertDescription,
 } from '@chakra-ui/react';
@@ -31,7 +32,7 @@ import { MongoIcon } from '../ui/icons/MongoIcon';
 import { RedisIcon } from '../ui/icons/RedisIcon';
 import { Header } from '../modules/layout/Header';
 import { dbTypeToDokkuPlugin } from './utils';
-import { Button, Terminal, Spinner, FormLabel } from '../ui';
+import { Button, Terminal, FormLabel } from '../ui';
 
 interface DatabaseBoxProps {
   label: string;
@@ -231,9 +232,9 @@ export const CreateDatabase = () => {
             <form onSubmit={formik.handleSubmit} className="mt-8">
               <div className="mt-12">
                 {loading && (
-                  <div className="flex justify-center ">
-                    <Spinner size="small" />
-                  </div>
+                  <Center>
+                    <Spinner />
+                  </Center>
                 )}
                 {isDokkuPluginInstalledError ? (
                   <Alert
