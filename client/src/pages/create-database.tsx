@@ -334,7 +334,7 @@ export const CreateDatabase = () => {
                 <div className="mt-2 text-gray-400"></div>
               </div>
 
-              <div className="mt-12 flex justify-end">
+              <Box mt="12" display="flex" justifyContent="flex-end">
                 <Button
                   isLoading={formik.isSubmitting}
                   disabled={
@@ -348,7 +348,7 @@ export const CreateDatabase = () => {
                 >
                   Create
                 </Button>
-              </div>
+              </Box>
             </form>
           )}
         </div>
