@@ -336,7 +336,7 @@ export const CreateDatabase = () => {
 
               <div className="mt-12 flex justify-end">
                 <Button
-                  isLoading={loading}
+                  isLoading={formik.isSubmitting}
                   disabled={
                     data?.isPluginInstalled.isPluginInstalled === false ||
                     !formik.values.name ||
@@ -344,6 +344,7 @@ export const CreateDatabase = () => {
                     !dataDb?.databases
                   }
                   rightIcon={<ArrowRight />}
+                  onClick={() => formik.handleSubmit()}
                 >
                   Create
                 </Button>
