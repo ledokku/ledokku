@@ -1,8 +1,11 @@
-import { createAppQueue } from './../../queues/createApp';
+import { deployAppQueue } from './../../queues/deployApp';
+import { sshConnect } from './../../lib/ssh';
 import { MutationResolvers } from '../../generated/graphql';
 import { prisma } from '../../prisma';
+import fetch from 'node-fetch';
 // import { buildAppQueue } from '../../queues/buildApp';
-import { appNameSchema } from '../utils';
+import { appNameSchema, getRepoData } from '../utils';
+import { dokku } from '../../lib/dokku';
 
 export const createApp: MutationResolvers['createApp'] = async (
   _,
@@ -28,12 +31,38 @@ export const createApp: MutationResolvers['createApp'] = async (
     throw new Error('App name already taken');
   }
 
-  await createAppQueue.add('create-app', {
-    appName: input.name,
-    userId,
-    gitRepoUrl: input.gitRepoUrl,
-    branchName: input.branchName,
+  const repoData = getRepoData(input.gitRepoUrl);
+
+  let repo;
+  try {
+    const res = await fetch(
+      `https://api.github.com/repos/${repoData.owner}/${repoData.repoName}`
+    );
+    repo = await res.json();
+  } catch (error) {
+    console.log(error);
+  }
+
+  const ssh = await sshConnect();
+
+  const dokkuApp = await dokku.apps.create(ssh, input.name);
+
+  const app = await prisma.app.create({
+    data: {
+      name: input.name,
+      githubRepoId: repo ? repo.id.toString() : undefined,
+    },
   });
+
+  if (input.gitRepoUrl && dokkuApp) {
+    await deployAppQueue.add('deploy-app', {
+      appName: input.name,
+      gitRepoUrl: input.gitRepoUrl,
+      branchName: input.branchName,
+      dokkuApp,
+      appId: app.id,
+    });
+  }
 
   // TODO enable again once we start the github app autodeployment
   // const appBuild = await prisma.appBuild.create({

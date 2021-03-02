@@ -5,21 +5,20 @@ import { pubsub } from './../index';
 import { config } from '../config';
 import { sshConnect } from '../lib/ssh';
 import { dokku } from '../lib/dokku';
-import { prisma } from '../prisma';
-import fetch from 'node-fetch';
 
-const queueName = 'create-app';
+const queueName = 'deploy-app';
 const debug = createDebug(`queue:${queueName}`);
 const redisClient = new Redis(config.redisUrl);
 
 interface QueueArgs {
   appName: string;
   gitRepoUrl: string;
-  userId: string;
   branchName?: string;
+  dokkuApp?: boolean;
+  appId?: string;
 }
 
-export const createAppQueue = new Queue<QueueArgs>(queueName, {
+export const deployAppQueue = new Queue<QueueArgs>(queueName, {
   defaultJobOptions: {
     // Max timeout 20 minutes
     timeout: 1.2e6,
@@ -33,51 +32,17 @@ export const createAppQueue = new Queue<QueueArgs>(queueName, {
 const worker = new Worker(
   queueName,
   async (job) => {
-    const { appName, gitRepoUrl, userId, branchName } = job.data;
+    const { appName, gitRepoUrl, appId, branchName } = job.data;
 
     debug(
-      `starting create app queue for ${userId} and ${appName} app with repoURL ${gitRepoUrl} and branch name ${branchName}`
+      `starting deploy app queue for ${appName} app with repoURL ${gitRepoUrl} and branch name ${branchName}`
     );
 
     const branch = branchName ? branchName : 'main';
 
     const ssh = await sshConnect();
 
-    //to do move this out to UTILS
-    const getRepoData = (gitRepoUrl: string) => {
-      const base = gitRepoUrl.replace('https://github.com/', '');
-      const split = base.split('/');
-      const owner = split[0];
-      const repoName = split[1].replace('.git', '');
-
-      return {
-        owner,
-        repoName,
-      };
-    };
-
-    const repoData = getRepoData(gitRepoUrl);
-
-    let repo;
-    try {
-      const res = await fetch(
-        `https://api.github.com/repos/${repoData.owner}/${repoData.repoName}`
-      );
-      repo = await res.json();
-    } catch (error) {
-      console.error(error);
-    }
-
-    const dokkuApp = await dokku.apps.create(ssh, appName);
-
-    const app = await prisma.app.create({
-      data: {
-        name: appName,
-        githubRepoId: repo.id.toString(),
-      },
-    });
-
-    if (dokkuApp && gitRepoUrl) {
+    if (gitRepoUrl) {
       const res = await dokku.git.sync(
         ssh,
         appName,
@@ -107,7 +72,7 @@ const worker = new Worker(
       if (!res.stderr) {
         pubsub.publish('APP_CREATED', {
           appCreateLogs: {
-            message: app.id,
+            message: appId,
             type: 'end:success',
           },
         });

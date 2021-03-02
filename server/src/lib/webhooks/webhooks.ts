@@ -1,22 +1,22 @@
 import { Request } from 'express';
 import { prisma } from '../../prisma';
-import { dokku } from '../dokku';
-
-import { sshConnect } from '../ssh';
+import { deployAppQueue } from './../../queues/deployApp';
 
 export const githubPushWebhookHandler = async (req: Request) => {
-  const ssh = await sshConnect();
-
-  const appToRedeploy = await prisma.app.findMany({
+  const appToRedeploy = await prisma.app.findFirst({
     where: {
       githubRepoId: req.body.repository.id.toString(),
     },
   });
 
   const branch = req.body.ref.replace('refs/heads/', '');
-  const { name, git_url } = req.body.repository;
+  const { git_url } = req.body.repository;
 
   if (appToRedeploy) {
-    await dokku.git.sync(ssh, name, git_url, branch);
+    await deployAppQueue.add('deploy-app', {
+      appName: appToRedeploy.name,
+      gitRepoUrl: git_url,
+      branchName: branch,
+    });
   }
 };
