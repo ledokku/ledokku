@@ -36,9 +36,6 @@ export const getRepoData = (gitRepoUrl: string) => {
   const owner = split[0];
   const repoName = split[1].replace('.git', '');
 
-  console.log('repoName', repoName);
-  console.log('repoOwner', owner);
-
   return {
     owner,
     repoName,
