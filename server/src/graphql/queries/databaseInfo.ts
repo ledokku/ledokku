@@ -13,7 +13,7 @@ export const databaseInfo: QueryResolvers['databaseInfo'] = async (
     throw new Error('Unauthorized');
   }
 
-  const database = await prisma.database.findOne({
+  const database = await prisma.database.findUnique({
     where: {
       id: databaseId,
     },

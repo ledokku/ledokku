@@ -355,7 +355,7 @@ const apolloServer = new ApolloServer({
         };
         const userId = decoded.userId;
 
-        const userInDb = await prisma.user.findOne({
+        const userInDb = await prisma.user.findUnique({
           where: {
             id: userId,
           },

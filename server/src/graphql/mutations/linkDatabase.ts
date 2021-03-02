@@ -14,7 +14,7 @@ export const linkDatabase: MutationResolvers['linkDatabase'] = async (
   const { databaseId, appId } = input;
 
   const [database, app] = await Promise.all([
-    prisma.database.findOne({
+    prisma.database.findUnique({
       where: {
         id: databaseId,
       },
@@ -26,7 +26,7 @@ export const linkDatabase: MutationResolvers['linkDatabase'] = async (
         },
       },
     }),
-    prisma.app.findOne({
+    prisma.app.findUnique({
       where: {
         id: appId,
       },

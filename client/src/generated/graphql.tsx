@@ -3,6 +3,8 @@ import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -31,7 +33,7 @@ export type AppBuild = {
   status: AppBuildStatus;
 };
 
-export type AppBuildStatus = 
+export type AppBuildStatus =
   | 'PENDING'
   | 'IN_PROGRESS'
   | 'COMPLETED'
@@ -46,7 +48,7 @@ export type Database = {
   apps?: Maybe<Array<App>>;
 };
 
-export type DatabaseTypes = 
+export type DatabaseTypes =
   | 'REDIS'
   | 'POSTGRESQL'
   | 'MONGODB'
@@ -449,7 +451,7 @@ export type MutationRemoveAppProxyPortArgs = {
   input: RemoveAppProxyPortInput;
 };
 
-export type CacheControlScope = 
+export type CacheControlScope =
   | 'PUBLIC'
   | 'PRIVATE';
 
@@ -1443,7 +1445,7 @@ export const AppByIdDocument = gql`
  *   },
  * });
  */
-export function useAppByIdQuery(baseOptions?: Apollo.QueryHookOptions<AppByIdQuery, AppByIdQueryVariables>) {
+export function useAppByIdQuery(baseOptions: Apollo.QueryHookOptions<AppByIdQuery, AppByIdQueryVariables>) {
         return Apollo.useQuery<AppByIdQuery, AppByIdQueryVariables>(AppByIdDocument, baseOptions);
       }
 export function useAppByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AppByIdQuery, AppByIdQueryVariables>) {
@@ -1476,7 +1478,7 @@ export const AppLogsDocument = gql`
  *   },
  * });
  */
-export function useAppLogsQuery(baseOptions?: Apollo.QueryHookOptions<AppLogsQuery, AppLogsQueryVariables>) {
+export function useAppLogsQuery(baseOptions: Apollo.QueryHookOptions<AppLogsQuery, AppLogsQueryVariables>) {
         return Apollo.useQuery<AppLogsQuery, AppLogsQueryVariables>(AppLogsDocument, baseOptions);
       }
 export function useAppLogsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AppLogsQuery, AppLogsQueryVariables>) {
@@ -1511,7 +1513,7 @@ export const AppProxyPortsDocument = gql`
  *   },
  * });
  */
-export function useAppProxyPortsQuery(baseOptions?: Apollo.QueryHookOptions<AppProxyPortsQuery, AppProxyPortsQueryVariables>) {
+export function useAppProxyPortsQuery(baseOptions: Apollo.QueryHookOptions<AppProxyPortsQuery, AppProxyPortsQueryVariables>) {
         return Apollo.useQuery<AppProxyPortsQuery, AppProxyPortsQueryVariables>(AppProxyPortsDocument, baseOptions);
       }
 export function useAppProxyPortsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AppProxyPortsQuery, AppProxyPortsQueryVariables>) {
@@ -1623,7 +1625,7 @@ export const DatabaseByIdDocument = gql`
  *   },
  * });
  */
-export function useDatabaseByIdQuery(baseOptions?: Apollo.QueryHookOptions<DatabaseByIdQuery, DatabaseByIdQueryVariables>) {
+export function useDatabaseByIdQuery(baseOptions: Apollo.QueryHookOptions<DatabaseByIdQuery, DatabaseByIdQueryVariables>) {
         return Apollo.useQuery<DatabaseByIdQuery, DatabaseByIdQueryVariables>(DatabaseByIdDocument, baseOptions);
       }
 export function useDatabaseByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DatabaseByIdQuery, DatabaseByIdQueryVariables>) {
@@ -1656,7 +1658,7 @@ export const DatabaseInfoDocument = gql`
  *   },
  * });
  */
-export function useDatabaseInfoQuery(baseOptions?: Apollo.QueryHookOptions<DatabaseInfoQuery, DatabaseInfoQueryVariables>) {
+export function useDatabaseInfoQuery(baseOptions: Apollo.QueryHookOptions<DatabaseInfoQuery, DatabaseInfoQueryVariables>) {
         return Apollo.useQuery<DatabaseInfoQuery, DatabaseInfoQueryVariables>(DatabaseInfoDocument, baseOptions);
       }
 export function useDatabaseInfoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DatabaseInfoQuery, DatabaseInfoQueryVariables>) {
@@ -1689,7 +1691,7 @@ export const DatabaseLogsDocument = gql`
  *   },
  * });
  */
-export function useDatabaseLogsQuery(baseOptions?: Apollo.QueryHookOptions<DatabaseLogsQuery, DatabaseLogsQueryVariables>) {
+export function useDatabaseLogsQuery(baseOptions: Apollo.QueryHookOptions<DatabaseLogsQuery, DatabaseLogsQueryVariables>) {
         return Apollo.useQuery<DatabaseLogsQuery, DatabaseLogsQueryVariables>(DatabaseLogsDocument, baseOptions);
       }
 export function useDatabaseLogsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DatabaseLogsQuery, DatabaseLogsQueryVariables>) {
@@ -1756,7 +1758,7 @@ export const DomainsDocument = gql`
  *   },
  * });
  */
-export function useDomainsQuery(baseOptions?: Apollo.QueryHookOptions<DomainsQuery, DomainsQueryVariables>) {
+export function useDomainsQuery(baseOptions: Apollo.QueryHookOptions<DomainsQuery, DomainsQueryVariables>) {
         return Apollo.useQuery<DomainsQuery, DomainsQueryVariables>(DomainsDocument, baseOptions);
       }
 export function useDomainsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DomainsQuery, DomainsQueryVariables>) {
@@ -1792,7 +1794,7 @@ export const EnvVarsDocument = gql`
  *   },
  * });
  */
-export function useEnvVarsQuery(baseOptions?: Apollo.QueryHookOptions<EnvVarsQuery, EnvVarsQueryVariables>) {
+export function useEnvVarsQuery(baseOptions: Apollo.QueryHookOptions<EnvVarsQuery, EnvVarsQueryVariables>) {
         return Apollo.useQuery<EnvVarsQuery, EnvVarsQueryVariables>(EnvVarsDocument, baseOptions);
       }
 export function useEnvVarsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EnvVarsQuery, EnvVarsQueryVariables>) {
@@ -1825,7 +1827,7 @@ export const IsPluginInstalledDocument = gql`
  *   },
  * });
  */
-export function useIsPluginInstalledQuery(baseOptions?: Apollo.QueryHookOptions<IsPluginInstalledQuery, IsPluginInstalledQueryVariables>) {
+export function useIsPluginInstalledQuery(baseOptions: Apollo.QueryHookOptions<IsPluginInstalledQuery, IsPluginInstalledQueryVariables>) {
         return Apollo.useQuery<IsPluginInstalledQuery, IsPluginInstalledQueryVariables>(IsPluginInstalledDocument, baseOptions);
       }
 export function useIsPluginInstalledLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IsPluginInstalledQuery, IsPluginInstalledQueryVariables>) {

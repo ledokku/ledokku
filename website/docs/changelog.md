@@ -8,6 +8,20 @@ hide_title: true
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.5.1](https://github.com/ledokku/ledokku/compare/v0.5.0...v0.5.1) (2021-02-26)
+
+### Features
+
+- add debug logs for the setup query ([#274](https://github.com/ledokku/ledokku/issues/274)) ([26667cc](https://github.com/ledokku/ledokku/commit/26667cc229e448970483d095d783c8fc94c1b9e6))
+- setup and use chakra-ui ([#262](https://github.com/ledokku/ledokku/issues/262)) ([38044e0](https://github.com/ledokku/ledokku/commit/38044e03ea6b21f4826ada4e635329bcd67f2922))
+
+### Miscellaneous Chores
+
+- **client:** partly migrate app views to chakra ([#269](https://github.com/ledokku/ledokku/issues/269)) ([77fd046](https://github.com/ledokku/ledokku/commit/77fd046cb2a715900b1eb64da102e29269fc7337))
+- **docs:** update dokku version and clean github screenshot ([#260](https://github.com/ledokku/ledokku/issues/260)) ([2e47906](https://github.com/ledokku/ledokku/commit/2e47906e44f82db3a8d3477f1dbba50ea72b30fc))
+- **docs:** update version and links ([#272](https://github.com/ledokku/ledokku/issues/272)) ([aa1758a](https://github.com/ledokku/ledokku/commit/aa1758a277d238820cbd38f04de7aca07e4716ee))
+- **server:** comment out appbuild related part ([#264](https://github.com/ledokku/ledokku/issues/264)) ([c8ff68f](https://github.com/ledokku/ledokku/commit/c8ff68f3a359edc19b9a96776e6833f8d4c61d00))
+
 ## [0.5.0](https://github.com/ledokku/ledokku/compare/v0.4.0...v0.5.0) (2020-12-10)
 
 ### Features

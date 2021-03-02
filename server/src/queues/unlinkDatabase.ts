@@ -32,13 +32,13 @@ const worker = new Worker(
   queueName,
   async (job) => {
     const { appId, databaseId } = job.data;
-    const app = await prisma.app.findOne({
+    const app = await prisma.app.findUnique({
       where: {
         id: appId,
       },
     });
 
-    const database = await prisma.database.findOne({
+    const database = await prisma.database.findUnique({
       where: {
         id: databaseId,
       },

@@ -12,7 +12,7 @@ export const addAppProxyPort: MutationResolvers['addAppProxyPort'] = async (
     throw new Error('Unauthorized');
   }
 
-  const app = await prisma.app.findOne({
+  const app = await prisma.app.findUnique({
     where: {
       id: input.appId,
     },

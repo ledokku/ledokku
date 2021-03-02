@@ -2,6 +2,8 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -15,6 +17,7 @@ export type Scalars = {
   /** The `Upload` scalar type represents a file upload. */
   Upload: any;
 };
+
 
 
 export type App = {
@@ -31,7 +34,7 @@ export type AppBuild = {
   status: AppBuildStatus;
 };
 
-export type AppBuildStatus = 
+export type AppBuildStatus =
   | 'PENDING'
   | 'IN_PROGRESS'
   | 'COMPLETED'
@@ -46,7 +49,7 @@ export type Database = {
   apps?: Maybe<Array<App>>;
 };
 
-export type DatabaseTypes = 
+export type DatabaseTypes =
   | 'REDIS'
   | 'POSTGRESQL'
   | 'MONGODB'
@@ -449,7 +452,7 @@ export type MutationRemoveAppProxyPortArgs = {
   input: RemoveAppProxyPortInput;
 };
 
-export type CacheControlScope = 
+export type CacheControlScope =
   | 'PUBLIC'
   | 'PRIVATE';
 
@@ -588,6 +591,7 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>;
   CacheControlScope: CacheControlScope;
   Upload: ResolverTypeWrapper<Scalars['Upload']>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -645,7 +649,13 @@ export type ResolversParentTypes = {
   Subscription: {};
   Mutation: {};
   Upload: Scalars['Upload'];
+  Int: Scalars['Int'];
 };
+
+export type CacheControlDirectiveArgs = {   maxAge?: Maybe<Scalars['Int']>;
+  scope?: Maybe<CacheControlScope>; };
+
+export type CacheControlDirectiveResolver<Result, Parent, ContextType = any, Args = CacheControlDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
 export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
   name: 'DateTime';
@@ -909,3 +919,13 @@ export type Resolvers<ContextType = any> = {
  * Use "Resolvers" root object instead. If you wish to get "IResolvers", add "typesPrefix: I" to your config.
  */
 export type IResolvers<ContextType = any> = Resolvers<ContextType>;
+export type DirectiveResolvers<ContextType = any> = {
+  cacheControl?: CacheControlDirectiveResolver<any, any, ContextType>;
+};
+
+
+/**
+ * @deprecated
+ * Use "DirectiveResolvers" root object instead. If you wish to get "IDirectiveResolvers", add "typesPrefix: I" to your config.
+ */
+export type IDirectiveResolvers<ContextType = any> = DirectiveResolvers<ContextType>;

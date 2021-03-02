@@ -61,7 +61,7 @@ You can now open your browser and visit http://localhost:3000 to see the app run
 
 ### Create a new migration
 
-To create a new database migration, first edit the `schema.prisma` file with the changes you would like to do. Then connect to the server docker container `docker-compose run server bash`. To create a new migration run `yarn prisma migrate save --experimental`. Then you need to apply the latest migration to the PostgreSQL database `yarn prisma migrate up --experimental`. Finally to regenerate the prisma client with your latest changes run `yarn prisma generate`.
+To create a new database migration, first edit the `schema.prisma` file with the changes you would like to do. Then connect to the server docker container `docker-compose run server bash`. To apply the latest migration to the PostgreSQL database `yarn prisma migrate dev --preview-feature`. Finally to regenerate the prisma client with your latest changes run `yarn prisma generate`.
 
 #### Removing migration you created
 
