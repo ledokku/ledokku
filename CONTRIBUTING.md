@@ -3,7 +3,6 @@
 ## Requirements
 
 - [Node](https://nodejs.org/en/) 12.0.0+
-- [Yarn](https://classic.yarnpkg.com/en/) 1.2.0+
 - [Docker](https://www.docker.com/) and docker compose installed.
 
 ## Pull Requests
@@ -13,13 +12,13 @@ For non-bug-fixes, please open an issue first and discuss your idea to make sure
 **Before submitting a pull request**, please make sure the following is done:
 
 - Fork the repository and create a new branch from `master`.
-- Must not break the test suite (`yarn test`). If you're fixing a bug, include a test that would fail without your fix.
-- Must be formatted with prettier (`yarn prettier`).
+- Must not break the test suite (`npm test`). If you're fixing a bug, include a test that would fail without your fix.
+- Must be formatted with prettier (`npm run prettier`).
 - Must be **isolated**. Avoid grouping many, unrelated changes in a single PR.
 
 ## Development Workflow
 
-To setup the project locally you first need to fork the project on Github (top right on the project page). Then clone the project: `git clone git@github.com:yourname/ledokku`. Now you can run `yarn` to install the dependencies.
+To setup the project locally you first need to fork the project on Github (top right on the project page). Then clone the project: `git clone git@github.com:yourname/ledokku`. Now you can run `npm ci` to install the dependencies.
 
 ### Setup dokku with vagrant
 
@@ -61,15 +60,15 @@ You can now open your browser and visit http://localhost:3000 to see the app run
 
 ### Create a new migration
 
-To create a new database migration, first edit the `schema.prisma` file with the changes you would like to do. Then connect to the server docker container `docker-compose run server bash`. To apply the latest migration to the PostgreSQL database `yarn prisma migrate dev --preview-feature`. Finally to regenerate the prisma client with your latest changes run `yarn prisma generate`.
+To create a new database migration, first edit the `schema.prisma` file with the changes you would like to do. Then connect to the server docker container `docker-compose run server bash`. To apply the latest migration to the PostgreSQL database `npm run prisma:migrate dev --preview-feature`. Finally to regenerate the prisma client with your latest changes run `npm run prisma:generate`.
 
 #### Removing migration you created
 
-In case you have created a new database migration and want to remove it, don't remove the files as it will cause data mismatch. Instead run `yarn prisma migrate down`.
+In case you have created a new database migration and want to remove it, don't remove the files as it will cause data mismatch. Instead run `npm run prisma:migrate down`.
 
 ## Style Guide
 
-To format the code automatically we use [prettier](https://prettier.io/). Run `yarn prettier` after making any changes to the code.
+To format the code automatically we use [prettier](https://prettier.io/). Run `npm run prettier` after making any changes to the code.
 
 ## License
 

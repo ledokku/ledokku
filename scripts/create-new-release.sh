@@ -21,7 +21,7 @@ sed "s|${CURRENT_PACKAGE_VERSION}|${NEW_VERSION}|g" ledokku-bootstrap.sh > "tmp.
 chmod +x ./ledokku-bootstrap.sh
 
 # Generate CHANGELOG.md
-yarn standard-version --release-as ${NEW_VERSION}
+npm run standard-version --release-as ${NEW_VERSION}
 
 # Update the website changelog page with the new release
 cat <<EOT > website/docs/changelog.md
@@ -34,7 +34,7 @@ EOT
 cat CHANGELOG.md >> website/docs/changelog.md
 
 # Use prettier to normalise the changed files
-yarn prettier
+npm run prettier
 
 # git commit
 RELEASE_COMMIT_MESSAGE="chore: publish v${NEW_VERSION}"

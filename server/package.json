@@ -4,9 +4,9 @@
   "version": "0.5.1",
   "license": "MIT",
   "scripts": {
-    "dev": "yarn prisma:migrate && yarn prisma:generate && nodemon 'src/index.ts' --exec 'ts-node' src/index.ts -e ts,graphql",
+    "dev": "npm run prisma:migrate && npm run prisma:generate && nodemon 'src/index.ts' --exec 'ts-node' src/index.ts -e ts,graphql",
     "build": "tsc",
-    "start": "yarn prisma:migrate && node build/index.js",
+    "start": "npm run prisma:migrate && node build/index.js",
     "generate": "graphql-codegen --config codegen.yml",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate deploy --preview-feature",

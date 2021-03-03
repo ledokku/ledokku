@@ -4,8 +4,8 @@
   "version": "0.5.1",
   "license": "MIT",
   "scripts": {
-    "dev": "yarn watch:css && SKIP_PREFLIGHT_CHECK=true react-scripts start",
-    "build": "yarn build:css && SKIP_PREFLIGHT_CHECK=true react-scripts build",
+    "dev": "npm run watch:css && SKIP_PREFLIGHT_CHECK=true react-scripts start",
+    "build": "npm run build:css && SKIP_PREFLIGHT_CHECK=true react-scripts build",
     "test": "react-scripts test",
     "build:css": "postcss src/styles/index.css -o src/generated/index.css",
     "watch:css": "postcss src/styles/index.css -o src/generated/index.css",

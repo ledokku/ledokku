@@ -2,11 +2,11 @@ FROM node:12
 
 WORKDIR /usr/src/app
 
-COPY package.json ./
+COPY package*.json ./
 
-RUN yarn
+RUN npm ci
 
 COPY . .
 
 EXPOSE 4000
-CMD [ "yarn", "dev" ]
+CMD [ "npm", "run", "dev" ]
