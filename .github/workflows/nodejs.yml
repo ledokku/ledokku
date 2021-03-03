@@ -37,16 +37,25 @@ jobs:
           CI: true
 
       - name: Test server
-        run: cd server && npm run build
+        working-directory: server
+        run: |
+          npm ci
+          npm run build
         env:
           CI: true
 
       - name: Test client
-        run: cd client && npm run build
+        working-directory: client
+        run: |
+          npm ci
+          npm run build
         env:
           CI: true
 
       - name: Test website
-        run: cd website && npm run build
+        working-directory: website
+        run: |
+          npm ci
+          npm run build
         env:
           CI: true
