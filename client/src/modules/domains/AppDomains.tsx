@@ -8,12 +8,15 @@ import {
 import { Button } from '../../ui';
 import { TrashBinIcon } from '../../ui/icons/TrashBinIcon';
 import { AddAppDomain } from './AddAppDomain';
+import { useToast } from '@chakra-ui/react';
+import { toastConfig } from '../../pages/utils';
 
 interface AppDomainProps {
   appId: string;
 }
 
 export const AppDomains = ({ appId }: AppDomainProps) => {
+  const toast = useToast();
   const { data, loading /* error */ } = useAppByIdQuery({
     variables: {
       appId,
@@ -48,10 +51,15 @@ export const AppDomains = ({ appId }: AppDomainProps) => {
         },
         refetchQueries: [{ query: DomainsDocument, variables: { appId } }],
       });
-
-      toast.success('Domain removed successfully');
+      toast({
+        description: 'Domain removed successfully',
+        ...toastConfig('success'),
+      });
     } catch (error) {
-      toast.error(error.message);
+      toast({
+        description: error.message,
+        ...toastConfig('error'),
+      });
     }
   };
 

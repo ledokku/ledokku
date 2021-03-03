@@ -1,7 +1,6 @@
 import * as yup from 'yup';
 import { useParams, useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
-import { toast } from 'react-toastify';
 import { Header } from '../../modules/layout/Header';
 import {
   useDatabaseByIdQuery,
@@ -10,11 +9,13 @@ import {
   useDatabaseInfoQuery,
 } from '../../generated/graphql';
 import { TabNav, TabNavLink, Button, FormInput, FormHelper } from '../../ui';
-import { Container, Heading } from '@chakra-ui/react';
+import { Container, Heading, useToast } from '@chakra-ui/react';
+import { toastConfig } from '../utils';
 
 export const Settings = () => {
   const { id: databaseId } = useParams<{ id: string }>();
   let history = useHistory();
+  const toast = useToast();
   const [
     destroyDatabaseMutation,
     { loading: destroyDbLoading },
@@ -70,10 +71,16 @@ export const Settings = () => {
             },
           ],
         });
-        toast.success('Database deleted successfully');
+        toast({
+          description: 'Database deleted successfully',
+          ...toastConfig('success'),
+        });
         history.push('/dashboard');
       } catch (error) {
-        toast.error(error.message);
+        toast({
+          description: error.message,
+          ...toastConfig('error'),
+        });
       }
     },
   });

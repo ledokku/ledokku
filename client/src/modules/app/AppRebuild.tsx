@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { toast } from 'react-toastify';
+import { useToast } from '@chakra-ui/toast';
 import {
   useAppByIdQuery,
   useRebuildAppMutation,
   useAppRebuildLogsSubscription,
   RealTimeLog,
 } from '../../generated/graphql';
+import { toastConfig } from '../../pages/utils';
 import {
   Button,
   Modal,
@@ -20,6 +21,7 @@ interface AppRebuildProps {
 }
 
 export const AppRebuild = ({ appId }: AppRebuildProps) => {
+  const toast = useToast();
   const [isRebuildAppModalOpen, setIsRebuildAppModalOpen] = useState(false);
   const [arrayOfRebuildLogs, setArrayOfRebuildLogs] = useState<RealTimeLog[]>(
     []
@@ -69,7 +71,10 @@ export const AppRebuild = ({ appId }: AppRebuildProps) => {
       setIsTerminalVisible(true);
       setRebuildLoading(true);
     } catch (e) {
-      toast.error(e.message);
+      toast({
+        description: e.message,
+        ...toastConfig('error'),
+      });
     }
   };
 

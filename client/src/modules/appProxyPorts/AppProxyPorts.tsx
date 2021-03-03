@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { toast } from 'react-toastify';
 import {
   useAppProxyPortsQuery,
   useRemoveAppProxyPortMutation,
@@ -13,12 +12,15 @@ import {
   ModalDescription,
 } from '../../ui';
 import { AddAppProxyPorts } from './AddAppProxyPorts';
+import { useToast } from '@chakra-ui/react';
+import { toastConfig } from '../../pages/utils';
 
 interface AppProxyPortsProps {
   appId: string;
 }
 
 export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
+  const toast = useToast();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [processStatus, setProcessStatus] = useState<
@@ -51,10 +53,16 @@ export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
         },
       });
       setIsDeleteModalOpen(false);
-      toast.success('Port mapping deleted successfully');
+      toast({
+        description: 'Port mapping deleted successfully',
+        ...toastConfig('success'),
+      });
       await appProxyPortsRefetch();
     } catch (error) {
-      toast.error(error.message);
+      toast({
+        description: error.message,
+        ...toastConfig('error'),
+      });
     }
   };
 

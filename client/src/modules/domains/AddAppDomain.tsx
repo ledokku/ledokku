@@ -1,8 +1,9 @@
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { toast } from 'react-toastify';
 import { useAddDomainMutation } from '../../generated/graphql';
 import { FormHelper, FormInput, Button } from '../../ui';
+import { useToast } from '@chakra-ui/react';
+import { toastConfig } from '../../pages/utils';
 
 const addAppDomainYupSchema = yup.object().shape({
   domainName: yup.string().required('Domain name is required'),
@@ -14,6 +15,7 @@ interface AddDomainProps {
 }
 
 export const AddAppDomain = ({ appId, appDomainsRefetch }: AddDomainProps) => {
+  const toast = useToast();
   const [addDomainMutation] = useAddDomainMutation();
 
   const formik = useFormik<{ domainName: string }>({
@@ -34,10 +36,17 @@ export const AddAppDomain = ({ appId, appDomainsRefetch }: AddDomainProps) => {
         });
 
         await appDomainsRefetch();
-        toast.success('Domain added successfully');
+        toast({
+          description: 'Domain added successfully',
+          ...toastConfig('success'),
+        });
+
         formik.resetForm();
       } catch (error) {
-        toast.error(error.message);
+        toast({
+          description: error.message,
+          ...toastConfig('error'),
+        });
       }
     },
   });

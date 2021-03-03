@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { Header } from '../../modules/layout/Header';
 import {
   useAppByIdQuery,
@@ -12,7 +11,8 @@ import {
 import { useFormik } from 'formik';
 import { TabNav, TabNavLink, Button } from '../../ui';
 import { TrashBinIcon } from '../../ui/icons/TrashBinIcon';
-import { Container, Heading } from '@chakra-ui/react';
+import { toastConfig } from '../../pages/utils';
+import { Container, Heading, useToast } from '@chakra-ui/react';
 
 interface EnvFormProps {
   name: string;
@@ -23,6 +23,7 @@ interface EnvFormProps {
 
 export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
   const [inputType, setInputType] = useState('password');
+  const toast = useToast();
   const [
     setEnvVarMutation,
     { loading: setEnvVarLoading },
@@ -40,7 +41,10 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
         refetchQueries: [{ query: EnvVarsDocument, variables: { appId } }],
       });
     } catch (error) {
-      toast.error(error.message);
+      toast({
+        description: error.message,
+        ...toastConfig('error'),
+      });
     }
   };
 
@@ -61,9 +65,15 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
           formik.resetForm();
         }
 
-        // TODO give feedback about setting success
+        toast({
+          description: 'Environment variable set successfully',
+          ...toastConfig('success'),
+        });
       } catch (error) {
-        toast.error(error.message);
+        toast({
+          description: error.message,
+          ...toastConfig('error'),
+        });
       }
     },
   });

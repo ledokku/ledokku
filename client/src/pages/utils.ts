@@ -1,3 +1,4 @@
+import { UseToastOptions } from '@chakra-ui/react';
 import { DatabaseTypes } from '../generated/graphql';
 
 export const dbTypeToDokkuPlugin = (dbType: DatabaseTypes) => {
@@ -11,4 +12,13 @@ export const dbTypeToDokkuPlugin = (dbType: DatabaseTypes) => {
     case 'MYSQL':
       return 'mysql';
   }
+};
+
+export const toastConfig = (type: 'error' | 'success'): UseToastOptions => {
+  return {
+    status: type,
+    position: 'top-left',
+    duration: 5000,
+    isClosable: true,
+  };
 };

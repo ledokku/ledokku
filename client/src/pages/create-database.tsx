@@ -19,6 +19,7 @@ import {
   Button,
   Box,
   Grid,
+  useToast,
 } from '@chakra-ui/react';
 import { ArrowRight, ArrowLeft } from 'react-feather';
 import { toast } from 'react-toastify';
@@ -35,7 +36,7 @@ import { MySQLIcon } from '../ui/icons/MySQLIcon';
 import { MongoIcon } from '../ui/icons/MongoIcon';
 import { RedisIcon } from '../ui/icons/RedisIcon';
 import { Header } from '../modules/layout/Header';
-import { dbTypeToDokkuPlugin } from './utils';
+import { dbTypeToDokkuPlugin, toastConfig } from './utils';
 import { Terminal } from '../ui';
 
 interface DatabaseBoxProps {
@@ -73,6 +74,7 @@ const DatabaseBox = ({ label, selected, icon, onClick }: DatabaseBoxProps) => {
 export const CreateDatabase = () => {
   const location = useLocation();
   const history = useHistory();
+  const toast = useToast();
 
   const { data: dataDb } = useDatabaseQuery();
   const [arrayOfCreateDbLogs, setArrayofCreateDbLogs] = useState<RealTimeLog[]>(
@@ -146,7 +148,10 @@ export const CreateDatabase = () => {
         });
         setIsTerminalVisible(true);
       } catch (error) {
-        toast.error(error.message);
+        toast({
+          description: error.message,
+          ...toastConfig('error'),
+        });
       }
     },
   });
@@ -171,9 +176,15 @@ export const CreateDatabase = () => {
   // Effect for db creation
   useEffect(() => {
     isDbCreationSuccess === DbCreationStatus.FAILURE
-      ? toast.error('Failed to create database')
+      ? toast({
+          description: 'Failed to create database',
+          ...toastConfig('error'),
+        })
       : isDbCreationSuccess === DbCreationStatus.SUCCESS &&
-        toast.success('Database created successfully');
+        toast({
+          description: 'Database created successfully',
+          ...toastConfig('success'),
+        });
   }, [isDbCreationSuccess]);
 
   return (

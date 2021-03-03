@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { toast } from 'react-toastify';
 import { Listbox, Transition } from '@headlessui/react';
 import cx from 'classnames';
 import { Header } from '../../modules/layout/Header';
@@ -23,10 +22,20 @@ import {
   ModalButton,
   Terminal,
 } from '../../ui';
-import { Container, Heading, Table, Tbody, Td, Tr } from '@chakra-ui/react';
+import { toastConfig } from '../utils';
+import {
+  Container,
+  Heading,
+  Table,
+  Tbody,
+  Td,
+  Tr,
+  useToast,
+} from '@chakra-ui/react';
 
 export const Database = () => {
   const { id: databaseId } = useParams<{ id: string }>();
+  const toast = useToast();
   const [isUnlinkModalOpen, setIsUnlinkModalOpen] = useState(false);
   const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
   const [arrayOfUnlinkLogs, setArrayOfUnlinkLogs] = useState<RealTimeLog[]>([]);
@@ -125,7 +134,10 @@ export const Database = () => {
       setIsTerminalVisible(true);
       setUnlinkLoading(true);
     } catch (e) {
-      toast.error(e.message);
+      toast({
+        description: e.message,
+        ...toastConfig('error'),
+      });
     }
   };
 
@@ -163,9 +175,11 @@ export const Database = () => {
       });
       setIsTerminalVisible(true);
       setLinkLoading(true);
-      // TODO - REACT - TOASTIFY
     } catch (e) {
-      toast.error(e.message);
+      toast({
+        description: e.message,
+        ...toastConfig('error'),
+      });
     }
   };
 
