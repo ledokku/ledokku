@@ -66,7 +66,7 @@ export const CreateApp = () => {
             Enter app name, click create and voila!
           </h2>
         </div>
-        <form>
+        <form onSubmit={formik.handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-3">
             <div>
               <FormLabel>App name: </FormLabel>
@@ -86,7 +86,6 @@ export const CreateApp = () => {
 
               <div className="mt-4 flex justify-end">
                 <Button
-                  onClick={() => formik.handleSubmit()}
                   color="grey"
                   type="submit"
                   disabled={!formik.values.name || !!formik.errors.name}
