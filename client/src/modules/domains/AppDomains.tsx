@@ -1,4 +1,3 @@
-import { toast } from 'react-toastify';
 import { DomainsDocument } from '../../generated/graphql';
 import {
   useAppByIdQuery,
