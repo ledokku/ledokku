@@ -22,7 +22,6 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { ArrowRight, ArrowLeft } from 'react-feather';
-import { toast } from 'react-toastify';
 import {
   useCreateDatabaseMutation,
   DatabaseTypes,
