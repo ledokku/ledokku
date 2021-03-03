@@ -64,7 +64,7 @@ export const Settings = () => {
           ],
         });
         toast({
-          description: 'App delete successfully',
+          description: 'App deleted successfully',
           ...toastConfig('success'),
         });
         history.push('/dashboard');
