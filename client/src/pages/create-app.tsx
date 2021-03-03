@@ -264,7 +264,7 @@ export const CreateApp = () => {
 
                     <div className="mt-4 flex justify-end">
                       <Button
-                        onClick={() => formik.handleSubmit()}
+                        type="submit"
                         color="grey"
                         disabled={
                           !formik.values.name ||

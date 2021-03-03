@@ -80,9 +80,10 @@ export const CreateDatabase = () => {
   );
   const [isTerminalVisible, setIsTerminalVisible] = useState(false);
   const [createDatabaseMutation] = useCreateDatabaseMutation();
-  const [isDbCreationSuccess, setIsDbCreationSuccess] = useState<
-    DbCreationStatus
-  >();
+  const [
+    isDbCreationSuccess,
+    setIsDbCreationSuccess,
+  ] = useState<DbCreationStatus>();
 
   useCreateDatabaseLogsSubscription({
     onSubscriptionData: (data) => {
@@ -343,7 +344,7 @@ export const CreateDatabase = () => {
                       !dataDb?.databases
                     }
                     rightIcon={<ArrowRight />}
-                    onClick={() => formik.handleSubmit()}
+                    type="submit"
                   >
                     Create
                   </Button>
