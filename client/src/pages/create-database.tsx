@@ -344,7 +344,7 @@ export const CreateDatabase = () => {
                       !dataDb?.databases
                     }
                     rightIcon={<ArrowRight />}
-                    onClick={() => formik.handleSubmit()}
+                    type="submit"
                   >
                     Create
                   </Button>
