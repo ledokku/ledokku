@@ -12,6 +12,14 @@ import { Header } from '../modules/layout/Header';
 import { Button, FormHelper, FormInput, FormLabel, Terminal } from '../ui';
 import { toast } from 'react-toastify';
 import { ArrowLeft, ArrowRight } from 'react-feather';
+import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
+} from '@chakra-ui/alert';
+import { Box } from '@chakra-ui/layout';
+import { CloseButton } from '@chakra-ui/close-button';
 
 enum AppCreationStatus {
   FAILURE = 'Failure',
@@ -25,10 +33,12 @@ export const CreateApp = () => {
     RealTimeLog[]
   >([]);
   const [isTerminalVisible, setIsTerminalVisible] = useState(false);
+  const [isWarningVisible, setIsWarningVisible] = useState(true);
   const [createAppMutation] = useCreateAppMutation();
-  const [isAppCreationSuccess, setIsAppCreationSuccess] = useState<
-    AppCreationStatus
-  >();
+  const [
+    isAppCreationSuccess,
+    setIsAppCreationSuccess,
+  ] = useState<AppCreationStatus>();
 
   useAppCreateLogsSubscription({
     onSubscriptionData: (data) => {
@@ -172,6 +182,27 @@ export const CreateApp = () => {
                   voila!
                 </h2>
               </div>
+              {isWarningVisible && (
+                <Alert mb="4" mt="4" w="65%" status="warning">
+                  <AlertIcon />
+                  <Box flex="1">
+                    <AlertTitle>
+                      Currently only works with public repositories
+                    </AlertTitle>
+                    <AlertDescription display="block">
+                      We are doing our best to add suport for private repos.
+                      Stay tuned and enjoy automatic git deployments with your
+                      public projects.
+                    </AlertDescription>
+                  </Box>
+                  <CloseButton
+                    onClick={() => setIsWarningVisible(false)}
+                    position="absolute"
+                    right="8px"
+                    top="8px"
+                  />
+                </Alert>
+              )}
               <form onSubmit={formik.handleSubmit}>
                 <div className="grid grid-cols-3 md:grid-cols-3 gap-10">
                   <div>
