@@ -184,7 +184,7 @@ export const CreateDatabase = () => {
           description: 'Database created successfully',
           ...toastConfig('success'),
         });
-  }, [isDbCreationSuccess]);
+  }, [isDbCreationSuccess, toast]);
 
   return (
     <>
