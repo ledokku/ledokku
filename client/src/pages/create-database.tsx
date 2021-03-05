@@ -172,7 +172,7 @@ export const CreateDatabase = () => {
   // Effect for db creation
   useEffect(() => {
     isDbCreationSuccess === DbCreationStatus.FAILURE
-      ? toast.error("'Failed to create database'")
+      ? toast.error('Failed to create database')
       : isDbCreationSuccess === DbCreationStatus.SUCCESS &&
         toast.success('Database created successfully');
   }, [isDbCreationSuccess, toast]);

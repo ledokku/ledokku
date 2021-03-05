@@ -61,7 +61,7 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
         if (isNewVar) {
           formik.resetForm();
         }
-        toast.success("'Environment variable set successfully'");
+        toast.success('Environment variable set successfully');
       } catch (error) {
         toast.error(error.message);
       }

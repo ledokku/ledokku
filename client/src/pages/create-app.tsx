@@ -14,7 +14,6 @@ import { useToast } from '../ui/toast';
 export const CreateApp = () => {
   const history = useHistory();
   const toast = useToast();
-  // const toast = useToast();
   const { data } = useAppsQuery();
   const [createAppMutation, { loading }] = useCreateAppMutation();
 
