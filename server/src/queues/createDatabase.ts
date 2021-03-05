@@ -32,7 +32,7 @@ export const createDatabaseQueue = new Queue<QueueArgs>(queueName, {
 const worker = new Worker(
   queueName,
   async (job) => {
-    const { databaseName, databaseType, userId } = job.data;
+    const { databaseName, databaseType } = job.data;
 
     const dbType = dbTypeToDokkuPlugin(databaseType);
 
