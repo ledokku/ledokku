@@ -34,7 +34,7 @@ import { MySQLIcon } from '../ui/icons/MySQLIcon';
 import { MongoIcon } from '../ui/icons/MongoIcon';
 import { RedisIcon } from '../ui/icons/RedisIcon';
 import { Header } from '../modules/layout/Header';
-import { dbTypeToDokkuPlugin, toastConfig } from './utils';
+import { dbTypeToDokkuPlugin } from './utils';
 import { Terminal } from '../ui';
 import { useToast } from '../ui/toast';
 

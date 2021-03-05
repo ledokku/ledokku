@@ -5,7 +5,6 @@ import {
   useAppRebuildLogsSubscription,
   RealTimeLog,
 } from '../../generated/graphql';
-import { toastConfig } from '../../pages/utils';
 import {
   Button,
   Modal,

@@ -11,7 +11,6 @@ import {
 import { useFormik } from 'formik';
 import { TabNav, TabNavLink, Button } from '../../ui';
 import { TrashBinIcon } from '../../ui/icons/TrashBinIcon';
-import { toastConfig } from '../../pages/utils';
 import { Container, Heading } from '@chakra-ui/react';
 import { useToast } from '../../ui/toast';
 
