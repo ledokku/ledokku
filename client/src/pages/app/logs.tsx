@@ -1,16 +1,16 @@
 import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
+import {
+  Container,
+  Heading,
+  Alert,
+  AlertDescription,
+  Text,
+} from '@chakra-ui/react';
 import AnsiUp from 'ansi_up';
 import { Header } from '../../modules/layout/Header';
 import { useAppByIdQuery, useAppLogsQuery } from '../../generated/graphql';
-import {
-  TabNav,
-  TabNavLink,
-  Terminal,
-  Alert,
-  AlertDescription,
-} from '../../ui';
-import { Container, Heading } from '@chakra-ui/react';
+import { TabNav, TabNavLink, Terminal } from '../../ui';
 
 export const Logs = () => {
   const { id: appId } = useParams<{ id: string }>();
@@ -83,17 +83,29 @@ export const Logs = () => {
         </Heading>
 
         {appLogsLoading ? (
-          <p className="text-gray-400 text-sm">Loading...</p>
+          <Text fontSize="sm" color="gray.400">
+            Loading...
+          </Text>
         ) : null}
 
         {appLogsError ? (
-          <Alert status="error">
+          <Alert
+            status="error"
+            variant="top-accent"
+            borderBottomRadius="base"
+            boxShadow="md"
+          >
             <AlertDescription>{appLogsError.message}</AlertDescription>
           </Alert>
         ) : null}
 
         {!appLogsLoading && !appLogsError && !appLogsData ? (
-          <Alert status="info">
+          <Alert
+            status="info"
+            variant="top-accent"
+            borderBottomRadius="base"
+            boxShadow="md"
+          >
             <AlertDescription>
               There are no logs for {app.name}.
               <br />

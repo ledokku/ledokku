@@ -38,7 +38,7 @@
     "@emotion/react": "11.1.5",
     "@emotion/styled": "11.1.5",
     "@headlessui/react": "0.2.0",
-    "ansi_up": "4.0.4",
+    "ansi_up": "5.0.0",
     "classnames": "2.2.6",
     "formik": "2.2.6",
     "framer-motion": "3.7.0",
