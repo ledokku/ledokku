@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useToast } from '@chakra-ui/toast';
 import {
   useAppByIdQuery,
   useRebuildAppMutation,
@@ -15,6 +14,7 @@ import {
   ModalButton,
   Terminal,
 } from '../../ui';
+import { useToast } from '../../ui/toast';
 
 interface AppRebuildProps {
   appId: string;
@@ -71,10 +71,7 @@ export const AppRebuild = ({ appId }: AppRebuildProps) => {
       setIsTerminalVisible(true);
       setRebuildLoading(true);
     } catch (e) {
-      toast({
-        description: e.message,
-        ...toastConfig('error'),
-      });
+      toast.error(e.message);
     }
   };
 

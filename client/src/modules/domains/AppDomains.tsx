@@ -7,8 +7,7 @@ import {
 import { Button } from '../../ui';
 import { TrashBinIcon } from '../../ui/icons/TrashBinIcon';
 import { AddAppDomain } from './AddAppDomain';
-import { useToast } from '@chakra-ui/react';
-import { toastConfig } from '../../pages/utils';
+import { useToast } from '../../ui/toast';
 
 interface AppDomainProps {
   appId: string;
@@ -50,15 +49,9 @@ export const AppDomains = ({ appId }: AppDomainProps) => {
         },
         refetchQueries: [{ query: DomainsDocument, variables: { appId } }],
       });
-      toast({
-        description: 'Domain removed successfully',
-        ...toastConfig('success'),
-      });
+      toast.success('Domain removed successfully');
     } catch (error) {
-      toast({
-        description: error.message,
-        ...toastConfig('error'),
-      });
+      toast.error(error.message);
     }
   };
 

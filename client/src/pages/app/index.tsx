@@ -28,16 +28,8 @@ import { PostgreSQLIcon } from '../../ui/icons/PostgreSQLIcon';
 import { MongoIcon } from '../../ui/icons/MongoIcon';
 import { RedisIcon } from '../../ui/icons/RedisIcon';
 import { MySQLIcon } from '../../ui/icons/MySQLIcon';
-import { toastConfig } from '../utils';
-import {
-  Container,
-  Heading,
-  Table,
-  Tbody,
-  Td,
-  Tr,
-  useToast,
-} from '@chakra-ui/react';
+import { Container, Heading, Table, Tbody, Td, Tr } from '@chakra-ui/react';
+import { useToast } from '../../ui/toast';
 
 export const App = () => {
   const history = useHistory();
@@ -167,10 +159,7 @@ export const App = () => {
       setIsTerminalVisible(true);
       setUnlinkLoading(true);
     } catch (e) {
-      toast({
-        description: e.message,
-        ...toastConfig('error'),
-      });
+      toast.error(e.message);
     }
   };
 
@@ -191,10 +180,7 @@ export const App = () => {
       setIsTerminalVisible(true);
       setLinkLoading(true);
     } catch (e) {
-      toast({
-        description: e.message,
-        ...toastConfig('error'),
-      });
+      toast.error(e.message);
     }
   };
 

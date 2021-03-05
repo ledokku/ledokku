@@ -1,12 +1,11 @@
 import { useState } from 'react';
-import { useToast } from '@chakra-ui/toast';
+
 import {
   useAppByIdQuery,
   useRestartAppMutation,
   useAppRestartLogsSubscription,
   RealTimeLog,
 } from '../../generated/graphql';
-import { toastConfig } from '../../pages/utils';
 import {
   Button,
   Modal,
@@ -15,6 +14,7 @@ import {
   ModalButton,
   Terminal,
 } from '../../ui';
+import { useToast } from '../../ui/toast';
 
 interface AppRestartProps {
   appId: string;
@@ -71,10 +71,7 @@ export const AppRestart = ({ appId }: AppRestartProps) => {
       setIsTerminalVisible(true);
       setRestartLoading(true);
     } catch (e) {
-      toast({
-        description: e.message,
-        ...toastConfig('error'),
-      });
+      toast.error(e.message);
     }
   };
 

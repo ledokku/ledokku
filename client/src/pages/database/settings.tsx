@@ -9,8 +9,8 @@ import {
   useDatabaseInfoQuery,
 } from '../../generated/graphql';
 import { TabNav, TabNavLink, Button, FormInput, FormHelper } from '../../ui';
-import { Container, Heading, useToast } from '@chakra-ui/react';
-import { toastConfig } from '../utils';
+import { Container, Heading } from '@chakra-ui/react';
+import { useToast } from '../../ui/toast';
 
 export const Settings = () => {
   const { id: databaseId } = useParams<{ id: string }>();
@@ -71,16 +71,11 @@ export const Settings = () => {
             },
           ],
         });
-        toast({
-          description: 'Database deleted successfully',
-          ...toastConfig('success'),
-        });
+        toast.success("'Database deleted successfully'");
+
         history.push('/dashboard');
       } catch (error) {
-        toast({
-          description: error.message,
-          ...toastConfig('error'),
-        });
+        toast.error(error.message);
       }
     },
   });

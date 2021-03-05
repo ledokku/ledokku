@@ -22,16 +22,10 @@ import {
   ModalButton,
   Terminal,
 } from '../../ui';
-import { toastConfig } from '../utils';
-import {
-  Container,
-  Heading,
-  Table,
-  Tbody,
-  Td,
-  Tr,
-  useToast,
-} from '@chakra-ui/react';
+
+import { Container, Heading, Table, Tbody, Td, Tr } from '@chakra-ui/react';
+
+import { useToast } from '../../ui/toast';
 
 export const Database = () => {
   const { id: databaseId } = useParams<{ id: string }>();
@@ -134,10 +128,7 @@ export const Database = () => {
       setIsTerminalVisible(true);
       setUnlinkLoading(true);
     } catch (e) {
-      toast({
-        description: e.message,
-        ...toastConfig('error'),
-      });
+      toast.error(e.message);
     }
   };
 
@@ -176,10 +167,7 @@ export const Database = () => {
       setIsTerminalVisible(true);
       setLinkLoading(true);
     } catch (e) {
-      toast({
-        description: e.message,
-        ...toastConfig('error'),
-      });
+      toast.error(e.message);
     }
   };
 

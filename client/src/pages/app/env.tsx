@@ -12,7 +12,8 @@ import { useFormik } from 'formik';
 import { TabNav, TabNavLink, Button } from '../../ui';
 import { TrashBinIcon } from '../../ui/icons/TrashBinIcon';
 import { toastConfig } from '../../pages/utils';
-import { Container, Heading, useToast } from '@chakra-ui/react';
+import { Container, Heading } from '@chakra-ui/react';
+import { useToast } from '../../ui/toast';
 
 interface EnvFormProps {
   name: string;
@@ -41,10 +42,7 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
         refetchQueries: [{ query: EnvVarsDocument, variables: { appId } }],
       });
     } catch (error) {
-      toast({
-        description: error.message,
-        ...toastConfig('error'),
-      });
+      toast.error(error.message);
     }
   };
 
@@ -64,16 +62,9 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
         if (isNewVar) {
           formik.resetForm();
         }
-
-        toast({
-          description: 'Environment variable set successfully',
-          ...toastConfig('success'),
-        });
+        toast.success("'Environment variable set successfully'");
       } catch (error) {
-        toast({
-          description: error.message,
-          ...toastConfig('error'),
-        });
+        toast.error(error.message);
       }
     },
   });

@@ -19,7 +19,6 @@ import {
   Button,
   Box,
   Grid,
-  useToast,
 } from '@chakra-ui/react';
 import { ArrowRight, ArrowLeft } from 'react-feather';
 import {
@@ -37,6 +36,7 @@ import { RedisIcon } from '../ui/icons/RedisIcon';
 import { Header } from '../modules/layout/Header';
 import { dbTypeToDokkuPlugin, toastConfig } from './utils';
 import { Terminal } from '../ui';
+import { useToast } from '../ui/toast';
 
 interface DatabaseBoxProps {
   label: string;
@@ -147,10 +147,7 @@ export const CreateDatabase = () => {
         });
         setIsTerminalVisible(true);
       } catch (error) {
-        toast({
-          description: error.message,
-          ...toastConfig('error'),
-        });
+        toast.error(error.message);
       }
     },
   });
@@ -175,15 +172,9 @@ export const CreateDatabase = () => {
   // Effect for db creation
   useEffect(() => {
     isDbCreationSuccess === DbCreationStatus.FAILURE
-      ? toast({
-          description: 'Failed to create database',
-          ...toastConfig('error'),
-        })
+      ? toast.error("'Failed to create database'")
       : isDbCreationSuccess === DbCreationStatus.SUCCESS &&
-        toast({
-          description: 'Database created successfully',
-          ...toastConfig('success'),
-        });
+        toast.success('Database created successfully');
   }, [isDbCreationSuccess, toast]);
 
   return (

@@ -1,4 +1,4 @@
-import { UseToastOptions } from '@chakra-ui/react';
+import { useToast, UseToastOptions } from '@chakra-ui/react';
 import { DatabaseTypes } from '../generated/graphql';
 
 export const dbTypeToDokkuPlugin = (dbType: DatabaseTypes) => {

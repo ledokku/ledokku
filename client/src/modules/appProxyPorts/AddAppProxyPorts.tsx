@@ -1,7 +1,6 @@
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { useToast } from '@chakra-ui/react';
-import { toastConfig } from '../../pages/utils';
+
 import { useAddAppProxyPortMutation } from '../../generated/graphql';
 import {
   FormHelper,
@@ -12,6 +11,7 @@ import {
   ModalDescription,
   ModalTitle,
 } from '../../ui';
+import { useToast } from '../../ui/toast';
 
 const createAppProxyPortSchema = yup.object().shape({
   host: yup.string().required('Host port is required'),
@@ -52,17 +52,11 @@ export const AddAppProxyPorts = ({
           },
         });
         await appProxyPortsRefetch();
+        toast.success("'Port mapping created successfully'");
 
-        toast({
-          description: 'Port mapping created successfully',
-          ...toastConfig('success'),
-        });
         onClose();
       } catch (error) {
-        toast({
-          description: error.message,
-          ...toastConfig('error'),
-        });
+        toast.error(error.message);
       }
     },
   });

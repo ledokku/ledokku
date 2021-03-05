@@ -8,12 +8,13 @@ import {
 } from '../generated/graphql';
 import { Header } from '../modules/layout/Header';
 import { Button, FormHelper, FormInput, FormLabel } from '../ui';
-import { useToast } from '@chakra-ui/react';
-import { toastConfig } from './utils';
+
+import { useToast } from '../ui/toast';
 
 export const CreateApp = () => {
   const history = useHistory();
   const toast = useToast();
+  // const toast = useToast();
   const { data } = useAppsQuery();
   const [createAppMutation, { loading }] = useCreateAppMutation();
 
@@ -48,17 +49,11 @@ export const CreateApp = () => {
           ],
         });
         if (data?.data) {
-          toast({
-            description: 'App created successfully',
-            ...toastConfig('success'),
-          });
+          toast.success('App created successfully');
           history.push(`/app/${data.data.createApp.app.id}`);
         }
       } catch (error) {
-        toast({
-          description: error,
-          ...toastConfig('error'),
-        });
+        toast.error(error);
       }
     },
   });

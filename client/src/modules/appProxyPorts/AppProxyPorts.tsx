@@ -12,8 +12,7 @@ import {
   ModalDescription,
 } from '../../ui';
 import { AddAppProxyPorts } from './AddAppProxyPorts';
-import { useToast } from '@chakra-ui/react';
-import { toastConfig } from '../../pages/utils';
+import { useToast } from '../../ui/toast';
 
 interface AppProxyPortsProps {
   appId: string;
@@ -53,16 +52,11 @@ export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
         },
       });
       setIsDeleteModalOpen(false);
-      toast({
-        description: 'Port mapping deleted successfully',
-        ...toastConfig('success'),
-      });
+      toast.success("'Port mapping deleted successfully'");
+
       await appProxyPortsRefetch();
     } catch (error) {
-      toast({
-        description: error.message,
-        ...toastConfig('error'),
-      });
+      toast.error(error.message);
     }
   };
 
