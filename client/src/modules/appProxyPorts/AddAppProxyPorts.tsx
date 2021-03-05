@@ -1,6 +1,6 @@
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { toast } from 'react-toastify';
+
 import { useAddAppProxyPortMutation } from '../../generated/graphql';
 import {
   Button,
@@ -17,6 +17,7 @@ import {
   FormErrorMessage,
   SimpleGrid,
 } from '@chakra-ui/react';
+import { useToast } from '../../ui/toast';
 
 const createAppProxyPortSchema = yup.object().shape({
   host: yup.string().required('Host port is required'),
@@ -37,7 +38,7 @@ export const AddAppProxyPorts = ({
   onClose,
 }: AddAppProxyPortsProps) => {
   const [addAppProxyPortMutation] = useAddAppProxyPortMutation();
-
+  const toast = useToast();
   const formik = useFormik<{ host: string; container: string }>({
     initialValues: {
       host: '',
@@ -58,6 +59,7 @@ export const AddAppProxyPorts = ({
         });
         await appProxyPortsRefetch();
         toast.success('Port mapping created successfully');
+
         onClose();
       } catch (error) {
         toast.error(error.message);

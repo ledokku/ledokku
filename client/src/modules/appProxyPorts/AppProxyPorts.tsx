@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { toast } from 'react-toastify';
 import {
   Box,
   Button,
@@ -24,12 +23,14 @@ import {
   AppProxyPort,
 } from '../../generated/graphql';
 import { AddAppProxyPorts } from './AddAppProxyPorts';
+import { useToast } from '../../ui/toast';
 
 interface AppProxyPortsProps {
   appId: string;
 }
 
 export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
+  const toast = useToast();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<
     false | AppProxyPort

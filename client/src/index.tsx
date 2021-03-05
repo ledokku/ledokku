@@ -15,7 +15,6 @@ import { WebSocketLink } from '@apollo/client/link/ws';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
 import './generated/index.css';
-import 'react-toastify/dist/ReactToastify.css';
 import { config } from './config';
 import { AuthProvider } from './modules/auth/AuthContext';
 import { Router } from './Router';

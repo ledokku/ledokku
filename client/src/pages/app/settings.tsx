@@ -1,6 +1,5 @@
 import * as yup from 'yup';
 import { useHistory, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import {
   Container,
   Heading,
@@ -24,9 +23,11 @@ import { AppProxyPorts } from '../../modules/appProxyPorts/AppProxyPorts';
 import { AppRestart } from '../../modules/app/AppRestart';
 import { AppRebuild } from '../../modules/app/AppRebuild';
 import { AppDomains } from '../../modules/domains/AppDomains';
+import { useToast } from '../../ui/toast';
 
 export const Settings = () => {
   const { id: appId } = useParams<{ id: string }>();
+  const toast = useToast();
   let history = useHistory();
   const [
     destroyAppMutation,
@@ -73,6 +74,7 @@ export const Settings = () => {
           ],
         });
         toast.success('App deleted successfully');
+
         history.push('/dashboard');
       } catch (error) {
         toast.error(error.message);

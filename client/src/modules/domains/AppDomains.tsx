@@ -1,4 +1,3 @@
-import { toast } from 'react-toastify';
 import { DomainsDocument } from '../../generated/graphql';
 import {
   useAppByIdQuery,
@@ -8,12 +7,14 @@ import {
 import { Button } from '../../ui';
 import { TrashBinIcon } from '../../ui/icons/TrashBinIcon';
 import { AddAppDomain } from './AddAppDomain';
+import { useToast } from '../../ui/toast';
 
 interface AppDomainProps {
   appId: string;
 }
 
 export const AppDomains = ({ appId }: AppDomainProps) => {
+  const toast = useToast();
   const { data, loading /* error */ } = useAppByIdQuery({
     variables: {
       appId,
@@ -48,7 +49,6 @@ export const AppDomains = ({ appId }: AppDomainProps) => {
         },
         refetchQueries: [{ query: DomainsDocument, variables: { appId } }],
       });
-
       toast.success('Domain removed successfully');
     } catch (error) {
       toast.error(error.message);

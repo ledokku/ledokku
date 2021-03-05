@@ -8,10 +8,12 @@ import {
 } from '../generated/graphql';
 import { Header } from '../modules/layout/Header';
 import { Button, FormHelper, FormInput, FormLabel } from '../ui';
-import { toast } from 'react-toastify';
+
+import { useToast } from '../ui/toast';
 
 export const CreateApp = () => {
   const history = useHistory();
+  const toast = useToast();
   const { data } = useAppsQuery();
   const [createAppMutation, { loading }] = useCreateAppMutation();
 
@@ -50,7 +52,7 @@ export const CreateApp = () => {
           history.push(`/app/${data.data.createApp.app.id}`);
         }
       } catch (error) {
-        toast.error(error.message);
+        toast.error(error);
       }
     },
   });

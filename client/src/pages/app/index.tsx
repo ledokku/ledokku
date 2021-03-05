@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { toast } from 'react-toastify';
 import { useHistory, Link, useParams } from 'react-router-dom';
 import { Listbox, Transition } from '@headlessui/react';
 import cx from 'classnames';
@@ -30,9 +29,11 @@ import { MongoIcon } from '../../ui/icons/MongoIcon';
 import { RedisIcon } from '../../ui/icons/RedisIcon';
 import { MySQLIcon } from '../../ui/icons/MySQLIcon';
 import { Container, Heading, Table, Tbody, Td, Tr } from '@chakra-ui/react';
+import { useToast } from '../../ui/toast';
 
 export const App = () => {
   const history = useHistory();
+  const toast = useToast();
   const { id: appId } = useParams<{ id: string }>();
   const [isUnlinkModalOpen, setIsUnlinkModalOpen] = useState(false);
   const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
