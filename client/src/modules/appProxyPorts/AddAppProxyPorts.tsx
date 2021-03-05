@@ -58,7 +58,7 @@ export const AddAppProxyPorts = ({
           },
         });
         await appProxyPortsRefetch();
-        toast.success("'Port mapping created successfully'");
+        toast.success('Port mapping created successfully');
 
         onClose();
       } catch (error) {
