@@ -40,7 +40,7 @@ main() {
   LEDOKKU_TAG=${LEDOKKU_TAG:-"0.5.1"}
 
   # First we get the user ip so we can use it in the text we print later
-  DOKKU_SSH_HOST=$(curl ifconfig.co)
+  DOKKU_SSH_HOST=$(curl -4 ifconfig.co)
 
   echo "=== 🐳 ledokku:${LEDOKKU_TAG} ==="
   echo "Welcome to installation helper of Ledokku"
