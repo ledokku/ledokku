@@ -108,7 +108,7 @@ export const CreateApp = () => {
   const handleNext = () => {
     setIsTerminalVisible(false);
     const appId = arrayOfCreateAppLogs[arrayOfCreateAppLogs.length - 1].message;
-    history.push(`app/${appId}`);
+    history.push(`app/${appId}`, 'new');
   };
 
   // Effect for app creation

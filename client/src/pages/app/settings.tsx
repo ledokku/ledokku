@@ -13,6 +13,7 @@ import { AppProxyPorts } from '../../modules/appProxyPorts/AppProxyPorts';
 import { AppRestart } from '../../modules/app/AppRestart';
 import { AppRebuild } from '../../modules/app/AppRebuild';
 import { AppDomains } from '../../modules/domains/AppDomains';
+import { Webhooks } from '../../modules/webhooks/Webhooks';
 import { Container, Heading } from '@chakra-ui/react';
 
 export const Settings = () => {
@@ -113,6 +114,8 @@ export const Settings = () => {
                 Update the settings of your app.
               </p>
             </div>
+
+            {app.githubRepoId && <Webhooks appId={app.id} />}
             <AppProxyPorts appId={app.id} />
             <AppRestart appId={app.id} />
             <AppRebuild appId={app.id} />
