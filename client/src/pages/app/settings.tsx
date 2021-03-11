@@ -18,7 +18,7 @@ import {
   DashboardDocument,
 } from '../../generated/graphql';
 import { useFormik } from 'formik';
-import { TabNav, TabNavLink } from '../../ui';
+import { HeaderContainer, TabNav, TabNavLink } from '../../ui';
 import { AppProxyPorts } from '../../modules/appProxyPorts/AppProxyPorts';
 import { AppRestart } from '../../modules/app/AppRestart';
 import { AppRebuild } from '../../modules/app/AppRebuild';
@@ -102,17 +102,19 @@ export const Settings = () => {
 
   return (
     <div>
-      <Header />
-      <Container maxW="5xl">
-        <TabNav>
-          <TabNavLink to={`/app/${app.id}`}>App</TabNavLink>
-          <TabNavLink to={`/app/${app.id}/logs`}>Logs</TabNavLink>
-          <TabNavLink to={`/app/${app.id}/env`}>Env setup</TabNavLink>
-          <TabNavLink to={`/app/${app.id}/settings`} selected>
-            Settings
-          </TabNavLink>
-        </TabNav>
-      </Container>
+      <HeaderContainer>
+        <Header />
+        <Container maxW="5xl">
+          <TabNav>
+            <TabNavLink to={`/app/${app.id}`}>App</TabNavLink>
+            <TabNavLink to={`/app/${app.id}/logs`}>Logs</TabNavLink>
+            <TabNavLink to={`/app/${app.id}/env`}>Env setup</TabNavLink>
+            <TabNavLink to={`/app/${app.id}/settings`} selected>
+              Settings
+            </TabNavLink>
+          </TabNav>
+        </Container>
+      </HeaderContainer>
 
       <Container maxW="5xl" mt={10}>
         <SimpleGrid columns={{ sm: 1, md: 2 }}>
