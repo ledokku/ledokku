@@ -40,7 +40,7 @@ main() {
   LEDOKKU_TAG=${LEDOKKU_TAG:-"0.5.1"}
 
   # First we get the user ip so we can use it in the text we print later
-  DOKKU_SSH_HOST=$(curl ifconfig.co)
+  DOKKU_SSH_HOST=$(curl -4 ifconfig.co)
 
   echo "=== 🐳 ledokku:${LEDOKKU_TAG} ==="
   echo "Welcome to installation helper of Ledokku"
@@ -86,9 +86,7 @@ main() {
 
   # Now it's finally time to install ledokku
   echo "=> Installation"
-  docker pull ledokku/ledokku:${LEDOKKU_TAG}
-  docker tag ledokku/ledokku:${LEDOKKU_TAG} dokku/ledokku:${LEDOKKU_TAG}
-  dokku tags:deploy ledokku ${LEDOKKU_TAG}
+  dokku git:from-image ledokku ledokku/ledokku:${LEDOKKU_TAG}
 
   # After app is deployed last step is to properly setup the ports
   dokku proxy:ports-add ledokku http:80:4000

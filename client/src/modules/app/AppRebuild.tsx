@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { toast } from 'react-toastify';
 import {
   useAppByIdQuery,
   useRebuildAppMutation,
@@ -14,12 +13,14 @@ import {
   ModalButton,
   Terminal,
 } from '../../ui';
+import { useToast } from '../../ui/toast';
 
 interface AppRebuildProps {
   appId: string;
 }
 
 export const AppRebuild = ({ appId }: AppRebuildProps) => {
+  const toast = useToast();
   const [isRebuildAppModalOpen, setIsRebuildAppModalOpen] = useState(false);
   const [arrayOfRebuildLogs, setArrayOfRebuildLogs] = useState<RealTimeLog[]>(
     []

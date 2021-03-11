@@ -1,16 +1,23 @@
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { toast } from 'react-toastify';
+
 import { useAddAppProxyPortMutation } from '../../generated/graphql';
 import {
-  FormHelper,
-  FormInput,
-  FormLabel,
+  Button,
   Modal,
-  ModalButton,
-  ModalDescription,
-  ModalTitle,
-} from '../../ui';
+  ModalOverlay,
+  ModalContent,
+  ModalCloseButton,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  FormControl,
+  FormLabel,
+  Input,
+  FormErrorMessage,
+  SimpleGrid,
+} from '@chakra-ui/react';
+import { useToast } from '../../ui/toast';
 
 const createAppProxyPortSchema = yup.object().shape({
   host: yup.string().required('Host port is required'),
@@ -31,7 +38,7 @@ export const AddAppProxyPorts = ({
   onClose,
 }: AddAppProxyPortsProps) => {
   const [addAppProxyPortMutation] = useAddAppProxyPortMutation();
-
+  const toast = useToast();
   const formik = useFormik<{ host: string; container: string }>({
     initialValues: {
       host: '',
@@ -52,6 +59,7 @@ export const AddAppProxyPorts = ({
         });
         await appProxyPortsRefetch();
         toast.success('Port mapping created successfully');
+
         onClose();
       } catch (error) {
         toast.error(error.message);
@@ -64,47 +72,57 @@ export const AddAppProxyPorts = ({
   }
 
   return (
-    <Modal>
-      <ModalTitle>Add port mapping</ModalTitle>
-      <ModalDescription>
-        <div className="grid md:grid-cols-2 gap-4">
-          <div>
-            <FormLabel>Host port:</FormLabel>
-            <FormInput
-              name="host"
-              value={formik.values.host}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={Boolean(formik.errors.host && formik.touched.host)}
-            />
-            {formik.errors.host ? (
-              <FormHelper status="error">{formik.errors.host}</FormHelper>
-            ) : null}
-          </div>
-          <div>
-            <FormLabel>Container port:</FormLabel>
-            <FormInput
-              name="container"
-              value={formik.values.container}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={Boolean(
+    <Modal isOpen={open} onClose={onClose} isCentered size="xl">
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Add port mapping</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <SimpleGrid columns={{ sm: 1, md: 2 }} spacing={3}>
+            <FormControl
+              id="host"
+              isInvalid={Boolean(formik.errors.host && formik.touched.host)}
+            >
+              <FormLabel>Host port:</FormLabel>
+              <Input
+                name="host"
+                value={formik.values.host}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
+              <FormErrorMessage>{formik.errors.host}</FormErrorMessage>
+            </FormControl>
+            <FormControl
+              id="container"
+              isInvalid={Boolean(
                 formik.errors.container && formik.touched.container
               )}
-            />
-            {formik.errors.container ? (
-              <FormHelper status="error">{formik.errors.container}</FormHelper>
-            ) : null}
-          </div>
-        </div>
-      </ModalDescription>
-      <ModalButton
-        ctaFn={formik.handleSubmit}
-        ctaText={'Create'}
-        otherButtonText={'Cancel'}
-        isCtaLoading={formik.isSubmitting}
-        closeModal={onClose}
-      />
+            >
+              <FormLabel>Container port:</FormLabel>
+              <Input
+                name="container"
+                value={formik.values.container}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
+              <FormErrorMessage>{formik.errors.container}</FormErrorMessage>
+            </FormControl>
+          </SimpleGrid>
+        </ModalBody>
+
+        <ModalFooter>
+          <Button mr={3} onClick={onClose}>
+            Cancel
+          </Button>
+          <Button
+            colorScheme="red"
+            isLoading={formik.isSubmitting}
+            onClick={() => formik.handleSubmit()}
+          >
+            Create
+          </Button>
+        </ModalFooter>
+      </ModalContent>
     </Modal>
   );
 };

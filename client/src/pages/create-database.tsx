@@ -21,7 +21,6 @@ import {
   Grid,
 } from '@chakra-ui/react';
 import { ArrowRight, ArrowLeft } from 'react-feather';
-import { toast } from 'react-toastify';
 import {
   useCreateDatabaseMutation,
   DatabaseTypes,
@@ -36,7 +35,8 @@ import { MongoIcon } from '../ui/icons/MongoIcon';
 import { RedisIcon } from '../ui/icons/RedisIcon';
 import { Header } from '../modules/layout/Header';
 import { dbTypeToDokkuPlugin } from './utils';
-import { Terminal } from '../ui';
+import { HeaderContainer, Terminal } from '../ui';
+import { useToast } from '../ui/toast';
 
 interface DatabaseBoxProps {
   label: string;
@@ -73,6 +73,7 @@ const DatabaseBox = ({ label, selected, icon, onClick }: DatabaseBoxProps) => {
 export const CreateDatabase = () => {
   const location = useLocation();
   const history = useHistory();
+  const toast = useToast();
 
   const { data: dataDb } = useDatabaseQuery();
   const [arrayOfCreateDbLogs, setArrayofCreateDbLogs] = useState<RealTimeLog[]>(
@@ -174,11 +175,13 @@ export const CreateDatabase = () => {
       ? toast.error('Failed to create database')
       : isDbCreationSuccess === DbCreationStatus.SUCCESS &&
         toast.success('Database created successfully');
-  }, [isDbCreationSuccess]);
+  }, [isDbCreationSuccess, toast]);
 
   return (
     <>
-      <Header />
+      <HeaderContainer>
+        <Header />
+      </HeaderContainer>
 
       <Container maxW="5xl" my="4">
         <Heading as="h2" size="md">

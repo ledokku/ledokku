@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { toast } from 'react-toastify';
 import { Listbox, Transition } from '@headlessui/react';
 import cx from 'classnames';
 import { Header } from '../../modules/layout/Header';
@@ -22,11 +21,16 @@ import {
   ModalDescription,
   ModalButton,
   Terminal,
+  HeaderContainer,
 } from '../../ui';
+
 import { Container, Heading, Table, Tbody, Td, Tr } from '@chakra-ui/react';
+
+import { useToast } from '../../ui/toast';
 
 export const Database = () => {
   const { id: databaseId } = useParams<{ id: string }>();
+  const toast = useToast();
   const [isUnlinkModalOpen, setIsUnlinkModalOpen] = useState(false);
   const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
   const [arrayOfUnlinkLogs, setArrayOfUnlinkLogs] = useState<RealTimeLog[]>([]);
@@ -163,7 +167,6 @@ export const Database = () => {
       });
       setIsTerminalVisible(true);
       setLinkLoading(true);
-      // TODO - REACT - TOASTIFY
     } catch (e) {
       toast.error(e.message);
     }
@@ -171,20 +174,22 @@ export const Database = () => {
 
   return (
     <div>
-      <Header />
+      <HeaderContainer>
+        <Header />
 
-      <Container maxW="5xl">
-        <TabNav>
-          <TabNavLink to={`/database/${database.id}`} selected>
-            Database
-          </TabNavLink>
+        <Container maxW="5xl">
+          <TabNav>
+            <TabNavLink to={`/database/${database.id}`} selected>
+              Database
+            </TabNavLink>
 
-          <TabNavLink to={`/database/${database.id}/logs`}>Logs</TabNavLink>
-          <TabNavLink to={`/database/${database.id}/settings`}>
-            Settings
-          </TabNavLink>
-        </TabNav>
-      </Container>
+            <TabNavLink to={`/database/${database.id}/logs`}>Logs</TabNavLink>
+            <TabNavLink to={`/database/${database.id}/settings`}>
+              Settings
+            </TabNavLink>
+          </TabNav>
+        </Container>
+      </HeaderContainer>
 
       <Container maxW="5xl" mt={10}>
         <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4 mt-10">

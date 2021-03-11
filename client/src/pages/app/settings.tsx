@@ -1,6 +1,16 @@
 import * as yup from 'yup';
 import { useHistory, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import {
+  Container,
+  Heading,
+  SimpleGrid,
+  Box,
+  Text,
+  FormControl,
+  Input,
+  FormErrorMessage,
+  Button,
+} from '@chakra-ui/react';
 import { Header } from '../../modules/layout/Header';
 import {
   useAppByIdQuery,
@@ -8,15 +18,16 @@ import {
   DashboardDocument,
 } from '../../generated/graphql';
 import { useFormik } from 'formik';
-import { TabNav, TabNavLink, Button, FormInput, FormHelper } from '../../ui';
+import { HeaderContainer, TabNav, TabNavLink } from '../../ui';
 import { AppProxyPorts } from '../../modules/appProxyPorts/AppProxyPorts';
 import { AppRestart } from '../../modules/app/AppRestart';
 import { AppRebuild } from '../../modules/app/AppRebuild';
 import { AppDomains } from '../../modules/domains/AppDomains';
-import { Container, Heading } from '@chakra-ui/react';
+import { useToast } from '../../ui/toast';
 
 export const Settings = () => {
   const { id: appId } = useParams<{ id: string }>();
+  const toast = useToast();
   let history = useHistory();
   const [
     destroyAppMutation,
@@ -63,6 +74,7 @@ export const Settings = () => {
           ],
         });
         toast.success('App deleted successfully');
+
         history.push('/dashboard');
       } catch (error) {
         toast.error(error.message);
@@ -90,70 +102,77 @@ export const Settings = () => {
 
   return (
     <div>
-      <Header />
-      <Container maxW="5xl">
-        <TabNav>
-          <TabNavLink to={`/app/${app.id}`}>App</TabNavLink>
-          <TabNavLink to={`/app/${app.id}/logs`}>Logs</TabNavLink>
-          <TabNavLink to={`/app/${app.id}/env`}>Env setup</TabNavLink>
-          <TabNavLink to={`/app/${app.id}/settings`} selected>
-            Settings
-          </TabNavLink>
-        </TabNav>
-      </Container>
+      <HeaderContainer>
+        <Header />
+        <Container maxW="5xl">
+          <TabNav>
+            <TabNavLink to={`/app/${app.id}`}>App</TabNavLink>
+            <TabNavLink to={`/app/${app.id}/logs`}>Logs</TabNavLink>
+            <TabNavLink to={`/app/${app.id}/env`}>Env setup</TabNavLink>
+            <TabNavLink to={`/app/${app.id}/settings`} selected>
+              Settings
+            </TabNavLink>
+          </TabNav>
+        </Container>
+      </HeaderContainer>
 
-      <Container maxW="5xl">
-        <div className="grid md:grid-cols-2">
+      <Container maxW="5xl" mt={10}>
+        <SimpleGrid columns={{ sm: 1, md: 2 }}>
           <div>
-            <div className="pt-10 pb-2">
-              <Heading as="h2" size="md" pt={5} pb={2}>
+            <Box py={5}>
+              <Heading as="h2" size="md">
                 App settings
               </Heading>
-              <p className="text-gray-400 text-sm">
+              <Text fontSize="sm" color="gray.400">
                 Update the settings of your app.
-              </p>
-            </div>
+              </Text>
+            </Box>
             <AppProxyPorts appId={app.id} />
             <AppRestart appId={app.id} />
             <AppRebuild appId={app.id} />
             <AppDomains appId={appId} />
-            <h1 className="text-md font-bold py-5">Delete app</h1>
-            <p className="text-gray-400">
-              This action cannot be undone. This will permanently delete{' '}
-              {app.name} app and everything related to it. Please type{' '}
-              <b>{app.name}</b> to confirm deletion.
-            </p>
+
+            <Box py="5">
+              <Text fontSize="md" fontWeight="bold">
+                Delete app
+              </Text>
+              <Text fontSize="sm" color="gray.400">
+                This action cannot be undone. This will permanently delete{' '}
+                {app.name} app and everything related to it. Please type{' '}
+                <b>{app.name}</b> to confirm deletion.
+              </Text>
+            </Box>
+
             <form onSubmit={formik.handleSubmit}>
-              <div className="mt-4">
-                <FormInput
+              <FormControl
+                id="appName"
+                isInvalid={Boolean(
+                  formik.errors.appName && formik.touched.appName
+                )}
+              >
+                <Input
                   autoComplete="off"
                   id="appNme"
                   name="appName"
+                  placeholder="App name"
                   value={formik.values.appName}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  error={Boolean(
-                    formik.errors.appName && formik.touched.appName
-                  )}
                 />
-                {formik.errors.appName && formik.errors.appName ? (
-                  <FormHelper status="error">
-                    {formik.errors.appName}
-                  </FormHelper>
-                ) : null}
-                <Button
-                  type="submit"
-                  disabled={!formik.values.appName || !!formik.errors.appName}
-                  color="red"
-                  isLoading={destroyAppMutationLoading}
-                  className="mt-2"
-                >
-                  Delete
-                </Button>
-              </div>
+                <FormErrorMessage>{formik.errors.appName}</FormErrorMessage>
+              </FormControl>
+
+              <Button
+                my={4}
+                type="submit"
+                colorScheme="red"
+                isLoading={destroyAppMutationLoading}
+              >
+                Delete
+              </Button>
             </form>
           </div>
-        </div>
+        </SimpleGrid>
       </Container>
     </div>
   );

@@ -5,7 +5,6 @@ import { pubsub } from './../index';
 import { config } from '../config';
 import { sshConnect } from '../lib/ssh';
 import { dokku } from '../lib/dokku';
-import { prisma } from '../prisma';
 
 const queueName = 'restart-app';
 const debug = createDebug(`queue:${queueName}`);

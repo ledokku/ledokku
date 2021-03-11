@@ -41,7 +41,7 @@ const worker = new Worker(
 );
 
 worker.on('failed', async (job, err) => {
-  const { appName, key, value } = job.data;
+  const { appName, key } = job.data;
 
   debug(
     `${job.id} has failed for for app:  ${appName} with ${key}: ${err.message}`
