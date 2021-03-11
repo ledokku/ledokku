@@ -17,7 +17,7 @@ import {
   Terminal,
   HeaderContainer,
 } from '../ui';
-import { toast } from 'react-toastify';
+import { useToast } from '../ui/toast';
 import { ArrowLeft, ArrowRight } from 'react-feather';
 import {
   Alert,
@@ -35,6 +35,7 @@ enum AppCreationStatus {
 
 export const CreateApp = () => {
   const history = useHistory();
+  const toast = useToast();
   const { data: dataApps } = useAppsQuery();
   const [arrayOfCreateAppLogs, setArrayOfCreateAppLogs] = useState<
     RealTimeLog[]
