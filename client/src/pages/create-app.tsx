@@ -125,7 +125,7 @@ export const CreateApp = () => {
       ? toast.error('Failed to create an app')
       : isAppCreationSuccess === AppCreationStatus.SUCCESS &&
         toast.success('App created successfully');
-  }, [isAppCreationSuccess]);
+  }, [isAppCreationSuccess, toast]);
 
   return (
     <>
