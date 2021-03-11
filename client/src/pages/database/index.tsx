@@ -21,6 +21,7 @@ import {
   ModalDescription,
   ModalButton,
   Terminal,
+  HeaderContainer,
 } from '../../ui';
 
 import { Container, Heading, Table, Tbody, Td, Tr } from '@chakra-ui/react';
@@ -173,20 +174,22 @@ export const Database = () => {
 
   return (
     <div>
-      <Header />
+      <HeaderContainer>
+        <Header />
 
-      <Container maxW="5xl">
-        <TabNav>
-          <TabNavLink to={`/database/${database.id}`} selected>
-            Database
-          </TabNavLink>
+        <Container maxW="5xl">
+          <TabNav>
+            <TabNavLink to={`/database/${database.id}`} selected>
+              Database
+            </TabNavLink>
 
-          <TabNavLink to={`/database/${database.id}/logs`}>Logs</TabNavLink>
-          <TabNavLink to={`/database/${database.id}/settings`}>
-            Settings
-          </TabNavLink>
-        </TabNav>
-      </Container>
+            <TabNavLink to={`/database/${database.id}/logs`}>Logs</TabNavLink>
+            <TabNavLink to={`/database/${database.id}/settings`}>
+              Settings
+            </TabNavLink>
+          </TabNav>
+        </Container>
+      </HeaderContainer>
 
       <Container maxW="5xl" mt={10}>
         <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4 mt-10">

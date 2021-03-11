@@ -11,6 +11,7 @@ import {
   Terminal,
   Alert,
   AlertDescription,
+  HeaderContainer,
 } from '../../ui';
 import { Container, Heading } from '@chakra-ui/react';
 
@@ -54,18 +55,20 @@ export const Logs = () => {
 
   return (
     <div>
-      <Header />
-      <Container maxW="5xl">
-        <TabNav>
-          <TabNavLink to={`/database/${database.id}`}>Database</TabNavLink>
-          <TabNavLink to={`/database/${database.id}/logs`} selected>
-            Logs
-          </TabNavLink>
-          <TabNavLink to={`/database/${database.id}/settings`}>
-            Settings
-          </TabNavLink>
-        </TabNav>
-      </Container>
+      <HeaderContainer>
+        <Header />
+        <Container maxW="5xl">
+          <TabNav>
+            <TabNavLink to={`/database/${database.id}`}>Database</TabNavLink>
+            <TabNavLink to={`/database/${database.id}/logs`} selected>
+              Logs
+            </TabNavLink>
+            <TabNavLink to={`/database/${database.id}/settings`}>
+              Settings
+            </TabNavLink>
+          </TabNav>
+        </Container>
+      </HeaderContainer>
 
       <Container maxW="5xl" mt={10}>
         <div className="grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 gap-4 mt-10">

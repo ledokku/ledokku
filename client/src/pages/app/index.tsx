@@ -9,10 +9,7 @@ import {
   Table,
   Tbody,
   Td,
-  Text,
   Tr,
-  Link as ChakraLink,
-  Badge,
 } from '@chakra-ui/react';
 import { Header } from '../../modules/layout/Header';
 import {
