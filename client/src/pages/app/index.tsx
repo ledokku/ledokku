@@ -1,8 +1,20 @@
-import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
-import { useHistory, useParams, Link, NavLink } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useHistory, Link, useParams, NavLink } from 'react-router-dom';
 import { Listbox, Transition } from '@headlessui/react';
 import cx from 'classnames';
+import {
+  chakra,
+  Container,
+  Heading,
+  Table,
+  Tbody,
+  Td,
+  Tr,
+  Text,
+  CloseButton,
+  Grid,
+  GridItem,
+} from '@chakra-ui/react';
 import { Header } from '../../modules/layout/Header';
 import {
   useAppByIdQuery,
@@ -29,21 +41,11 @@ import { PostgreSQLIcon } from '../../ui/icons/PostgreSQLIcon';
 import { MongoIcon } from '../../ui/icons/MongoIcon';
 import { RedisIcon } from '../../ui/icons/RedisIcon';
 import { MySQLIcon } from '../../ui/icons/MySQLIcon';
-import {
-  Container,
-  Heading,
-  Table,
-  Tbody,
-  Td,
-  Tr,
-  Text,
-  CloseButton,
-  Grid,
-  GridItem,
-} from '@chakra-ui/react';
+import { useToast } from '../../ui/toast';
 
 export const App = () => {
   const history = useHistory();
+  const toast = useToast();
   const { id: appId } = useParams<{ id: string }>();
   const [isUnlinkModalOpen, setIsUnlinkModalOpen] = useState(false);
   const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
@@ -204,18 +206,36 @@ export const App = () => {
 
   return (
     <div>
-      <Header />
+      <chakra.div
+        backgroundColor="gray.50"
+        borderBottom="1px"
+        borderColor="gray.200"
+      >
+        <Header />
 
-      <Container maxW="5xl">
-        <TabNav>
-          <TabNavLink to={`/app/${app.id}`} selected>
-            App
-          </TabNavLink>
-          <TabNavLink to={`/app/${app.id}/logs`}>Logs</TabNavLink>
-          <TabNavLink to={`/app/${app.id}/env`}>Env setup</TabNavLink>
-          <TabNavLink to={`/app/${app.id}/settings`}>Settings</TabNavLink>
-        </TabNav>
-      </Container>
+        {/* <Container maxW="5xl" py="5">
+          <Text fontSize="md" fontWeight="bold">
+            my-docker-app
+          </Text>
+          <Text fontSize="sm" mt="1">
+            Docker <ChakraLink>library/ghost</ChakraLink>{' '}
+            <Badge backgroundColor="gray.200" borderBottomRadius="base" ml="1">
+              1.0.0
+            </Badge>
+          </Text>
+        </Container> */}
+
+        <Container maxW="5xl">
+          <TabNav>
+            <TabNavLink to={`/app/${app.id}`} selected>
+              App
+            </TabNavLink>
+            <TabNavLink to={`/app/${app.id}/logs`}>Logs</TabNavLink>
+            <TabNavLink to={`/app/${app.id}/env`}>Env setup</TabNavLink>
+            <TabNavLink to={`/app/${app.id}/settings`}>Settings</TabNavLink>
+          </TabNav>
+        </Container>
+      </chakra.div>
 
       <Container maxW="5xl" mt={10}>
         <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4 mt-10">

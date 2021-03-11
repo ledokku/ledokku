@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { toast } from 'react-toastify';
+
 import {
   useAppByIdQuery,
   useRestartAppMutation,
@@ -14,12 +14,14 @@ import {
   ModalButton,
   Terminal,
 } from '../../ui';
+import { useToast } from '../../ui/toast';
 
 interface AppRestartProps {
   appId: string;
 }
 
 export const AppRestart = ({ appId }: AppRestartProps) => {
+  const toast = useToast();
   const [isRestartAppModalOpen, setIsRestartAppModalOpen] = useState(false);
   const [arrayOfRestartLogs, setArrayOfRestartLogs] = useState<RealTimeLog[]>(
     []

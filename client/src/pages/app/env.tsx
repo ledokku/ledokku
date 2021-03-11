@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { Header } from '../../modules/layout/Header';
 import {
   useAppByIdQuery,
@@ -10,9 +9,10 @@ import {
   EnvVarsDocument,
 } from '../../generated/graphql';
 import { useFormik } from 'formik';
-import { TabNav, TabNavLink, Button } from '../../ui';
+import { TabNav, TabNavLink, Button, HeaderContainer } from '../../ui';
 import { TrashBinIcon } from '../../ui/icons/TrashBinIcon';
 import { Container, Heading } from '@chakra-ui/react';
+import { useToast } from '../../ui/toast';
 
 interface EnvFormProps {
   name: string;
@@ -23,6 +23,7 @@ interface EnvFormProps {
 
 export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
   const [inputType, setInputType] = useState('password');
+  const toast = useToast();
   const [
     setEnvVarMutation,
     { loading: setEnvVarLoading },
@@ -60,8 +61,7 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
         if (isNewVar) {
           formik.resetForm();
         }
-
-        // TODO give feedback about setting success
+        toast.success('Environment variable set successfully');
       } catch (error) {
         toast.error(error.message);
       }
@@ -164,17 +164,20 @@ export const Env = () => {
 
   return (
     <div>
-      <Header />
-      <Container maxW="5xl">
-        <TabNav>
-          <TabNavLink to={`/app/${app.id}`}>App</TabNavLink>
-          <TabNavLink to={`/app/${app.id}/logs`}>Logs</TabNavLink>
-          <TabNavLink to={`/app/${app.id}/env`} selected>
-            Env setup
-          </TabNavLink>
-          <TabNavLink to={`/app/${app.id}/settings`}>Settings</TabNavLink>
-        </TabNav>
-      </Container>
+      <HeaderContainer>
+        <Header />
+
+        <Container maxW="5xl">
+          <TabNav>
+            <TabNavLink to={`/app/${app.id}`}>App</TabNavLink>
+            <TabNavLink to={`/app/${app.id}/logs`}>Logs</TabNavLink>
+            <TabNavLink to={`/app/${app.id}/env`} selected>
+              Env setup
+            </TabNavLink>
+            <TabNavLink to={`/app/${app.id}/settings`}>Settings</TabNavLink>
+          </TabNav>
+        </Container>
+      </HeaderContainer>
 
       <Container maxW="5xl" mt={10}>
         <Heading as="h2" size="md" py={5}>

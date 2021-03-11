@@ -5,7 +5,6 @@ import {
   RouteProps,
   Redirect,
 } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
 import { useAuth } from './modules/auth/AuthContext';
 import { Home } from './pages/home';
 import { App } from './pages/app/index';
@@ -47,7 +46,6 @@ const PrivateRoute = ({ children, ...rest }: RouteProps) => {
 export const Router = () => {
   return (
     <BrowserRouter>
-      <ToastContainer position={'top-left'} />
       <Switch>
         <Route path="/" exact>
           <Home />

@@ -38,7 +38,6 @@ const worker = new Worker(
       debug(`skipping as there are no users`);
       return;
     }
-    const user = users[0];
 
     const ssh = await sshConnect();
 
