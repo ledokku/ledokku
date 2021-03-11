@@ -8,10 +8,11 @@ import {
   Text,
   Button,
   Container,
+  chakra,
 } from '@chakra-ui/react';
 import { useDashboardQuery } from '../generated/graphql';
 import { Header } from '../modules/layout/Header';
-import { TabNav, TabNavLink } from '../ui';
+import { TabNav, TabNavLink, HeaderContainer } from '../ui';
 import { PostgreSQLIcon } from '../ui/icons/PostgreSQLIcon';
 import { MongoIcon } from '../ui/icons/MongoIcon';
 import { RedisIcon } from '../ui/icons/RedisIcon';
@@ -30,19 +31,21 @@ export const Dashboard = () => {
 
   return (
     <div>
-      <Header />
+      <HeaderContainer>
+        <Header />
 
-      <Container maxW="5xl">
-        {/* TODO migrate TabNav to chakra-ui */}
-        <TabNav>
-          <TabNavLink to="/dashboard" selected>
-            Dashboard
-          </TabNavLink>
-          <TabNavLink to="/activity">Activity</TabNavLink>
-          <TabNavLink to="/metrics">Metrics</TabNavLink>
-          <TabNavLink to="/settings">Settings</TabNavLink>
-        </TabNav>
-      </Container>
+        <Container maxW="5xl">
+          {/* TODO migrate TabNav to chakra-ui */}
+          <TabNav>
+            <TabNavLink to="/dashboard" selected>
+              Dashboard
+            </TabNavLink>
+            <TabNavLink to="/activity">Activity</TabNavLink>
+            <TabNavLink to="/metrics">Metrics</TabNavLink>
+            <TabNavLink to="/settings">Settings</TabNavLink>
+          </TabNav>
+        </Container>
+      </HeaderContainer>
 
       <Container maxW="5xl" py={6}>
         <Box display="flex" justifyContent="flex-end" pb={6}>
