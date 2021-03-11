@@ -8,7 +8,6 @@ import {
   Text,
   Button,
   Container,
-  chakra,
 } from '@chakra-ui/react';
 import { useDashboardQuery } from '../generated/graphql';
 import { Header } from '../modules/layout/Header';
