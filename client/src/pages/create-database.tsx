@@ -35,7 +35,7 @@ import { MongoIcon } from '../ui/icons/MongoIcon';
 import { RedisIcon } from '../ui/icons/RedisIcon';
 import { Header } from '../modules/layout/Header';
 import { dbTypeToDokkuPlugin } from './utils';
-import { Terminal } from '../ui';
+import { HeaderContainer, Terminal } from '../ui';
 import { useToast } from '../ui/toast';
 
 interface DatabaseBoxProps {
@@ -179,7 +179,9 @@ export const CreateDatabase = () => {
 
   return (
     <>
-      <Header />
+      <HeaderContainer>
+        <Header />
+      </HeaderContainer>
 
       <Container maxW="5xl" my="4">
         <Heading as="h2" size="md">

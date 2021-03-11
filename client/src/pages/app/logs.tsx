@@ -10,7 +10,7 @@ import {
 import AnsiUp from 'ansi_up';
 import { Header } from '../../modules/layout/Header';
 import { useAppByIdQuery, useAppLogsQuery } from '../../generated/graphql';
-import { TabNav, TabNavLink, Terminal } from '../../ui';
+import { HeaderContainer, TabNav, TabNavLink, Terminal } from '../../ui';
 
 export const Logs = () => {
   const { id: appId } = useParams<{ id: string }>();
@@ -65,17 +65,20 @@ export const Logs = () => {
 
   return (
     <div>
-      <Header />
-      <Container maxW="5xl">
-        <TabNav>
-          <TabNavLink to={`/app/${app.id}`}>App</TabNavLink>
-          <TabNavLink to={`/app/${app.id}/databases`} selected>
-            Logs
-          </TabNavLink>
-          <TabNavLink to={`/app/${app.id}/env`}>Env setup</TabNavLink>
-          <TabNavLink to={`/app/${app.id}/settings`}>Settings</TabNavLink>
-        </TabNav>
-      </Container>
+      <HeaderContainer>
+        <Header />
+
+        <Container maxW="5xl">
+          <TabNav>
+            <TabNavLink to={`/app/${app.id}`}>App</TabNavLink>
+            <TabNavLink to={`/app/${app.id}/databases`} selected>
+              Logs
+            </TabNavLink>
+            <TabNavLink to={`/app/${app.id}/env`}>Env setup</TabNavLink>
+            <TabNavLink to={`/app/${app.id}/settings`}>Settings</TabNavLink>
+          </TabNav>
+        </Container>
+      </HeaderContainer>
 
       <Container maxW="5xl" mt={10}>
         <Heading as="h2" size="md" py={5}>

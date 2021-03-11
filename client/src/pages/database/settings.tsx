@@ -8,7 +8,14 @@ import {
   DashboardDocument,
   useDatabaseInfoQuery,
 } from '../../generated/graphql';
-import { TabNav, TabNavLink, Button, FormInput, FormHelper } from '../../ui';
+import {
+  TabNav,
+  TabNavLink,
+  Button,
+  FormInput,
+  FormHelper,
+  HeaderContainer,
+} from '../../ui';
 import { Container, Heading } from '@chakra-ui/react';
 import { useToast } from '../../ui/toast';
 
@@ -108,16 +115,18 @@ export const Settings = () => {
 
   return (
     <div>
-      <Header />
-      <Container maxW="5xl">
-        <TabNav>
-          <TabNavLink to={`/database/${database.id}`}>Database</TabNavLink>
-          <TabNavLink to={`/database/${database.id}/logs`}>Logs</TabNavLink>
-          <TabNavLink to={`/database/${database.id}/settings`} selected>
-            Settings
-          </TabNavLink>
-        </TabNav>
-      </Container>
+      <HeaderContainer>
+        <Header />
+        <Container maxW="5xl">
+          <TabNav>
+            <TabNavLink to={`/database/${database.id}`}>Database</TabNavLink>
+            <TabNavLink to={`/database/${database.id}/logs`}>Logs</TabNavLink>
+            <TabNavLink to={`/database/${database.id}/settings`} selected>
+              Settings
+            </TabNavLink>
+          </TabNav>
+        </Container>
+      </HeaderContainer>
 
       <Container maxW="5xl" mt={10}>
         <div className="grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 gap-4 mt-10">

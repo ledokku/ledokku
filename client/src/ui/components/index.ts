@@ -6,3 +6,5 @@ export * from './TabNav';
 export * from './Spinner';
 export * from './DatabaseLabel';
 export * from './Modal';
+
+export * from './HeaderContainer';

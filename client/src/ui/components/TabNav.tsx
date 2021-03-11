@@ -7,12 +7,7 @@ interface TabNavProps {
 }
 
 export const TabNav = ({ children, className }: TabNavProps) => (
-  <nav
-    className={cx(
-      'flex space-x-5 text-sm leading-5 border-b border-gray-200',
-      className
-    )}
-  >
+  <nav className={cx('flex space-x-5 text-sm leading-5', className)}>
     {children}
   </nav>
 );
@@ -35,7 +30,7 @@ export const TabNavLink = ({
       'py-3 px-0.5 transition-colors ease-in-out duration-150',
       {
         'text-gray-500 hover:text-black ': !selected,
-        '-mb-px border-b border-black text-black': selected,
+        '-mb-px border-b-2 border-black text-black': selected,
       },
       className
     )}
