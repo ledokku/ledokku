@@ -11,11 +11,12 @@ import {
 } from '@chakra-ui/react';
 import { useDashboardQuery } from '../generated/graphql';
 import { Header } from '../modules/layout/Header';
-import { TabNav, TabNavLink, HeaderContainer } from '../ui';
+import { HeaderContainer } from '../ui';
 import { PostgreSQLIcon } from '../ui/icons/PostgreSQLIcon';
 import { MongoIcon } from '../ui/icons/MongoIcon';
 import { RedisIcon } from '../ui/icons/RedisIcon';
 import { MySQLIcon } from '../ui/icons/MySQLIcon';
+import { HomeHeaderTabNav } from '../modules/home/HomeHeaderTabNav';
 
 export const Dashboard = () => {
   // const history = useHistory();
@@ -32,18 +33,7 @@ export const Dashboard = () => {
     <div>
       <HeaderContainer>
         <Header />
-
-        <Container maxW="5xl">
-          {/* TODO migrate TabNav to chakra-ui */}
-          <TabNav>
-            <TabNavLink to="/dashboard" selected>
-              Dashboard
-            </TabNavLink>
-            <TabNavLink to="/activity">Activity</TabNavLink>
-            <TabNavLink to="/metrics">Metrics</TabNavLink>
-            <TabNavLink to="/settings">Settings</TabNavLink>
-          </TabNav>
-        </Container>
+        <HomeHeaderTabNav />
       </HeaderContainer>
 
       <Container maxW="5xl" py={6}>
