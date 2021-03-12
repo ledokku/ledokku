@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import cx from 'classnames';
+import { Container, Heading, Table, Tbody, Td, Tr } from '@chakra-ui/react';
 import { Header } from '../../modules/layout/Header';
 import {
   useDatabaseByIdQuery,
@@ -13,8 +14,6 @@ import {
 } from '../../generated/graphql';
 import { useParams, Link } from 'react-router-dom';
 import {
-  TabNav,
-  TabNavLink,
   Button,
   Modal,
   ModalTitle,
@@ -23,10 +22,9 @@ import {
   Terminal,
   HeaderContainer,
 } from '../../ui';
-
-import { Container, Heading, Table, Tbody, Td, Tr } from '@chakra-ui/react';
-
 import { useToast } from '../../ui/toast';
+import { DatabaseHeaderInfo } from '../../modules/database/DatabaseHeaderInfo';
+import { DatabaseHeaderTabNav } from '../../modules/database/DatabaseHeaderTabNav';
 
 export const Database = () => {
   const { id: databaseId } = useParams<{ id: string }>();
@@ -176,19 +174,8 @@ export const Database = () => {
     <div>
       <HeaderContainer>
         <Header />
-
-        <Container maxW="5xl">
-          <TabNav>
-            <TabNavLink to={`/database/${database.id}`} selected>
-              Database
-            </TabNavLink>
-
-            <TabNavLink to={`/database/${database.id}/logs`}>Logs</TabNavLink>
-            <TabNavLink to={`/database/${database.id}/settings`}>
-              Settings
-            </TabNavLink>
-          </TabNav>
-        </Container>
+        <DatabaseHeaderInfo database={database} />
+        <DatabaseHeaderTabNav database={database} />
       </HeaderContainer>
 
       <Container maxW="5xl" mt={10}>

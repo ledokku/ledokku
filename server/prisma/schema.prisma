@@ -52,6 +52,7 @@ model Database {
   updatedAt DateTime @default(now())
   name      String
   type      DbTypes
+  version   String?
   apps      App[]    @relation(references: [id])
 }
 
