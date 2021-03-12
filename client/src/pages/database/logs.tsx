@@ -5,15 +5,10 @@ import {
   useDatabaseByIdQuery,
   useDatabaseLogsQuery,
 } from '../../generated/graphql';
-import {
-  TabNav,
-  TabNavLink,
-  Terminal,
-  Alert,
-  AlertDescription,
-  HeaderContainer,
-} from '../../ui';
+import { Terminal, Alert, AlertDescription, HeaderContainer } from '../../ui';
 import { Container, Heading } from '@chakra-ui/react';
+import { DatabaseHeaderInfo } from '../../modules/database/DatabaseHeaderInfo';
+import { DatabaseHeaderTabNav } from '../../modules/database/DatabaseHeaderTabNav';
 
 export const Logs = () => {
   const { id: databaseId } = useParams<{ id: string }>();
@@ -57,23 +52,14 @@ export const Logs = () => {
     <div>
       <HeaderContainer>
         <Header />
-        <Container maxW="5xl">
-          <TabNav>
-            <TabNavLink to={`/database/${database.id}`}>Database</TabNavLink>
-            <TabNavLink to={`/database/${database.id}/logs`} selected>
-              Logs
-            </TabNavLink>
-            <TabNavLink to={`/database/${database.id}/settings`}>
-              Settings
-            </TabNavLink>
-          </TabNav>
-        </Container>
+        <DatabaseHeaderInfo database={database} />
+        <DatabaseHeaderTabNav database={database} />
       </HeaderContainer>
 
       <Container maxW="5xl" mt={10}>
         <div className="grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 gap-4 mt-10">
           <Heading as="h2" size="md" py={5}>
-            Logs for {database.name}:
+            Logs
           </Heading>
         </div>
 

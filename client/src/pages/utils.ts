@@ -12,3 +12,16 @@ export const dbTypeToDokkuPlugin = (dbType: DatabaseTypes) => {
       return 'mysql';
   }
 };
+
+export const dbTypeToReadableName = (dbType: DatabaseTypes) => {
+  switch (dbType) {
+    case 'MONGODB':
+      return 'MongoDB';
+    case 'POSTGRESQL':
+      return 'PostgreSQL';
+    case 'REDIS':
+      return 'Redis';
+    case 'MYSQL':
+      return 'MySQL';
+  }
+};
