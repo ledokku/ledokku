@@ -12,11 +12,8 @@ import {
 import { useDashboardQuery } from '../generated/graphql';
 import { Header } from '../modules/layout/Header';
 import { HeaderContainer } from '../ui';
-import { PostgreSQLIcon } from '../ui/icons/PostgreSQLIcon';
-import { MongoIcon } from '../ui/icons/MongoIcon';
-import { RedisIcon } from '../ui/icons/RedisIcon';
-import { MySQLIcon } from '../ui/icons/MySQLIcon';
 import { HomeHeaderTabNav } from '../modules/home/HomeHeaderTabNav';
+import { dbTypeToIcon, dbTypeToReadableName } from './utils';
 
 export const Dashboard = () => {
   // const history = useHistory();
@@ -97,63 +94,39 @@ export const Dashboard = () => {
                 No databases created.
               </Text>
             ) : null}
-            {data?.databases.map((database) => (
-              <Box
-                key={database.id}
-                py={3}
-                borderBottom={'1px'}
-                borderColor="gray.200"
-              >
-                <Box mb={1} color="gray.900" fontWeight="medium">
-                  <Link to={`/database/${database.id}`}>{database.name}</Link>
-                </Box>
+            {data?.databases.map((database) => {
+              const DbIcon = dbTypeToIcon(database.type);
+
+              return (
                 <Box
-                  fontSize="sm"
-                  color="gray.400"
-                  display="flex"
-                  justifyContent="space-between"
+                  key={database.id}
+                  py={3}
+                  borderBottom={'1px'}
+                  borderColor="gray.200"
                 >
-                  <Text display="flex" alignItems="center">
-                    {database.type === 'POSTGRESQL' ? (
-                      <>
-                        <Box mr={1} as="span">
-                          <PostgreSQLIcon size={16} />
-                        </Box>
-                        PostgreSQL
-                      </>
-                    ) : undefined}
-                    {database.type === 'MONGODB' ? (
-                      <>
-                        <Box mr={1} as="span">
-                          <MongoIcon size={16} />
-                        </Box>
-                        Mongo
-                      </>
-                    ) : undefined}
-                    {database.type === 'REDIS' ? (
-                      <>
-                        <Box mr={1} as="span">
-                          <RedisIcon size={16} />
-                        </Box>
-                        Redis
-                      </>
-                    ) : undefined}
-                    {database.type === 'MYSQL' ? (
-                      <>
-                        <Box mr={1} as="span">
-                          <MySQLIcon size={16} />
-                        </Box>
-                        MySQL
-                      </>
-                    ) : undefined}
-                  </Text>
-                  <Text>
-                    Created on{' '}
-                    {format(new Date(database.createdAt), 'MM/DD/YYYY')}
-                  </Text>
+                  <Box mb={1} color="gray.900" fontWeight="medium">
+                    <Link to={`/database/${database.id}`}>{database.name}</Link>
+                  </Box>
+                  <Box
+                    fontSize="sm"
+                    color="gray.400"
+                    display="flex"
+                    justifyContent="space-between"
+                  >
+                    <Text display="flex" alignItems="center">
+                      <Box mr={1} as="span">
+                        <DbIcon size={16} />
+                      </Box>
+                      {dbTypeToReadableName(database.type)}
+                    </Text>
+                    <Text>
+                      Created on{' '}
+                      {format(new Date(database.createdAt), 'MM/DD/YYYY')}
+                    </Text>
+                  </Box>
                 </Box>
-              </Box>
-            ))}
+              );
+            })}
           </GridItem>
 
           <GridItem colSpan={{ base: 12, md: 5 }}>
