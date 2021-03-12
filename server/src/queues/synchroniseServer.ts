@@ -109,11 +109,18 @@ const worker = new Worker(
         let database = databases[0];
         // If database is not in our system we add it
         if (!database) {
+          const dokkuDatabaseVersion = await dokku.database.infoVersion(
+            ssh,
+            dokkuDatabase,
+            dbDokkuName
+          );
+
           console.log(`=> Added ${dbDokkuName} database ${dokkuDatabase}`);
           database = await prisma.database.create({
             data: {
               name: dokkuDatabase,
               type: databaseToCheck,
+              version: dokkuDatabaseVersion,
             },
           });
         }
@@ -162,6 +169,7 @@ const worker = new Worker(
 
     debug(`finished`);
     console.log('Finished synchronisation with Dokku');
+    ssh.dispose();
   },
   { connection: redisClient }
 );

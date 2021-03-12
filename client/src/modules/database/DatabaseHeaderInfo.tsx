@@ -1,7 +1,6 @@
 import { Badge, Container, Flex, Text } from '@chakra-ui/layout';
 import { DatabaseTypes } from '../../generated/graphql';
 import { dbTypeToIcon, dbTypeToReadableName } from '../../pages/utils';
-import { PostgreSQLIcon } from '../../ui/icons/PostgreSQLIcon';
 
 interface DatabaseHeaderInfoProps {
   database: {
@@ -31,8 +30,7 @@ export const DatabaseHeaderInfo = ({ database }: DatabaseHeaderInfoProps) => {
           textTransform="none"
           ml="2"
         >
-          {/* {database.version} */}
-          postgres:11.6
+          {database.version}
         </Badge>
       </Flex>
     </Container>
