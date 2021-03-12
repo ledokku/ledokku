@@ -1,3 +1,6 @@
+// Disable outline style for non keyboard users https://github.com/chakra-ui/chakra-ui/issues/3449#issuecomment-785607510
+import 'focus-visible/dist/focus-visible';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { ChakraProvider } from '@chakra-ui/react';
