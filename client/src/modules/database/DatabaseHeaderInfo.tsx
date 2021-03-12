@@ -6,7 +6,6 @@ interface DatabaseHeaderInfoProps {
   database: {
     name: string;
     type: DatabaseTypes;
-    // TODO make it required
     version?: string | null;
   };
 }
