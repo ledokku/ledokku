@@ -18,13 +18,14 @@ import {
   DashboardDocument,
 } from '../../generated/graphql';
 import { useFormik } from 'formik';
-import { HeaderContainer, TabNav, TabNavLink } from '../../ui';
+import { HeaderContainer } from '../../ui';
 import { AppProxyPorts } from '../../modules/appProxyPorts/AppProxyPorts';
 import { AppRestart } from '../../modules/app/AppRestart';
 import { AppRebuild } from '../../modules/app/AppRebuild';
 import { AppDomains } from '../../modules/domains/AppDomains';
 import { Webhooks } from '../../modules/webhooks/Webhooks';
 import { useToast } from '../../ui/toast';
+import { AppHeaderTabNav } from '../../modules/app/AppHeaderTabNav';
 
 export const Settings = () => {
   const { id: appId } = useParams<{ id: string }>();
@@ -105,16 +106,7 @@ export const Settings = () => {
     <div>
       <HeaderContainer>
         <Header />
-        <Container maxW="5xl">
-          <TabNav>
-            <TabNavLink to={`/app/${app.id}`}>App</TabNavLink>
-            <TabNavLink to={`/app/${app.id}/logs`}>Logs</TabNavLink>
-            <TabNavLink to={`/app/${app.id}/env`}>Env setup</TabNavLink>
-            <TabNavLink to={`/app/${app.id}/settings`} selected>
-              Settings
-            </TabNavLink>
-          </TabNav>
-        </Container>
+        <AppHeaderTabNav app={app} />
       </HeaderContainer>
 
       <Container maxW="5xl" mt={10}>

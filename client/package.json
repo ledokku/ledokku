@@ -40,6 +40,7 @@
     "@headlessui/react": "0.2.0",
     "ansi_up": "5.0.0",
     "classnames": "2.2.6",
+    "focus-visible": "5.2.0",
     "formik": "2.2.6",
     "framer-motion": "3.10.2",
     "graphql": "15.5.0",

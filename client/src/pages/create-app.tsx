@@ -79,7 +79,8 @@ export const CreateApp = () => {
     gitRepoUrl: yup
       .string()
       .matches(
-        /((git|ssh|http(s)?)|(git@[\w.]+))(:(\/\/)?)([\w.@:/\-~]+)(\.git)(\/)?/
+        /((git|ssh|http(s)?)|(git@[\w.]+))(:(\/\/)?)([\w.@:/\-~]+)(\.git)(\/)?/,
+        'Must be a valid git link'
       ),
     gitBranch: yup.string().optional(),
   });
@@ -273,7 +274,12 @@ export const CreateApp = () => {
                       <FormHelper status="error">
                         {formik.errors.gitBranch}
                       </FormHelper>
-                    ) : null}
+                    ) : (
+                      <FormHelper status="info">
+                        If left empty, this will default to{' '}
+                        <span className="font-bold">main</span> branch
+                      </FormHelper>
+                    )}
 
                     <div className="mt-4 flex justify-end">
                       <Button

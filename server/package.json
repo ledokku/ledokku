@@ -10,7 +10,7 @@
     "generate": "graphql-codegen --config codegen.yml",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate deploy --preview-feature",
-    "prisma:migrate:save": "prisma migrate save --experimental"
+    "prisma:migrate:save": "prisma migrate dev --preview-feature"
   },
   "dependencies": {
     "@octokit/rest": "18.3.0",

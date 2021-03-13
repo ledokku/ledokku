@@ -1,23 +1,14 @@
 import { Container, Heading, Text } from '@chakra-ui/react';
+import { HomeHeaderTabNav } from '../modules/home/HomeHeaderTabNav';
 import { Header } from '../modules/layout/Header';
-import { HeaderContainer, TabNav, TabNavLink } from '../ui';
+import { HeaderContainer } from '../ui';
 
 export const Activity = () => {
   return (
     <div>
       <HeaderContainer>
         <Header />
-
-        <Container maxW="5xl">
-          <TabNav>
-            <TabNavLink to="/dashboard">Dashboard</TabNavLink>
-            <TabNavLink to="/activity" selected>
-              Activity
-            </TabNavLink>
-            <TabNavLink to="/metrics">Metrics</TabNavLink>
-            <TabNavLink to="/settings">Settings</TabNavLink>
-          </TabNav>
-        </Container>
+        <HomeHeaderTabNav />
       </HeaderContainer>
 
       <Container maxW="5xl" mt={10}>

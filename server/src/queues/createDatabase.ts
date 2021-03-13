@@ -66,10 +66,17 @@ const worker = new Worker(
       }
     );
 
+    const dokkuDatabaseVersion = await dokku.database.infoVersion(
+      ssh,
+      databaseName,
+      dbType
+    );
+
     const createdDb = await prisma.database.create({
       data: {
         name: databaseName,
         type: databaseType,
+        version: dokkuDatabaseVersion,
       },
     });
 

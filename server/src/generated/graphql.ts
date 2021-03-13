@@ -46,6 +46,7 @@ export type Database = {
   id: Scalars['ID'];
   name: Scalars['String'];
   type: DatabaseTypes;
+  version?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
   apps?: Maybe<Array<App>>;
 };
@@ -681,6 +682,7 @@ export type DatabaseResolvers<ContextType = any, ParentType extends ResolversPar
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['DatabaseTypes'], ParentType, ContextType>;
+  version?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   apps?: Resolver<Maybe<Array<ResolversTypes['App']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
