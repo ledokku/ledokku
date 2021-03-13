@@ -55,8 +55,8 @@ module.exports = {
               href: 'https://twitter.com/ledokku',
             },
             {
-              label: 'Telegram',
-              href: 'https://t.me/Ledokku',
+              label: 'Discord',
+              href: 'https://discord.gg/v76vY2YaKp',
             },
           ],
         },
