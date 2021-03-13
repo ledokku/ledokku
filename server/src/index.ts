@@ -393,7 +393,8 @@ app.get('/runtime-config.js', (_, res) => {
   res.setHeader('Content-Type', 'application/javascript');
   res.end(`
   window['runConfig'] = {
-    GITHUB_CLIENT_ID: '${config.githubClientId}'
+    GITHUB_CLIENT_ID: '${config.githubClientId}',
+    TELEMETRY_DISABLED: '${config.telemetryDisabled}'
   }
   `);
 });
