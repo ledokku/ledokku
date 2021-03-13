@@ -42,6 +42,8 @@ const worker = new Worker(
 
     const ssh = await sshConnect();
 
+    await dokku.git.unlock(ssh, appName);
+
     if (gitRepoUrl) {
       const res = await dokku.git.sync(
         ssh,
