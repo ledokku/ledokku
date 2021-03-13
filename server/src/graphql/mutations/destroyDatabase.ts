@@ -43,5 +43,7 @@ export const destroyDatabase: MutationResolvers['destroyDatabase'] = async (
     },
   });
 
+  ssh.dispose();
+
   return { result };
 };

@@ -62,5 +62,7 @@ export const destroyApp: MutationResolvers['destroyApp'] = async (
 
   const result = await dokku.apps.destroy(ssh, appToDelete.name);
 
+  ssh.dispose();
+
   return { result };
 };

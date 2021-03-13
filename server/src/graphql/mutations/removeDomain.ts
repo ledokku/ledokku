@@ -28,5 +28,7 @@ export const removeDomain: MutationResolvers['removeDomain'] = async (
 
   await dokku.domains.remove(ssh, app.name, domainName);
 
+  ssh.dispose();
+
   return { result: true };
 };

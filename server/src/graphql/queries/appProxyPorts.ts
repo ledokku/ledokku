@@ -26,5 +26,7 @@ export const appProxyPorts: QueryResolvers['appProxyPorts'] = async (
 
   const proxyPorts = await dokku.proxy.ports(ssh, app.name);
 
+  ssh.dispose();
+
   return proxyPorts;
 };

@@ -59,5 +59,7 @@ export const createApp: MutationResolvers['createApp'] = async (
   // // We trigger the queue that will add dokku to the server
   // await buildAppQueue.add('build-app', { buildId: appBuild.id });
 
+  ssh.dispose();
+
   return { app };
 };

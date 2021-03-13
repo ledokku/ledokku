@@ -32,5 +32,7 @@ export const removeAppProxyPort: MutationResolvers['removeAppProxyPort'] = async
     input.container
   );
 
+  ssh.dispose();
+
   return true;
 };
