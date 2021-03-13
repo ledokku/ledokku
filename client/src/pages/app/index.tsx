@@ -1,8 +1,19 @@
-import { useState } from 'react';
-import { useHistory, Link, useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useHistory, Link, useParams, NavLink } from 'react-router-dom';
 import { Listbox, Transition } from '@headlessui/react';
 import cx from 'classnames';
-import { Container, Heading, Table, Tbody, Td, Tr } from '@chakra-ui/react';
+import {
+  Container,
+  Heading,
+  Table,
+  Tbody,
+  Td,
+  Tr,
+  Text,
+  CloseButton,
+  Grid,
+  GridItem,
+} from '@chakra-ui/react';
 import { Header } from '../../modules/layout/Header';
 import {
   useAppByIdQuery,
@@ -46,11 +57,13 @@ export const App = () => {
   >('notStarted');
   const [unlinkLoading, setUnlinkLoading] = useState(false);
   const [linkLoading, setLinkLoading] = useState(false);
+  const [isAppJustCreated, setIsAppJustCreated] = useState(false);
 
   const [selectedDb, setSelectedDb] = useState({
     value: { name: '', id: '', type: '' },
     label: 'Please select database',
   });
+
   const [
     linkDatabaseMutation,
     {
@@ -109,6 +122,12 @@ export const App = () => {
     ssr: false,
     skip: !appId,
   });
+
+  useEffect(() => {
+    if (history.location.state === 'new' && data?.app?.githubRepoId) {
+      setIsAppJustCreated(true);
+    }
+  }, [history.location.state, data?.app?.githubRepoId]);
 
   if (!data || !databaseData) {
     return null;
@@ -227,6 +246,44 @@ export const App = () => {
                 </Tbody>
               </Table>
             </div>
+            {isAppJustCreated && (
+              <Container borderRadius="lg" p={4} bg="green.100" px={0} mt={10}>
+                <Grid templateColumns="repeat(7, 1fr)" gap={10}>
+                  <GridItem colSpan={6}>
+                    <Heading as="h2" size="md">
+                      Set up webhooks for automatic deployments
+                    </Heading>
+                  </GridItem>
+                  <GridItem colSpan={1}>
+                    <CloseButton
+                      onClick={() => {
+                        setIsAppJustCreated(false);
+                      }}
+                    />
+                  </GridItem>
+                </Grid>
+
+                <Text color="gray.900">
+                  Currently you haven't created any databases, to do so proceed
+                  with the database creation flow
+                </Text>
+                <NavLink
+                  activeStyle={{ textDecorationLine: 'none' }}
+                  to="http://localhost:3001/docs/setting-up-git-webhooks#github-repository-webhooks-setup"
+                >
+                  <Button
+                    color="grey"
+                    width="small"
+                    className="mt-2"
+                    onClick={() => {
+                      setIsAppJustCreated(false);
+                    }}
+                  >
+                    Proceed to guide
+                  </Button>
+                </NavLink>
+              </Container>
+            )}
           </div>
 
           <div className="w-full">

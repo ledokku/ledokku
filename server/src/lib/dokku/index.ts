@@ -25,6 +25,7 @@ import { set as domainsSet } from './domains/set';
 import { remove } from './domains/remove';
 import { add } from './domains/add';
 import { sync } from './git/sync';
+import { unlock } from './git/unlock';
 
 export const dokku = {
   apps: { create, logs, destroy, list: appList },
@@ -57,5 +58,6 @@ export const dokku = {
   },
   git: {
     sync,
+    unlock,
   },
 };

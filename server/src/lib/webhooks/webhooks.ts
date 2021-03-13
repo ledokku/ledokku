@@ -10,12 +10,12 @@ export const githubPushWebhookHandler = async (req: Request) => {
   });
 
   const branch = req.body.ref.replace('refs/heads/', '');
-  const { git_url } = req.body.repository;
+  const { clone_url } = req.body.repository;
 
   if (appToRedeploy) {
     await deployAppQueue.add('deploy-app', {
       appName: appToRedeploy.name,
-      gitRepoUrl: git_url,
+      gitRepoUrl: clone_url,
       branchName: branch,
     });
   }

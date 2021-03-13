@@ -23,6 +23,7 @@ import { AppProxyPorts } from '../../modules/appProxyPorts/AppProxyPorts';
 import { AppRestart } from '../../modules/app/AppRestart';
 import { AppRebuild } from '../../modules/app/AppRebuild';
 import { AppDomains } from '../../modules/domains/AppDomains';
+import { Webhooks } from '../../modules/webhooks/Webhooks';
 import { useToast } from '../../ui/toast';
 import { AppHeaderTabNav } from '../../modules/app/AppHeaderTabNav';
 

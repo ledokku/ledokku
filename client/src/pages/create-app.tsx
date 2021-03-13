@@ -42,6 +42,7 @@ export const CreateApp = () => {
   >([]);
   const [isTerminalVisible, setIsTerminalVisible] = useState(false);
   const [isWarningVisible, setIsWarningVisible] = useState(true);
+  const [isToastShown, setIsToastShown] = useState(false);
   const [createAppMutation] = useCreateAppMutation();
   const [
     isAppCreationSuccess,
@@ -117,16 +118,18 @@ export const CreateApp = () => {
   const handleNext = () => {
     setIsTerminalVisible(false);
     const appId = arrayOfCreateAppLogs[arrayOfCreateAppLogs.length - 1].message;
-    history.push(`app/${appId}`);
+    history.push(`app/${appId}`, 'new');
   };
 
   // Effect for app creation
   useEffect(() => {
-    isAppCreationSuccess === AppCreationStatus.FAILURE
-      ? toast.error('Failed to create an app')
+    isAppCreationSuccess === AppCreationStatus.FAILURE && !isToastShown
+      ? toast.error('Failed to create an app') && setIsToastShown(true)
       : isAppCreationSuccess === AppCreationStatus.SUCCESS &&
-        toast.success('App created successfully');
-  }, [isAppCreationSuccess, toast]);
+        !isToastShown &&
+        toast.success('App created successfully') &&
+        setIsToastShown(true);
+  }, [isToastShown, isAppCreationSuccess, toast]);
 
   return (
     <>

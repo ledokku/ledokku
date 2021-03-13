@@ -6,6 +6,7 @@ module.exports = {
       'changelog',
       'getting-started',
       'installation',
+      'setting-up-git-webhooks',
       'upgrade',
       'uninstall',
     ],

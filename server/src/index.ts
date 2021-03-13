@@ -26,6 +26,7 @@ const typeDefs = gql`
     id: ID!
     name: String!
     createdAt: DateTime!
+    githubRepoId: String
     databases: [Database!]
   }
 
@@ -413,7 +414,7 @@ app.get('*', (_, res) => {
   );
 });
 
-app.post('/hook', (req, res) => {
+app.post('/webhooks', (req, res) => {
   const isWebhookVerified = verifyWebhookSecret(req);
   if (!isWebhookVerified) {
     res.status(400).send('Request not verified');
