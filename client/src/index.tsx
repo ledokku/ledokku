@@ -5,6 +5,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 import { createGlobalStyle } from 'styled-components';
+import { BrowserRouter } from 'react-router-dom';
 import {
   split,
   from,
@@ -95,7 +96,9 @@ ReactDOM.render(
       <ChakraProvider>
         <AuthProvider>
           <GlobalStyle />
-          <Router />
+          <BrowserRouter>
+            <Router />
+          </BrowserRouter>
         </AuthProvider>
       </ChakraProvider>
     </ApolloProvider>

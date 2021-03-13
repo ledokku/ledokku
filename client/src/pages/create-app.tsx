@@ -1,4 +1,5 @@
 import { useHistory } from 'react-router-dom';
+import { trackGoal } from 'fathom-client';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import {
@@ -14,8 +15,8 @@ import {
   FormLabel,
   HeaderContainer,
 } from '../ui';
-
 import { useToast } from '../ui/toast';
+import { trackingGoals } from '../config';
 
 export const CreateApp = () => {
   const history = useHistory();
@@ -53,6 +54,9 @@ export const CreateApp = () => {
             },
           ],
         });
+
+        trackGoal(trackingGoals.createApp, 0);
+
         if (data?.data) {
           toast.success('App created successfully');
           history.push(`/app/${data.data.createApp.app.id}`);

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
+import { trackGoal } from 'fathom-client';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import {
@@ -37,6 +38,7 @@ import { Header } from '../modules/layout/Header';
 import { dbTypeToDokkuPlugin } from './utils';
 import { HeaderContainer, Terminal } from '../ui';
 import { useToast } from '../ui/toast';
+import { trackingGoals } from '../config';
 
 interface DatabaseBoxProps {
   label: string;
@@ -146,6 +148,8 @@ export const CreateDatabase = () => {
           },
         });
         setIsTerminalVisible(true);
+
+        trackGoal(trackingGoals.createDatabase, 0);
       } catch (error) {
         toast.error(error.message);
       }
