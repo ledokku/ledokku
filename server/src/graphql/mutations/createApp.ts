@@ -1,3 +1,4 @@
+import { pubsub } from './../../index';
 import { deployAppQueue } from './../../queues/deployApp';
 import { sshConnect } from './../../lib/ssh';
 import { MutationResolvers } from '../../generated/graphql';
@@ -30,17 +31,19 @@ export const createApp: MutationResolvers['createApp'] = async (
   if (isAppNameTaken) {
     throw new Error('App name already taken');
   }
-
-  const repoData = getRepoData(input.gitRepoUrl);
-
+  // we do git related operations only for apps
+  // that have gitRepoURl
   let repo;
-  try {
-    const res = await fetch(
-      `https://api.github.com/repos/${repoData.owner}/${repoData.repoName}`
-    );
-    repo = await res.json();
-  } catch (error) {
-    console.log(error);
+  if (input.gitRepoUrl) {
+    const repoData = getRepoData(input.gitRepoUrl);
+    try {
+      const res = await fetch(
+        `https://api.github.com/repos/${repoData.owner}/${repoData.repoName}`
+      );
+      repo = await res.json();
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   const ssh = await sshConnect();
@@ -54,6 +57,20 @@ export const createApp: MutationResolvers['createApp'] = async (
     },
   });
 
+  // for apps created w/o gitRepoUrl we send down to client
+  // data via  subscription
+  if (!input.gitRepoUrl) {
+    pubsub.publish('APP_CREATED', {
+      appCreateLogs: {
+        //TODO @ARTURS : Figure out a prettier way to send down logs
+        message: app.id,
+        type: 'end:success',
+      },
+    });
+  }
+
+  // for apps with gitRepoUrl and dokku app created
+  // we proceed further with deployment queue
   if (input.gitRepoUrl && dokkuApp) {
     await deployAppQueue.add('deploy-app', {
       appName: input.name,
