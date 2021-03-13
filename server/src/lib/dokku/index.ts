@@ -9,6 +9,7 @@ import { destroy } from './apps/destroy';
 import { unset } from './config/unset';
 import { destroy as destroyDb } from './plugin/database/destroy';
 import { info } from './plugin/database/info';
+import { infoVersion } from './plugin/database/infoVersion';
 import { logs as databaseLogs } from './plugin/database/logs';
 import { list as databaseList } from './plugin/database/list';
 import { links as databaseLinks } from './plugin/database/links';
@@ -32,6 +33,7 @@ export const dokku = {
   database: {
     destroy: destroyDb,
     info,
+    infoVersion,
     logs: databaseLogs,
     list: databaseList,
     listLinks: databaseLinks,

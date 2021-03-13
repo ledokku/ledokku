@@ -9,10 +9,11 @@ import {
   EnvVarsDocument,
 } from '../../generated/graphql';
 import { useFormik } from 'formik';
-import { TabNav, TabNavLink, Button, HeaderContainer } from '../../ui';
+import { Button, HeaderContainer } from '../../ui';
 import { TrashBinIcon } from '../../ui/icons/TrashBinIcon';
 import { Container, Heading } from '@chakra-ui/react';
 import { useToast } from '../../ui/toast';
+import { AppHeaderTabNav } from '../../modules/app/AppHeaderTabNav';
 
 interface EnvFormProps {
   name: string;
@@ -166,17 +167,7 @@ export const Env = () => {
     <div>
       <HeaderContainer>
         <Header />
-
-        <Container maxW="5xl">
-          <TabNav>
-            <TabNavLink to={`/app/${app.id}`}>App</TabNavLink>
-            <TabNavLink to={`/app/${app.id}/logs`}>Logs</TabNavLink>
-            <TabNavLink to={`/app/${app.id}/env`} selected>
-              Env setup
-            </TabNavLink>
-            <TabNavLink to={`/app/${app.id}/settings`}>Settings</TabNavLink>
-          </TabNav>
-        </Container>
+        <AppHeaderTabNav app={app} />
       </HeaderContainer>
 
       <Container maxW="5xl" mt={10}>

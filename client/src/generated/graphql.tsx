@@ -19,6 +19,7 @@ export type Scalars = {
 };
 
 
+
 export type App = {
   __typename?: 'App';
   id: Scalars['ID'];
@@ -44,6 +45,7 @@ export type Database = {
   id: Scalars['ID'];
   name: Scalars['String'];
   type: DatabaseTypes;
+  version?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
   apps?: Maybe<Array<App>>;
 };
@@ -738,7 +740,7 @@ export type DatabaseByIdQuery = (
   { __typename?: 'Query' }
   & { database?: Maybe<(
     { __typename?: 'Database' }
-    & Pick<Database, 'id' | 'name' | 'type'>
+    & Pick<Database, 'id' | 'name' | 'type' | 'version'>
     & { apps?: Maybe<Array<(
       { __typename?: 'App' }
       & Pick<App, 'id' | 'name'>
@@ -1601,6 +1603,7 @@ export const DatabaseByIdDocument = gql`
     id
     name
     type
+    version
     apps {
       id
       name

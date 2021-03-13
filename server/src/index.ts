@@ -45,6 +45,7 @@ const typeDefs = gql`
     id: ID!
     name: String!
     type: DatabaseTypes!
+    version: String
     createdAt: DateTime!
     apps: [App!]
   }

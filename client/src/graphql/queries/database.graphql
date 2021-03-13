@@ -3,6 +3,7 @@ query databaseById($databaseId: String!) {
     id
     name
     type
+    version
     apps {
       id
       name
