@@ -269,7 +269,7 @@ export const App = () => {
                 </Text>
                 <NavLink
                   activeStyle={{ textDecorationLine: 'none' }}
-                  to="http://localhost:3001/docs/setting-up-git-webhooks#github-repository-webhooks-setup"
+                  to="https://ledokku.com/docs/setting-up-git-webhooks#github-repository-webhooks-setup"
                 >
                   <Button
                     color="grey"
