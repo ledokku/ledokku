@@ -270,7 +270,11 @@ export const CreateApp = () => {
                       <FormHelper status="error">
                         {formik.errors.gitBranch}
                       </FormHelper>
-                    ) : null}
+                    ) : (
+                      <FormHelper status="info">
+                        If left empty "main" branch will be used
+                      </FormHelper>
+                    )}
 
                     <div className="mt-4 flex justify-end">
                       <Button
