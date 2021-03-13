@@ -26,5 +26,7 @@ export const domains: QueryResolvers['domains'] = async (
 
   const domains = await dokku.domains.report(ssh, app.name);
 
+  ssh.dispose();
+
   return { domains: domains };
 };

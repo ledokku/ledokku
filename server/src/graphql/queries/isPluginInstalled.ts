@@ -19,5 +19,7 @@ export const isPluginInstalled: QueryResolvers['isPluginInstalled'] = async (
     dokkuPlugins.plugins.filter((plugin) => plugin.name === pluginName)
       .length !== 0;
 
+  ssh.dispose();
+
   return { isPluginInstalled };
 };

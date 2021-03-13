@@ -32,5 +32,7 @@ export const addAppProxyPort: MutationResolvers['addAppProxyPort'] = async (
     input.container
   );
 
+  ssh.dispose();
+
   return true;
 };

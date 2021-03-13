@@ -60,5 +60,7 @@ export const createDatabase: MutationResolvers['createDatabase'] = async (
     userId,
   });
 
+  ssh.dispose();
+
   return { result: true };
 };

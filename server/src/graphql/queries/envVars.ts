@@ -26,5 +26,7 @@ export const envVars: QueryResolvers['envVars'] = async (
 
   const envVars = await dokku.config.listVars(ssh, app.name);
 
+  ssh.dispose();
+
   return { envVars };
 };

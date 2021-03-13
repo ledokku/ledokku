@@ -28,5 +28,7 @@ export const setDomain: MutationResolvers['setDomain'] = async (
 
   await dokku.domains.set(ssh, app.name, domainName);
 
+  ssh.dispose();
+
   return { result: true };
 };

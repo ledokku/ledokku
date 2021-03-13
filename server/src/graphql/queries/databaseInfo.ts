@@ -29,5 +29,7 @@ export const databaseInfo: QueryResolvers['databaseInfo'] = async (
 
   const info = await dokku.database.info(ssh, database.name, dbType);
 
+  ssh.dispose();
+
   return { info };
 };

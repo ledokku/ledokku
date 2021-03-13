@@ -14,5 +14,8 @@ export const dokkuPlugins: QueryResolvers['dokkuPlugins'] = async (
   const ssh = await sshConnect();
 
   const dokkuPlugins = await dokku.plugin.list(ssh);
+
+  ssh.dispose();
+
   return dokkuPlugins;
 };
