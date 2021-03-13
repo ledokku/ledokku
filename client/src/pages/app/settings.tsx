@@ -120,6 +120,7 @@ export const Settings = () => {
                 Update the settings of your app.
               </Text>
             </Box>
+            {app.githubRepoId && <Webhooks appId={app.id} />}
             <AppProxyPorts appId={app.id} />
             <AppRestart appId={app.id} />
             <AppRebuild appId={app.id} />
