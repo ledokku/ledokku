@@ -36,6 +36,7 @@ const worker = new Worker(
     await dokku.config.unset(ssh, appName, key);
 
     debug(`finished unsetEnvVarQueue for app:  ${appName} with ${key}`);
+    ssh.dispose();
   },
   { connection: redisClient }
 );

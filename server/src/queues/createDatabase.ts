@@ -98,6 +98,7 @@ const worker = new Worker(
         },
       });
     }
+    ssh.dispose();
   },
   { connection: redisClient }
 );

@@ -1,12 +1,18 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
+import {
+  Alert,
+  AlertDescription,
+  Container,
+  Heading,
+  Text,
+} from '@chakra-ui/react';
 import { Header } from '../../modules/layout/Header';
 import {
   useDatabaseByIdQuery,
   useDatabaseLogsQuery,
 } from '../../generated/graphql';
-import { Terminal, Alert, AlertDescription, HeaderContainer } from '../../ui';
-import { Container, Heading } from '@chakra-ui/react';
+import { Terminal, HeaderContainer } from '../../ui';
 import { DatabaseHeaderInfo } from '../../modules/database/DatabaseHeaderInfo';
 import { DatabaseHeaderTabNav } from '../../modules/database/DatabaseHeaderTabNav';
 
@@ -57,18 +63,23 @@ export const Logs = () => {
       </HeaderContainer>
 
       <Container maxW="5xl" mt={10}>
-        <div className="grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 gap-4 mt-10">
-          <Heading as="h2" size="md" py={5}>
-            Logs
-          </Heading>
-        </div>
+        <Heading as="h2" size="md" py={5}>
+          Logs
+        </Heading>
 
         {databaseLogsLoading ? (
-          <p className="text-gray-400 text-sm">Loading...</p>
+          <Text fontSize="sm" color="gray.400">
+            Loading...
+          </Text>
         ) : null}
 
         {databaseLogsError ? (
-          <Alert status="error">
+          <Alert
+            status="error"
+            variant="top-accent"
+            borderBottomRadius="base"
+            boxShadow="md"
+          >
             <AlertDescription>{databaseLogsError.message}</AlertDescription>
           </Alert>
         ) : null}

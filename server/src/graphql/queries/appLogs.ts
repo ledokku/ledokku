@@ -26,5 +26,7 @@ export const appLogs: QueryResolvers['appLogs'] = async (
 
   const logs = await dokku.apps.logs(ssh, app.name);
 
+  ssh.dispose();
+
   return { logs };
 };

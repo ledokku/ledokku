@@ -94,4 +94,5 @@ export const config = {
   numberUsersAllowed: process.env.NUMBER_USERS_ALLOWED
     ? +process.env.NUMBER_USERS_ALLOWED
     : 1,
+  telemetryDisabled: process.env.TELEMETRY_DISABLED,
 };

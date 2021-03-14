@@ -29,5 +29,7 @@ export const databaseLogs: QueryResolvers['databaseLogs'] = async (
 
   const logs = await dokku.database.logs(ssh, database.name, dbType);
 
+  ssh.dispose();
+
   return { logs };
 };
