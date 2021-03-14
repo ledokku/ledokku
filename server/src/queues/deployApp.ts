@@ -45,13 +45,12 @@ const worker = new Worker(
     await dokku.git.unlock(ssh, appName);
 
     if (gitRepoUrl) {
-      const res = await dokku.git.sync(
+      const res = await dokku.git.sync({
         ssh,
         appName,
         gitRepoUrl,
-        branch,
-
-        {
+        branchName: branch,
+        options: {
           onStdout: (chunk) => {
             pubsub.publish('APP_CREATED', {
               appCreateLogs: {
@@ -68,8 +67,8 @@ const worker = new Worker(
               },
             });
           },
-        }
-      );
+        },
+      });
       debug(`finishing create app ${appName} from ${gitRepoUrl}`);
       if (!res.stderr) {
         pubsub.publish('APP_CREATED', {
