@@ -1,6 +1,7 @@
 import { useHistory } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
+import { trackGoal } from 'fathom-client';
 import * as yup from 'yup';
 import {
   useAppsQuery,
@@ -18,6 +19,7 @@ import {
   HeaderContainer,
 } from '../../ui';
 import { useToast } from '../../ui/toast';
+import { trackingGoals } from '../../config';
 import { ArrowLeft, ArrowRight } from 'react-feather';
 import {
   Alert,
@@ -120,6 +122,7 @@ export const CreateAppGithub = () => {
     setIsTerminalVisible(false);
     const appId = arrayOfCreateAppLogs[arrayOfCreateAppLogs.length - 1].message;
     history.push(`app/${appId}`, 'new');
+    trackGoal(trackingGoals.createApp, 0);
   };
 
   // Effect for app creation
