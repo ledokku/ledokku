@@ -1,15 +1,17 @@
 import { NodeSSH, SSHExecOptions } from 'node-ssh';
 
-export const sync = async (
-  ssh: NodeSSH,
-  appName: string,
-  gitBranchUrl: string,
-  branchName?: string,
-  options?: SSHExecOptions
-) => {
-  const resultGitSync = await ssh.execCommand(
-    `git:sync --build ${appName} ${gitBranchUrl} ${branchName}`,
-    options
+interface Args {
+  ssh: NodeSSH;
+  appName: string;
+  gitBranchUrl: string;
+  branchName: string;
+  options: SSHExecOptions;
+}
+
+export const sync = async (args: Args) => {
+  const resultGitSync = await args.ssh.execCommand(
+    `git:sync --build ${args.appName} ${args.gitBranchUrl} ${args.branchName}`,
+    args.options
   );
   return resultGitSync;
 };
