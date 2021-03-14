@@ -1,4 +1,3 @@
-import { pubsub } from './../../index';
 import { sshConnect } from './../../lib/ssh';
 import { MutationResolvers } from '../../generated/graphql';
 import { prisma } from '../../prisma';
@@ -32,7 +31,7 @@ export const createApp: MutationResolvers['createApp'] = async (
 
   const ssh = await sshConnect();
 
-  const dokkuApp = await dokku.apps.create(ssh, input.name);
+  await dokku.apps.create(ssh, input.name);
 
   const app = await prisma.app.create({
     data: {
