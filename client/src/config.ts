@@ -22,4 +22,5 @@ export const config = runConfig
 export const trackingGoals = {
   createDatabase: 'OHO7WM5Y',
   createApp: '37GKGSE1',
+  createAppGithub: 'UQPMEGEM',
 };

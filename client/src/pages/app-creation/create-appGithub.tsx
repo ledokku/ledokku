@@ -122,7 +122,7 @@ export const CreateAppGithub = () => {
     setIsTerminalVisible(false);
     const appId = arrayOfCreateAppLogs[arrayOfCreateAppLogs.length - 1].message;
     history.push(`app/${appId}`, 'new');
-    trackGoal(trackingGoals.createApp, 0);
+    trackGoal(trackingGoals.createAppGithub, 0);
   };
 
   // Effect for app creation
