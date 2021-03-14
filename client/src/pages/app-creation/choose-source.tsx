@@ -84,7 +84,7 @@ export const ChooseSource = () => {
       try {
         values.type === AppTypes.GITHUB
           ? history.push('/create-app-github')
-          : history.push('/create-app');
+          : history.push('/create-app-dokku');
       } catch (error) {
         toast.error(error.message);
       }

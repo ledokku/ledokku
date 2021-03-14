@@ -75,7 +75,7 @@ const typeDefs = gql`
     token: String!
   }
 
-  type CreateAppResult {
+  type CreateAppDokkuResult {
     appId: String!
   }
 
@@ -181,7 +181,7 @@ const typeDefs = gql`
     container: String!
   }
 
-  input CreateAppInput {
+  input CreateAppDokkuInput {
     name: String!
   }
 
@@ -295,7 +295,7 @@ const typeDefs = gql`
     addDomain(input: AddDomainInput!): AddDomainResult!
     removeDomain(input: RemoveDomainInput!): RemoveDomainResult!
     setDomain(input: SetDomainInput!): SetDomainResult!
-    createApp(input: CreateAppInput!): CreateAppResult!
+    createAppDokku(input: CreateAppDokkuInput!): CreateAppDokkuResult!
     createDatabase(input: CreateDatabaseInput!): CreateDatabaseResult!
     setEnvVar(input: SetEnvVarInput!): SetEnvVarResult!
     unsetEnvVar(input: UnsetEnvVarInput!): UnsetEnvVarResult!

@@ -74,8 +74,8 @@ export type LoginResult = {
   token: Scalars['String'];
 };
 
-export type CreateAppResult = {
-  __typename?: 'CreateAppResult';
+export type CreateAppDokkuResult = {
+  __typename?: 'CreateAppDokkuResult';
   appId: Scalars['String'];
 };
 
@@ -205,7 +205,7 @@ export type AppProxyPort = {
   container: Scalars['String'];
 };
 
-export type CreateAppInput = {
+export type CreateAppDokkuInput = {
   name: Scalars['String'];
 };
 
@@ -370,7 +370,7 @@ export type Mutation = {
   addDomain: AddDomainResult;
   removeDomain: RemoveDomainResult;
   setDomain: SetDomainResult;
-  createApp: CreateAppResult;
+  createAppDokku: CreateAppDokkuResult;
   createDatabase: CreateDatabaseResult;
   setEnvVar: SetEnvVarResult;
   unsetEnvVar: UnsetEnvVarResult;
@@ -406,8 +406,8 @@ export type MutationSetDomainArgs = {
 };
 
 
-export type MutationCreateAppArgs = {
-  input: CreateAppInput;
+export type MutationCreateAppDokkuArgs = {
+  input: CreateAppDokkuInput;
 };
 
 
@@ -498,16 +498,16 @@ export type AddDomainMutation = (
   ) }
 );
 
-export type CreateAppMutationVariables = Exact<{
-  input: CreateAppInput;
+export type CreateAppDokkuMutationVariables = Exact<{
+  input: CreateAppDokkuInput;
 }>;
 
 
-export type CreateAppMutation = (
+export type CreateAppDokkuMutation = (
   { __typename?: 'Mutation' }
-  & { createApp: (
-    { __typename?: 'CreateAppResult' }
-    & Pick<CreateAppResult, 'appId'>
+  & { createAppDokku: (
+    { __typename?: 'CreateAppDokkuResult' }
+    & Pick<CreateAppDokkuResult, 'appId'>
   ) }
 );
 
@@ -997,38 +997,38 @@ export function useAddDomainMutation(baseOptions?: Apollo.MutationHookOptions<Ad
 export type AddDomainMutationHookResult = ReturnType<typeof useAddDomainMutation>;
 export type AddDomainMutationResult = Apollo.MutationResult<AddDomainMutation>;
 export type AddDomainMutationOptions = Apollo.BaseMutationOptions<AddDomainMutation, AddDomainMutationVariables>;
-export const CreateAppDocument = gql`
-    mutation createApp($input: CreateAppInput!) {
-  createApp(input: $input) {
+export const CreateAppDokkuDocument = gql`
+    mutation createAppDokku($input: CreateAppDokkuInput!) {
+  createAppDokku(input: $input) {
     appId
   }
 }
     `;
-export type CreateAppMutationFn = Apollo.MutationFunction<CreateAppMutation, CreateAppMutationVariables>;
+export type CreateAppDokkuMutationFn = Apollo.MutationFunction<CreateAppDokkuMutation, CreateAppDokkuMutationVariables>;
 
 /**
- * __useCreateAppMutation__
+ * __useCreateAppDokkuMutation__
  *
- * To run a mutation, you first call `useCreateAppMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateAppMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateAppDokkuMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAppDokkuMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createAppMutation, { data, loading, error }] = useCreateAppMutation({
+ * const [createAppDokkuMutation, { data, loading, error }] = useCreateAppDokkuMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useCreateAppMutation(baseOptions?: Apollo.MutationHookOptions<CreateAppMutation, CreateAppMutationVariables>) {
-        return Apollo.useMutation<CreateAppMutation, CreateAppMutationVariables>(CreateAppDocument, baseOptions);
+export function useCreateAppDokkuMutation(baseOptions?: Apollo.MutationHookOptions<CreateAppDokkuMutation, CreateAppDokkuMutationVariables>) {
+        return Apollo.useMutation<CreateAppDokkuMutation, CreateAppDokkuMutationVariables>(CreateAppDokkuDocument, baseOptions);
       }
-export type CreateAppMutationHookResult = ReturnType<typeof useCreateAppMutation>;
-export type CreateAppMutationResult = Apollo.MutationResult<CreateAppMutation>;
-export type CreateAppMutationOptions = Apollo.BaseMutationOptions<CreateAppMutation, CreateAppMutationVariables>;
+export type CreateAppDokkuMutationHookResult = ReturnType<typeof useCreateAppDokkuMutation>;
+export type CreateAppDokkuMutationResult = Apollo.MutationResult<CreateAppDokkuMutation>;
+export type CreateAppDokkuMutationOptions = Apollo.BaseMutationOptions<CreateAppDokkuMutation, CreateAppDokkuMutationVariables>;
 export const CreateAppGithubDocument = gql`
     mutation createAppGithub($input: CreateAppGithubInput!) {
   createAppGithub(input: $input) {

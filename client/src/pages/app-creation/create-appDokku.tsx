@@ -3,7 +3,10 @@ import React from 'react';
 import { useFormik } from 'formik';
 import { trackGoal } from 'fathom-client';
 import * as yup from 'yup';
-import { useCreateAppMutation, useAppsQuery } from '../../generated/graphql';
+import {
+  useCreateAppDokkuMutation,
+  useAppsQuery,
+} from '../../generated/graphql';
 import { Header } from '../../modules/layout/Header';
 import {
   Button,
@@ -15,11 +18,11 @@ import {
 import { useToast } from '../../ui/toast';
 import { trackingGoals } from '../../config';
 
-export const CreateApp = () => {
+export const CreateAppDokku = () => {
   const history = useHistory();
   const toast = useToast();
   const { data: dataApps } = useAppsQuery();
-  const [createAppMutation, { loading }] = useCreateAppMutation();
+  const [createAppDokkuMutation, { loading }] = useCreateAppDokkuMutation();
 
   const createAppSchema = yup.object().shape({
     name: yup
@@ -44,7 +47,7 @@ export const CreateApp = () => {
     validationSchema: createAppSchema,
     onSubmit: async (values) => {
       try {
-        const res = await createAppMutation({
+        const res = await createAppDokkuMutation({
           variables: {
             input: {
               name: values.name,
@@ -55,7 +58,7 @@ export const CreateApp = () => {
         trackGoal(trackingGoals.createApp, 0);
 
         if (res.data) {
-          history.push(`app/${res.data?.createApp.appId}`);
+          history.push(`app/${res.data?.createAppDokku.appId}`);
           toast.success('App created successfully');
         }
       } catch (error) {

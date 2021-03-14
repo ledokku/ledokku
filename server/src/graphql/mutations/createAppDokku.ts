@@ -1,11 +1,11 @@
-import { sshConnect } from './../../lib/ssh';
+import { sshConnect } from '../../lib/ssh';
 import { MutationResolvers } from '../../generated/graphql';
 import { prisma } from '../../prisma';
 // import { buildAppQueue } from '../../queues/buildApp';
 import { appNameSchema } from '../utils';
 import { dokku } from '../../lib/dokku';
 
-export const createApp: MutationResolvers['createApp'] = async (
+export const createAppDokku: MutationResolvers['createAppDokku'] = async (
   _,
   { input },
   { userId }

@@ -6,7 +6,7 @@ import { unsetEnvVar } from './unsetEnvVar';
 import { setEnvVar } from './setEnvVar';
 import { loginWithGithub } from './loginWithGithub';
 import { createDatabase } from './createDatabase';
-import { createApp } from './createApp';
+import { createAppDokku } from './createAppDokku';
 import { destroyApp } from './destroyApp';
 import { destroyDatabase } from './destroyDatabase';
 import { linkDatabase } from './linkDatabase';
@@ -19,7 +19,7 @@ import { rebuildApp } from './rebuildApp';
 export const mutations = {
   loginWithGithub,
   createDatabase,
-  createApp,
+  createAppDokku,
   createAppGithub,
   setEnvVar,
   unsetEnvVar,

@@ -13,7 +13,7 @@ import { Activity } from './pages/activity';
 import { Metrics } from './pages/metrics';
 import { Settings } from './pages/settings';
 import { CreateDatabase } from './pages/create-database';
-import { CreateApp } from './pages/app-creation/create-app';
+import { CreateAppDokku } from './pages/app-creation/create-appDokku';
 import { ChooseSource } from './pages/app-creation/choose-source';
 import { CreateAppGithub } from './pages/app-creation/create-appGithub';
 import { useTracking } from './utils/useTracking';
@@ -60,8 +60,8 @@ export const Router = () => {
       <PrivateRoute path="/settings" exact>
         <Settings />
       </PrivateRoute>
-      <PrivateRoute path="/create-app" exact>
-        <CreateApp />
+      <PrivateRoute path="/create-app-dokku" exact>
+        <CreateAppDokku />
       </PrivateRoute>
       <PrivateRoute path="/create-app-github" exact>
         <CreateAppGithub />
