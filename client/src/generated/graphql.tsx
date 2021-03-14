@@ -75,6 +75,11 @@ export type LoginResult = {
 
 export type CreateAppResult = {
   __typename?: 'CreateAppResult';
+  appId: Scalars['String'];
+};
+
+export type CreateAppGithubResult = {
+  __typename?: 'CreateAppGithubResult';
   result: Scalars['Boolean'];
 };
 
@@ -201,7 +206,11 @@ export type AppProxyPort = {
 
 export type CreateAppInput = {
   name: Scalars['String'];
-  gitRepoUrl?: Maybe<Scalars['String']>;
+};
+
+export type CreateAppGithubInput = {
+  name: Scalars['String'];
+  gitRepoUrl: Scalars['String'];
   branchName?: Maybe<Scalars['String']>;
 };
 
@@ -372,6 +381,7 @@ export type Mutation = {
   unlinkDatabase: UnlinkDatabaseResult;
   addAppProxyPort?: Maybe<Scalars['Boolean']>;
   removeAppProxyPort?: Maybe<Scalars['Boolean']>;
+  createAppGithub: CreateAppGithubResult;
 };
 
 
@@ -454,6 +464,11 @@ export type MutationRemoveAppProxyPortArgs = {
   input: RemoveAppProxyPortInput;
 };
 
+
+export type MutationCreateAppGithubArgs = {
+  input: CreateAppGithubInput;
+};
+
 export type CacheControlScope =
   | 'PUBLIC'
   | 'PRIVATE';
@@ -491,7 +506,20 @@ export type CreateAppMutation = (
   { __typename?: 'Mutation' }
   & { createApp: (
     { __typename?: 'CreateAppResult' }
-    & Pick<CreateAppResult, 'result'>
+    & Pick<CreateAppResult, 'appId'>
+  ) }
+);
+
+export type CreateAppGithubMutationVariables = Exact<{
+  input: CreateAppGithubInput;
+}>;
+
+
+export type CreateAppGithubMutation = (
+  { __typename?: 'Mutation' }
+  & { createAppGithub: (
+    { __typename?: 'CreateAppGithubResult' }
+    & Pick<CreateAppGithubResult, 'result'>
   ) }
 );
 
@@ -971,7 +999,7 @@ export type AddDomainMutationOptions = Apollo.BaseMutationOptions<AddDomainMutat
 export const CreateAppDocument = gql`
     mutation createApp($input: CreateAppInput!) {
   createApp(input: $input) {
-    result
+    appId
   }
 }
     `;
@@ -1000,6 +1028,38 @@ export function useCreateAppMutation(baseOptions?: Apollo.MutationHookOptions<Cr
 export type CreateAppMutationHookResult = ReturnType<typeof useCreateAppMutation>;
 export type CreateAppMutationResult = Apollo.MutationResult<CreateAppMutation>;
 export type CreateAppMutationOptions = Apollo.BaseMutationOptions<CreateAppMutation, CreateAppMutationVariables>;
+export const CreateAppGithubDocument = gql`
+    mutation createAppGithub($input: CreateAppGithubInput!) {
+  createAppGithub(input: $input) {
+    result
+  }
+}
+    `;
+export type CreateAppGithubMutationFn = Apollo.MutationFunction<CreateAppGithubMutation, CreateAppGithubMutationVariables>;
+
+/**
+ * __useCreateAppGithubMutation__
+ *
+ * To run a mutation, you first call `useCreateAppGithubMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAppGithubMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createAppGithubMutation, { data, loading, error }] = useCreateAppGithubMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateAppGithubMutation(baseOptions?: Apollo.MutationHookOptions<CreateAppGithubMutation, CreateAppGithubMutationVariables>) {
+        return Apollo.useMutation<CreateAppGithubMutation, CreateAppGithubMutationVariables>(CreateAppGithubDocument, baseOptions);
+      }
+export type CreateAppGithubMutationHookResult = ReturnType<typeof useCreateAppGithubMutation>;
+export type CreateAppGithubMutationResult = Apollo.MutationResult<CreateAppGithubMutation>;
+export type CreateAppGithubMutationOptions = Apollo.BaseMutationOptions<CreateAppGithubMutation, CreateAppGithubMutationVariables>;
 export const CreateDatabaseDocument = gql`
     mutation createDatabase($input: CreateDatabaseInput!) {
   createDatabase(input: $input) {

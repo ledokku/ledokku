@@ -1,12 +1,14 @@
 import { pubsub } from './../../index';
+import { deployAppQueue } from './../../queues/deployApp';
 import { sshConnect } from './../../lib/ssh';
 import { MutationResolvers } from '../../generated/graphql';
 import { prisma } from '../../prisma';
+import fetch from 'node-fetch';
 // import { buildAppQueue } from '../../queues/buildApp';
-import { appNameSchema } from '../utils';
+import { appNameSchema, getRepoData } from '../utils';
 import { dokku } from '../../lib/dokku';
 
-export const createApp: MutationResolvers['createApp'] = async (
+export const createAppGithub: MutationResolvers['createAppGithub'] = async (
   _,
   { input },
   { userId }
@@ -30,6 +32,18 @@ export const createApp: MutationResolvers['createApp'] = async (
     throw new Error('App name already taken');
   }
 
+  let repo;
+
+  const repoData = getRepoData(input.gitRepoUrl);
+  try {
+    const res = await fetch(
+      `https://api.github.com/repos/${repoData.owner}/${repoData.repoName}`
+    );
+    repo = await res.json();
+  } catch (error) {
+    console.log(error);
+  }
+
   const ssh = await sshConnect();
 
   const dokkuApp = await dokku.apps.create(ssh, input.name);
@@ -37,11 +51,19 @@ export const createApp: MutationResolvers['createApp'] = async (
   const app = await prisma.app.create({
     data: {
       name: input.name,
+      githubRepoId: repo.id.toString(),
     },
   });
 
-  // for apps created w/o gitRepoUrl we send down to client
-  // data via  subscription
+  if (dokkuApp) {
+    await deployAppQueue.add('deploy-app', {
+      appName: input.name,
+      gitRepoUrl: input.gitRepoUrl,
+      branchName: input.branchName,
+      dokkuApp,
+      appId: app.id,
+    });
+  }
 
   // TODO enable again once we start the github app autodeployment
   // const appBuild = await prisma.appBuild.create({
@@ -63,5 +85,5 @@ export const createApp: MutationResolvers['createApp'] = async (
   // // We trigger the queue that will add dokku to the server
   // await buildAppQueue.add('build-app', { buildId: appBuild.id });
 
-  return { appId: app.id };
+  return { result: true };
 };

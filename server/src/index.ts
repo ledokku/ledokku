@@ -72,6 +72,10 @@ const typeDefs = gql`
   }
 
   type CreateAppResult {
+    appId: String!
+  }
+
+  type CreateAppGithubResult {
     result: Boolean!
   }
 
@@ -175,7 +179,11 @@ const typeDefs = gql`
 
   input CreateAppInput {
     name: String!
-    gitRepoUrl: String
+  }
+
+  input CreateAppGithubInput {
+    name: String!
+    gitRepoUrl: String!
     branchName: String
   }
 
@@ -295,6 +303,7 @@ const typeDefs = gql`
     unlinkDatabase(input: UnlinkDatabaseInput!): UnlinkDatabaseResult!
     addAppProxyPort(input: AddAppProxyPortInput!): Boolean
     removeAppProxyPort(input: RemoveAppProxyPortInput!): Boolean
+    createAppGithub(input: CreateAppGithubInput!): CreateAppGithubResult!
   }
 `;
 

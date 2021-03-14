@@ -43,7 +43,7 @@ export const Dashboard = () => {
               Create database
             </Button>
           </Link>
-          <Link to="/create-app">
+          <Link to="/choose-source">
             <Button colorScheme="gray" fontSize="sm">
               Create app
             </Button>

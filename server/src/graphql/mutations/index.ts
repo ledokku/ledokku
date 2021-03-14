@@ -1,3 +1,4 @@
+import { createAppGithub } from './createAppGithub';
 import { removeDomain } from './removeDomain';
 import { addDomain } from './addDomain';
 import { setDomain } from './setDomain';
@@ -19,6 +20,7 @@ export const mutations = {
   loginWithGithub,
   createDatabase,
   createApp,
+  createAppGithub,
   setEnvVar,
   unsetEnvVar,
   destroyApp,

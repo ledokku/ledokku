@@ -75,6 +75,11 @@ export type LoginResult = {
 
 export type CreateAppResult = {
   __typename?: 'CreateAppResult';
+  appId: Scalars['String'];
+};
+
+export type CreateAppGithubResult = {
+  __typename?: 'CreateAppGithubResult';
   result: Scalars['Boolean'];
 };
 
@@ -201,7 +206,11 @@ export type AppProxyPort = {
 
 export type CreateAppInput = {
   name: Scalars['String'];
-  gitRepoUrl?: Maybe<Scalars['String']>;
+};
+
+export type CreateAppGithubInput = {
+  name: Scalars['String'];
+  gitRepoUrl: Scalars['String'];
   branchName?: Maybe<Scalars['String']>;
 };
 
@@ -372,6 +381,7 @@ export type Mutation = {
   unlinkDatabase: UnlinkDatabaseResult;
   addAppProxyPort?: Maybe<Scalars['Boolean']>;
   removeAppProxyPort?: Maybe<Scalars['Boolean']>;
+  createAppGithub: CreateAppGithubResult;
 };
 
 
@@ -452,6 +462,11 @@ export type MutationAddAppProxyPortArgs = {
 
 export type MutationRemoveAppProxyPortArgs = {
   input: RemoveAppProxyPortInput;
+};
+
+
+export type MutationCreateAppGithubArgs = {
+  input: CreateAppGithubInput;
 };
 
 export type CacheControlScope =
@@ -549,6 +564,7 @@ export type ResolversTypes = {
   RealTimeLog: ResolverTypeWrapper<RealTimeLog>;
   LoginResult: ResolverTypeWrapper<LoginResult>;
   CreateAppResult: ResolverTypeWrapper<CreateAppResult>;
+  CreateAppGithubResult: ResolverTypeWrapper<CreateAppGithubResult>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   DestroyAppResult: ResolverTypeWrapper<DestroyAppResult>;
   RestartAppResult: ResolverTypeWrapper<RestartAppResult>;
@@ -574,6 +590,7 @@ export type ResolversTypes = {
   IsPluginInstalledResult: ResolverTypeWrapper<IsPluginInstalledResult>;
   AppProxyPort: ResolverTypeWrapper<AppProxyPort>;
   CreateAppInput: CreateAppInput;
+  CreateAppGithubInput: CreateAppGithubInput;
   RestartAppInput: RestartAppInput;
   RebuildAppInput: RebuildAppInput;
   CreateDatabaseInput: CreateDatabaseInput;
@@ -608,6 +625,7 @@ export type ResolversParentTypes = {
   RealTimeLog: RealTimeLog;
   LoginResult: LoginResult;
   CreateAppResult: CreateAppResult;
+  CreateAppGithubResult: CreateAppGithubResult;
   Boolean: Scalars['Boolean'];
   DestroyAppResult: DestroyAppResult;
   RestartAppResult: RestartAppResult;
@@ -633,6 +651,7 @@ export type ResolversParentTypes = {
   IsPluginInstalledResult: IsPluginInstalledResult;
   AppProxyPort: AppProxyPort;
   CreateAppInput: CreateAppInput;
+  CreateAppGithubInput: CreateAppGithubInput;
   RestartAppInput: RestartAppInput;
   RebuildAppInput: RebuildAppInput;
   CreateDatabaseInput: CreateDatabaseInput;
@@ -705,6 +724,11 @@ export type LoginResultResolvers<ContextType = any, ParentType extends Resolvers
 };
 
 export type CreateAppResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateAppResult'] = ResolversParentTypes['CreateAppResult']> = {
+  appId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CreateAppGithubResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateAppGithubResult'] = ResolversParentTypes['CreateAppGithubResult']> = {
   result?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -873,6 +897,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   unlinkDatabase?: Resolver<ResolversTypes['UnlinkDatabaseResult'], ParentType, ContextType, RequireFields<MutationUnlinkDatabaseArgs, 'input'>>;
   addAppProxyPort?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddAppProxyPortArgs, 'input'>>;
   removeAppProxyPort?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveAppProxyPortArgs, 'input'>>;
+  createAppGithub?: Resolver<ResolversTypes['CreateAppGithubResult'], ParentType, ContextType, RequireFields<MutationCreateAppGithubArgs, 'input'>>;
 };
 
 export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
@@ -888,6 +913,7 @@ export type Resolvers<ContextType = any> = {
   RealTimeLog?: RealTimeLogResolvers<ContextType>;
   LoginResult?: LoginResultResolvers<ContextType>;
   CreateAppResult?: CreateAppResultResolvers<ContextType>;
+  CreateAppGithubResult?: CreateAppGithubResultResolvers<ContextType>;
   DestroyAppResult?: DestroyAppResultResolvers<ContextType>;
   RestartAppResult?: RestartAppResultResolvers<ContextType>;
   RebuildAppResult?: RebuildAppResultResolvers<ContextType>;

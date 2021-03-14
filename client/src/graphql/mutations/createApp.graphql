@@ -1,5 +1,5 @@
 mutation createApp($input: CreateAppInput!) {
   createApp(input: $input) {
-    result
+    appId
   }
 }

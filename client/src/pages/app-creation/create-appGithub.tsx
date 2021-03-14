@@ -3,12 +3,12 @@ import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import {
-  useCreateAppMutation,
   useAppsQuery,
   RealTimeLog,
   useAppCreateLogsSubscription,
-} from '../generated/graphql';
-import { Header } from '../modules/layout/Header';
+  useCreateAppGithubMutation,
+} from '../../generated/graphql';
+import { Header } from '../../modules/layout/Header';
 import {
   Button,
   FormHelper,
@@ -16,8 +16,8 @@ import {
   FormLabel,
   Terminal,
   HeaderContainer,
-} from '../ui';
-import { useToast } from '../ui/toast';
+} from '../../ui';
+import { useToast } from '../../ui/toast';
 import { ArrowLeft, ArrowRight } from 'react-feather';
 import {
   Alert,
@@ -33,7 +33,7 @@ enum AppCreationStatus {
   SUCCESS = 'Success',
 }
 
-export const CreateApp = () => {
+export const CreateAppGithub = () => {
   const history = useHistory();
   const toast = useToast();
   const { data: dataApps } = useAppsQuery();
@@ -43,7 +43,7 @@ export const CreateApp = () => {
   const [isTerminalVisible, setIsTerminalVisible] = useState(false);
   const [isWarningVisible, setIsWarningVisible] = useState(true);
   const [isToastShown, setIsToastShown] = useState(false);
-  const [createAppMutation] = useCreateAppMutation();
+  const [createAppGithubMutation] = useCreateAppGithubMutation();
   const [
     isAppCreationSuccess,
     setIsAppCreationSuccess,
@@ -66,7 +66,7 @@ export const CreateApp = () => {
     },
   });
 
-  const createAppSchema = yup.object().shape({
+  const createAppGithubSchema = yup.object().shape({
     name: yup
       .string()
       .required('App name is required')
@@ -81,9 +81,11 @@ export const CreateApp = () => {
       .matches(
         /((git|ssh|http(s)?)|(git@[\w.]+))(:(\/\/)?)([\w.@:/\-~]+)(\.git)(\/)?/,
         'Must be a valid git link'
-      ),
+      )
+      .required(),
     gitBranch: yup.string().optional(),
   });
+
   const formik = useFormik<{
     name: string;
     gitRepoUrl: string;
@@ -96,15 +98,14 @@ export const CreateApp = () => {
     },
 
     validateOnChange: true,
-    validationSchema: createAppSchema,
+    validationSchema: createAppGithubSchema,
     onSubmit: async (values) => {
       try {
-        await createAppMutation({
+        await createAppGithubMutation({
           variables: {
             input: {
               name: values.name,
               gitRepoUrl: values.gitRepoUrl,
-              branchName: values.gitBranch ? values.gitBranch : undefined,
             },
           },
         });
@@ -137,7 +138,7 @@ export const CreateApp = () => {
         <Header />
       </HeaderContainer>
 
-      <div className="max-w-5xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-5xl mx-auto py-6 sm:px-6 lg:px-4">
         <h1 className="text-lg font-bold">Create a new app</h1>
         <div className="mt-12">
           {isTerminalVisible ? (
@@ -190,114 +191,120 @@ export const CreateApp = () => {
             </>
           ) : (
             <React.Fragment>
-              <div className="mt-4 mb-4">
-                <h2 className="text-gray-400">
-                  Enter app name, github repository URL and click create and
-                  voila!
-                </h2>
-              </div>
-              {isWarningVisible && (
-                <Alert mb="4" mt="4" w="65%" status="warning">
-                  <AlertIcon />
-                  <Box flex="1">
-                    <AlertTitle>
-                      Currently only works with public repositories
-                    </AlertTitle>
-                    <AlertDescription display="block">
-                      We are doing our best to add suport for private repos.
-                      Stay tuned and enjoy automatic git deployments with your
-                      public projects.
-                    </AlertDescription>
-                  </Box>
-                  <CloseButton
-                    onClick={() => setIsWarningVisible(false)}
-                    position="absolute"
-                    right="8px"
-                    top="8px"
-                  />
-                </Alert>
-              )}
-              <form onSubmit={formik.handleSubmit}>
-                <div className="grid grid-cols-3 md:grid-cols-3 gap-10">
-                  <div>
-                    <FormLabel>App name: </FormLabel>
-                    <FormInput
-                      autoComplete="off"
-                      id="name"
-                      name="name"
-                      placeholder="Name"
-                      value={formik.values.name}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      error={Boolean(formik.errors.name && formik.touched.name)}
-                    />
-                    {formik.errors.name ? (
-                      <FormHelper status="error">
-                        {formik.errors.name}
-                      </FormHelper>
-                    ) : null}
+              <React.Fragment>
+                <>
+                  <div className="mt-4 mb-4">
+                    <h2 className="text-gray-400">
+                      Enter app name, github repository URL and click create and
+                      voila!
+                    </h2>
                   </div>
-                  <div>
-                    <FormLabel>Git repository url: </FormLabel>
-                    <FormInput
-                      autoComplete="off"
-                      id="gitRepoUrl"
-                      name="gitRepoUrl"
-                      placeholder="Git repository url"
-                      value={formik.values.gitRepoUrl}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      error={Boolean(
-                        formik.errors.gitRepoUrl && formik.touched.gitRepoUrl
-                      )}
-                    />
-                    {formik.errors.gitRepoUrl ? (
-                      <FormHelper status="error">
-                        {formik.errors.gitRepoUrl}
-                      </FormHelper>
-                    ) : null}
+                  {isWarningVisible && (
+                    <Alert mb="4" mt="4" w="65%" status="warning">
+                      <AlertIcon />
+                      <Box flex="1">
+                        <AlertTitle>
+                          Currently only works with public repositories
+                        </AlertTitle>
+                        <AlertDescription display="block">
+                          We are doing our best to add suport for private repos.
+                          Stay tuned and enjoy automatic git deployments with
+                          your public projects.
+                        </AlertDescription>
+                      </Box>
+                      <CloseButton
+                        onClick={() => setIsWarningVisible(false)}
+                        position="absolute"
+                        right="8px"
+                        top="8px"
+                      />
+                    </Alert>
+                  )}
+                </>
+                <form onSubmit={formik.handleSubmit}>
+                  <div className="grid grid-cols-3 md:grid-cols-3 gap-10">
+                    <div>
+                      <FormLabel>App name: </FormLabel>
+                      <FormInput
+                        autoComplete="off"
+                        id="name"
+                        name="name"
+                        placeholder="Name"
+                        value={formik.values.name}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        error={Boolean(
+                          formik.errors.name && formik.touched.name
+                        )}
+                      />
+                      {formik.errors.name ? (
+                        <FormHelper status="error">
+                          {formik.errors.name}
+                        </FormHelper>
+                      ) : null}
+                    </div>
+                    <div>
+                      <FormLabel>Git repository url: </FormLabel>
+                      <FormInput
+                        autoComplete="off"
+                        id="gitRepoUrl"
+                        name="gitRepoUrl"
+                        placeholder="Git repository url"
+                        value={formik.values.gitRepoUrl}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        error={Boolean(
+                          formik.errors.gitRepoUrl && formik.touched.gitRepoUrl
+                        )}
+                      />
+                      {formik.errors.gitRepoUrl ? (
+                        <FormHelper status="error">
+                          {formik.errors.gitRepoUrl}
+                        </FormHelper>
+                      ) : null}
 
-                    <FormLabel className="mt-4">Git branch name: </FormLabel>
-                    <FormInput
-                      autoComplete="off"
-                      id="gitBranch"
-                      name="gitBranch"
-                      placeholder="Git branch name"
-                      value={formik.values.gitBranch}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      error={Boolean(
-                        formik.errors.gitBranch && formik.touched.gitBranch
+                      <FormLabel className="mt-4">Git branch name: </FormLabel>
+                      <FormInput
+                        autoComplete="off"
+                        id="gitBranch"
+                        name="gitBranch"
+                        placeholder="Git branch name"
+                        value={formik.values.gitBranch}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        error={Boolean(
+                          formik.errors.gitBranch && formik.touched.gitBranch
+                        )}
+                      />
+                      {formik.errors.gitBranch ? (
+                        <FormHelper status="error">
+                          {formik.errors.gitBranch}
+                        </FormHelper>
+                      ) : (
+                        <FormHelper status="info">
+                          If left empty, this will default to{' '}
+                          <span className="font-bold">main</span> branch
+                        </FormHelper>
                       )}
-                    />
-                    {formik.errors.gitBranch ? (
-                      <FormHelper status="error">
-                        {formik.errors.gitBranch}
-                      </FormHelper>
-                    ) : (
-                      <FormHelper status="info">
-                        If left empty, this will default to{' '}
-                        <span className="font-bold">main</span> branch
-                      </FormHelper>
-                    )}
 
-                    <div className="mt-4 flex justify-end">
-                      <Button
-                        type="submit"
-                        color="grey"
-                        disabled={
-                          !formik.values.name ||
-                          !!formik.errors.name ||
-                          !!formik.errors.gitRepoUrl ||
-                          !!formik.errors.gitBranch
-                        }
-                      >
-                        Create
-                      </Button>
+                      <div className="mt-4 flex justify-end">
+                        <Button
+                          type="submit"
+                          color="grey"
+                          disabled={
+                            !formik.values.name ||
+                            !!formik.errors.name ||
+                            !!formik.errors.gitRepoUrl ||
+                            !!formik.errors.gitBranch
+                          }
+                        >
+                          Create
+                        </Button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </form>
+                </form>
+              </React.Fragment>
             </React.Fragment>
           )}
         </div>
