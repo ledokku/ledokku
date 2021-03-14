@@ -17,6 +17,8 @@ import { synchroniseServerQueue } from './queues/synchroniseServer';
 import { prisma } from './prisma';
 import { githubPushWebhookHandler } from './lib/webhooks/webhooks';
 
+app.use(express.json());
+
 app.use(express.static(path.join(__dirname, '..', '..', 'client', 'build')));
 
 const typeDefs = gql`
