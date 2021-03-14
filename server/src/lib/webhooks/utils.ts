@@ -1,18 +1,18 @@
+import { prisma } from './../../prisma';
 import crypto from 'crypto';
 import { Request } from 'express';
 
-export const verifyWebhookSecret = (req: Request) => {
+export const verifyWebhookSecret = async (req: Request) => {
   // we get signature from gh
   const signature = req.header('X-Hub-Signature-256');
-  // we encrypt signature from our db
 
-  // we take repo id
-  const repoId = req.body.repository.id.toString();
+  const appToRedeploy = await prisma.app.findFirst({
+    where: {
+      githubRepoId: req.body.repository.id.toString(),
+    },
+  });
 
-  // we take first 4 chars from gh client id
-  const clientIDPart = process.env.GITHUB_CLIENT_ID.slice(0, 4);
-
-  const webhooksSecret = repoId + clientIDPart;
+  const webhooksSecret = appToRedeploy.githubWebhooksToken;
 
   const bodyCrypted =
     'sha256=' +

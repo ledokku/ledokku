@@ -9,7 +9,7 @@ export const githubPushWebhookHandler = async (req: Request) => {
     },
   });
 
-  const branch = req.body.ref.replace('refs/heads/', '');
+  const branch = appToRedeploy.githubBranch;
   const { clone_url } = req.body.repository;
 
   if (appToRedeploy) {

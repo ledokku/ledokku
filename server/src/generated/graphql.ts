@@ -26,6 +26,7 @@ export type App = {
   name: Scalars['String'];
   createdAt: Scalars['DateTime'];
   githubRepoId?: Maybe<Scalars['String']>;
+  githuWebhooksToken?: Maybe<Scalars['String']>;
   databases?: Maybe<Array<Database>>;
 };
 
@@ -687,6 +688,7 @@ export type AppResolvers<ContextType = any, ParentType extends ResolversParentTy
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   githubRepoId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  githuWebhooksToken?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   databases?: Resolver<Maybe<Array<ResolversTypes['Database']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

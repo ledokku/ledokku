@@ -26,6 +26,7 @@ export type App = {
   name: Scalars['String'];
   createdAt: Scalars['DateTime'];
   githubRepoId?: Maybe<Scalars['String']>;
+  githubWebhooksToken?: Maybe<Scalars['String']>;
   databases?: Maybe<Array<Database>>;
 };
 
@@ -701,7 +702,7 @@ export type AppByIdQuery = (
   { __typename?: 'Query' }
   & { app?: Maybe<(
     { __typename?: 'App' }
-    & Pick<App, 'id' | 'name' | 'createdAt' | 'githubRepoId'>
+    & Pick<App, 'id' | 'name' | 'createdAt' | 'githubRepoId' | 'githubWebhooksToken'>
     & { databases?: Maybe<Array<(
       { __typename?: 'Database' }
       & Pick<Database, 'id' | 'name' | 'type'>
@@ -1484,6 +1485,7 @@ export const AppByIdDocument = gql`
     name
     createdAt
     githubRepoId
+    githubWebhooksToken
     databases {
       id
       name

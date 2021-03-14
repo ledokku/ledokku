@@ -1,9 +1,9 @@
-import { pubsub } from './../../index';
 import { deployAppQueue } from './../../queues/deployApp';
 import { sshConnect } from './../../lib/ssh';
 import { MutationResolvers } from '../../generated/graphql';
+import { Octokit } from '@octokit/rest';
 import { prisma } from '../../prisma';
-import fetch from 'node-fetch';
+import crypto from 'crypto';
 // import { buildAppQueue } from '../../queues/buildApp';
 import { appNameSchema, getRepoData } from '../utils';
 import { dokku } from '../../lib/dokku';
@@ -32,14 +32,16 @@ export const createAppGithub: MutationResolvers['createAppGithub'] = async (
     throw new Error('App name already taken');
   }
 
+  const octokit = new Octokit({});
+
   let repo;
 
   const repoData = getRepoData(input.gitRepoUrl);
   try {
-    const res = await fetch(
-      `https://api.github.com/repos/${repoData.owner}/${repoData.repoName}`
-    );
-    repo = await res.json();
+    repo = await octokit.repos.get({
+      owner: repoData.owner,
+      repo: repoData.repoName,
+    });
   } catch (error) {
     console.log(error);
   }
@@ -48,10 +50,18 @@ export const createAppGithub: MutationResolvers['createAppGithub'] = async (
 
   const dokkuApp = await dokku.apps.create(ssh, input.name);
 
+  const hash = crypto
+    .createHash('sha256')
+    .update(`${input.name}` + `${userId}`, 'utf8')
+    .digest('hex')
+    .slice(0, 40);
+
   const app = await prisma.app.create({
     data: {
       name: input.name,
-      githubRepoId: repo.id.toString(),
+      githubRepoId: repo.data.id.toString(),
+      githubWebhooksToken: hash,
+      githubBranch: input.branchName ? input.branchName : 'main',
     },
   });
 

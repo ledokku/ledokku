@@ -8,7 +8,7 @@ generator client {
 }
 
 model User {
-  id                String     @default(uuid()) @id
+  id                String     @id @default(uuid())
   createdAt         DateTime   @default(now())
   updatedAt         DateTime   @default(now())
   username          String     @unique
@@ -22,22 +22,28 @@ model User {
 }
 
 model App {
-  id            String     @default(uuid()) @id
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @default(now())
-  name          String
-  githubRepoId  String?
-  appBuild      AppBuild[]
-  databases     Database[] @relation(references: [id])
+  id                  String     @id @default(uuid())
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @default(now())
+  name                String
+  githubRepoId        String?
+  githubWebhooksToken String?
+  githubBranch        String?
+  appBuild            AppBuild[]
+  databases           Database[] @relation(references: [id])
+  User                User?      @relation(fields: [userId], references: [id])
+  userId              String?
 }
 
 model AppBuild {
-  id        String         @default(uuid()) @id
+  id        String         @id @default(uuid())
   createdAt DateTime       @default(now())
   updatedAt DateTime       @default(now())
   status    AppBuildStatus
   app       App            @relation(fields: [appId], references: [id])
   appId     String
+  User      User?          @relation(fields: [userId], references: [id])
+  userId    String?
 }
 
 enum AppBuildStatus {
@@ -48,13 +54,15 @@ enum AppBuildStatus {
 }
 
 model Database {
-  id        String   @default(uuid()) @id
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   name      String
   type      DbTypes
   version   String?
   apps      App[]    @relation(references: [id])
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    String?
 }
 
 enum DbTypes {

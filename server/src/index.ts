@@ -30,6 +30,7 @@ const typeDefs = gql`
     name: String!
     createdAt: DateTime!
     githubRepoId: String
+    githubWebhooksToken: String
     databases: [Database!]
   }
 
