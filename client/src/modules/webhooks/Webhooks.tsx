@@ -1,8 +1,6 @@
 import { useAppByIdQuery } from '../../generated/graphql';
 import { chakra } from '@chakra-ui/system';
-
 import { Grid, GridItem, Text, Link, Heading } from '@chakra-ui/react';
-import { config } from '../../config';
 import { useState } from 'react';
 
 interface AppDomainProps {
