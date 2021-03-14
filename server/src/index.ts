@@ -6,6 +6,7 @@ import jsonwebtoken from 'jsonwebtoken';
 import { PubSub } from 'apollo-server';
 import express from 'express';
 import path from 'path';
+import createDebug from 'debug';
 import { Resolvers } from './generated/graphql';
 import { customResolvers } from './graphql/resolvers';
 import { mutations } from './graphql/mutations';
@@ -426,10 +427,13 @@ app.get('*', (_, res) => {
   );
 });
 
+const debug = createDebug(`webhooks`);
+
 app.post('/webhooks', (req, res) => {
   const isWebhookVerified = verifyWebhookSecret(req);
   if (!isWebhookVerified) {
     res.status(400).send('Request not verified');
+    debug(`Webhook verification failed for req ${req},`);
   } else {
     res.status(200).end();
     githubPushWebhookHandler(req);
