@@ -22,17 +22,35 @@ model User {
 }
 
 model App {
-  id                  String     @id @default(uuid())
-  createdAt           DateTime   @default(now())
-  updatedAt           DateTime   @default(now())
-  name                String
-  githubRepoId        String?
-  githubWebhooksToken String?
-  githubBranch        String?
-  appBuild            AppBuild[]
-  databases           Database[] @relation(references: [id])
-  User                User?      @relation(fields: [userId], references: [id])
-  userId              String?
+  id            String         @id @default(uuid())
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @default(now())
+  name          String
+  type          AppTypes
+  appBuild      AppBuild[]
+  databases     Database[]     @relation(references: [id])
+  User          User?          @relation(fields: [userId], references: [id])
+  userId        String?
+  AppMetaGithub AppMetaGithub?
+}
+
+enum AppTypes {
+  DOKKU
+  GITHUB
+  GITLAB
+  DOCKER
+}
+
+model AppMetaGithub {
+  id             String   @id @default(uuid())
+  app            App      @relation(fields: [appId], references: [id])
+  appId          String
+  webhooksSecret String
+  repoId         String
+  repoUrl        String
+  branch         String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @default(now())
 }
 
 model AppBuild {

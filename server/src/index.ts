@@ -29,9 +29,23 @@ const typeDefs = gql`
     id: ID!
     name: String!
     createdAt: DateTime!
-    githubRepoId: String
-    githubWebhooksToken: String
+    type: AppTypes!
     databases: [Database!]
+    appMetaGithub: AppMetaGithub
+  }
+
+  type AppMetaGithub {
+    repoId: String!
+    repoUrl: String!
+    webhooksSecret: String!
+    branch: String!
+  }
+
+  enum AppTypes {
+    DOKKU
+    GITHUB
+    GITLAB
+    DOCKER
   }
 
   type AppBuild {
@@ -264,6 +278,7 @@ const typeDefs = gql`
   type Query {
     setup: SetupResult!
     apps: [App!]!
+    appMetaGithub(appId: String!): AppMetaGithub
     app(appId: String!): App
     domains(appId: String!): Domains!
     database(databaseId: String!): Database

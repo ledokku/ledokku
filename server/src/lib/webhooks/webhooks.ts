@@ -3,18 +3,24 @@ import { prisma } from '../../prisma';
 import { deployAppQueue } from './../../queues/deployApp';
 
 export const githubPushWebhookHandler = async (req: Request) => {
-  const appToRedeploy = await prisma.app.findFirst({
+  const appGithubMeta = await prisma.appMetaGithub.findFirst({
     where: {
-      githubRepoId: req.body.repository.id.toString(),
+      repoId: req.body.repository.id.toString(),
     },
   });
 
-  const branch = appToRedeploy.githubBranch;
+  const app = await prisma.app.findFirst({
+    where: {
+      id: appGithubMeta.appId,
+    },
+  });
+
+  const branch = appGithubMeta.branch;
   const { clone_url } = req.body.repository;
 
-  if (appToRedeploy) {
+  if (appGithubMeta && app) {
     await deployAppQueue.add('deploy-app', {
-      appName: appToRedeploy.name,
+      appName: app.name,
       gitRepoUrl: clone_url,
       branchName: branch,
     });

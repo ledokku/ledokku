@@ -23,6 +23,7 @@ import {
   useUnlinkDatabaseLogsSubscription,
   useLinkDatabaseLogsSubscription,
   RealTimeLog,
+  useAppMetaGithubQuery,
 } from '../../generated/graphql';
 
 import {
@@ -58,6 +59,12 @@ export const App = () => {
   const [unlinkLoading, setUnlinkLoading] = useState(false);
   const [linkLoading, setLinkLoading] = useState(false);
   const [isAppJustCreated, setIsAppJustCreated] = useState(false);
+
+  const { data: dataMeta } = useAppMetaGithubQuery({
+    variables: {
+      appId,
+    },
+  });
 
   const [selectedDb, setSelectedDb] = useState({
     value: { name: '', id: '', type: '' },
@@ -124,10 +131,10 @@ export const App = () => {
   });
 
   useEffect(() => {
-    if (history.location.state === 'new' && data?.app?.githubRepoId) {
+    if (history.location.state === 'new' && dataMeta?.appMetaGithub?.repoId) {
       setIsAppJustCreated(true);
     }
-  }, [history.location.state, data?.app?.githubRepoId]);
+  }, [history.location.state, dataMeta?.appMetaGithub?.repoId]);
 
   if (!data || !databaseData) {
     return null;

@@ -59,9 +59,21 @@ export const createAppGithub: MutationResolvers['createAppGithub'] = async (
   const app = await prisma.app.create({
     data: {
       name: input.name,
-      githubRepoId: repo.data.id.toString(),
-      githubWebhooksToken: hash,
-      githubBranch: input.branchName ? input.branchName : 'main',
+      type: 'GITHUB',
+    },
+  });
+
+  const meta = await prisma.appMetaGithub.create({
+    data: {
+      repoUrl: input.gitRepoUrl,
+      repoId: repo.data.id.toString(),
+      webhooksSecret: hash,
+      branch: input.branchName ? input.branchName : 'main',
+      app: {
+        connect: {
+          id: app.id,
+        },
+      },
     },
   });
 

@@ -3,8 +3,6 @@ query appById($appId: String!) {
     id
     name
     createdAt
-    githubRepoId
-    githubWebhooksToken
     databases {
       id
       name

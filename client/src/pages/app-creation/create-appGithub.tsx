@@ -108,6 +108,7 @@ export const CreateAppGithub = () => {
             input: {
               name: values.name,
               gitRepoUrl: values.gitRepoUrl,
+              branchName: values.gitBranch,
             },
           },
         });

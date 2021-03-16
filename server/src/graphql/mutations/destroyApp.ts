@@ -1,3 +1,4 @@
+import { AppMetaGithub } from './../../generated/graphql';
 import { MutationResolvers } from '../../generated/graphql';
 import { prisma } from '../../prisma';
 import { dokku } from '../../lib/dokku';
@@ -54,6 +55,22 @@ export const destroyApp: MutationResolvers['destroyApp'] = async (
   // Link to GH issue : https://github.com/prisma/migrate/issues/249
 
   // We delete the app itself
+  const githubMetaToDelete = await prisma.app
+    .findUnique({
+      where: {
+        id: appId,
+      },
+    })
+    .AppMetaGithub();
+
+  if (githubMetaToDelete) {
+    await prisma.appMetaGithub.delete({
+      where: {
+        id: githubMetaToDelete.id,
+      },
+    });
+  }
+
   await prisma.app.delete({
     where: {
       id: appId,

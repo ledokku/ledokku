@@ -36,6 +36,7 @@ export const createAppDokku: MutationResolvers['createAppDokku'] = async (
   const app = await prisma.app.create({
     data: {
       name: input.name,
+      type: 'DOKKU',
     },
   });
 

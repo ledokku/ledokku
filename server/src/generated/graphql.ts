@@ -25,10 +25,24 @@ export type App = {
   id: Scalars['ID'];
   name: Scalars['String'];
   createdAt: Scalars['DateTime'];
-  githubRepoId?: Maybe<Scalars['String']>;
-  githubWebhooksToken?: Maybe<Scalars['String']>;
+  type: AppTypes;
   databases?: Maybe<Array<Database>>;
+  appMetaGithub?: Maybe<AppMetaGithub>;
 };
+
+export type AppMetaGithub = {
+  __typename?: 'AppMetaGithub';
+  repoId: Scalars['String'];
+  repoUrl: Scalars['String'];
+  webhooksSecret: Scalars['String'];
+  branch: Scalars['String'];
+};
+
+export type AppTypes =
+  | 'DOKKU'
+  | 'GITHUB'
+  | 'GITLAB'
+  | 'DOCKER';
 
 export type AppBuild = {
   __typename?: 'AppBuild';
@@ -289,6 +303,7 @@ export type Query = {
   __typename?: 'Query';
   setup: SetupResult;
   apps: Array<App>;
+  appMetaGithub?: Maybe<AppMetaGithub>;
   app?: Maybe<App>;
   domains: Domains;
   database?: Maybe<Database>;
@@ -301,6 +316,11 @@ export type Query = {
   isDatabaseLinked: IsDatabaseLinkedResult;
   envVars: EnvVarsResult;
   appProxyPorts: Array<AppProxyPort>;
+};
+
+
+export type QueryAppMetaGithubArgs = {
+  appId: Scalars['String'];
 };
 
 
@@ -557,6 +577,8 @@ export type ResolversTypes = {
   App: ResolverTypeWrapper<App>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  AppMetaGithub: ResolverTypeWrapper<AppMetaGithub>;
+  AppTypes: AppTypes;
   AppBuild: ResolverTypeWrapper<AppBuild>;
   AppBuildStatus: AppBuildStatus;
   Database: ResolverTypeWrapper<Database>;
@@ -620,6 +642,7 @@ export type ResolversParentTypes = {
   App: App;
   ID: Scalars['ID'];
   String: Scalars['String'];
+  AppMetaGithub: AppMetaGithub;
   AppBuild: AppBuild;
   Database: Database;
   Domains: Domains;
@@ -687,9 +710,17 @@ export type AppResolvers<ContextType = any, ParentType extends ResolversParentTy
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
-  githubRepoId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  githubWebhooksToken?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['AppTypes'], ParentType, ContextType>;
   databases?: Resolver<Maybe<Array<ResolversTypes['Database']>>, ParentType, ContextType>;
+  appMetaGithub?: Resolver<Maybe<ResolversTypes['AppMetaGithub']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AppMetaGithubResolvers<ContextType = any, ParentType extends ResolversParentTypes['AppMetaGithub'] = ResolversParentTypes['AppMetaGithub']> = {
+  repoId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  repoUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  webhooksSecret?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  branch?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -859,6 +890,7 @@ export type AppProxyPortResolvers<ContextType = any, ParentType extends Resolver
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   setup?: Resolver<ResolversTypes['SetupResult'], ParentType, ContextType>;
   apps?: Resolver<Array<ResolversTypes['App']>, ParentType, ContextType>;
+  appMetaGithub?: Resolver<Maybe<ResolversTypes['AppMetaGithub']>, ParentType, ContextType, RequireFields<QueryAppMetaGithubArgs, 'appId'>>;
   app?: Resolver<Maybe<ResolversTypes['App']>, ParentType, ContextType, RequireFields<QueryAppArgs, 'appId'>>;
   domains?: Resolver<ResolversTypes['Domains'], ParentType, ContextType, RequireFields<QueryDomainsArgs, 'appId'>>;
   database?: Resolver<Maybe<ResolversTypes['Database']>, ParentType, ContextType, RequireFields<QueryDatabaseArgs, 'databaseId'>>;
@@ -909,6 +941,7 @@ export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTyp
 export type Resolvers<ContextType = any> = {
   DateTime?: GraphQLScalarType;
   App?: AppResolvers<ContextType>;
+  AppMetaGithub?: AppMetaGithubResolvers<ContextType>;
   AppBuild?: AppBuildResolvers<ContextType>;
   Database?: DatabaseResolvers<ContextType>;
   Domains?: DomainsResolvers<ContextType>;

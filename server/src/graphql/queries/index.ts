@@ -1,3 +1,4 @@
+import { appMetaGithub } from './appGithubMeta';
 import { app } from './app';
 import { apps } from './apps';
 import { databases } from './databases';
@@ -15,6 +16,7 @@ import { domains } from './domains';
 
 export const queries = {
   app,
+  appMetaGithub,
   apps,
   database,
   databases,

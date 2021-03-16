@@ -16,6 +16,7 @@ import {
   useAppByIdQuery,
   useDestroyAppMutation,
   DashboardDocument,
+  useAppMetaGithubQuery,
 } from '../../generated/graphql';
 import { useFormik } from 'formik';
 import { HeaderContainer } from '../../ui';
@@ -43,6 +44,14 @@ export const Settings = () => {
     ssr: false,
     skip: !appId,
   });
+
+  const { data: dataMeta, loading: dataMetaLoading } = useAppMetaGithubQuery({
+    variables: {
+      appId,
+    },
+  });
+
+  console.log(dataMeta);
 
   const DeleteAppNameSchema = yup.object().shape({
     appName: yup
@@ -90,7 +99,7 @@ export const Settings = () => {
 
   // // TODO display error
 
-  if (loading) {
+  if (loading || dataMetaLoading) {
     // TODO nice loading
     return <p>Loading...</p>;
   }
@@ -120,7 +129,9 @@ export const Settings = () => {
                 Update the settings of your app.
               </Text>
             </Box>
-            {app.githubRepoId && <Webhooks appId={app.id} />}
+            {dataMeta?.appMetaGithub?.webhooksSecret && (
+              <Webhooks appId={app.id} />
+            )}
             <AppProxyPorts appId={app.id} />
             <AppRestart appId={app.id} />
             <AppRebuild appId={app.id} />
