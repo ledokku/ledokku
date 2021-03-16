@@ -1,4 +1,3 @@
-import { AppMetaGithub } from './../../generated/graphql';
 import { MutationResolvers } from '../../generated/graphql';
 import { prisma } from '../../prisma';
 import { dokku } from '../../lib/dokku';

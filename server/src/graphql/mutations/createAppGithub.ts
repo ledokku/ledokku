@@ -63,7 +63,7 @@ export const createAppGithub: MutationResolvers['createAppGithub'] = async (
     },
   });
 
-  const meta = await prisma.appMetaGithub.create({
+  await prisma.appMetaGithub.create({
     data: {
       repoUrl: input.gitRepoUrl,
       repoId: repo.data.id.toString(),
