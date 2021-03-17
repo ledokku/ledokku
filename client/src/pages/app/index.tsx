@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useHistory, Link, useParams, NavLink } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { Listbox, Transition } from '@headlessui/react';
 import cx from 'classnames';
 import {
@@ -12,6 +12,7 @@ import {
   Text,
   CloseButton,
   Grid,
+  Link,
   GridItem,
 } from '@chakra-ui/react';
 import { Header } from '../../modules/layout/Header';
@@ -269,15 +270,12 @@ export const App = () => {
                     />
                   </GridItem>
                 </Grid>
-
-                <Text color="gray.900">
-                  Setting up github webhooks flow is thoroughly described on our
-                  guide and you will need to do this only once per Ledokku app.
+                <Text mt={6} mb={6} color="gray.900">
+                  Have a look at our webhooks setup guide, follow couple of
+                  config steps once and voila you have app working with git auto
+                  deployments.
                 </Text>
-                <NavLink
-                  activeStyle={{ textDecorationLine: 'none' }}
-                  to="https://ledokku.com/docs/setting-up-git-webhooks#github-repository-webhooks-setup"
-                >
+                <Link href="https://ledokku.com/docs/setting-up-git-webhooks#github-repository-webhooks-setup">
                   <Button
                     color="grey"
                     width="small"
@@ -288,7 +286,7 @@ export const App = () => {
                   >
                     Proceed to guide
                   </Button>
-                </NavLink>
+                </Link>
               </Container>
             )}
           </div>
