@@ -271,8 +271,8 @@ export const App = () => {
                 </Grid>
 
                 <Text color="gray.900">
-                  Currently you haven't created any databases, to do so proceed
-                  with the database creation flow
+                  Setting up github webhooks flow is thoroughly described on our
+                  guide and you will need to do this only once per Ledokku app.
                 </Text>
                 <NavLink
                   activeStyle={{ textDecorationLine: 'none' }}
