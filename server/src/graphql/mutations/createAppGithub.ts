@@ -60,29 +60,22 @@ export const createAppGithub: MutationResolvers['createAppGithub'] = async (
     data: {
       name: input.name,
       type: 'GITHUB',
-    },
-  });
-
-  await prisma.appMetaGithub.create({
-    data: {
-      repoUrl: input.gitRepoUrl,
-      repoId: repo.data.id.toString(),
-      webhooksSecret: hash,
-      branch: input.branchName ? input.branchName : 'main',
-      app: {
-        connect: {
-          id: app.id,
+      AppMetaGithub: {
+        create: {
+          repoUrl: input.gitRepoUrl,
+          repoId: repo.data.id.toString(),
+          webhooksSecret: hash,
+          branch: input.branchName ? input.branchName : 'main',
         },
       },
+    },
+    include: {
+      AppMetaGithub: true,
     },
   });
 
   if (dokkuApp) {
     await deployAppQueue.add('deploy-app', {
-      appName: input.name,
-      gitRepoUrl: input.gitRepoUrl,
-      branchName: input.branchName,
-      dokkuApp,
       appId: app.id,
     });
   }

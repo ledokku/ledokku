@@ -40,7 +40,7 @@ export const Dashboard = () => {
               Create database
             </Button>
           </Link>
-          <Link to="/choose-source">
+          <Link to="/create-app">
             <Button colorScheme="gray" fontSize="sm">
               Create app
             </Button>

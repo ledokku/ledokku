@@ -13,9 +13,9 @@ import { Activity } from './pages/activity';
 import { Metrics } from './pages/metrics';
 import { Settings } from './pages/settings';
 import { CreateDatabase } from './pages/create-database';
-import { CreateAppDokku } from './pages/app-creation/create-appDokku';
-import { ChooseSource } from './pages/app-creation/choose-source';
-import { CreateAppGithub } from './pages/app-creation/create-appGithub';
+import { CreateAppDokku } from './pages/app-creation/create-app-dokku';
+import { CreateApp } from './pages/app-creation/create-app';
+import { CreateAppGithub } from './pages/app-creation/create-app-github';
 import { useTracking } from './utils/useTracking';
 
 const PrivateRoute = ({ children, ...rest }: RouteProps) => {
@@ -66,8 +66,8 @@ export const Router = () => {
       <PrivateRoute path="/create-app-github" exact>
         <CreateAppGithub />
       </PrivateRoute>
-      <PrivateRoute path="/choose-source" exact>
-        <ChooseSource />
+      <PrivateRoute path="/create-app" exact>
+        <CreateApp />
       </PrivateRoute>
       <PrivateRoute path="/create-database" exact>
         <CreateDatabase />

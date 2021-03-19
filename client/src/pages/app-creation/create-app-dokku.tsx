@@ -55,7 +55,7 @@ export const CreateAppDokku = () => {
           },
         });
 
-        trackGoal(trackingGoals.createApp, 0);
+        trackGoal(trackingGoals.createAppDokku, 0);
 
         if (res.data) {
           history.push(`app/${res.data?.createAppDokku.appId}`);

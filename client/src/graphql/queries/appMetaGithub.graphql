@@ -1,8 +1,0 @@
-query appMetaGithub($appId: String!) {
-  appMetaGithub(appId: $appId) {
-    repoId
-    repoUrl
-    webhooksSecret
-    branch
-  }
-}

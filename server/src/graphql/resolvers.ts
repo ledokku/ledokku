@@ -14,6 +14,17 @@ export const customResolvers = {
 
       return databases;
     },
+    appMetaGithub: async (app: App) => {
+      const appMetaGithub = await prisma.app
+        .findUnique({
+          where: {
+            id: app.id,
+          },
+        })
+        .AppMetaGithub();
+
+      return appMetaGithub;
+    },
   },
   Database: {
     apps: async (database: Database) => {

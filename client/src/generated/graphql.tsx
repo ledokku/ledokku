@@ -726,7 +726,10 @@ export type AppByIdQuery = (
     & { databases?: Maybe<Array<(
       { __typename?: 'Database' }
       & Pick<Database, 'id' | 'name' | 'type'>
-    )>> }
+    )>>, appMetaGithub?: Maybe<(
+      { __typename?: 'AppMetaGithub' }
+      & Pick<AppMetaGithub, 'repoId' | 'repoUrl' | 'webhooksSecret' | 'branch'>
+    )> }
   )> }
 );
 
@@ -741,19 +744,6 @@ export type AppLogsQuery = (
     { __typename?: 'AppLogsResult' }
     & Pick<AppLogsResult, 'logs'>
   ) }
-);
-
-export type AppMetaGithubQueryVariables = Exact<{
-  appId: Scalars['String'];
-}>;
-
-
-export type AppMetaGithubQuery = (
-  { __typename?: 'Query' }
-  & { appMetaGithub?: Maybe<(
-    { __typename?: 'AppMetaGithub' }
-    & Pick<AppMetaGithub, 'repoId' | 'repoUrl' | 'webhooksSecret' | 'branch'>
-  )> }
 );
 
 export type AppProxyPortsQueryVariables = Exact<{
@@ -1522,6 +1512,12 @@ export const AppByIdDocument = gql`
       name
       type
     }
+    appMetaGithub {
+      repoId
+      repoUrl
+      webhooksSecret
+      branch
+    }
   }
 }
     `;
@@ -1584,42 +1580,6 @@ export function useAppLogsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ap
 export type AppLogsQueryHookResult = ReturnType<typeof useAppLogsQuery>;
 export type AppLogsLazyQueryHookResult = ReturnType<typeof useAppLogsLazyQuery>;
 export type AppLogsQueryResult = Apollo.QueryResult<AppLogsQuery, AppLogsQueryVariables>;
-export const AppMetaGithubDocument = gql`
-    query appMetaGithub($appId: String!) {
-  appMetaGithub(appId: $appId) {
-    repoId
-    repoUrl
-    webhooksSecret
-    branch
-  }
-}
-    `;
-
-/**
- * __useAppMetaGithubQuery__
- *
- * To run a query within a React component, call `useAppMetaGithubQuery` and pass it any options that fit your needs.
- * When your component renders, `useAppMetaGithubQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useAppMetaGithubQuery({
- *   variables: {
- *      appId: // value for 'appId'
- *   },
- * });
- */
-export function useAppMetaGithubQuery(baseOptions: Apollo.QueryHookOptions<AppMetaGithubQuery, AppMetaGithubQueryVariables>) {
-        return Apollo.useQuery<AppMetaGithubQuery, AppMetaGithubQueryVariables>(AppMetaGithubDocument, baseOptions);
-      }
-export function useAppMetaGithubLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AppMetaGithubQuery, AppMetaGithubQueryVariables>) {
-          return Apollo.useLazyQuery<AppMetaGithubQuery, AppMetaGithubQueryVariables>(AppMetaGithubDocument, baseOptions);
-        }
-export type AppMetaGithubQueryHookResult = ReturnType<typeof useAppMetaGithubQuery>;
-export type AppMetaGithubLazyQueryHookResult = ReturnType<typeof useAppMetaGithubLazyQuery>;
-export type AppMetaGithubQueryResult = Apollo.QueryResult<AppMetaGithubQuery, AppMetaGithubQueryVariables>;
 export const AppProxyPortsDocument = gql`
     query appProxyPorts($appId: String!) {
   appProxyPorts(appId: $appId) {

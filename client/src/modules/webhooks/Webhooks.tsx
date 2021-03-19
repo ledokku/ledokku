@@ -1,7 +1,4 @@
-import {
-  useAppByIdQuery,
-  useAppMetaGithubQuery,
-} from '../../generated/graphql';
+import { useAppByIdQuery } from '../../generated/graphql';
 import { chakra } from '@chakra-ui/system';
 import { Grid, GridItem, Text, Link, Heading } from '@chakra-ui/react';
 import { useState } from 'react';
@@ -19,14 +16,6 @@ export const Webhooks = ({ appId }: AppDomainProps) => {
     skip: !appId,
   });
   const [isSecretVisible, setIsSecretVisible] = useState(false);
-  const { data: dataMeta, loading: metaLoading } = useAppMetaGithubQuery({
-    variables: {
-      appId,
-    },
-  });
-
-  console.log(dataMeta);
-  // FETCHING ISSUE
 
   if (!data) {
     return null;
@@ -34,7 +23,7 @@ export const Webhooks = ({ appId }: AppDomainProps) => {
 
   // // TODO display error
 
-  if (loading || metaLoading) {
+  if (loading) {
     // TODO nice loading
     return <p>Loading...</p>;
   }
@@ -59,7 +48,7 @@ export const Webhooks = ({ appId }: AppDomainProps) => {
         <GridItem colSpan={8} pt={3}>
           <Text>
             {isSecretVisible
-              ? dataMeta?.appMetaGithub?.webhooksSecret
+              ? data.app?.appMetaGithub?.webhooksSecret
               : '*************************'}
           </Text>
         </GridItem>

@@ -6,6 +6,10 @@ export const verifyWebhookSecret = async (req: Request) => {
   // we get signature from gh
   const signature = req.header('X-Hub-Signature-256');
 
+  if (!req.body) {
+    throw new Error('Failed to fetch the request from github');
+  }
+
   const appToRedeploy = await prisma.appMetaGithub.findFirst({
     where: {
       repoId: req.body.repository.id.toString(),

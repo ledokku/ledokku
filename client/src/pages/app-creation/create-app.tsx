@@ -63,11 +63,11 @@ const SourceBox = ({
   );
 };
 
-export const ChooseSource = () => {
+export const CreateApp = () => {
   const history = useHistory();
   const toast = useToast();
 
-  const chooseSourceSchema = yup.object({
+  const createAppSchema = yup.object({
     type: yup
       .string()
       .oneOf(['GITHUB', 'GITLAB', 'DOCKER', 'DOKKU'])
@@ -79,7 +79,7 @@ export const ChooseSource = () => {
       type: AppTypes.GITHUB,
     },
     validateOnChange: true,
-    validationSchema: chooseSourceSchema,
+    validationSchema: createAppSchema,
     onSubmit: async (values) => {
       try {
         values.type === AppTypes.GITHUB
@@ -129,7 +129,7 @@ export const ChooseSource = () => {
                       <Image
                         boxSize="48px"
                         objectFit="cover"
-                        src="https://alternative.me/media/256/dokku-icon-2rtcs9lztuk6iud7-c.png"
+                        src="/dokku.png"
                         alt="dokkuLogo"
                       />
                     }
