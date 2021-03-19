@@ -1,4 +1,3 @@
-import { appMetaGithub } from './../graphql/queries/appGithubMeta';
 import { Worker, Queue } from 'bullmq';
 import createDebug from 'debug';
 import Redis from 'ioredis';

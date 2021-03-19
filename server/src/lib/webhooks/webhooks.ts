@@ -1,4 +1,3 @@
-import { App } from '../../generated/graphql';
 import { Request } from 'express';
 import { prisma } from '../../prisma';
 import { deployAppQueue } from './../../queues/deployApp';
