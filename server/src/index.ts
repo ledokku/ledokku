@@ -445,14 +445,14 @@ app.get('*', (_, res) => {
 
 const debug = createDebug(`webhooks`);
 
-app.post('/webhooks', (req, res) => {
-  const isWebhookVerified = verifyWebhookSecret(req);
+app.post('/webhooks', async (req, res) => {
+  const isWebhookVerified = await verifyWebhookSecret(req);
   if (!isWebhookVerified) {
     res.status(400).send('Request not verified');
     debug(`Webhook verification failed for req ${req},`);
   } else {
     res.status(200).end();
-    githubPushWebhookHandler(req);
+    githubPushWebhookHandler(isWebhookVerified);
   }
 });
 

@@ -1,15 +1,10 @@
-import { Request } from 'express';
 import { prisma } from '../../prisma';
 import { deployAppQueue } from './../../queues/deployApp';
 
-export const githubPushWebhookHandler = async (req: Request) => {
-  if (!req.body) {
-    throw new Error('Failed to fetch the request from github');
-  }
-
+export const githubPushWebhookHandler = async (appToRedeployMeta: any) => {
   const appGithubMeta = await prisma.appMetaGithub.findFirst({
     where: {
-      repoId: req.body.repository.id.toString(),
+      appId: appToRedeployMeta.appId,
     },
   });
 

@@ -10,24 +10,32 @@ export const verifyWebhookSecret = async (req: Request) => {
     throw new Error('Failed to fetch the request from github');
   }
 
-  const appToRedeploy = await prisma.appMetaGithub.findFirst({
+  let appToRedeploy;
+
+  // we look for all apps that are deployed from this repo
+  const appMetaFromRepo = await prisma.appMetaGithub.findMany({
     where: {
       repoId: req.body.repository.id.toString(),
     },
   });
 
-  const webhooksSecret = appToRedeploy.webhooksSecret;
+  // we look for the particular webhooks secret to be veriefied
+  appMetaFromRepo.map((app) => {
+    const webhooksSecret = app.webhooksSecret;
 
-  const bodyCrypted =
-    'sha256=' +
-    crypto
-      .createHmac('sha256', `${webhooksSecret}`)
-      .update(JSON.stringify(req.body))
-      .digest('hex');
+    const bodyCrypted =
+      'sha256=' +
+      crypto
+        .createHmac('sha256', `${webhooksSecret}`)
+        .update(JSON.stringify(req.body))
+        .digest('hex');
 
-  if (signature !== bodyCrypted) {
-    return false;
-  } else {
-    return true;
-  }
+    if (signature !== bodyCrypted) {
+      appToRedeploy = null;
+    } else {
+      appToRedeploy = app;
+    }
+  });
+
+  return appToRedeploy;
 };
