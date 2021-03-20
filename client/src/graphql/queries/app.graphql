@@ -10,7 +10,8 @@ query appById($appId: String!) {
     }
     appMetaGithub {
       repoId
-      repoUrl
+      repoName
+      repoOwner
       webhooksSecret
       branch
     }

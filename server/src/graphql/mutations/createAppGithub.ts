@@ -77,7 +77,8 @@ export const createAppGithub: MutationResolvers['createAppGithub'] = async (
       type: 'GITHUB',
       AppMetaGithub: {
         create: {
-          repoUrl: `${repoData.owner}/${repoData.repoName}`,
+          repoName: repoData.repoName,
+          repoOwner: repoData.owner,
           repoId: repo.data.id.toString(),
           webhooksSecret: randomToken,
           branch: input.branchName ? input.branchName : 'main',

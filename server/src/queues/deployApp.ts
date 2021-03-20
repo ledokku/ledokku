@@ -47,7 +47,7 @@ const worker = new Worker(
       })
       .AppMetaGithub();
 
-    const { branch, repoUrl } = appMetaGithub;
+    const { branch, repoName, repoOwner } = appMetaGithub;
 
     const branchName = branch ? branch : 'main';
 
@@ -58,7 +58,7 @@ const worker = new Worker(
     const res = await dokku.git.sync({
       ssh,
       appName: app.name,
-      gitRepoUrl: `https://github.com/${repoUrl}.git`,
+      gitRepoUrl: `https://github.com/${repoOwner}/${repoName}.git`,
       branchName,
       options: {
         onStdout: (chunk) => {
@@ -79,7 +79,9 @@ const worker = new Worker(
         },
       },
     });
-    debug(`finishing create app ${app.name} from ${repoUrl}`);
+    debug(
+      `finishing create app ${app.name} from https://github.com/${repoOwner}/${repoName}.git`
+    );
     if (!res.stderr) {
       pubsub.publish('APP_CREATED', {
         appCreateLogs: {
