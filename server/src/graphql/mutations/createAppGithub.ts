@@ -40,11 +40,9 @@ export const createAppGithub: MutationResolvers['createAppGithub'] = async (
 
   const octokit = new Octokit({});
 
-  let repo;
-
   const repoData = getRepoData(input.gitRepoUrl);
 
-  repo = await octokit.repos.get({
+  const repo = await octokit.repos.get({
     owner: repoData.owner,
     repo: repoData.repoName,
   });
