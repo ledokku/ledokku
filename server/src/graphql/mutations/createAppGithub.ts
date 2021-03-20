@@ -69,7 +69,7 @@ export const createAppGithub: MutationResolvers['createAppGithub'] = async (
 
   const dokkuApp = await dokku.apps.create(ssh, input.name);
 
-  const randomToken = generateRandomToken(40);
+  const randomToken = generateRandomToken(20);
 
   const app = await prisma.app.create({
     data: {
