@@ -6,14 +6,19 @@ import jsonwebtoken from 'jsonwebtoken';
 import { PubSub } from 'apollo-server';
 import express from 'express';
 import path from 'path';
+import createDebug from 'debug';
 import { Resolvers } from './generated/graphql';
 import { customResolvers } from './graphql/resolvers';
 import { mutations } from './graphql/mutations';
 import { config } from './config';
 import { app, http } from './server';
 import { queries } from './graphql/queries';
+import { verifyWebhookSecret } from './lib/webhooks/utils';
 import { synchroniseServerQueue } from './queues/synchroniseServer';
 import { prisma } from './prisma';
+import { githubPushWebhookHandler } from './lib/webhooks/webhooks';
+
+app.use(express.json());
 
 app.use(express.static(path.join(__dirname, '..', '..', 'client', 'build')));
 
@@ -24,7 +29,23 @@ const typeDefs = gql`
     id: ID!
     name: String!
     createdAt: DateTime!
+    type: AppTypes!
     databases: [Database!]
+    appMetaGithub: AppMetaGithub
+  }
+
+  type AppMetaGithub {
+    repoId: String!
+    repoUrl: String!
+    webhooksSecret: String!
+    branch: String!
+  }
+
+  enum AppTypes {
+    DOKKU
+    GITHUB
+    GITLAB
+    DOCKER
   }
 
   type AppBuild {
@@ -68,8 +89,12 @@ const typeDefs = gql`
     token: String!
   }
 
-  type CreateAppResult {
-    app: App!
+  type CreateAppDokkuResult {
+    appId: String!
+  }
+
+  type CreateAppGithubResult {
+    result: Boolean!
   }
 
   type DestroyAppResult {
@@ -170,8 +195,14 @@ const typeDefs = gql`
     container: String!
   }
 
-  input CreateAppInput {
+  input CreateAppDokkuInput {
     name: String!
+  }
+
+  input CreateAppGithubInput {
+    name: String!
+    gitRepoUrl: String!
+    branchName: String
   }
 
   input RestartAppInput {
@@ -247,6 +278,7 @@ const typeDefs = gql`
   type Query {
     setup: SetupResult!
     apps: [App!]!
+    appMetaGithub(appId: String!): AppMetaGithub
     app(appId: String!): App
     domains(appId: String!): Domains!
     database(databaseId: String!): Database
@@ -270,6 +302,7 @@ const typeDefs = gql`
     createDatabaseLogs: RealTimeLog!
     appRestartLogs: RealTimeLog!
     appRebuildLogs: RealTimeLog!
+    appCreateLogs: RealTimeLog!
   }
 
   type Mutation {
@@ -277,7 +310,7 @@ const typeDefs = gql`
     addDomain(input: AddDomainInput!): AddDomainResult!
     removeDomain(input: RemoveDomainInput!): RemoveDomainResult!
     setDomain(input: SetDomainInput!): SetDomainResult!
-    createApp(input: CreateAppInput!): CreateAppResult!
+    createAppDokku(input: CreateAppDokkuInput!): CreateAppDokkuResult!
     createDatabase(input: CreateDatabaseInput!): CreateDatabaseResult!
     setEnvVar(input: SetEnvVarInput!): SetEnvVarResult!
     unsetEnvVar(input: UnsetEnvVarInput!): UnsetEnvVarResult!
@@ -289,6 +322,7 @@ const typeDefs = gql`
     unlinkDatabase(input: UnlinkDatabaseInput!): UnlinkDatabaseResult!
     addAppProxyPort(input: AddAppProxyPortInput!): Boolean
     removeAppProxyPort(input: RemoveAppProxyPortInput!): Boolean
+    createAppGithub(input: CreateAppGithubInput!): CreateAppGithubResult!
   }
 `;
 
@@ -298,6 +332,7 @@ export const DATABASE_LINKED = 'DATABASE_LINKED';
 export const DATABASE_CREATED = 'DATABASE_CREATED';
 export const APP_RESTARTED = 'APP_RESTARTED';
 export const APP_REBUILT = 'APP_REBUILT';
+export const APP_CREATED = 'APP_CREATED';
 
 const resolvers: Resolvers<{ userId?: string }> = {
   Query: queries,
@@ -318,6 +353,9 @@ const resolvers: Resolvers<{ userId?: string }> = {
     },
     appRebuildLogs: {
       subscribe: () => pubsub.asyncIterator([APP_REBUILT]),
+    },
+    appCreateLogs: {
+      subscribe: () => pubsub.asyncIterator([APP_CREATED]),
     },
   },
   ...customResolvers,
@@ -403,6 +441,19 @@ app.get('*', (_, res) => {
   res.sendFile(
     path.join(__dirname, '..', '..', 'client', 'build', 'index.html')
   );
+});
+
+const debug = createDebug(`webhooks`);
+
+app.post('/webhooks', async (req, res) => {
+  const isWebhookVerified = await verifyWebhookSecret(req);
+  if (!isWebhookVerified) {
+    res.status(400).send('Request not verified');
+    debug(`Webhook verification failed for req ${req},`);
+  } else {
+    res.status(200).end();
+    githubPushWebhookHandler(isWebhookVerified);
+  }
 });
 
 http.listen({ port: 4000 }, () => {

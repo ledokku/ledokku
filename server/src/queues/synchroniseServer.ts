@@ -64,6 +64,7 @@ const worker = new Worker(
         await prisma.app.create({
           data: {
             name: dokkuApp,
+            type: 'DOKKU',
           },
         });
       }

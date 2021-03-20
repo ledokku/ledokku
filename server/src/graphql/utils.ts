@@ -28,3 +28,16 @@ export const dbTypeToDokkuPlugin = (dbType: DatabaseTypes): string => {
       return 'mysql';
   }
 };
+
+// Extracts github repo owner and name
+export const getRepoData = (gitRepoUrl: string) => {
+  const base = gitRepoUrl.replace('https://github.com/', '');
+  const split = base.split('/');
+  const owner = split[0];
+  const repoName = split[1].replace('.git', '');
+
+  return {
+    owner,
+    repoName,
+  };
+};

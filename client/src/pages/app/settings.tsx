@@ -23,6 +23,7 @@ import { AppProxyPorts } from '../../modules/appProxyPorts/AppProxyPorts';
 import { AppRestart } from '../../modules/app/AppRestart';
 import { AppRebuild } from '../../modules/app/AppRebuild';
 import { AppDomains } from '../../modules/domains/AppDomains';
+import { Webhooks } from '../../modules/webhooks/Webhooks';
 import { useToast } from '../../ui/toast';
 import { AppHeaderTabNav } from '../../modules/app/AppHeaderTabNav';
 
@@ -119,6 +120,9 @@ export const Settings = () => {
                 Update the settings of your app.
               </Text>
             </Box>
+            {!loading && data?.app?.appMetaGithub?.webhooksSecret && (
+              <Webhooks appId={app.id} />
+            )}
             <AppProxyPorts appId={app.id} />
             <AppRestart appId={app.id} />
             <AppRebuild appId={app.id} />

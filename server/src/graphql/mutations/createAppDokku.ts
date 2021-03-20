@@ -1,11 +1,11 @@
+import { sshConnect } from '../../lib/ssh';
 import { MutationResolvers } from '../../generated/graphql';
 import { prisma } from '../../prisma';
-import { dokku } from '../../lib/dokku';
 // import { buildAppQueue } from '../../queues/buildApp';
-import { sshConnect } from '../../lib/ssh';
 import { appNameSchema } from '../utils';
+import { dokku } from '../../lib/dokku';
 
-export const createApp: MutationResolvers['createApp'] = async (
+export const createAppDokku: MutationResolvers['createAppDokku'] = async (
   _,
   { input },
   { userId }
@@ -36,8 +36,12 @@ export const createApp: MutationResolvers['createApp'] = async (
   const app = await prisma.app.create({
     data: {
       name: input.name,
+      type: 'DOKKU',
     },
   });
+
+  // for apps created w/o gitRepoUrl we send down to client
+  // data via  subscription
 
   // TODO enable again once we start the github app autodeployment
   // const appBuild = await prisma.appBuild.create({
@@ -60,6 +64,5 @@ export const createApp: MutationResolvers['createApp'] = async (
   // await buildAppQueue.add('build-app', { buildId: appBuild.id });
 
   ssh.dispose();
-
-  return { app };
+  return { appId: app.id };
 };

@@ -1,7 +1,0 @@
-mutation createApp($name: String!) {
-  createApp(input: { name: $name }) {
-    app {
-      id
-    }
-  }
-}

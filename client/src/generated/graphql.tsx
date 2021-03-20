@@ -25,8 +25,24 @@ export type App = {
   id: Scalars['ID'];
   name: Scalars['String'];
   createdAt: Scalars['DateTime'];
+  type: AppTypes;
   databases?: Maybe<Array<Database>>;
+  appMetaGithub?: Maybe<AppMetaGithub>;
 };
+
+export type AppMetaGithub = {
+  __typename?: 'AppMetaGithub';
+  repoId: Scalars['String'];
+  repoUrl: Scalars['String'];
+  webhooksSecret: Scalars['String'];
+  branch: Scalars['String'];
+};
+
+export type AppTypes =
+  | 'DOKKU'
+  | 'GITHUB'
+  | 'GITLAB'
+  | 'DOCKER';
 
 export type AppBuild = {
   __typename?: 'AppBuild';
@@ -72,9 +88,14 @@ export type LoginResult = {
   token: Scalars['String'];
 };
 
-export type CreateAppResult = {
-  __typename?: 'CreateAppResult';
-  app: App;
+export type CreateAppDokkuResult = {
+  __typename?: 'CreateAppDokkuResult';
+  appId: Scalars['String'];
+};
+
+export type CreateAppGithubResult = {
+  __typename?: 'CreateAppGithubResult';
+  result: Scalars['Boolean'];
 };
 
 export type DestroyAppResult = {
@@ -198,8 +219,14 @@ export type AppProxyPort = {
   container: Scalars['String'];
 };
 
-export type CreateAppInput = {
+export type CreateAppDokkuInput = {
   name: Scalars['String'];
+};
+
+export type CreateAppGithubInput = {
+  name: Scalars['String'];
+  gitRepoUrl: Scalars['String'];
+  branchName?: Maybe<Scalars['String']>;
 };
 
 export type RestartAppInput = {
@@ -276,6 +303,7 @@ export type Query = {
   __typename?: 'Query';
   setup: SetupResult;
   apps: Array<App>;
+  appMetaGithub?: Maybe<AppMetaGithub>;
   app?: Maybe<App>;
   domains: Domains;
   database?: Maybe<Database>;
@@ -288,6 +316,11 @@ export type Query = {
   isDatabaseLinked: IsDatabaseLinkedResult;
   envVars: EnvVarsResult;
   appProxyPorts: Array<AppProxyPort>;
+};
+
+
+export type QueryAppMetaGithubArgs = {
+  appId: Scalars['String'];
 };
 
 
@@ -348,6 +381,7 @@ export type Subscription = {
   createDatabaseLogs: RealTimeLog;
   appRestartLogs: RealTimeLog;
   appRebuildLogs: RealTimeLog;
+  appCreateLogs: RealTimeLog;
 };
 
 export type Mutation = {
@@ -356,7 +390,7 @@ export type Mutation = {
   addDomain: AddDomainResult;
   removeDomain: RemoveDomainResult;
   setDomain: SetDomainResult;
-  createApp: CreateAppResult;
+  createAppDokku: CreateAppDokkuResult;
   createDatabase: CreateDatabaseResult;
   setEnvVar: SetEnvVarResult;
   unsetEnvVar: UnsetEnvVarResult;
@@ -368,6 +402,7 @@ export type Mutation = {
   unlinkDatabase: UnlinkDatabaseResult;
   addAppProxyPort?: Maybe<Scalars['Boolean']>;
   removeAppProxyPort?: Maybe<Scalars['Boolean']>;
+  createAppGithub: CreateAppGithubResult;
 };
 
 
@@ -391,8 +426,8 @@ export type MutationSetDomainArgs = {
 };
 
 
-export type MutationCreateAppArgs = {
-  input: CreateAppInput;
+export type MutationCreateAppDokkuArgs = {
+  input: CreateAppDokkuInput;
 };
 
 
@@ -450,6 +485,11 @@ export type MutationRemoveAppProxyPortArgs = {
   input: RemoveAppProxyPortInput;
 };
 
+
+export type MutationCreateAppGithubArgs = {
+  input: CreateAppGithubInput;
+};
+
 export type CacheControlScope =
   | 'PUBLIC'
   | 'PRIVATE';
@@ -478,19 +518,29 @@ export type AddDomainMutation = (
   ) }
 );
 
-export type CreateAppMutationVariables = Exact<{
-  name: Scalars['String'];
+export type CreateAppDokkuMutationVariables = Exact<{
+  input: CreateAppDokkuInput;
 }>;
 
 
-export type CreateAppMutation = (
+export type CreateAppDokkuMutation = (
   { __typename?: 'Mutation' }
-  & { createApp: (
-    { __typename?: 'CreateAppResult' }
-    & { app: (
-      { __typename?: 'App' }
-      & Pick<App, 'id'>
-    ) }
+  & { createAppDokku: (
+    { __typename?: 'CreateAppDokkuResult' }
+    & Pick<CreateAppDokkuResult, 'appId'>
+  ) }
+);
+
+export type CreateAppGithubMutationVariables = Exact<{
+  input: CreateAppGithubInput;
+}>;
+
+
+export type CreateAppGithubMutation = (
+  { __typename?: 'Mutation' }
+  & { createAppGithub: (
+    { __typename?: 'CreateAppGithubResult' }
+    & Pick<CreateAppGithubResult, 'result'>
   ) }
 );
 
@@ -676,7 +726,10 @@ export type AppByIdQuery = (
     & { databases?: Maybe<Array<(
       { __typename?: 'Database' }
       & Pick<Database, 'id' | 'name' | 'type'>
-    )>> }
+    )>>, appMetaGithub?: Maybe<(
+      { __typename?: 'AppMetaGithub' }
+      & Pick<AppMetaGithub, 'repoId' | 'repoUrl' | 'webhooksSecret' | 'branch'>
+    )> }
   )> }
 );
 
@@ -838,6 +891,17 @@ export type SetupQuery = (
   ) }
 );
 
+export type AppCreateLogsSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AppCreateLogsSubscription = (
+  { __typename?: 'Subscription' }
+  & { appCreateLogs: (
+    { __typename?: 'RealTimeLog' }
+    & Pick<RealTimeLog, 'message' | 'type'>
+  ) }
+);
+
 export type CreateDatabaseLogsSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -956,40 +1020,70 @@ export function useAddDomainMutation(baseOptions?: Apollo.MutationHookOptions<Ad
 export type AddDomainMutationHookResult = ReturnType<typeof useAddDomainMutation>;
 export type AddDomainMutationResult = Apollo.MutationResult<AddDomainMutation>;
 export type AddDomainMutationOptions = Apollo.BaseMutationOptions<AddDomainMutation, AddDomainMutationVariables>;
-export const CreateAppDocument = gql`
-    mutation createApp($name: String!) {
-  createApp(input: {name: $name}) {
-    app {
-      id
-    }
+export const CreateAppDokkuDocument = gql`
+    mutation createAppDokku($input: CreateAppDokkuInput!) {
+  createAppDokku(input: $input) {
+    appId
   }
 }
     `;
-export type CreateAppMutationFn = Apollo.MutationFunction<CreateAppMutation, CreateAppMutationVariables>;
+export type CreateAppDokkuMutationFn = Apollo.MutationFunction<CreateAppDokkuMutation, CreateAppDokkuMutationVariables>;
 
 /**
- * __useCreateAppMutation__
+ * __useCreateAppDokkuMutation__
  *
- * To run a mutation, you first call `useCreateAppMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateAppMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateAppDokkuMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAppDokkuMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createAppMutation, { data, loading, error }] = useCreateAppMutation({
+ * const [createAppDokkuMutation, { data, loading, error }] = useCreateAppDokkuMutation({
  *   variables: {
- *      name: // value for 'name'
+ *      input: // value for 'input'
  *   },
  * });
  */
-export function useCreateAppMutation(baseOptions?: Apollo.MutationHookOptions<CreateAppMutation, CreateAppMutationVariables>) {
-        return Apollo.useMutation<CreateAppMutation, CreateAppMutationVariables>(CreateAppDocument, baseOptions);
+export function useCreateAppDokkuMutation(baseOptions?: Apollo.MutationHookOptions<CreateAppDokkuMutation, CreateAppDokkuMutationVariables>) {
+        return Apollo.useMutation<CreateAppDokkuMutation, CreateAppDokkuMutationVariables>(CreateAppDokkuDocument, baseOptions);
       }
-export type CreateAppMutationHookResult = ReturnType<typeof useCreateAppMutation>;
-export type CreateAppMutationResult = Apollo.MutationResult<CreateAppMutation>;
-export type CreateAppMutationOptions = Apollo.BaseMutationOptions<CreateAppMutation, CreateAppMutationVariables>;
+export type CreateAppDokkuMutationHookResult = ReturnType<typeof useCreateAppDokkuMutation>;
+export type CreateAppDokkuMutationResult = Apollo.MutationResult<CreateAppDokkuMutation>;
+export type CreateAppDokkuMutationOptions = Apollo.BaseMutationOptions<CreateAppDokkuMutation, CreateAppDokkuMutationVariables>;
+export const CreateAppGithubDocument = gql`
+    mutation createAppGithub($input: CreateAppGithubInput!) {
+  createAppGithub(input: $input) {
+    result
+  }
+}
+    `;
+export type CreateAppGithubMutationFn = Apollo.MutationFunction<CreateAppGithubMutation, CreateAppGithubMutationVariables>;
+
+/**
+ * __useCreateAppGithubMutation__
+ *
+ * To run a mutation, you first call `useCreateAppGithubMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAppGithubMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createAppGithubMutation, { data, loading, error }] = useCreateAppGithubMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateAppGithubMutation(baseOptions?: Apollo.MutationHookOptions<CreateAppGithubMutation, CreateAppGithubMutationVariables>) {
+        return Apollo.useMutation<CreateAppGithubMutation, CreateAppGithubMutationVariables>(CreateAppGithubDocument, baseOptions);
+      }
+export type CreateAppGithubMutationHookResult = ReturnType<typeof useCreateAppGithubMutation>;
+export type CreateAppGithubMutationResult = Apollo.MutationResult<CreateAppGithubMutation>;
+export type CreateAppGithubMutationOptions = Apollo.BaseMutationOptions<CreateAppGithubMutation, CreateAppGithubMutationVariables>;
 export const CreateDatabaseDocument = gql`
     mutation createDatabase($input: CreateDatabaseInput!) {
   createDatabase(input: $input) {
@@ -1417,6 +1511,12 @@ export const AppByIdDocument = gql`
       id
       name
       type
+    }
+    appMetaGithub {
+      repoId
+      repoUrl
+      webhooksSecret
+      branch
     }
   }
 }
@@ -1863,6 +1963,35 @@ export function useSetupLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Setu
 export type SetupQueryHookResult = ReturnType<typeof useSetupQuery>;
 export type SetupLazyQueryHookResult = ReturnType<typeof useSetupLazyQuery>;
 export type SetupQueryResult = Apollo.QueryResult<SetupQuery, SetupQueryVariables>;
+export const AppCreateLogsDocument = gql`
+    subscription appCreateLogs {
+  appCreateLogs {
+    message
+    type
+  }
+}
+    `;
+
+/**
+ * __useAppCreateLogsSubscription__
+ *
+ * To run a query within a React component, call `useAppCreateLogsSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useAppCreateLogsSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAppCreateLogsSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAppCreateLogsSubscription(baseOptions?: Apollo.SubscriptionHookOptions<AppCreateLogsSubscription, AppCreateLogsSubscriptionVariables>) {
+        return Apollo.useSubscription<AppCreateLogsSubscription, AppCreateLogsSubscriptionVariables>(AppCreateLogsDocument, baseOptions);
+      }
+export type AppCreateLogsSubscriptionHookResult = ReturnType<typeof useAppCreateLogsSubscription>;
+export type AppCreateLogsSubscriptionResult = Apollo.SubscriptionResult<AppCreateLogsSubscription>;
 export const CreateDatabaseLogsDocument = gql`
     subscription CreateDatabaseLogs {
   createDatabaseLogs {

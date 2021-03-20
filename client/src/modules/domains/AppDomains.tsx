@@ -85,7 +85,10 @@ export const AppDomains = ({ appId }: AppDomainProps) => {
         domainsData.domains.domains.map((domain) => (
           <>
             {domain && domain.length > 0 ? (
-              <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4">
+              <div
+                key={domain}
+                className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4"
+              >
                 <p className="text-blue-600 mt-2">{domain}</p>
                 <div className="flex items-end">
                   <Button
