@@ -3,9 +3,12 @@ import { sshConnect } from './../../lib/ssh';
 import { MutationResolvers } from '../../generated/graphql';
 import { Octokit } from '@octokit/rest';
 import { prisma } from '../../prisma';
-import crypto from 'crypto';
 // import { buildAppQueue } from '../../queues/buildApp';
-import { appNameSchema, getRepoData } from '../utils';
+import {
+  githubAppCreationSchema,
+  getRepoData,
+  generateRandomToken,
+} from '../utils';
 import { dokku } from '../../lib/dokku';
 
 export const createAppGithub: MutationResolvers['createAppGithub'] = async (
@@ -18,7 +21,10 @@ export const createAppGithub: MutationResolvers['createAppGithub'] = async (
   }
 
   // We make sure the name is valid to avoid security risks
-  appNameSchema.validateSync({ name: input.name });
+  githubAppCreationSchema.validateSync({
+    name: input.name,
+    gitRepoUrl: input.gitRepoUrl,
+  });
 
   const apps = await prisma.app.findMany({
     where: {
@@ -37,24 +43,27 @@ export const createAppGithub: MutationResolvers['createAppGithub'] = async (
   let repo;
 
   const repoData = getRepoData(input.gitRepoUrl);
-  try {
-    repo = await octokit.repos.get({
-      owner: repoData.owner,
-      repo: repoData.repoName,
-    });
-  } catch (error) {
-    console.log(error);
+
+  repo = await octokit.repos.get({
+    owner: repoData.owner,
+    repo: repoData.repoName,
+  });
+
+  const branch = await octokit.repos.getBranch({
+    owner: repoData.owner,
+    repo: repoData.repoName,
+    branch: input.branchName ? input.branchName : 'main',
+  });
+
+  if (!branch.url) {
+    throw new Error("There's no such branch for this repository");
   }
 
   const ssh = await sshConnect();
 
   const dokkuApp = await dokku.apps.create(ssh, input.name);
 
-  const hash = crypto
-    .createHash('sha256')
-    .update(`${input.name}` + `${userId}`, 'utf8')
-    .digest('hex')
-    .slice(0, 40);
+  const randomToken = generateRandomToken(40);
 
   const app = await prisma.app.create({
     data: {
@@ -62,9 +71,9 @@ export const createAppGithub: MutationResolvers['createAppGithub'] = async (
       type: 'GITHUB',
       AppMetaGithub: {
         create: {
-          repoUrl: input.gitRepoUrl,
+          repoUrl: `${repoData.owner}/${repoData.repoName}`,
           repoId: repo.data.id.toString(),
-          webhooksSecret: hash,
+          webhooksSecret: randomToken,
           branch: input.branchName ? input.branchName : 'main',
         },
       },

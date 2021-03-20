@@ -58,7 +58,7 @@ const worker = new Worker(
     const res = await dokku.git.sync({
       ssh,
       appName: app.name,
-      gitRepoUrl: repoUrl,
+      gitRepoUrl: `https://github.com/${repoUrl}.git`,
       branchName,
       options: {
         onStdout: (chunk) => {
