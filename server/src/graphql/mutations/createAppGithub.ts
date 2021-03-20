@@ -47,6 +47,12 @@ export const createAppGithub: MutationResolvers['createAppGithub'] = async (
     repo: repoData.repoName,
   });
 
+  if (!repo) {
+    throw new Error(
+      `No repository found for ${repoData.owner} with name ${repoData.repoName}`
+    );
+  }
+
   const branch = await octokit.repos.getBranch({
     owner: repoData.owner,
     repo: repoData.repoName,
@@ -54,7 +60,9 @@ export const createAppGithub: MutationResolvers['createAppGithub'] = async (
   });
 
   if (!branch.url) {
-    throw new Error("There's no such branch for this repository");
+    throw new Error(
+      `There's no ${input.branchName} branch or main branch for this repository`
+    );
   }
 
   const ssh = await sshConnect();
