@@ -42,6 +42,7 @@ import { RedisIcon } from '../../ui/icons/RedisIcon';
 import { MySQLIcon } from '../../ui/icons/MySQLIcon';
 import { useToast } from '../../ui/toast';
 import { AppHeaderTabNav } from '../../modules/app/AppHeaderTabNav';
+import { AppHeaderInfo } from '../../modules/app/AppHeaderInfo';
 
 export const App = () => {
   const history = useHistory();
@@ -208,6 +209,7 @@ export const App = () => {
     <div>
       <HeaderContainer>
         <Header />
+        <AppHeaderInfo app={app} />
         <AppHeaderTabNav app={app} />
       </HeaderContainer>
 

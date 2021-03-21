@@ -12,6 +12,7 @@ import { Header } from '../../modules/layout/Header';
 import { useAppByIdQuery, useAppLogsQuery } from '../../generated/graphql';
 import { HeaderContainer, Terminal } from '../../ui';
 import { AppHeaderTabNav } from '../../modules/app/AppHeaderTabNav';
+import { AppHeaderInfo } from '../../modules/app/AppHeaderInfo';
 
 export const Logs = () => {
   const { id: appId } = useParams<{ id: string }>();
@@ -68,6 +69,7 @@ export const Logs = () => {
     <div>
       <HeaderContainer>
         <Header />
+        <AppHeaderInfo app={app} />
         <AppHeaderTabNav app={app} />
       </HeaderContainer>
 
