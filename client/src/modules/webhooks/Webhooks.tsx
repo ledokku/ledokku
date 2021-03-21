@@ -71,7 +71,11 @@ export const Webhooks = ({ appId }: AppDomainProps) => {
       </Grid>
       <Text color="gray.400" fontSize="sm">
         For more info head to{' '}
-        <Link color="blue.400" href="https://ledokku.com" isExternal>
+        <Link
+          color="blue.400"
+          href="https://ledokku.com/docs/setting-up-git-webhooks#github-repository-webhooks-setup"
+          isExternal
+        >
           Webhooks setup guide
         </Link>
       </Text>

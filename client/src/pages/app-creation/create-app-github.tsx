@@ -114,7 +114,7 @@ export const CreateAppGithub = () => {
         });
         setIsTerminalVisible(true);
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       }
     },
   });
