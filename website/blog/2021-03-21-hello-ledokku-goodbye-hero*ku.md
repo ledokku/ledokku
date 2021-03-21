@@ -21,6 +21,8 @@ image: https://www.ledokku.com/img/twitterCardImage.png
 hide_table_of_contents: false
 ---
 
+![Ledokku-Dashboard](https://www.ledokku.com/img/dashboard1.png)
+
 ### Meet Ledokku
 
 Ledokku is UI built on top of an amazing open source PaaS project called Dokku. For those who are not familiar, Dokku is a docker powered heroku-like tool that is using herokuish and when you deploy your app via Dokku, essential functionality is very similar to one used in Heroku.
@@ -50,3 +52,13 @@ We are here to stay and this, while big step, is just a beginning. Deployments f
 Take part in shaping the future and follow us on [**Twitter**](https://twitter.com/ledokku), join our [**Discord**](https://discord.gg/v76vY2YaKp) or open an issue on our [**Github**](https://github.com/ledokku/ledokku) repo. Any and all of the feedback will be highly appreciated.
 
 Stay tuned and happy deployments.
+
+### And before you go, couple more shots of our slick UI
+
+Create app view
+
+![Ledokku-Create-App-View](https://www.ledokku.com/img/createApp.png)
+
+App logs view
+
+![Ledokku-Logs](https://www.ledokku.com/img/appLogs.png)
