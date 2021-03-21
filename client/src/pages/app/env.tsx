@@ -14,6 +14,7 @@ import { TrashBinIcon } from '../../ui/icons/TrashBinIcon';
 import { Container, Heading } from '@chakra-ui/react';
 import { useToast } from '../../ui/toast';
 import { AppHeaderTabNav } from '../../modules/app/AppHeaderTabNav';
+import { AppHeaderInfo } from '../../modules/app/AppHeaderInfo';
 
 interface EnvFormProps {
   name: string;
@@ -167,6 +168,7 @@ export const Env = () => {
     <div>
       <HeaderContainer>
         <Header />
+        <AppHeaderInfo app={app} />
         <AppHeaderTabNav app={app} />
       </HeaderContainer>
 

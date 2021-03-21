@@ -3,6 +3,10 @@ query dashboard {
     id
     name
     createdAt
+    appMetaGithub {
+      repoName
+      repoOwner
+    }
   }
   databases {
     id

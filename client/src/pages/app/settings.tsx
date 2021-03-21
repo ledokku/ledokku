@@ -26,6 +26,7 @@ import { AppDomains } from '../../modules/domains/AppDomains';
 import { Webhooks } from '../../modules/webhooks/Webhooks';
 import { useToast } from '../../ui/toast';
 import { AppHeaderTabNav } from '../../modules/app/AppHeaderTabNav';
+import { AppHeaderInfo } from '../../modules/app/AppHeaderInfo';
 
 export const Settings = () => {
   const { id: appId } = useParams<{ id: string }>();
@@ -106,6 +107,7 @@ export const Settings = () => {
     <div>
       <HeaderContainer>
         <Header />
+        <AppHeaderInfo app={app} />
         <AppHeaderTabNav app={app} />
       </HeaderContainer>
 
