@@ -36,7 +36,8 @@ const typeDefs = gql`
 
   type AppMetaGithub {
     repoId: String!
-    repoUrl: String!
+    repoName: String!
+    repoOwner: String!
     webhooksSecret: String!
     branch: String!
   }

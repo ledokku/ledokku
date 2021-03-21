@@ -1,3 +1,4 @@
+import { randomBytes } from 'crypto';
 import * as yup from 'yup';
 import { DatabaseTypes } from '../generated/graphql';
 
@@ -11,6 +12,20 @@ const appNameYup = yup
   .string()
   .required()
   .matches(/^[a-z0-9-]+$/);
+
+// Regexp for git URLs
+const gitRepoUrlYup = yup
+  .string()
+  .matches(
+    /((git|ssh|http(s)?)|(git@[\w.]+))(:(\/\/)?)([\w.@:/\-~]+)(\.git)(\/)?/,
+    'Must be a valid git link'
+  )
+  .required();
+
+export const githubAppCreationSchema = yup.object({
+  name: appNameYup,
+  gitRepoUrl: gitRepoUrlYup,
+});
 
 export const appNameSchema = yup.object({
   name: appNameYup,
@@ -41,3 +56,6 @@ export const getRepoData = (gitRepoUrl: string) => {
     repoName,
   };
 };
+
+export const generateRandomToken = (length = 40): string =>
+  randomBytes(length).toString('hex');

@@ -268,7 +268,10 @@ export const App = () => {
                   config steps once and voila you have app working with git auto
                   deployments.
                 </Text>
-                <Link href="https://ledokku.com/docs/setting-up-git-webhooks#github-repository-webhooks-setup">
+                <Link
+                  isExternal
+                  href="https://ledokku.com/docs/setting-up-git-webhooks#github-repository-webhooks-setup"
+                >
                   <Button
                     color="grey"
                     width="small"
