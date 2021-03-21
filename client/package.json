@@ -1,7 +1,7 @@
 {
   "name": "ledokku-client",
   "private": true,
-  "version": "0.5.1",
+  "version": "0.6.0",
   "license": "MIT",
   "scripts": {
     "dev": "yarn watch:css && SKIP_PREFLIGHT_CHECK=true react-scripts start",

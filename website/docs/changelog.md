@@ -8,6 +8,49 @@ hide_title: true
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.6.0](https://github.com/ledokku/ledokku/compare/v0.5.1...v0.6.0) (2021-03-21)
+
+### Features
+
+- **website:** add blog to website ([#309](https://github.com/ledokku/ledokku/issues/309)) ([58ce37f](https://github.com/ledokku/ledokku/commit/58ce37fd945f4b213ae8a833ae296af15b0cdba2))
+- app header redesign ([#311](https://github.com/ledokku/ledokku/issues/311)) ([68aef78](https://github.com/ledokku/ledokku/commit/68aef78f94d83cb4f6f3ce3de1e207295132dc57))
+- **client,server:** deploy directly from public git repo ([#265](https://github.com/ledokku/ledokku/issues/265)) ([8c69aad](https://github.com/ledokku/ledokku/commit/8c69aad89eaf9e1152bd439cd5aaa4dabd880c1c)), closes [#293](https://github.com/ledokku/ledokku/issues/293)
+- add anonymous telemetry data via fathom ([#307](https://github.com/ledokku/ledokku/issues/307)) ([fa66eda](https://github.com/ledokku/ledokku/commit/fa66eda458089f86b2d2fadf0b05a3d1ba598d4c))
+- **website:** add discord link ([#305](https://github.com/ledokku/ledokku/issues/305)) ([cce1486](https://github.com/ledokku/ledokku/commit/cce1486ac92a11fa9c17e741bab6ff9e29b42f14))
+- database header redesign ([#296](https://github.com/ledokku/ledokku/issues/296)) ([19e6e02](https://github.com/ledokku/ledokku/commit/19e6e0272b0805e030937470af38c16596881ce0))
+- disable outline style for non keyboard users ([#299](https://github.com/ledokku/ledokku/issues/299)) ([c327433](https://github.com/ledokku/ledokku/commit/c32743325a8cfdc02794e1290d15d54a9e89f75e))
+- improve header style ([#294](https://github.com/ledokku/ledokku/issues/294)) ([e00b258](https://github.com/ledokku/ledokku/commit/e00b25809bc745df0dbea91c227f288e31d57114))
+
+### Bug Fixes
+
+- force `DOKKU_SSH_HOST` to ipv4 during installation ([#291](https://github.com/ledokku/ledokku/issues/291)) ([d75d67b](https://github.com/ledokku/ledokku/commit/d75d67b0b3f34687dcb6a6465113427ce38825d2))
+- **client:** fix create app and database button ([#281](https://github.com/ledokku/ledokku/issues/281)) ([f1d51ad](https://github.com/ledokku/ledokku/commit/f1d51adb4e6d686cdc988b69b37c9cf844857035))
+- fix setup ssh view layout ([#276](https://github.com/ledokku/ledokku/issues/276)) ([818f6ce](https://github.com/ledokku/ledokku/commit/818f6ce22de0d267c9e93ba1f41962aceb7ede7a))
+
+### Code Refactoring
+
+- cleanup dashboard db list ([#301](https://github.com/ledokku/ledokku/issues/301)) ([f031eea](https://github.com/ledokku/ledokku/commit/f031eeaa3c892d7789dcff27c0ef317abf1c79b4))
+
+### Miscellaneous Chores
+
+- **client:** fix minor issues ([#312](https://github.com/ledokku/ledokku/issues/312)) ([afee3c3](https://github.com/ledokku/ledokku/commit/afee3c3bf938b10b9d829e88c1a3e281b97b1e1a))
+- **client:** migrate app logs view to chakra ([#288](https://github.com/ledokku/ledokku/issues/288)) ([4cec905](https://github.com/ledokku/ledokku/commit/4cec905d180f79b7ab15c4b55d37acdbb07d5bad))
+- **client:** migrate database logs view to chakra ([#304](https://github.com/ledokku/ledokku/issues/304)) ([403be67](https://github.com/ledokku/ledokku/commit/403be6782921fd5db293deb5e654a22073264671))
+- **client:** migrate proxy ports view to chakra ([#289](https://github.com/ledokku/ledokku/issues/289)) ([5e284e0](https://github.com/ledokku/ledokku/commit/5e284e09baba8a692f13ee2bb2581ccdaf52fdcf))
+- **client:** migrate settings view to chakra ([#290](https://github.com/ledokku/ledokku/issues/290)) ([11c2347](https://github.com/ledokku/ledokku/commit/11c2347b6756e3b5c83dbacef490f28974b8e198))
+- **client:** migrate toast messages to chakra UI ([#283](https://github.com/ledokku/ledokku/issues/283)) ([e7394da](https://github.com/ledokku/ledokku/commit/e7394da0635542f8ba34a72fd1896500d9d8bc6c))
+- **docs:** update dokku version ([#303](https://github.com/ledokku/ledokku/issues/303)) ([f44e981](https://github.com/ledokku/ledokku/commit/f44e98127b9463e11ef2285b07dd7d994f2949a4))
+- **server:** add ssh.dispose to queues ([#306](https://github.com/ledokku/ledokku/issues/306)) ([021403d](https://github.com/ledokku/ledokku/commit/021403db97bbd2f0c27e943c74571acb81e95ae6))
+- **server:** fix additional feedbacks ([#308](https://github.com/ledokku/ledokku/issues/308)) ([bf4f291](https://github.com/ledokku/ledokku/commit/bf4f291de87f649466d5102b8becdf3b0cb04b6a))
+- **website:** minor-blog-update ([#313](https://github.com/ledokku/ledokku/issues/313)) ([a7155bf](https://github.com/ledokku/ledokku/commit/a7155bf9bda7f5377554cf74e19d7003ce9e3bf4))
+- create shared app nav component ([#297](https://github.com/ledokku/ledokku/issues/297)) ([78fcdb5](https://github.com/ledokku/ledokku/commit/78fcdb53f4a33287ce2b454e1dc0d7fa26f47691))
+- create shared home nav component ([#298](https://github.com/ledokku/ledokku/issues/298)) ([0a52c6b](https://github.com/ledokku/ledokku/commit/0a52c6b8e1e94305391d0fafd3ab631bbb814218))
+- set no-unused-vars eslint rule to error ([#287](https://github.com/ledokku/ledokku/issues/287)) ([4303c01](https://github.com/ledokku/ledokku/commit/4303c01b75670eb7381ce98ee31f934cb69b0fc9))
+- **installation:** une new dokku git:from-image command ([#286](https://github.com/ledokku/ledokku/issues/286)) ([c3ebc69](https://github.com/ledokku/ledokku/commit/c3ebc692112020d5f1b64672d8d79625d66965f8))
+- **website:** update dokku version ([#280](https://github.com/ledokku/ledokku/issues/280)) ([dbe8888](https://github.com/ledokku/ledokku/commit/dbe8888ec3d4df71c49c6bdbfed64dc373818a15))
+- migrate create database view to chakra ([#278](https://github.com/ledokku/ledokku/issues/278)) ([107c0c5](https://github.com/ledokku/ledokku/commit/107c0c52c11cb1d9f870328a2e270a1fcd5fb02c))
+- upgrade deps ([#277](https://github.com/ledokku/ledokku/issues/277)) ([72c0236](https://github.com/ledokku/ledokku/commit/72c023669b2a3c4c81bd06acc87f48222dab0a4f))
+
 ### [0.5.1](https://github.com/ledokku/ledokku/compare/v0.5.0...v0.5.1) (2021-02-26)
 
 ### Features
