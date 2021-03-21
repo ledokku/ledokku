@@ -47,7 +47,8 @@ model AppMetaGithub {
   appId          String
   webhooksSecret String
   repoId         String
-  repoUrl        String
+  repoOwner      String
+  repoName       String
   branch         String
   createdAt      DateTime @default(now())
   updatedAt      DateTime @default(now())

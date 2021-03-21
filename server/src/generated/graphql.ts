@@ -33,7 +33,8 @@ export type App = {
 export type AppMetaGithub = {
   __typename?: 'AppMetaGithub';
   repoId: Scalars['String'];
-  repoUrl: Scalars['String'];
+  repoName: Scalars['String'];
+  repoOwner: Scalars['String'];
   webhooksSecret: Scalars['String'];
   branch: Scalars['String'];
 };
@@ -718,7 +719,8 @@ export type AppResolvers<ContextType = any, ParentType extends ResolversParentTy
 
 export type AppMetaGithubResolvers<ContextType = any, ParentType extends ResolversParentTypes['AppMetaGithub'] = ResolversParentTypes['AppMetaGithub']> = {
   repoId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  repoUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  repoName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  repoOwner?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   webhooksSecret?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   branch?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
