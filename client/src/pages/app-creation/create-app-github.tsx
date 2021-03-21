@@ -114,7 +114,9 @@ export const CreateAppGithub = () => {
         });
         setIsTerminalVisible(true);
       } catch (error) {
-        toast.error(error.message);
+        error.message === 'Not Found'
+          ? toast.error(`Repository : ${values.gitRepoUrl} not found`)
+          : toast.error(error.message);
       }
     },
   });
