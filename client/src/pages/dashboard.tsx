@@ -8,12 +8,14 @@ import {
   Text,
   Button,
   Container,
+  Image,
 } from '@chakra-ui/react';
 import { useDashboardQuery } from '../generated/graphql';
 import { Header } from '../modules/layout/Header';
 import { HeaderContainer } from '../ui';
 import { HomeHeaderTabNav } from '../modules/home/HomeHeaderTabNav';
 import { dbTypeToIcon, dbTypeToReadableName } from './utils';
+import { GithubIcon } from '../ui/icons/GithubIcon';
 
 export const Dashboard = () => {
   // const history = useHistory();
@@ -78,7 +80,24 @@ export const Dashboard = () => {
                   display="flex"
                   justifyContent="space-between"
                 >
-                  <Text>ledokku/ledokku</Text>
+                  <Text display="flex" alignItems="center">
+                    <Box mr={1} as="span">
+                      {app.appMetaGithub ? (
+                        <GithubIcon size={16} />
+                      ) : (
+                        <Image
+                          boxSize="16px"
+                          objectFit="cover"
+                          src="/dokku.png"
+                          alt="dokkuLogo"
+                        />
+                      )}
+                    </Box>
+
+                    {app.appMetaGithub
+                      ? `${app.appMetaGithub.repoOwner}/${app.appMetaGithub.repoName}`
+                      : ''}
+                  </Text>
                   <Text>
                     Created on {format(new Date(app.createdAt), 'MM/DD/YYYY')}
                   </Text>

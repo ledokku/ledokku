@@ -779,6 +779,10 @@ export type DashboardQuery = (
   & { apps: Array<(
     { __typename?: 'App' }
     & Pick<App, 'id' | 'name' | 'createdAt'>
+    & { appMetaGithub?: Maybe<(
+      { __typename?: 'AppMetaGithub' }
+      & Pick<AppMetaGithub, 'repoName' | 'repoOwner'>
+    )> }
   )>, databases: Array<(
     { __typename?: 'Database' }
     & Pick<Database, 'id' | 'name' | 'type' | 'createdAt'>
@@ -1656,6 +1660,10 @@ export const DashboardDocument = gql`
     id
     name
     createdAt
+    appMetaGithub {
+      repoName
+      repoOwner
+    }
   }
   databases {
     id
