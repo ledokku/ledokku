@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams, Link as RouterLink } from 'react-router-dom';
 import { Listbox, Transition } from '@headlessui/react';
 import cx from 'classnames';
 import {
@@ -301,7 +301,7 @@ export const App = () => {
                     proceed with the database creation flow
                   </h2>
                 </div>
-                <Link
+                <RouterLink
                   to={{
                     pathname: '/create-database/',
                     state: app.name,
@@ -310,7 +310,7 @@ export const App = () => {
                   <Button width="large" color={'grey'}>
                     Create a database
                   </Button>
-                </Link>
+                </RouterLink>
               </>
             ) : (
               <>
