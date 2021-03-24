@@ -13,7 +13,7 @@ all of the associated data, you will need to just run these scripts on your serv
 ```sh
 dokku apps:destroy ledokku
 dokku postgres:destroy ledokku
-dokku postgres:destroy redis
+dokku redis:destroy ledokku
 ```
 
 ### Uninstall both Ledokku and dokku
