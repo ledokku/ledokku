@@ -206,6 +206,8 @@ export type SetupResult = {
   __typename?: 'SetupResult';
   canConnectSsh: Scalars['Boolean'];
   sshPublicKey: Scalars['String'];
+  isGithubAppSetup: Scalars['Boolean'];
+  githubAppManifest: Scalars['String'];
 };
 
 export type IsPluginInstalledResult = {
@@ -892,7 +894,7 @@ export type SetupQuery = (
   { __typename?: 'Query' }
   & { setup: (
     { __typename?: 'SetupResult' }
-    & Pick<SetupResult, 'canConnectSsh' | 'sshPublicKey'>
+    & Pick<SetupResult, 'canConnectSsh' | 'sshPublicKey' | 'isGithubAppSetup' | 'githubAppManifest'>
   ) }
 );
 
@@ -1945,6 +1947,8 @@ export const SetupDocument = gql`
   setup {
     canConnectSsh
     sshPublicKey
+    isGithubAppSetup
+    githubAppManifest
   }
 }
     `;

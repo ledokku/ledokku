@@ -27,12 +27,13 @@ export const Home = () => {
   // On mount we check if there is a github code present
   useEffect(() => {
     const codeToLogin = async () => {
-      const githubCode = window.location.search
-        .substring(1)
-        .split('&')[0]
-        .split('code=')[1];
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const githubCode = urlParams.get('code');
+      const githubState = urlParams.get('state');
 
-      if (githubCode) {
+      // In case of login state is empty
+      if (!githubState && githubCode) {
         setLoggingIn(true);
         // Remove hash in url
         window.history.replaceState({}, document.title, '.');
@@ -44,6 +45,13 @@ export const Home = () => {
           login(data.data.loginWithGithub.token);
           history.push('/dashboard');
         }
+        return;
+      }
+
+      if (githubState === 'github_application_setup' && githubCode) {
+        // Remove hash in url
+        window.history.replaceState({}, document.title, '.');
+        // TODO send code and register app server side
       }
     };
 
@@ -92,22 +100,6 @@ export const Home = () => {
 
         {(loading || loggingIn) && <Spinner mt={4} />}
 
-        {data?.setup.canConnectSsh === true && !loggingIn && (
-          <>
-            <Text>Login to get started.</Text>
-
-            <Button
-              mt={3}
-              colorScheme="gray"
-              onClick={handleLogin}
-              leftIcon={<FiGithub size={18} />}
-              size="lg"
-            >
-              Log in with Github
-            </Button>
-          </>
-        )}
-
         {data?.setup.canConnectSsh === false && (
           <>
             <Text mt={4}>
@@ -121,6 +113,54 @@ export const Home = () => {
             <Text mt={3}>Once you are done, just refresh this page.</Text>
           </>
         )}
+
+        {data?.setup.isGithubAppSetup === false && (
+          <>
+            <Text mt={4}>
+              In order to be able to login and interact with the Github API,
+              let's create a new Github Application
+            </Text>
+            <form
+              action="https://github.com/settings/apps/new?state=github_application_setup"
+              method="post"
+            >
+              <input
+                type="text"
+                name="manifest"
+                id="manifest"
+                defaultValue={data.setup.githubAppManifest}
+                style={{ display: 'none' }}
+              />
+              <Button
+                mt={3}
+                colorScheme="gray"
+                type="submit"
+                leftIcon={<FiGithub size={18} />}
+                size="lg"
+              >
+                Create Github Application
+              </Button>
+            </form>
+          </>
+        )}
+
+        {data?.setup.canConnectSsh === true &&
+          data?.setup.isGithubAppSetup === true &&
+          !loggingIn && (
+            <>
+              <Text>Login to get started.</Text>
+
+              <Button
+                mt={3}
+                colorScheme="gray"
+                onClick={handleLogin}
+                leftIcon={<FiGithub size={18} />}
+                size="lg"
+              >
+                Log in with Github
+              </Button>
+            </>
+          )}
       </Box>
     </Container>
   );

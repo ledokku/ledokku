@@ -206,6 +206,8 @@ export type SetupResult = {
   __typename?: 'SetupResult';
   canConnectSsh: Scalars['Boolean'];
   sshPublicKey: Scalars['String'];
+  isGithubAppSetup: Scalars['Boolean'];
+  githubAppManifest: Scalars['String'];
 };
 
 export type IsPluginInstalledResult = {
@@ -874,6 +876,8 @@ export type RemoveDomainResultResolvers<ContextType = any, ParentType extends Re
 export type SetupResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['SetupResult'] = ResolversParentTypes['SetupResult']> = {
   canConnectSsh?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   sshPublicKey?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  isGithubAppSetup?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  githubAppManifest?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

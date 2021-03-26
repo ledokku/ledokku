@@ -184,6 +184,8 @@ const typeDefs = gql`
   type SetupResult {
     canConnectSsh: Boolean!
     sshPublicKey: String!
+    isGithubAppSetup: Boolean!
+    githubAppManifest: String!
   }
 
   type IsPluginInstalledResult {
