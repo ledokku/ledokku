@@ -10,7 +10,8 @@
     "generate": "graphql-codegen --config codegen.yml",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate deploy --preview-feature",
-    "prisma:migrate:save": "prisma migrate dev --preview-feature"
+    "prisma:migrate:save": "prisma migrate dev --preview-feature",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@octokit/rest": "18.3.0",
@@ -44,6 +45,8 @@
     "@types/node-ssh": "7.0.0",
     "@types/yup": "0.29.9",
     "nodemon": "2.0.7",
+    "patch-package": "6.4.7",
+    "postinstall-postinstall": "2.1.0",
     "ts-node": "9.1.1",
     "typescript": "4.2.2"
   }
