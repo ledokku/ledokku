@@ -8,12 +8,6 @@ const envSchema = yup.object({
   JWT_SECRET: yup
     .string()
     .required('Please provide a valid JWT_SECRET env variable.'),
-  GITHUB_CLIENT_ID: yup
-    .string()
-    .required('Please provide a valid GITHUB_CLIENT_ID env variable.'),
-  GITHUB_CLIENT_SECRET: yup
-    .string()
-    .required('Please provide a valid GITHUB_CLIENT_SECRET env variable.'),
   REDIS_URL: yup
     .string()
     .required('Please provide a valid REDIS_URL env variable.'),
@@ -21,8 +15,19 @@ const envSchema = yup.object({
     .string()
     .required('Please provide a valid DOKKU_SSH_HOST env variable.'),
   DOKKU_SSH_PORT: yup.string(),
-  // Temporary solution until we have proper user management
+  /**
+   * Temporary solution until we have proper user management.
+   */
   NUMBER_USERS_ALLOWED: yup.string(),
+  /**
+   * Only required in dev mode, production does not require any proxy.
+   */
+  WEBHOOK_PROXY_URL:
+    process.env.NODE_ENV === 'production'
+      ? yup.string()
+      : yup
+          .string()
+          .required('Please provide a valid WEBHOOK_PROXY_URL env variable.'),
 });
 
 try {
@@ -95,4 +100,5 @@ export const config = {
     ? +process.env.NUMBER_USERS_ALLOWED
     : 1,
   telemetryDisabled: process.env.TELEMETRY_DISABLED,
+  webhookProxyUrl: process.env.WEBHOOK_PROXY_URL,
 };

@@ -457,6 +457,11 @@ app.post('/webhooks', async (req, res) => {
   }
 });
 
+app.post('/events', (req, res) => {
+  console.log('received request -----------------------------', req.body);
+  res.json({ success: true });
+});
+
 http.listen({ port: 4000 }, () => {
   console.log(
     `🚀 Server ready at http://localhost:4000${apolloServer.graphqlPath}`
@@ -464,6 +469,13 @@ http.listen({ port: 4000 }, () => {
   console.log(
     `🚀 Subscriptions ready at ws://localhost:4000${apolloServer.subscriptionsPath}`
   );
+
+  /**
+   * In development we use the smee proxy to forward the external calls to our app
+   */
+  if (process.env.NODE_ENV !== 'production') {
+    require('./smeeClient');
+  }
 
   // When the server boot we start the synchronisation with dokku
   synchroniseServerQueue.add('synchronise-server', {});
