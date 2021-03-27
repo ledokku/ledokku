@@ -101,6 +101,10 @@ export const config = {
   numberUsersAllowed: process.env.NUMBER_USERS_ALLOWED
     ? +process.env.NUMBER_USERS_ALLOWED
     : 1,
-  telemetryDisabled: process.env.TELEMETRY_DISABLED,
+  telemetryDisabled:
+    process.env.NODE_ENV === 'production'
+      ? process.env.TELEMETRY_DISABLED
+      : // Always disabled in dev mode
+        '1',
   webhookProxyUrl: process.env.WEBHOOK_PROXY_URL,
 };
