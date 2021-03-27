@@ -8,8 +8,10 @@ You can customise the configuration of ledokku using the `dokku config:set` comm
 Here is a list of the variables you can change:
 
 - `JWT_SECRET`: Secret used to generate the JWT used for authentication.
-- `GITHUB_CLIENT_ID`: Github client id used to authenticate a user via Github.
-- `GITHUB_CLIENT_SECRET`: Github client secret used to authenticate a user via Github.
+- `GITHUB_APP_CLIENT_ID`: Github application client id used to authenticate a user via Github.
+- `GITHUB_APP_CLIENT_SECRET`: Github application client secret used to authenticate a user via Github.
+- `GITHUB_APP_WEBHOOK_SECRET`: Github application webhook secret used to verify webhook authenticity.
+- `GITHUB_APP_PEM`: Github application private key.
 - `DATABASE_URL`: Postgres connection string.
 - `REDIS_URL`: Redis connection string.
 - `DOKKU_SSH_HOST`: Ip address of the server.
