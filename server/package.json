@@ -43,6 +43,7 @@
     "@types/node-ssh": "7.0.0",
     "@types/yup": "0.29.9",
     "nodemon": "2.0.7",
+    "smee-client-patched": "1.0.1",
     "ts-node": "9.1.1",
     "typescript": "4.2.2"
   }
