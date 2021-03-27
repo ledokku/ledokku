@@ -19,15 +19,6 @@ const envSchema = yup.object({
    * Temporary solution until we have proper user management.
    */
   NUMBER_USERS_ALLOWED: yup.string(),
-  /**
-   * Only required in dev mode, production does not require any proxy.
-   */
-  WEBHOOK_PROXY_URL:
-    process.env.NODE_ENV === 'production'
-      ? yup.string()
-      : yup
-          .string()
-          .required('Please provide a valid WEBHOOK_PROXY_URL env variable.'),
 });
 
 try {

@@ -37,16 +37,6 @@ DOKKU_SSH_HOST="dokku.me"
 DOKKU_SSH_PORT="22"
 ```
 
-### Setup local proxy
-
-In order to allows your local development environment to receive GitHub webhook event, we need to configure a proxy that will forward external events to the ledokku server. Go to https://smee.io/new to get started.
-
-Add the value of the "Webhook Proxy URL" field in your `.env` file.
-
-```
-WEBHOOK_PROXY_URL=https://smee.io/your-custom-url
-```
-
 ### Starting the services
 
 In your terminal, run `docker-compose up` from the root folder of the repository to start the database and apps services. When the server is booting, the prisma client is generated and the latest migration is executed on the database. The web application is running on port 3000 and the server on port 4000.
