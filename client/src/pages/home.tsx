@@ -66,6 +66,9 @@ export const Home = () => {
         } catch (error) {
           toast.error(error.message);
         }
+
+        // TODO show success message after reload?
+
         // reload the page so the config github client id is injected
         window.location.href = '/';
       }
