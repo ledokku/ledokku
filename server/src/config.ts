@@ -89,8 +89,10 @@ const privateKey = readFileSync(sshKeyPath, {
 
 export const config = {
   jwtSecret: process.env.JWT_SECRET,
-  githubClientId: process.env.GITHUB_CLIENT_ID,
-  githubClientSecret: process.env.GITHUB_CLIENT_SECRET,
+  githubAppClientId: process.env.GITHUB_APP_CLIENT_ID,
+  githubAppClientSecret: process.env.GITHUB_APP_CLIENT_SECRET,
+  githubAppWebhookSecret: process.env.GITHUB_APP_WEBHOOK_SECRET,
+  githubAppPem: process.env.GITHUB_APP_PEM,
   redisUrl: process.env.REDIS_URL,
   dokkuSshHost: process.env.DOKKU_SSH_HOST,
   dokkuSshPort: process.env.DOKKU_SSH_PORT ? +process.env.DOKKU_SSH_PORT : 22,

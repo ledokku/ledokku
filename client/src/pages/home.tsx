@@ -12,6 +12,7 @@ import {
 import { config } from '../config';
 import {
   useSetupQuery,
+  useRegisterGithubAppMutation,
   useLoginWithGithubMutation,
 } from '../generated/graphql';
 import { useAuth } from '../modules/auth/AuthContext';
@@ -21,6 +22,7 @@ export const Home = () => {
   const history = useHistory();
   const { loggedIn, login } = useAuth();
   const { data, loading, error } = useSetupQuery({});
+  const [registerGithubAppMutation] = useRegisterGithubAppMutation();
   const [loginWithGithubMutation] = useLoginWithGithubMutation();
   const [loggingIn, setLoggingIn] = useState(false);
 
@@ -33,10 +35,11 @@ export const Home = () => {
       const githubState = urlParams.get('state');
 
       // In case of login state is empty
-      if (!githubState && githubCode) {
+      if (githubState === 'github_login' && githubCode) {
         setLoggingIn(true);
         // Remove hash in url
         window.history.replaceState({}, document.title, '.');
+        // TODO try catch
         const data = await loginWithGithubMutation({
           variables: { code: githubCode },
         });
@@ -51,7 +54,12 @@ export const Home = () => {
       if (githubState === 'github_application_setup' && githubCode) {
         // Remove hash in url
         window.history.replaceState({}, document.title, '.');
-        // TODO send code and register app server side
+        // TODO try catch
+        await registerGithubAppMutation({
+          variables: { code: githubCode },
+        });
+        // reload the page so the config github client id is injected
+        window.location.href = '/';
       }
     };
 
@@ -64,13 +72,7 @@ export const Home = () => {
     // The redirect_uri parameter should only be used on production,
     // on dev env we force the redirection to localhost
     window.location.replace(
-      `https://github.com/login/oauth/authorize?client_id=${
-        config.githubClientId
-      }&scope=user:email${
-        config.environment === 'development'
-          ? '&redirect_uri=http://localhost:3000/'
-          : ''
-      }`
+      `https://github.com/login/oauth/authorize?client_id=${config.githubClientId}&state=github_login`
     );
   };
 

@@ -89,6 +89,11 @@ export type LoginResult = {
   token: Scalars['String'];
 };
 
+export type RegisterGithubAppResult = {
+  __typename?: 'RegisterGithubAppResult';
+  result: Scalars['Boolean'];
+};
+
 export type CreateAppDokkuResult = {
   __typename?: 'CreateAppDokkuResult';
   appId: Scalars['String'];
@@ -390,6 +395,7 @@ export type Subscription = {
 export type Mutation = {
   __typename?: 'Mutation';
   loginWithGithub?: Maybe<LoginResult>;
+  registerGithubApp?: Maybe<RegisterGithubAppResult>;
   addDomain: AddDomainResult;
   removeDomain: RemoveDomainResult;
   setDomain: SetDomainResult;
@@ -410,6 +416,11 @@ export type Mutation = {
 
 
 export type MutationLoginWithGithubArgs = {
+  code: Scalars['String'];
+};
+
+
+export type MutationRegisterGithubAppArgs = {
   code: Scalars['String'];
 };
 
@@ -589,9 +600,10 @@ export type ResolversTypes = {
   Domains: ResolverTypeWrapper<Domains>;
   RealTimeLog: ResolverTypeWrapper<RealTimeLog>;
   LoginResult: ResolverTypeWrapper<LoginResult>;
+  RegisterGithubAppResult: ResolverTypeWrapper<RegisterGithubAppResult>;
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   CreateAppDokkuResult: ResolverTypeWrapper<CreateAppDokkuResult>;
   CreateAppGithubResult: ResolverTypeWrapper<CreateAppGithubResult>;
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   DestroyAppResult: ResolverTypeWrapper<DestroyAppResult>;
   RestartAppResult: ResolverTypeWrapper<RestartAppResult>;
   RebuildAppResult: ResolverTypeWrapper<RebuildAppResult>;
@@ -651,9 +663,10 @@ export type ResolversParentTypes = {
   Domains: Domains;
   RealTimeLog: RealTimeLog;
   LoginResult: LoginResult;
+  RegisterGithubAppResult: RegisterGithubAppResult;
+  Boolean: Scalars['Boolean'];
   CreateAppDokkuResult: CreateAppDokkuResult;
   CreateAppGithubResult: CreateAppGithubResult;
-  Boolean: Scalars['Boolean'];
   DestroyAppResult: DestroyAppResult;
   RestartAppResult: RestartAppResult;
   RebuildAppResult: RebuildAppResult;
@@ -757,6 +770,11 @@ export type RealTimeLogResolvers<ContextType = any, ParentType extends Resolvers
 
 export type LoginResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['LoginResult'] = ResolversParentTypes['LoginResult']> = {
   token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type RegisterGithubAppResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['RegisterGithubAppResult'] = ResolversParentTypes['RegisterGithubAppResult']> = {
+  result?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -922,6 +940,7 @@ export type SubscriptionResolvers<ContextType = any, ParentType extends Resolver
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   loginWithGithub?: Resolver<Maybe<ResolversTypes['LoginResult']>, ParentType, ContextType, RequireFields<MutationLoginWithGithubArgs, 'code'>>;
+  registerGithubApp?: Resolver<Maybe<ResolversTypes['RegisterGithubAppResult']>, ParentType, ContextType, RequireFields<MutationRegisterGithubAppArgs, 'code'>>;
   addDomain?: Resolver<ResolversTypes['AddDomainResult'], ParentType, ContextType, RequireFields<MutationAddDomainArgs, 'input'>>;
   removeDomain?: Resolver<ResolversTypes['RemoveDomainResult'], ParentType, ContextType, RequireFields<MutationRemoveDomainArgs, 'input'>>;
   setDomain?: Resolver<ResolversTypes['SetDomainResult'], ParentType, ContextType, RequireFields<MutationSetDomainArgs, 'input'>>;
@@ -953,6 +972,7 @@ export type Resolvers<ContextType = any> = {
   Domains?: DomainsResolvers<ContextType>;
   RealTimeLog?: RealTimeLogResolvers<ContextType>;
   LoginResult?: LoginResultResolvers<ContextType>;
+  RegisterGithubAppResult?: RegisterGithubAppResultResolvers<ContextType>;
   CreateAppDokkuResult?: CreateAppDokkuResultResolvers<ContextType>;
   CreateAppGithubResult?: CreateAppGithubResultResolvers<ContextType>;
   DestroyAppResult?: DestroyAppResultResolvers<ContextType>;

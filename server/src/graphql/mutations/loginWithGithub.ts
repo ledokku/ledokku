@@ -20,6 +20,7 @@ export const loginWithGithub: MutationResolvers['loginWithGithub'] = async (
         token_type: string;
         scope: string;
       };
+
   try {
     const res = await fetch('https://github.com/login/oauth/access_token', {
       method: 'POST',
@@ -28,9 +29,10 @@ export const loginWithGithub: MutationResolvers['loginWithGithub'] = async (
         Accept: 'application/json',
       },
       body: JSON.stringify({
-        client_id: config.githubClientId,
-        client_secret: config.githubClientSecret,
+        client_id: config.githubAppClientId,
+        client_secret: config.githubAppClientSecret,
         code,
+        state: 'github_login',
       }),
     });
     data = await res.json();
@@ -42,11 +44,6 @@ export const loginWithGithub: MutationResolvers['loginWithGithub'] = async (
   if ('error' in data) {
     console.error(data);
     throw new Error(data.error_description);
-  }
-
-  if ('scope' in data && data.scope !== 'user:email') {
-    console.error(data);
-    throw new Error('Github scope invalid');
   }
 
   const octokit = new Octokit({
@@ -80,6 +77,7 @@ export const loginWithGithub: MutationResolvers['loginWithGithub'] = async (
         avatarUrl: githubUser.avatar_url,
         email: email.email,
         githubAccessToken: data.access_token,
+        // TODO save refresh token + refresh_token_expires_in?
         githubId: githubUser.node_id,
       },
     });

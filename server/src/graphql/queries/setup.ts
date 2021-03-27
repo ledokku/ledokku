@@ -23,11 +23,17 @@ export const setup: QueryResolvers['setup'] = async () => {
   return {
     canConnectSsh,
     sshPublicKey: publicKey,
-    isGithubAppSetup: false,
+    isGithubAppSetup: !!config.githubAppClientId,
     // See https://docs.github.com/en/developers/apps/creating-a-github-app-from-a-manifest#examples
     githubAppManifest: JSON.stringify({
       name: 'Ledokku',
-      url: `http://${config.dokkuSshHost}`,
+      url:
+        process.env.NODE_ENV === 'production'
+          ? `http://${config.dokkuSshHost}`
+          : 'http://localhost:3000',
+      // TODO This should be enabled
+      // It's working for apps created via parameters but not here, not sure why
+      // request_oauth_on_install: true,
       hook_attributes: {
         url:
           process.env.NODE_ENV === 'production'

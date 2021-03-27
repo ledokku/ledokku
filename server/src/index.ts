@@ -90,6 +90,10 @@ const typeDefs = gql`
     token: String!
   }
 
+  type RegisterGithubAppResult {
+    result: Boolean!
+  }
+
   type CreateAppDokkuResult {
     appId: String!
   }
@@ -310,6 +314,7 @@ const typeDefs = gql`
 
   type Mutation {
     loginWithGithub(code: String!): LoginResult
+    registerGithubApp(code: String!): RegisterGithubAppResult
     addDomain(input: AddDomainInput!): AddDomainResult!
     removeDomain(input: RemoveDomainInput!): RemoveDomainResult!
     setDomain(input: SetDomainInput!): SetDomainResult!
@@ -434,7 +439,7 @@ app.get('/runtime-config.js', (_, res) => {
   res.setHeader('Content-Type', 'application/javascript');
   res.end(`
   window['runConfig'] = {
-    GITHUB_CLIENT_ID: '${config.githubClientId}',
+    GITHUB_APP_CLIENT_ID: '${config.githubAppClientId}',
     TELEMETRY_DISABLED: '${config.telemetryDisabled}'
   }
   `);

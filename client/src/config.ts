@@ -12,6 +12,7 @@ export const config = runConfig
       environment: process.env.NODE_ENV,
     }
   : {
+      // TODO ask server for this even in dev mode
       githubClientId: process.env.REACT_APP_GITHUB_CLIENT_ID,
       telemetryDisabled: true,
       serverUrl: process.env.REACT_APP_SERVER_URL,
