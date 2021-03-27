@@ -42,20 +42,6 @@ main() {
   # First we get the user ip so we can use it in the text we print later
   DOKKU_SSH_HOST=$(curl -4 ifconfig.co)
 
-  echo "=== 🐳 ledokku:${LEDOKKU_TAG} ==="
-  echo "Welcome to installation helper of Ledokku"
-  echo
-  echo "In your browser open https://github.com/settings/developers and click on the \"New OAuth App\" button."
-  echo
-  echo "Add a name, a homepage url, and in the field \"Authorization callback URL\" set the value to \"http://"$DOKKU_SSH_HOST"\"."
-  echo
-  echo "Then click the \"Register application\" button. You should now be able to see the client id and client secret of the app."
-  echo "=== 🐳 ==="
-
-  # Get variables from the user
-  read -p "Enter Your Github Client ID: " GITHUB_CLIENT_ID
-  read -p "Enter Your Github Client Secret: " GITHUB_CLIENT_SECRET
-
   # First we create the app
   dokku apps:create ledokku
 
@@ -79,8 +65,6 @@ main() {
   JWT_SECRET=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 
   # Set all the variables
-  dokku config:set ledokku GITHUB_CLIENT_ID="${GITHUB_CLIENT_ID}"
-  dokku config:set ledokku GITHUB_CLIENT_SECRET="${GITHUB_CLIENT_SECRET}"
   dokku config:set ledokku DOKKU_SSH_HOST="${DOKKU_SSH_HOST}"
   dokku config:set ledokku JWT_SECRET="${JWT_SECRET}"
 
