@@ -17,8 +17,10 @@ import {
 } from '../generated/graphql';
 import { useAuth } from '../modules/auth/AuthContext';
 import { Terminal } from '../ui';
+import { useToast } from '../ui/toast';
 
 export const Home = () => {
+  const toast = useToast();
   const history = useHistory();
   const { loggedIn, login } = useAuth();
   const { data, loading, error } = useSetupQuery({});
@@ -39,25 +41,31 @@ export const Home = () => {
         setLoggingIn(true);
         // Remove hash in url
         window.history.replaceState({}, document.title, '.');
-        // TODO try catch
-        const data = await loginWithGithubMutation({
-          variables: { code: githubCode },
-        });
-        // TODO handle errors
-        if (data.data?.loginWithGithub) {
-          login(data.data.loginWithGithub.token);
-          history.push('/dashboard');
+        try {
+          const data = await loginWithGithubMutation({
+            variables: { code: githubCode },
+          });
+          if (data.data?.loginWithGithub) {
+            login(data.data.loginWithGithub.token);
+            history.push('/dashboard');
+          }
+        } catch (error) {
+          toast.error(error.message);
         }
+
         return;
       }
 
       if (githubState === 'github_application_setup' && githubCode) {
         // Remove hash in url
         window.history.replaceState({}, document.title, '.');
-        // TODO try catch
-        await registerGithubAppMutation({
-          variables: { code: githubCode },
-        });
+        try {
+          await registerGithubAppMutation({
+            variables: { code: githubCode },
+          });
+        } catch (error) {
+          toast.error(error.message);
+        }
         // reload the page so the config github client id is injected
         window.location.href = '/';
       }
