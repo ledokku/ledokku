@@ -34,7 +34,7 @@ const worker = new Worker(
 
     const ssh = await sshConnect();
 
-    await dokku.config.set(ssh, appName, key, value);
+    await dokku.config.set(ssh, appName, { key, value });
 
     debug(`finished setEnvVarQueue for app:  ${appName} with ${key}=${value}`);
     ssh.dispose();

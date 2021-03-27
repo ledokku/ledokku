@@ -2,6 +2,8 @@ import { readFileSync, writeFileSync } from 'fs';
 import { Octokit } from '@octokit/rest';
 import { MutationResolvers } from '../../generated/graphql';
 import { config } from '../../config';
+import { sshConnect } from '../../lib/ssh';
+import { dokku } from '../../lib/dokku';
 
 export const registerGithubApp: MutationResolvers['registerGithubApp'] = async (
   _,
@@ -29,7 +31,22 @@ export const registerGithubApp: MutationResolvers['registerGithubApp'] = async (
 
   if (process.env.NODE_ENV === 'production') {
     // In production we add this config as dokku config for the ledokku app.
-    // TODO
+    // The no-restart option is used as we do not need to reboot the ledokku server.
+    const ssh = await sshConnect();
+
+    await dokku.config.set(
+      ssh,
+      'ledokku',
+      [
+        { key: 'GITHUB_APP_CLIENT_ID', value: githubAppClientId },
+        { key: 'GITHUB_APP_CLIENT_SECRET', value: githubAppClientSecret },
+        { key: 'GITHUB_APP_WEBHOOK_SECRET', value: githubAppWebhookSecret },
+        { key: 'GITHUB_APP_PEM', value: githubAppPem },
+      ],
+      { noRestart: true }
+    );
+
+    ssh.dispose();
   } else {
     // In dev mode we want to add these variables to the .env local file.
     const dotenvPath = `${process.cwd()}/.env`;
