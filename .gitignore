@@ -3,3 +3,4 @@ node_modules
 .ledokku
 build
 website/.docusaurus
+server/yarn.lock

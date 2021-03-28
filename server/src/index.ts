@@ -465,6 +465,13 @@ http.listen({ port: 4000 }, () => {
     `🚀 Subscriptions ready at ws://localhost:4000${apolloServer.subscriptionsPath}`
   );
 
+  /**
+   * In development we use the smee proxy to forward the external calls to our app
+   */
+  if (process.env.NODE_ENV !== 'production') {
+    require('./smeeClient');
+  }
+
   // When the server boot we start the synchronisation with dokku
   synchroniseServerQueue.add('synchronise-server', {});
 });
