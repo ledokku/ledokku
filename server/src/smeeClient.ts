@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync } from 'fs';
-import SmeeClient from 'smee-client';
+import SmeeClient from 'smee-client-patched';
 import { config } from './config';
 
 const startSmeeClient = async () => {
