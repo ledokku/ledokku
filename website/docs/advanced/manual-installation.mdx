@@ -48,7 +48,20 @@ dokku postgres:create ledokku
 dokku postgres:link ledokku ledokku
 ```
 
-Let's add the required env variables we need.
+In your browser open https://github.com/settings/developers and click on the "New OAuth App" button.
+
+Add a name, a homepage url, and in the field "Authorization callback URL" set the value to your ledokku ip address. (eg: http://123.123.123.123)
+
+<img alt="Github Oauth app setup" src={useBaseUrl('/img/githubApp.png')} />
+
+Then click the "Register application" button. You should now be able to see the client id and client secret of the app. Let's add them to the ledokku config.
+
+```sh
+dokku config:set ledokku GITHUB_CLIENT_ID="MY_GITHUB_CLIENT_ID"
+dokku config:set ledokku GITHUB_CLIENT_SECRET="MY_GITHUB_CLIENT_SECRET"
+```
+
+Now that github is configured let's add the missing env variables we need.
 
 ```sh
 dokku config:set ledokku DOKKU_SSH_HOST="MY_SERVER_IP"

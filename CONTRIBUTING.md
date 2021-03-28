@@ -25,13 +25,27 @@ To setup the project locally you first need to fork the project on Github (top r
 
 Follow the official guide to setup dokku with vagrant http://dokku.viewdocs.io/dokku/getting-started/install/vagrant/.
 
+### Creating a new OAuth App
+
+In your browser open https://github.com/settings/developers and click on the "New OAuth App" button.
+
+Add a name, a homepage url, and in the field "Authorization callback URL" set the value to "http://localhost:3000/". Then click the "Register application" button. You should now be able to see the client id and client secret of the app.
+
 ### Setup environment variables
 
 We use [dotenv](https://github.com/motdotla/dotenv) to loads environment variables from a `.env` file.
 
-Let's setup the server environment. Inside the `server` folder create a new `.env` file and add the following env variables (replace the github id and secret with the one you obtained when creating the Github OAuth App):
+Let's first setup the client environment. Inside the `client` folder create a new `.env.development.local` file and add the following env variables:
 
 ```
+REACT_APP_GITHUB_CLIENT_ID="MY_GITHUB_CLIENT_ID_CREATED_AT_THE_PREVIOUS_STEP"
+```
+
+Let's now setup the server environment. Inside the `server` folder create a new `.env` file and add the following env variables (replace the github id and secret with the one you obtained when creating the Github OAuth App):
+
+```
+GITHUB_CLIENT_ID="MY_GITHUB_CLIENT_ID_CREATE_AT_THE_PREVIOUS_STEP"
+GITHUB_CLIENT_SECRET="MY_GITHUB_CLIENT_SECRET_CREATE_AT_THE_PREVIOUS_STEP"
 JWT_SECRET="strong-secret"
 DOKKU_SSH_HOST="dokku.me"
 DOKKU_SSH_PORT="22"
