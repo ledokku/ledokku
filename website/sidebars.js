@@ -9,6 +9,7 @@ module.exports = {
       'setting-up-git-webhooks',
       'upgrade',
       'uninstall',
+      'security',
     ],
     Advanced: ['advanced/manual-installation', 'advanced/configuration'],
   },
