@@ -1,9 +1,7 @@
 const runConfig: any = window['runConfig' as any];
 
 export const config = {
-  githubClientId: runConfig
-    ? runConfig['GITHUB_CLIENT_ID']
-    : process.env.REACT_APP_GITHUB_CLIENT_ID,
+  githubClientId: runConfig['GITHUB_APP_CLIENT_ID'],
   telemetryDisabled: runConfig['TELEMETRY_DISABLED'] === '1',
   serverUrl: process.env.REACT_APP_SERVER_URL
     ? process.env.REACT_APP_SERVER_URL

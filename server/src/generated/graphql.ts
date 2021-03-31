@@ -89,6 +89,11 @@ export type LoginResult = {
   token: Scalars['String'];
 };
 
+export type RegisterGithubAppResult = {
+  __typename?: 'RegisterGithubAppResult';
+  githubAppClientId: Scalars['String'];
+};
+
 export type CreateAppDokkuResult = {
   __typename?: 'CreateAppDokkuResult';
   appId: Scalars['String'];
@@ -206,6 +211,8 @@ export type SetupResult = {
   __typename?: 'SetupResult';
   canConnectSsh: Scalars['Boolean'];
   sshPublicKey: Scalars['String'];
+  isGithubAppSetup: Scalars['Boolean'];
+  githubAppManifest: Scalars['String'];
 };
 
 export type IsPluginInstalledResult = {
@@ -388,6 +395,7 @@ export type Subscription = {
 export type Mutation = {
   __typename?: 'Mutation';
   loginWithGithub?: Maybe<LoginResult>;
+  registerGithubApp?: Maybe<RegisterGithubAppResult>;
   addDomain: AddDomainResult;
   removeDomain: RemoveDomainResult;
   setDomain: SetDomainResult;
@@ -408,6 +416,11 @@ export type Mutation = {
 
 
 export type MutationLoginWithGithubArgs = {
+  code: Scalars['String'];
+};
+
+
+export type MutationRegisterGithubAppArgs = {
   code: Scalars['String'];
 };
 
@@ -587,6 +600,7 @@ export type ResolversTypes = {
   Domains: ResolverTypeWrapper<Domains>;
   RealTimeLog: ResolverTypeWrapper<RealTimeLog>;
   LoginResult: ResolverTypeWrapper<LoginResult>;
+  RegisterGithubAppResult: ResolverTypeWrapper<RegisterGithubAppResult>;
   CreateAppDokkuResult: ResolverTypeWrapper<CreateAppDokkuResult>;
   CreateAppGithubResult: ResolverTypeWrapper<CreateAppGithubResult>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
@@ -649,6 +663,7 @@ export type ResolversParentTypes = {
   Domains: Domains;
   RealTimeLog: RealTimeLog;
   LoginResult: LoginResult;
+  RegisterGithubAppResult: RegisterGithubAppResult;
   CreateAppDokkuResult: CreateAppDokkuResult;
   CreateAppGithubResult: CreateAppGithubResult;
   Boolean: Scalars['Boolean'];
@@ -755,6 +770,11 @@ export type RealTimeLogResolvers<ContextType = any, ParentType extends Resolvers
 
 export type LoginResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['LoginResult'] = ResolversParentTypes['LoginResult']> = {
   token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type RegisterGithubAppResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['RegisterGithubAppResult'] = ResolversParentTypes['RegisterGithubAppResult']> = {
+  githubAppClientId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -874,6 +894,8 @@ export type RemoveDomainResultResolvers<ContextType = any, ParentType extends Re
 export type SetupResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['SetupResult'] = ResolversParentTypes['SetupResult']> = {
   canConnectSsh?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   sshPublicKey?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  isGithubAppSetup?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  githubAppManifest?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -918,6 +940,7 @@ export type SubscriptionResolvers<ContextType = any, ParentType extends Resolver
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   loginWithGithub?: Resolver<Maybe<ResolversTypes['LoginResult']>, ParentType, ContextType, RequireFields<MutationLoginWithGithubArgs, 'code'>>;
+  registerGithubApp?: Resolver<Maybe<ResolversTypes['RegisterGithubAppResult']>, ParentType, ContextType, RequireFields<MutationRegisterGithubAppArgs, 'code'>>;
   addDomain?: Resolver<ResolversTypes['AddDomainResult'], ParentType, ContextType, RequireFields<MutationAddDomainArgs, 'input'>>;
   removeDomain?: Resolver<ResolversTypes['RemoveDomainResult'], ParentType, ContextType, RequireFields<MutationRemoveDomainArgs, 'input'>>;
   setDomain?: Resolver<ResolversTypes['SetDomainResult'], ParentType, ContextType, RequireFields<MutationSetDomainArgs, 'input'>>;
@@ -949,6 +972,7 @@ export type Resolvers<ContextType = any> = {
   Domains?: DomainsResolvers<ContextType>;
   RealTimeLog?: RealTimeLogResolvers<ContextType>;
   LoginResult?: LoginResultResolvers<ContextType>;
+  RegisterGithubAppResult?: RegisterGithubAppResultResolvers<ContextType>;
   CreateAppDokkuResult?: CreateAppDokkuResultResolvers<ContextType>;
   CreateAppGithubResult?: CreateAppGithubResultResolvers<ContextType>;
   DestroyAppResult?: DestroyAppResultResolvers<ContextType>;

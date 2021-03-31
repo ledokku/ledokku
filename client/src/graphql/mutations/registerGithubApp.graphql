@@ -1,0 +1,5 @@
+mutation registerGithubApp($code: String!) {
+  registerGithubApp(code: $code) {
+    githubAppClientId
+  }
+}

@@ -89,6 +89,11 @@ export type LoginResult = {
   token: Scalars['String'];
 };
 
+export type RegisterGithubAppResult = {
+  __typename?: 'RegisterGithubAppResult';
+  githubAppClientId: Scalars['String'];
+};
+
 export type CreateAppDokkuResult = {
   __typename?: 'CreateAppDokkuResult';
   appId: Scalars['String'];
@@ -206,6 +211,8 @@ export type SetupResult = {
   __typename?: 'SetupResult';
   canConnectSsh: Scalars['Boolean'];
   sshPublicKey: Scalars['String'];
+  isGithubAppSetup: Scalars['Boolean'];
+  githubAppManifest: Scalars['String'];
 };
 
 export type IsPluginInstalledResult = {
@@ -388,6 +395,7 @@ export type Subscription = {
 export type Mutation = {
   __typename?: 'Mutation';
   loginWithGithub?: Maybe<LoginResult>;
+  registerGithubApp?: Maybe<RegisterGithubAppResult>;
   addDomain: AddDomainResult;
   removeDomain: RemoveDomainResult;
   setDomain: SetDomainResult;
@@ -408,6 +416,11 @@ export type Mutation = {
 
 
 export type MutationLoginWithGithubArgs = {
+  code: Scalars['String'];
+};
+
+
+export type MutationRegisterGithubAppArgs = {
   code: Scalars['String'];
 };
 
@@ -621,6 +634,19 @@ export type RebuildAppMutation = (
     { __typename?: 'RebuildAppResult' }
     & Pick<RebuildAppResult, 'result'>
   ) }
+);
+
+export type RegisterGithubAppMutationVariables = Exact<{
+  code: Scalars['String'];
+}>;
+
+
+export type RegisterGithubAppMutation = (
+  { __typename?: 'Mutation' }
+  & { registerGithubApp?: Maybe<(
+    { __typename?: 'RegisterGithubAppResult' }
+    & Pick<RegisterGithubAppResult, 'githubAppClientId'>
+  )> }
 );
 
 export type RemoveAppProxyPortMutationVariables = Exact<{
@@ -892,7 +918,7 @@ export type SetupQuery = (
   { __typename?: 'Query' }
   & { setup: (
     { __typename?: 'SetupResult' }
-    & Pick<SetupResult, 'canConnectSsh' | 'sshPublicKey'>
+    & Pick<SetupResult, 'canConnectSsh' | 'sshPublicKey' | 'isGithubAppSetup' | 'githubAppManifest'>
   ) }
 );
 
@@ -1281,6 +1307,38 @@ export function useRebuildAppMutation(baseOptions?: Apollo.MutationHookOptions<R
 export type RebuildAppMutationHookResult = ReturnType<typeof useRebuildAppMutation>;
 export type RebuildAppMutationResult = Apollo.MutationResult<RebuildAppMutation>;
 export type RebuildAppMutationOptions = Apollo.BaseMutationOptions<RebuildAppMutation, RebuildAppMutationVariables>;
+export const RegisterGithubAppDocument = gql`
+    mutation registerGithubApp($code: String!) {
+  registerGithubApp(code: $code) {
+    githubAppClientId
+  }
+}
+    `;
+export type RegisterGithubAppMutationFn = Apollo.MutationFunction<RegisterGithubAppMutation, RegisterGithubAppMutationVariables>;
+
+/**
+ * __useRegisterGithubAppMutation__
+ *
+ * To run a mutation, you first call `useRegisterGithubAppMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRegisterGithubAppMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [registerGithubAppMutation, { data, loading, error }] = useRegisterGithubAppMutation({
+ *   variables: {
+ *      code: // value for 'code'
+ *   },
+ * });
+ */
+export function useRegisterGithubAppMutation(baseOptions?: Apollo.MutationHookOptions<RegisterGithubAppMutation, RegisterGithubAppMutationVariables>) {
+        return Apollo.useMutation<RegisterGithubAppMutation, RegisterGithubAppMutationVariables>(RegisterGithubAppDocument, baseOptions);
+      }
+export type RegisterGithubAppMutationHookResult = ReturnType<typeof useRegisterGithubAppMutation>;
+export type RegisterGithubAppMutationResult = Apollo.MutationResult<RegisterGithubAppMutation>;
+export type RegisterGithubAppMutationOptions = Apollo.BaseMutationOptions<RegisterGithubAppMutation, RegisterGithubAppMutationVariables>;
 export const RemoveAppProxyPortDocument = gql`
     mutation removeAppProxyPort($input: RemoveAppProxyPortInput!) {
   removeAppProxyPort(input: $input)
@@ -1945,6 +2003,8 @@ export const SetupDocument = gql`
   setup {
     canConnectSsh
     sshPublicKey
+    isGithubAppSetup
+    githubAppManifest
   }
 }
     `;

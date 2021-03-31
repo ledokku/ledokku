@@ -15,6 +15,7 @@ import { addAppProxyPort } from './addAppProxyPort';
 import { removeAppProxyPort } from './removeAppProxyPort';
 import { restartApp } from './restartApp';
 import { rebuildApp } from './rebuildApp';
+import { registerGithubApp } from './registerGithubApp';
 
 export const mutations = {
   loginWithGithub,
@@ -34,4 +35,5 @@ export const mutations = {
   removeDomain,
   addDomain,
   setDomain,
+  registerGithubApp,
 };

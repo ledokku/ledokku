@@ -13,8 +13,9 @@ export const setup: QueryResolvers['setup'] = async () => {
 
   let canConnectSsh = false;
   try {
-    await sshConnect();
+    const ssh = await sshConnect();
     canConnectSsh = true;
+    ssh.dispose();
   } catch (error) {
     // We do nothing as canConnectSsh is false
     debug(error);
@@ -23,5 +24,36 @@ export const setup: QueryResolvers['setup'] = async () => {
   return {
     canConnectSsh,
     sshPublicKey: publicKey,
+    isGithubAppSetup: !!config.githubAppClientId,
+    // See https://docs.github.com/en/developers/apps/creating-a-github-app-from-a-manifest#examples
+    githubAppManifest: JSON.stringify({
+      name: 'Ledokku',
+      url:
+        process.env.NODE_ENV === 'production'
+          ? `http://${config.dokkuSshHost}`
+          : 'http://localhost:3000',
+      request_oauth_on_install: true,
+      callback_url:
+        process.env.NODE_ENV === 'production'
+          ? `http://${config.dokkuSshHost}`
+          : 'http://localhost:3000',
+      hook_attributes: {
+        url:
+          process.env.NODE_ENV === 'production'
+            ? `http://${config.dokkuSshHost}/github/events`
+            : config.webhookProxyUrl,
+      },
+      redirect_url:
+        process.env.NODE_ENV === 'production'
+          ? `http://${config.dokkuSshHost}`
+          : 'http://localhost:3000',
+      public: false,
+      default_permissions: {
+        emails: 'read',
+        contents: 'read',
+        metadata: 'read',
+      },
+      default_events: ['push'],
+    }),
   };
 };

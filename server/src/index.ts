@@ -90,6 +90,10 @@ const typeDefs = gql`
     token: String!
   }
 
+  type RegisterGithubAppResult {
+    githubAppClientId: String!
+  }
+
   type CreateAppDokkuResult {
     appId: String!
   }
@@ -184,6 +188,8 @@ const typeDefs = gql`
   type SetupResult {
     canConnectSsh: Boolean!
     sshPublicKey: String!
+    isGithubAppSetup: Boolean!
+    githubAppManifest: String!
   }
 
   type IsPluginInstalledResult {
@@ -308,6 +314,7 @@ const typeDefs = gql`
 
   type Mutation {
     loginWithGithub(code: String!): LoginResult
+    registerGithubApp(code: String!): RegisterGithubAppResult
     addDomain(input: AddDomainInput!): AddDomainResult!
     removeDomain(input: RemoveDomainInput!): RemoveDomainResult!
     setDomain(input: SetDomainInput!): SetDomainResult!
@@ -432,7 +439,7 @@ app.get('/runtime-config.js', (_, res) => {
   res.setHeader('Content-Type', 'application/javascript');
   res.end(`
   window['runConfig'] = {
-    GITHUB_CLIENT_ID: '${config.githubClientId}',
+    GITHUB_APP_CLIENT_ID: '${config.githubAppClientId}',
     TELEMETRY_DISABLED: '${config.telemetryDisabled}'
   }
   `);
@@ -455,6 +462,11 @@ app.post('/webhooks', async (req, res) => {
     res.status(200).end();
     githubPushWebhookHandler(isWebhookVerified);
   }
+});
+
+app.post('/events', (req, res) => {
+  console.log('received request -----------------------------', req.body);
+  res.json({ success: true });
 });
 
 http.listen({ port: 4000 }, () => {
