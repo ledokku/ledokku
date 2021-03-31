@@ -91,7 +91,7 @@ export type LoginResult = {
 
 export type RegisterGithubAppResult = {
   __typename?: 'RegisterGithubAppResult';
-  result: Scalars['Boolean'];
+  githubAppClientId: Scalars['String'];
 };
 
 export type CreateAppDokkuResult = {
@@ -601,9 +601,9 @@ export type ResolversTypes = {
   RealTimeLog: ResolverTypeWrapper<RealTimeLog>;
   LoginResult: ResolverTypeWrapper<LoginResult>;
   RegisterGithubAppResult: ResolverTypeWrapper<RegisterGithubAppResult>;
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   CreateAppDokkuResult: ResolverTypeWrapper<CreateAppDokkuResult>;
   CreateAppGithubResult: ResolverTypeWrapper<CreateAppGithubResult>;
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   DestroyAppResult: ResolverTypeWrapper<DestroyAppResult>;
   RestartAppResult: ResolverTypeWrapper<RestartAppResult>;
   RebuildAppResult: ResolverTypeWrapper<RebuildAppResult>;
@@ -664,9 +664,9 @@ export type ResolversParentTypes = {
   RealTimeLog: RealTimeLog;
   LoginResult: LoginResult;
   RegisterGithubAppResult: RegisterGithubAppResult;
-  Boolean: Scalars['Boolean'];
   CreateAppDokkuResult: CreateAppDokkuResult;
   CreateAppGithubResult: CreateAppGithubResult;
+  Boolean: Scalars['Boolean'];
   DestroyAppResult: DestroyAppResult;
   RestartAppResult: RestartAppResult;
   RebuildAppResult: RebuildAppResult;
@@ -774,7 +774,7 @@ export type LoginResultResolvers<ContextType = any, ParentType extends Resolvers
 };
 
 export type RegisterGithubAppResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['RegisterGithubAppResult'] = ResolversParentTypes['RegisterGithubAppResult']> = {
-  result?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  githubAppClientId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

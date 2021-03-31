@@ -91,7 +91,7 @@ export type LoginResult = {
 
 export type RegisterGithubAppResult = {
   __typename?: 'RegisterGithubAppResult';
-  result: Scalars['Boolean'];
+  githubAppClientId: Scalars['String'];
 };
 
 export type CreateAppDokkuResult = {
@@ -645,7 +645,7 @@ export type RegisterGithubAppMutation = (
   { __typename?: 'Mutation' }
   & { registerGithubApp?: Maybe<(
     { __typename?: 'RegisterGithubAppResult' }
-    & Pick<RegisterGithubAppResult, 'result'>
+    & Pick<RegisterGithubAppResult, 'githubAppClientId'>
   )> }
 );
 
@@ -1310,7 +1310,7 @@ export type RebuildAppMutationOptions = Apollo.BaseMutationOptions<RebuildAppMut
 export const RegisterGithubAppDocument = gql`
     mutation registerGithubApp($code: String!) {
   registerGithubApp(code: $code) {
-    result
+    githubAppClientId
   }
 }
     `;

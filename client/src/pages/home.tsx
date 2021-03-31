@@ -8,6 +8,9 @@ import {
   Button,
   Spinner,
   Container,
+  Alert,
+  AlertTitle,
+  AlertDescription,
 } from '@chakra-ui/react';
 import { config } from '../config';
 import {
@@ -23,10 +26,11 @@ export const Home = () => {
   const toast = useToast();
   const history = useHistory();
   const { loggedIn, login } = useAuth();
-  const { data, loading, error } = useSetupQuery({});
+  const { data, loading, error, refetch: refetchSetup } = useSetupQuery({});
   const [registerGithubAppMutation] = useRegisterGithubAppMutation();
   const [loginWithGithubMutation] = useLoginWithGithubMutation();
   const [loggingIn, setLoggingIn] = useState(false);
+  const [showAppSuccessAlert, setShowAppSuccessAlert] = useState(false);
 
   // On mount we check if there is a github code present
   useEffect(() => {
@@ -60,17 +64,20 @@ export const Home = () => {
         // Remove hash in url
         window.history.replaceState({}, document.title, '.');
         try {
-          await registerGithubAppMutation({
+          const data = await registerGithubAppMutation({
             variables: { code: githubCode },
           });
+          if (data.data?.registerGithubApp?.githubAppClientId) {
+            config.githubClientId =
+              data.data?.registerGithubApp?.githubAppClientId;
+
+            setShowAppSuccessAlert(true);
+
+            await refetchSetup();
+          }
         } catch (error) {
           toast.error(error.message);
         }
-
-        // TODO show success message after reload?
-
-        // reload the page so the config github client id is injected
-        window.location.href = '/';
       }
     };
 
@@ -129,10 +136,16 @@ export const Home = () => {
 
         {data?.setup.canConnectSsh === true &&
           data?.setup.isGithubAppSetup === false && (
-            <>
-              <Text mt={4}>
+            <Box
+              maxWidth="xl"
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Text mt={4} textAlign="center">
                 In order to be able to login and interact with the Github API,
-                let's create a new Github Application
+                let's create a new Github Application.
               </Text>
               <form
                 action="https://github.com/settings/apps/new?state=github_application_setup"
@@ -146,7 +159,7 @@ export const Home = () => {
                   style={{ display: 'none' }}
                 />
                 <Button
-                  mt={3}
+                  mt={4}
                   colorScheme="gray"
                   type="submit"
                   leftIcon={<FiGithub size={18} />}
@@ -155,17 +168,40 @@ export const Home = () => {
                   Create Github Application
                 </Button>
               </form>
-            </>
+            </Box>
           )}
 
         {data?.setup.canConnectSsh === true &&
           data?.setup.isGithubAppSetup === true &&
           !loggingIn && (
-            <>
-              <Text>Login to get started.</Text>
+            <Box
+              maxWidth="2xl"
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              justifyContent="center"
+            >
+              {showAppSuccessAlert ? (
+                <Alert
+                  mt={4}
+                  status="success"
+                  variant="top-accent"
+                  flexDirection="column"
+                  alignItems="flex-start"
+                  borderBottomRadius="base"
+                  boxShadow="md"
+                >
+                  <AlertTitle mr={2}>
+                    Github application successfully created
+                  </AlertTitle>
+                  <AlertDescription>
+                    You can now login to create your first user.
+                  </AlertDescription>
+                </Alert>
+              ) : null}
 
               <Button
-                mt={3}
+                mt={4}
                 colorScheme="gray"
                 onClick={handleLogin}
                 leftIcon={<FiGithub size={18} />}
@@ -173,7 +209,7 @@ export const Home = () => {
               >
                 Log in with Github
               </Button>
-            </>
+            </Box>
           )}
       </Box>
     </Container>

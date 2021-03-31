@@ -1,5 +1,5 @@
 mutation registerGithubApp($code: String!) {
   registerGithubApp(code: $code) {
-    result
+    githubAppClientId
   }
 }

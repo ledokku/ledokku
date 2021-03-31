@@ -68,5 +68,5 @@ export const registerGithubApp: MutationResolvers['registerGithubApp'] = async (
   config.githubAppWebhookSecret = githubAppWebhookSecret;
   config.githubAppPem = githubAppPem;
 
-  return { result: true };
+  return { githubAppClientId };
 };

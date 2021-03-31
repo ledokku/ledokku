@@ -91,7 +91,7 @@ const typeDefs = gql`
   }
 
   type RegisterGithubAppResult {
-    result: Boolean!
+    githubAppClientId: String!
   }
 
   type CreateAppDokkuResult {
