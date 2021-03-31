@@ -13,8 +13,9 @@ export const setup: QueryResolvers['setup'] = async () => {
 
   let canConnectSsh = false;
   try {
-    await sshConnect();
+    const ssh = await sshConnect();
     canConnectSsh = true;
+    ssh.dispose();
   } catch (error) {
     // We do nothing as canConnectSsh is false
     debug(error);
@@ -31,9 +32,11 @@ export const setup: QueryResolvers['setup'] = async () => {
         process.env.NODE_ENV === 'production'
           ? `http://${config.dokkuSshHost}`
           : 'http://localhost:3000',
-      // TODO This should be enabled
-      // It's working for apps created via parameters but not here, not sure why
-      // request_oauth_on_install: true,
+      request_oauth_on_install: true,
+      callback_url:
+        process.env.NODE_ENV === 'production'
+          ? `http://${config.dokkuSshHost}`
+          : 'http://localhost:3000',
       hook_attributes: {
         url:
           process.env.NODE_ENV === 'production'
