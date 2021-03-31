@@ -8,6 +8,24 @@ hide_title: true
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.6.1](https://github.com/ledokku/ledokku/compare/v0.6.0...v0.6.1) (2021-03-29)
+
+### Bug Fixes
+
+- **docs:** fix settings image, fix typos in oauth app ([#317](https://github.com/ledokku/ledokku/issues/317)) ([35d4ab2](https://github.com/ledokku/ledokku/commit/35d4ab2c887f736557a2d161cc4b3359ac4adf65))
+- **docs:** update command for destroying redis instance ([#320](https://github.com/ledokku/ledokku/issues/320)) ([8b38504](https://github.com/ledokku/ledokku/commit/8b3850409e0e7ef435af14d624182326c184a4d3))
+
+### Documentation
+
+- add security section ([#327](https://github.com/ledokku/ledokku/issues/327)) ([4eda409](https://github.com/ledokku/ledokku/commit/4eda409129e02d226ab7f50adf7d66b0d820e3cd))
+
+### Miscellaneous Chores
+
+- **client:** fix how config is loaded ([#326](https://github.com/ledokku/ledokku/issues/326)) ([9d39b69](https://github.com/ledokku/ledokku/commit/9d39b6912d6e9633b86b3fad55ec4b7cf877c686))
+- in dev mode automatically setup smee proxy ([#323](https://github.com/ledokku/ledokku/issues/323)) ([359b856](https://github.com/ledokku/ledokku/commit/359b856dbd044b571a5c13711e111e38959a2f48))
+- **client:** fix create db link ([#315](https://github.com/ledokku/ledokku/issues/315)) ([4a12cd2](https://github.com/ledokku/ledokku/commit/4a12cd2bbb120a5cdfee82f92ad50f68fee8af90))
+- **docs:** update dokku w in getting-started guide ([#318](https://github.com/ledokku/ledokku/issues/318)) ([a879354](https://github.com/ledokku/ledokku/commit/a8793541acbebc85eba175787acfc8af28ed1bef))
+
 ## [0.6.0](https://github.com/ledokku/ledokku/compare/v0.5.1...v0.6.0) (2021-03-21)
 
 ### Features
