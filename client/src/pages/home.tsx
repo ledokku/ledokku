@@ -127,35 +127,36 @@ export const Home = () => {
           </>
         )}
 
-        {data?.setup.isGithubAppSetup === false && (
-          <>
-            <Text mt={4}>
-              In order to be able to login and interact with the Github API,
-              let's create a new Github Application
-            </Text>
-            <form
-              action="https://github.com/settings/apps/new?state=github_application_setup"
-              method="post"
-            >
-              <input
-                type="text"
-                name="manifest"
-                id="manifest"
-                defaultValue={data.setup.githubAppManifest}
-                style={{ display: 'none' }}
-              />
-              <Button
-                mt={3}
-                colorScheme="gray"
-                type="submit"
-                leftIcon={<FiGithub size={18} />}
-                size="lg"
+        {data?.setup.canConnectSsh === true &&
+          data?.setup.isGithubAppSetup === false && (
+            <>
+              <Text mt={4}>
+                In order to be able to login and interact with the Github API,
+                let's create a new Github Application
+              </Text>
+              <form
+                action="https://github.com/settings/apps/new?state=github_application_setup"
+                method="post"
               >
-                Create Github Application
-              </Button>
-            </form>
-          </>
-        )}
+                <input
+                  type="text"
+                  name="manifest"
+                  id="manifest"
+                  defaultValue={data.setup.githubAppManifest}
+                  style={{ display: 'none' }}
+                />
+                <Button
+                  mt={3}
+                  colorScheme="gray"
+                  type="submit"
+                  leftIcon={<FiGithub size={18} />}
+                  size="lg"
+                >
+                  Create Github Application
+                </Button>
+              </form>
+            </>
+          )}
 
         {data?.setup.canConnectSsh === true &&
           data?.setup.isGithubAppSetup === true &&
