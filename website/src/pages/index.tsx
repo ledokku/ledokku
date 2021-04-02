@@ -27,11 +27,7 @@ function Home() {
 
   return (
     <ChakraProvider>
-      <Layout
-      // TODO ARTURS - fix so it works with site config
-      // title={`Ledokku`}
-      // description="Blazing fast, cheap deployment platform based on dokku. Find us on github and twitter @ledokku"
-      >
+      <Layout>
         <Container py={20} mb={20} alignContent={'center'} maxW={'4xl'}>
           <SimpleGrid
             minChildWidth={300}
@@ -103,8 +99,6 @@ function Home() {
                 </Link>
               </SimpleGrid>
             </Box>
-
-            {/*STYLE THIS PROPERLY RESPONSIVE*/}
             <Box mt={6}>
               <Box w={{ md: 450, sm: 300, xs: 300 }} boxShadow="lg">
                 <Image src="./static/img/dashboardLanding.png" />
