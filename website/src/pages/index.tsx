@@ -3,7 +3,6 @@ import React from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import useBaseUrl from '@docusaurus/useBaseUrl';
 import styles from './styles.module.css';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'; // requires a loader
 
@@ -66,12 +65,12 @@ function Home() {
                 <Heading color="gray.200">Based on Dokku</Heading>
 
                 <SimpleGrid mt={6} columns={16}>
-                  <Image h={6} w={6} src="https://ledokku.com/img/js.png" />
-                  <Image h={6} w={6} src="https://ledokku.com/img/ruby.png" />
-                  <Image h={6} w={6} src="https://ledokku.com/img/golang.png" />
-                  <Image h={6} w={6} src="https://ledokku.com/img/python.png" />
-                  <Image h={6} w={6} src="https://ledokku.com/img/php.png" />
-                  <Image h={6} w={6} src="https://ledokku.com/img/java.png" />
+                  <Image h={6} w={6} src="img/js.png" />
+                  <Image h={6} w={6} src="img/ruby.png" />
+                  <Image h={6} w={6} src="img/golang.png" />
+                  <Image h={6} w={6} src="img/python.png" />
+                  <Image h={6} w={6} src="img/php.png" />
+                  <Image h={6} w={6} src="img/java.png" />
                   <Image
                     h={6}
                     w={6}
@@ -101,7 +100,7 @@ function Home() {
             </Box>
             <Box mt={6}>
               <Box w={{ md: 450, sm: 300, xs: 300 }} boxShadow="lg">
-                <Image src="https://ledokku.com/img/dashboardLanding.png" />
+                <Image src="img/dashboardLanding.png" />
               </Box>
               <Box
                 mt={-16}
@@ -110,7 +109,7 @@ function Home() {
                 w={{ md: 400, sm: 250, xs: 250 }}
                 boxShadow="lg"
               >
-                <Image src="https://ledokku.com/img/terminal.png" />
+                <Image src="img/terminal.png" />
               </Box>
             </Box>
           </SimpleGrid>
