@@ -1,195 +1,122 @@
 import React from 'react';
-import classnames from 'clsx';
+
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import styles from './styles.module.css';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'; // requires a loader
-import { Carousel } from 'react-responsive-carousel';
 
-const features = [
-  {
-    title: <>Web interface</>,
-    imageUrl: 'img/undraw_web_developer.svg',
-    description: (
-      <>
-        Ledokku provides a beautiful and intuitive web interface that lets you
-        manage all things Dokku.
-      </>
-    ),
-  },
-  {
-    title: <>Deploy and monitor</>,
-    imageUrl: 'img/undraw_deploy.svg',
-    description: (
-      <>
-        Deploy your app with usual Dokku flow, monitor both app and database
-        logs and manage connections between the two.
-      </>
-    ),
-  },
-  {
-    title: <>Powered by Dokku</>,
-    imageUrl: 'img/undraw_server.svg',
-    description: (
-      <>
-        With almost 20k+ stars on github, Dokku is one of the most famous
-        open-source PaaS using docker 🐋.
-      </>
-    ),
-  },
-];
-
-function Feature({ imageUrl, title, description }) {
-  const imgUrl = useBaseUrl(imageUrl);
-  return (
-    <div className={classnames('col col--4', styles.feature)}>
-      {imgUrl && (
-        <div className="text--center">
-          <img className={styles.featureImage} src={imgUrl} alt={title} />
-        </div>
-      )}
-      <h3>{title}</h3>
-      <p>{description}</p>
-    </div>
-  );
-}
+import {
+  Box,
+  Heading,
+  Container,
+  Text,
+  Button,
+  SimpleGrid,
+  ChakraProvider,
+  Image,
+  Grid,
+  GridItem,
+  Divider,
+} from '@chakra-ui/react';
 
 function Home() {
   const context = useDocusaurusContext();
   const { siteConfig = {} } = context;
 
   return (
-    <Layout
-      // TODO ARTURS - fix so it works with site config
-      title={`Ledokku`}
-      description="Blazing fast, cheap deployment platform based on dokku. Find us on github and twitter @ledokku"
-    >
-      <header className={classnames('hero hero--primary', styles.heroBanner)}>
-        <div className="container">
-          <h1 className="hero__title">{siteConfig.title}</h1>
-          <p className="hero__subtitle">{siteConfig.tagline}</p>
-          <div className={styles.buttons}>
-            <Link
-              className={classnames(
-                'button button--outline button--secondary button--lg',
-                styles.getStarted
-              )}
-              to={useBaseUrl('docs/introduction')}
-            >
-              Get Started
-            </Link>
-          </div>
-        </div>
-      </header>
+    <ChakraProvider>
+      <Layout>
+        <Container py={20} mb={20} alignContent={'center'} maxW={'4xl'}>
+          <SimpleGrid
+            minChildWidth={300}
+            columns={[4, 2, 2, 2]}
+            gap={{ md: 6, xs: 2, sm: 2 }}
+            pt={4}
+            as="main"
+          >
+            <Box>
+              <Heading
+                color="gray.700"
+                fontWeight={'extrabold'}
+                fontFamily={'sans-serif'}
+                fontSize={'6xl'}
+                lineHeight={'110%'}
+              >
+                Ledokku
+              </Heading>
+              <Heading
+                color="grey.600"
+                fontWeight={'bold'}
+                fontFamily={'sans-serif'}
+                fontSize={{ base: 'xl', md: 'xl', sm: 'xl', xs: 'l' }}
+                lineHeight={'110%'}
+                mb={6}
+                px={1}
+              >
+                Take control of your app deployments
+              </Heading>
+              <Divider orientation="horizontal" />
+              <SimpleGrid mb={10} gap={{ xl: 4, l: 4, sm: 4, xs: 1 }}>
+                <Heading color="gray.600">Deploy from git</Heading>
+                <Heading color="gray.500">Link with databases</Heading>
+                <Heading color="gray.400">Open source</Heading>
+                <Heading color="gray.300">Save money</Heading>
+                <Heading color="gray.200">Based on Dokku</Heading>
 
-      <main>
-        <section className={styles.dashboard}>
-          <div style={{ border: '1px solid #e2e8f0', maxWidth: 800 }}>
-            <Carousel
-              showIndicators={true}
-              showThumbs={false}
-              showStatus={false}
-              width={'auto'}
-            >
-              <div>
-                <img alt="Dashboard view" src="img/dashboard1.png" />
-              </div>
-              <div>
-                <img alt="Db view" src="img/dbView.png" />
-              </div>
-              <div>
-                <img alt="Create app view" src="img/createApp.png" />
-              </div>
-              <div>
-                <img alt="App logs view" src="img/applogs.png" />
-              </div>
-            </Carousel>
-          </div>
-        </section>
-
-        {features && features.length && (
-          <section className={styles.features}>
-            <div className="container">
-              <div className="row">
-                {features.map((props, idx) => (
-                  <Feature key={idx} {...props} />
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
-
-        <section className={styles.languages}>
-          <div className="container">
-            <h3>Supported languages</h3>
-            <div>
-              <a href="https://nodejs.org/" target="_blank">
-                <img
-                  alt="nodejs"
-                  src="https://cdn.svgporn.com/logos/nodejs-icon.svg"
-                />
-              </a>
-              <a href="https://golang.org/" target="_blank">
-                <img alt="go" src="https://cdn.svgporn.com/logos/go.svg" />
-              </a>
-              <a href="https://www.python.org/" target="_blank">
-                <img
-                  alt="python"
-                  src="https://cdn.svgporn.com/logos/python.svg"
-                />
-              </a>
-              <a href="https://www.php.net/" target="_blank">
-                <img alt="php" src="https://cdn.svgporn.com/logos/php.svg" />
-              </a>
-              <a href="https://www.ruby-lang.org/" target="_blank">
-                <img alt="ruby" src="https://cdn.svgporn.com/logos/ruby.svg" />
-              </a>
-              <a href="https://www.java.com/" target="_blank">
-                <img alt="java" src="https://cdn.svgporn.com/logos/java.svg" />
-              </a>
-              <a href="https://www.scala-lang.org/" target="_blank">
-                <img
-                  alt="scala"
-                  src="https://cdn.svgporn.com/logos/scala.svg"
-                />
-              </a>
-              <a href="https://clojure.org/" target="_blank">
-                <img
-                  alt="clojure"
-                  src="https://cdn.svgporn.com/logos/clojure.svg"
-                />
-              </a>
-            </div>
-          </div>
-        </section>
-
-        <section className={classnames(styles.languages, styles.databases)}>
-          <div className="container">
-            <h3>Supported databases</h3>
-            <a href="https://www.postgresql.org/" target="_blank">
-              <img
-                alt="postgresql"
-                src="https://cdn.svgporn.com/logos/postgresql.svg"
-              />
-            </a>
-            <a href="https://dev.mysql.com/" target="_blank">
-              <img alt="mysql" src="https://cdn.svgporn.com/logos/mysql.svg" />
-            </a>
-            <a href="https://www.mongodb.com/" target="_blank">
-              <img
-                alt="mongodb"
-                src="https://cdn.svgporn.com/logos/mongodb.svg"
-              />
-            </a>
-            <a href="https://redis.io/" target="_blank">
-              <img alt="redis" src="https://cdn.svgporn.com/logos/redis.svg" />
-            </a>
-          </div>
-        </section>
-      </main>
-    </Layout>
+                <SimpleGrid mt={6} columns={16}>
+                  <Image h={6} w={6} src="./static/img/js.png" />
+                  <Image h={6} w={6} src="./static/img/ruby.png" />
+                  <Image h={6} w={6} src="./static/img/golang.png" />
+                  <Image h={6} w={6} src="./static/img/python.png" />
+                  <Image h={6} w={6} src="./static/img/php.png" />
+                  <Image h={6} w={6} src="./static/img/java.png" />
+                  <Image
+                    h={6}
+                    w={6}
+                    src="https://cdn.svgporn.com/logos/scala.svg"
+                  />
+                  <Image
+                    h={6}
+                    w={6}
+                    src="https://cdn.svgporn.com/logos/clojure.svg"
+                  />
+                </SimpleGrid>
+              </SimpleGrid>
+              <SimpleGrid mt={12}>
+                <Link href="/docs/getting-started">
+                  <Button
+                    colorScheme={'white'}
+                    w={'50%'}
+                    bg={'gray.900'}
+                    _hover={{
+                      bg: 'gray.500',
+                    }}
+                  >
+                    Get started
+                  </Button>
+                </Link>
+              </SimpleGrid>
+            </Box>
+            <Box mt={6}>
+              <Box w={{ md: 450, sm: 300, xs: 300 }} boxShadow="lg">
+                <Image src="./static/img/dashboardLanding.png" />
+              </Box>
+              <Box
+                mt={-16}
+                ml={6}
+                mr={6}
+                w={{ md: 400, sm: 250, xs: 250 }}
+                boxShadow="lg"
+              >
+                <Image src="./static/img/terminal.png" />
+              </Box>
+            </Box>
+          </SimpleGrid>
+        </Container>
+      </Layout>
+    </ChakraProvider>
   );
 }
 

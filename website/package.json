@@ -12,6 +12,7 @@
     "clear": "docusaurus clear"
   },
   "dependencies": {
+    "@chakra-ui/react": "^1.4.1",
     "@docusaurus/core": "2.0.0-alpha.68",
     "@docusaurus/preset-classic": "2.0.0-alpha.68",
     "clsx": "1.1.1",

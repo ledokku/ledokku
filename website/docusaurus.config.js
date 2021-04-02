@@ -32,7 +32,7 @@ module.exports = {
         {
           href: 'https://github.com/ledokku/ledokku',
           label: 'GitHub',
-          position: 'right',
+          position: 'left',
         },
       ],
     },
