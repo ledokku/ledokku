@@ -66,12 +66,12 @@ function Home() {
                 <Heading color="gray.200">Based on Dokku</Heading>
 
                 <SimpleGrid mt={6} columns={16}>
-                  <Image h={6} w={6} src="./static/img/js.png" />
-                  <Image h={6} w={6} src="./static/img/ruby.png" />
-                  <Image h={6} w={6} src="./static/img/golang.png" />
-                  <Image h={6} w={6} src="./static/img/python.png" />
-                  <Image h={6} w={6} src="./static/img/php.png" />
-                  <Image h={6} w={6} src="./static/img/java.png" />
+                  <Image h={6} w={6} src="https://ledokku.com/img/js.png" />
+                  <Image h={6} w={6} src="https://ledokku.com/img/ruby.png" />
+                  <Image h={6} w={6} src="https://ledokku.com/img/golang.png" />
+                  <Image h={6} w={6} src="https://ledokku.com/img/python.png" />
+                  <Image h={6} w={6} src="https://ledokku.com/img/php.png" />
+                  <Image h={6} w={6} src="https://ledokku.com/img/java.png" />
                   <Image
                     h={6}
                     w={6}
@@ -101,7 +101,7 @@ function Home() {
             </Box>
             <Box mt={6}>
               <Box w={{ md: 450, sm: 300, xs: 300 }} boxShadow="lg">
-                <Image src="./static/img/dashboardLanding.png" />
+                <Image src="https://ledokku.com/img/dashboardLanding.png" />
               </Box>
               <Box
                 mt={-16}
@@ -110,7 +110,7 @@ function Home() {
                 w={{ md: 400, sm: 250, xs: 250 }}
                 boxShadow="lg"
               >
-                <Image src="./static/img/terminal.png" />
+                <Image src="https://ledokku.com/img/terminal.png" />
               </Box>
             </Box>
           </SimpleGrid>
