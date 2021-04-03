@@ -1,15 +1,17 @@
 import * as yup from 'yup';
-import { useHistory, useParams } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import {
   Container,
   Heading,
-  SimpleGrid,
+  Grid,
+  GridItem,
   Box,
   Text,
   FormControl,
   Input,
   FormErrorMessage,
   Button,
+  VStack,
 } from '@chakra-ui/react';
 import { Header } from '../../modules/layout/Header';
 import {
@@ -112,8 +114,37 @@ export const Settings = () => {
       </HeaderContainer>
 
       <Container maxW="5xl" mt={10}>
-        <SimpleGrid columns={{ sm: 1, md: 2 }}>
-          <div>
+        <Grid templateColumns="repeat(6, 1fr)" gap={16}>
+          <GridItem colSpan={2} py={5}>
+            <VStack align="stretch">
+              <Button
+                variant="ghost"
+                justifyContent="left"
+                isActive={true}
+                as={Link}
+                to={`/app/${app.id}/settings/ports`}
+              >
+                Port Management
+              </Button>
+              <Button
+                variant="ghost"
+                justifyContent="left"
+                as={Link}
+                to={`/app/${app.id}/settings/domains`}
+              >
+                Domains
+              </Button>
+              <Button
+                variant="ghost"
+                justifyContent="left"
+                as={Link}
+                to={`/app/${app.id}/settings/advanced`}
+              >
+                Advanced
+              </Button>
+            </VStack>
+          </GridItem>
+          <GridItem colSpan={4}>
             <Box py={5}>
               <Heading as="h2" size="md">
                 App settings
@@ -169,8 +200,8 @@ export const Settings = () => {
                 Delete
               </Button>
             </form>
-          </div>
-        </SimpleGrid>
+          </GridItem>
+        </Grid>
       </Container>
     </div>
   );
