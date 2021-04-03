@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import {
   Container,
   Heading,
@@ -11,7 +11,6 @@ import {
   Input,
   FormErrorMessage,
   Button,
-  VStack,
 } from '@chakra-ui/react';
 import { Header } from '../../modules/layout/Header';
 import {
@@ -29,6 +28,7 @@ import { Webhooks } from '../../modules/webhooks/Webhooks';
 import { useToast } from '../../ui/toast';
 import { AppHeaderTabNav } from '../../modules/app/AppHeaderTabNav';
 import { AppHeaderInfo } from '../../modules/app/AppHeaderInfo';
+import { AppSettingsMenu } from '../../modules/app/AppSettingsMenu';
 
 export const Settings = () => {
   const { id: appId } = useParams<{ id: string }>();
@@ -119,33 +119,7 @@ export const Settings = () => {
           gap={{ sm: 0, md: 16 }}
         >
           <GridItem colSpan={2} py={5}>
-            <VStack align="stretch">
-              <Button
-                variant="ghost"
-                justifyContent="left"
-                isActive={true}
-                as={Link}
-                to={`/app/${app.id}/settings/ports`}
-              >
-                Port Management
-              </Button>
-              <Button
-                variant="ghost"
-                justifyContent="left"
-                as={Link}
-                to={`/app/${app.id}/settings/domains`}
-              >
-                Domains
-              </Button>
-              <Button
-                variant="ghost"
-                justifyContent="left"
-                as={Link}
-                to={`/app/${app.id}/settings/advanced`}
-              >
-                Advanced
-              </Button>
-            </VStack>
+            <AppSettingsMenu app={app} />
           </GridItem>
           <GridItem colSpan={4}>
             <Box py={5}>
