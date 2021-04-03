@@ -114,7 +114,10 @@ export const Settings = () => {
       </HeaderContainer>
 
       <Container maxW="5xl" mt={10}>
-        <Grid templateColumns="repeat(6, 1fr)" gap={16}>
+        <Grid
+          templateColumns={{ sm: 'repeat(1, 1fr)', md: 'repeat(6, 1fr)' }}
+          gap={{ sm: 0, md: 16 }}
+        >
           <GridItem colSpan={2} py={5}>
             <VStack align="stretch">
               <Button
