@@ -11,12 +11,14 @@ interface AppHeaderTabNavProps {
 export const AppHeaderTabNav = ({ app }: AppHeaderTabNavProps) => {
   const location = useLocation();
 
-  const selectedRoute = location.pathname.endsWith('/settings')
-    ? 'settings'
-    : location.pathname.endsWith('/logs')
+  const selectedRoute = location.pathname.endsWith('/logs')
     ? 'logs'
     : location.pathname.endsWith('/env')
     ? 'env'
+    : location.pathname.endsWith('/settings/ports') ||
+      location.pathname.endsWith('/settings/domains') ||
+      location.pathname.endsWith('/settings/advanced')
+    ? 'settings'
     : 'index';
 
   return (
@@ -38,7 +40,7 @@ export const AppHeaderTabNav = ({ app }: AppHeaderTabNavProps) => {
           Env setup
         </TabNavLink>
         <TabNavLink
-          to={`/app/${app.id}/settings`}
+          to={`/app/${app.id}/settings/ports`}
           selected={selectedRoute === 'settings'}
         >
           Settings

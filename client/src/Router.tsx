@@ -4,7 +4,6 @@ import { Home } from './pages/home';
 import { App } from './pages/app/index';
 import { Env } from './pages/app/env';
 import { Logs } from './pages/app/logs';
-import { Settings as AppSettings } from './pages/app/settings';
 import { Database } from './pages/database/index';
 import { Logs as DatabaseLogs } from './pages/database/logs';
 import { Settings as DatabaseSettings } from './pages/database/settings';
@@ -17,6 +16,9 @@ import { CreateAppDokku } from './pages/app-creation/create-app-dokku';
 import { CreateApp } from './pages/app-creation/create-app';
 import { CreateAppGithub } from './pages/app-creation/create-app-github';
 import { useTracking } from './utils/useTracking';
+import { AppSettingsPorts } from './pages/app/settings/ports';
+import { AppSettingsDomains } from './pages/app/settings/domains';
+import { AppSettingsAdvanced } from './pages/app/settings/advanced';
 
 const PrivateRoute = ({ children, ...rest }: RouteProps) => {
   const { loggedIn } = useAuth();
@@ -78,8 +80,14 @@ export const Router = () => {
       <PrivateRoute path="/app/:id/env" exact>
         <Env />
       </PrivateRoute>
-      <PrivateRoute path="/app/:id/settings" exact>
-        <AppSettings />
+      <PrivateRoute path="/app/:id/settings/ports" exact>
+        <AppSettingsPorts />
+      </PrivateRoute>
+      <PrivateRoute path="/app/:id/settings/domains" exact>
+        <AppSettingsDomains />
+      </PrivateRoute>
+      <PrivateRoute path="/app/:id/settings/advanced" exact>
+        <AppSettingsAdvanced />
       </PrivateRoute>
       <PrivateRoute path="/app/:id/logs" exact>
         <Logs />
