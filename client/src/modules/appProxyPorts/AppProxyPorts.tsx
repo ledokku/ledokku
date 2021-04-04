@@ -16,6 +16,7 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
+  Heading,
 } from '@chakra-ui/react';
 import {
   useAppProxyPortsQuery,
@@ -80,9 +81,9 @@ export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
   return (
     <>
       <Box py="5">
-        <Text fontSize="md" fontWeight="bold">
+        <Heading as="h2" size="md">
           Port Management
-        </Text>
+        </Heading>
         <Text fontSize="sm" color="gray.400">
           The following ports are assigned to your app.
         </Text>

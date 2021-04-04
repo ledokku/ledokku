@@ -17,6 +17,7 @@ import { CreateAppDokku } from './pages/app-creation/create-app-dokku';
 import { CreateApp } from './pages/app-creation/create-app';
 import { CreateAppGithub } from './pages/app-creation/create-app-github';
 import { useTracking } from './utils/useTracking';
+import { AppSettingsPorts } from './pages/app/settings/ports';
 
 const PrivateRoute = ({ children, ...rest }: RouteProps) => {
   const { loggedIn } = useAuth();
@@ -80,6 +81,9 @@ export const Router = () => {
       </PrivateRoute>
       <PrivateRoute path="/app/:id/settings" exact>
         <AppSettings />
+      </PrivateRoute>
+      <PrivateRoute path="/app/:id/settings/ports" exact>
+        <AppSettingsPorts />
       </PrivateRoute>
       <PrivateRoute path="/app/:id/logs" exact>
         <Logs />
