@@ -1,3 +1,4 @@
+import { Box, Heading, Text } from '@chakra-ui/layout';
 import { DomainsDocument } from '../../generated/graphql';
 import {
   useAppByIdQuery,
@@ -75,10 +76,15 @@ export const AppDomains = ({ appId }: AppDomainProps) => {
 
   return (
     <>
-      <h1 className="text-md font-bold mt-7">Domain managment</h1>
-      <p className="text-gray-400 text-sm mb-2">
-        List of domains you have added to {app.name} app
-      </p>
+      <Box py="5">
+        <Heading as="h2" size="md">
+          Domain management
+        </Heading>
+        <Text fontSize="sm" color="gray.400">
+          List of domains you have added to {app.name} app
+        </Text>
+      </Box>
+
       {domainsData &&
         !domainsDataLoading &&
         domainsData.domains.domains.length > 0 &&
