@@ -14,7 +14,7 @@ export const AppSettingsMenu = ({ app }: AppSettingsMenuProps) => {
     ? 'ports'
     : location.pathname.endsWith('/settings/domains')
     ? 'domains'
-    : location.pathname.endsWith('/setting/advanced')
+    : location.pathname.endsWith('/settings/advanced')
     ? 'advanced'
     : 'index';
 

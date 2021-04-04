@@ -1,51 +1,48 @@
-import * as yup from 'yup';
-import { useHistory, useParams } from 'react-router-dom';
 import {
+  Box,
   Container,
-  Heading,
   Grid,
   GridItem,
-  Box,
   Text,
-  FormControl,
   Input,
+  FormControl,
   FormErrorMessage,
   Button,
+  Heading,
 } from '@chakra-ui/react';
-import { Header } from '../../modules/layout/Header';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import { useHistory, useParams } from 'react-router';
 import {
+  DashboardDocument,
   useAppByIdQuery,
   useDestroyAppMutation,
-  DashboardDocument,
-} from '../../generated/graphql';
-import { useFormik } from 'formik';
-import { HeaderContainer } from '../../ui';
-import { AppProxyPorts } from '../../modules/appProxyPorts/AppProxyPorts';
-import { AppRestart } from '../../modules/app/AppRestart';
-import { AppRebuild } from '../../modules/app/AppRebuild';
-import { AppDomains } from '../../modules/domains/AppDomains';
-import { Webhooks } from '../../modules/webhooks/Webhooks';
-import { useToast } from '../../ui/toast';
-import { AppHeaderTabNav } from '../../modules/app/AppHeaderTabNav';
-import { AppHeaderInfo } from '../../modules/app/AppHeaderInfo';
-import { AppSettingsMenu } from '../../modules/app/AppSettingsMenu';
+} from '../../../generated/graphql';
+import { AppHeaderInfo } from '../../../modules/app/AppHeaderInfo';
+import { AppHeaderTabNav } from '../../../modules/app/AppHeaderTabNav';
+import { AppRebuild } from '../../../modules/app/AppRebuild';
+import { AppRestart } from '../../../modules/app/AppRestart';
+import { AppSettingsMenu } from '../../../modules/app/AppSettingsMenu';
+import { Header } from '../../../modules/layout/Header';
+import { Webhooks } from '../../../modules/webhooks/Webhooks';
+import { HeaderContainer } from '../../../ui';
+import { useToast } from '../../../ui/toast';
 
-export const Settings = () => {
+export const AppSettingsAdvanced = () => {
   const { id: appId } = useParams<{ id: string }>();
   const toast = useToast();
-  let history = useHistory();
+  const history = useHistory();
+
+  const { data, loading } = useAppByIdQuery({
+    variables: {
+      appId,
+    },
+  });
+
   const [
     destroyAppMutation,
     { loading: destroyAppMutationLoading },
   ] = useDestroyAppMutation();
-
-  const { data, loading /* error */ } = useAppByIdQuery({
-    variables: {
-      appId,
-    },
-    ssr: false,
-    skip: !appId,
-  });
 
   const DeleteAppNameSchema = yup.object().shape({
     appName: yup
@@ -87,26 +84,22 @@ export const Settings = () => {
     },
   });
 
-  if (!data) {
-    return null;
-  }
-
-  // // TODO display error
+  // TODO display error
 
   if (loading) {
     // TODO nice loading
     return <p>Loading...</p>;
   }
 
-  const { app } = data;
-
-  if (!app) {
+  if (!data?.app) {
     // TODO nice 404
     return <p>App not found.</p>;
   }
 
+  const { app } = data;
+
   return (
-    <div>
+    <>
       <HeaderContainer>
         <Header />
         <AppHeaderInfo app={app} />
@@ -122,26 +115,16 @@ export const Settings = () => {
             <AppSettingsMenu app={app} />
           </GridItem>
           <GridItem colSpan={4}>
-            <Box py={5}>
-              <Heading as="h2" size="md">
-                App settings
-              </Heading>
-              <Text fontSize="sm" color="gray.400">
-                Update the settings of your app.
-              </Text>
-            </Box>
             {!loading && data?.app?.appMetaGithub?.webhooksSecret && (
               <Webhooks appId={app.id} />
             )}
-            <AppProxyPorts appId={app.id} />
             <AppRestart appId={app.id} />
             <AppRebuild appId={app.id} />
-            <AppDomains appId={appId} />
 
             <Box py="5">
-              <Text fontSize="md" fontWeight="bold">
+              <Heading as="h2" size="md">
                 Delete app
-              </Text>
+              </Heading>
               <Text fontSize="sm" color="gray.400">
                 This action cannot be undone. This will permanently delete{' '}
                 {app.name} app and everything related to it. Please type{' '}
@@ -180,6 +163,6 @@ export const Settings = () => {
           </GridItem>
         </Grid>
       </Container>
-    </div>
+    </>
   );
 };
