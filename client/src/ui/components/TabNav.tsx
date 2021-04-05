@@ -1,40 +1,42 @@
-import cx from 'classnames';
-import { Link, LinkProps } from 'react-router-dom';
+import { HStack, BoxProps, Link } from '@chakra-ui/react';
+import { Link as ReactRouterLink, LinkProps } from 'react-router-dom';
 
-interface TabNavProps {
-  children?: React.ReactNode;
-  className?: string;
-}
-
-export const TabNav = ({ children, className }: TabNavProps) => (
-  <nav className={cx('flex space-x-5 text-sm leading-5', className)}>
-    {children}
-  </nav>
+export const TabNav = (props: BoxProps) => (
+  <HStack
+    as="nav"
+    spacing="5"
+    fontSize="sm"
+    lineHeight="5"
+    alignItems="baseline"
+    {...props}
+  />
 );
 
 interface TabNavLinkProps extends LinkProps {
-  children?: React.ReactNode;
-  className?: string;
   selected?: boolean;
 }
 
 export const TabNavLink = ({
-  children,
-  className,
   selected,
   ...props
-}: TabNavLinkProps) => (
+}: TabNavLinkProps & BoxProps) => (
   <Link
+    as={ReactRouterLink}
+    py="3"
+    px="0.5"
+    color="gray.500"
+    _hover={{
+      textDecoration: 'none',
+      color: 'black',
+    }}
+    {...(selected
+      ? {
+          borderBottom: '2px',
+          borderColor: 'black',
+          color: 'black',
+          mb: '-1px',
+        }
+      : {})}
     {...props}
-    className={cx(
-      'py-3 px-0.5 transition-colors ease-in-out duration-150',
-      {
-        'text-gray-500 hover:text-black ': !selected,
-        '-mb-px border-b-2 border-black text-black': selected,
-      },
-      className
-    )}
-  >
-    {children}
-  </Link>
+  />
 );
