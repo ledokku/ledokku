@@ -1,17 +1,17 @@
-import cx from 'classnames';
+import { Box, BoxProps } from '@chakra-ui/react';
 
-interface TerminalProps {
-  children?: React.ReactNode;
-  className?: string;
-}
-
-export const Terminal = ({ children, className }: TerminalProps) => (
-  <div
-    className={cx(
-      'mt-3 shadow-lg text-gray-100 text-sm leading-normal font-mono subpixel-antialiased bg-gray-900 p-4 rounded-lg',
-      className
-    )}
-  >
-    {children}
-  </div>
+export const Terminal = (props: BoxProps) => (
+  <Box
+    mt="3"
+    p="4"
+    boxShadow="lg"
+    borderRadius="lg"
+    color="gray.100"
+    backgroundColor="gray.900"
+    fontSize="sm"
+    fontFamily="mono"
+    lineHeight="1.5"
+    style={{ WebkitFontSmoothing: 'auto' }}
+    {...props}
+  />
 );

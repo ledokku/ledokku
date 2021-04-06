@@ -126,8 +126,7 @@ export const Home = () => {
               In order to setup the ssh connection, run the following command on
               your Dokku server.
             </Text>
-            {/* TODO migrate terminal to chakra-ui */}
-            <Terminal className="break-all">
+            <Terminal wordBreak="break-all">
               {`echo "${data.setup.sshPublicKey}" | dokku ssh-keys:add ledokku`}
             </Terminal>
             <Text mt={3}>Once you are done, just refresh this page.</Text>
