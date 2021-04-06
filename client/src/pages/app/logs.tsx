@@ -111,7 +111,7 @@ export const Logs = () => {
         ) : null}
 
         {memoizedLogsHtml ? (
-          <Terminal className="mb-8">
+          <Terminal mb="8">
             {memoizedLogsHtml.map((html, index) => (
               <p key={index} dangerouslySetInnerHTML={{ __html: html }}></p>
             ))}

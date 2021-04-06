@@ -85,7 +85,7 @@ export const Logs = () => {
         ) : null}
 
         {!databaseLogsLoading && !databaseLogsError && databaseLogsData ? (
-          <Terminal className="mb-8">
+          <Terminal mb="8">
             {databaseLogsData.databaseLogs.logs.map((dblog, index) => (
               <React.Fragment key={index}>
                 {dblog ? <p>{dblog}</p> : <p>&nbsp;</p>}
