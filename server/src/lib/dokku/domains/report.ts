@@ -1,6 +1,10 @@
 import { NodeSSH } from 'node-ssh';
 
 const parseDomainsCommand = (commandResult: string) => {
+  if (commandResult === '') {
+    return [];
+  }
+
   const domains = commandResult.split(' ');
   return domains;
 };

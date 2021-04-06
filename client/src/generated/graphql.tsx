@@ -75,7 +75,7 @@ export type DatabaseTypes =
 
 export type Domains = {
   __typename?: 'Domains';
-  domains: Array<Maybe<Scalars['String']>>;
+  domains: Array<Scalars['String']>;
 };
 
 export type RealTimeLog = {

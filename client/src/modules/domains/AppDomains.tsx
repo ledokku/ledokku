@@ -1,12 +1,22 @@
-import { Box, Heading, Text } from '@chakra-ui/layout';
+import {
+  Box,
+  Flex,
+  Heading,
+  Link,
+  Text,
+  Spinner,
+  Icon,
+  IconButton,
+  Grid,
+  GridItem,
+} from '@chakra-ui/react';
+import { FiExternalLink, FiTrash2 } from 'react-icons/fi';
 import { DomainsDocument } from '../../generated/graphql';
 import {
   useAppByIdQuery,
   useRemoveDomainMutation,
   useDomainsQuery,
 } from '../../generated/graphql';
-import { Button } from '../../ui';
-import { TrashBinIcon } from '../../ui/icons/TrashBinIcon';
 import { AddAppDomain } from './AddAppDomain';
 import { useToast } from '../../ui/toast';
 
@@ -85,38 +95,45 @@ export const AppDomains = ({ appId }: AppDomainProps) => {
         </Text>
       </Box>
 
-      {domainsData &&
-        !domainsDataLoading &&
-        domainsData.domains.domains.length > 0 &&
-        domainsData.domains.domains.map((domain) => (
-          <>
-            {domain && domain.length > 0 ? (
-              <div
+      <Grid templateColumns={{ sm: 'repeat(1, 1fr)', md: 'repeat(3, 1fr)' }}>
+        <GridItem colSpan={2}>
+          <Box mb="8">
+            {domainsDataLoading ? <Spinner /> : null}
+            {domainsData?.domains.domains.length === 0 ? (
+              <Text fontSize="sm" color="gray.400">
+                Currently you haven't added any custom domains to your app
+              </Text>
+            ) : null}
+            {domainsData?.domains.domains.map((domain: any) => (
+              <Flex
                 key={domain}
-                className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4"
+                justifyContent="space-between"
+                alignItems="center"
               >
-                <p className="text-blue-600 mt-2">{domain}</p>
-                <div className="flex items-end">
-                  <Button
-                    disabled={removeDomainMutationLoading}
-                    className="ml-2"
-                    color="red"
-                    onClick={() => handleRemoveDomain(domain)}
-                    variant="outline"
-                    size={24}
-                  >
-                    <TrashBinIcon size={24} />
-                  </Button>
-                </div>
-              </div>
-            ) : (
-              <p className="text-gray-400 text-sm mt-4">
-                Currently you haven't added any domains to your app
-              </p>
-            )}
-          </>
-        ))}
-      <AddAppDomain appId={appId} appDomainsRefetch={appDomainsRefetch} />
+                <Link
+                  href={`http://${domain}`}
+                  isExternal
+                  display="flex"
+                  alignItems="center"
+                >
+                  {domain} <Icon as={FiExternalLink} mx="2" />
+                </Link>
+
+                <IconButton
+                  aria-label="Delete"
+                  variant="ghost"
+                  colorScheme="red"
+                  icon={<FiTrash2 />}
+                  disabled={removeDomainMutationLoading}
+                  onClick={() => handleRemoveDomain(domain)}
+                />
+              </Flex>
+            ))}
+          </Box>
+
+          <AddAppDomain appId={appId} appDomainsRefetch={appDomainsRefetch} />
+        </GridItem>
+      </Grid>
     </>
   );
 };
