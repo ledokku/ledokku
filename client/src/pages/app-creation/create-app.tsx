@@ -11,10 +11,8 @@ import {
   Image,
   Badge,
 } from '@chakra-ui/react';
-import { ArrowRight } from 'react-feather';
-
+import { FiArrowRight } from 'react-icons/fi';
 import { Header } from '../../modules/layout/Header';
-
 import { HeaderContainer } from '../../ui';
 import { useToast } from '../../ui/toast';
 import { GithubIcon } from '../../ui/icons/GithubIcon';
@@ -166,7 +164,7 @@ export const CreateApp = () => {
                 <Button
                   isLoading={formik.isSubmitting}
                   disabled={!formik.values.type || !!formik.errors.type}
-                  rightIcon={<ArrowRight />}
+                  rightIcon={<FiArrowRight size={20} />}
                   type="submit"
                 >
                   Next
