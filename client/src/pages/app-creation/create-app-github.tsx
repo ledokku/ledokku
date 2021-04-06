@@ -20,7 +20,7 @@ import {
 } from '../../ui';
 import { useToast } from '../../ui/toast';
 import { trackingGoals } from '../../config';
-import { ArrowLeft, ArrowRight } from 'react-feather';
+import { FiArrowRight, FiArrowLeft } from 'react-icons/fi';
 import {
   Alert,
   AlertDescription,
@@ -174,7 +174,7 @@ export const CreateAppGithub = () => {
                   <Button
                     onClick={() => handleNext()}
                     color="grey"
-                    iconEnd={<ArrowRight />}
+                    iconEnd={<FiArrowRight size={20} />}
                   >
                     Next
                   </Button>
@@ -188,7 +188,7 @@ export const CreateAppGithub = () => {
                       formik.resetForm();
                     }}
                     color="grey"
-                    iconEnd={<ArrowLeft />}
+                    iconEnd={<FiArrowLeft size={20} />}
                   >
                     Back
                   </Button>

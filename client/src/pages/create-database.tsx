@@ -21,7 +21,7 @@ import {
   Box,
   Grid,
 } from '@chakra-ui/react';
-import { ArrowRight, ArrowLeft } from 'react-feather';
+import { FiArrowRight, FiArrowLeft } from 'react-icons/fi';
 import {
   useCreateDatabaseMutation,
   DatabaseTypes,
@@ -215,7 +215,7 @@ export const CreateDatabase = () => {
                 <Box mt="12" display="flex" justifyContent="flex-end">
                   <Button
                     onClick={() => handleNext()}
-                    rightIcon={<ArrowRight />}
+                    rightIcon={<FiArrowRight size={20} />}
                   >
                     Next
                   </Button>
@@ -228,7 +228,7 @@ export const CreateDatabase = () => {
                       setIsTerminalVisible(false);
                       formik.resetForm();
                     }}
-                    rightIcon={<ArrowLeft />}
+                    rightIcon={<FiArrowLeft size={20} />}
                   >
                     Back
                   </Button>
@@ -350,7 +350,7 @@ export const CreateDatabase = () => {
                       !!formik.errors.name ||
                       !dataDb?.databases
                     }
-                    rightIcon={<ArrowRight />}
+                    rightIcon={<FiArrowRight size={20} />}
                     type="submit"
                   >
                     Create
