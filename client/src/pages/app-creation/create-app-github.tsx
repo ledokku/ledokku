@@ -26,9 +26,9 @@ import {
   AlertDescription,
   AlertIcon,
   AlertTitle,
-} from '@chakra-ui/alert';
-import { Box } from '@chakra-ui/layout';
-import { CloseButton } from '@chakra-ui/close-button';
+  Box,
+  CloseButton,
+} from '@chakra-ui/react';
 
 enum AppCreationStatus {
   FAILURE = 'Failure',
