@@ -75,7 +75,7 @@ export type DatabaseTypes =
 
 export type Domains = {
   __typename?: 'Domains';
-  domains: Array<Maybe<Scalars['String']>>;
+  domains: Array<Scalars['String']>;
 };
 
 export type RealTimeLog = {
@@ -758,7 +758,7 @@ export type DatabaseResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type DomainsResolvers<ContextType = any, ParentType extends ResolversParentTypes['Domains'] = ResolversParentTypes['Domains']> = {
-  domains?: Resolver<Array<Maybe<ResolversTypes['String']>>, ParentType, ContextType>;
+  domains?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

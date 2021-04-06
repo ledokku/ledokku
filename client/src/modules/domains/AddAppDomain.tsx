@@ -1,7 +1,14 @@
+import { useState } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import {
+  FormControl,
+  FormErrorMessage,
+  Input,
+  Button,
+  ButtonGroup,
+} from '@chakra-ui/react';
 import { useAddDomainMutation } from '../../generated/graphql';
-import { FormHelper, FormInput, Button } from '../../ui';
 import { useToast } from '../../ui/toast';
 
 const addAppDomainYupSchema = yup.object().shape({
@@ -16,6 +23,7 @@ interface AddDomainProps {
 export const AddAppDomain = ({ appId, appDomainsRefetch }: AddDomainProps) => {
   const toast = useToast();
   const [addDomainMutation] = useAddDomainMutation();
+  const [showAddForm, setShowAddForm] = useState(false);
 
   const formik = useFormik<{ domainName: string }>({
     initialValues: {
@@ -46,30 +54,41 @@ export const AddAppDomain = ({ appId, appDomainsRefetch }: AddDomainProps) => {
 
   return (
     <>
-      <p className="text-gray-400 text-sm mb-2 mt-4">
-        To add new domain to the app, fill in the form below
-      </p>
-      <div className="grid md:grid-cols-3 gap-2">
-        <FormInput
-          className="col-span-2"
-          name="domainName"
-          value={formik.values.domainName}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={Boolean(formik.errors.domainName && formik.touched.domainName)}
-        />
-        <Button
-          disabled={!!formik.errors.domainName || !formik.values.domainName}
-          color="grey"
-          isLoading={formik.isSubmitting}
-          onClick={() => formik.handleSubmit()}
-        >
-          Add
+      {!showAddForm ? (
+        <Button variant="outline" onClick={() => setShowAddForm(true)}>
+          Add custom domain
         </Button>
-        {formik.errors.domainName ? (
-          <FormHelper status="error">{formik.errors.domainName}</FormHelper>
-        ) : null}
-      </div>
+      ) : (
+        <form onSubmit={formik.handleSubmit}>
+          <FormControl
+            id="domainName"
+            isInvalid={Boolean(
+              formik.errors.domainName && formik.touched.domainName
+            )}
+          >
+            <Input
+              placeholder="www.mydomain.com"
+              name="domainName"
+              value={formik.values.domainName}
+              onChange={formik.handleChange}
+            />
+            <FormErrorMessage>{formik.errors.domainName}</FormErrorMessage>
+          </FormControl>
+
+          <ButtonGroup mt="4" spacing="2">
+            <Button isLoading={formik.isSubmitting} type="submit">
+              Save
+            </Button>
+            <Button
+              variant="outline"
+              disabled={formik.isSubmitting}
+              onClick={() => setShowAddForm(false)}
+            >
+              Cancel
+            </Button>
+          </ButtonGroup>
+        </form>
+      )}
     </>
   );
 };

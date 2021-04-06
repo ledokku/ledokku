@@ -78,7 +78,7 @@ const typeDefs = gql`
   }
 
   type Domains {
-    domains: [String]!
+    domains: [String!]!
   }
 
   type RealTimeLog {
