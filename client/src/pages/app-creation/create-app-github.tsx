@@ -1,15 +1,15 @@
-import { useHistory } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { useFormik } from 'formik';
-import { trackGoal } from 'fathom-client';
-import * as yup from 'yup';
+// import { useHistory } from 'react-router-dom';
+// import { useEffect, useState } from 'react';
+// import { useFormik } from 'formik';
+// import { trackGoal } from 'fathom-client';
+// import * as yup from 'yup';
 import Select from 'react-select';
-import {
-  useAppsQuery,
-  RealTimeLog,
-  useAppCreateLogsSubscription,
-  useCreateAppGithubMutation,
-} from '../../generated/graphql';
+// import {
+//   useAppsQuery,
+//   RealTimeLog,
+//   useAppCreateLogsSubscription,
+//   useCreateAppGithubMutation,
+// } from '../../generated/graphql';
 import { Header } from '../../modules/layout/Header';
 import {
   Button,
@@ -18,8 +18,8 @@ import {
   // Terminal,
   HeaderContainer,
 } from '../../ui';
-import { useToast } from '../../ui/toast';
-import { trackingGoals } from '../../config';
+// import { useToast } from '../../ui/toast';
+// import { trackingGoals } from '../../config';
 // import { FiArrowRight, FiArrowLeft } from 'react-icons/fi';
 import {
   // Alert,
@@ -39,10 +39,10 @@ import {
   Text,
 } from '@chakra-ui/react';
 
-enum AppCreationStatus {
-  FAILURE = 'Failure',
-  SUCCESS = 'Success',
-}
+// enum AppCreationStatus {
+//   FAILURE = 'Failure',
+//   SUCCESS = 'Success',
+// }
 
 export const CreateAppGithub = () => {
   // const history = useHistory();
