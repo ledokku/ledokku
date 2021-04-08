@@ -1,8 +1,9 @@
 import { useHistory } from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import { trackGoal } from 'fathom-client';
 import * as yup from 'yup';
+import Select from 'react-select';
 import {
   useAppsQuery,
   RealTimeLog,
@@ -12,22 +13,30 @@ import {
 import { Header } from '../../modules/layout/Header';
 import {
   Button,
-  FormHelper,
-  FormInput,
+  // FormHelper,
+  // FormInput,
   FormLabel,
-  Terminal,
+  // Terminal,
   HeaderContainer,
 } from '../../ui';
 import { useToast } from '../../ui/toast';
 import { trackingGoals } from '../../config';
-import { FiArrowRight, FiArrowLeft } from 'react-icons/fi';
+// import { FiArrowRight, FiArrowLeft } from 'react-icons/fi';
 import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  AlertTitle,
+  // Alert,
+  // AlertDescription,
+  // AlertIcon,
+  // AlertTitle,
+  Avatar,
   Box,
-  CloseButton,
+  // CloseButton,
+  Container,
+  Flex,
+  Grid,
+  GridItem,
+  Heading,
+  Link,
+  Text,
 } from '@chakra-ui/react';
 
 enum AppCreationStatus {
@@ -138,13 +147,76 @@ export const CreateAppGithub = () => {
         setIsToastShown(true);
   }, [isToastShown, isAppCreationSuccess, toast]);
 
+  const options = [
+    { value: 'pradel/sigle', label: 'pradel/sigle' },
+    { value: 'pradel/sigle2', label: 'pradel/sigle2' },
+    { value: 'pradel/sigle3', label: 'pradel/sigle3' },
+  ];
+
   return (
     <>
       <HeaderContainer>
         <Header />
       </HeaderContainer>
 
-      <div className="max-w-5xl mx-auto py-6 sm:px-6 lg:px-4">
+      <Container maxW="5xl" mt={10}>
+        <Heading as="h2" size="md">
+          Create a new GitHub application
+        </Heading>
+        <Text color="gray.400">
+          When you push to Git, your application will be redeployed
+          automatically.
+        </Text>
+
+        <Grid templateColumns={{ sm: 'repeat(1, 1fr)', md: 'repeat(3, 1fr)' }}>
+          <GridItem colSpan={2}>
+            <Flex alignItems="center" mt="12">
+              {/* TODO change name and src props */}
+              <Avatar
+                size="sm"
+                name={'pradel'}
+                src="https://avatars.githubusercontent.com/u/5749437?v=4"
+              />
+              <Text ml="2" fontWeight="bold">
+                {/* TODO change name */}
+                pradel
+              </Text>
+            </Flex>
+
+            <Box mt="8">
+              <FormLabel>Repository</FormLabel>
+              {/* TODO change options */}
+              <Select options={options} />
+            </Box>
+            <Text mt="1" color="gray.400" fontSize="sm">
+              Can't see your repo in the list?{' '}
+              {/* TODO the link should open a popup */}
+              <Link textDecoration="underline">Configure the GitHub app.</Link>
+            </Text>
+
+            <Box mt="8">
+              <FormLabel>Branch to deploy</FormLabel>
+              {/* TODO change options */}
+              <Select options={options} />
+            </Box>
+
+            <Box mt="8" display="flex" justifyContent="flex-end">
+              <Button
+                type="submit"
+                color="grey"
+                // disabled={
+                //   loading || !formik.values.name || !!formik.errors.name
+                // }
+                // isLoading={loading}
+              >
+                Create
+              </Button>
+            </Box>
+          </GridItem>
+        </Grid>
+      </Container>
+
+      {/* <div className="max-w-5xl mx-auto py-6 sm:px-6 lg:px-4">
         <h1 className="text-lg font-bold">Create a new app</h1>
         <div className="mt-12">
           {isTerminalVisible ? (
@@ -314,7 +386,7 @@ export const CreateAppGithub = () => {
             </React.Fragment>
           )}
         </div>
-      </div>
+      </div> */}
     </>
   );
 };
