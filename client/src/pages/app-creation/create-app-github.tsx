@@ -15,7 +15,6 @@ import {
   Button,
   // FormHelper,
   // FormInput,
-  FormLabel,
   // Terminal,
   HeaderContainer,
 } from '../../ui';
@@ -32,6 +31,7 @@ import {
   // CloseButton,
   Container,
   Flex,
+  FormLabel,
   Grid,
   GridItem,
   Heading,
