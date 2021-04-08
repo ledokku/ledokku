@@ -45,107 +45,107 @@ enum AppCreationStatus {
 }
 
 export const CreateAppGithub = () => {
-  const history = useHistory();
-  const toast = useToast();
-  const { data: dataApps } = useAppsQuery();
-  const [arrayOfCreateAppLogs, setArrayOfCreateAppLogs] = useState<
-    RealTimeLog[]
-  >([]);
-  const [isTerminalVisible, setIsTerminalVisible] = useState(false);
-  const [isWarningVisible, setIsWarningVisible] = useState(true);
-  const [isToastShown, setIsToastShown] = useState(false);
-  const [createAppGithubMutation] = useCreateAppGithubMutation();
-  const [
-    isAppCreationSuccess,
-    setIsAppCreationSuccess,
-  ] = useState<AppCreationStatus>();
+  // const history = useHistory();
+  // const toast = useToast();
+  // const { data: dataApps } = useAppsQuery();
+  // const [arrayOfCreateAppLogs, setArrayOfCreateAppLogs] = useState<
+  //   RealTimeLog[]
+  // >([]);
+  // const [isTerminalVisible, setIsTerminalVisible] = useState(false);
+  // const [isWarningVisible, setIsWarningVisible] = useState(true);
+  // const [isToastShown, setIsToastShown] = useState(false);
+  // const [createAppGithubMutation] = useCreateAppGithubMutation();
+  // const [
+  //   isAppCreationSuccess,
+  //   setIsAppCreationSuccess,
+  // ] = useState<AppCreationStatus>();
 
-  useAppCreateLogsSubscription({
-    onSubscriptionData: (data) => {
-      const logsExist = data.subscriptionData.data?.appCreateLogs;
+  // useAppCreateLogsSubscription({
+  //   onSubscriptionData: (data) => {
+  //     const logsExist = data.subscriptionData.data?.appCreateLogs;
 
-      if (logsExist) {
-        setArrayOfCreateAppLogs((currentLogs) => {
-          return [...currentLogs, logsExist];
-        });
-        if (logsExist.type === 'end:success') {
-          setIsAppCreationSuccess(AppCreationStatus.SUCCESS);
-        } else if (logsExist.type === 'end:failure') {
-          setIsAppCreationSuccess(AppCreationStatus.FAILURE);
-        }
-      }
-    },
-  });
+  //     if (logsExist) {
+  //       setArrayOfCreateAppLogs((currentLogs) => {
+  //         return [...currentLogs, logsExist];
+  //       });
+  //       if (logsExist.type === 'end:success') {
+  //         setIsAppCreationSuccess(AppCreationStatus.SUCCESS);
+  //       } else if (logsExist.type === 'end:failure') {
+  //         setIsAppCreationSuccess(AppCreationStatus.FAILURE);
+  //       }
+  //     }
+  //   },
+  // });
 
-  const createAppGithubSchema = yup.object().shape({
-    name: yup
-      .string()
-      .required('App name is required')
-      .matches(/^[a-z0-9-]+$/)
-      .test(
-        'Name exists',
-        'App with this name already exists',
-        (val) => !dataApps?.apps.find((app) => app.name === val)
-      ),
-    gitRepoUrl: yup
-      .string()
-      .matches(
-        /((git|ssh|http(s)?)|(git@[\w.]+))(:(\/\/)?)([\w.@:/\-~]+)(\.git)(\/)?/,
-        'Must be a valid git link'
-      )
-      .required(),
-    gitBranch: yup.string().optional(),
-  });
+  // const createAppGithubSchema = yup.object().shape({
+  //   name: yup
+  //     .string()
+  //     .required('App name is required')
+  //     .matches(/^[a-z0-9-]+$/)
+  //     .test(
+  //       'Name exists',
+  //       'App with this name already exists',
+  //       (val) => !dataApps?.apps.find((app) => app.name === val)
+  //     ),
+  //   gitRepoUrl: yup
+  //     .string()
+  //     .matches(
+  //       /((git|ssh|http(s)?)|(git@[\w.]+))(:(\/\/)?)([\w.@:/\-~]+)(\.git)(\/)?/,
+  //       'Must be a valid git link'
+  //     )
+  //     .required(),
+  //   gitBranch: yup.string().optional(),
+  // });
 
-  const formik = useFormik<{
-    name: string;
-    gitRepoUrl: string;
-    gitBranch: string;
-  }>({
-    initialValues: {
-      name: '',
-      gitRepoUrl: '',
-      gitBranch: '',
-    },
+  // const formik = useFormik<{
+  //   name: string;
+  //   gitRepoUrl: string;
+  //   gitBranch: string;
+  // }>({
+  //   initialValues: {
+  //     name: '',
+  //     gitRepoUrl: '',
+  //     gitBranch: '',
+  //   },
 
-    validateOnChange: true,
-    validationSchema: createAppGithubSchema,
-    onSubmit: async (values) => {
-      try {
-        await createAppGithubMutation({
-          variables: {
-            input: {
-              name: values.name,
-              gitRepoUrl: values.gitRepoUrl,
-              branchName: values.gitBranch,
-            },
-          },
-        });
-        setIsTerminalVisible(true);
-      } catch (error) {
-        error.message === 'Not Found'
-          ? toast.error(`Repository : ${values.gitRepoUrl} not found`)
-          : toast.error(error.message);
-      }
-    },
-  });
+  //   validateOnChange: true,
+  //   validationSchema: createAppGithubSchema,
+  //   onSubmit: async (values) => {
+  //     try {
+  //       await createAppGithubMutation({
+  //         variables: {
+  //           input: {
+  //             name: values.name,
+  //             gitRepoUrl: values.gitRepoUrl,
+  //             branchName: values.gitBranch,
+  //           },
+  //         },
+  //       });
+  //       setIsTerminalVisible(true);
+  //     } catch (error) {
+  //       error.message === 'Not Found'
+  //         ? toast.error(`Repository : ${values.gitRepoUrl} not found`)
+  //         : toast.error(error.message);
+  //     }
+  //   },
+  // });
 
-  const handleNext = () => {
-    setIsTerminalVisible(false);
-    const appId = arrayOfCreateAppLogs[arrayOfCreateAppLogs.length - 1].message;
-    history.push(`app/${appId}`, 'new');
-    trackGoal(trackingGoals.createAppGithub, 0);
-  };
+  // const handleNext = () => {
+  //   setIsTerminalVisible(false);
+  //   const appId = arrayOfCreateAppLogs[arrayOfCreateAppLogs.length - 1].message;
+  //   history.push(`app/${appId}`, 'new');
+  //   trackGoal(trackingGoals.createAppGithub, 0);
+  // };
 
   // Effect for app creation
-  useEffect(() => {
-    isAppCreationSuccess === AppCreationStatus.FAILURE && !isToastShown
-      ? toast.error('Failed to create an app') && setIsToastShown(true)
-      : isAppCreationSuccess === AppCreationStatus.SUCCESS &&
-        !isToastShown &&
-        toast.success('App created successfully') &&
-        setIsToastShown(true);
-  }, [isToastShown, isAppCreationSuccess, toast]);
+  // useEffect(() => {
+  //   isAppCreationSuccess === AppCreationStatus.FAILURE && !isToastShown
+  //     ? toast.error('Failed to create an app') && setIsToastShown(true)
+  //     : isAppCreationSuccess === AppCreationStatus.SUCCESS &&
+  //       !isToastShown &&
+  //       toast.success('App created successfully') &&
+  //       setIsToastShown(true);
+  // }, [isToastShown, isAppCreationSuccess, toast]);
 
   const options = [
     { value: 'pradel/sigle', label: 'pradel/sigle' },
