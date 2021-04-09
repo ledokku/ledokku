@@ -9,9 +9,20 @@ import {
   EnvVarsDocument,
 } from '../../generated/graphql';
 import { useFormik } from 'formik';
-import { Button, HeaderContainer } from '../../ui';
-import { TrashBinIcon } from '../../ui/icons/TrashBinIcon';
-import { Container, Heading } from '@chakra-ui/react';
+import { HeaderContainer } from '../../ui';
+import {
+  Box,
+  Container,
+  Grid,
+  GridItem,
+  Heading,
+  Link,
+  Text,
+  Input,
+  Button,
+  IconButton,
+} from '@chakra-ui/react';
+import { FiTrash2 } from 'react-icons/fi';
 import { useToast } from '../../ui/toast';
 import { AppHeaderTabNav } from '../../modules/app/AppHeaderTabNav';
 import { AppHeaderInfo } from '../../modules/app/AppHeaderInfo';
@@ -73,12 +84,15 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
   return (
     //TODO Handle visual feedback on changing env
     //TODO Provide infos about env vars
-    <form onSubmit={formik.handleSubmit} autoComplete="off" className="mt-2">
-      <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4">
-        <div className="mt-8">
-          <input
+    <form onSubmit={formik.handleSubmit} autoComplete="off">
+      <Grid
+        templateColumns={{ sm: 'repeat(1, 1fr)', md: 'repeat(3, 1fr)' }}
+        gap="3"
+        mt="3"
+      >
+        <GridItem>
+          <Input
             autoComplete="off"
-            className="inline w-full max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black"
             id={isNewVar ? 'newVarName' : name}
             name="name"
             placeholder="Name"
@@ -86,15 +100,14 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
             value={formik.values.name}
             onChange={formik.handleChange}
           />
-        </div>
-        <div className="mt-8">
-          <input
+        </GridItem>
+        <GridItem>
+          <Input
             autoComplete="off"
             onMouseEnter={() => setInputType('text')}
             onMouseLeave={() => setInputType('password')}
             onFocus={() => setInputType('text')}
             onBlur={() => setInputType('password')}
-            className={`inline w-full max-w-xs bg-white border border-grey rounded py-3 px-3 text-sm leading-tight transition duration-200 focus:outline-none focus:border-black`}
             id={isNewVar ? 'newVarValue' : value}
             name="value"
             placeholder="Value"
@@ -103,24 +116,23 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
             onChange={formik.handleChange}
             type={inputType}
           />
-        </div>
-        <div className="flex items-end">
-          <Button isLoading={setEnvVarLoading} type="submit" color="grey">
+        </GridItem>
+        <GridItem display="flex">
+          <Button isLoading={setEnvVarLoading} type="submit">
             {isNewVar ? 'Add' : 'Save'}
           </Button>
           {!isNewVar && (
-            <Button
-              isLoading={unsetEnvVarLoading}
-              className="ml-2"
-              color="red"
-              onClick={handleDeleteEnvVar}
+            <IconButton
+              aria-label="Delete"
               variant="outline"
-            >
-              <TrashBinIcon size={24} />
-            </Button>
+              ml="3"
+              icon={<FiTrash2 />}
+              isLoading={unsetEnvVarLoading}
+              onClick={handleDeleteEnvVar}
+            />
           )}
-        </div>
-      </div>
+        </GridItem>
+      </Grid>
     </form>
   );
 };
@@ -173,18 +185,26 @@ export const Env = () => {
       </HeaderContainer>
 
       <Container maxW="5xl" mt={10}>
-        <Heading as="h2" size="md" py={5}>
-          Set env variables
-        </Heading>
-        <div className="mt-4 mb-4">
-          <h2 className="text-gray-400">
-            Before modifying any of these, make sure you are familiar with dokku
-            env vars
-          </h2>
-        </div>
+        <Box py="5">
+          <Heading as="h2" size="md">
+            Set env variables
+          </Heading>
+          <Text color="gray.400" fontSize="sm">
+            Environment variables change the way your app behaves. They are
+            available both at run time and during the application
+            build/compilation step for buildpack-based deploys.{' '}
+            <Link
+              textDecoration="underline"
+              href="https://dokku.com/docs/configuration/environment-variables/"
+              isExternal
+            >
+              Read more.
+            </Link>
+          </Text>
+        </Box>
 
         {!envVarLoading && !envVarError && envVarData?.envVars.envVars && (
-          <div className="mb-8">
+          <Box mb="8">
             {envVarData.envVars.envVars.map((envVar) => {
               return (
                 <EnvForm
@@ -202,7 +222,7 @@ export const Env = () => {
               appId={appId}
               isNewVar={true}
             />
-          </div>
+          </Box>
         )}
       </Container>
     </div>
