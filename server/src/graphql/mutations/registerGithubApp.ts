@@ -60,7 +60,7 @@ export const registerGithubApp: MutationResolvers['registerGithubApp'] = async (
     dotenvData += `\n\n# Automatically added by ledokku server `;
     dotenvData += `\nGITHUB_APP_CLIENT_ID="${githubAppClientId}"`;
     dotenvData += `\nGITHUB_APP_NAME="${githubAppName}"`;
-    dotenvData += `\nGITHUB_APP__ID="${githubAppId}"`;
+    dotenvData += `\nGITHUB_APP_ID="${githubAppId}"`;
     dotenvData += `\nGITHUB_APP_CLIENT_SECRET="${githubAppClientSecret}"`;
     dotenvData += `\nGITHUB_APP_WEBHOOK_SECRET="${githubAppWebhookSecret}"`;
     dotenvData += `\nGITHUB_APP_PEM="${githubAppPem}"\n`;
