@@ -83,7 +83,6 @@ export const config = {
   githubAppClientId: process.env.GITHUB_APP_CLIENT_ID,
   githubAppClientSecret: process.env.GITHUB_APP_CLIENT_SECRET,
   githubAppWebhookSecret: process.env.GITHUB_APP_WEBHOOK_SECRET,
-  githubAppInstallationId: process.env.GITHUB_APP_INSTALLATION_ID,
   githubAppName: process.env.GITHUB_APP_NAME,
   githubAppId: process.env.GITHUB_APP_ID,
   githubAppPem: process.env.GITHUB_APP_PEM,

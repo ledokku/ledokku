@@ -30,6 +30,11 @@ export type App = {
   appMetaGithub?: Maybe<AppMetaGithub>;
 };
 
+export type GithubAppInstallationId = {
+  __typename?: 'GithubAppInstallationId';
+  id: Scalars['String'];
+};
+
 export type AppMetaGithub = {
   __typename?: 'AppMetaGithub';
   repoId: Scalars['String'];
@@ -309,6 +314,7 @@ export type RemoveAppProxyPortInput = {
 
 export type Query = {
   __typename?: 'Query';
+  githubInstallationId: GithubAppInstallationId;
   setup: SetupResult;
   apps: Array<App>;
   appMetaGithub?: Maybe<AppMetaGithub>;
@@ -591,6 +597,7 @@ export type ResolversTypes = {
   App: ResolverTypeWrapper<App>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  GithubAppInstallationId: ResolverTypeWrapper<GithubAppInstallationId>;
   AppMetaGithub: ResolverTypeWrapper<AppMetaGithub>;
   AppTypes: AppTypes;
   AppBuild: ResolverTypeWrapper<AppBuild>;
@@ -657,6 +664,7 @@ export type ResolversParentTypes = {
   App: App;
   ID: Scalars['ID'];
   String: Scalars['String'];
+  GithubAppInstallationId: GithubAppInstallationId;
   AppMetaGithub: AppMetaGithub;
   AppBuild: AppBuild;
   Database: Database;
@@ -729,6 +737,11 @@ export type AppResolvers<ContextType = any, ParentType extends ResolversParentTy
   type?: Resolver<ResolversTypes['AppTypes'], ParentType, ContextType>;
   databases?: Resolver<Maybe<Array<ResolversTypes['Database']>>, ParentType, ContextType>;
   appMetaGithub?: Resolver<Maybe<ResolversTypes['AppMetaGithub']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GithubAppInstallationIdResolvers<ContextType = any, ParentType extends ResolversParentTypes['GithubAppInstallationId'] = ResolversParentTypes['GithubAppInstallationId']> = {
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -912,6 +925,7 @@ export type AppProxyPortResolvers<ContextType = any, ParentType extends Resolver
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  githubInstallationId?: Resolver<ResolversTypes['GithubAppInstallationId'], ParentType, ContextType>;
   setup?: Resolver<ResolversTypes['SetupResult'], ParentType, ContextType>;
   apps?: Resolver<Array<ResolversTypes['App']>, ParentType, ContextType>;
   appMetaGithub?: Resolver<Maybe<ResolversTypes['AppMetaGithub']>, ParentType, ContextType, RequireFields<QueryAppMetaGithubArgs, 'appId'>>;
@@ -966,6 +980,7 @@ export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTyp
 export type Resolvers<ContextType = any> = {
   DateTime?: GraphQLScalarType;
   App?: AppResolvers<ContextType>;
+  GithubAppInstallationId?: GithubAppInstallationIdResolvers<ContextType>;
   AppMetaGithub?: AppMetaGithubResolvers<ContextType>;
   AppBuild?: AppBuildResolvers<ContextType>;
   Database?: DatabaseResolvers<ContextType>;

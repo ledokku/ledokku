@@ -7,7 +7,7 @@ import { PubSub } from 'apollo-server';
 import express from 'express';
 import path from 'path';
 import createDebug from 'debug';
-import { Resolvers } from './generated/graphql';
+import { Resolvers, GithubAppInstallationId } from './generated/graphql';
 import { customResolvers } from './graphql/resolvers';
 import { mutations } from './graphql/mutations';
 import { config } from './config';
@@ -17,7 +17,6 @@ import { verifyWebhookSecret } from './lib/webhooks/utils';
 import { synchroniseServerQueue } from './queues/synchroniseServer';
 import { prisma } from './prisma';
 import { githubPushWebhookHandler } from './lib/webhooks/webhooks';
-import { githubInstallationIdHandler } from './lib/githubInstallationIdHandler';
 
 app.use(express.json());
 
@@ -33,6 +32,10 @@ const typeDefs = gql`
     type: AppTypes!
     databases: [Database!]
     appMetaGithub: AppMetaGithub
+  }
+
+  type GithubAppInstallationId {
+    id: String!
   }
 
   type AppMetaGithub {
@@ -284,6 +287,7 @@ const typeDefs = gql`
   }
 
   type Query {
+    githubInstallationId: GithubAppInstallationId!
     setup: SetupResult!
     apps: [App!]!
     appMetaGithub(appId: String!): AppMetaGithub
@@ -468,9 +472,6 @@ app.post('/webhooks', async (req, res) => {
 
 app.post('/events', (req, res) => {
   console.log('received request -----------------------------', req.body);
-  if (req.body.action === 'created' || req.body.action === 'added') {
-    githubInstallationIdHandler(req);
-  }
 
   res.json({ success: true });
 });
