@@ -1,4 +1,3 @@
-import { Repository } from './../../generated/graphql';
 import fetch from 'node-fetch';
 import { QueryResolvers } from '../../generated/graphql';
 import jsonwebtoken from 'jsonwebtoken';
@@ -6,7 +5,7 @@ import { config } from '../../config';
 import { prisma } from '../../prisma';
 export const repositories: QueryResolvers['repositories'] = async (
   _,
-  __,
+  { installationId },
   { userId }
 ) => {
   if (!userId) {
@@ -39,11 +38,7 @@ export const repositories: QueryResolvers['repositories'] = async (
     }
   );
   const authAsInstallation = await fetch(
-    `https://api.github.com/app/installations/${
-      process.env.NODE_ENV === 'production'
-        ? config.githubAppInstallationId
-        : process.env.GITHUB_APP_INSTALLATION_ID
-    }/access_tokens`,
+    `https://api.github.com/app/installations/${installationId}/access_tokens`,
     {
       headers: {
         Accept: 'application/vnd.github.machine-man-preview+json',

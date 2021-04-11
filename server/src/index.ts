@@ -302,7 +302,7 @@ const typeDefs = gql`
     githubInstallationId: GithubAppInstallationId!
     setup: SetupResult!
     apps: [App!]!
-    repositories: [Repository!]!
+    repositories(installationId: String!): [Repository!]!
     appMetaGithub(appId: String!): AppMetaGithub
     app(appId: String!): App
     domains(appId: String!): Domains!

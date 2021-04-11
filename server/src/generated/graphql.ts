@@ -348,6 +348,11 @@ export type Query = {
 };
 
 
+export type QueryRepositoriesArgs = {
+  installationId: Scalars['String'];
+};
+
+
 export type QueryAppMetaGithubArgs = {
   appId: Scalars['String'];
 };
@@ -961,7 +966,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   githubInstallationId?: Resolver<ResolversTypes['GithubAppInstallationId'], ParentType, ContextType>;
   setup?: Resolver<ResolversTypes['SetupResult'], ParentType, ContextType>;
   apps?: Resolver<Array<ResolversTypes['App']>, ParentType, ContextType>;
-  repositories?: Resolver<Array<ResolversTypes['Repository']>, ParentType, ContextType>;
+  repositories?: Resolver<Array<ResolversTypes['Repository']>, ParentType, ContextType, RequireFields<QueryRepositoriesArgs, 'installationId'>>;
   appMetaGithub?: Resolver<Maybe<ResolversTypes['AppMetaGithub']>, ParentType, ContextType, RequireFields<QueryAppMetaGithubArgs, 'appId'>>;
   app?: Resolver<Maybe<ResolversTypes['App']>, ParentType, ContextType, RequireFields<QueryAppArgs, 'appId'>>;
   domains?: Resolver<ResolversTypes['Domains'], ParentType, ContextType, RequireFields<QueryDomainsArgs, 'appId'>>;
