@@ -472,7 +472,6 @@ app.post('/webhooks', async (req, res) => {
 
 app.post('/events', (req, res) => {
   console.log('received request -----------------------------', req.body);
-
   res.json({ success: true });
 });
 
