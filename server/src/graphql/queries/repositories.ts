@@ -101,7 +101,5 @@ export const repositories: QueryResolvers['repositories'] = async (
     repositories.push(repoToPush);
   }
 
-  console.log('repos outside', repositories);
-
   return repositories;
 };
