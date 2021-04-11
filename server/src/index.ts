@@ -17,6 +17,7 @@ import { verifyWebhookSecret } from './lib/webhooks/utils';
 import { synchroniseServerQueue } from './queues/synchroniseServer';
 import { prisma } from './prisma';
 import { githubPushWebhookHandler } from './lib/webhooks/webhooks';
+import { githubInstallationIdHandler } from './lib/githubInstallationIdHandler';
 
 app.use(express.json());
 
@@ -440,7 +441,8 @@ app.get('/runtime-config.js', (_, res) => {
   res.end(`
   window['runConfig'] = {
     GITHUB_APP_CLIENT_ID: '${config.githubAppClientId}',
-    TELEMETRY_DISABLED: '${config.telemetryDisabled}'
+    TELEMETRY_DISABLED: '${config.telemetryDisabled}',
+    GITHUB_APP_NAME: '${config.githubAppName}'
   }
   `);
 });
@@ -466,6 +468,10 @@ app.post('/webhooks', async (req, res) => {
 
 app.post('/events', (req, res) => {
   console.log('received request -----------------------------', req.body);
+  if (req.body.action === 'created' || req.body.action === 'added') {
+    githubInstallationIdHandler(req);
+  }
+
   res.json({ success: true });
 });
 

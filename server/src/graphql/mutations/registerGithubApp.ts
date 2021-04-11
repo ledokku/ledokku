@@ -28,6 +28,8 @@ export const registerGithubApp: MutationResolvers['registerGithubApp'] = async (
   const githubAppClientSecret = githubResponse.data.client_secret;
   const githubAppWebhookSecret = githubResponse.data.webhook_secret;
   const githubAppPem = githubResponse.data.pem;
+  const githubAppName = githubResponse.data.name;
+  const githubAppId = githubResponse.data.id.toString();
 
   if (process.env.NODE_ENV === 'production') {
     // In production we add this config as dokku config for the ledokku app.
@@ -42,6 +44,8 @@ export const registerGithubApp: MutationResolvers['registerGithubApp'] = async (
         { key: 'GITHUB_APP_CLIENT_SECRET', value: githubAppClientSecret },
         { key: 'GITHUB_APP_WEBHOOK_SECRET', value: githubAppWebhookSecret },
         { key: 'GITHUB_APP_PEM', value: githubAppPem },
+        { key: 'GITHUB_APP_NAME', value: githubAppName },
+        { key: 'GITHUB_APP_ID', value: githubAppId },
       ],
       { noRestart: true }
     );
@@ -55,6 +59,8 @@ export const registerGithubApp: MutationResolvers['registerGithubApp'] = async (
     });
     dotenvData += `\n\n# Automatically added by ledokku server `;
     dotenvData += `\nGITHUB_APP_CLIENT_ID="${githubAppClientId}"`;
+    dotenvData += `\nGITHUB_APP_NAME="${githubAppName}"`;
+    dotenvData += `\nGITHUB_APP__ID="${githubAppId}"`;
     dotenvData += `\nGITHUB_APP_CLIENT_SECRET="${githubAppClientSecret}"`;
     dotenvData += `\nGITHUB_APP_WEBHOOK_SECRET="${githubAppWebhookSecret}"`;
     dotenvData += `\nGITHUB_APP_PEM="${githubAppPem}"\n`;
@@ -67,6 +73,8 @@ export const registerGithubApp: MutationResolvers['registerGithubApp'] = async (
   config.githubAppClientSecret = githubAppClientSecret;
   config.githubAppWebhookSecret = githubAppWebhookSecret;
   config.githubAppPem = githubAppPem;
+  config.githubAppName = githubAppName;
+  config.githubAppId = githubAppId;
 
   return { githubAppClientId };
 };
