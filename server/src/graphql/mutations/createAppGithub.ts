@@ -1,7 +1,6 @@
 import { deployAppQueue } from './../../queues/deployApp';
 import { sshConnect } from './../../lib/ssh';
 import { MutationResolvers } from '../../generated/graphql';
-import { Octokit } from '@octokit/rest';
 import { prisma } from '../../prisma';
 // import { buildAppQueue } from '../../queues/buildApp';
 import {
@@ -10,6 +9,7 @@ import {
   generateRandomToken,
 } from '../utils';
 import { dokku } from '../../lib/dokku';
+import { config } from '../../config';
 
 export const createAppGithub: MutationResolvers['createAppGithub'] = async (
   _,
@@ -38,32 +38,7 @@ export const createAppGithub: MutationResolvers['createAppGithub'] = async (
     throw new Error('App name already taken');
   }
 
-  const octokit = new Octokit({});
-
   const repoData = getRepoData(input.gitRepoUrl);
-
-  const repo = await octokit.repos.get({
-    owner: repoData.owner,
-    repo: repoData.repoName,
-  });
-
-  if (!repo) {
-    throw new Error(
-      `No repository found for ${repoData.owner} with name ${repoData.repoName}`
-    );
-  }
-
-  const branch = await octokit.repos.getBranch({
-    owner: repoData.owner,
-    repo: repoData.repoName,
-    branch: input.branchName ? input.branchName : 'main',
-  });
-
-  if (!branch.url) {
-    throw new Error(
-      `There's no ${input.branchName} branch or main branch for this repository`
-    );
-  }
 
   const ssh = await sshConnect();
 
@@ -79,7 +54,11 @@ export const createAppGithub: MutationResolvers['createAppGithub'] = async (
         create: {
           repoName: repoData.repoName,
           repoOwner: repoData.owner,
-          repoId: repo.data.id.toString(),
+          repoId: input.gitRepoId,
+          githubAppInstallationId:
+            process.env.NODE_ENV === 'production'
+              ? config.githubAppInstallationId
+              : process.env.GITHUB_APP_INSTALLATION_ID,
           webhooksSecret: randomToken,
           branch: input.branchName ? input.branchName : 'main',
         },
