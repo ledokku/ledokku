@@ -34,6 +34,10 @@ const typeDefs = gql`
     appMetaGithub: AppMetaGithub
   }
 
+  type GithubAppInstallationId {
+    id: String!
+  }
+
   type AppMetaGithub {
     repoId: String!
     repoName: String!
@@ -283,6 +287,7 @@ const typeDefs = gql`
   }
 
   type Query {
+    githubInstallationId: GithubAppInstallationId!
     setup: SetupResult!
     apps: [App!]!
     appMetaGithub(appId: String!): AppMetaGithub
@@ -440,7 +445,8 @@ app.get('/runtime-config.js', (_, res) => {
   res.end(`
   window['runConfig'] = {
     GITHUB_APP_CLIENT_ID: '${config.githubAppClientId}',
-    TELEMETRY_DISABLED: '${config.telemetryDisabled}'
+    TELEMETRY_DISABLED: '${config.telemetryDisabled}',
+    GITHUB_APP_NAME: '${config.githubAppName}'
   }
   `);
 });

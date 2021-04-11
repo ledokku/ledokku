@@ -83,6 +83,8 @@ export const config = {
   githubAppClientId: process.env.GITHUB_APP_CLIENT_ID,
   githubAppClientSecret: process.env.GITHUB_APP_CLIENT_SECRET,
   githubAppWebhookSecret: process.env.GITHUB_APP_WEBHOOK_SECRET,
+  githubAppName: process.env.GITHUB_APP_NAME,
+  githubAppId: process.env.GITHUB_APP_ID,
   githubAppPem: process.env.GITHUB_APP_PEM,
   redisUrl: process.env.REDIS_URL,
   dokkuSshHost: process.env.DOKKU_SSH_HOST,
