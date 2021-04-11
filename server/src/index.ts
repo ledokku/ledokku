@@ -43,6 +43,18 @@ const typeDefs = gql`
     branch: String!
   }
 
+  type Repository {
+    id: String!
+    name: String!
+    fullName: String!
+    private: Boolean!
+    branches: [String!]!
+  }
+
+  type Branch {
+    name: String!
+  }
+
   enum AppTypes {
     DOKKU
     GITHUB
@@ -286,6 +298,7 @@ const typeDefs = gql`
   type Query {
     setup: SetupResult!
     apps: [App!]!
+    repositories: [Repository!]!
     appMetaGithub(appId: String!): AppMetaGithub
     app(appId: String!): App
     domains(appId: String!): Domains!

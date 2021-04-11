@@ -1,0 +1,9 @@
+query repositories {
+  repositories {
+    id
+    name
+    fullName
+    private
+    branches
+  }
+}

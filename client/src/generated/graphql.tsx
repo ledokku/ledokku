@@ -39,6 +39,20 @@ export type AppMetaGithub = {
   branch: Scalars['String'];
 };
 
+export type Repository = {
+  __typename?: 'Repository';
+  id: Scalars['String'];
+  name: Scalars['String'];
+  fullName: Scalars['String'];
+  private: Scalars['Boolean'];
+  branches: Array<Scalars['String']>;
+};
+
+export type Branch = {
+  __typename?: 'Branch';
+  name: Scalars['String'];
+};
+
 export type AppTypes =
   | 'DOKKU'
   | 'GITHUB'
@@ -311,6 +325,7 @@ export type Query = {
   __typename?: 'Query';
   setup: SetupResult;
   apps: Array<App>;
+  repositories: Array<Repository>;
   appMetaGithub?: Maybe<AppMetaGithub>;
   app?: Maybe<App>;
   domains: Domains;
@@ -909,6 +924,17 @@ export type IsPluginInstalledQuery = (
     { __typename?: 'IsPluginInstalledResult' }
     & Pick<IsPluginInstalledResult, 'isPluginInstalled'>
   ) }
+);
+
+export type RepositoriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type RepositoriesQuery = (
+  { __typename?: 'Query' }
+  & { repositories: Array<(
+    { __typename?: 'Repository' }
+    & Pick<Repository, 'id' | 'name' | 'fullName' | 'private' | 'branches'>
+  )> }
 );
 
 export type SetupQueryVariables = Exact<{ [key: string]: never; }>;
@@ -1998,6 +2024,42 @@ export function useIsPluginInstalledLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type IsPluginInstalledQueryHookResult = ReturnType<typeof useIsPluginInstalledQuery>;
 export type IsPluginInstalledLazyQueryHookResult = ReturnType<typeof useIsPluginInstalledLazyQuery>;
 export type IsPluginInstalledQueryResult = Apollo.QueryResult<IsPluginInstalledQuery, IsPluginInstalledQueryVariables>;
+export const RepositoriesDocument = gql`
+    query repositories {
+  repositories {
+    id
+    name
+    fullName
+    private
+    branches
+  }
+}
+    `;
+
+/**
+ * __useRepositoriesQuery__
+ *
+ * To run a query within a React component, call `useRepositoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRepositoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRepositoriesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useRepositoriesQuery(baseOptions?: Apollo.QueryHookOptions<RepositoriesQuery, RepositoriesQueryVariables>) {
+        return Apollo.useQuery<RepositoriesQuery, RepositoriesQueryVariables>(RepositoriesDocument, baseOptions);
+      }
+export function useRepositoriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RepositoriesQuery, RepositoriesQueryVariables>) {
+          return Apollo.useLazyQuery<RepositoriesQuery, RepositoriesQueryVariables>(RepositoriesDocument, baseOptions);
+        }
+export type RepositoriesQueryHookResult = ReturnType<typeof useRepositoriesQuery>;
+export type RepositoriesLazyQueryHookResult = ReturnType<typeof useRepositoriesLazyQuery>;
+export type RepositoriesQueryResult = Apollo.QueryResult<RepositoriesQuery, RepositoriesQueryVariables>;
 export const SetupDocument = gql`
     query setup {
   setup {

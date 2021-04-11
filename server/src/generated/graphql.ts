@@ -39,6 +39,20 @@ export type AppMetaGithub = {
   branch: Scalars['String'];
 };
 
+export type Repository = {
+  __typename?: 'Repository';
+  id: Scalars['String'];
+  name: Scalars['String'];
+  fullName: Scalars['String'];
+  private: Scalars['Boolean'];
+  branches: Array<Scalars['String']>;
+};
+
+export type Branch = {
+  __typename?: 'Branch';
+  name: Scalars['String'];
+};
+
 export type AppTypes =
   | 'DOKKU'
   | 'GITHUB'
@@ -311,6 +325,7 @@ export type Query = {
   __typename?: 'Query';
   setup: SetupResult;
   apps: Array<App>;
+  repositories: Array<Repository>;
   appMetaGithub?: Maybe<AppMetaGithub>;
   app?: Maybe<App>;
   domains: Domains;
@@ -592,6 +607,9 @@ export type ResolversTypes = {
   ID: ResolverTypeWrapper<Scalars['ID']>;
   String: ResolverTypeWrapper<Scalars['String']>;
   AppMetaGithub: ResolverTypeWrapper<AppMetaGithub>;
+  Repository: ResolverTypeWrapper<Repository>;
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  Branch: ResolverTypeWrapper<Branch>;
   AppTypes: AppTypes;
   AppBuild: ResolverTypeWrapper<AppBuild>;
   AppBuildStatus: AppBuildStatus;
@@ -603,7 +621,6 @@ export type ResolversTypes = {
   RegisterGithubAppResult: ResolverTypeWrapper<RegisterGithubAppResult>;
   CreateAppDokkuResult: ResolverTypeWrapper<CreateAppDokkuResult>;
   CreateAppGithubResult: ResolverTypeWrapper<CreateAppGithubResult>;
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   DestroyAppResult: ResolverTypeWrapper<DestroyAppResult>;
   RestartAppResult: ResolverTypeWrapper<RestartAppResult>;
   RebuildAppResult: ResolverTypeWrapper<RebuildAppResult>;
@@ -658,6 +675,9 @@ export type ResolversParentTypes = {
   ID: Scalars['ID'];
   String: Scalars['String'];
   AppMetaGithub: AppMetaGithub;
+  Repository: Repository;
+  Boolean: Scalars['Boolean'];
+  Branch: Branch;
   AppBuild: AppBuild;
   Database: Database;
   Domains: Domains;
@@ -666,7 +686,6 @@ export type ResolversParentTypes = {
   RegisterGithubAppResult: RegisterGithubAppResult;
   CreateAppDokkuResult: CreateAppDokkuResult;
   CreateAppGithubResult: CreateAppGithubResult;
-  Boolean: Scalars['Boolean'];
   DestroyAppResult: DestroyAppResult;
   RestartAppResult: RestartAppResult;
   RebuildAppResult: RebuildAppResult;
@@ -738,6 +757,20 @@ export type AppMetaGithubResolvers<ContextType = any, ParentType extends Resolve
   repoOwner?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   webhooksSecret?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   branch?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type RepositoryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Repository'] = ResolversParentTypes['Repository']> = {
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  fullName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  private?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  branches?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type BranchResolvers<ContextType = any, ParentType extends ResolversParentTypes['Branch'] = ResolversParentTypes['Branch']> = {
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -914,6 +947,7 @@ export type AppProxyPortResolvers<ContextType = any, ParentType extends Resolver
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   setup?: Resolver<ResolversTypes['SetupResult'], ParentType, ContextType>;
   apps?: Resolver<Array<ResolversTypes['App']>, ParentType, ContextType>;
+  repositories?: Resolver<Array<ResolversTypes['Repository']>, ParentType, ContextType>;
   appMetaGithub?: Resolver<Maybe<ResolversTypes['AppMetaGithub']>, ParentType, ContextType, RequireFields<QueryAppMetaGithubArgs, 'appId'>>;
   app?: Resolver<Maybe<ResolversTypes['App']>, ParentType, ContextType, RequireFields<QueryAppArgs, 'appId'>>;
   domains?: Resolver<ResolversTypes['Domains'], ParentType, ContextType, RequireFields<QueryDomainsArgs, 'appId'>>;
@@ -967,6 +1001,8 @@ export type Resolvers<ContextType = any> = {
   DateTime?: GraphQLScalarType;
   App?: AppResolvers<ContextType>;
   AppMetaGithub?: AppMetaGithubResolvers<ContextType>;
+  Repository?: RepositoryResolvers<ContextType>;
+  Branch?: BranchResolvers<ContextType>;
   AppBuild?: AppBuildResolvers<ContextType>;
   Database?: DatabaseResolvers<ContextType>;
   Domains?: DomainsResolvers<ContextType>;
