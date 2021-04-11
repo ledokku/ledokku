@@ -4,14 +4,12 @@ import { prisma } from '../../prisma';
 
 export const githubInstallationId: QueryResolvers['githubInstallationId'] = async (
   _,
-  {},
+  __,
   { userId }
 ) => {
   if (!userId) {
     throw new Error('Unauthorized');
   }
-
-  console.log(userId);
 
   const user = await prisma.user.findUnique({
     where: {

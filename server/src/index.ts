@@ -7,7 +7,7 @@ import { PubSub } from 'apollo-server';
 import express from 'express';
 import path from 'path';
 import createDebug from 'debug';
-import { Resolvers, GithubAppInstallationId } from './generated/graphql';
+import { Resolvers } from './generated/graphql';
 import { customResolvers } from './graphql/resolvers';
 import { mutations } from './graphql/mutations';
 import { config } from './config';
