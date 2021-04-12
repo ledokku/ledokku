@@ -69,6 +69,7 @@ export type AppMetaGithub = {
   repoOwner: Scalars['String'];
   webhooksSecret: Scalars['String'];
   branch: Scalars['String'];
+  githubInstallationId: Scalars['String'];
 };
 
 export type AppProxyPort = {
@@ -102,6 +103,13 @@ export type CreateAppDokkuResult = {
   appId: Scalars['String'];
 };
 
+export type CreateAppGithubInput = {
+  name: Scalars['String'];
+  gitRepoUrl: Scalars['String'];
+  branchName: Scalars['String'];
+  gitRepoId: Scalars['String'];
+  githubInstallationId: Scalars['String'];
+};
 
 export type CreateAppGithubResult = {
   __typename?: 'CreateAppGithubResult';
@@ -258,12 +266,6 @@ export type MutationAddDomainArgs = {
   input: AddDomainInput;
 };
 
-export type CreateAppGithubInput = {
-  name: Scalars['String'];
-  gitRepoUrl: Scalars['String'];
-  branchName: Scalars['String'];
-  gitRepoId: Scalars['String'];
-};
 
 export type MutationRemoveDomainArgs = {
   input: RemoveDomainInput;
@@ -789,6 +791,7 @@ export type AppMetaGithubResolvers<ContextType = any, ParentType extends Resolve
   repoOwner?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   webhooksSecret?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   branch?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  githubInstallationId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

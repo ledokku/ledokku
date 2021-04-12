@@ -1,3 +1,4 @@
+import { githubInstallationId } from './graphql/queries/githubInstallationId';
 import dotenv from 'dotenv';
 dotenv.config();
 import { ApolloServer, gql } from 'apollo-server-express';
@@ -44,6 +45,7 @@ const typeDefs = gql`
     repoOwner: String!
     webhooksSecret: String!
     branch: String!
+    githubInstallationId: String!
   }
 
   type Repository {
@@ -226,6 +228,7 @@ const typeDefs = gql`
     gitRepoUrl: String!
     branchName: String!
     gitRepoId: String!
+    githubInstallationId: String!
   }
 
   input RestartAppInput {
