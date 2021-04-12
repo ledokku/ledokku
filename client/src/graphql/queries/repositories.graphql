@@ -1,9 +1,8 @@
-query repositories {
-  repositories {
+query repositories($installationId: String!) {
+  repositories(installationId: $installationId) {
     id
     name
     fullName
     private
-    branches
   }
 }

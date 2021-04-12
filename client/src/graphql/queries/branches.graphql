@@ -1,0 +1,5 @@
+query branches($installationId: String!, $repositoryName: String!) {
+  branches(installationId: $installationId, repositoryName: $repositoryName) {
+    name
+  }
+}
