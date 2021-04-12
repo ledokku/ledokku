@@ -2,7 +2,7 @@ import { Octokit } from '@octokit/rest';
 import { createAppAuth } from '@octokit/auth-app';
 import { QueryResolvers } from '../../generated/graphql';
 import { config } from '../../config';
-import { AppAuth, AppAuthentication } from '@octokit/auth-app/dist-types/types';
+import { AppAuthentication } from '@octokit/auth-app/dist-types/types';
 export const repositories: QueryResolvers['repositories'] = async (
   _,
   { installationId },
