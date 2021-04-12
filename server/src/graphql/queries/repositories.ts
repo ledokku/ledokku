@@ -30,17 +30,15 @@ export const repositories: QueryResolvers['repositories'] = async (
 
   const repos = await octo.request('GET /installation/repositories');
 
-  const repositories = [];
-
-  repos.data.repositories.map((r) => {
+  const repositories = repos.data.repositories.map((r) => {
     const repoToPush = {
-      id: r.id,
+      id: r.id.toString(),
       name: r.name,
       fullName: r.full_name,
       private: r.private,
     };
 
-    repositories.push(repoToPush);
+    return repoToPush;
   });
 
   return repositories;
