@@ -1,4 +1,3 @@
-import { githubInstallationId } from './graphql/queries/githubInstallationId';
 import dotenv from 'dotenv';
 dotenv.config();
 import { ApolloServer, gql } from 'apollo-server-express';
