@@ -39,14 +39,12 @@ export const branches: QueryResolvers['branches'] = async (
     `GET /repos/${user.username}/${repositoryName}/branches`
   );
 
-  const branches = [];
-
-  fetchedBranches.data.map((b) => {
+  const branches = fetchedBranches.data.map((b) => {
     const branchToPush = {
       name: b.name,
     };
 
-    branches.push(branchToPush);
+    return branchToPush;
   });
 
   return branches;
