@@ -41,7 +41,7 @@ KEY HERE
     `GET /repos/${user.username}/${repositoryName}/branches`
   );
 
-  let branches = [];
+  const branches = [];
 
   fetchedBranches.data.map((b) => {
     const branchToPush = {

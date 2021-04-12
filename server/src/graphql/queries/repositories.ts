@@ -12,12 +12,6 @@ export const repositories: QueryResolvers['repositories'] = async (
     throw new Error('Unauthorized');
   }
 
-  const user = await prisma.user.findUnique({
-    where: {
-      id: userId,
-    },
-  });
-
   const auth = createAppAuth({
     appId: config.githubAppId,
     privateKey: `-----BEGIN RSA PRIVATE KEY-----
@@ -39,7 +33,7 @@ KEY HERE
 
   const repos = await octo.request('GET /installation/repositories');
 
-  let repositories = [];
+  const repositories = [];
 
   repos.data.repositories.map((r) => {
     const repoToPush = {
