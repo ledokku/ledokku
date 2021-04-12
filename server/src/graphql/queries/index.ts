@@ -1,4 +1,6 @@
 import { repositories } from './repositories';
+import { branches } from './branches';
+import { githubInstallationId } from './githubInstallationId';
 import { appMetaGithub } from './appGithubMeta';
 import { app } from './app';
 import { apps } from './apps';
@@ -31,5 +33,7 @@ export const queries = {
   setup,
   isPluginInstalled,
   appProxyPorts,
+  githubInstallationId,
   repositories,
+  branches,
 };

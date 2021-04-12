@@ -13,6 +13,7 @@
     "prisma:migrate:save": "prisma migrate dev --preview-feature"
   },
   "dependencies": {
+    "@octokit/auth-app": "3.3.0",
     "@octokit/rest": "18.3.0",
     "@prisma/client": "2.17.0",
     "apollo-server": "2.21.0",

@@ -17,7 +17,6 @@ import { verifyWebhookSecret } from './lib/webhooks/utils';
 import { synchroniseServerQueue } from './queues/synchroniseServer';
 import { prisma } from './prisma';
 import { githubPushWebhookHandler } from './lib/webhooks/webhooks';
-import { githubInstallationIdHandler } from './lib/githubInstallationIdHandler';
 
 app.use(express.json());
 
@@ -35,6 +34,10 @@ const typeDefs = gql`
     appMetaGithub: AppMetaGithub
   }
 
+  type GithubAppInstallationId {
+    id: String!
+  }
+
   type AppMetaGithub {
     repoId: String!
     repoName: String!
@@ -48,7 +51,6 @@ const typeDefs = gql`
     name: String!
     fullName: String!
     private: Boolean!
-    branches: [String!]!
   }
 
   type Branch {
@@ -297,9 +299,11 @@ const typeDefs = gql`
   }
 
   type Query {
+    githubInstallationId: GithubAppInstallationId!
     setup: SetupResult!
     apps: [App!]!
-    repositories: [Repository!]!
+    repositories(installationId: String!): [Repository!]!
+    branches(repositoryName: String!, installationId: String!): [Branch!]!
     appMetaGithub(appId: String!): AppMetaGithub
     app(appId: String!): App
     domains(appId: String!): Domains!
@@ -482,10 +486,6 @@ app.post('/webhooks', async (req, res) => {
 
 app.post('/events', (req, res) => {
   console.log('received request -----------------------------', req.body);
-  if (req.body.action === 'created' || req.body.action === 'added') {
-    githubInstallationIdHandler(req);
-  }
-
   res.json({ success: true });
 });
 

@@ -30,6 +30,11 @@ export type App = {
   appMetaGithub?: Maybe<AppMetaGithub>;
 };
 
+export type GithubAppInstallationId = {
+  __typename?: 'GithubAppInstallationId';
+  id: Scalars['String'];
+};
+
 export type AppMetaGithub = {
   __typename?: 'AppMetaGithub';
   repoId: Scalars['String'];
@@ -45,7 +50,6 @@ export type Repository = {
   name: Scalars['String'];
   fullName: Scalars['String'];
   private: Scalars['Boolean'];
-  branches: Array<Scalars['String']>;
 };
 
 export type Branch = {
@@ -324,9 +328,11 @@ export type RemoveAppProxyPortInput = {
 
 export type Query = {
   __typename?: 'Query';
+  githubInstallationId: GithubAppInstallationId;
   setup: SetupResult;
   apps: Array<App>;
   repositories: Array<Repository>;
+  branches: Array<Branch>;
   appMetaGithub?: Maybe<AppMetaGithub>;
   app?: Maybe<App>;
   domains: Domains;
@@ -340,6 +346,17 @@ export type Query = {
   isDatabaseLinked: IsDatabaseLinkedResult;
   envVars: EnvVarsResult;
   appProxyPorts: Array<AppProxyPort>;
+};
+
+
+export type QueryRepositoriesArgs = {
+  installationId: Scalars['String'];
+};
+
+
+export type QueryBranchesArgs = {
+  repositoryName: Scalars['String'];
+  installationId: Scalars['String'];
 };
 
 
@@ -813,6 +830,20 @@ export type AppsQuery = (
   )> }
 );
 
+export type BranchesQueryVariables = Exact<{
+  installationId: Scalars['String'];
+  repositoryName: Scalars['String'];
+}>;
+
+
+export type BranchesQuery = (
+  { __typename?: 'Query' }
+  & { branches: Array<(
+    { __typename?: 'Branch' }
+    & Pick<Branch, 'name'>
+  )> }
+);
+
 export type DashboardQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -927,14 +958,16 @@ export type IsPluginInstalledQuery = (
   ) }
 );
 
-export type RepositoriesQueryVariables = Exact<{ [key: string]: never; }>;
+export type RepositoriesQueryVariables = Exact<{
+  installationId: Scalars['String'];
+}>;
 
 
 export type RepositoriesQuery = (
   { __typename?: 'Query' }
   & { repositories: Array<(
     { __typename?: 'Repository' }
-    & Pick<Repository, 'id' | 'name' | 'fullName' | 'private' | 'branches'>
+    & Pick<Repository, 'id' | 'name' | 'fullName' | 'private'>
   )> }
 );
 
@@ -1739,6 +1772,40 @@ export function useAppsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AppsQ
 export type AppsQueryHookResult = ReturnType<typeof useAppsQuery>;
 export type AppsLazyQueryHookResult = ReturnType<typeof useAppsLazyQuery>;
 export type AppsQueryResult = Apollo.QueryResult<AppsQuery, AppsQueryVariables>;
+export const BranchesDocument = gql`
+    query branches($installationId: String!, $repositoryName: String!) {
+  branches(installationId: $installationId, repositoryName: $repositoryName) {
+    name
+  }
+}
+    `;
+
+/**
+ * __useBranchesQuery__
+ *
+ * To run a query within a React component, call `useBranchesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBranchesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBranchesQuery({
+ *   variables: {
+ *      installationId: // value for 'installationId'
+ *      repositoryName: // value for 'repositoryName'
+ *   },
+ * });
+ */
+export function useBranchesQuery(baseOptions: Apollo.QueryHookOptions<BranchesQuery, BranchesQueryVariables>) {
+        return Apollo.useQuery<BranchesQuery, BranchesQueryVariables>(BranchesDocument, baseOptions);
+      }
+export function useBranchesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BranchesQuery, BranchesQueryVariables>) {
+          return Apollo.useLazyQuery<BranchesQuery, BranchesQueryVariables>(BranchesDocument, baseOptions);
+        }
+export type BranchesQueryHookResult = ReturnType<typeof useBranchesQuery>;
+export type BranchesLazyQueryHookResult = ReturnType<typeof useBranchesLazyQuery>;
+export type BranchesQueryResult = Apollo.QueryResult<BranchesQuery, BranchesQueryVariables>;
 export const DashboardDocument = gql`
     query dashboard {
   apps {
@@ -2026,13 +2093,12 @@ export type IsPluginInstalledQueryHookResult = ReturnType<typeof useIsPluginInst
 export type IsPluginInstalledLazyQueryHookResult = ReturnType<typeof useIsPluginInstalledLazyQuery>;
 export type IsPluginInstalledQueryResult = Apollo.QueryResult<IsPluginInstalledQuery, IsPluginInstalledQueryVariables>;
 export const RepositoriesDocument = gql`
-    query repositories {
-  repositories {
+    query repositories($installationId: String!) {
+  repositories(installationId: $installationId) {
     id
     name
     fullName
     private
-    branches
   }
 }
     `;
@@ -2049,10 +2115,11 @@ export const RepositoriesDocument = gql`
  * @example
  * const { data, loading, error } = useRepositoriesQuery({
  *   variables: {
+ *      installationId: // value for 'installationId'
  *   },
  * });
  */
-export function useRepositoriesQuery(baseOptions?: Apollo.QueryHookOptions<RepositoriesQuery, RepositoriesQueryVariables>) {
+export function useRepositoriesQuery(baseOptions: Apollo.QueryHookOptions<RepositoriesQuery, RepositoriesQueryVariables>) {
         return Apollo.useQuery<RepositoriesQuery, RepositoriesQueryVariables>(RepositoriesDocument, baseOptions);
       }
 export function useRepositoriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RepositoriesQuery, RepositoriesQueryVariables>) {

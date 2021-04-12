@@ -1,16 +1,23 @@
+import { AppAuthentication } from '@octokit/auth-app/dist-types/types';
 import { Octokit } from '@octokit/rest';
 import { createAppAuth } from '@octokit/auth-app';
 import { QueryResolvers } from '../../generated/graphql';
 import { config } from '../../config';
-import { AppAuthentication } from '@octokit/auth-app/dist-types/types';
-export const repositories: QueryResolvers['repositories'] = async (
+import { prisma } from '../../prisma';
+export const branches: QueryResolvers['branches'] = async (
   _,
-  { installationId },
+  { repositoryName, installationId },
   { userId }
 ) => {
   if (!userId) {
     throw new Error('Unauthorized');
   }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
 
   const auth = createAppAuth({
     appId: config.githubAppId,
@@ -28,20 +35,19 @@ export const repositories: QueryResolvers['repositories'] = async (
     auth: installationAuthentication.token,
   });
 
-  const repos = await octo.request('GET /installation/repositories');
+  const fetchedBranches = await octo.request(
+    `GET /repos/${user.username}/${repositoryName}/branches`
+  );
 
-  const repositories = [];
+  const branches = [];
 
-  repos.data.repositories.map((r) => {
-    const repoToPush = {
-      id: r.id,
-      name: r.name,
-      fullName: r.full_name,
-      private: r.private,
+  fetchedBranches.data.map((b) => {
+    const branchToPush = {
+      name: b.name,
     };
 
-    repositories.push(repoToPush);
+    branches.push(branchToPush);
   });
 
-  return repositories;
+  return branches;
 };
