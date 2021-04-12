@@ -45,7 +45,7 @@ const typeDefs = gql`
     repoOwner: String!
     webhooksSecret: String!
     branch: String!
-    githubInstallationId: String!
+    githubAppInstallationId: String!
   }
 
   type Repository {
