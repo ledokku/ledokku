@@ -18,12 +18,10 @@ export const githubInstallationId: QueryResolvers['githubInstallationId'] = asyn
   });
 
   const octokit = new Octokit({
-    auth: `${user.githubAccessToken}`,
+    auth: user.githubAccessToken,
   });
 
   const installations = await octokit.request('GET /user/installations');
-
-  console.log(installations.data.installations[0]);
 
   const installationId = {
     id: installations.data.installations[0].id.toString(),
