@@ -38,7 +38,7 @@ KEY HERE
     const repoToPush = {
       id: r.id,
       name: r.name,
-      full_name: r.full_name,
+      fullName: r.full_name,
       private: r.private,
     };
 
