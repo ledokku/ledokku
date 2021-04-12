@@ -2,6 +2,7 @@ import { Octokit } from '@octokit/rest';
 import { createAppAuth } from '@octokit/auth-app';
 import { QueryResolvers } from '../../generated/graphql';
 import { config } from '../../config';
+import { AppAuth, AppAuthentication } from '@octokit/auth-app/dist-types/types';
 export const repositories: QueryResolvers['repositories'] = async (
   _,
   { installationId },
@@ -20,13 +21,12 @@ KEY HERE
     clientSecret: config.githubAppClientSecret,
   });
 
-  const installationAuthentication = await auth({
+  const installationAuthentication = (await auth({
     type: 'installation',
     installationId,
-  });
+  })) as AppAuthentication;
 
   const octo = new Octokit({
-    //@ts-ignore
     auth: installationAuthentication.token,
   });
 

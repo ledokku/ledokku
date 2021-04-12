@@ -1,3 +1,4 @@
+import { AppAuthentication } from '@octokit/auth-app/dist-types/types';
 import { Octokit } from '@octokit/rest';
 import { createAppAuth } from '@octokit/auth-app';
 import { QueryResolvers } from '../../generated/graphql';
@@ -27,13 +28,12 @@ KEY HERE
     clientSecret: config.githubAppClientSecret,
   });
 
-  const installationAuthentication = await auth({
+  const installationAuthentication = (await auth({
     type: 'installation',
     installationId,
-  });
+  })) as AppAuthentication;
 
   const octo = new Octokit({
-    //@ts-ignore
     auth: installationAuthentication.token,
   });
 
