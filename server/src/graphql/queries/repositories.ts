@@ -2,7 +2,6 @@ import { Octokit } from '@octokit/rest';
 import { createAppAuth } from '@octokit/auth-app';
 import { QueryResolvers } from '../../generated/graphql';
 import { config } from '../../config';
-import { prisma } from '../../prisma';
 export const repositories: QueryResolvers['repositories'] = async (
   _,
   { installationId },
