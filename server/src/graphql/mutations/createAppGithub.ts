@@ -1,3 +1,5 @@
+import { AppAuthentication } from '@octokit/auth-app/dist-types/types';
+import { createAppAuth } from '@octokit/auth-app';
 import { deployAppQueue } from './../../queues/deployApp';
 import { sshConnect } from './../../lib/ssh';
 import { MutationResolvers } from '../../generated/graphql';
@@ -32,17 +34,41 @@ export const createAppGithub: MutationResolvers['createAppGithub'] = async (
     },
   });
 
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+
   const isAppNameTaken = !!apps[0];
 
   if (isAppNameTaken) {
     throw new Error('App name already taken');
   }
 
+  const auth = createAppAuth({
+    appId: config.githubAppId,
+    privateKey: config.githubAppPem,
+    clientId: config.githubAppClientSecret,
+    clientSecret: config.githubAppClientSecret,
+  });
+
+  const installationAuthentication = (await auth({
+    type: 'installation',
+    installationId: input.githubInstallationId,
+  })) as AppAuthentication;
+
   const repoData = getRepoData(input.gitRepoUrl);
 
   const ssh = await sshConnect();
 
   const dokkuApp = await dokku.apps.create(ssh, input.name);
+
+  const dokkuAuth = await dokku.git.auth({
+    ssh,
+    username: user.username,
+    token: installationAuthentication.token,
+  });
 
   const randomToken = generateRandomToken(20);
 
@@ -66,7 +92,7 @@ export const createAppGithub: MutationResolvers['createAppGithub'] = async (
     },
   });
 
-  if (dokkuApp) {
+  if (dokkuApp && dokkuAuth) {
     await deployAppQueue.add('deploy-app', {
       appId: app.id,
     });
