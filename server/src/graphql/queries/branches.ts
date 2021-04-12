@@ -21,9 +21,7 @@ export const branches: QueryResolvers['branches'] = async (
 
   const auth = createAppAuth({
     appId: config.githubAppId,
-    privateKey: `-----BEGIN RSA PRIVATE KEY-----
-KEY HERE
------END RSA PRIVATE KEY-----`,
+    privateKey: config.githubAppPem,
     clientId: config.githubAppClientSecret,
     clientSecret: config.githubAppClientSecret,
   });

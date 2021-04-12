@@ -72,7 +72,7 @@ export const registerGithubApp: MutationResolvers['registerGithubApp'] = async (
   config.githubAppClientId = githubAppClientId;
   config.githubAppClientSecret = githubAppClientSecret;
   config.githubAppWebhookSecret = githubAppWebhookSecret;
-  config.githubAppPem = githubAppPem;
+  config.githubAppPem = githubAppPem.replace(/\\n/g, '\n').replace(/"/g, '`');
   config.githubAppName = githubAppName;
   config.githubAppId = githubAppId;
 
