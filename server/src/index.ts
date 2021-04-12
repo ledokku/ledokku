@@ -51,7 +51,6 @@ const typeDefs = gql`
     name: String!
     fullName: String!
     private: Boolean!
-    branches: [String!]!
   }
 
   type Branch {
@@ -303,6 +302,7 @@ const typeDefs = gql`
     setup: SetupResult!
     apps: [App!]!
     repositories(installationId: String!): [Repository!]!
+    branches(repositoryName: String!, installationId: String!): [Branch!]!
     appMetaGithub(appId: String!): AppMetaGithub
     app(appId: String!): App
     domains(appId: String!): Domains!

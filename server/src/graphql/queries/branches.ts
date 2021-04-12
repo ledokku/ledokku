@@ -3,9 +3,9 @@ import { createAppAuth } from '@octokit/auth-app';
 import { QueryResolvers } from '../../generated/graphql';
 import { config } from '../../config';
 import { prisma } from '../../prisma';
-export const repositories: QueryResolvers['repositories'] = async (
+export const branches: QueryResolvers['branches'] = async (
   _,
-  { installationId },
+  { repositoryName, installationId },
   { userId }
 ) => {
   if (!userId) {
@@ -37,20 +37,19 @@ KEY HERE
     auth: installationAuthentication.token,
   });
 
-  const repos = await octo.request('GET /installation/repositories');
+  const fetchedBranches = await octo.request(
+    `GET /repos/${user.username}/${repositoryName}/branches`
+  );
 
-  let repositories = [];
+  let branches = [];
 
-  repos.data.repositories.map((r) => {
-    const repoToPush = {
-      id: r.id,
-      name: r.name,
-      full_name: r.full_name,
-      private: r.private,
+  fetchedBranches.data.map((b) => {
+    const branchToPush = {
+      name: b.name,
     };
 
-    repositories.push(repoToPush);
+    branches.push(branchToPush);
   });
 
-  return repositories;
+  return branches;
 };
