@@ -31,6 +31,10 @@ export const registerGithubApp: MutationResolvers['registerGithubApp'] = async (
   const githubAppName = githubResponse.data.name;
   const githubAppId = githubResponse.data.id.toString();
 
+  // Here we split pem and join into a single line, so env var is readable for dev process
+  const githubAppPemSplit = githubAppPem.split('\n');
+  const formattedPem = githubAppPemSplit.join('');
+
   if (process.env.NODE_ENV === 'production') {
     // In production we add this config as dokku config for the ledokku app.
     // The no-restart option is used as we do not need to reboot the ledokku server.
@@ -63,7 +67,7 @@ export const registerGithubApp: MutationResolvers['registerGithubApp'] = async (
     dotenvData += `\nGITHUB_APP_ID="${githubAppId}"`;
     dotenvData += `\nGITHUB_APP_CLIENT_SECRET="${githubAppClientSecret}"`;
     dotenvData += `\nGITHUB_APP_WEBHOOK_SECRET="${githubAppWebhookSecret}"`;
-    dotenvData += `\nGITHUB_APP_PEM="${githubAppPem}"\n`;
+    dotenvData += `\nGITHUB_APP_PEM="${formattedPem}"\n`;
     writeFileSync(dotenvPath, dotenvData, { encoding: 'utf8' });
     console.log(`Github application config added to .env file.`);
   }
@@ -72,7 +76,7 @@ export const registerGithubApp: MutationResolvers['registerGithubApp'] = async (
   config.githubAppClientId = githubAppClientId;
   config.githubAppClientSecret = githubAppClientSecret;
   config.githubAppWebhookSecret = githubAppWebhookSecret;
-  config.githubAppPem = githubAppPem;
+  config.githubAppPem = formattedPem;
   config.githubAppName = githubAppName;
   config.githubAppId = githubAppId;
 
