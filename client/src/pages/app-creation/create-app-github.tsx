@@ -109,6 +109,8 @@ export const CreateAppGithub = () => {
               name: values.name,
               gitRepoUrl: values.gitRepoUrl,
               branchName: values.gitBranch,
+              gitRepoId: 'MOCK INPUT TO PREVET TYPE ERRORS',
+              githubInstallationId: 'MOCK INPUT TO PREVET TYPE ERRORS',
             },
           },
         });
