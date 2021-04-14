@@ -12,5 +12,10 @@ export const auth = async (args: Args) => {
     `git:auth github.com ${args.username} ${args.token}`,
     args.options
   );
-  return resultGitAuth;
+
+  if (resultGitAuth.code === 1) {
+    throw new Error(resultGitAuth.stderr);
+  }
+
+  return true;
 };

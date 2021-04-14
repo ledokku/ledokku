@@ -59,3 +59,18 @@ export const getRepoData = (gitRepoUrl: string) => {
 
 export const generateRandomToken = (length = 40): string =>
   randomBytes(length).toString('hex');
+
+export const formatGithubPem = (pem: string) => {
+  const githubAppPemSplit = pem.split('\n');
+  const joinedPem = githubAppPemSplit.join('');
+  const formattedStart = joinedPem.replace(
+    '-----BEGIN RSA PRIVATE KEY-----',
+    '-----BEGIN RSA PRIVATE KEY-----\n'
+  );
+  const formattedPem = formattedStart.replace(
+    '-----END RSA PRIVATE KEY-----',
+    '\n-----END RSA PRIVATE KEY-----'
+  );
+
+  return formattedPem;
+};
