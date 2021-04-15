@@ -224,7 +224,7 @@ const typeDefs = gql`
 
   input CreateAppGithubInput {
     name: String!
-    gitRepoUrl: String!
+    gitRepoFullName: String!
     branchName: String!
     gitRepoId: String!
     githubInstallationId: String!

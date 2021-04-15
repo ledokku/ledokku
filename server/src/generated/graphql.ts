@@ -105,7 +105,7 @@ export type CreateAppDokkuResult = {
 
 export type CreateAppGithubInput = {
   name: Scalars['String'];
-  gitRepoUrl: Scalars['String'];
+  gitRepoFullName: Scalars['String'];
   branchName: Scalars['String'];
   gitRepoId: Scalars['String'];
   githubInstallationId: Scalars['String'];

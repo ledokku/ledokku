@@ -13,6 +13,8 @@ const redisClient = new Redis(config.redisUrl);
 
 interface QueueArgs {
   appId: string;
+  userName: string;
+  token: string;
 }
 
 export const deployAppQueue = new Queue<QueueArgs>(queueName, {
@@ -29,7 +31,7 @@ export const deployAppQueue = new Queue<QueueArgs>(queueName, {
 const worker = new Worker(
   queueName,
   async (job) => {
-    const { appId } = job.data;
+    const { appId, userName, token } = job.data;
 
     debug(`starting deploy app queue for ${appId} app`);
 
@@ -52,6 +54,12 @@ const worker = new Worker(
     const branchName = branch ? branch : 'main';
 
     const ssh = await sshConnect();
+
+    await dokku.git.auth({
+      ssh,
+      username: userName,
+      token,
+    });
 
     await dokku.git.unlock(ssh, app.name);
 

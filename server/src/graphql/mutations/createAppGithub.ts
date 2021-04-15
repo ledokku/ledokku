@@ -6,11 +6,7 @@ import { sshConnect } from './../../lib/ssh';
 import { MutationResolvers } from '../../generated/graphql';
 import { prisma } from '../../prisma';
 // import { buildAppQueue } from '../../queues/buildApp';
-import {
-  githubAppCreationSchema,
-  getRepoData,
-  generateRandomToken,
-} from '../utils';
+import { githubAppCreationSchema, generateRandomToken } from '../utils';
 import { dokku } from '../../lib/dokku';
 import { config } from '../../config';
 
@@ -26,7 +22,6 @@ export const createAppGithub: MutationResolvers['createAppGithub'] = async (
   // We make sure the name is valid to avoid security risks
   githubAppCreationSchema.validateSync({
     name: input.name,
-    gitRepoUrl: input.gitRepoUrl,
   });
 
   const apps = await prisma.app.findMany({
@@ -64,7 +59,12 @@ export const createAppGithub: MutationResolvers['createAppGithub'] = async (
     auth: installationAuthentication.token,
   });
 
-  const repoData = getRepoData(input.gitRepoUrl);
+  const fullName = input.gitRepoFullName.split('/');
+
+  const repoData = {
+    owner: fullName[0],
+    repoName: fullName[1],
+  };
 
   // We check whether repo is valid
   const repo = await octo.repos.get({
@@ -94,12 +94,6 @@ export const createAppGithub: MutationResolvers['createAppGithub'] = async (
 
   const dokkuApp = await dokku.apps.create(ssh, input.name);
 
-  const dokkuAuth = await dokku.git.auth({
-    ssh,
-    username: user.username,
-    token: installationAuthentication.token,
-  });
-
   const randomToken = generateRandomToken(20);
 
   const app = await prisma.app.create({
@@ -122,9 +116,11 @@ export const createAppGithub: MutationResolvers['createAppGithub'] = async (
     },
   });
 
-  if (dokkuApp && dokkuAuth) {
+  if (dokkuApp) {
     await deployAppQueue.add('deploy-app', {
       appId: app.id,
+      userName: user.username,
+      token: installationAuthentication.token,
     });
   }
 

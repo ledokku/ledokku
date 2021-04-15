@@ -14,9 +14,11 @@ export const githubPushWebhookHandler = async (appToRedeployMeta: any) => {
     },
   });
 
-  if (appGithubMeta && app) {
-    await deployAppQueue.add('deploy-app', {
-      appId: app.id,
-    });
-  }
+  // TODO MAKE WEBHOOKS WORK
+
+  // if (appGithubMeta && app) {
+  //   await deployAppQueue.add('deploy-app', {
+  //     appId: app.id,
+  //   });
+  // }
 };

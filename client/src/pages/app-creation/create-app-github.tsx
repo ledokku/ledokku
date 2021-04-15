@@ -107,7 +107,7 @@ export const CreateAppGithub = () => {
           variables: {
             input: {
               name: values.name,
-              gitRepoUrl: values.gitRepoUrl,
+              gitRepoFullName: 'FULL NAME VALUE THAT YOU GET FROM REPOS QUERY',
               branchName: values.gitBranch,
               gitRepoId: 'MOCK INPUT TO PREVET TYPE ERRORS',
               githubInstallationId: 'MOCK INPUT TO PREVET TYPE ERRORS',

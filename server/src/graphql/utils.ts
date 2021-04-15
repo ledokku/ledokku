@@ -13,18 +13,8 @@ const appNameYup = yup
   .required()
   .matches(/^[a-z0-9-]+$/);
 
-// Regexp for git URLs
-const gitRepoUrlYup = yup
-  .string()
-  .matches(
-    /((git|ssh|http(s)?)|(git@[\w.]+))(:(\/\/)?)([\w.@:/\-~]+)(\.git)(\/)?/,
-    'Must be a valid git link'
-  )
-  .required();
-
 export const githubAppCreationSchema = yup.object({
   name: appNameYup,
-  gitRepoUrl: gitRepoUrlYup,
 });
 
 export const appNameSchema = yup.object({
@@ -42,19 +32,6 @@ export const dbTypeToDokkuPlugin = (dbType: DatabaseTypes): string => {
     case 'MYSQL':
       return 'mysql';
   }
-};
-
-// Extracts github repo owner and name
-export const getRepoData = (gitRepoUrl: string) => {
-  const base = gitRepoUrl.replace('https://github.com/', '');
-  const split = base.split('/');
-  const owner = split[0];
-  const repoName = split[1].replace('.git', '');
-
-  return {
-    owner,
-    repoName,
-  };
 };
 
 export const generateRandomToken = (length = 40): string =>
