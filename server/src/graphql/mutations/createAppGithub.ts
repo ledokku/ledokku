@@ -1,3 +1,4 @@
+import { Octokit } from '@octokit/rest';
 import { AppAuthentication } from '@octokit/auth-app/dist-types/types';
 import { createAppAuth } from '@octokit/auth-app';
 import { deployAppQueue } from './../../queues/deployApp';
@@ -46,6 +47,7 @@ export const createAppGithub: MutationResolvers['createAppGithub'] = async (
     throw new Error('App name already taken');
   }
 
+  // We authenticate as installation
   const auth = createAppAuth({
     appId: config.githubAppId,
     privateKey: config.githubAppPem,
@@ -58,7 +60,35 @@ export const createAppGithub: MutationResolvers['createAppGithub'] = async (
     installationId: input.githubInstallationId,
   })) as AppAuthentication;
 
+  const octo = new Octokit({
+    auth: installationAuthentication.token,
+  });
+
   const repoData = getRepoData(input.gitRepoUrl);
+
+  // We check whether repo is valid
+  const repo = await octo.repos.get({
+    owner: repoData.owner,
+    repo: repoData.repoName,
+  });
+
+  if (!repo) {
+    throw new Error(
+      `No repository found for ${repoData.owner} with name ${repoData.repoName}`
+    );
+  }
+  // We check whether branch is valid
+  const branch = await octo.repos.getBranch({
+    owner: repoData.owner,
+    repo: repoData.repoName,
+    branch: input.branchName,
+  });
+
+  if (!branch.url) {
+    throw new Error(
+      `There's no ${input.branchName} branch or main branch for this repository`
+    );
+  }
 
   const ssh = await sshConnect();
 
