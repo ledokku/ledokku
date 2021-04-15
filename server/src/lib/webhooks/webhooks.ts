@@ -1,5 +1,5 @@
 import { prisma } from '../../prisma';
-import { deployAppQueue } from './../../queues/deployApp';
+// import { deployAppQueue } from './../../queues/deployApp';
 
 export const githubPushWebhookHandler = async (appToRedeployMeta: any) => {
   const appGithubMeta = await prisma.appMetaGithub.findFirst({
@@ -8,7 +8,7 @@ export const githubPushWebhookHandler = async (appToRedeployMeta: any) => {
     },
   });
 
-  const app = await prisma.app.findFirst({
+  await prisma.app.findFirst({
     where: {
       id: appGithubMeta.appId,
     },
