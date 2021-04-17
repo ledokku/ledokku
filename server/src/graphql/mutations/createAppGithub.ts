@@ -6,7 +6,7 @@ import { sshConnect } from './../../lib/ssh';
 import { MutationResolvers } from '../../generated/graphql';
 import { prisma } from '../../prisma';
 // import { buildAppQueue } from '../../queues/buildApp';
-import { githubAppCreationSchema, generateRandomToken } from '../utils';
+import { githubAppCreationSchema } from '../utils';
 import { dokku } from '../../lib/dokku';
 import { config } from '../../config';
 
@@ -94,8 +94,6 @@ export const createAppGithub: MutationResolvers['createAppGithub'] = async (
 
   const dokkuApp = await dokku.apps.create(ssh, input.name);
 
-  const randomToken = generateRandomToken(20);
-
   const app = await prisma.app.create({
     data: {
       name: input.name,
@@ -106,7 +104,7 @@ export const createAppGithub: MutationResolvers['createAppGithub'] = async (
           repoOwner: repoData.owner,
           repoId: input.gitRepoId,
           githubAppInstallationId: input.githubInstallationId,
-          webhooksSecret: randomToken,
+          webhooksSecret: config.githubAppWebhookSecret,
           branch: input.branchName ? input.branchName : 'main',
         },
       },
