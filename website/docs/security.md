@@ -10,5 +10,5 @@ Currently the Graphql API we provide to the UI is secured by a JWT token (valid 
 
 ## Can anyone with a Github account access my ledokku admin?
 
-In the current version of the project we only allow one user to signup, meaning that if another person tries to login via Github on your instance he will get rejected. Later we plan to let you invite more users and maybe do some team/role management for the apps.
+In the current version of the project we only allow one user to signup, meaning that if another person tries to login via Github on your instance they will get rejected. Later we plan to let you invite more users and maybe do some team/role management for the apps.
 As a workaround, you can use the `NUMBER_USERS_ALLOWED` env variable if you want to allow more users to access the ledokku admin.
