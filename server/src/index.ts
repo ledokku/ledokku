@@ -472,8 +472,6 @@ app.get('*', (_, res) => {
   );
 });
 
-const debug = createDebug(`webhooks`);
-
 app.post('/events', async (req, res) => {
   console.log('received request -----------------------------', req.body);
 

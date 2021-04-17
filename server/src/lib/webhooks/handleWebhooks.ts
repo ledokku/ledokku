@@ -10,8 +10,6 @@ export const handleWebhooks = async (req: Request) => {
     throw new Error('Failed to fetch the request from github');
   }
 
-  let installationAuthentication;
-
   const auth = createAppAuth({
     appId: config.githubAppId,
     privateKey: config.githubAppWebhookSecret,
@@ -19,7 +17,7 @@ export const handleWebhooks = async (req: Request) => {
     clientSecret: config.githubAppClientSecret,
   });
 
-  installationAuthentication = (await auth({
+  const installationAuthentication = (await auth({
     type: 'installation',
     installationId: req.body.installation.id.toString(),
   })) as AppAuthentication;
