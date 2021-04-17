@@ -11,8 +11,6 @@ export const handleWebhooks = async (req: Request) => {
     throw new Error('Failed to fetch the request from github');
   }
 
-  console.log(req.headers);
-
   const requestVerified = verifyWebhookSecret(req);
 
   if (!requestVerified) {
@@ -37,7 +35,7 @@ export const handleWebhooks = async (req: Request) => {
     },
   });
 
-  for (let app of appsToRedeploy) {
+  for (const app of appsToRedeploy) {
     const appToRedeploy = await prisma.app.findUnique({
       where: {
         id: app.appId,
