@@ -2,6 +2,7 @@ import { useAppByIdQuery } from '../../generated/graphql';
 import { chakra } from '@chakra-ui/system';
 import { Grid, GridItem, Text, Link, Heading } from '@chakra-ui/react';
 import { useState } from 'react';
+import { config } from '../../config';
 
 interface AppDomainProps {
   appId: string;
@@ -48,7 +49,7 @@ export const Webhooks = ({ appId }: AppDomainProps) => {
         <GridItem colSpan={8} pt={3}>
           <Text>
             {isSecretVisible
-              ? data.app?.appMetaGithub?.webhooksSecret
+              ? config.githubWebhooksSecret
               : '*************************'}
           </Text>
         </GridItem>

@@ -41,7 +41,6 @@ const typeDefs = gql`
     repoId: String!
     repoName: String!
     repoOwner: String!
-    webhooksSecret: String!
     branch: String!
     githubAppInstallationId: String!
   }
@@ -462,6 +461,7 @@ app.get('/runtime-config.js', (_, res) => {
     GITHUB_APP_CLIENT_ID: '${config.githubAppClientId}',
     TELEMETRY_DISABLED: '${config.telemetryDisabled}',
     GITHUB_APP_NAME: '${config.githubAppName}'
+    GITHUB_APP_WEBHOOKS_SECRET: '${config.githubAppWebhookSecret}'
   }
   `);
 });

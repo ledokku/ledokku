@@ -27,6 +27,7 @@ import { Header } from '../../../modules/layout/Header';
 import { Webhooks } from '../../../modules/webhooks/Webhooks';
 import { HeaderContainer } from '../../../ui';
 import { useToast } from '../../../ui/toast';
+import { config } from '../../../config';
 
 export const AppSettingsAdvanced = () => {
   const { id: appId } = useParams<{ id: string }>();
@@ -115,7 +116,7 @@ export const AppSettingsAdvanced = () => {
             <AppSettingsMenu app={app} />
           </GridItem>
           <GridItem colSpan={4}>
-            {!loading && data?.app?.appMetaGithub?.webhooksSecret && (
+            {!loading && config.githubWebhooksSecret && (
               <Webhooks appId={app.id} />
             )}
             <AppRestart appId={app.id} />

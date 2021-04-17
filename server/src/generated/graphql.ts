@@ -67,7 +67,6 @@ export type AppMetaGithub = {
   repoId: Scalars['String'];
   repoName: Scalars['String'];
   repoOwner: Scalars['String'];
-  webhooksSecret: Scalars['String'];
   branch: Scalars['String'];
   githubAppInstallationId: Scalars['String'];
 };
@@ -789,7 +788,6 @@ export type AppMetaGithubResolvers<ContextType = any, ParentType extends Resolve
   repoId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   repoName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   repoOwner?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  webhooksSecret?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   branch?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   githubAppInstallationId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

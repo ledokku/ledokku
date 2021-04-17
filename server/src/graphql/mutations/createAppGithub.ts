@@ -104,7 +104,6 @@ export const createAppGithub: MutationResolvers['createAppGithub'] = async (
           repoOwner: repoData.owner,
           repoId: input.gitRepoId,
           githubAppInstallationId: input.githubInstallationId,
-          webhooksSecret: config.githubAppWebhookSecret,
           branch: input.branchName ? input.branchName : 'main',
         },
       },
