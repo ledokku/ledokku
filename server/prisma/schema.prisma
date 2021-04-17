@@ -42,16 +42,17 @@ enum AppTypes {
 }
 
 model AppMetaGithub {
-  id             String   @id @default(uuid())
-  app            App      @relation(fields: [appId], references: [id])
-  appId          String
-  webhooksSecret String
-  repoId         String
-  repoOwner      String
-  repoName       String
-  branch         String
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @default(now())
+  id                      String   @id @default(uuid())
+  app                     App      @relation(fields: [appId], references: [id])
+  appId                   String
+  webhooksSecret          String
+  repoId                  String
+  repoOwner               String
+  repoName                String
+  branch                  String
+  githubAppInstallationId String
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @default(now())
 }
 
 model AppBuild {

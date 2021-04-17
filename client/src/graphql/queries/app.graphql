@@ -14,6 +14,7 @@ query appById($appId: String!) {
       repoOwner
       webhooksSecret
       branch
+      githubAppInstallationId
     }
   }
 }

@@ -4,6 +4,7 @@ import { MutationResolvers } from '../../generated/graphql';
 import { config } from '../../config';
 import { sshConnect } from '../../lib/ssh';
 import { dokku } from '../../lib/dokku';
+import { formatGithubPem } from '../utils';
 
 export const registerGithubApp: MutationResolvers['registerGithubApp'] = async (
   _,
@@ -31,9 +32,7 @@ export const registerGithubApp: MutationResolvers['registerGithubApp'] = async (
   const githubAppName = githubResponse.data.name;
   const githubAppId = githubResponse.data.id.toString();
 
-  // Here we split pem and join into a single line, so env var is readable for dev process
-  const githubAppPemSplit = githubAppPem.split('\n');
-  const formattedPem = githubAppPemSplit.join('');
+  const formattedPem = formatGithubPem(githubAppPem);
 
   if (process.env.NODE_ENV === 'production') {
     // In production we add this config as dokku config for the ledokku app.

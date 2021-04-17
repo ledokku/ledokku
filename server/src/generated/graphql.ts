@@ -69,6 +69,7 @@ export type AppMetaGithub = {
   repoOwner: Scalars['String'];
   webhooksSecret: Scalars['String'];
   branch: Scalars['String'];
+  githubAppInstallationId: Scalars['String'];
 };
 
 export type AppProxyPort = {
@@ -104,8 +105,10 @@ export type CreateAppDokkuResult = {
 
 export type CreateAppGithubInput = {
   name: Scalars['String'];
-  gitRepoUrl: Scalars['String'];
-  branchName?: Maybe<Scalars['String']>;
+  gitRepoFullName: Scalars['String'];
+  branchName: Scalars['String'];
+  gitRepoId: Scalars['String'];
+  githubInstallationId: Scalars['String'];
 };
 
 export type CreateAppGithubResult = {
@@ -788,6 +791,7 @@ export type AppMetaGithubResolvers<ContextType = any, ParentType extends Resolve
   repoOwner?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   webhooksSecret?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   branch?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  githubAppInstallationId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

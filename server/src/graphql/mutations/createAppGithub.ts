@@ -1,15 +1,14 @@
+import { Octokit } from '@octokit/rest';
+import { AppAuthentication } from '@octokit/auth-app/dist-types/types';
+import { createAppAuth } from '@octokit/auth-app';
 import { deployAppQueue } from './../../queues/deployApp';
 import { sshConnect } from './../../lib/ssh';
 import { MutationResolvers } from '../../generated/graphql';
-import { Octokit } from '@octokit/rest';
 import { prisma } from '../../prisma';
 // import { buildAppQueue } from '../../queues/buildApp';
-import {
-  githubAppCreationSchema,
-  getRepoData,
-  generateRandomToken,
-} from '../utils';
+import { githubAppCreationSchema, generateRandomToken } from '../utils';
 import { dokku } from '../../lib/dokku';
+import { config } from '../../config';
 
 export const createAppGithub: MutationResolvers['createAppGithub'] = async (
   _,
@@ -23,12 +22,17 @@ export const createAppGithub: MutationResolvers['createAppGithub'] = async (
   // We make sure the name is valid to avoid security risks
   githubAppCreationSchema.validateSync({
     name: input.name,
-    gitRepoUrl: input.gitRepoUrl,
   });
 
   const apps = await prisma.app.findMany({
     where: {
       name: input.name,
+    },
+  });
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
     },
   });
 
@@ -38,11 +42,32 @@ export const createAppGithub: MutationResolvers['createAppGithub'] = async (
     throw new Error('App name already taken');
   }
 
-  const octokit = new Octokit({});
+  // We authenticate as installation
+  const auth = createAppAuth({
+    appId: config.githubAppId,
+    privateKey: config.githubAppPem,
+    clientId: config.githubAppClientSecret,
+    clientSecret: config.githubAppClientSecret,
+  });
 
-  const repoData = getRepoData(input.gitRepoUrl);
+  const installationAuthentication = (await auth({
+    type: 'installation',
+    installationId: input.githubInstallationId,
+  })) as AppAuthentication;
 
-  const repo = await octokit.repos.get({
+  const octo = new Octokit({
+    auth: installationAuthentication.token,
+  });
+
+  const fullName = input.gitRepoFullName.split('/');
+
+  const repoData = {
+    owner: fullName[0],
+    repoName: fullName[1],
+  };
+
+  // We check whether repo is valid
+  const repo = await octo.repos.get({
     owner: repoData.owner,
     repo: repoData.repoName,
   });
@@ -52,11 +77,11 @@ export const createAppGithub: MutationResolvers['createAppGithub'] = async (
       `No repository found for ${repoData.owner} with name ${repoData.repoName}`
     );
   }
-
-  const branch = await octokit.repos.getBranch({
+  // We check whether branch is valid
+  const branch = await octo.repos.getBranch({
     owner: repoData.owner,
     repo: repoData.repoName,
-    branch: input.branchName ? input.branchName : 'main',
+    branch: input.branchName,
   });
 
   if (!branch.url) {
@@ -79,7 +104,8 @@ export const createAppGithub: MutationResolvers['createAppGithub'] = async (
         create: {
           repoName: repoData.repoName,
           repoOwner: repoData.owner,
-          repoId: repo.data.id.toString(),
+          repoId: input.gitRepoId,
+          githubAppInstallationId: input.githubInstallationId,
           webhooksSecret: randomToken,
           branch: input.branchName ? input.branchName : 'main',
         },
@@ -93,6 +119,8 @@ export const createAppGithub: MutationResolvers['createAppGithub'] = async (
   if (dokkuApp) {
     await deployAppQueue.add('deploy-app', {
       appId: app.id,
+      userName: user.username,
+      token: installationAuthentication.token,
     });
   }
 

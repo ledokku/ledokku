@@ -44,6 +44,7 @@ const typeDefs = gql`
     repoOwner: String!
     webhooksSecret: String!
     branch: String!
+    githubAppInstallationId: String!
   }
 
   type Repository {
@@ -223,8 +224,10 @@ const typeDefs = gql`
 
   input CreateAppGithubInput {
     name: String!
-    gitRepoUrl: String!
-    branchName: String
+    gitRepoFullName: String!
+    branchName: String!
+    gitRepoId: String!
+    githubInstallationId: String!
   }
 
   input RestartAppInput {
