@@ -1,3 +1,4 @@
+import { verifyWebhookSecret } from './verifyGithubSecret';
 import { prisma } from '../../prisma';
 import { Request } from 'express';
 import { createAppAuth } from '@octokit/auth-app';
@@ -10,9 +11,17 @@ export const handleWebhooks = async (req: Request) => {
     throw new Error('Failed to fetch the request from github');
   }
 
+  console.log(req.headers);
+
+  const requestVerified = verifyWebhookSecret(req);
+
+  if (!requestVerified) {
+    throw new Error('Invalid request');
+  }
+
   const auth = createAppAuth({
     appId: config.githubAppId,
-    privateKey: config.githubAppWebhookSecret,
+    privateKey: config.githubAppPem,
     clientId: config.githubAppClientSecret,
     clientSecret: config.githubAppClientSecret,
   });
@@ -25,13 +34,10 @@ export const handleWebhooks = async (req: Request) => {
   const appsToRedeploy = await prisma.appMetaGithub.findMany({
     where: {
       repoId: req.body.repository.id.toString(),
-      repoOwner: req.body.repository.owner.name,
-      githubAppInstallationId: req.body.installation.id.toString(),
-      webhooksSecret: config.githubAppWebhookSecret,
     },
   });
 
-  appsToRedeploy.forEach(async (app) => {
+  for (let app of appsToRedeploy) {
     const appToRedeploy = await prisma.app.findUnique({
       where: {
         id: app.appId,
@@ -43,5 +49,5 @@ export const handleWebhooks = async (req: Request) => {
       userName: app.repoOwner,
       token: installationAuthentication.token,
     });
-  });
+  }
 };

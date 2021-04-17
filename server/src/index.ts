@@ -6,6 +6,7 @@ import jsonwebtoken from 'jsonwebtoken';
 import { PubSub } from 'apollo-server';
 import express from 'express';
 import path from 'path';
+import createDebug from 'debug';
 import { Resolvers } from './generated/graphql';
 import { customResolvers } from './graphql/resolvers';
 import { mutations } from './graphql/mutations';
@@ -470,11 +471,14 @@ app.get('*', (_, res) => {
     path.join(__dirname, '..', '..', 'client', 'build', 'index.html')
   );
 });
+const debug = createDebug(`webhooks`);
 
 app.post('/events', async (req, res) => {
-  console.log('received request -----------------------------', req.body);
+  debug('received request -----------------------------', req.body);
 
-  await handleWebhooks(req);
+  if (req.header('x-github-event') === 'push') {
+    await handleWebhooks(req);
+  }
 
   res.json({ success: true });
 });
