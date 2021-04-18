@@ -31,8 +31,10 @@ export const Home = () => {
     registerGithubAppMutation,
     { loading: registerGithubAppLoading },
   ] = useRegisterGithubAppMutation();
-  const [loginWithGithubMutation] = useLoginWithGithubMutation();
-  const [loggingIn, setLoggingIn] = useState(false);
+  const [
+    loginWithGithubMutation,
+    { loading: loginWithGithubLoading },
+  ] = useLoginWithGithubMutation();
   const [showAppSuccessAlert, setShowAppSuccessAlert] = useState(false);
 
   // On mount we check if there is a github code present
@@ -45,7 +47,6 @@ export const Home = () => {
 
       // In case of login state is empty
       if (githubState === 'github_login' && githubCode) {
-        setLoggingIn(true);
         // Remove hash in url
         window.history.replaceState({}, document.title, '.');
         try {
@@ -105,7 +106,6 @@ export const Home = () => {
   }, []);
 
   const handleLogin = () => {
-    setLoggingIn(true);
     // The redirect_uri parameter should only be used on production,
     // on dev env we force the redirection to localhost
     window.location.replace(
@@ -137,7 +137,7 @@ export const Home = () => {
           </Text>
         )}
 
-        {(loading || loggingIn || registerGithubAppLoading) && (
+        {(loading || registerGithubAppLoading || loginWithGithubLoading) && (
           <Spinner mt={4} />
         )}
 
@@ -194,7 +194,7 @@ export const Home = () => {
 
         {data?.setup.canConnectSsh === true &&
           data?.setup.isGithubAppSetup === true &&
-          !loggingIn && (
+          !loginWithGithubLoading && (
             <Box
               maxWidth="2xl"
               display="flex"
