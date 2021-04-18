@@ -26,8 +26,11 @@ export const Home = () => {
   const toast = useToast();
   const history = useHistory();
   const { loggedIn, login } = useAuth();
-  const { data, loading, error, refetch: refetchSetup } = useSetupQuery({});
-  const [registerGithubAppMutation] = useRegisterGithubAppMutation();
+  const { data, loading, error } = useSetupQuery({});
+  const [
+    registerGithubAppMutation,
+    { loading: registerGithubAppLoading },
+  ] = useRegisterGithubAppMutation();
   const [loginWithGithubMutation] = useLoginWithGithubMutation();
   const [loggingIn, setLoggingIn] = useState(false);
   const [showAppSuccessAlert, setShowAppSuccessAlert] = useState(false);
@@ -66,16 +69,33 @@ export const Home = () => {
         try {
           const data = await registerGithubAppMutation({
             variables: { code: githubCode },
+            update: (cache, { data }) => {
+              cache.modify({
+                fields: {
+                  setup: (existingSetup) => {
+                    if (data?.registerGithubApp?.githubAppClientId) {
+                      // Change the local cache so we don't have to call the server again
+                      const newSetup = {
+                        ...existingSetup,
+                        isGithubAppSetup: true,
+                      };
+                      return newSetup;
+                    }
+                    return existingSetup;
+                  },
+                },
+              });
+            },
           });
           if (data.data?.registerGithubApp?.githubAppClientId) {
+            // Manually set the config so we don't have to reload the page
             config.githubClientId =
               data.data?.registerGithubApp?.githubAppClientId;
 
             setShowAppSuccessAlert(true);
-
-            await refetchSetup();
           }
         } catch (error) {
+          console.error(error);
           toast.error(error.message);
         }
       }
@@ -118,7 +138,9 @@ export const Home = () => {
           </Text>
         )}
 
-        {(loading || loggingIn) && <Spinner mt={4} />}
+        {(loading || loggingIn || registerGithubAppLoading) && (
+          <Spinner mt={4} />
+        )}
 
         {data?.setup.canConnectSsh === false && (
           <>
@@ -134,7 +156,8 @@ export const Home = () => {
         )}
 
         {data?.setup.canConnectSsh === true &&
-          data?.setup.isGithubAppSetup === false && (
+          data?.setup.isGithubAppSetup === false &&
+          !registerGithubAppLoading && (
             <Box
               maxWidth="xl"
               display="flex"
