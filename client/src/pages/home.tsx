@@ -26,10 +26,15 @@ export const Home = () => {
   const toast = useToast();
   const history = useHistory();
   const { loggedIn, login } = useAuth();
-  const { data, loading, error, refetch: refetchSetup } = useSetupQuery({});
-  const [registerGithubAppMutation] = useRegisterGithubAppMutation();
-  const [loginWithGithubMutation] = useLoginWithGithubMutation();
-  const [loggingIn, setLoggingIn] = useState(false);
+  const { data, loading, error } = useSetupQuery({});
+  const [
+    registerGithubAppMutation,
+    { loading: registerGithubAppLoading },
+  ] = useRegisterGithubAppMutation();
+  const [
+    loginWithGithubMutation,
+    { loading: loginWithGithubLoading },
+  ] = useLoginWithGithubMutation();
   const [showAppSuccessAlert, setShowAppSuccessAlert] = useState(false);
 
   // On mount we check if there is a github code present
@@ -42,7 +47,6 @@ export const Home = () => {
 
       // In case of login state is empty
       if (githubState === 'github_login' && githubCode) {
-        setLoggingIn(true);
         // Remove hash in url
         window.history.replaceState({}, document.title, '.');
         try {
@@ -66,14 +70,30 @@ export const Home = () => {
         try {
           const data = await registerGithubAppMutation({
             variables: { code: githubCode },
+            update: (cache, { data }) => {
+              cache.modify({
+                fields: {
+                  setup: (existingSetup) => {
+                    if (data?.registerGithubApp?.githubAppClientId) {
+                      // Change the local cache so we don't have to call the server again
+                      const newSetup = {
+                        ...existingSetup,
+                        isGithubAppSetup: true,
+                      };
+                      return newSetup;
+                    }
+                    return existingSetup;
+                  },
+                },
+              });
+            },
           });
           if (data.data?.registerGithubApp?.githubAppClientId) {
+            // Manually set the config so we don't have to reload the page
             config.githubClientId =
               data.data?.registerGithubApp?.githubAppClientId;
 
             setShowAppSuccessAlert(true);
-
-            await refetchSetup();
           }
         } catch (error) {
           toast.error(error.message);
@@ -86,7 +106,6 @@ export const Home = () => {
   }, []);
 
   const handleLogin = () => {
-    setLoggingIn(true);
     // The redirect_uri parameter should only be used on production,
     // on dev env we force the redirection to localhost
     window.location.replace(
@@ -118,7 +137,9 @@ export const Home = () => {
           </Text>
         )}
 
-        {(loading || loggingIn) && <Spinner mt={4} />}
+        {(loading || registerGithubAppLoading || loginWithGithubLoading) && (
+          <Spinner mt={4} />
+        )}
 
         {data?.setup.canConnectSsh === false && (
           <>
@@ -134,7 +155,8 @@ export const Home = () => {
         )}
 
         {data?.setup.canConnectSsh === true &&
-          data?.setup.isGithubAppSetup === false && (
+          data?.setup.isGithubAppSetup === false &&
+          !registerGithubAppLoading && (
             <Box
               maxWidth="xl"
               display="flex"
@@ -172,7 +194,7 @@ export const Home = () => {
 
         {data?.setup.canConnectSsh === true &&
           data?.setup.isGithubAppSetup === true &&
-          !loggingIn && (
+          !loginWithGithubLoading && (
             <Box
               maxWidth="2xl"
               display="flex"
