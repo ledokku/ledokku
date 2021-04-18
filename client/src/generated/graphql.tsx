@@ -40,7 +40,6 @@ export type AppMetaGithub = {
   repoId: Scalars['String'];
   repoName: Scalars['String'];
   repoOwner: Scalars['String'];
-  webhooksSecret: Scalars['String'];
   branch: Scalars['String'];
   githubAppInstallationId: Scalars['String'];
 };
@@ -790,7 +789,7 @@ export type AppByIdQuery = (
       & Pick<Database, 'id' | 'name' | 'type'>
     )>>, appMetaGithub?: Maybe<(
       { __typename?: 'AppMetaGithub' }
-      & Pick<AppMetaGithub, 'repoId' | 'repoName' | 'repoOwner' | 'webhooksSecret' | 'branch' | 'githubAppInstallationId'>
+      & Pick<AppMetaGithub, 'repoId' | 'repoName' | 'repoOwner' | 'branch' | 'githubAppInstallationId'>
     )> }
   )> }
 );
@@ -1641,7 +1640,6 @@ export const AppByIdDocument = gql`
       repoId
       repoName
       repoOwner
-      webhooksSecret
       branch
       githubAppInstallationId
     }
