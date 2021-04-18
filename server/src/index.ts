@@ -13,10 +13,9 @@ import { mutations } from './graphql/mutations';
 import { config } from './config';
 import { app, http } from './server';
 import { queries } from './graphql/queries';
-import { verifyWebhookSecret } from './lib/webhooks/utils';
+import { handleWebhooks } from './lib/webhooks/handleWebhooks';
 import { synchroniseServerQueue } from './queues/synchroniseServer';
 import { prisma } from './prisma';
-import { githubPushWebhookHandler } from './lib/webhooks/webhooks';
 
 app.use(express.json());
 
@@ -42,7 +41,6 @@ const typeDefs = gql`
     repoId: String!
     repoName: String!
     repoOwner: String!
-    webhooksSecret: String!
     branch: String!
     githubAppInstallationId: String!
   }
@@ -472,22 +470,20 @@ app.get('*', (_, res) => {
     path.join(__dirname, '..', '..', 'client', 'build', 'index.html')
   );
 });
-
 const debug = createDebug(`webhooks`);
 
-app.post('/webhooks', async (req, res) => {
-  const isWebhookVerified = await verifyWebhookSecret(req);
-  if (!isWebhookVerified) {
-    res.status(400).send('Request not verified');
-    debug(`Webhook verification failed for req ${req},`);
-  } else {
-    res.status(200).end();
-    githubPushWebhookHandler(isWebhookVerified);
-  }
-});
+app.post('/api/webhooks', async (req, res) => {
+  debug('received request -----------------------------', req.body);
 
-app.post('/events', (req, res) => {
-  console.log('received request -----------------------------', req.body);
+  if (req.header('x-github-event') === 'push') {
+    try {
+      await handleWebhooks(req);
+      res.status(200).end();
+    } catch (e) {
+      res.status(500).send(e);
+    }
+  }
+
   res.json({ success: true });
 });
 

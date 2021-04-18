@@ -27,7 +27,7 @@ const startSmeeClient = async () => {
 
   const smeeClient = new SmeeClient({
     source: config.webhookProxyUrl,
-    target: 'http://localhost:4000/events',
+    target: 'http://localhost:4000/api/webhooks',
     logger: console,
   });
 

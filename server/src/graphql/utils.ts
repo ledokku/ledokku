@@ -1,4 +1,3 @@
-import { randomBytes } from 'crypto';
 import * as yup from 'yup';
 import { DatabaseTypes } from '../generated/graphql';
 
@@ -33,9 +32,6 @@ export const dbTypeToDokkuPlugin = (dbType: DatabaseTypes): string => {
       return 'mysql';
   }
 };
-
-export const generateRandomToken = (length = 40): string =>
-  randomBytes(length).toString('hex');
 
 export const formatGithubPem = (pem: string) => {
   const githubAppPemSplit = pem.split('\n');

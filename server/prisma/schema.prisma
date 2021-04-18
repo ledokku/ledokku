@@ -45,7 +45,6 @@ model AppMetaGithub {
   id                      String   @id @default(uuid())
   app                     App      @relation(fields: [appId], references: [id])
   appId                   String
-  webhooksSecret          String
   repoId                  String
   repoOwner               String
   repoName                String

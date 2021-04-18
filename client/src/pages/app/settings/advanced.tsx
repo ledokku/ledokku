@@ -24,7 +24,6 @@ import { AppRebuild } from '../../../modules/app/AppRebuild';
 import { AppRestart } from '../../../modules/app/AppRestart';
 import { AppSettingsMenu } from '../../../modules/app/AppSettingsMenu';
 import { Header } from '../../../modules/layout/Header';
-import { Webhooks } from '../../../modules/webhooks/Webhooks';
 import { HeaderContainer } from '../../../ui';
 import { useToast } from '../../../ui/toast';
 
@@ -115,9 +114,6 @@ export const AppSettingsAdvanced = () => {
             <AppSettingsMenu app={app} />
           </GridItem>
           <GridItem colSpan={4}>
-            {!loading && data?.app?.appMetaGithub?.webhooksSecret && (
-              <Webhooks appId={app.id} />
-            )}
             <AppRestart appId={app.id} />
             <AppRebuild appId={app.id} />
 
