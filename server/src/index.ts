@@ -473,7 +473,7 @@ app.get('*', (_, res) => {
 });
 const debug = createDebug(`webhooks`);
 
-app.post('/events', async (req, res) => {
+app.post('/api/webhooks', async (req, res) => {
   debug('received request -----------------------------', req.body);
 
   if (req.header('x-github-event') === 'push') {

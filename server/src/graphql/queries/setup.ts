@@ -40,7 +40,7 @@ export const setup: QueryResolvers['setup'] = async () => {
       hook_attributes: {
         url:
           process.env.NODE_ENV === 'production'
-            ? `http://${config.dokkuSshHost}/github/events`
+            ? `http://${config.dokkuSshHost}/github/api/webhooks`
             : config.webhookProxyUrl,
       },
       redirect_url:
