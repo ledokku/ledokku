@@ -460,8 +460,7 @@ app.get('/runtime-config.js', (_, res) => {
   window['runConfig'] = {
     GITHUB_APP_CLIENT_ID: '${config.githubAppClientId}',
     TELEMETRY_DISABLED: '${config.telemetryDisabled}',
-    GITHUB_APP_NAME: '${config.githubAppName}',
-    GITHUB_APP_WEBHOOKS_SECRET: '${config.githubAppWebhookSecret}'
+    GITHUB_APP_NAME: '${config.githubAppName}'
   }
   `);
 });
@@ -477,7 +476,12 @@ app.post('/api/webhooks', async (req, res) => {
   debug('received request -----------------------------', req.body);
 
   if (req.header('x-github-event') === 'push') {
-    await handleWebhooks(req);
+    try {
+      await handleWebhooks(req);
+      res.status(200).end();
+    } catch (e) {
+      res.status(500).send(e);
+    }
   }
 
   res.json({ success: true });

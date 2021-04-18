@@ -24,10 +24,8 @@ import { AppRebuild } from '../../../modules/app/AppRebuild';
 import { AppRestart } from '../../../modules/app/AppRestart';
 import { AppSettingsMenu } from '../../../modules/app/AppSettingsMenu';
 import { Header } from '../../../modules/layout/Header';
-import { Webhooks } from '../../../modules/webhooks/Webhooks';
 import { HeaderContainer } from '../../../ui';
 import { useToast } from '../../../ui/toast';
-import { config } from '../../../config';
 
 export const AppSettingsAdvanced = () => {
   const { id: appId } = useParams<{ id: string }>();
@@ -116,9 +114,6 @@ export const AppSettingsAdvanced = () => {
             <AppSettingsMenu app={app} />
           </GridItem>
           <GridItem colSpan={4}>
-            {!loading && config.githubWebhooksSecret && (
-              <Webhooks appId={app.id} />
-            )}
             <AppRestart appId={app.id} />
             <AppRebuild appId={app.id} />
 
