@@ -460,7 +460,7 @@ app.get('/runtime-config.js', (_, res) => {
   window['runConfig'] = {
     GITHUB_APP_CLIENT_ID: '${config.githubAppClientId}',
     TELEMETRY_DISABLED: '${config.telemetryDisabled}',
-    GITHUB_APP_NAME: '${config.githubAppName}'
+    GITHUB_APP_NAME: '${config.githubAppName}',
     GITHUB_APP_WEBHOOKS_SECRET: '${config.githubAppWebhookSecret}'
   }
   `);
