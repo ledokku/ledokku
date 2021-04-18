@@ -4,7 +4,6 @@ import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import styles from './styles.module.css';
-import 'react-responsive-carousel/lib/styles/carousel.min.css'; // requires a loader
 
 import {
   Box,
