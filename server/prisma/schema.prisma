@@ -8,17 +8,19 @@ generator client {
 }
 
 model User {
-  id                String     @id @default(uuid())
-  createdAt         DateTime   @default(now())
-  updatedAt         DateTime   @default(now())
-  username          String     @unique
-  avatarUrl         String
-  email             String
-  githubId          String     @unique
-  githubAccessToken String
-  App               App[]
-  Database          Database[]
-  AppBuild          AppBuild[]
+  id                    String     @id @default(uuid())
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @default(now())
+  username              String     @unique
+  avatarUrl             String
+  email                 String
+  githubId              String     @unique
+  githubAccessToken     String
+  refreshToken          String
+  refreshTokenExpiresIn String
+  App                   App[]
+  Database              Database[]
+  AppBuild              AppBuild[]
 }
 
 model App {

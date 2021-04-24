@@ -19,6 +19,8 @@ export const loginWithGithub: MutationResolvers['loginWithGithub'] = async (
         access_token: string;
         token_type: string;
         scope: string;
+        refresh_token: string;
+        refresh_token_expires_in: number;
       };
 
   try {
@@ -77,7 +79,8 @@ export const loginWithGithub: MutationResolvers['loginWithGithub'] = async (
         avatarUrl: githubUser.avatar_url,
         email: email.email,
         githubAccessToken: data.access_token,
-        // TODO save refresh token + refresh_token_expires_in?
+        refreshToken: data.refresh_token,
+        refreshTokenExpiresIn: data.refresh_token_expires_in.toString(),
         githubId: githubUser.node_id,
       },
     });
