@@ -1,6 +1,5 @@
 import * as yup from 'yup';
 import { DatabaseTypes } from '../generated/graphql';
-import { Octokit } from '@octokit/rest';
 import { prisma } from '../prisma';
 import { config } from '../config';
 import fetch from 'node-fetch';
