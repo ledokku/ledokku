@@ -505,3 +505,9 @@ http.listen({ port: 4000 }, () => {
   // When the server boot we start the synchronisation with dokku
   synchroniseServerQueue.add('synchronise-server', {});
 });
+
+const test = async () => {
+  // await prisma.user.deleteMany();
+};
+
+test();

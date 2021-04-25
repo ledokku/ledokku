@@ -73,6 +73,13 @@ export const loginWithGithub: MutationResolvers['loginWithGithub'] = async (
     // Github return an array of emails, we just need the primary email
     const email = emails.find((email) => email.primary);
 
+    // We add token expires in to current date
+    const rn = new Date();
+    const time = rn.getTime();
+    const refreshTokenExpiresIn = new Date(
+      time + data.refresh_token_expires_in
+    );
+
     user = await prisma.user.create({
       data: {
         username: githubUser.login,
@@ -80,7 +87,7 @@ export const loginWithGithub: MutationResolvers['loginWithGithub'] = async (
         email: email.email,
         githubAccessToken: data.access_token,
         refreshToken: data.refresh_token,
-        refreshTokenExpiresIn: data.refresh_token_expires_in.toString(),
+        refreshTokenExpiresIn,
         githubId: githubUser.node_id,
       },
     });
