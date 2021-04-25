@@ -1,5 +1,9 @@
 import * as yup from 'yup';
 import { DatabaseTypes } from '../generated/graphql';
+import { Octokit } from '@octokit/rest';
+import { prisma } from '../prisma';
+import { config } from '../config';
+import fetch from 'node-fetch';
 
 // Digital ocean token format = exactly 64 chars, lowercase letters & numbers
 export const digitalOceanAccessTokenRegExp = /^[a-z0-9]{64}/;
@@ -46,4 +50,46 @@ export const formatGithubPem = (pem: string) => {
   );
 
   return formattedPem;
+};
+
+export const refreshAuthToken = async (userId: string) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+
+  let data;
+
+  try {
+    const res = await fetch('https://github.com/login/oauth/access_token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify({
+        refresh_token: user.refreshToken,
+        grant_type: 'refresh_token',
+        client_id: config.githubAppClientId,
+        client_secret: config.githubAppClientSecret,
+      }),
+    });
+    data = await res.json();
+    await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        refreshToken: data.refresh_token,
+        refreshTokenExpiresIn: data.refresh_token_expires_in.toString(),
+        githubAccessToken: data.access_token,
+      },
+    });
+
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Request failed');
+  }
 };
