@@ -1,8 +1,8 @@
+import { Octokit } from '@octokit/rest';
 import * as yup from 'yup';
 import { DatabaseTypes } from '../generated/graphql';
 import { prisma } from '../prisma';
 import { config } from '../config';
-import fetch from 'node-fetch';
 
 // Digital ocean token format = exactly 64 chars, lowercase letters & numbers
 export const digitalOceanAccessTokenRegExp = /^[a-z0-9]{64}/;
@@ -56,13 +56,19 @@ export const refreshAuthToken = async (userId: string) => {
     where: {
       id: userId,
     },
+    select: {
+      refreshToken: true,
+      refreshTokenExpiresIn: true,
+      githubAccessToken: true,
+    },
   });
 
   let data;
 
+  const octo = new Octokit({});
+
   try {
-    const res = await fetch('https://github.com/login/oauth/access_token', {
-      method: 'POST',
+    const res = await octo.request(`POST /login/oauth/access_token`, {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -74,7 +80,8 @@ export const refreshAuthToken = async (userId: string) => {
         client_secret: config.githubAppClientSecret,
       }),
     });
-    data = await res.json();
+
+    data = res;
     await prisma.user.update({
       where: {
         id: userId,
@@ -90,5 +97,33 @@ export const refreshAuthToken = async (userId: string) => {
   } catch (error) {
     console.error(error);
     throw new Error('Request failed');
+  }
+};
+
+export const octoRequestWithUserToken = async (
+  requestData: string,
+  userGithubAccessToken: string,
+  userId: string
+) => {
+  let res;
+
+  const octokit = new Octokit({
+    auth: userGithubAccessToken,
+  });
+
+  try {
+    res = await octokit.request(requestData);
+  } catch (e) {
+    if (e.message === 'Bad credentials') {
+      await refreshAuthToken(userId);
+    }
+
+    const octokit = new Octokit({
+      auth: userGithubAccessToken,
+    });
+
+    res = await octokit.request(requestData);
+
+    return res;
   }
 };
