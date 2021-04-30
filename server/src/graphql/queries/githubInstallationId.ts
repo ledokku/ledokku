@@ -18,7 +18,15 @@ export const githubInstallationId: QueryResolvers['githubInstallationId'] = asyn
   });
 
   const installations = await octoRequestWithUserToken(
-    'GET /user/installations',
+    {
+      method: 'GET',
+      url: '/user/installations',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      request: {},
+    },
     user.githubAccessToken,
     userId
   );

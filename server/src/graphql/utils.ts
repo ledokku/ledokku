@@ -1,5 +1,5 @@
 import { Octokit } from '@octokit/rest';
-import { GetResponseTypeFromEndpointMethod } from '@octokit/types';
+import { Endpoints } from '@octokit/types';
 import * as yup from 'yup';
 import { DatabaseTypes } from '../generated/graphql';
 import { prisma } from '../prisma';
@@ -91,8 +91,11 @@ export const refreshAuthToken = async (userId: string) => {
   });
 };
 
+type InstallationParams = Endpoints['GET /user/installations'];
+type InstallationsResponse = Endpoints['GET /user/installations']['response'];
+
 export const octoRequestWithUserToken = async (
-  requestData: string,
+  requestData: InstallationParams['request'],
   userGithubAccessToken: string,
   userId: string
 ) => {
@@ -100,12 +103,12 @@ export const octoRequestWithUserToken = async (
     auth: userGithubAccessToken,
   });
 
-  type OctoResponse = GetResponseTypeFromEndpointMethod<typeof octokit.request>;
-
-  let res: OctoResponse;
+  let res: InstallationsResponse;
 
   try {
-    res = await octokit.request(requestData);
+    res = (await octokit.request(
+      requestData as InstallationParams['request']
+    )) as InstallationsResponse;
   } catch (e) {
     if (e.message === 'Bad credentials') {
       await refreshAuthToken(userId);
@@ -115,7 +118,7 @@ export const octoRequestWithUserToken = async (
       auth: userGithubAccessToken,
     });
 
-    res = await octokit.request(requestData);
+    res = (await octokit.request(requestData)) as InstallationsResponse;
   }
   return res;
 };
