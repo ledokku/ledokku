@@ -17,7 +17,7 @@ model User {
   githubId              String     @unique
   githubAccessToken     String
   refreshToken          String
-  refreshTokenExpiresIn DateTime
+  refreshTokenExpiresAt DateTime
   App                   App[]
   Database              Database[]
   AppBuild              AppBuild[]

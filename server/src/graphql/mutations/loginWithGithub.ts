@@ -76,7 +76,7 @@ export const loginWithGithub: MutationResolvers['loginWithGithub'] = async (
     // We add token expires in to current date
     const rn = new Date();
     const time = rn.getTime();
-    const refreshTokenExpiresIn = new Date(
+    const refreshTokenExpiresAt = new Date(
       time + data.refresh_token_expires_in
     );
 
@@ -87,7 +87,7 @@ export const loginWithGithub: MutationResolvers['loginWithGithub'] = async (
         email: email.email,
         githubAccessToken: data.access_token,
         refreshToken: data.refresh_token,
-        refreshTokenExpiresIn,
+        refreshTokenExpiresAt,
         githubId: githubUser.node_id,
       },
     });

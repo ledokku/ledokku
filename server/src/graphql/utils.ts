@@ -1,4 +1,5 @@
 import { Octokit } from '@octokit/rest';
+import { GetResponseTypeFromEndpointMethod } from '@octokit/types';
 import * as yup from 'yup';
 import { DatabaseTypes } from '../generated/graphql';
 import { prisma } from '../prisma';
@@ -58,46 +59,36 @@ export const refreshAuthToken = async (userId: string) => {
     },
     select: {
       refreshToken: true,
-      refreshTokenExpiresIn: true,
+      refreshTokenExpiresAt: true,
       githubAccessToken: true,
     },
   });
 
-  let data;
-
   const octo = new Octokit({});
 
-  try {
-    const res = await octo.request(`POST /login/oauth/access_token`, {
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      body: JSON.stringify({
-        refresh_token: user.refreshToken,
-        grant_type: 'refresh_token',
-        client_id: config.githubAppClientId,
-        client_secret: config.githubAppClientSecret,
-      }),
-    });
+  const res = await octo.request(`POST /login/oauth/access_token`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    body: JSON.stringify({
+      refresh_token: user.refreshToken,
+      grant_type: 'refresh_token',
+      client_id: config.githubAppClientId,
+      client_secret: config.githubAppClientSecret,
+    }),
+  });
 
-    data = res;
-    await prisma.user.update({
-      where: {
-        id: userId,
-      },
-      data: {
-        refreshToken: data.refresh_token,
-        refreshTokenExpiresIn: data.refresh_token_expires_in.toString(),
-        githubAccessToken: data.access_token,
-      },
-    });
-
-    return data;
-  } catch (error) {
-    console.error(error);
-    throw new Error('Request failed');
-  }
+  await prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      refreshToken: res.data.refresh_token,
+      refreshTokenExpiresAt: res.data.refresh_token_expires_in.toString(),
+      githubAccessToken: res.data.access_token,
+    },
+  });
 };
 
 export const octoRequestWithUserToken = async (
@@ -105,11 +96,13 @@ export const octoRequestWithUserToken = async (
   userGithubAccessToken: string,
   userId: string
 ) => {
-  let res;
-
   const octokit = new Octokit({
     auth: userGithubAccessToken,
   });
+
+  type OctoResponse = GetResponseTypeFromEndpointMethod<typeof octokit.request>;
+
+  let res: OctoResponse;
 
   try {
     res = await octokit.request(requestData);
@@ -123,7 +116,6 @@ export const octoRequestWithUserToken = async (
     });
 
     res = await octokit.request(requestData);
-
-    return res;
   }
+  return res;
 };

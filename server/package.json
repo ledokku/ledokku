@@ -15,6 +15,7 @@
   "dependencies": {
     "@octokit/auth-app": "3.3.0",
     "@octokit/rest": "18.3.0",
+    "@octokit/types": "6.14.1",
     "@prisma/client": "2.17.0",
     "apollo-server": "2.21.0",
     "apollo-server-express": "2.21.0",
