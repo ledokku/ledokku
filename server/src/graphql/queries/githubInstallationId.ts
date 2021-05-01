@@ -1,4 +1,4 @@
-import { Octokit } from '@octokit/rest';
+import { octoRequestWithUserToken } from './../utils';
 import { QueryResolvers } from '../../generated/graphql';
 import { prisma } from '../../prisma';
 
@@ -17,11 +17,19 @@ export const githubInstallationId: QueryResolvers['githubInstallationId'] = asyn
     },
   });
 
-  const octokit = new Octokit({
-    auth: user.githubAccessToken,
-  });
-
-  const installations = await octokit.request('GET /user/installations');
+  const installations = await octoRequestWithUserToken(
+    {
+      method: 'GET',
+      url: '/user/installations',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      request: {},
+    },
+    user.githubAccessToken,
+    userId
+  );
 
   const installationId = {
     id: installations.data.installations[0].id.toString(),
