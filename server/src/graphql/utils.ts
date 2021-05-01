@@ -59,8 +59,6 @@ export const refreshAuthToken = async (userId: string) => {
     },
     select: {
       refreshToken: true,
-      refreshTokenExpiresAt: true,
-      githubAccessToken: true,
     },
   });
 
