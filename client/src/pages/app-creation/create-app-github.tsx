@@ -62,7 +62,7 @@ export const CreateAppGithub = () => {
     RealTimeLog[]
   >([]);
   const [isTerminalVisible, setIsTerminalVisible] = useState(false);
-  const [isWarningVisible, setIsWarningVisible] = useState(true);
+  const [isInfoVisible, setIsInfoVisible] = useState(true);
   const [isToastShown, setIsToastShown] = useState(false);
   const [createAppGithubMutation] = useCreateAppGithubMutation();
   const [
@@ -150,7 +150,6 @@ export const CreateAppGithub = () => {
   };
 
   const handleOpen = () => {
-    console.log('window with', window.screen.width);
     const newWindow = window.open(
       `https://github.com/apps/${config.githubAppName}/installations/new`,
       'Install App',
@@ -281,7 +280,7 @@ export const CreateAppGithub = () => {
                   Setup permissions, choose branch and repository and voila!
                 </h2>
               </div>
-              {isWarningVisible ||
+              {isInfoVisible ||
                 (!installationData && (
                   <Alert mb="4" mt="4" w="65%" status="info">
                     <AlertIcon />
@@ -295,7 +294,7 @@ export const CreateAppGithub = () => {
                       </AlertDescription>
                     </Box>
                     <CloseButton
-                      onClick={() => setIsWarningVisible(false)}
+                      onClick={() => setIsInfoVisible(false)}
                       position="absolute"
                       right="8px"
                       top="8px"
