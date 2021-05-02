@@ -8,6 +8,9 @@ import {
   RealTimeLog,
   useAppCreateLogsSubscription,
   useCreateAppGithubMutation,
+  useGithubInstallationIdQuery,
+  useRepositoriesLazyQuery,
+  useBranchesLazyQuery,
 } from '../../generated/graphql';
 import { Header } from '../../modules/layout/Header';
 import {
@@ -19,7 +22,7 @@ import {
   HeaderContainer,
 } from '../../ui';
 import { useToast } from '../../ui/toast';
-import { trackingGoals } from '../../config';
+import { config, trackingGoals } from '../../config';
 import { FiArrowRight, FiArrowLeft } from 'react-icons/fi';
 import {
   Alert,
@@ -28,6 +31,8 @@ import {
   AlertTitle,
   Box,
   CloseButton,
+  List,
+  ListItem,
 } from '@chakra-ui/react';
 
 enum AppCreationStatus {
@@ -39,6 +44,20 @@ export const CreateAppGithub = () => {
   const history = useHistory();
   const toast = useToast();
   const { data: dataApps } = useAppsQuery();
+  const [isNewWindowClosed, setIsNewWindowClosed] = useState(false);
+  const {
+    data: installationData,
+    loading: installationLoading,
+  } = useGithubInstallationIdQuery();
+  const [
+    getRepos,
+    { data: reposData, loading: reposLoading },
+  ] = useRepositoriesLazyQuery({ fetchPolicy: 'cache-and-network' });
+  const [
+    getBranches,
+    { data: branchesData, loading: branchesLoading },
+  ] = useBranchesLazyQuery({ fetchPolicy: 'cache-and-network' });
+
   const [arrayOfCreateAppLogs, setArrayOfCreateAppLogs] = useState<
     RealTimeLog[]
   >([]);
@@ -130,6 +149,64 @@ export const CreateAppGithub = () => {
     trackGoal(trackingGoals.createAppGithub, 0);
   };
 
+  const handleOpen = () => {
+    console.log('window with', window.screen.width);
+    const newWindow = window.open(
+      `https://github.com/apps/${config.githubAppName}/installations/new`,
+      'Install App',
+      'resizable=1, scrollbars=1, fullscreen=0, height=1000, width=1020,top=' +
+        window.screen.width +
+        ', left=' +
+        window.screen.width +
+        ', toolbar=0, menubar=0, status=0'
+    );
+    const timer = setInterval(async () => {
+      if (newWindow && newWindow.closed) {
+        setIsNewWindowClosed(true);
+        clearInterval(timer);
+      }
+    }, 100);
+  };
+
+  useEffect(() => {
+    if (!installationLoading && installationData && isNewWindowClosed) {
+      getRepos({
+        variables: {
+          installationId: installationData.githubInstallationId.id,
+        },
+      });
+      setIsNewWindowClosed(false);
+    }
+  }, [
+    installationData,
+    installationLoading,
+    isNewWindowClosed,
+    setIsNewWindowClosed,
+  ]);
+
+  useEffect(() => {
+    if (
+      !installationLoading &&
+      installationData &&
+      !reposLoading &&
+      reposData
+    ) {
+      getBranches({
+        variables: {
+          installationId: installationData.githubInstallationId.id,
+          // @TODO THIS NEEDS TO BE CHANGED TO SELECTED
+          repositoryName: reposData.repositories[0].name,
+        },
+      });
+    }
+  }, [
+    installationData,
+    installationLoading,
+    reposData,
+    reposLoading,
+    getBranches,
+  ]);
+
   // Effect for app creation
   useEffect(() => {
     isAppCreationSuccess === AppCreationStatus.FAILURE && !isToastShown
@@ -199,7 +276,46 @@ export const CreateAppGithub = () => {
             </>
           ) : (
             <React.Fragment>
-              <React.Fragment>
+              <div className="mt-4 mb-4">
+                <h2 className="text-gray-400">
+                  Setup permissions, choose branch and repository and voila!
+                </h2>
+              </div>
+              {isWarningVisible ||
+                (!installationData && (
+                  <Alert mb="4" mt="4" w="65%" status="info">
+                    <AlertIcon />
+                    <Box flex="1">
+                      <AlertTitle>Set up repository permissions</AlertTitle>
+                      <AlertDescription display="block">
+                        First you will need to set up permissions for
+                        repositories that you would like to use with Ledokku.
+                        Once that's done, it's time to choose repo and branch
+                        that you would like to create app from and off we go.
+                      </AlertDescription>
+                    </Box>
+                    <CloseButton
+                      onClick={() => setIsWarningVisible(false)}
+                      position="absolute"
+                      right="8px"
+                      top="8px"
+                    />
+                  </Alert>
+                ))}
+              {!installationData || installationLoading || !reposData ? (
+                <Button color="grey" onClick={() => handleOpen()}>
+                  Set up permissions
+                </Button>
+              ) : (
+                // @TODO EXCHANGE THIS WITH SELECT ITEMS
+                <List>
+                  {reposData?.repositories.map((r) => (
+                    <ListItem>{r.name}</ListItem>
+                  ))}
+                </List>
+              )}
+
+              {/* <React.Fragment>
                 <>
                   <div className="mt-4 mb-4">
                     <h2 className="text-gray-400">
@@ -312,7 +428,7 @@ export const CreateAppGithub = () => {
                     </div>
                   </div>
                 </form>
-              </React.Fragment>
+              </React.Fragment> */}
             </React.Fragment>
           )}
         </div>

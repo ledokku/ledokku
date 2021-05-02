@@ -946,6 +946,17 @@ export type EnvVarsQuery = (
   ) }
 );
 
+export type GithubInstallationIdQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GithubInstallationIdQuery = (
+  { __typename?: 'Query' }
+  & { githubInstallationId: (
+    { __typename?: 'GithubAppInstallationId' }
+    & Pick<GithubAppInstallationId, 'id'>
+  ) }
+);
+
 export type IsPluginInstalledQueryVariables = Exact<{
   pluginName: Scalars['String'];
 }>;
@@ -2060,6 +2071,38 @@ export function useEnvVarsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<En
 export type EnvVarsQueryHookResult = ReturnType<typeof useEnvVarsQuery>;
 export type EnvVarsLazyQueryHookResult = ReturnType<typeof useEnvVarsLazyQuery>;
 export type EnvVarsQueryResult = Apollo.QueryResult<EnvVarsQuery, EnvVarsQueryVariables>;
+export const GithubInstallationIdDocument = gql`
+    query githubInstallationId {
+  githubInstallationId {
+    id
+  }
+}
+    `;
+
+/**
+ * __useGithubInstallationIdQuery__
+ *
+ * To run a query within a React component, call `useGithubInstallationIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGithubInstallationIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGithubInstallationIdQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGithubInstallationIdQuery(baseOptions?: Apollo.QueryHookOptions<GithubInstallationIdQuery, GithubInstallationIdQueryVariables>) {
+        return Apollo.useQuery<GithubInstallationIdQuery, GithubInstallationIdQueryVariables>(GithubInstallationIdDocument, baseOptions);
+      }
+export function useGithubInstallationIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GithubInstallationIdQuery, GithubInstallationIdQueryVariables>) {
+          return Apollo.useLazyQuery<GithubInstallationIdQuery, GithubInstallationIdQueryVariables>(GithubInstallationIdDocument, baseOptions);
+        }
+export type GithubInstallationIdQueryHookResult = ReturnType<typeof useGithubInstallationIdQuery>;
+export type GithubInstallationIdLazyQueryHookResult = ReturnType<typeof useGithubInstallationIdLazyQuery>;
+export type GithubInstallationIdQueryResult = Apollo.QueryResult<GithubInstallationIdQuery, GithubInstallationIdQueryVariables>;
 export const IsPluginInstalledDocument = gql`
     query isPluginInstalled($pluginName: String!) {
   isPluginInstalled(pluginName: $pluginName) {
