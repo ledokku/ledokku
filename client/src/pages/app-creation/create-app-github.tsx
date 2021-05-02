@@ -15,9 +15,9 @@ import {
 import { Header } from '../../modules/layout/Header';
 import {
   Button,
-  FormHelper,
-  FormInput,
-  FormLabel,
+  // FormHelper,
+  // FormInput,
+  // FormLabel,
   Terminal,
   HeaderContainer,
 } from '../../ui';
@@ -205,6 +205,8 @@ export const CreateAppGithub = () => {
     reposLoading,
     getBranches,
   ]);
+
+  console.log(branchesData);
 
   // Effect for app creation
   useEffect(() => {
