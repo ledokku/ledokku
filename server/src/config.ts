@@ -78,6 +78,22 @@ const privateKey = readFileSync(sshKeyPath, {
   encoding: 'utf8',
 });
 
+// helper function to parse github PEM
+const formatGithubPem = (pem: string) => {
+  const githubAppPemSplit = pem.split('\n');
+  const joinedPem = githubAppPemSplit.join('');
+  const formattedStart = joinedPem.replace(
+    '-----BEGIN RSA PRIVATE KEY-----',
+    '-----BEGIN RSA PRIVATE KEY-----\n'
+  );
+  const formattedPem = formattedStart.replace(
+    '-----END RSA PRIVATE KEY-----',
+    '\n-----END RSA PRIVATE KEY-----'
+  );
+
+  return formattedPem;
+};
+
 export const config = {
   jwtSecret: process.env.JWT_SECRET,
   githubAppClientId: process.env.GITHUB_APP_CLIENT_ID,
@@ -85,7 +101,7 @@ export const config = {
   githubAppWebhookSecret: process.env.GITHUB_APP_WEBHOOK_SECRET,
   githubAppName: process.env.GITHUB_APP_NAME,
   githubAppId: process.env.GITHUB_APP_ID,
-  githubAppPem: process.env.GITHUB_APP_PEM,
+  githubAppPem: formatGithubPem(process.env.GITHUB_APP_PEM),
   redisUrl: process.env.REDIS_URL,
   dokkuSshHost: process.env.DOKKU_SSH_HOST,
   dokkuSshPort: process.env.DOKKU_SSH_PORT ? +process.env.DOKKU_SSH_PORT : 22,
