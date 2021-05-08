@@ -206,8 +206,6 @@ export const CreateAppGithub = () => {
     getBranches,
   ]);
 
-  console.log(branchesData);
-
   // Effect for app creation
   useEffect(() => {
     isAppCreationSuccess === AppCreationStatus.FAILURE && !isToastShown
@@ -303,7 +301,7 @@ export const CreateAppGithub = () => {
                     />
                   </Alert>
                 ))}
-              {!installationData || installationLoading || !reposData ? (
+              {(!installationData || installationLoading) && !reposData ? (
                 <Button color="grey" onClick={() => handleOpen()}>
                   Set up permissions
                 </Button>
