@@ -4,7 +4,6 @@ import { MutationResolvers } from '../../generated/graphql';
 import { config } from '../../config';
 import { sshConnect } from '../../lib/ssh';
 import { dokku } from '../../lib/dokku';
-import { formatGithubPem } from '../utils';
 
 export const registerGithubApp: MutationResolvers['registerGithubApp'] = async (
   _,
@@ -32,7 +31,7 @@ export const registerGithubApp: MutationResolvers['registerGithubApp'] = async (
   const githubAppName = githubResponse.data.name;
   const githubAppId = githubResponse.data.id.toString();
 
-  const formattedPem = formatGithubPem(githubAppPem);
+  const formattedPem = githubAppPem.replace(/[\n\r]/g, '');
 
   if (process.env.NODE_ENV === 'production') {
     // In production we add this config as dokku config for the ledokku app.
@@ -66,7 +65,7 @@ export const registerGithubApp: MutationResolvers['registerGithubApp'] = async (
     dotenvData += `\nGITHUB_APP_ID="${githubAppId}"`;
     dotenvData += `\nGITHUB_APP_CLIENT_SECRET="${githubAppClientSecret}"`;
     dotenvData += `\nGITHUB_APP_WEBHOOK_SECRET="${githubAppWebhookSecret}"`;
-    dotenvData += `\nGITHUB_APP_PEM="${formattedPem}"\n`;
+    dotenvData += `\nGITHUB_APP_PEM=${formattedPem}\n`;
     writeFileSync(dotenvPath, dotenvData, { encoding: 'utf8' });
     console.log(`Github application config added to .env file.`);
   }
