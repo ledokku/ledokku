@@ -101,7 +101,9 @@ export const config = {
   githubAppWebhookSecret: process.env.GITHUB_APP_WEBHOOK_SECRET,
   githubAppName: process.env.GITHUB_APP_NAME,
   githubAppId: process.env.GITHUB_APP_ID,
-  githubAppPem: formatGithubPem(process.env.GITHUB_APP_PEM),
+  githubAppPem: process.env.GIHUB_APP_PEM
+    ? formatGithubPem(process.env.GITHUB_APP_PEM)
+    : undefined,
   redisUrl: process.env.REDIS_URL,
   dokkuSshHost: process.env.DOKKU_SSH_HOST,
   dokkuSshPort: process.env.DOKKU_SSH_PORT ? +process.env.DOKKU_SSH_PORT : 22,

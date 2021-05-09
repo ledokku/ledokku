@@ -18,15 +18,17 @@ export const githubInstallationId: QueryResolvers['githubInstallationId'] = asyn
   });
 
   const installations = await octoRequestWithUserToken(
-    {
-      method: 'GET',
-      url: '/user/installations',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      request: {},
-    },
+    'GET /user/installations',
+    // @TODO fix types, related issue : https://github.com/ledokku/ledokku/issues/371
+    // {
+    //   method: 'GET',
+    //   url: '/user/installations',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     Accept: 'application/json',
+    //   },
+    //   request: {},
+    // },
     user.githubAccessToken,
     userId
   );
