@@ -30,11 +30,6 @@ export type App = {
   appMetaGithub?: Maybe<AppMetaGithub>;
 };
 
-export type User = {
-  __typename?: 'User';
-  userName: Scalars['String'];
-};
-
 export type GithubAppInstallationId = {
   __typename?: 'GithubAppInstallationId';
   id: Scalars['String'];
@@ -337,7 +332,6 @@ export type Query = {
   githubInstallationId: GithubAppInstallationId;
   setup: SetupResult;
   apps: Array<App>;
-  user: User;
   repositories: Array<Repository>;
   branches: Array<Branch>;
   appMetaGithub?: Maybe<AppMetaGithub>;
