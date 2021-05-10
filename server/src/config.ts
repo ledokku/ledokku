@@ -80,6 +80,10 @@ const privateKey = readFileSync(sshKeyPath, {
 
 // helper function to parse github PEM
 const formatGithubPem = (pem: string) => {
+  if (!pem) {
+    return '';
+  }
+
   const githubAppPemSplit = pem.split('\n');
   const joinedPem = githubAppPemSplit.join('');
   const formattedStart = joinedPem.replace(
@@ -101,9 +105,7 @@ export const config = {
   githubAppWebhookSecret: process.env.GITHUB_APP_WEBHOOK_SECRET,
   githubAppName: process.env.GITHUB_APP_NAME,
   githubAppId: process.env.GITHUB_APP_ID,
-  githubAppPem: process.env.GIHUB_APP_PEM
-    ? formatGithubPem(process.env.GITHUB_APP_PEM)
-    : undefined,
+  githubAppPem: formatGithubPem(process.env.GITHUB_APP_PEM),
   redisUrl: process.env.REDIS_URL,
   dokkuSshHost: process.env.DOKKU_SSH_HOST,
   dokkuSshPort: process.env.DOKKU_SSH_PORT ? +process.env.DOKKU_SSH_PORT : 22,

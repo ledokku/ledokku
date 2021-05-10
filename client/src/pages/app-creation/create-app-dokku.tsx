@@ -88,7 +88,7 @@ export const CreateAppDokku = () => {
           Enter app name, click create and voila!
         </Text>
 
-        <Grid templateColumns="repeat(3, 1fr)">
+        <Grid templateColumns={{ sm: 'repeat(1, 1fr)', md: 'repeat(3, 1fr)' }}>
           <GridItem colSpan={2}>
             <form onSubmit={formik.handleSubmit}>
               <FormControl
