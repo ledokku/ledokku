@@ -263,8 +263,6 @@ export const CreateAppGithub = () => {
 
   const repoOptions: RepoOption[] = [];
 
-  console.log(reposData);
-
   if (reposData && !reposLoading) {
     reposData?.repositories.map((r) =>
       repoOptions.push({ value: r, label: r.fullName })
@@ -298,9 +296,7 @@ export const CreateAppGithub = () => {
         },
       });
     }
-  }, [selectedRepo]);
-
-  console.log(formik.values);
+  }, [selectedRepo, getBranches, installationData]);
 
   // Effect for app creation
   useEffect(() => {
