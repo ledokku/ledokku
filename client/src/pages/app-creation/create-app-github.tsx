@@ -63,7 +63,7 @@ export const CreateAppGithub = () => {
   const { data: dataApps } = useAppsQuery();
   const { data: userData } = useUserQuery();
   const [isNewWindowClosed, setIsNewWindowClosed] = useState(false);
-  const [selectedRepo, setSelectedRepo] = useState({} as Repository);
+  const [selectedRepo, setSelectedRepo] = useState<Repository>();
   const [selectedBranch, setSelectedBranch] = useState('');
   const {
     data: installationData,
@@ -84,7 +84,7 @@ export const CreateAppGithub = () => {
   >([]);
   const [isTerminalVisible, setIsTerminalVisible] = useState(false);
   const [isToastShown, setIsToastShown] = useState(false);
-  const [createAppGithubMutation] = useCreateAppGithubMutation();
+  const [createAppGithubMutation, { loading }] = useCreateAppGithubMutation();
   const [
     isAppCreationSuccess,
     setIsAppCreationSuccess,
@@ -221,7 +221,8 @@ export const CreateAppGithub = () => {
       !installationLoading &&
       installationData &&
       !reposLoading &&
-      reposData
+      reposData &&
+      selectedRepo
     ) {
       getBranches({
         variables: {
@@ -236,7 +237,7 @@ export const CreateAppGithub = () => {
     reposData,
     reposLoading,
     getBranches,
-    selectedRepo.name,
+    selectedRepo?.name,
   ]);
 
   const handleChangeRepo = (active: RepoOption) => {
@@ -386,7 +387,6 @@ export const CreateAppGithub = () => {
                 >
                   <GridItem colSpan={2}>
                     <Flex alignItems="center" mt="12">
-                      {/* TODO change name and src props */}
                       <Avatar
                         size="sm"
                         name={userData?.user.userName}
@@ -438,10 +438,7 @@ export const CreateAppGithub = () => {
                           type="submit"
                           color="grey"
                           disabled={!selectedBranch || !selectedRepo}
-                          // disabled={
-                          //   loading || !formik.values.name || !!formik.errors.name
-                          // }
-                          // isLoading={loading}
+                          isLoading={loading}
                         >
                           Create
                         </Button>

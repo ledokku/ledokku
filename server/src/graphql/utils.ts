@@ -48,13 +48,6 @@ export const refreshAuthToken = async (userId: string) => {
     },
   });
 
-  // const res = await octo.request(`POST /login/oauth/access_token`, {
-  //   refresh_token: user.refreshToken,
-  //   grant_type: 'refresh_token',
-  //   client_id: config.githubAppClientId,
-  //   client_secret: config.githubAppClientSecret,
-  // });
-
   const app = new OAuthApp({
     clientType: 'github-app',
     clientId: config.githubAppClientId,
