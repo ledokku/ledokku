@@ -16,7 +16,6 @@ import { databaseLogs } from './databaseLogs';
 import { isDatabaseLinked } from './isDatabaseLinked';
 import { appProxyPorts } from './appProxyPorts';
 import { domains } from './domains';
-import { user } from './user';
 
 export const queries = {
   app,
@@ -37,5 +36,4 @@ export const queries = {
   githubInstallationId,
   repositories,
   branches,
-  user,
 };

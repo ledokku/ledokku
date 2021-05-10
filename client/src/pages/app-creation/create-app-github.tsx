@@ -14,7 +14,6 @@ import {
   useBranchesLazyQuery,
   Repository,
   Branch,
-  useUserQuery,
 } from '../../generated/graphql';
 import { Header } from '../../modules/layout/Header';
 import { Button, Terminal, HeaderContainer } from '../../ui';
@@ -61,7 +60,6 @@ export const CreateAppGithub = () => {
   const { user } = useAuth();
 
   const { data: dataApps } = useAppsQuery();
-  const { data: userData } = useUserQuery();
   const [isNewWindowClosed, setIsNewWindowClosed] = useState(false);
   const [selectedRepo, setSelectedRepo] = useState<Repository>();
   const [selectedBranch, setSelectedBranch] = useState('');
@@ -390,11 +388,11 @@ export const CreateAppGithub = () => {
                     <Flex alignItems="center" mt="12">
                       <Avatar
                         size="sm"
-                        name={userData?.user.userName}
+                        name={user?.userName}
                         src={user?.avatarUrl}
                       />
                       <Text ml="2" fontWeight="bold">
-                        {userData?.user.userName}
+                        {user?.userName}
                       </Text>
                     </Flex>
                     <form onSubmit={formik.handleSubmit}>

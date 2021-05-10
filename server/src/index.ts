@@ -33,10 +33,6 @@ const typeDefs = gql`
     appMetaGithub: AppMetaGithub
   }
 
-  type User {
-    userName: String!
-  }
-
   type GithubAppInstallationId {
     id: String!
   }
@@ -306,7 +302,6 @@ const typeDefs = gql`
     githubInstallationId: GithubAppInstallationId!
     setup: SetupResult!
     apps: [App!]!
-    user: User!
     repositories(installationId: String!): [Repository!]!
     branches(repositoryName: String!, installationId: String!): [Branch!]!
     appMetaGithub(appId: String!): AppMetaGithub

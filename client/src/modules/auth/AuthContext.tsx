@@ -4,6 +4,7 @@ import jwtDecode from 'jwt-decode';
 interface JwtUser {
   userId: string;
   avatarUrl: string;
+  userName: string;
 }
 
 const AuthContext = createContext<{
@@ -37,6 +38,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         ? {
             userId: decodedToken.userId,
             avatarUrl: decodedToken.avatarUrl,
+            userName: decodedToken.userName,
           }
         : undefined,
     };
@@ -50,6 +52,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       user: {
         userId: decodedToken.userId,
         avatarUrl: decodedToken.avatarUrl,
+        userName: decodedToken.userName,
       },
     });
   };
