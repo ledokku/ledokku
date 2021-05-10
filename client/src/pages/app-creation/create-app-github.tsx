@@ -213,6 +213,7 @@ export const CreateAppGithub = () => {
     installationLoading,
     isNewWindowClosed,
     setIsNewWindowClosed,
+    getRepos,
   ]);
 
   useEffect(() => {
@@ -235,6 +236,7 @@ export const CreateAppGithub = () => {
     reposData,
     reposLoading,
     getBranches,
+    selectedRepo.name,
   ]);
 
   const handleChangeRepo = (active: RepoOption) => {
@@ -264,17 +266,17 @@ export const CreateAppGithub = () => {
   console.log(reposData);
 
   if (reposData && !reposLoading) {
-    reposData?.repositories.map((r) => {
-      repoOptions.push({ value: r, label: r.fullName });
-    });
+    reposData?.repositories.map((r) =>
+      repoOptions.push({ value: r, label: r.fullName })
+    );
   }
 
   let branchOptions: BranchOption[] = [];
 
   if (branchesData && !branchesLoading) {
-    branchesData.branches.map((b) => {
-      branchOptions.push({ value: b, label: b.name });
-    });
+    branchesData.branches.map((b) =>
+      branchOptions.push({ value: b, label: b.name })
+    );
   }
 
   useEffect(() => {
@@ -285,13 +287,10 @@ export const CreateAppGithub = () => {
         },
       });
     }
-  }, [installationLoading]);
+  }, [installationLoading, getRepos, installationData]);
 
   useEffect(() => {
     if (selectedRepo && installationData) {
-      if (formik.values.gitBranch) {
-        branchOptions = [];
-      }
       getBranches({
         variables: {
           installationId: installationData?.githubInstallationId.id,
