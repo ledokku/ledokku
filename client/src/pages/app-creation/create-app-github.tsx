@@ -238,6 +238,7 @@ export const CreateAppGithub = () => {
     reposLoading,
     getBranches,
     selectedRepo?.name,
+    selectedRepo,
   ]);
 
   const handleChangeRepo = (active: RepoOption) => {
