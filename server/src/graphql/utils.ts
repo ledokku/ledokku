@@ -1,5 +1,6 @@
 import { Octokit } from '@octokit/rest';
 import { Endpoints } from '@octokit/types';
+import { OAuthApp } from '@octokit/oauth-app';
 import * as yup from 'yup';
 import { DatabaseTypes } from '../generated/graphql';
 import { prisma } from '../prisma';
@@ -47,38 +48,42 @@ export const refreshAuthToken = async (userId: string) => {
     },
   });
 
-  const octo = new Octokit({});
-
-  const res = await octo.request(`POST /login/oauth/access_token`, {
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-    },
-    body: JSON.stringify({
-      refresh_token: user.refreshToken,
-      grant_type: 'refresh_token',
-      client_id: config.githubAppClientId,
-      client_secret: config.githubAppClientSecret,
-    }),
+  const app = new OAuthApp({
+    clientType: 'github-app',
+    clientId: config.githubAppClientId,
+    clientSecret: config.githubAppClientSecret,
   });
+
+  const { data } = await app.refreshToken({
+    refreshToken: user.refreshToken,
+  });
+
+  const rn = new Date();
+  const time = rn.getTime();
+  const refreshTokenExpiresAt = new Date(time + data.refresh_token_expires_in);
 
   await prisma.user.update({
     where: {
       id: userId,
     },
     data: {
-      refreshToken: res.data.refresh_token,
-      refreshTokenExpiresAt: res.data.refresh_token_expires_in.toString(),
-      githubAccessToken: res.data.access_token,
+      refreshToken: data.refresh_token,
+      refreshTokenExpiresAt,
+      githubAccessToken: data.access_token,
     },
   });
+
+  return data.access_token;
 };
 
-type InstallationParams = Endpoints['GET /user/installations'];
+// All the commented out files could be helpful
+// TODO FIX TYPES : https://github.com/ledokku/ledokku/issues/371
+// type InstallationParams = Endpoints['GET /user/installations'];
 type InstallationsResponse = Endpoints['GET /user/installations']['response'];
 
 export const octoRequestWithUserToken = async (
-  requestData: InstallationParams['request'],
+  requestData: string,
+  // requestData: InstallationParams['request'],
   userGithubAccessToken: string,
   userId: string
 ) => {
@@ -86,15 +91,20 @@ export const octoRequestWithUserToken = async (
     auth: userGithubAccessToken,
   });
 
-  let res: InstallationsResponse;
+  // let res: InstallationsResponse;
+
+  // type OctoResponse = GetResponseTypeFromEndpointMethod<typeof octokit.request>;
+
+  let res: any;
 
   try {
-    res = (await octokit.request(
-      requestData as InstallationParams['request']
-    )) as InstallationsResponse;
+    res = await octokit.request(requestData);
+    // res = (await octokit.request(
+    //   requestData as InstallationParams['request']
+    // )) as InstallationsResponse;
   } catch (e) {
     if (e.message === 'Bad credentials') {
-      await refreshAuthToken(userId);
+      userGithubAccessToken = await refreshAuthToken(userId);
     }
 
     const octokit = new Octokit({

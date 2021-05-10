@@ -97,7 +97,7 @@ export const loginWithGithub: MutationResolvers['loginWithGithub'] = async (
   }
 
   const jwtToken = jsonwebtoken.sign(
-    { userId: user.id, avatarUrl: user.avatarUrl },
+    { userId: user.id, avatarUrl: user.avatarUrl, userName: user.username },
     config.jwtSecret,
     {
       expiresIn: '1d',

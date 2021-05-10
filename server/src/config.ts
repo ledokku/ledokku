@@ -80,6 +80,10 @@ const privateKey = readFileSync(sshKeyPath, {
 
 // helper function to parse github PEM
 const formatGithubPem = (pem: string) => {
+  if (!pem) {
+    return '';
+  }
+
   const githubAppPemSplit = pem.split('\n');
   const joinedPem = githubAppPemSplit.join('');
   const formattedStart = joinedPem.replace(
