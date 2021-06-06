@@ -79,7 +79,7 @@ export const registerGithubApp: MutationResolvers['registerGithubApp'] = async (
     dotenvData += `\nGITHUB_APP_ID="${githubAppId}"`;
     dotenvData += `\nGITHUB_APP_CLIENT_SECRET="${githubAppClientSecret}"`;
     dotenvData += `\nGITHUB_APP_WEBHOOK_SECRET="${githubAppWebhookSecret}"`;
-    dotenvData += `\nGITHUB_APP_PEM="${formattedPem}"\n`;
+    dotenvData += `\nGITHUB_APP_PEM=${formattedPem}\n`;
     writeFileSync(dotenvPath, dotenvData, { encoding: 'utf8' });
     console.log(`Github application config added to .env file.`);
   }
