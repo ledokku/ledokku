@@ -52,8 +52,8 @@ export const registerGithubApp: MutationResolvers['registerGithubApp'] = async (
     );
     //encoding PEM to base64 so it works smoothly when setting
     //dokku env var with spaces
-    let buf = Buffer.from(githubAppPem);
-    let encodedPem = buf.toString('base64');
+    const buf = Buffer.from(githubAppPem);
+    const encodedPem = buf.toString('base64');
 
     await dokku.config.set(
       ssh,
