@@ -44,7 +44,7 @@ Outside of all the massive addition of new app features, we have redesigned our 
 
 ### Shaping the future of deployments
 
-We are here to stay and this, while big step, is just a beginning. Deployments from private repos, cleaner UI, deployments from Gitlab, Dockerhub, custom domain handling and many more exciting features are coming soon.
+We are here to stay and this, while big step, is just a beginning.
 
 Take part in shaping the future and follow us on [**Twitter**](https://twitter.com/ledokku), join our [**Discord**](https://discord.gg/v76vY2YaKp) or open an issue on our [**Github**](https://github.com/ledokku/ledokku) repo. Any and all of the feedback will be highly appreciated.
 
