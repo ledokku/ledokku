@@ -1,3 +1,4 @@
+import { formatGithubPem } from './../../config';
 import { readFileSync, writeFileSync } from 'fs';
 import { Octokit } from '@octokit/rest';
 import { MutationResolvers } from '../../generated/graphql';
@@ -88,7 +89,7 @@ export const registerGithubApp: MutationResolvers['registerGithubApp'] = async (
   config.githubAppClientId = githubAppClientId;
   config.githubAppClientSecret = githubAppClientSecret;
   config.githubAppWebhookSecret = githubAppWebhookSecret;
-  config.githubAppPem = formattedPem;
+  config.githubAppPem = formatGithubPem(formattedPem);
   config.githubAppName = githubAppName;
   config.githubAppId = githubAppId;
 

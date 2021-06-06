@@ -79,7 +79,7 @@ const privateKey = readFileSync(sshKeyPath, {
 });
 
 // helper function to parse github PEM
-const formatGithubPem = (pem: string) => {
+export const formatGithubPem = (pem: string) => {
   if (!pem) {
     return '';
   }
