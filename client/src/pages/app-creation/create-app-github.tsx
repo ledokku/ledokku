@@ -16,7 +16,7 @@ import {
   Branch,
 } from '../../generated/graphql';
 import { Header } from '../../modules/layout/Header';
-import { Button, Terminal, HeaderContainer } from '../../ui';
+import { Terminal, HeaderContainer, Button } from '../../ui';
 import { useToast } from '../../ui/toast';
 import { config, trackingGoals } from '../../config';
 import { FiArrowRight, FiArrowLeft } from 'react-icons/fi';
@@ -36,6 +36,13 @@ import {
   Link,
   Spinner,
   Text,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalCloseButton,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
 } from '@chakra-ui/react';
 import { useAuth } from '../../modules/auth/AuthContext';
 
@@ -63,6 +70,7 @@ export const CreateAppGithub = () => {
   const [isNewWindowClosed, setIsNewWindowClosed] = useState(false);
   const [selectedRepo, setSelectedRepo] = useState<Repository>();
   const [selectedBranch, setSelectedBranch] = useState('');
+  const [isProceedModalOpen, setIsProceedModalOpen] = useState(false);
   const {
     data: installationData,
     loading: installationLoading,
@@ -409,7 +417,7 @@ export const CreateAppGithub = () => {
                       <Text mt="1" color="gray.400" fontSize="sm">
                         Can't see your repo in the list?{' '}
                         <Link
-                          onClick={() => handleOpen()}
+                          onClick={() => setIsProceedModalOpen(true)}
                           textDecoration="underline"
                         >
                           Configure the GitHub app.
@@ -461,7 +469,10 @@ export const CreateAppGithub = () => {
                   </Box>
                 </Alert>
 
-                <Button color="grey" onClick={() => handleOpen()}>
+                <Button
+                  color="grey"
+                  onClick={() => setIsProceedModalOpen(true)}
+                >
                   Set up permissions
                 </Button>
               </>
@@ -470,6 +481,41 @@ export const CreateAppGithub = () => {
             )}
           </>
         )}
+        <Modal
+          isOpen={isProceedModalOpen}
+          onClose={() => setIsProceedModalOpen(false)}
+          isCentered
+        >
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Github setup info</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              New window is about to open. After you are done selecting github
+              repos, close the window and refresh page.
+            </ModalBody>
+
+            <ModalFooter>
+              <Button
+                color="grey"
+                variant="outline"
+                className="mr-3"
+                onClick={() => setIsProceedModalOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                color="grey"
+                onClick={() => {
+                  handleOpen();
+                  setIsProceedModalOpen(false);
+                }}
+              >
+                Proceed
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       </Container>
     </>
   );
