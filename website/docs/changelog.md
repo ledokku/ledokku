@@ -8,6 +8,52 @@ hide_title: true
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.7.0](https://github.com/ledokku/ledokku/compare/v0.6.1...v0.7.0) (2021-06-06)
+
+### Features
+
+- **client:** redesign app settings ([#335](https://github.com/ledokku/ledokku/issues/335)) ([8382fd7](https://github.com/ledokku/ledokku/commit/8382fd735072e23509da3ea101f27af50947b46e))
+- **client:** set up github installation config screen ([#368](https://github.com/ledokku/ledokku/issues/368)) ([d7d3829](https://github.com/ledokku/ledokku/commit/d7d3829ad80b5448b3e47a72e08a274bef16a5ec))
+- **client,server:** fetching repos/branches from user ([#357](https://github.com/ledokku/ledokku/issues/357)) ([fb9d353](https://github.com/ledokku/ledokku/commit/fb9d353b7054d8cc38ccd1e935fef1254ad739e3))
+- **server:** set up config for private repos ([#356](https://github.com/ledokku/ledokku/issues/356)) ([ebabe63](https://github.com/ledokku/ledokku/commit/ebabe63c34d286d9a638172d9f1ddfad4d8b8414))
+- **server:** webhooks with new setup ([#360](https://github.com/ledokku/ledokku/issues/360)) ([2a5f7b9](https://github.com/ledokku/ledokku/commit/2a5f7b9c852a30f145b97768ba96c5c9a56997be))
+- **server, client:** modify-create-github-app-mutation ([#358](https://github.com/ledokku/ledokku/issues/358)) ([14a531f](https://github.com/ledokku/ledokku/commit/14a531f2d990a7265d64a5dd1db10bf23f01304d))
+- use github app workflow ([#321](https://github.com/ledokku/ledokku/issues/321)) ([1230fd6](https://github.com/ledokku/ledokku/commit/1230fd6840a119eb469b06aeb2406f43e2e8bcfa))
+
+### Bug Fixes
+
+- **client:** fix Github app creation glitch ([#363](https://github.com/ledokku/ledokku/issues/363)) ([9c8570a](https://github.com/ledokku/ledokku/commit/9c8570aa248b43b5e9bfd4031ae031371bb7db80))
+- **client:** remove webhook secret from generated graphql ([#364](https://github.com/ledokku/ledokku/issues/364)) ([37262ae](https://github.com/ledokku/ledokku/commit/37262aef647b38f19e8649804f1d04557d819264))
+
+### Miscellaneous Chores
+
+- **client:** add options to useToast component ([#348](https://github.com/ledokku/ledokku/issues/348)) ([15ed2a8](https://github.com/ledokku/ledokku/commit/15ed2a89077862e30bc9299264a93323d2c0679c))
+- **client:** delete Alert component ([#343](https://github.com/ledokku/ledokku/issues/343)) ([976f388](https://github.com/ledokku/ledokku/commit/976f3880902bdbb90d42a607e7b168358e4d3f30))
+- **client:** migrate app env view to chakra ([#355](https://github.com/ledokku/ledokku/issues/355)) ([5df1a41](https://github.com/ledokku/ledokku/commit/5df1a41963569f94db8f16b4215e83b21a5d5f40))
+- **client:** migrate create dokku app view to chakra ([#341](https://github.com/ledokku/ledokku/issues/341)) ([2668300](https://github.com/ledokku/ledokku/commit/2668300a93d37a6409e44edaf2adcb1057f47a71))
+- **client:** migrate domains view to chakra ([#351](https://github.com/ledokku/ledokku/issues/351)) ([770784a](https://github.com/ledokku/ledokku/commit/770784ae22817b1d3488be5b3a207d4dfeac86b8))
+- **client:** migrate terminal component to chakra ([#342](https://github.com/ledokku/ledokku/issues/342)) ([7739898](https://github.com/ledokku/ledokku/commit/77398988fe8ed112892fc75dcdc4954f33687893))
+- **client:** pin emotion version ([#382](https://github.com/ledokku/ledokku/issues/382)) ([df2a4a3](https://github.com/ledokku/ledokku/commit/df2a4a329365092c5c160f6d6d4f8e3ed95a3172))
+- **client:** remove webhooks log info card ([#374](https://github.com/ledokku/ledokku/issues/374)) ([b975c8d](https://github.com/ledokku/ledokku/commit/b975c8dc65d38ef31f7e63c60a041c3f165804da))
+- **client:** replace react-feather with react-icons ([#352](https://github.com/ledokku/ledokku/issues/352)) ([8b5522a](https://github.com/ledokku/ledokku/commit/8b5522a14582f10b418e5a11aed6617ae8529353))
+- **docs:** fix img src ([#334](https://github.com/ledokku/ledokku/issues/334)) ([9b8ef54](https://github.com/ledokku/ledokku/commit/9b8ef541ccec0be578e855e297720423efad47bd))
+- **server:** add encoded functionality to dokku env set ([#379](https://github.com/ledokku/ledokku/issues/379)) ([c6a1fd3](https://github.com/ledokku/ledokku/commit/c6a1fd38ef38903d16bbb842ec4e73e81a94d807))
+- **server:** add quatation marks ([#377](https://github.com/ledokku/ledokku/issues/377)) ([edc3cbb](https://github.com/ledokku/ledokku/commit/edc3cbb44d18d879b0e92d7d6fd26edf7e6da4e6))
+- **server:** add refreshToken and refreshTokenExpiresIn to user ([#366](https://github.com/ledokku/ledokku/issues/366)) ([614e961](https://github.com/ledokku/ledokku/commit/614e9612bf2765d8b3af91305da7a0c1d1750d99))
+- **server:** fix formatting pem ([#380](https://github.com/ledokku/ledokku/issues/380)) ([6a3424f](https://github.com/ledokku/ledokku/commit/6a3424f9890db8844c97d8a83e5ae33a3f4e93ac))
+- **server:** fix private key reading ([#370](https://github.com/ledokku/ledokku/issues/370)) ([c15de05](https://github.com/ledokku/ledokku/commit/c15de05388df99dee6acb5f0a5deb024f21cf72e))
+- **server:** remove redundant quatation marks ([#378](https://github.com/ledokku/ledokku/issues/378)) ([9e47b13](https://github.com/ledokku/ledokku/commit/9e47b13a83121013875c0460bbe05ce4a38aac93))
+- **server:** sync config ([#381](https://github.com/ledokku/ledokku/issues/381)) ([219bb91](https://github.com/ledokku/ledokku/commit/219bb9152664c886ca1d9e44c2364d40d0ba4788))
+- migrate tabnav component to chakra ([#340](https://github.com/ledokku/ledokku/issues/340)) ([64c5dd5](https://github.com/ledokku/ledokku/commit/64c5dd5d9b58386150e4767de401543189c1a55d))
+- **website:** add missing chakra imports ([#333](https://github.com/ledokku/ledokku/issues/333)) ([58bb79b](https://github.com/ledokku/ledokku/commit/58bb79b27b4f270f3f8561672bd0db3bd236dd76))
+- **website:** add new landing page ([#332](https://github.com/ledokku/ledokku/issues/332)) ([370d196](https://github.com/ledokku/ledokku/commit/370d196b98f8b03672f8bcd6b78ff62f084aa90c))
+
+### Documentation
+
+- add new blog ([#383](https://github.com/ledokku/ledokku/issues/383)) ([fd84b34](https://github.com/ledokku/ledokku/commit/fd84b344bb981d293528b17390ad74b6125474ae))
+- remove react-responsive-carousel dependency ([#365](https://github.com/ledokku/ledokku/issues/365)) ([291b8e9](https://github.com/ledokku/ledokku/commit/291b8e9bbbee5c1c69c0e2a04e17430a305c2a45))
+- update documentation for new github app flow ([#324](https://github.com/ledokku/ledokku/issues/324)) ([5c02bc5](https://github.com/ledokku/ledokku/commit/5c02bc505d0adb6f9b1a9bea3fc54156ef4ce83a))
+
 ### [0.6.1](https://github.com/ledokku/ledokku/compare/v0.6.0...v0.6.1) (2021-03-29)
 
 ### Bug Fixes
