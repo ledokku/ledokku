@@ -12,7 +12,7 @@ export const set = async (
 
   const resultSetEnv = await ssh.execCommand(
     `config:set ${noRestart ? '--no-restart' : ''} ${name} ${values.map(
-      (data) => ` ${data.key}=${data.value}`
+      (data) => ` ${data.key}="${data.value}"`
     )}`
   );
 
