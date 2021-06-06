@@ -52,7 +52,7 @@ export const registerGithubApp: MutationResolvers['registerGithubApp'] = async (
     );
     //encoding PEM to base64 so it works smoothly when setting
     //dokku env var with spaces
-    const buf = Buffer.from(githubAppPem);
+    const buf = Buffer.from(formattedPem);
     const encodedPem = buf.toString('base64');
 
     await dokku.config.set(
@@ -79,7 +79,7 @@ export const registerGithubApp: MutationResolvers['registerGithubApp'] = async (
     dotenvData += `\nGITHUB_APP_ID="${githubAppId}"`;
     dotenvData += `\nGITHUB_APP_CLIENT_SECRET="${githubAppClientSecret}"`;
     dotenvData += `\nGITHUB_APP_WEBHOOK_SECRET="${githubAppWebhookSecret}"`;
-    dotenvData += `\nGITHUB_APP_PEM=${formattedPem}\n`;
+    dotenvData += `\nGITHUB_APP_PEM="${formattedPem}"\n`;
     writeFileSync(dotenvPath, dotenvData, { encoding: 'utf8' });
     console.log(`Github application config added to .env file.`);
   }
