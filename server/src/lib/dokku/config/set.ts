@@ -4,16 +4,17 @@ export const set = async (
   ssh: NodeSSH,
   name: string,
   values: { key: string; value: string } | { key: string; value: string }[],
-  { noRestart }: { noRestart: boolean } = { noRestart: false }
+  { noRestart }: { noRestart: boolean } = { noRestart: false },
+  encoded?: boolean
 ) => {
   if (!Array.isArray(values)) {
     values = [values];
   }
 
   const resultSetEnv = await ssh.execCommand(
-    `config:set ${noRestart ? '--no-restart' : ''} ${name} ${values.map(
-      (data) => ` ${data.key}=${data.value}`
-    )}`
+    `config:set ${noRestart ? '--no-restart' : ''} ${
+      encoded ? '--encoded' : ''
+    } ${name} ${values.map((data) => ` ${data.key}=${data.value}`)}`
   );
 
   if (resultSetEnv.code === 1) {
