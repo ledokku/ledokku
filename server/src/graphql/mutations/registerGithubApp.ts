@@ -45,11 +45,25 @@ export const registerGithubApp: MutationResolvers['registerGithubApp'] = async (
         { key: 'GITHUB_APP_CLIENT_ID', value: githubAppClientId },
         { key: 'GITHUB_APP_CLIENT_SECRET', value: githubAppClientSecret },
         { key: 'GITHUB_APP_WEBHOOK_SECRET', value: githubAppWebhookSecret },
-        { key: 'GITHUB_APP_PEM', value: githubAppPem },
         { key: 'GITHUB_APP_NAME', value: githubAppName },
         { key: 'GITHUB_APP_ID', value: githubAppId },
       ],
       { noRestart: true }
+    );
+    //encoding PEM to base64 so it works smoothly when setting
+    //dokku env var with spaces
+    let buf = Buffer.from(githubAppPem);
+    let encodedPem = buf.toString('base64');
+
+    await dokku.config.set(
+      ssh,
+      'ledokku',
+      {
+        key: 'GITHUB_APP_PEM',
+        value: encodedPem,
+      },
+      { noRestart: true },
+      true
     );
 
     ssh.dispose();
