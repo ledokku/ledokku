@@ -77,7 +77,7 @@ main() {
   dokku proxy:ports-remove ledokku http:4000:4000
 
   echo "=== 🐳 ==="
-  echo "Ledooku was successfully installed"
+  echo "Ledokku was successfully installed"
   echo "Open you server ip in your browser"
   echo "http://${DOKKU_SSH_HOST}"
   echo "=== 🐳 ==="
