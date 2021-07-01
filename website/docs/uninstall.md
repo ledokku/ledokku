@@ -6,7 +6,7 @@ title: How to uninstall Ledokku
 # Remove Ledokku
 
 As Ledokku is a simple dokku app, to uninstall the app itself and
-delete all of the associated data, run there commands on your server:
+delete all of the associated data, run these commands on your server:
 
 ```sh
 dokku apps:destroy ledokku
