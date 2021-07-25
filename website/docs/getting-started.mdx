@@ -83,28 +83,3 @@ ssh root@YOUR_DOCKER_DROPLET_IP
 4. In your terminal you will see that you are inside the docker droplet <br/>
    Your terminal path will look something similar to this `root@YOUR_DROPLET_NAME:~#`
 
-### Install dokku on your Droplet
-
-From your Docker Droplet run these commands :
-
-```sh
-wget https://raw.githubusercontent.com/dokku/dokku/v0.24.9/bootstrap.sh
-sudo DOKKU_TAG=v0.24.9 bash bootstrap.sh
-```
-
-### Configure dokku
-
-1. In order to be able to access our dokku server, we update the server Firewall Rules to allow all incoming HTTP and HTTPS requests.
-
-```sh
-sudo ufw allow proto tcp from any to any port 80,443
-```
-
-2. Open http://YOUR_DOCKER_DROPLET_IP in browser
-   You will see dokku webUI with SSH key already there
-
-You will need to set up the domain name and put tickbox in `Use virtual host naming for apps`
-
-<img alt="Dokku Web UI Setup" src={useBaseUrl('/img/dokkuWebUi.png')} />
-
-If set up is successful, you will be redirected to dokku home page.
