@@ -96,6 +96,39 @@ function ensure-dokku() {
   ## If not exits Let him download.
   if which dokku >/dev/null; then
       echo "${GREEN}Dokku Exists${END}"
+      # Checking Dokku vesrion and comparing it with the latest Version
+      # In case of version changes in dokku, we need to change this varibale.
+      # We can also change the LATEST_DOKKU_VERSION to PREFFERED_DOKKU_VERSION
+      
+      EXISTING_DOKKU_VERSION="$(dokku version)"
+      LATEST_DOKKU_VERSION="dokku version 0.24.10"
+      
+      if [[ "$EXISTING_DOKKU_VERSION" == "$LATEST_DOKKU_VERSION" ]]; then
+        echo  "${YELLOW}Dokku is upto date${END}"
+      else
+        whiptail --title "Warning !!" --msgbox "Read carefully before proceeding:\n
+        You are currently using "$EXISTING_DOKKU_VERSION"
+        but the latest was "$LATEST_DOKKU_VERSION" \n\nIn the next dialog box, you can update your dokku or skip \n\nFor more info check the dokku CHANGELOG before doing the upgrade: https://github.com/dokku/dokku/releases" 20 60
+        # Promt for update
+        if (whiptail --title "Updating Dokku" --yes-button "Update" --no-button "Skip"  --yesno "Would you like to update your Dokku?" 10 60) then
+            echo "${YELLOW}You chose Update.${END}"
+            # Update Dokku
+            echo "${YELLOW}Upgrading Dokku${END}"
+            sudo apt-get -y update -qq
+            wait
+            sudo apt-get -qq -y --no-install-recommends install dokku herokuish sshcommand plugn gliderlabs-sigil dokku-update dokku-event-listener
+            wait
+            sudo apt -y upgrade &
+            process_id=$!
+            wait $process_id
+            echo "Exit status: $?"
+            echo "${YELLOW}Updated to ${GREEN} $LATEST_DOKKU_VERSION ${END}"
+            # Dokku Updated
+        else
+            echo "${YELLOW}You chose to skip dokku updates.${END}"
+            # Dokku Update skipped
+        fi
+      fi
   else
       echo "${RED}Dokku does not exist${END}"
       # Show messagebox and make it mandatory to download and install dokku
