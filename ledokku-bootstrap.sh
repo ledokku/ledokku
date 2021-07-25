@@ -86,13 +86,45 @@ function systemUpdate {
   fi
 }
 
-# Check that dokku is installed on the server
-ensure-dokku() {
-  if ! command -v dokku &> /dev/null
-  then
-      echo "dokku is not installed, please follow our getting started guide first"
-      echo "https://www.ledokku.com/docs/getting-started"
-      exit
+function dokku()
+{
+  # Confirming the existance of Dokku
+  ## If exists, promt for update
+  ## If not exits Let him download.
+  if which dokku >/dev/null; then
+      echo "${GREEN}Dokku Exists${END}"
+      # Promt for update
+      if (whiptail --title "Updating Dokku" --yes-button "Update" --no-button "Skip"  --yesno "Would you like to update your Dokku?" 10 60) then
+          echo "${YELLOW}You chose Update.${END}"
+          # Update Dokku
+          echo "${YELLOW}Upgrading Dokku${END}"
+          sudo apt-get -y update -qq
+          wait
+          sudo apt-get -qq -y --no-install-recommends install dokku herokuish sshcommand plugn gliderlabs-sigil dokku-update dokku-event-listener
+          wait
+          sudo apt -y upgrade &
+          process_id=$!
+          wait $process_id
+          echo "Exit status: $?"
+          echo "${YELLOW}Now you have the latest Version of Dokku${END}"
+          # Dokku Updated
+      else
+          echo "${Yellow}You chose to skip dokku updates.${END}"
+          # Dokku Update skipped
+      fi
+  else
+      echo "${RED}Dokku does not exist${END}"
+      # Show messagebox and make it mandatory to download and install dokku
+      whiptail --title "Unable to Detect Dokku" --msgbox "If you want to insatll your app using t2d, it is madatory to install Dokku. So, I would like to install Dokku on behalf of you." 10 60
+      wait
+      echo "${YELLOW}Downloading Dokku from its Official Repository${END}"
+      wget https://raw.githubusercontent.com/dokku/dokku/v0.24.10/bootstrap.sh
+      wait
+      sudo DOKKU_TAG=v0.24.10 bash bootstrap.sh &
+      process_id=$!
+      wait $process_id
+      echo "Exit status: $?"
+      whiptail --title "Confirm Dokku Installation" --msgbox "Before continuing forward, verify Dokku installation by visiting your IP address in your browser.\n\nOne among these IP adresses is your Public IP Address:\n${IP}" 20 60
   fi
 }
 
