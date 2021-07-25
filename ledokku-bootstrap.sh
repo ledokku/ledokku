@@ -6,9 +6,9 @@
 ## 3 => Update and Upgrade the VPS.
 ## 4 => Check whether the program/application, "Dokku" was Installed or not.
 ## 5 => Upgrading dokku to the latest version.
-## 6 => Check Whether Plugins are installed or not (Redis, Postgres)
+## 6 => Check whether the Plugins are installed or not (Redis, Postgres)
 ## 7 => Install Redis and Postgress, if they were not installed
-## 7 => Install Ledokku
+## 8 => Install Ledokku
 ## ? => Update Script (Will be added later)
 
 set -e
@@ -27,7 +27,7 @@ function define-colors {
 
 function system-info() {
   
-  # Finding Information about the server
+  # Finding Information about the server/VPS
   ## Basic VPS info
 
   DOKKU_SSH_HOST=$(curl -4 ifconfig.co)
@@ -39,7 +39,7 @@ function check-whiptail() {
   # Checking if whiptail is available or not
   if which whiptail >/dev/null; then
       echo "${GREEN}whiptail exists${END}"
-      # Continue the script
+      # Script Continues
   else
       echo "${RED}whiptail does not exist${END}"
       echo "Install whiptail and re-run the script, your OS is ${OS}"
@@ -56,9 +56,11 @@ function check-root() {
   ## We will not face any further issues, during any sort of compulsory sudo commands; like the case for installing plugins in Dokku or Giving permissions to our scripts
   if [ "$(whoami)" == "root" ] ; then
       echo "${YELLOW}Nice you are running the script as root!${END}"
+      # Script Continues
   else
       echo "${RED}Please! Run the script with root access${END}, without root access I cannot create plugins in Dokku"
       exit
+      # End of Script
   fi
 }
 
@@ -67,7 +69,7 @@ function system-update {
   # Updating and Upgrading system
   ## If dokku was installed, it will be automatically updated to the latest version
   ## Staying up to date is always good
-  if (whiptail --title "Update and Upgrade System " --yes-button "Yes" --no-button "Skip"  --yesno "Do you wish to Update packges and Upgrade your system?" 10 60) then
+  if (whiptail --title "Update and Upgrade System " --yes-button "Yes" --no-button "Skip"  --yesno "Do you wish to Update and Upgrade your system?" 10 60) then
       echo "You chose to update your system"
       # Update and skip to next step
       echo "${YELLOW}Updating System${END}"
@@ -92,8 +94,9 @@ function system-update {
 function ensure-dokku() {
   
   # Confirming the existance of Dokku
-  ## If exists, promt for update
-  ## If not exits Let him download.
+  ## If exists => check if existing and latest dokku versions are same => If same version => Continue to next step
+  ###  In case of different dokku versions => Promot a (warning & dokku upgrade) dialog box (Now it is upto the user to update or skip)
+  ## If dokku does not exits, take permission to download Dokku.
   if which dokku >/dev/null; then
       echo "${GREEN}Dokku Exists${END}"
       # Checking Dokku vesrion and comparing it with the latest Version
@@ -108,11 +111,11 @@ function ensure-dokku() {
       else
         whiptail --title "Warning !!" --msgbox "Read carefully before proceeding:\n
         You are currently using "$EXISTING_DOKKU_VERSION"
-        but the latest was "$LATEST_DOKKU_VERSION" \n\nIn the next dialog box, you can update your dokku or skip \n\nFor more info check the dokku CHANGELOG before doing the upgrade: https://github.com/dokku/dokku/releases" 20 60
-        # Promt for update
-        if (whiptail --title "Updating Dokku" --yes-button "Update" --no-button "Skip"  --yesno "Would you like to update your Dokku?" 10 60) then
-            echo "${YELLOW}You chose Update.${END}"
-            # Update Dokku
+        but the latest was "$LATEST_DOKKU_VERSION" \n\nIn the next dialog box, you can upgrade your dokku or skip to ledokku installation \n\nFor more info check the dokku CHANGELOG before doing the upgrade: https://github.com/dokku/dokku/releases" 20 60
+        # Promt for upgrade
+        if (whiptail --title "Upgrading Dokku" --yes-button "Upgrade" --no-button "Skip"  --yesno "Would you like to upgrade your Dokku?" 10 60) then
+            echo "${YELLOW}You chose Upgrade.${END}"
+            # Upgrade Dokku
             echo "${YELLOW}Upgrading Dokku${END}"
             sudo apt-get -y update -qq
             wait
@@ -122,17 +125,17 @@ function ensure-dokku() {
             process_id=$!
             wait $process_id
             echo "Exit status: $?"
-            echo "${YELLOW}Updated to ${GREEN} $LATEST_DOKKU_VERSION ${END}"
+            echo "${YELLOW}Upgraded to ${GREEN} $LATEST_DOKKU_VERSION ${END}"
             # Dokku Updated
         else
-            echo "${YELLOW}You chose to skip dokku updates.${END}"
+            echo "${YELLOW}You chose to skip dokku upgrades.${END}"
             # Dokku Update skipped
         fi
       fi
   else
       echo "${RED}Dokku does not exist${END}"
       # Show messagebox and make it mandatory to download and install dokku
-      whiptail --title "Unable to Detect Dokku" --msgbox "If you want to insatll your app using ledokku, it is madatory to install Dokku. So, I would like to install Dokku on behalf of you." 10 60
+      whiptail --title "Unable to detect Dokku" --msgbox "If you want to install your app using ledokku, it is madatory to install Dokku. So, I would like to install Dokku on behalf of you." 10 60
       wait
       echo "${YELLOW}Downloading Dokku from its Official Repository${END}"
       wget https://raw.githubusercontent.com/dokku/dokku/v0.24.10/bootstrap.sh
@@ -141,7 +144,7 @@ function ensure-dokku() {
       process_id=$!
       wait $process_id
       echo "Exit status: $?"
-      whiptail --title "Confirm Dokku Installation" --msgbox "Before continuing forward, verify Dokku installation by visiting your IP address in your browser.\n\nOne among these IP adresses is your Public IP Address:${DOKKU_SSH_HOST}\n" 20 60
+      whiptail --title "Confirm Dokku Installation" --msgbox "Before continuing forward, verify Dokku installation by visiting your IP address in your browser.\n\nVisit this IP Address:${DOKKU_SSH_HOST} in your browser\n" 20 60
   fi
 }
 
