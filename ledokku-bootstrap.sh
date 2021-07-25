@@ -22,59 +22,69 @@ YELLOW="$(tput setaf 3)" # ${YELLOW}
 BLUE="$(tput setaf 123)" # ${BLUE}
 END="$(tput setaf 7)" # ${END
 
-# Finding Information about your device
-## Basic VPS info
-## Should exist in every script
-IP="$(ifconfig | grep broadcast | awk '{print $2}')"
-OS=$( $(compgen -G "/etc/*release" > /dev/null) && cat /etc/*release | grep ^NAME | tr -d 'NAME="' || echo "${OSTYPE//[0-9.]/}")
+function sysInfo() 
+{
+  # Finding Information about your device
+  ## Basic VPS info
+  ## Should exist in every script
+  IP="$(ifconfig | grep broadcast | awk '{print $2}')"
+  OS=$( $(compgen -G "/etc/*release" > /dev/null) && cat /etc/*release | grep ^NAME | tr -d 'NAME="' || echo "${OSTYPE//[0-9.]/}")
+}
 
-# Checking if whiptail is available or not
-if which whiptail >/dev/null; then
-    echo "${GREEN}whiptail exists${END}"
-    # Continue the script
-else
-    echo "${RED}whiptail does not exist${END}"
-    echo "Install whiptail and re-run the script, your OS is ${OS}"
-    exit
-    # As I already know the OS, I can also automate this process, but will save it for later.
-    # This is just a matter of finiding all the possible OS people might use and writing a if statement.
-fi
+function check-whiptail() 
+{
+  # Checking if whiptail is available or not
+  if which whiptail >/dev/null; then
+      echo "${GREEN}whiptail exists${END}"
+      # Continue the script
+  else
+      echo "${RED}whiptail does not exist${END}"
+      echo "Install whiptail and re-run the script, your OS is ${OS}"
+      exit
+      # As I already know the OS, I can also automate this process, but will save it for later.
+      # This is just a matter of finiding all the possible OS people might use and writing a if statement.
+  fi
+}
 
-#Check root and if not root take permissions (Some providers doesnot support passwordless sudo)
-## It is always better to do this.
-## We will not face any further issues, during any sort of compulsory sudo commands; like the case for installing plugins in Dokku or Giving permissions to our scripts
-if [ "$(whoami)" == "root" ] ; then
-    echo "${YELLOW}Nice you are running the script as root!${END}"
-else
-    echo "${RED}Please! Run the script with root access${END}, without root access I cannot create plugins in Dokku"
-    exit
-fi
+function check-root()
+{
+  #Check root and if not root take permissions (Some providers doesnot support passwordless sudo)
+  ## It is always better to do this.
+  ## We will not face any further issues, during any sort of compulsory sudo commands; like the case for installing plugins in Dokku or Giving permissions to our scripts
+  if [ "$(whoami)" == "root" ] ; then
+      echo "${YELLOW}Nice you are running the script as root!${END}"
+  else
+      echo "${RED}Please! Run the script with root access${END}, without root access I cannot create plugins in Dokku"
+      exit
+  fi
+}
 
+function systemUpdate {
 
-# Updating and Upgrading system
-## If dokku was installed, it will be automatically updated to the latest version
-## Staying up to date is always good
-if (whiptail --title "Update and Upgrade System " --yes-button "Yes" --no-button "Skip"  --yesno "Do you wish to Update packges and Upgrade your system?" 10 60) then
-    echo "You chose to update your system"
-    # Update and skip to next step
-    echo "${YELLOW}Updating System${END}"
-    sudo dpkg --configure -a
-    sudo apt -y --purge autoremove
-    sudo apt install -f
-    sudo apt -y update
-    wait
-    echo "${YELLOW}Upgrading System${END}"
-    sudo apt -y upgrade
-    sudo apt -y autoclean
-    sudo apt -y --purge autoremove &
-    process_id=$!
-    wait $process_id
-    echo "Exit status: $?"
-else
-    echo "${YELLOW}You chose to skip.${END}"
-    # Should skip to next step
-fi
-
+  # Updating and Upgrading system
+  ## If dokku was installed, it will be automatically updated to the latest version
+  ## Staying up to date is always good
+  if (whiptail --title "Update and Upgrade System " --yes-button "Yes" --no-button "Skip"  --yesno "Do you wish to Update packges and Upgrade your system?" 10 60) then
+      echo "You chose to update your system"
+      # Update and skip to next step
+      echo "${YELLOW}Updating System${END}"
+      sudo dpkg --configure -a
+      sudo apt -y --purge autoremove
+      sudo apt install -f
+      sudo apt -y update
+      wait
+      echo "${YELLOW}Upgrading System${END}"
+      sudo apt -y upgrade
+      sudo apt -y autoclean
+      sudo apt -y --purge autoremove &
+      process_id=$!
+      wait $process_id
+      echo "Exit status: $?"
+  else
+      echo "${YELLOW}You chose to skip.${END}"
+      # Should skip to next step
+  fi
+}
 
 # Check that dokku is installed on the server
 ensure-dokku() {
