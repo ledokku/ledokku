@@ -110,8 +110,8 @@ function ensure-dokku() {
         echo  "${YELLOW}Dokku is upto date${END}"
       else
         whiptail --title "Warning !!" --msgbox "Read carefully before proceeding:\n
-        You are currently using "$EXISTING_DOKKU_VERSION"
-        but the latest was "$LATEST_DOKKU_VERSION" \n\nIn the next dialog box, you can upgrade your dokku or skip to ledokku installation \n\nFor more info check the dokku CHANGELOG before doing the upgrade: https://github.com/dokku/dokku/releases" 20 60
+        You are currently using $EXISTING_DOKKU_VERSION
+        but the latest was $LATEST_DOKKU_VERSION \n\nIn the next dialog box, you can upgrade your dokku or skip to ledokku installation \n\nFor more info check the dokku CHANGELOG before doing the upgrade: https://github.com/dokku/dokku/releases" 20 60
         # Promt for upgrade
         if (whiptail --title "Upgrading Dokku" --yes-button "Upgrade" --no-button "Skip"  --yesno "Would you like to upgrade your Dokku?" 10 60) then
             echo "${YELLOW}You chose Upgrade.${END}"
