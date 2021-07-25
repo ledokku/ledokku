@@ -97,25 +97,6 @@ function ensure-dokku() {
   ## If not exits Let him download.
   if which dokku >/dev/null; then
       echo "${GREEN}Dokku Exists${END}"
-      # Promt for update
-      if (whiptail --title "Updating Dokku" --yes-button "Update" --no-button "Skip"  --yesno "Would you like to update your Dokku?" 10 60) then
-          echo "${YELLOW}You chose Update.${END}"
-          # Update Dokku
-          echo "${YELLOW}Upgrading Dokku${END}"
-          sudo apt-get -y update -qq
-          wait
-          sudo apt-get -qq -y --no-install-recommends install dokku herokuish sshcommand plugn gliderlabs-sigil dokku-update dokku-event-listener
-          wait
-          sudo apt -y upgrade &
-          process_id=$!
-          wait $process_id
-          echo "Exit status: $?"
-          echo "${YELLOW}Now you have the latest Version of Dokku${END}"
-          # Dokku Updated
-      else
-          echo "${Yellow}You chose to skip dokku updates.${END}"
-          # Dokku Update skipped
-      fi
   else
       echo "${RED}Dokku does not exist${END}"
       # Show messagebox and make it mandatory to download and install dokku
