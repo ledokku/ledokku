@@ -13,6 +13,15 @@
 
 set -e
 
+# Using tput will eliminate the usage of "-e" in echo, and can be used anywhere
+## Color Palet
+## Should exist in every script
+RED="$(tput setaf 1)" # ${RED}
+GREEN="$(tput setaf 2)" # ${GREEN}
+YELLOW="$(tput setaf 3)" # ${YELLOW}
+BLUE="$(tput setaf 123)" # ${BLUE}
+END="$(tput setaf 7)" # ${END
+
 # Check that dokku is installed on the server
 ensure-dokku() {
   if ! command -v dokku &> /dev/null
