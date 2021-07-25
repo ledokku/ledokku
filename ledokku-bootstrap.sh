@@ -30,7 +30,8 @@ function system-info() {
   # Finding Information about your device
   ## Basic VPS info
   ## Should exist in every script
-  IP="$(ifconfig | grep broadcast | awk '{print $2}')"
+  # IP="$(ifconfig | grep broadcast | awk '{print $2}')"
+  DOKKU_SSH_HOST=$(curl -4 ifconfig.co)
   OS=$( $(compgen -G "/etc/*release" > /dev/null) && cat /etc/*release | grep ^NAME | tr -d 'NAME="' || echo "${OSTYPE//[0-9.]/}")
 }
 
@@ -118,7 +119,7 @@ function ensure-dokku() {
   else
       echo "${RED}Dokku does not exist${END}"
       # Show messagebox and make it mandatory to download and install dokku
-      whiptail --title "Unable to Detect Dokku" --msgbox "If you want to insatll your app using t2d, it is madatory to install Dokku. So, I would like to install Dokku on behalf of you." 10 60
+      whiptail --title "Unable to Detect Dokku" --msgbox "If you want to insatll your app using ledokku, it is madatory to install Dokku. So, I would like to install Dokku on behalf of you." 10 60
       wait
       echo "${YELLOW}Downloading Dokku from its Official Repository${END}"
       wget https://raw.githubusercontent.com/dokku/dokku/v0.24.10/bootstrap.sh
@@ -127,7 +128,7 @@ function ensure-dokku() {
       process_id=$!
       wait $process_id
       echo "Exit status: $?"
-      whiptail --title "Confirm Dokku Installation" --msgbox "Before continuing forward, verify Dokku installation by visiting your IP address in your browser.\n\nOne among these IP adresses is your Public IP Address:\n${IP}" 20 60
+      whiptail --title "Confirm Dokku Installation" --msgbox "Before continuing forward, verify Dokku installation by visiting your IP address in your browser.\n\nOne among these IP adresses is your Public IP Address:${DOKKU_SSH_HOST}\n" 20 60
   fi
 }
 
@@ -162,8 +163,6 @@ main() {
   # Set latest version or use the one provided by the user
   LEDOKKU_TAG=${LEDOKKU_TAG:-"0.7.0"}
 
-  # First we get the user ip so we can use it in the text we print later
-  DOKKU_SSH_HOST=$(curl -4 ifconfig.co)
 
   # First we create the app
   dokku apps:create ledokku
