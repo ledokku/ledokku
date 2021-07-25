@@ -30,7 +30,6 @@ function system-info() {
   # Finding Information about your device
   ## Basic VPS info
   ## Should exist in every script
-  # IP="$(ifconfig | grep broadcast | awk '{print $2}')"
   DOKKU_SSH_HOST=$(curl -4 ifconfig.co)
   OS=$( $(compgen -G "/etc/*release" > /dev/null) && cat /etc/*release | grep ^NAME | tr -d 'NAME="' || echo "${OSTYPE//[0-9.]/}")
 }
@@ -46,7 +45,7 @@ function check-whiptail() {
       echo "Install whiptail and re-run the script, your OS is ${OS}"
       exit
       # As I already know the OS, I can also automate this process, but will save it for later.
-      # This is just a matter of finiding all the possible OS people might use and writing a if statement.
+      # This is just a matter of finding all the possible OS people might use and writing an if statement.
   fi
 }
 
