@@ -40,6 +40,16 @@ else
     # This is just a matter of finiding all the possible OS people might use and writing a if statement.
 fi
 
+#Check root and if not root take permissions (Some providers doesnot support passwordless sudo)
+## It is always better to do this.
+## We will not face any further issues, during any sort of compulsory sudo commands; like the case for installing plugins in Dokku or Giving permissions to our scripts
+if [ "$(whoami)" == "root" ] ; then
+    echo "${YELLOW}Nice you are running the script as root!${END}"
+else
+    echo "${RED}Please! Run the script with root access${END}, without root access I cannot create plugins in Dokku"
+    exit
+fi
+
 # Check that dokku is installed on the server
 ensure-dokku() {
   if ! command -v dokku &> /dev/null
