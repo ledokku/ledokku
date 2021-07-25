@@ -22,6 +22,12 @@ YELLOW="$(tput setaf 3)" # ${YELLOW}
 BLUE="$(tput setaf 123)" # ${BLUE}
 END="$(tput setaf 7)" # ${END
 
+# Finding Information about your device
+## Basic VPS info
+## Should exist in every script
+IP="$(ifconfig | grep broadcast | awk '{print $2}')"
+OS=$( $(compgen -G "/etc/*release" > /dev/null) && cat /etc/*release | grep ^NAME | tr -d 'NAME="' || echo "${OSTYPE//[0-9.]/}")
+
 # Check that dokku is installed on the server
 ensure-dokku() {
   if ! command -v dokku &> /dev/null
