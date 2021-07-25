@@ -1,6 +1,16 @@
 #!/bin/bash
-# This script will install ledokku on your server
-# You need to already have dokku installed in order to be able to run it
+
+# This script is used to configure the essentials of t2d.
+## 1 => Check whether the program/application, "Whiptails" exists or not.
+## 2 => Making sure that the script is runing with root permissions.
+## 3 => Update and Upgrade the VPS.
+## 4 => Check whether the program/application, "Dokku" was Installed or not.
+## 5 => Upgrading dokku to the latest version.
+## 6 => Check Whether Plugins are installed or not (Redis, Postgres)
+## 7 => Install Redis and Postgress, if they were not installed
+## 7 => Install Ledokku
+## ? => Update Script (Will be added later)
+
 set -e
 
 # Check that dokku is installed on the server
