@@ -135,6 +135,8 @@ function ensure-dokku() {
   else
       echo "${RED}Dokku does not exist${END}"
       # Show messagebox and make it mandatory to download and install dokku
+      system-update
+      wait
       whiptail --title "Unable to detect Dokku" --msgbox "If you want to install your app using ledokku, it is madatory to install Dokku. So, I would like to install Dokku on behalf of you." 10 60
       wait
       echo "${YELLOW}Downloading Dokku from its Official Repository${END}"
@@ -173,7 +175,6 @@ function main() {
   system-info
   check-whiptail
   check-root
-  system-update
   ensure-dokku
 
   # Set latest version or use the one provided by the user
