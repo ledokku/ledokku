@@ -13,17 +13,20 @@
 
 set -e
 
-# Using tput will eliminate the usage of "-e" in echo, and can be used anywhere
-## Color Palet
-## Should exist in every script
-RED="$(tput setaf 1)" # ${RED}
-GREEN="$(tput setaf 2)" # ${GREEN}
-YELLOW="$(tput setaf 3)" # ${YELLOW}
-BLUE="$(tput setaf 123)" # ${BLUE}
-END="$(tput setaf 7)" # ${END
+function define-colors {
 
-function sysInfo() 
-{
+  # Using tput will eliminate the usage of "-e" in echo, and can be used anywhere
+  ## Color Palet
+  ## Should exist in every script
+  RED="$(tput setaf 1)" # ${RED}
+  GREEN="$(tput setaf 2)" # ${GREEN}
+  YELLOW="$(tput setaf 3)" # ${YELLOW}
+  BLUE="$(tput setaf 123)" # ${BLUE}
+  END="$(tput setaf 7)" # ${END
+}
+
+function system-info() {
+  
   # Finding Information about your device
   ## Basic VPS info
   ## Should exist in every script
@@ -31,8 +34,8 @@ function sysInfo()
   OS=$( $(compgen -G "/etc/*release" > /dev/null) && cat /etc/*release | grep ^NAME | tr -d 'NAME="' || echo "${OSTYPE//[0-9.]/}")
 }
 
-function check-whiptail() 
-{
+function check-whiptail() {
+  
   # Checking if whiptail is available or not
   if which whiptail >/dev/null; then
       echo "${GREEN}whiptail exists${END}"
@@ -46,8 +49,8 @@ function check-whiptail()
   fi
 }
 
-function check-root()
-{
+function check-root() {
+  
   #Check root and if not root take permissions (Some providers doesnot support passwordless sudo)
   ## It is always better to do this.
   ## We will not face any further issues, during any sort of compulsory sudo commands; like the case for installing plugins in Dokku or Giving permissions to our scripts
@@ -59,7 +62,7 @@ function check-root()
   fi
 }
 
-function systemUpdate {
+function system-update {
 
   # Updating and Upgrading system
   ## If dokku was installed, it will be automatically updated to the latest version
@@ -86,8 +89,8 @@ function systemUpdate {
   fi
 }
 
-function dokku()
-{
+function ensure-dokku() {
+  
   # Confirming the existance of Dokku
   ## If exists, promt for update
   ## If not exits Let him download.
@@ -131,9 +134,9 @@ function dokku()
 # Check if dokku redis plugin is intalled and otherwise install it
 install-redis() {
   if sudo dokku plugin:installed redis; then
-    echo "=> Redis plugin already installed skipping"
+    echo "=> ${GREEN}Redis plugin already installed skipping${END}"
   else
-    echo "=> Installing redis plugin"
+    echo "=> ${YELLOW}Installing redis plugin${END}"
     sudo dokku plugin:install https://github.com/dokku/dokku-redis.git redis
   fi
 }
@@ -141,14 +144,19 @@ install-redis() {
 # Check if dokku postgres plugin is intalled and otherwise install it
 install-postgres() {
   if sudo dokku plugin:installed postgres; then
-    echo "=> Postgres plugin already installed skipping"
+    echo "=> ${GREEN}Postgres plugin already installed skipping${END}"
   else
-    echo "=> Installing postgres plugin"
+    echo "=> ${YELLOW}Installing postgres plugin${END}"
     sudo dokku plugin:install https://github.com/dokku/dokku-postgres.git postgres
   fi
 }
 
 main() {
+  define-colors
+  system-info
+  check-whiptail
+  check-root
+  system-update
   ensure-dokku
 
   # Set latest version or use the one provided by the user
@@ -161,7 +169,7 @@ main() {
   dokku apps:create ledokku
 
   # Create volume necessary for the ssh key
-  echo "=> Creating volume"
+  echo "=> ${YELLOW}Creating volume${END}"
   mkdir /var/lib/dokku/data/storage/ledokku-ssh/
   chown dokku:dokku /var/lib/dokku/data/storage/ledokku-ssh/
   dokku storage:mount ledokku /var/lib/dokku/data/storage/ledokku-ssh/:/root/.ssh
@@ -170,7 +178,7 @@ main() {
   install-postgres
 
   # We create the required databases
-  echo "=> Creating databases"
+  echo "=> ${YELLOW}Creating databases${END}"
   dokku redis:create ledokku
   dokku redis:link ledokku ledokku
   dokku postgres:create ledokku
@@ -184,7 +192,7 @@ main() {
   dokku config:set ledokku JWT_SECRET="${JWT_SECRET}"
 
   # Now it's finally time to install ledokku
-  echo "=> Installation"
+  echo "=> ${YELLOW}Installing ledooku${END}"
   dokku git:from-image ledokku ledokku/ledokku:${LEDOKKU_TAG}
 
   # After app is deployed last step is to properly setup the ports
@@ -192,7 +200,7 @@ main() {
   dokku proxy:ports-remove ledokku http:4000:4000
 
   echo "=== 🐳 ==="
-  echo "Ledokku was successfully installed"
+  echo "${GREEN}Ledokku was successfully installed${END}"
   echo "Open you server ip in your browser"
   echo "http://${DOKKU_SSH_HOST}"
   echo "=== 🐳 ==="
