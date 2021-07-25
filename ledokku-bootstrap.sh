@@ -50,6 +50,32 @@ else
     exit
 fi
 
+
+# Updating and Upgrading system
+## If dokku was installed, it will be automatically updated to the latest version
+## Staying up to date is always good
+if (whiptail --title "Update and Upgrade System " --yes-button "Yes" --no-button "Skip"  --yesno "Do you wish to Update packges and Upgrade your system?" 10 60) then
+    echo "You chose to update your system"
+    # Update and skip to next step
+    echo "${YELLOW}Updating System${END}"
+    sudo dpkg --configure -a
+    sudo apt -y --purge autoremove
+    sudo apt install -f
+    sudo apt -y update
+    wait
+    echo "${YELLOW}Upgrading System${END}"
+    sudo apt -y upgrade
+    sudo apt -y autoclean
+    sudo apt -y --purge autoremove &
+    process_id=$!
+    wait $process_id
+    echo "Exit status: $?"
+else
+    echo "${YELLOW}You chose to skip.${END}"
+    # Should skip to next step
+fi
+
+
 # Check that dokku is installed on the server
 ensure-dokku() {
   if ! command -v dokku &> /dev/null
