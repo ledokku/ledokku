@@ -28,6 +28,18 @@ END="$(tput setaf 7)" # ${END
 IP="$(ifconfig | grep broadcast | awk '{print $2}')"
 OS=$( $(compgen -G "/etc/*release" > /dev/null) && cat /etc/*release | grep ^NAME | tr -d 'NAME="' || echo "${OSTYPE//[0-9.]/}")
 
+# Checking if whiptail is available or not
+if which whiptail >/dev/null; then
+    echo "${GREEN}whiptail exists${END}"
+    # Continue the script
+else
+    echo "${RED}whiptail does not exist${END}"
+    echo "Install whiptail and re-run the script, your OS is ${OS}"
+    exit
+    # As I already know the OS, I can also automate this process, but will save it for later.
+    # This is just a matter of finiding all the possible OS people might use and writing a if statement.
+fi
+
 # Check that dokku is installed on the server
 ensure-dokku() {
   if ! command -v dokku &> /dev/null
