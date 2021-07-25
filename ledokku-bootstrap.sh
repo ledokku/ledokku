@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This script is used to configure the essentials of t2d.
+# This script is used to configure the essentials of ledokku.
 ## 1 => Check whether the program/application, "Whiptails" exists or not.
 ## 2 => Making sure that the script is runing with root permissions.
 ## 3 => Update and Upgrade the VPS.
@@ -27,9 +27,9 @@ function define-colors {
 
 function system-info() {
   
-  # Finding Information about your device
+  # Finding Information about the server
   ## Basic VPS info
-  ## Should exist in every script
+
   DOKKU_SSH_HOST=$(curl -4 ifconfig.co)
   OS=$( $(compgen -G "/etc/*release" > /dev/null) && cat /etc/*release | grep ^NAME | tr -d 'NAME="' || echo "${OSTYPE//[0-9.]/}")
 }
@@ -51,7 +51,7 @@ function check-whiptail() {
 
 function check-root() {
   
-  #Check root and if not root take permissions (Some providers doesnot support passwordless sudo)
+  # Check root and if not root take permissions (Some providers doesnot support passwordless sudo)
   ## It is always better to do this.
   ## We will not face any further issues, during any sort of compulsory sudo commands; like the case for installing plugins in Dokku or Giving permissions to our scripts
   if [ "$(whoami)" == "root" ] ; then
@@ -97,8 +97,8 @@ function ensure-dokku() {
   if which dokku >/dev/null; then
       echo "${GREEN}Dokku Exists${END}"
       # Checking Dokku vesrion and comparing it with the latest Version
-      # In case of version changes in dokku, we need to change this varibale.
-      # We can also change the LATEST_DOKKU_VERSION to PREFFERED_DOKKU_VERSION
+      # In case of version changes in dokku, we need to change this varibale: LATEST_DOKKU_VERSION.
+      # We can also rename the variable => LATEST_DOKKU_VERSION to PREFFERED_DOKKU_VERSION
       
       EXISTING_DOKKU_VERSION="$(dokku version)"
       LATEST_DOKKU_VERSION="dokku version 0.24.10"
@@ -146,7 +146,7 @@ function ensure-dokku() {
 }
 
 # Check if dokku redis plugin is intalled and otherwise install it
-install-redis() {
+function install-redis() {
   if sudo dokku plugin:installed redis; then
     echo "=> ${GREEN}Redis plugin already installed skipping${END}"
   else
@@ -156,7 +156,7 @@ install-redis() {
 }
 
 # Check if dokku postgres plugin is intalled and otherwise install it
-install-postgres() {
+function install-postgres() {
   if sudo dokku plugin:installed postgres; then
     echo "=> ${GREEN}Postgres plugin already installed skipping${END}"
   else
@@ -165,7 +165,7 @@ install-postgres() {
   fi
 }
 
-main() {
+function main() {
   define-colors
   system-info
   check-whiptail
