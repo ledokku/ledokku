@@ -32,7 +32,7 @@ function system-info() {
   DOKKU_SSH_HOST=$(curl -4 ifconfig.co)
   OS=$( $(compgen -G "/etc/*release" > /dev/null) && cat /etc/*release | grep ^NAME | tr -d 'NAME="' || echo "${OSTYPE//[0-9.]/}")
 
-  ## Dokku Configuration Varibales
+  ## Dokku Configuration Variables
   LATEST_DOKKU_VERSION="0.24.10"
   MINIMUM_DOKKU_VERSION="0.24.0"
 }
