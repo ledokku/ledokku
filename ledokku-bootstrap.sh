@@ -29,9 +29,12 @@ function system-info() {
   
   # Finding Information about the server/VPS
   ## Basic VPS info
-
   DOKKU_SSH_HOST=$(curl -4 ifconfig.co)
   OS=$( $(compgen -G "/etc/*release" > /dev/null) && cat /etc/*release | grep ^NAME | tr -d 'NAME="' || echo "${OSTYPE//[0-9.]/}")
+
+  ## Dokku Configuration Varibales
+  LATEST_DOKKU_VERSION="0.24.10"
+  MINIMUM_DOKKU_VERSION="0.24.0"
 }
 
 function check-whiptail() {
@@ -103,17 +106,44 @@ function ensure-dokku() {
       # In case of version changes in dokku, we need to change this varibale: LATEST_DOKKU_VERSION.
       # We can also rename the variable => LATEST_DOKKU_VERSION to PREFFERED_DOKKU_VERSION
       
-      EXISTING_DOKKU_VERSION="$(dokku version)"
-      LATEST_DOKKU_VERSION="dokku version 0.24.10"
-      
-      if [[ "$EXISTING_DOKKU_VERSION" == "$LATEST_DOKKU_VERSION" ]]; then
-        echo  "${YELLOW}Dokku is upto date${END}"
+      EXISTING_DOKKU_VERSION="$(dokku version | awk '{print $3}')"
+
+      if [ "$( echo -e "${MINIMUM_DOKKU_VERSION}\\n${LATEST_DOKKU_VERSION}\\n${EXISTING_DOKKU_VERSION}" | sort --sort=version | head -2 | tail -1)" == ${EXISTING_DOKKU_VERSION} ];
+      then
+        echo "Your dokku version is ${EXISTING_DOKKU_VERSION}, and it is compatible with ledokku "
+        if [[ "${EXISTING_DOKKU_VERSION}" == "${LATEST_DOKKU_VERSION}" ]];
+        then
+          # Continue the script
+          echo "${GREEN}Awesome! You have the latest dokku version${END}"
+        else 
+          # Promot upgrade warning (upgrade or skip)
+          whiptail --title "Warning !!" --msgbox "Read carefully before proceeding:\n\nYou are currently using dokku version: ${EXISTING_DOKKU_VERSION} but the latest dokku version was: ${LATEST_DOKKU_VERSION}\n\nIn the next dialog box, you can upgrade your dokku or skip to ledokku installation \n\nFor more info check the dokku CHANGELOG before doing the upgrade: https://github.com/dokku/dokku/releases" 20 60
+          # Promt for upgrade
+          if (whiptail --title "Upgrading Dokku" --yes-button "Upgrade" --no-button "Skip"  --yesno "Would you like to upgrade your Dokku?" 10 60) then
+              echo "${YELLOW}You chose Upgrade.${END}"
+              # Upgrade Dokku
+              echo "${YELLOW}Upgrading Dokku${END}"
+              sudo apt-get -y update -qq
+              wait
+              sudo apt-get -qq -y --no-install-recommends install dokku herokuish sshcommand plugn gliderlabs-sigil dokku-update dokku-event-listener
+              wait
+              sudo apt -y upgrade &
+              process_id=$!
+              wait $process_id
+              echo "Exit status: $?"
+              echo "${YELLOW}Upgraded to ${GREEN} $LATEST_DOKKU_VERSION ${END}"
+              # Dokku Updated
+          else
+              echo "${YELLOW}You chose to skip dokku upgrades.${END}"
+              # Dokku Update skipped
+          fi
+        fi
       else
-        whiptail --title "Warning !!" --msgbox "Read carefully before proceeding:\n
-        You are currently using $EXISTING_DOKKU_VERSION
-        but the latest was $LATEST_DOKKU_VERSION \n\nIn the next dialog box, you can upgrade your dokku or skip to ledokku installation \n\nFor more info check the dokku CHANGELOG before doing the upgrade: https://github.com/dokku/dokku/releases" 20 60
+        echo "Your dokku version is ${EXISTING_DOKKU_VERSION} => and for ledokku compatibility dokku version should be between ${MINIMUM_DOKKU_VERSION} and ${LATEST_DOKKU_VERSION}"
+        # Promot upgrade to latest dokku version (upgrade or exit)
+        whiptail --title "Warning !!" --msgbox "Read carefully before proceeding:\n\nYou are currently using dokku version: $EXISTING_DOKKU_VERSION, which is incompatible with ledokku.\n\nWould you like to install the latest dokku version $LATEST_DOKKU_VERSION?\n\nIn the next dialog box, you can upgrade your dokku or exit the ledokku installation \n\nFor more info check the dokku CHANGELOG before doing the upgrade: https://github.com/dokku/dokku/releases" 20 60
         # Promt for upgrade
-        if (whiptail --title "Upgrading Dokku" --yes-button "Upgrade" --no-button "Skip"  --yesno "Would you like to upgrade your Dokku?" 10 60) then
+        if (whiptail --title "Upgrading Dokku" --yes-button "Upgrade" --no-button "Exit"  --yesno "Would you like to upgrade your Dokku?" 10 60) then
             echo "${YELLOW}You chose Upgrade.${END}"
             # Upgrade Dokku
             echo "${YELLOW}Upgrading Dokku${END}"
@@ -128,8 +158,10 @@ function ensure-dokku() {
             echo "${YELLOW}Upgraded to ${GREEN} $LATEST_DOKKU_VERSION ${END}"
             # Dokku Updated
         else
-            echo "${YELLOW}You chose to skip dokku upgrades.${END}"
-            # Dokku Update skipped
+            echo "${RED}You chose to skip dokku upgrades and exit ledokku installation.${END}"
+            exit
+            # ledokku script ended
+            # This way we can prevent installing ledokku in non-compatible dokku versions.
         fi
       fi
   else
@@ -140,9 +172,9 @@ function ensure-dokku() {
       whiptail --title "Unable to detect Dokku" --msgbox "If you want to install your app using ledokku, it is madatory to install Dokku. So, I would like to install Dokku on behalf of you." 10 60
       wait
       echo "${YELLOW}Downloading Dokku from its Official Repository${END}"
-      wget https://raw.githubusercontent.com/dokku/dokku/v0.24.10/bootstrap.sh
+      wget https://raw.githubusercontent.com/dokku/dokku/v${LATEST_DOKKU_VERSION}/bootstrap.sh
       wait
-      sudo DOKKU_TAG=v0.24.10 bash bootstrap.sh &
+      sudo DOKKU_TAG=v${LATEST_DOKKU_VERSION} bash bootstrap.sh &
       process_id=$!
       wait $process_id
       echo "Exit status: $?"
