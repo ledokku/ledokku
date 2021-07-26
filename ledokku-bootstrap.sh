@@ -2,13 +2,13 @@
 
 # This script is used to configure the essentials of ledokku.
 ## 1 => Check whether the program/application, "Whiptails" exists or not.
-## 2 => Making sure that the script is runing with root permissions.
+## 2 => Making sure that the script is running with root permissions.
 ## 3 => Update and Upgrade the VPS.
 ## 4 => Check whether the program/application, "Dokku" was Installed or not.
 ## 5 => Upgrading dokku to the latest version.
 ## 6 => Check whether the Plugins are installed or not (Redis, Postgres)
-## 7 => Install Redis and Postgress, if they were not installed
-## 8 => Install Ledokku
+## 7 => Install Redis and Postgres, if they were not installed
+## 8 => Install ledokku
 ## ? => Update Script (Will be added later)
 
 set -e
@@ -54,7 +54,7 @@ function check-whiptail() {
 
 function check-root() {
   
-  # Check root and if not root take permissions (Some providers doesnot support passwordless sudo)
+  # Check root and if not root take permissions (Some providers does not support password less sudo)
   ## It is always better to do this.
   ## We will not face any further issues, during any sort of compulsory sudo commands; like the case for installing plugins in Dokku or Giving permissions to our scripts
   if [ "$(whoami)" == "root" ] ; then
@@ -96,15 +96,15 @@ function system-update {
 
 function ensure-dokku() {
   
-  # Confirming the existance of Dokku
+  # Confirming the existence of Dokku
   ## If exists => check if existing and latest dokku versions are same => If same version => Continue to next step
-  ###  In case of different dokku versions => Promot a (warning & dokku upgrade) dialog box (Now it is upto the user to update or skip)
+  ###  In case of different dokku versions => Prompt a (warning & dokku upgrade) dialog box (Now it is up to the user to update or skip)
   ## If dokku does not exits, take permission to download Dokku.
   if which dokku >/dev/null; then
       echo "${GREEN}Dokku Exists${END}"
       # Checking Dokku version and comparing it with the latest Version
-      # In case of version changes in dokku, we need to change this varibale: LATEST_DOKKU_VERSION.
-      # We can also rename the variable => LATEST_DOKKU_VERSION to PREFFERED_DOKKU_VERSION
+      # In case of version changes in dokku, we need to change this variable: LATEST_DOKKU_VERSION.
+      # We can also rename the variable => LATEST_DOKKU_VERSION to PREFERRED_DOKKU_VERSION
       
       EXISTING_DOKKU_VERSION="$(dokku version | awk '{print $3}')"
 
@@ -116,9 +116,9 @@ function ensure-dokku() {
           # Continue the script
           echo "${GREEN}Awesome! You have the latest dokku version${END}"
         else 
-          # Promot upgrade warning (upgrade or skip)
+          # Prompt upgrade warning (upgrade or skip)
           whiptail --title "Warning !!" --msgbox "Read carefully before proceeding:\n\nYou are currently using dokku version: ${EXISTING_DOKKU_VERSION} but the latest dokku version was: ${LATEST_DOKKU_VERSION}\n\nIn the next dialog box, you can upgrade your dokku or skip to ledokku installation \n\nFor more info check the dokku CHANGELOG before doing the upgrade: https://github.com/dokku/dokku/releases" 20 60
-          # Promt for upgrade
+          # Prompt for upgrade
           if (whiptail --title "Upgrading Dokku" --yes-button "Upgrade" --no-button "Skip"  --yesno "Would you like to upgrade your Dokku?" 10 60) then
               echo "${YELLOW}You chose Upgrade.${END}"
               # Upgrade Dokku
@@ -142,7 +142,7 @@ function ensure-dokku() {
         echo "Your dokku version is ${EXISTING_DOKKU_VERSION} => and for ledokku compatibility dokku version should be between ${MINIMUM_DOKKU_VERSION} and ${LATEST_DOKKU_VERSION}"
         # Prompt upgrade to latest dokku version (upgrade or exit)
         whiptail --title "Warning !!" --msgbox "Read carefully before proceeding:\n\nYou are currently using dokku version: $EXISTING_DOKKU_VERSION, which is incompatible with ledokku.\n\nWould you like to install the latest dokku version $LATEST_DOKKU_VERSION?\n\nIn the next dialog box, you can upgrade your dokku or exit the ledokku installation \n\nFor more info check the dokku CHANGELOG before doing the upgrade: https://github.com/dokku/dokku/releases" 20 60
-        # Promt for upgrade
+        # Prompt for upgrade
         if (whiptail --title "Upgrading Dokku" --yes-button "Upgrade" --no-button "Exit"  --yesno "Would you like to upgrade your Dokku?" 10 60) then
             echo "${YELLOW}You chose Upgrade.${END}"
             # Upgrade Dokku
@@ -166,10 +166,10 @@ function ensure-dokku() {
       fi
   else
       echo "${RED}Dokku does not exist${END}"
-      # Show messagebox and make it mandatory to download and install dokku
+      # Show message box and make it mandatory to download and install dokku
       system-update
       wait
-      whiptail --title "Unable to detect Dokku" --msgbox "If you want to install your app using ledokku, it is madatory to install Dokku. So, I would like to install Dokku on behalf of you." 10 60
+      whiptail --title "Unable to detect Dokku" --msgbox "If you want to install your app using ledokku, it is mandatory to install Dokku. So, I would like to install Dokku on behalf of you." 10 60
       wait
       echo "${YELLOW}Downloading Dokku from its Official Repository${END}"
       wget https://raw.githubusercontent.com/dokku/dokku/v${LATEST_DOKKU_VERSION}/bootstrap.sh
@@ -182,7 +182,7 @@ function ensure-dokku() {
   fi
 }
 
-# Check if dokku redis plugin is intalled and otherwise install it
+# Check if dokku redis plugin is installed and otherwise install it
 function install-redis() {
   if sudo dokku plugin:installed redis; then
     echo "=> ${GREEN}Redis plugin already installed skipping${END}"
@@ -192,7 +192,7 @@ function install-redis() {
   fi
 }
 
-# Check if dokku postgres plugin is intalled and otherwise install it
+# Check if dokku postgres plugin is installed and otherwise install it
 function install-postgres() {
   if sudo dokku plugin:installed postgres; then
     echo "=> ${GREEN}Postgres plugin already installed skipping${END}"
@@ -240,7 +240,7 @@ function main() {
   dokku config:set ledokku JWT_SECRET="${JWT_SECRET}"
 
   # Now it's finally time to install ledokku
-  echo "=> ${YELLOW}Installing ledooku${END}"
+  echo "=> ${YELLOW}Installing ledokku${END}"
   dokku git:from-image ledokku ledokku/ledokku:${LEDOKKU_TAG}
 
   # After app is deployed last step is to properly setup the ports
