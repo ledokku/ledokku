@@ -140,7 +140,7 @@ function ensure-dokku() {
         fi
       else
         echo "Your dokku version is ${EXISTING_DOKKU_VERSION} => and for ledokku compatibility dokku version should be between ${MINIMUM_DOKKU_VERSION} and ${LATEST_DOKKU_VERSION}"
-        # Promot upgrade to latest dokku version (upgrade or exit)
+        # Prompt upgrade to latest dokku version (upgrade or exit)
         whiptail --title "Warning !!" --msgbox "Read carefully before proceeding:\n\nYou are currently using dokku version: $EXISTING_DOKKU_VERSION, which is incompatible with ledokku.\n\nWould you like to install the latest dokku version $LATEST_DOKKU_VERSION?\n\nIn the next dialog box, you can upgrade your dokku or exit the ledokku installation \n\nFor more info check the dokku CHANGELOG before doing the upgrade: https://github.com/dokku/dokku/releases" 20 60
         # Promt for upgrade
         if (whiptail --title "Upgrading Dokku" --yes-button "Upgrade" --no-button "Exit"  --yesno "Would you like to upgrade your Dokku?" 10 60) then
