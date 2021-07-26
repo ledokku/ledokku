@@ -102,7 +102,7 @@ function ensure-dokku() {
   ## If dokku does not exits, take permission to download Dokku.
   if which dokku >/dev/null; then
       echo "${GREEN}Dokku Exists${END}"
-      # Checking Dokku vesrion and comparing it with the latest Version
+      # Checking Dokku version and comparing it with the latest Version
       # In case of version changes in dokku, we need to change this varibale: LATEST_DOKKU_VERSION.
       # We can also rename the variable => LATEST_DOKKU_VERSION to PREFFERED_DOKKU_VERSION
       
