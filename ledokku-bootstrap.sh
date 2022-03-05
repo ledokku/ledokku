@@ -33,8 +33,8 @@ function system-info() {
   OS=$( $(compgen -G "/etc/*release" > /dev/null) && cat /etc/*release | grep ^NAME | tr -d 'NAME="' || echo "${OSTYPE//[0-9.]/}")
 
   ## Dokku Configuration Variables
-  LATEST_DOKKU_VERSION="0.24.10"
-  MINIMUM_DOKKU_VERSION="0.24.0"
+  LATEST_DOKKU_VERSION="0.26.7"
+  MINIMUM_DOKKU_VERSION="0.26.0"
 }
 
 function check-whiptail() {
@@ -212,6 +212,9 @@ function main() {
   # Set latest version or use the one provided by the user
   LEDOKKU_TAG=${LEDOKKU_TAG:-"0.7.0"}
 
+  # TODO only if none is set
+  GLOBAL_DOMAIN=${DOKKU_SSH_HOST}.sslip.io
+  dokku domains:set-global ${GLOBAL_DOMAIN}
 
   # First we create the app
   dokku apps:create ledokku
