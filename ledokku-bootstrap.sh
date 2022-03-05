@@ -213,7 +213,7 @@ function main() {
   LEDOKKU_TAG=${LEDOKKU_TAG:-"0.7.0"}
 
   # TODO only if none is set
-  GLOBAL_DOMAIN=${DOKKU_SSH_HOST}.sslip.io
+  GLOBAL_DOMAIN="${DOKKU_SSH_HOST}.sslip.io"
   dokku domains:set-global ${GLOBAL_DOMAIN}
 
   # First we create the app
