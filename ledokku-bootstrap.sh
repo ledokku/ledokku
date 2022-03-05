@@ -253,7 +253,7 @@ function main() {
   echo "=== 🐳 ==="
   echo "${GREEN}Ledokku was successfully installed${END}"
   echo "Open you server ip in your browser"
-  echo "http://${DOKKU_SSH_HOST}"
+  echo "http://${GLOBAL_DOMAIN}"
   echo "=== 🐳 ==="
 }
 
