@@ -12,6 +12,8 @@ delete all of the associated data, run these commands on your server:
 dokku apps:destroy ledokku
 dokku postgres:destroy ledokku
 dokku redis:destroy ledokku
+rm -rf /var/lib/dokku/data/storage/ledokku-ssh
+rm -rf /home/dokku/ledokku
 ```
 
 # Remove both Ledokku and dokku
