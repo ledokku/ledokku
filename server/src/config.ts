@@ -16,7 +16,7 @@ const envSchema = yup.object({
     .required('Please provide a valid DOKKU_SSH_HOST env variable.'),
   DOKKU_WEB_HOST: yup
     .string()
-    .required('Please provide a valid DOKKU_WEB_HOST env variable.').stripEmptyString().default(process.env.DOKKU_SSH_HOST),
+    .required('Please provide a valid DOKKU_WEB_HOST env variable.'),
   DOKKU_SSH_PORT: yup.string(),
   /**
    * Temporary solution until we have proper user management.
