@@ -14,6 +14,9 @@ const envSchema = yup.object({
   DOKKU_SSH_HOST: yup
     .string()
     .required('Please provide a valid DOKKU_SSH_HOST env variable.'),
+  DOKKU_WEB_HOST: yup
+    .string()
+    .required('Please provide a valid DOKKU_WEB_HOST env variable.').stripEmptyString().default(process.env.DOKKU_SSH_HOST),
   DOKKU_SSH_PORT: yup.string(),
   /**
    * Temporary solution until we have proper user management.
@@ -108,6 +111,7 @@ export const config = {
   githubAppPem: formatGithubPem(process.env.GITHUB_APP_PEM),
   redisUrl: process.env.REDIS_URL,
   dokkuSshHost: process.env.DOKKU_SSH_HOST,
+  dokkuWebHost: process.env.DOKKU_WEB_HOST,
   dokkuSshPort: process.env.DOKKU_SSH_PORT ? +process.env.DOKKU_SSH_PORT : 22,
   privateKey,
   sshKeyPath,

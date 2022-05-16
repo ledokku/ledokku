@@ -30,22 +30,22 @@ export const setup: QueryResolvers['setup'] = async () => {
       name: 'Ledokku',
       url:
         process.env.NODE_ENV === 'production'
-          ? `http://${config.dokkuSshHost}`
+          ? `http://${config.dokkuWebHost}`
           : 'http://localhost:3000',
       request_oauth_on_install: true,
       callback_url:
         process.env.NODE_ENV === 'production'
-          ? `http://${config.dokkuSshHost}`
+          ? `http://${config.dokkuWebHost}`
           : 'http://localhost:3000',
       hook_attributes: {
         url:
           process.env.NODE_ENV === 'production'
-            ? `http://${config.dokkuSshHost}/github/api/webhooks`
+            ? `http://${config.dokkuWebHost}/github/api/webhooks`
             : config.webhookProxyUrl,
       },
       redirect_url:
         process.env.NODE_ENV === 'production'
-          ? `http://${config.dokkuSshHost}`
+          ? `http://${config.dokkuWebHost}`
           : 'http://localhost:3000',
       public: false,
       default_permissions: {
