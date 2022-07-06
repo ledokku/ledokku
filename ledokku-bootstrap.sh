@@ -30,6 +30,12 @@ function system-info() {
   # Finding Information about the server/VPS
   ## Basic VPS info
   DOKKU_SSH_HOST=$(curl -4 ifconfig.co)
+  
+  # ifconfig.co will probably block our request
+  if [[ ! $DOKKU_SSH_HOST =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+      read -p "Enter your public address (IPV4): " DOKKU_SSH_HOST
+  fi
+  
   OS=$( $(compgen -G "/etc/*release" > /dev/null) && cat /etc/*release | grep ^NAME | tr -d 'NAME="' || echo "${OSTYPE//[0-9.]/}")
 
   ## Dokku Configuration Variables
