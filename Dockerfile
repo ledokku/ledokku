@@ -1,5 +1,5 @@
 # First step is to generate a static build for the client
-FROM node:12-alpine AS BUILD_CLIENT
+FROM node:14 AS BUILD_CLIENT
 
 WORKDIR /usr/src/app
 
@@ -13,7 +13,9 @@ COPY client ./client
 RUN cd client; yarn build
 
 # Then we build the server
-FROM node:12-alpine AS BUILD_SERVER
+FROM node:14 AS BUILD_SERVER
+
+RUN apt update; apt install -y openssl
 
 WORKDIR /usr/src/app
 
@@ -29,7 +31,7 @@ COPY server ./server
 RUN cd server; yarn build
 
 # Last step, we prepare everything for the server
-FROM node:12-alpine
+FROM node:14
 
 WORKDIR /usr/src/app
 
