@@ -1,4 +1,4 @@
-import { Switch, Route, RouteProps, Redirect } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import { useAuth } from './modules/auth/AuthContext';
 import { Home } from './pages/home';
 import { App } from './pages/app/index';
@@ -20,7 +20,7 @@ import { AppSettingsPorts } from './pages/app/settings/ports';
 import { AppSettingsDomains } from './pages/app/settings/domains';
 import { AppSettingsAdvanced } from './pages/app/settings/advanced';
 
-const PrivateRoute = ({ children, ...rest }: RouteProps) => {
+const PrivateRoute = ({ children, ...rest }: any) => {
   const { loggedIn } = useAuth();
 
   return (
