@@ -70,7 +70,7 @@ export const AppRestart = ({ appId }: AppRestartProps) => {
       });
       setIsTerminalVisible(true);
       setRestartLoading(true);
-    } catch (e) {
+    } catch (e: any) {
       toast.error(e.message);
     }
   };

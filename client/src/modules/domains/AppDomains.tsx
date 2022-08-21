@@ -61,7 +61,7 @@ export const AppDomains = ({ appId }: AppDomainProps) => {
         refetchQueries: [{ query: DomainsDocument, variables: { appId } }],
       });
       toast.success('Domain removed successfully');
-    } catch (error) {
+    } catch (error: any) {
       toast.error(error.message);
     }
   };

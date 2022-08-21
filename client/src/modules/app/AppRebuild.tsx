@@ -69,7 +69,7 @@ export const AppRebuild = ({ appId }: AppRebuildProps) => {
       });
       setIsTerminalVisible(true);
       setRebuildLoading(true);
-    } catch (e) {
+    } catch (e: any) {
       toast.error(e.message);
     }
   };

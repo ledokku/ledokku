@@ -83,7 +83,7 @@ export const CreateApp = () => {
         values.type === AppTypes.GITHUB
           ? history.push('/create-app-github')
           : history.push('/create-app-dokku');
-      } catch (error) {
+      } catch (error: any) {
         toast.error(error.message);
       }
     },

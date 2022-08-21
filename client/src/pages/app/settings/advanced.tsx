@@ -77,7 +77,7 @@ export const AppSettingsAdvanced = () => {
         toast.success('App deleted successfully');
 
         history.push('/dashboard');
-      } catch (error) {
+      } catch (error: any) {
         toast.error(error.message);
       }
     },

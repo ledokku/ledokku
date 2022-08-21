@@ -53,7 +53,7 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
         variables: { key: name, appId },
         refetchQueries: [{ query: EnvVarsDocument, variables: { appId } }],
       });
-    } catch (error) {
+    } catch (error: any) {
       toast.error(error.message);
     }
   };
@@ -75,7 +75,7 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
           formik.resetForm();
         }
         toast.success('Environment variable set successfully');
-      } catch (error) {
+      } catch (error: any) {
         toast.error(error.message);
       }
     },
