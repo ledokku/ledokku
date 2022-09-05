@@ -168,7 +168,7 @@ export const App = () => {
       });
       setIsTerminalVisible(true);
       setUnlinkLoading(true);
-    } catch (e: any) {
+    } catch (e) {
       toast.error(e.message);
     }
   };
@@ -189,7 +189,7 @@ export const App = () => {
       });
       setIsTerminalVisible(true);
       setLinkLoading(true);
-    } catch (e: any) {
+    } catch (e) {
       toast.error(e.message);
     }
   };

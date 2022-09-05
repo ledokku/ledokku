@@ -67,7 +67,7 @@ export const CreateAppDokku = () => {
           history.push(`app/${res.data?.createAppDokku.appId}`);
           toast.success('App created successfully');
         }
-      } catch (error: any) {
+      } catch (error) {
         toast.error(error);
       }
     },

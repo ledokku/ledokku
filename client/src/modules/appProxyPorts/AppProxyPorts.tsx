@@ -73,7 +73,7 @@ export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
       await appProxyPortsRefetch();
       setIsDeleteModalOpen(false);
       toast.success('Port mapping deleted successfully');
-    } catch (error: any) {
+    } catch (error) {
       toast.error(error.message);
     }
   };

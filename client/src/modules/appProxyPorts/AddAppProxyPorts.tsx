@@ -61,7 +61,7 @@ export const AddAppProxyPorts = ({
         toast.success('Port mapping created successfully');
 
         onClose();
-      } catch (error: any) {
+      } catch (error) {
         toast.error(error.message);
       }
     },

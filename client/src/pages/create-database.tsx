@@ -150,7 +150,7 @@ export const CreateDatabase = () => {
         setIsTerminalVisible(true);
 
         trackGoal(trackingGoals.createDatabase, 0);
-      } catch (error: any) {
+      } catch (error) {
         toast.error(error.message);
       }
     },

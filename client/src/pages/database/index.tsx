@@ -126,7 +126,7 @@ export const Database = () => {
       });
       setIsTerminalVisible(true);
       setUnlinkLoading(true);
-    } catch (e: any) {
+    } catch (e) {
       toast.error(e.message);
     }
   };
@@ -165,7 +165,7 @@ export const Database = () => {
       });
       setIsTerminalVisible(true);
       setLinkLoading(true);
-    } catch (e: any) {
+    } catch (e) {
       toast.error(e.message);
     }
   };

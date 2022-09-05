@@ -76,7 +76,7 @@ export const Settings = () => {
         toast.success('Database deleted successfully');
 
         history.push('/dashboard');
-      } catch (error: any) {
+      } catch (error) {
         toast.error(error.message);
       }
     },

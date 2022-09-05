@@ -170,7 +170,7 @@ export const CreateAppGithub = () => {
             },
           });
           setIsTerminalVisible(true);
-        } catch (error: any) {
+        } catch (error) {
           error.message === 'Not Found'
             ? toast.error(`Repository : ${values.repo.fullName} not found`)
             : toast.error(error.message);

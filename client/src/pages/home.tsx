@@ -57,7 +57,7 @@ export const Home = () => {
             login(data.data.loginWithGithub.token);
             history.push('/dashboard');
           }
-        } catch (error: any) {
+        } catch (error) {
           toast.error(error.message);
         }
 
@@ -95,7 +95,7 @@ export const Home = () => {
 
             setShowAppSuccessAlert(true);
           }
-        } catch (error: any) {
+        } catch (error) {
           toast.error(error.message);
         }
       }
