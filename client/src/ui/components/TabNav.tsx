@@ -24,7 +24,6 @@ export const TabNavLink = ({
     as={ReactRouterLink}
     py="3"
     px="0.5"
-    color="gray.500"
     _hover={{
       textDecoration: 'none',
       color: 'black',
@@ -36,7 +35,7 @@ export const TabNavLink = ({
           color: 'black',
           mb: '-1px',
         }
-      : {})}
+      : { color: 'gray.500' })}
     {...props}
   />
 );
