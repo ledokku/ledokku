@@ -19,7 +19,7 @@ export const AppSettingsMenu = ({ app }: AppSettingsMenuProps) => {
         : 'index';
 
   return (
-    <Navbar disableShadow css={{ maxH: "inherit" }}>
+    <Navbar disableShadow css={{ maxH: "inherit", display: 'block' }}>
       <Navbar.Content variant={'highlight-rounded'} className="flex flex-col">
         <Navbar.Link
           css={{ padding: 16 }}

@@ -1,3 +1,4 @@
+import { Button, Loading, Modal, Text } from '@nextui-org/react';
 import { useState } from 'react';
 
 import {
@@ -7,11 +8,6 @@ import {
   RealTimeLog,
 } from '../../generated/graphql';
 import {
-  Button,
-  Modal,
-  ModalTitle,
-  ModalDescription,
-  ModalButton,
   Terminal,
 } from '../../ui';
 import { useToast } from '../../ui/toast';
@@ -70,7 +66,7 @@ export const AppRestart = ({ appId }: AppRestartProps) => {
       });
       setIsTerminalVisible(true);
       setRestartLoading(true);
-    } catch (e) {
+    } catch (e: any) {
       toast.error(e.message);
     }
   };
@@ -83,7 +79,7 @@ export const AppRestart = ({ appId }: AppRestartProps) => {
 
   if (loading) {
     // TODO nice loading
-    return <p>Loading...</p>;
+    return <Loading />;
   }
 
   const { app } = data;
@@ -95,66 +91,73 @@ export const AppRestart = ({ appId }: AppRestartProps) => {
 
   return (
     <>
-      <h1 className="text-md font-bold mt-6">Restart app</h1>
-      <p className="text-gray-400">
-        Restart your dokku app and see logs in real time.
-      </p>
+      <Text h3>Reiniciar aplicación</Text>
+      <Text>
+        Reinicia tu aplicación y ve los registros en tiempo real.
+      </Text>
 
       <div className="mt-1">
         <Button
           onClick={() => setIsRestartAppModalOpen(true)}
-          color="grey"
           className="mt-2"
         >
-          Restart
+          Reiniciar
         </Button>
       </div>
-      {isRestartAppModalOpen && (
-        <Modal>
-          <ModalTitle>Restart app</ModalTitle>
-          <ModalDescription>
-            {isTerminalVisible ? (
-              <>
-                <p className="mb-2 ">Restarting {app.name}</p>
-                <p className="text-gray-500 mb-2">
-                  Restarting the app usually takes couple of minutes. Breathe
-                  in, breathe out, logs are about to appear below:
-                </p>
-                <Terminal className={'w-6/6'}>
-                  {arrayOfRestartLogs.map((log) => (
-                    <p
-                      key={arrayOfRestartLogs.indexOf(log)}
-                      className="text-s leading-5"
-                    >
-                      {log.message}
-                    </p>
-                  ))}
-                </Terminal>
-              </>
-            ) : (
-              <p>{`Are you sure, you want to restart ${app.name} app ?`}</p>
-            )}
-          </ModalDescription>
-          <ModalButton
-            ctaFn={() => {
-              setProcessStatus('running');
-              handleRestartApp();
-            }}
-            ctaText={'Restart'}
-            otherButtonText={'Cancel'}
-            isCtaLoading={isTerminalVisible ? false : restartLoading}
-            isCtaDisabled={isTerminalVisible}
-            isOtherButtonDisabled={processStatus === 'running'}
-            closeModal={() => {
-              setIsRestartAppModalOpen(false);
+      <Modal preventClose={processStatus === 'running'} width={processStatus === 'running' ? "90%" : undefined} blur onClose={() => {
+        setIsRestartAppModalOpen(false)
+        refetch({ appId });
+        setRestartLoading(false);
+        setIsTerminalVisible(false);
+        setProcessStatus('notStarted');
+      }} open={isRestartAppModalOpen}>
+        <Modal.Header><Text h4>Reinciar aplicación</Text></Modal.Header>
+        <Modal.Body>
+          {isTerminalVisible ? (
+            <>
+              <p className="mb-2">Reiniciando <b>{app.name}</b></p>
+              <p className="text-gray-500 mb-2">
+                Reiniciar la app toma algunos minutos. Respira un poco, los registros aparecerán pronto:
+              </p>
+              <Terminal className={'w-6/6'}>
+                {arrayOfRestartLogs.map((log) => (
+                  <p
+                    key={arrayOfRestartLogs.indexOf(log)}
+                    className="text-s leading-5"
+                  >
+                    {log.message}
+                  </p>
+                ))}
+              </Terminal>
+            </>
+          ) : (
+            <Text>¿Estás seguro de que deseas reiniciar <b>{app.name}</b>?</Text>
+          )}
+        </Modal.Body>
+        <Modal.Footer
+        >
+          <Button size="sm"
+            disabled={processStatus === 'running'}
+            bordered onClick={() => {
+              setIsRestartAppModalOpen(false)
               refetch({ appId });
               setRestartLoading(false);
               setIsTerminalVisible(false);
               setProcessStatus('notStarted');
-            }}
-          />
-        </Modal>
-      )}
+            }}>
+            Cancelar
+          </Button>
+          <Button
+            disabled={isTerminalVisible}
+            size="sm"
+            color="warning" onClick={() => {
+              setProcessStatus('running');
+              handleRestartApp();
+            }}>
+            {(isTerminalVisible ? false : restartLoading) ? <Loading size='sm' color="currentColor" /> : "Reiniciar"}
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };

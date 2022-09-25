@@ -1,15 +1,3 @@
-import {
-  Box,
-  Container,
-  Grid,
-  GridItem,
-  Text,
-  Input,
-  FormControl,
-  FormErrorMessage,
-  Button,
-  Heading,
-} from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useHistory, useParams } from 'react-router';
@@ -25,11 +13,14 @@ import { AppRestart } from '../../../modules/app/AppRestart';
 import { AppSettingsMenu } from '../../../modules/app/AppSettingsMenu';
 import { Header } from '../../../ui';
 import { useToast } from '../../../ui/toast';
+import { Button, Card, Container, Grid, Input, Loading, Modal, Spacer, Text } from '@nextui-org/react';
+import { useState } from 'react';
 
 export const AppSettingsAdvanced = () => {
   const { id: appId } = useParams<{ id: string }>();
   const toast = useToast();
   const history = useHistory();
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
 
   const { data, loading } = useAppByIdQuery({
     variables: {
@@ -45,10 +36,10 @@ export const AppSettingsAdvanced = () => {
   const DeleteAppNameSchema = yup.object().shape({
     appName: yup
       .string()
-      .required('Required')
+      .required('Requerido')
       .test(
         'Equals app name',
-        'Must match app name',
+        'Debe ser igual al nombre de la aplicación',
         (val) => val === data?.app?.name
       ),
   });
@@ -73,10 +64,10 @@ export const AppSettingsAdvanced = () => {
             },
           ],
         });
-        toast.success('App deleted successfully');
+        toast.success('Aplicación eliminada');
 
         history.push('/dashboard');
-      } catch (error) {
+      } catch (error: any) {
         toast.error(error.message);
       }
     },
@@ -86,7 +77,7 @@ export const AppSettingsAdvanced = () => {
 
   if (loading) {
     // TODO nice loading
-    return <p>Loading...</p>;
+    return <Loading />;
   }
 
   if (!data?.app) {
@@ -104,59 +95,73 @@ export const AppSettingsAdvanced = () => {
         <AppHeaderTabNav app={app} />
       </div>
 
-      <Container maxW="5xl" mt={10}>
-        <Grid
-          templateColumns={{ sm: 'repeat(1, 1fr)', md: 'repeat(6, 1fr)' }}
-          gap={{ sm: 0, md: 16 }}
+      <Container className='mt-16'>
+        <Grid.Container
+          gap={3}
         >
-          <GridItem colSpan={2} py={5}>
+          <Grid xs={3}>
             <AppSettingsMenu app={app} />
-          </GridItem>
-          <GridItem colSpan={4}>
+          </Grid>
+          <Grid xs={9} direction='column'>
             <AppRestart appId={app.id} />
+            <Spacer y={2}/>
             <AppRebuild appId={app.id} />
+            <Spacer y={2}/>
+            <Card className='mt-8' variant='bordered' borderWeight='normal'>
+              <Card.Header>
+                <Text h3 className='mb-1'>
+                  Eliminar aplicación
+                </Text>
+              </Card.Header>
+              <Card.Divider />
+              <Card.Body>
+                <Text>
+                  Esta acción no se puede deshacer. Esto eliminará permanentemente la aplicación "{app.name}" y todo lo relacionado con ella.
+                </Text>
+              </Card.Body>
+              <Card.Footer>
+                <Button color="error" onClick={() => setShowDeleteModal(true)}>
+                  Eliminar aplicación
+                </Button>
+              </Card.Footer>
+            </Card>
 
-            <Box py="5">
-              <Heading as="h2" size="md">
-                Delete app
-              </Heading>
-              <Text fontSize="sm" color="gray.400">
-                This action cannot be undone. This will permanently delete{' '}
-                {app.name} app and everything related to it. Please type{' '}
-                <b>{app.name}</b> to confirm deletion.
-              </Text>
-            </Box>
-
-            <form onSubmit={formik.handleSubmit}>
-              <FormControl
-                id="appName"
-                isInvalid={Boolean(
-                  formik.errors.appName && formik.touched.appName
-                )}
-              >
+            <Modal blur closeButton open={showDeleteModal} onClose={() => setShowDeleteModal(false)}>
+              <Modal.Header>
+                <Text h4>Eliminar aplicación</Text>
+              </Modal.Header>
+              <Modal.Body>
                 <Input
+                  css={{ marginBottom: 0 }}
                   autoComplete="off"
                   id="appNme"
                   name="appName"
-                  placeholder="App name"
+                  label="Nombre de la aplicación"
+                  placeholder={app.name}
                   value={formik.values.appName}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
-                <FormErrorMessage>{formik.errors.appName}</FormErrorMessage>
-              </FormControl>
-
-              <Button
-                my={4}
-                type="submit"
-                colorScheme="red"
-                isLoading={destroyAppMutationLoading}
-              >
-                Delete
-              </Button>
-            </form>
-          </GridItem>
-        </Grid>
+                <Text color='$error'>{formik.errors.appName}</Text>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button
+                  size="sm"
+                  bordered
+                  onClick={() => setShowDeleteModal(false)}>Cancelar</Button>
+                <Button
+                  size="sm"
+                  type="submit"
+                  color="error"
+                  onClick={() => formik.handleSubmit()}
+                  disabled={!!formik.errors.appName || formik.values.appName === ""}
+                >
+                  {destroyAppMutationLoading ? <Loading size='sm' color="currentColor" /> : "Eliminar"}
+                </Button>
+              </Modal.Footer>
+            </Modal>
+          </Grid>
+        </Grid.Container>
       </Container>
     </>
   );

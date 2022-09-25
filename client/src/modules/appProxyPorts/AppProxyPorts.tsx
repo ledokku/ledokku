@@ -1,21 +1,13 @@
 import { useState } from 'react';
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalCloseButton,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-} from '@chakra-ui/react';
-import {
   useAppProxyPortsQuery,
   useRemoveAppProxyPortMutation,
   AppProxyPort,
 } from '../../generated/graphql';
 import { AddAppProxyPorts } from './AddAppProxyPorts';
 import { useToast } from '../../ui/toast';
-import { Button, Grid, Loading, Table, Text } from '@nextui-org/react';
+import { Button, Grid, Loading, Modal, Table, Text } from '@nextui-org/react';
+import { Alert } from '../../ui/components/Alert';
 
 interface AppProxyPortsProps {
   appId: string;
@@ -63,7 +55,7 @@ export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
       });
       await appProxyPortsRefetch();
       setIsDeleteModalOpen(false);
-      toast.success('Port mapping deleted successfully');
+      toast.success('Puerto eliminado');
     } catch (error: any) {
       toast.error(error.message);
     }
@@ -90,9 +82,9 @@ export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
         {appProxyPortsData && appProxyPortsData.appProxyPorts.length > 0 ? (
           <Table className='w-full'>
             <Table.Header>
-              <Table.Column>Scheme</Table.Column>
-              <Table.Column>Host port</Table.Column>
-              <Table.Column>Container port</Table.Column>
+              <Table.Column>Esquema</Table.Column>
+              <Table.Column>Puerto anfitrion</Table.Column>
+              <Table.Column>Puerto contenedor</Table.Column>
               <Table.Column>Acciones</Table.Column>
             </Table.Header>
             <Table.Body>
@@ -116,7 +108,7 @@ export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
               ))}
             </Table.Body>
           </Table>
-        ) : null}
+        ) : <Alert message='No hay mapeos de puertos' type='warning' />}
         <div className='mt-8 flex justify-end'>
           <Button
             bordered
@@ -135,28 +127,24 @@ export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
         />
       </Grid>
 
-      <Modal isOpen={!!isDeleteModalOpen} onClose={handleCloseModal} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Delete port</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            Are you sure, you want to delete this port mapping?
-          </ModalBody>
+      <Modal open={!!isDeleteModalOpen} onClose={handleCloseModal} blur closeButton>
+        <Modal.Header><Text h4>Eliminar mapeo de puertos</Text></Modal.Header>
+        <Modal.Body>
+          ¿Estas seguro de eliminar este mapeo de puertos?
 
-          <ModalFooter>
-            <Button onClick={handleCloseModal}>
-              Cancel
-            </Button>
-            <Button
-              color="error"
-              // isLoading={appProxyPortsLoading || removeAppPortLoading}
-              onClick={handleRemovePort}
-            >
-              Delete
-            </Button>
-          </ModalFooter>
-        </ModalContent>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={handleCloseModal} size="sm" bordered >
+            Cancelar
+          </Button>
+          <Button
+            size="sm"
+            color="error"
+            onClick={handleRemovePort}
+          >
+            {appProxyPortsLoading || removeAppPortLoading ? <Loading color="currentColor" size='sm' /> : "Eliminar"}
+          </Button>
+        </Modal.Footer>
       </Modal>
 
 

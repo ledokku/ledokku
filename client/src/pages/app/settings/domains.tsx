@@ -1,4 +1,4 @@
-import { Container, Grid, GridItem } from '@chakra-ui/layout';
+import { Container, Grid } from '@nextui-org/react';
 import { useParams } from 'react-router';
 import { useAppByIdQuery } from '../../../generated/graphql';
 import { AppHeaderInfo } from '../../../modules/app/AppHeaderInfo';
@@ -38,18 +38,17 @@ export const AppSettingsDomains = () => {
         <AppHeaderTabNav app={app} />
       </div>
 
-      <Container maxW="5xl" mt={10}>
-        <Grid
-          templateColumns={{ sm: 'repeat(1, 1fr)', md: 'repeat(6, 1fr)' }}
-          gap={{ sm: 0, md: 16 }}
+      <Container className='mt-16'>
+        <Grid.Container
+          gap={4}
         >
-          <GridItem colSpan={2} py={5}>
+          <Grid xs={3}>
             <AppSettingsMenu app={app} />
-          </GridItem>
-          <GridItem colSpan={4}>
+          </Grid>
+          <Grid xs={9}>
             <AppDomains appId={appId} />
-          </GridItem>
-        </Grid>
+          </Grid>
+        </Grid.Container>
       </Container>
     </>
   );

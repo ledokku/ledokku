@@ -9,17 +9,4 @@ export const Terminal = (props: React.DetailedHTMLProps<React.HTMLAttributes<HTM
       {props.children}
     </Card.Body>
   </Card>
-  // <Box
-  //   mt="3"
-  //   p="4"
-  //   boxShadow="lg"
-  //   borderRadius="lg"
-  //   color="gray.100"
-  //   backgroundColor="gray.900"
-  //   fontSize="sm"
-  //   fontFamily="mono"
-  //   lineHeight="1.5"
-  //   style={{ WebkitFontSmoothing: 'auto' }}
-
-  // />
 );

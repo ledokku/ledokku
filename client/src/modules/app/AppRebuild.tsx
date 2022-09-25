@@ -1,3 +1,4 @@
+import { Button, Loading, Modal, Text } from '@nextui-org/react';
 import { useState } from 'react';
 import {
   useAppByIdQuery,
@@ -6,11 +7,6 @@ import {
   RealTimeLog,
 } from '../../generated/graphql';
 import {
-  Button,
-  Modal,
-  ModalTitle,
-  ModalDescription,
-  ModalButton,
   Terminal,
 } from '../../ui';
 import { useToast } from '../../ui/toast';
@@ -69,7 +65,7 @@ export const AppRebuild = ({ appId }: AppRebuildProps) => {
       });
       setIsTerminalVisible(true);
       setRebuildLoading(true);
-    } catch (e) {
+    } catch (e: any) {
       toast.error(e.message);
     }
   };
@@ -82,7 +78,7 @@ export const AppRebuild = ({ appId }: AppRebuildProps) => {
 
   if (loading) {
     // TODO nice loading
-    return <p>Loading...</p>;
+    return <Loading />;
   }
 
   const { app } = data;
@@ -94,66 +90,72 @@ export const AppRebuild = ({ appId }: AppRebuildProps) => {
 
   return (
     <>
-      <h1 className="text-md font-bold mt-6">Rebuild app</h1>
-      <p className="text-gray-400">
-        Rebuild your dokku app and see logs in real time.
+      <Text h3>Re-compilar</Text>
+      <p>
+        Re-compila la aplicación y ve los registros en tiempo real.
       </p>
 
       <div className="mt-1">
         <Button
           onClick={() => setIsRebuildAppModalOpen(true)}
-          color="grey"
-          className="mt-2"
         >
-          Rebuild
+          Re-compilar
         </Button>
       </div>
-      {isRebuildAppModalOpen && (
-        <Modal>
-          <ModalTitle>Rebuild app</ModalTitle>
-          <ModalDescription>
-            {isTerminalVisible ? (
-              <>
-                <p className="mb-2 ">Rebuilding {app.name}</p>
-                <p className="text-gray-500 mb-2">
-                  Rebuilding the app usually takes couple of minutes. Breathe
-                  in, breathe out, logs are about to appear below:
-                </p>
-                <Terminal className={'w-6/6'}>
-                  {arrayOfRebuildLogs.map((log) => (
-                    <p
-                      key={arrayOfRebuildLogs.indexOf(log)}
-                      className="text-s leading-5"
-                    >
-                      {log.message}
-                    </p>
-                  ))}
-                </Terminal>
-              </>
-            ) : (
-              <p>{`Are you sure, you want to rebuild ${app.name} app ?`}</p>
-            )}
-          </ModalDescription>
-          <ModalButton
-            ctaFn={() => {
-              setProcessStatus('running');
-              handleRebuildApp();
-            }}
-            ctaText={'Rebuild'}
-            otherButtonText={'Cancel'}
-            isCtaLoading={isTerminalVisible ? false : rebuildLoading}
-            isCtaDisabled={isTerminalVisible}
-            isOtherButtonDisabled={processStatus === 'running'}
-            closeModal={() => {
+      <Modal preventClose={processStatus === 'running'} width={processStatus === 'running' ? "90%" : undefined} blur closeButton onClose={() => {
+        setIsRebuildAppModalOpen(false);
+        refetch({ appId });
+        setRebuildLoading(false);
+        setIsTerminalVisible(false);
+        setProcessStatus('notStarted');
+      }} open={isRebuildAppModalOpen}>
+        <Modal.Header><Text h4>Re-compilar</Text></Modal.Header>
+        <Modal.Body>
+          {isTerminalVisible ? (
+            <>
+              <p className="mb-2 ">Re-compilando {app.name}</p>
+              <p className="text-gray-500 mb-2">
+                Re-compilar la app toma algunos minutos. Respira un poco, los registros aparecerán pronto:
+              </p>
+              <Terminal className={'w-6/6'}>
+                {arrayOfRebuildLogs.map((log) => (
+                  <p
+                    key={arrayOfRebuildLogs.indexOf(log)}
+                    className="text-s leading-5"
+                  >
+                    {log.message}
+                  </p>
+                ))}
+              </Terminal>
+            </>
+          ) : (
+            <p>¿Estás seguro de re-compilar la aplicación <b>{app.name}</b>?</p>
+          )}
+        </Modal.Body>
+        <Modal.Footer
+        >
+          <Button size="sm"
+            disabled={processStatus === 'running'}
+            bordered onClick={() => {
               setIsRebuildAppModalOpen(false);
               refetch({ appId });
               setRebuildLoading(false);
               setIsTerminalVisible(false);
               setProcessStatus('notStarted');
-            }}
-          />
-        </Modal>
-      )}
+            }}>
+            Cancelar
+          </Button>
+          <Button
+            disabled={isTerminalVisible}
+            size="sm"
+            color="warning" onClick={() => {
+              setProcessStatus('running');
+              handleRebuildApp();
+            }}>
+            {(isTerminalVisible ? false : rebuildLoading) ? <Loading size='sm' color="currentColor" /> : "Compilar"}
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };

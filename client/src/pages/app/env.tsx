@@ -35,12 +35,13 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
   ] = useUnsetEnvVarMutation();
 
   const handleDeleteEnvVar = async (event: any) => {
-    event.preventDefault();
+    // event.preventDefault();
     try {
       await unsetEnvVarMutation({
         variables: { key: name, appId },
         refetchQueries: [{ query: EnvVarsDocument, variables: { appId } }],
       });
+      toast.success('Variable de entorno eliminada');
     } catch (error: any) {
       toast.error(error.message);
     }
@@ -62,7 +63,7 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
         if (isNewVar) {
           formik.resetForm();
         }
-        toast.success('Environment variable set successfully');
+        toast.success('Variable de entorno asignada');
       } catch (error: any) {
         toast.error(error.message);
       }
@@ -154,7 +155,7 @@ export const Env = () => {
 
   if (loading) {
     // TODO nice loading
-    return <p>Loading...</p>;
+    return <Loading />;
   }
 
   const { app } = data;

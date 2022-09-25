@@ -32,7 +32,7 @@ export const Alert = ({ message, title, type, className }: AlertProps) => {
     return (<div className={`w-156 ${className}`} >
         <Card variant="flat" css={{ bgColor: bgColor, borderColor: color, borderWidth: 2 }}>
             <Card.Body>
-                <Text h4 color={textColor}>{title}</Text>
+                {title ? <Text h4 color={textColor}>{title}</Text> : undefined}
                 <Text color={textColor}>{message}</Text>
             </Card.Body>
         </Card>

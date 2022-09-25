@@ -456,7 +456,7 @@ export const CreateAppGithub = () => {
         >
           <Modal.Header><Text h4>Configuración de Github</Text></Modal.Header>
           <Modal.Body>
-            Una nueva ventana se abrirá. Después de que hayas finalizado de seleccionar los repositorios, cierra esta ventana para refrescar.
+            Una nueva ventana se abrirá. Después de que hayas finalizado de seleccionar los repositorios, cierra esa ventana para refrescar.
           </Modal.Body>
           <Modal.Footer>
             <div className='flex flex-row'>

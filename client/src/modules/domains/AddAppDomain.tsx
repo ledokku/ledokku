@@ -1,15 +1,9 @@
 import { useState } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import {
-  FormControl,
-  FormErrorMessage,
-  Input,
-  Button,
-  ButtonGroup,
-} from '@chakra-ui/react';
 import { useAddDomainMutation } from '../../generated/graphql';
 import { useToast } from '../../ui/toast';
+import { Button, Input, Loading, Modal, Text } from '@nextui-org/react';
 
 const addAppDomainYupSchema = yup.object().shape({
   domainName: yup.string().required('Domain name is required'),
@@ -43,52 +37,55 @@ export const AddAppDomain = ({ appId, appDomainsRefetch }: AddDomainProps) => {
         });
 
         await appDomainsRefetch();
-        toast.success('Domain added successfully');
+        toast.success('Dominio agregado');
+        setShowAddForm(false)
 
         formik.resetForm();
-      } catch (error) {
+      } catch (error: any) {
         toast.error(error.message);
       }
     },
   });
 
   return (
-    <>
-      {!showAddForm ? (
-        <Button variant="outline" onClick={() => setShowAddForm(true)}>
-          Add custom domain
-        </Button>
-      ) : (
-        <form onSubmit={formik.handleSubmit}>
-          <FormControl
-            id="domainName"
-            isInvalid={Boolean(
-              formik.errors.domainName && formik.touched.domainName
-            )}
+    <div className='w-full flex flex-row justify-end'>
+      <Button bordered onClick={() => setShowAddForm(true)}>
+        Añadir dominio personalizado
+      </Button>
+      <Modal closeButton blur open={showAddForm} onClose={() => setShowAddForm(false)}>
+        <Modal.Header>
+          <Text h4>
+            Agegar dominio personalizado
+          </Text>
+        </Modal.Header>
+        <Modal.Body>
+          <Input
+            label='Dominio personalizado'
+            placeholder="www.example.com"
+            name="domainName"
+            value={formik.values.domainName}
+            onChange={formik.handleChange}
+          />
+          <Text color='$error'>{formik.errors.domainName}</Text>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            size="sm"
+            bordered
+            color="error"
+            disabled={formik.isSubmitting}
+            onClick={() => setShowAddForm(false)}
           >
-            <Input
-              placeholder="www.mydomain.com"
-              name="domainName"
-              value={formik.values.domainName}
-              onChange={formik.handleChange}
-            />
-            <FormErrorMessage>{formik.errors.domainName}</FormErrorMessage>
-          </FormControl>
+            Cancelar
+          </Button>
+          <Button
+            disabled={formik.values.domainName === ""}
+            onClick={() => formik.handleSubmit()} size="sm">
+            {formik.isSubmitting ? <Loading color="currentColor" size='sm' /> : "Guardar"}
+          </Button>
 
-          <ButtonGroup mt="4" spacing="2">
-            <Button isLoading={formik.isSubmitting} type="submit">
-              Save
-            </Button>
-            <Button
-              variant="outline"
-              disabled={formik.isSubmitting}
-              onClick={() => setShowAddForm(false)}
-            >
-              Cancel
-            </Button>
-          </ButtonGroup>
-        </form>
-      )}
-    </>
+        </Modal.Footer>
+      </Modal>
+    </div>
   );
 };

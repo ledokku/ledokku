@@ -1,16 +1,4 @@
-import {
-  Box,
-  Flex,
-  Heading,
-  Link,
-  Text,
-  Spinner,
-  Icon,
-  IconButton,
-  Grid,
-  GridItem,
-} from '@chakra-ui/react';
-import { FiExternalLink, FiTrash2 } from 'react-icons/fi';
+import { FiTrash2 } from 'react-icons/fi';
 import { DomainsDocument } from '../../generated/graphql';
 import {
   useAppByIdQuery,
@@ -19,6 +7,7 @@ import {
 } from '../../generated/graphql';
 import { AddAppDomain } from './AddAppDomain';
 import { useToast } from '../../ui/toast';
+import { Button, Grid, Link, Loading, Table, Text } from '@nextui-org/react';
 
 interface AppDomainProps {
   appId: string;
@@ -60,8 +49,8 @@ export const AppDomains = ({ appId }: AppDomainProps) => {
         },
         refetchQueries: [{ query: DomainsDocument, variables: { appId } }],
       });
-      toast.success('Domain removed successfully');
-    } catch (error) {
+      toast.success('Dominio eliminado');
+    } catch (error: any) {
       toast.error(error.message);
     }
   };
@@ -74,7 +63,7 @@ export const AppDomains = ({ appId }: AppDomainProps) => {
 
   if (loading) {
     // TODO nice loading
-    return <p>Loading...</p>;
+    return <Loading />;
   }
 
   const { app } = data;
@@ -85,55 +74,58 @@ export const AppDomains = ({ appId }: AppDomainProps) => {
   }
 
   return (
-    <>
-      <Box py="5">
-        <Heading as="h2" size="md">
-          Domain management
-        </Heading>
-        <Text fontSize="sm" color="gray.400">
-          List of domains you have added to {app.name} app
+    <Grid.Container gap={2}>
+      <Grid xs={12} direction='column'>
+        <Text h2>
+          Configuración de dominios
         </Text>
-      </Box>
-
-      <Grid templateColumns={{ sm: 'repeat(1, 1fr)', md: 'repeat(3, 1fr)' }}>
-        <GridItem colSpan={2}>
-          <Box mb="8">
-            {domainsDataLoading ? <Spinner /> : null}
-            {domainsData?.domains.domains.length === 0 ? (
-              <Text fontSize="sm" color="gray.400">
-                Currently you haven't added any custom domains to your app
-              </Text>
-            ) : null}
-            {domainsData?.domains.domains.map((domain: any) => (
-              <Flex
-                key={domain}
-                justifyContent="space-between"
-                alignItems="center"
-              >
-                <Link
-                  href={`http://${domain}`}
-                  isExternal
-                  display="flex"
-                  alignItems="center"
-                >
-                  {domain} <Icon as={FiExternalLink} mx="2" />
-                </Link>
-
-                <IconButton
-                  aria-label="Delete"
-                  variant="ghost"
-                  colorScheme="red"
-                  icon={<FiTrash2 />}
-                  disabled={removeDomainMutationLoading}
-                  onClick={() => handleRemoveDomain(domain)}
-                />
-              </Flex>
-            ))}
-          </Box>
-
-          <AddAppDomain appId={appId} appDomainsRefetch={appDomainsRefetch} />
-        </GridItem>
+        <Text>
+          Lista de dominios agregados a "{app.name}"
+        </Text>
       </Grid>
-    </>
+
+      <Grid xs={12} direction="column">
+        {domainsData?.domains.domains.length === 0 ? (
+          <Text h5>
+            Actualmente no hay ningún dominio asignado
+          </Text>
+        ) : (<Table width="100%">
+          <Table.Header>
+            <Table.Column >URL</Table.Column>
+            <Table.Column width={100}>Acciones</Table.Column>
+          </Table.Header>
+          <Table.Body>
+            {domainsData?.domains.domains.map((domain: any) => (
+              <Table.Row>
+                <Table.Cell>
+                  <Link
+                    href={`http://${domain}`}
+                    isExternal
+
+                  >
+                    {domain}
+                  </Link>
+                </Table.Cell>
+                <Table.Cell>
+                  <Button
+                    color="error"
+                    flat
+                    css={{ minWidth: "auto" }}
+                    aria-label="Delete"
+                    icon={<FiTrash2 />}
+                    disabled={removeDomainMutationLoading}
+                    onClick={() => handleRemoveDomain(domain)}
+                  />
+                </Table.Cell>
+              </Table.Row>
+
+            )) ?? []}
+          </Table.Body>
+        </Table>)}
+        <div className='mt-8'>
+          <AddAppDomain appId={appId} appDomainsRefetch={appDomainsRefetch} />
+        </div>
+      </Grid>
+    </Grid.Container>
   );
 };

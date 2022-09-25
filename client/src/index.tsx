@@ -22,7 +22,8 @@ import { config } from './config';
 import { AuthProvider } from './modules/auth/AuthContext';
 import { Router } from './Router';
 import { NextUIProvider } from '@nextui-org/react';
-import themeConfig from './nextui_config';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // TODO remove this after chakra migration is done
 const GlobalStyle = createGlobalStyle`
@@ -101,6 +102,7 @@ ReactDOM.render(
             <Router />
           </BrowserRouter>
         </AuthProvider>
+        <ToastContainer />
       </NextUIProvider>
     </ApolloProvider>
   </React.StrictMode>,

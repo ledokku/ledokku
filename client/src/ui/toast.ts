@@ -1,58 +1,52 @@
-import { useToast as useToastChakra, UseToastOptions } from '@chakra-ui/react';
+import { toast } from 'react-toastify';
 
 export const useToast = () => {
-  const toastChakra = useToastChakra();
-
-  const error = (description: string, options?: UseToastOptions) => {
-    return toastChakra({
-      description: description,
-      status: 'error',
+  const error = (description: string) => {
+    return toast.error(description, {
       position: 'top-left',
-      duration: 5000,
-      isClosable: true,
-      ...options,
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
     });
   };
 
-  const success = (description: string, options?: UseToastOptions) => {
-    return toastChakra({
-      description: description,
-      status: 'success',
+  const success = (description: string) => {
+    return toast.success(description, {
       position: 'top-left',
-      duration: 5000,
-      isClosable: true,
-      ...options,
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
     });
   };
 
-  const info = (description: string, options?: UseToastOptions) => {
-    return toastChakra({
-      description: description,
-      status: 'info',
+  const info = (description: string) => {
+    return toast.info(description, {
       position: 'top-left',
-      duration: 5000,
-      isClosable: true,
-      ...options,
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
     });
   };
 
-  const warning = (description: string, options?: UseToastOptions) => {
-    return toastChakra({
-      description: description,
-      status: 'info',
+  const warning = (description: string) => {
+    return toast.warn(description, {
       position: 'top-left',
-      duration: 5000,
-      isClosable: true,
-      ...options,
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
     });
   };
 
-  const toast = {
+  const toasts = {
     success,
     error,
     info,
     warning,
   };
 
-  return toast;
+  return toasts;
 };
