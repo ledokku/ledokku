@@ -7,12 +7,11 @@ import {
   Heading,
   Text,
 } from '@chakra-ui/react';
-import { Header } from '../../modules/layout/Header';
 import {
   useDatabaseByIdQuery,
   useDatabaseLogsQuery,
 } from '../../generated/graphql';
-import { Terminal, HeaderContainer } from '../../ui';
+import { Terminal, Header } from '../../ui';
 import { DatabaseHeaderInfo } from '../../modules/database/DatabaseHeaderInfo';
 import { DatabaseHeaderTabNav } from '../../modules/database/DatabaseHeaderTabNav';
 
@@ -56,11 +55,11 @@ export const Logs = () => {
 
   return (
     <div>
-      <HeaderContainer>
+      <div>
         <Header />
         <DatabaseHeaderInfo database={database} />
         <DatabaseHeaderTabNav database={database} />
-      </HeaderContainer>
+      </div>
 
       <Container maxW="5xl" mt={10}>
         <Heading as="h2" size="md" py={5}>
@@ -85,7 +84,7 @@ export const Logs = () => {
         ) : null}
 
         {!databaseLogsLoading && !databaseLogsError && databaseLogsData ? (
-          <Terminal mb="8">
+          <Terminal>
             {databaseLogsData.databaseLogs.logs.map((dblog, index) => (
               <React.Fragment key={index}>
                 {dblog ? <p>{dblog}</p> : <p>&nbsp;</p>}

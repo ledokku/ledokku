@@ -1,4 +1,4 @@
-import { Container } from '@chakra-ui/layout';
+import { Container, Link, Navbar } from '@nextui-org/react';
 import { useLocation } from 'react-router';
 import { TabNav, TabNavLink } from '../../ui';
 
@@ -14,38 +14,31 @@ export const AppHeaderTabNav = ({ app }: AppHeaderTabNavProps) => {
   const selectedRoute = location.pathname.endsWith('/logs')
     ? 'logs'
     : location.pathname.endsWith('/env')
-    ? 'env'
-    : location.pathname.endsWith('/settings/ports') ||
-      location.pathname.endsWith('/settings/domains') ||
-      location.pathname.endsWith('/settings/advanced')
-    ? 'settings'
-    : 'index';
+      ? 'env'
+      : location.pathname.endsWith('/settings/ports') ||
+        location.pathname.endsWith('/settings/domains') ||
+        location.pathname.endsWith('/settings/advanced')
+        ? 'settings'
+        : 'index';
 
   return (
-    <Container maxW="5xl">
-      <TabNav>
-        <TabNavLink to={`/app/${app.id}`} selected={selectedRoute === 'index'}>
-          App
-        </TabNavLink>
-        <TabNavLink
-          to={`/app/${app.id}/logs`}
-          selected={selectedRoute === 'logs'}
-        >
-          Logs
-        </TabNavLink>
-        <TabNavLink
-          to={`/app/${app.id}/env`}
-          selected={selectedRoute === 'env'}
-        >
-          Env setup
-        </TabNavLink>
-        <TabNavLink
-          to={`/app/${app.id}/settings/ports`}
-          selected={selectedRoute === 'settings'}
-        >
-          Settings
-        </TabNavLink>
-      </TabNav>
+    <Container>
+      <Navbar disableShadow>
+        <Navbar.Content variant="underline-rounded">
+          <Navbar.Link isActive={selectedRoute === 'index'} href={`/app/${app.id}`}>
+            Aplicación
+          </Navbar.Link>
+          <Navbar.Link isActive={selectedRoute === 'logs'} href={`/app/${app.id}/logs`}>
+            Registros
+          </Navbar.Link>
+          <Navbar.Link isActive={selectedRoute === 'env'} href={`/app/${app.id}/env`}>
+            Variables de entorno
+          </Navbar.Link>
+          <Navbar.Link isActive={selectedRoute === 'settings'} href={`/app/${app.id}/settings/ports`}>
+            Configuración
+          </Navbar.Link>
+        </Navbar.Content>
+      </Navbar>
     </Container>
   );
 };

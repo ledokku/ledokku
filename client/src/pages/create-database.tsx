@@ -34,9 +34,8 @@ import { PostgreSQLIcon } from '../ui/icons/PostgreSQLIcon';
 import { MySQLIcon } from '../ui/icons/MySQLIcon';
 import { MongoIcon } from '../ui/icons/MongoIcon';
 import { RedisIcon } from '../ui/icons/RedisIcon';
-import { Header } from '../modules/layout/Header';
 import { dbTypeToDokkuPlugin } from './utils';
-import { HeaderContainer, Terminal } from '../ui';
+import { Header, Terminal } from '../ui';
 import { useToast } from '../ui/toast';
 import { trackingGoals } from '../config';
 
@@ -178,14 +177,12 @@ export const CreateDatabase = () => {
     isDbCreationSuccess === DbCreationStatus.FAILURE
       ? toast.error('Failed to create database')
       : isDbCreationSuccess === DbCreationStatus.SUCCESS &&
-        toast.success('Database created successfully');
+      toast.success('Database created successfully');
   }, [isDbCreationSuccess, toast]);
 
   return (
     <>
-      <HeaderContainer>
-        <Header />
-      </HeaderContainer>
+      <Header />
 
       <Container maxW="5xl" my="4">
         <Heading as="h2" size="md">
@@ -211,7 +208,7 @@ export const CreateDatabase = () => {
               </Terminal>
 
               {!!isDbCreationSuccess &&
-              isDbCreationSuccess === DbCreationStatus.SUCCESS ? (
+                isDbCreationSuccess === DbCreationStatus.SUCCESS ? (
                 <Box mt="12" display="flex" justifyContent="flex-end">
                   <Button
                     onClick={() => handleNext()}

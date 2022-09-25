@@ -79,10 +79,14 @@ const privateKey = readFileSync(sshKeyPath, {
 });
 
 // helper function to parse github PEM
-export const formatGithubPem = (pem: string) => {
-  if (!pem) {
+export const formatGithubPem = (base64Pem?: string) => {
+  if (!base64Pem) {
     return '';
   }
+
+  const pem = Buffer.from(base64Pem, 'base64').toString('utf-8');
+
+  console.log(pem);
 
   const githubAppPemSplit = pem.split('\n');
   const joinedPem = githubAppPemSplit.join('');

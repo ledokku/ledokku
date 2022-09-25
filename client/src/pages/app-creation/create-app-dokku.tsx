@@ -3,26 +3,16 @@ import { useFormik } from 'formik';
 import { trackGoal } from 'fathom-client';
 import * as yup from 'yup';
 import {
-  Box,
-  Container,
-  Heading,
-  Text,
-  Grid,
-  GridItem,
   FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Input,
-  Button,
 } from '@chakra-ui/react';
 import {
   useCreateAppDokkuMutation,
   useAppsQuery,
 } from '../../generated/graphql';
-import { Header } from '../../modules/layout/Header';
-import { HeaderContainer } from '../../ui';
+import { Header } from '../../ui';
 import { useToast } from '../../ui/toast';
 import { trackingGoals } from '../../config';
+import { Button, Container, Grid, Input, Loading, Text } from '@nextui-org/react';
 
 export const CreateAppDokku = () => {
   const history = useHistory();
@@ -67,7 +57,7 @@ export const CreateAppDokku = () => {
           history.push(`app/${res.data?.createAppDokku.appId}`);
           toast.success('App created successfully');
         }
-      } catch (error) {
+      } catch (error: any) {
         toast.error(error);
       }
     },
@@ -75,54 +65,53 @@ export const CreateAppDokku = () => {
 
   return (
     <>
-      <HeaderContainer>
-        <Header />
-      </HeaderContainer>
+      <Header />
 
-      <Container maxW="5xl" mt={10}>
-        <Heading as="h2" size="md">
-          Create a new app
-        </Heading>
-
-        <Text mt="12" mb="4" color="gray.400">
-          Enter app name, click create and voila!
+      <Container className='mt-10'>
+        <Text h2>
+          Crear aplicación nueva
         </Text>
 
-        <Grid templateColumns={{ sm: 'repeat(1, 1fr)', md: 'repeat(3, 1fr)' }}>
-          <GridItem colSpan={2}>
+        <Text className='mt-12 mb-8' >
+          Escribe el nombre de la apicación y estará listo!
+        </Text>
+
+        <Grid.Container>
+          <Grid>
             <form onSubmit={formik.handleSubmit}>
               <FormControl
                 id="v"
                 isInvalid={Boolean(formik.errors.name && formik.touched.name)}
               >
-                <FormLabel>App name:</FormLabel>
                 <Input
+                  label='Nombre de la aplicación'
                   autoComplete="off"
                   id="name"
                   name="name"
-                  placeholder="Name"
+                  placeholder="Nombre"
                   value={formik.values.name}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
-                <FormErrorMessage>{formik.errors.name}</FormErrorMessage>
+                <Text color='error'>{formik.errors.name}</Text>
               </FormControl>
 
-              <Box mt="4" display="flex" justifyContent="flex-end">
+              <div className='mt-4 flex justify-end'>
                 <Button
+                  className='mt-8'
                   type="submit"
-                  color="grey"
                   disabled={
                     loading || !formik.values.name || !!formik.errors.name
                   }
-                  isLoading={loading}
                 >
-                  Create
+                  {
+                    !loading ? "Crear" : <Loading color="currentColor" />
+                  }
                 </Button>
-              </Box>
+              </div>
             </form>
-          </GridItem>
-        </Grid>
+          </Grid>
+        </Grid.Container>
       </Container>
     </>
   );

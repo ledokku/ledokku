@@ -1,23 +1,13 @@
 import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import {
-  Container,
-  Heading,
-  Text,
-  Button,
-  Box,
-  Grid,
-  Image,
-  Badge,
-} from '@chakra-ui/react';
 import { FiArrowRight } from 'react-icons/fi';
-import { Header } from '../../modules/layout/Header';
-import { HeaderContainer } from '../../ui';
+import { Header } from '../../ui';
 import { useToast } from '../../ui/toast';
 import { GithubIcon } from '../../ui/icons/GithubIcon';
 import { GitlabIcon } from '../../ui/icons/GitlabIcon';
 import { DockerIcon } from '../../ui/icons/DockerIcon';
+import { Container, Grid, Text, Image, Badge, Button, Loading } from '@nextui-org/react';
 
 interface SourceBoxProps {
   label: string;
@@ -42,22 +32,14 @@ const SourceBox = ({
   badge,
 }: SourceBoxProps) => {
   return (
-    <Box
-      p="12"
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      border="1px"
-      borderColor={selected ? 'black' : 'gray.300'}
-      opacity={selected ? '100%' : '50%'}
-      cursor="pointer"
-      borderRadius="base"
+    <div
+      className={`${selected ? 'border-black' : 'border-gray-300'} w-full p-12 flex flex-col items-center border-2 rounded-lg  ${onClick ? 'grayscale-0 opacity-100 cursor-pointer' : 'grayscale  opacity-50'}`}
       onClick={onClick}
     >
-      <Box mb="2">{icon}</Box>
-      <p>{label}</p>
+      <div className='mb-2 h-12'>{icon}</div>
+      <Text h3>{label}</Text>
       {badge}
-    </Box>
+    </div>
   );
 };
 
@@ -83,7 +65,7 @@ export const CreateApp = () => {
         values.type === AppTypes.GITHUB
           ? history.push('/create-app-github')
           : history.push('/create-app-dokku');
-      } catch (error) {
+      } catch (error: any) {
         toast.error(error.message);
       }
     },
@@ -91,88 +73,89 @@ export const CreateApp = () => {
 
   return (
     <>
-      <HeaderContainer>
-        <Header />
-      </HeaderContainer>
+      <Header />
 
-      <Container maxW="5xl" my="4">
-        <Heading py="2" as="h2" size="md">
+      <Container>
+        <Text h2 className='py-2'>
           App source
-        </Heading>
-        <Box mt="24">
-          <Box mt="4">
+        </Text>
+        <div className='mt-24'>
+          <div className='mt-4'>
             <form onSubmit={formik.handleSubmit}>
-              <Box mt="20">
-                <Text mb="5" color="gray.500">
-                  Choose between creating app from a Github repository or
-                  creating a standalone Dokku app.
+              <div className='mt-16'>
+                <Text className='mb-5 text-gray-500'>
+                  Elige entre crear una aplicación desde un repositorio de Github o una aplicación de Dokku.
                 </Text>
-                <Grid
-                  templateColumns={{
-                    base: 'repeat(2, minmax(0, 1fr))',
-                    md: 'repeat(4, minmax(0, 1fr))',
-                  }}
-                  gap="4"
+                <Grid.Container
+                  gap={4}
                 >
-                  <SourceBox
-                    selected={formik.values.type === AppTypes.GITHUB}
-                    label="GitHub"
-                    icon={<GithubIcon size={40} />}
-                    onClick={() => formik.setFieldValue('type', 'GITHUB')}
-                  />
-                  <SourceBox
-                    selected={formik.values.type === AppTypes.DOKKU}
-                    label="Dokku"
-                    icon={
-                      <Image
-                        boxSize="48px"
-                        objectFit="cover"
-                        src="/dokku.png"
-                        alt="dokkuLogo"
-                      />
-                    }
-                    onClick={() => formik.setFieldValue('type', 'DOKKU')}
-                  />
-                  <SourceBox
-                    selected={formik.values.type === AppTypes.GITLAB}
-                    label="Gitlab"
-                    icon={<GitlabIcon size={40} />}
-                    badge={
-                      <Badge ml="1" colorScheme="red">
-                        Coming soon
-                      </Badge>
-                    }
+                  <Grid md={3} xs={6}>
+                    <SourceBox
+                      selected={formik.values.type === AppTypes.GITHUB}
+                      label="GitHub"
+                      icon={<GithubIcon size={40} />}
+                      onClick={() => formik.setFieldValue('type', 'GITHUB')}
+                    />
+                  </Grid>
+                  <Grid md={3} xs={6}>
+                    <SourceBox
+                      selected={formik.values.type === AppTypes.DOKKU}
+                      label="Dokku"
+                      icon={
+                        <Image
+                          width={48}
+                          objectFit="cover"
+                          src="/dokku.png"
+                          alt="dokkuLogo"
+                        />
+                      }
+                      onClick={() => formik.setFieldValue('type', 'DOKKU')}
+                    />
+                  </Grid>
+                  <Grid md={3} xs={6}>
+                    <SourceBox
+                      selected={formik.values.type === AppTypes.GITLAB}
+                      label="Gitlab"
+                      icon={<GitlabIcon size={40} />}
+                      badge={
+                        <Badge color="error">
+                          Proximamente
+                        </Badge>
+                      }
                     // Uncomment this when we can handle docker deployments
                     // onClick={() => formik.setFieldValue('type', 'GITLAB')}
-                  />
-                  <SourceBox
-                    selected={formik.values.type === AppTypes.DOCKER}
-                    label="Docker"
-                    icon={<DockerIcon size={40} />}
-                    badge={
-                      <Badge ml="1" colorScheme="red">
-                        Coming soon
-                      </Badge>
-                    }
+                    />
+                  </Grid>
+                  <Grid md={3} xs={6}>
+                    <SourceBox
+                      selected={formik.values.type === AppTypes.DOCKER}
+                      label="Docker"
+                      icon={<DockerIcon size={40} />}
+                      badge={
+                        <Badge color="error">
+                          Proximamente
+                        </Badge>
+                      }
                     // Uncomment this when we can handle docker deployments
                     // onClick={() => formik.setFieldValue('type', 'DOCKER')}
-                  />
-                </Grid>
-              </Box>
+                    />
+                  </Grid>
+                </Grid.Container>
+              </div>
 
-              <Box mt="36" display="flex" justifyContent="flex-end">
+              <div className='mt-36 flex justify-end'>
                 <Button
-                  isLoading={formik.isSubmitting}
+                  flat
                   disabled={!formik.values.type || !!formik.errors.type}
-                  rightIcon={<FiArrowRight size={20} />}
+                  iconRight={<FiArrowRight size={20} />}
                   type="submit"
                 >
-                  Next
+                  {!formik.isSubmitting ? "Siguiente" : <Loading color="currentColor" />}
                 </Button>
-              </Box>
+              </div>
             </form>
-          </Box>
-        </Box>
+          </div>
+        </div>
       </Container>
     </>
   );

@@ -2,7 +2,6 @@ import { useHistory } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import { trackGoal } from 'fathom-client';
-import Select from 'react-select';
 import * as yup from 'yup';
 import {
   useAppsQuery,
@@ -15,36 +14,13 @@ import {
   Repository,
   Branch,
 } from '../../generated/graphql';
-import { Header } from '../../modules/layout/Header';
-import { Terminal, HeaderContainer, Button } from '../../ui';
+import { Terminal, Header } from '../../ui';
 import { useToast } from '../../ui/toast';
 import { config, trackingGoals } from '../../config';
 import { FiArrowRight, FiArrowLeft } from 'react-icons/fi';
-import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  AlertTitle,
-  Avatar,
-  Box,
-  Container,
-  Flex,
-  FormLabel,
-  Grid,
-  GridItem,
-  Heading,
-  Link,
-  Spinner,
-  Text,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalCloseButton,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-} from '@chakra-ui/react';
 import { useAuth } from '../../modules/auth/AuthContext';
+import { Button, Container, Dropdown, Grid, Link, Loading, Modal, Text, User } from '@nextui-org/react';
+import { Alert } from '../../ui/components/Alert';
 
 enum AppCreationStatus {
   FAILURE = 'Failure',
@@ -170,7 +146,7 @@ export const CreateAppGithub = () => {
             },
           });
           setIsTerminalVisible(true);
-        } catch (error) {
+        } catch (error: any) {
           error.message === 'Not Found'
             ? toast.error(`Repository : ${values.repo.fullName} not found`)
             : toast.error(error.message);
@@ -191,10 +167,10 @@ export const CreateAppGithub = () => {
       `https://github.com/apps/${config.githubAppName}/installations/new`,
       'Install App',
       'resizable=1, scrollbars=1, fullscreen=0, height=1000, width=1020,top=' +
-        window.screen.width +
-        ', left=' +
-        window.screen.width +
-        ', toolbar=0, menubar=0, status=0'
+      window.screen.width +
+      ', left=' +
+      window.screen.width +
+      ', toolbar=0, menubar=0, status=0'
     );
     const timer = setInterval(async () => {
       if (newWindow && newWindow.closed) {
@@ -311,210 +287,198 @@ export const CreateAppGithub = () => {
     isAppCreationSuccess === AppCreationStatus.FAILURE && !isToastShown
       ? toast.error('Failed to create an app') && setIsToastShown(true)
       : isAppCreationSuccess === AppCreationStatus.SUCCESS &&
-        !isToastShown &&
-        toast.success('App created successfully') &&
-        setIsToastShown(true);
+      !isToastShown &&
+      toast.success('App created successfully') &&
+      setIsToastShown(true);
   }, [isToastShown, isAppCreationSuccess, toast]);
 
   return (
     <>
-      <HeaderContainer>
-        <Header />
-      </HeaderContainer>
+      <Header />
 
-      <Container maxW="5xl" mt={10}>
+      <Container className='mt-10'>
         {isTerminalVisible ? (
           <>
-            <p className="mb-2 ">
-              Creating <b>{formik.values.name}</b> app from{' '}
+            <Text className="mb-2">
+              Creando la aplicación <b>{formik.values.name}</b> desde{' '}
               <b>{formik.values.repo.name}</b>
-            </p>
+            </Text>
             <p className="text-gray-500 mb-2">
-              Creating app usually takes a couple of minutes. Breathe in,
-              breathe out, logs are about to appear below:
+              Crear una aplicación usualmente toma unos cuantos minutos. Respira un poco, los registros aparecerán pronto:
             </p>
-            <Terminal className={'w-6/6'}>
+            <Terminal>
               {arrayOfCreateAppLogs.map((log) => (
-                <p
+                <Text
                   key={arrayOfCreateAppLogs.indexOf(log)}
-                  className={'text-s leading-5'}
+                  css={{ fontFamily: "monospace" }}
                 >
                   {log.message?.replaceAll('[1G', '')}
-                </p>
+                </Text>
               ))}
             </Terminal>
 
             {!!isAppCreationSuccess &&
-            isAppCreationSuccess === AppCreationStatus.SUCCESS ? (
+              isAppCreationSuccess === AppCreationStatus.SUCCESS ? (
               <div className="mt-12 flex justify-end">
                 <Button
+                  flat
                   onClick={() => handleNext()}
-                  color="grey"
-                  iconEnd={<FiArrowRight size={20} />}
+                  iconRight={<FiArrowRight size={20} />}
                 >
-                  Next
+                  Siguiente
                 </Button>
               </div>
             ) : !!isAppCreationSuccess &&
               isAppCreationSuccess === AppCreationStatus.FAILURE ? (
               <div className="mt-12 flex justify-start">
                 <Button
+                  flat
                   onClick={() => {
                     setIsTerminalVisible(false);
                     formik.resetForm();
                   }}
-                  color="grey"
-                  iconEnd={<FiArrowLeft size={20} />}
+                  icon={<FiArrowLeft size={20} />}
                 >
-                  Back
+                  Atras
                 </Button>
               </div>
             ) : null}
           </>
         ) : (
           <>
-            <Heading as="h2" size="md">
-              Create a new GitHub application
-            </Heading>
+            <Text h2>
+              Crear nueva aplicación de Github
+            </Text>
             {installationData &&
-            !installationLoading &&
-            reposData &&
-            !reposLoading ? (
+              !installationLoading &&
+              reposData &&
+              !reposLoading ? (
               <>
-                <Text color="gray.400">
-                  When you push to Git, your application will be redeployed
-                  automatically.
+                <Text>
+                  Cuando hagas push a Git, tu aplicación va a lanzarse de nuevo automaticamente.
                 </Text>
 
-                <Grid
-                  templateColumns={{
-                    sm: 'repeat(1, 1fr)',
-                    md: 'repeat(3, 1fr)',
-                  }}
-                >
-                  <GridItem colSpan={2}>
-                    <Flex alignItems="center" mt="12">
-                      <Avatar
-                        size="sm"
-                        name={user?.userName}
-                        src={user?.avatarUrl}
-                      />
-                      <Text ml="2" fontWeight="bold">
-                        {user?.userName}
-                      </Text>
-                    </Flex>
+                <Grid.Container>
+                  <Grid>
+                    <User className='my-8' name={user?.userName} src={user?.avatarUrl} />
                     <form onSubmit={formik.handleSubmit}>
-                      <Box mt="8">
-                        <FormLabel>Repository</FormLabel>
-                        <Select
-                          placeholder="Select repository"
-                          isSearchable={false}
-                          onChange={handleChangeRepo}
-                          options={repoOptions}
-                        />
-                      </Box>
+                      <Text h5>Repositorio</Text>
+                      <Dropdown>
+                        <Dropdown.Button flat>
+                          {selectedRepo?.fullName ?? "Selecciona un repositorio"}
+                        </Dropdown.Button>
+                        <Dropdown.Menu
+                          color='primary'
+                          css={{ $$dropdownMenuWidth: "auto" }}
+                          selectionMode='single'
+                          selectedKeys={new Set(selectedRepo?.id ? [selectedRepo?.id] : [])}
+                          onAction={(key) => {
+                            const repo = repoOptions.find((item) => item.value.id === key)
 
-                      <Text mt="1" color="gray.400" fontSize="sm">
-                        Can't see your repo in the list?{' '}
+                            if (repo) {
+                              handleChangeRepo(repo)
+                            }
+                          }}>
+                          {repoOptions.map((option) => (<Dropdown.Item key={option.value.id}>{option.label}</Dropdown.Item>))}
+                        </Dropdown.Menu>
+                      </Dropdown>
+
+                      <Text className='mt-1' h6>
+                        ¿No puedes ver los repositorios privados?{' '}
                         <Link
                           onClick={() => setIsProceedModalOpen(true)}
-                          textDecoration="underline"
+                          css={{ display: "inline" }}
                         >
-                          Configure the GitHub app.
+                          Configura la app de Github
                         </Link>
                       </Text>
 
-                      <Box mt="8">
-                        <FormLabel>Branch to deploy</FormLabel>
-                        <Select
-                          placeholder="Select branch"
-                          isSearchable={false}
-                          disabled={
-                            !branchesData ||
-                            branchesLoading ||
-                            reposLoading ||
-                            !reposData
-                          }
-                          onChange={handleChangeBranch}
-                          options={branchOptions}
-                        />
-                      </Box>
+                      <Text h5 className='mt-8'>Rama a lanzar</Text>
+                      <Dropdown >
+                        <Dropdown.Button flat isDisabled={!branchesData ||
+                          branchesLoading ||
+                          reposLoading ||
+                          !reposData}>
+                          {branchesLoading ? <Loading color="currentColor" size='sm' /> : selectedBranch !== "" ? selectedBranch : "Selecciona una rama"}
+                        </Dropdown.Button>
+                        <Dropdown.Menu
+                          color='primary'
+                          css={{ $$dropdownMenuWidth: "auto" }}
+                          selectionMode='single'
+                          selectedKeys={new Set(selectedBranch ? [selectedBranch] : [])}
+                          onAction={(key) => {
+                            const repo = branchOptions.find((item) => item.value.name === key)
 
-                      <Box mt="8" display="flex" justifyContent="flex-end">
-                        <Button
-                          type="submit"
-                          color="grey"
-                          disabled={!selectedBranch || !selectedRepo}
-                          isLoading={loading}
-                        >
-                          Create
-                        </Button>
-                      </Box>
+                            if (repo) {
+                              handleChangeBranch(repo)
+                            }
+                          }}>
+                          {branchOptions.map((option) => (<Dropdown.Item key={option.value.name}>{option.label}</Dropdown.Item>))}
+                        </Dropdown.Menu>
+                      </Dropdown>
+
+                      <Button
+                        className='mt-8'
+                        type="submit"
+                        disabled={!selectedBranch || !selectedRepo}
+                      >
+                        {!loading ? "Crear" : <Loading color="currentColor" />}
+                      </Button>
                     </form>
-                  </GridItem>
-                </Grid>
+                  </Grid>
+                </Grid.Container>
               </>
             ) : !reposLoading && !installationLoading && !reposData ? (
               <>
-                <Alert mb="4" mt="4" w="65%" status="info">
-                  <AlertIcon />
-                  <Box flex="1">
-                    <AlertTitle>Set up repository permissions</AlertTitle>
-                    <AlertDescription display="block">
-                      First you will need to set up permissions for repositories
-                      that you would like to use with Ledokku. Once that's done,
-                      it's time to choose repo and branch that you would like to
-                      create app from and off we go.
-                    </AlertDescription>
-                  </Box>
-                </Alert>
-
+                <Alert
+                  className='my-8'
+                  title='Configura los permisos de repositorios'
+                  type='warning'
+                  message="Primero necesitas configurar los permisos de los repositorios
+                que te gustaria usar. Una vez completado,
+                es hora de escoger el repositorio y la rama que te gustaria para crear la aplicación."/>
                 <Button
-                  color="grey"
                   onClick={() => setIsProceedModalOpen(true)}
                 >
-                  Set up permissions
+                  Configurar permisos
                 </Button>
               </>
             ) : (
-              <Spinner />
+              <Loading />
             )}
           </>
         )}
         <Modal
-          isOpen={isProceedModalOpen}
+          blur
+          closeButton
+          open={isProceedModalOpen}
           onClose={() => setIsProceedModalOpen(false)}
-          isCentered
         >
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>Github setup info</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>
-              New window is about to open. After you are done selecting github
-              repos, close the window and refresh page.
-            </ModalBody>
-
-            <ModalFooter>
+          <Modal.Header><Text h4>Configuración de Github</Text></Modal.Header>
+          <Modal.Body>
+            Una nueva ventana se abrirá. Después de que hayas finalizado de seleccionar los repositorios, cierra esta ventana para refrescar.
+          </Modal.Body>
+          <Modal.Footer>
+            <div className='flex flex-row'>
               <Button
-                color="grey"
-                variant="outline"
+                bordered
+                size={'sm'}
                 className="mr-3"
                 onClick={() => setIsProceedModalOpen(false)}
               >
-                Cancel
+                Cancelar
               </Button>
               <Button
-                color="grey"
+                size={'sm'}
                 onClick={() => {
                   handleOpen();
                   setIsProceedModalOpen(false);
                 }}
               >
-                Proceed
+                Entendido
               </Button>
-            </ModalFooter>
-          </ModalContent>
+            </div>
+          </Modal.Footer>
         </Modal>
       </Container>
     </>

@@ -23,8 +23,7 @@ import { AppHeaderTabNav } from '../../../modules/app/AppHeaderTabNav';
 import { AppRebuild } from '../../../modules/app/AppRebuild';
 import { AppRestart } from '../../../modules/app/AppRestart';
 import { AppSettingsMenu } from '../../../modules/app/AppSettingsMenu';
-import { Header } from '../../../modules/layout/Header';
-import { HeaderContainer } from '../../../ui';
+import { Header } from '../../../ui';
 import { useToast } from '../../../ui/toast';
 
 export const AppSettingsAdvanced = () => {
@@ -99,11 +98,11 @@ export const AppSettingsAdvanced = () => {
 
   return (
     <>
-      <HeaderContainer>
+      <div>
         <Header />
         <AppHeaderInfo app={app} />
         <AppHeaderTabNav app={app} />
-      </HeaderContainer>
+      </div>
 
       <Container maxW="5xl" mt={10}>
         <Grid

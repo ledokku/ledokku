@@ -1,21 +1,10 @@
 import { Link } from 'react-router-dom';
 import format from 'date-fns/format';
-import {
-  Box,
-  Grid,
-  GridItem,
-  Heading,
-  Text,
-  Button,
-  Container,
-  Image,
-} from '@chakra-ui/react';
 import { useDashboardQuery } from '../generated/graphql';
-import { Header } from '../modules/layout/Header';
-import { HeaderContainer } from '../ui';
-import { HomeHeaderTabNav } from '../modules/home/HomeHeaderTabNav';
+import { Header } from '../ui';
 import { dbTypeToIcon, dbTypeToReadableName } from './utils';
 import { GithubIcon } from '../ui/icons/GithubIcon';
+import { Button, Card, Container, Grid, Image, Text } from '@nextui-org/react';
 
 export const Dashboard = () => {
   // const history = useHistory();
@@ -30,133 +19,129 @@ export const Dashboard = () => {
 
   return (
     <div>
-      <HeaderContainer>
-        <Header />
-        <HomeHeaderTabNav />
-      </HeaderContainer>
+      <Header />
 
-      <Container maxW="5xl" py={6}>
-        <Box display="flex" justifyContent="flex-end" pb={6}>
+      <Container>
+        <div className='w-100 flex flex-row justify-end my-6'>
           <Link to="/create-database">
-            <Button colorScheme="gray" variant="outline" fontSize="sm" mr={3}>
-              Create database
+            <Button bordered className='mr-4'>
+              Crear base de datos
             </Button>
           </Link>
           <Link to="/create-app">
-            <Button colorScheme="gray" fontSize="sm">
-              Create app
+            <Button>
+              Crear aplicación
             </Button>
           </Link>
-        </Box>
+        </div>
 
-        <Grid
+        <Grid.Container
           as="main"
-          templateColumns="repeat(12, 1fr)"
-          gap={{ base: 6, md: 20 }}
-          pt={4}
+          gap={6}
         >
-          <GridItem colSpan={{ base: 12, md: 7 }}>
-            <Heading as="h2" size="md" py={5}>
-              Apps
-            </Heading>
+          <Grid xs={12} md={7} className="flex flex-col">
+            <Text h2>
+              Aplicaciones
+            </Text>
             {data?.apps.length === 0 ? (
-              <Text fontSize="sm" color="gray.400">
-                No apps deployed.
+              <Text h6 >
+                Sin aplicaciones
               </Text>
             ) : null}
-            {data?.apps.map((app) => (
-              <Box
-                key={app.id}
-                py={3}
-                borderBottom={'1px'}
-                borderColor="gray.200"
-              >
-                <Box mb={1} color="gray.900" fontWeight="medium">
-                  <Link to={`/app/${app.id}`}>{app.name}</Link>
-                </Box>
-                <Box
-                  fontSize="sm"
-                  color="gray.400"
-                  display="flex"
-                  justifyContent="space-between"
-                >
-                  <Text display="flex" alignItems="center">
-                    <Box mr={1} as="span">
-                      {app.appMetaGithub ? (
-                        <GithubIcon size={16} />
-                      ) : (
-                        <Image
-                          boxSize="16px"
-                          objectFit="cover"
-                          src="/dokku.png"
-                          alt="dokkuLogo"
-                        />
-                      )}
-                    </Box>
+            <Grid.Container gap={1}>
+              {data?.apps.map((app) => (
+                <Grid xs={12} sm={6}>
+                  <Link to={`/app/${app.id}`} className='w-full'>
+                    <Card isHoverable isPressable className='w-full'>
+                      <Card.Header>
+                        <div style={{ width: "auto", height: "auto", padding: "0.3rem" }} className="border-2 rounded-lg">
+                          {app.appMetaGithub ? (
+                            <div style={{ width: 40, height: 40 }}>
+                              <GithubIcon size={40} />
+                            </div>
+                          ) : (
+                            <Image
+                              width={40}
+                              height={40}
+                              objectFit="cover"
+                              src="/dokku.png"
+                              alt="dokkuLogo"
+                            />
+                          )}
+                        </div>
+                        <Grid.Container css={{ pl: "$6" }}>
+                          <Grid xs={12}>
+                            <Text h4 css={{ lineHeight: "$xs" }}>
+                              {app.name}
+                            </Text>
+                          </Grid>
+                          <Grid xs={12}>
+                            <Text css={{ color: "$accents8" }} h6>{app.id}</Text>
+                          </Grid>
+                        </Grid.Container>
+                      </Card.Header>
+                      <Card.Body css={{ py: "$2" }}>
+                        <Text>
+                          {app.appMetaGithub
+                            ? `${app.appMetaGithub.repoOwner}/${app.appMetaGithub.repoName}`
+                            : ''}
+                        </Text>
+                      </Card.Body>
+                      <Card.Footer>
+                        <Text h6 className='mb-1'>Creado el {format(new Date(app.createdAt), 'MM/DD/YYYY')}</Text>
+                      </Card.Footer>
+                    </Card></Link>
+                </Grid>
+              ))}
+            </Grid.Container>
 
-                    {app.appMetaGithub
-                      ? `${app.appMetaGithub.repoOwner}/${app.appMetaGithub.repoName}`
-                      : ''}
-                  </Text>
-                  <Text>
-                    Created on {format(new Date(app.createdAt), 'MM/DD/YYYY')}
-                  </Text>
-                </Box>
-              </Box>
-            ))}
-
-            <Heading as="h2" size="md" py={5} mt={8}>
-              Databases
-            </Heading>
+            <Text h2 className='mt-8'>
+              Bases de datos
+            </Text>
             {data?.databases.length === 0 ? (
-              <Text fontSize="sm" color="gray.400">
-                No databases created.
+              <Text h6>
+                Sin bases de datos
               </Text>
             ) : null}
             {data?.databases.map((database) => {
               const DbIcon = dbTypeToIcon(database.type);
 
               return (
-                <Box
+                <div
                   key={database.id}
-                  py={3}
-                  borderBottom={'1px'}
-                  borderColor="gray.200"
+                  className="py-3 border-gray-200"
                 >
-                  <Box mb={1} color="gray.900" fontWeight="medium">
+                  <div className='mb-1 bg-gray-900'>
                     <Link to={`/database/${database.id}`}>{database.name}</Link>
-                  </Box>
-                  <Box
-                    fontSize="sm"
-                    color="gray.400"
-                    display="flex"
-                    justifyContent="space-between"
+                  </div>
+                  <div
+                    className='bg-gray-400 flex justify-between'
                   >
-                    <Text display="flex" alignItems="center">
-                      <Box mr={1} as="span">
+                    <Text h6>
+                      <span className='mr-1'>
                         <DbIcon size={16} />
-                      </Box>
+                      </span>
                       {dbTypeToReadableName(database.type)}
                     </Text>
                     <Text>
                       Created on{' '}
                       {format(new Date(database.createdAt), 'MM/DD/YYYY')}
                     </Text>
-                  </Box>
-                </Box>
+                  </div>
+                </div>
               );
             })}
-          </GridItem>
+          </Grid>
 
-          <GridItem colSpan={{ base: 12, md: 5 }}>
-            <Heading as="h2" size="md" py={5}>
-              Latest activity
-            </Heading>
-            <Text fontSize="sm" color="gray.400">
-              Coming soon
+          <Grid xs={12} md={5} className="flex flex-col">
+            <Text h2>
+              Última actividad
             </Text>
-          </GridItem>
-        </Grid>
+            <Text h6>
+              Proximamente
+            </Text>
+          </Grid>
+        </Grid.Container>
       </Container>
     </div>
   );

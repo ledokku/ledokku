@@ -4,7 +4,7 @@
   "version": "0.7.0",
   "license": "MIT",
   "scripts": {
-    "dev": "yarn prisma:migrate && yarn prisma:generate && nodemon 'src/index.ts' --exec 'ts-node' src/index.ts -e ts,graphql",
+    "dev": "yarn prisma:migrate && yarn prisma:generate && nodemon 'src/index.ts' --exec \"npx ts-node src/index.ts\" -e ts,graphql",
     "build": "tsc",
     "start": "yarn prisma:migrate && node build/index.js",
     "generate": "graphql-codegen --config codegen.yml",

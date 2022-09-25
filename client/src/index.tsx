@@ -3,7 +3,6 @@ import 'focus-visible/dist/focus-visible';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { ChakraProvider } from '@chakra-ui/react';
 import { createGlobalStyle } from 'styled-components';
 import { BrowserRouter } from 'react-router-dom';
 import {
@@ -22,6 +21,8 @@ import './generated/index.css';
 import { config } from './config';
 import { AuthProvider } from './modules/auth/AuthContext';
 import { Router } from './Router';
+import { NextUIProvider } from '@nextui-org/react';
+import themeConfig from './nextui_config';
 
 // TODO remove this after chakra migration is done
 const GlobalStyle = createGlobalStyle`
@@ -93,14 +94,14 @@ const apolloClient = new ApolloClient({
 ReactDOM.render(
   <React.StrictMode>
     <ApolloProvider client={apolloClient}>
-      <ChakraProvider>
+      <NextUIProvider>
         <AuthProvider>
           <GlobalStyle />
           <BrowserRouter>
             <Router />
           </BrowserRouter>
         </AuthProvider>
-      </ChakraProvider>
+      </NextUIProvider>
     </ApolloProvider>
   </React.StrictMode>,
   document.getElementById('root')

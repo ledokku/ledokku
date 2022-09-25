@@ -1,4 +1,4 @@
-import { Badge, Container, Flex, Text } from '@chakra-ui/layout';
+import { Badge, Card, Container, Grid, Text } from '@nextui-org/react';
 import { AppMetaGithub } from '../../generated/graphql';
 import { GithubIcon } from '../../ui/icons/GithubIcon';
 
@@ -11,26 +11,31 @@ interface AppHeaderInfoProps {
 
 export const AppHeaderInfo = ({ app }: AppHeaderInfoProps) => {
   return (
-    <Container maxW="5xl" py="5">
-      <Text fontSize="md" fontWeight="bold">
-        {app.name}
-      </Text>
-      {app.appMetaGithub ? (
-        <Flex mt="1" alignItems="center" color="gray.700">
-          <GithubIcon size={16} />
-          <Text fontSize="sm" ml="1">
-            {app.appMetaGithub.repoOwner}/{app.appMetaGithub.repoName}
+    <Container className='mt-8'>
+      <Grid.Container>
+        <Grid xs={12} md>
+          <Text h2>
+            {app.name}
           </Text>
-          <Badge
-            backgroundColor="gray.200"
-            borderRadius="base"
-            textTransform="none"
-            ml="2"
-          >
-            {app.appMetaGithub.branch}
-          </Badge>
-        </Flex>
-      ) : null}
+        </Grid>
+        <Grid xs={12} md className='flex md:justify-end'>
+          {app.appMetaGithub ? (
+            <Card variant='bordered' css={{ w: "auto" }}>
+              <Card.Body css={{ paddingTop: "0.75rem", paddingBottom: "0.75rem" }}>
+                <div className='flex flex-row items-center'>
+                  <GithubIcon size={16} />
+                  <Text className='mx-4'>
+                    {app.appMetaGithub.repoOwner}/{app.appMetaGithub.repoName}
+                  </Text>
+                  <Badge>
+                    {app.appMetaGithub.branch}
+                  </Badge>
+                </div>
+              </Card.Body>
+            </Card>
+          ) : null}
+        </Grid>
+      </Grid.Container>
     </Container>
   );
 };

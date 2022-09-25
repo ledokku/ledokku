@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import cx from 'classnames';
 import { Container, Heading, Table, Tbody, Td, Tr } from '@chakra-ui/react';
-import { Header } from '../../modules/layout/Header';
 import {
   useDatabaseByIdQuery,
   useAppsQuery,
@@ -20,7 +19,7 @@ import {
   ModalDescription,
   ModalButton,
   Terminal,
-  HeaderContainer,
+  Header,
 } from '../../ui';
 import { useToast } from '../../ui/toast';
 import { DatabaseHeaderInfo } from '../../modules/database/DatabaseHeaderInfo';
@@ -172,11 +171,11 @@ export const Database = () => {
 
   return (
     <div>
-      <HeaderContainer>
+      <div>
         <Header />
         <DatabaseHeaderInfo database={database} />
         <DatabaseHeaderTabNav database={database} />
-      </HeaderContainer>
+      </div>
 
       <Container maxW="5xl" mt={10}>
         <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4 mt-10">

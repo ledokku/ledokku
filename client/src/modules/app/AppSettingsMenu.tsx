@@ -1,5 +1,5 @@
-import { Button, VStack } from '@chakra-ui/react';
-import { Link, useLocation } from 'react-router-dom';
+import { Navbar } from '@nextui-org/react';
+import { useLocation } from 'react-router-dom';
 
 interface AppSettingsMenuProps {
   app: {
@@ -13,40 +13,36 @@ export const AppSettingsMenu = ({ app }: AppSettingsMenuProps) => {
   const selectedRoute = location.pathname.endsWith('/settings/ports')
     ? 'ports'
     : location.pathname.endsWith('/settings/domains')
-    ? 'domains'
-    : location.pathname.endsWith('/settings/advanced')
-    ? 'advanced'
-    : 'index';
+      ? 'domains'
+      : location.pathname.endsWith('/settings/advanced')
+        ? 'advanced'
+        : 'index';
 
   return (
-    <VStack align="stretch">
-      <Button
-        variant="ghost"
-        justifyContent="left"
-        isActive={selectedRoute === 'ports'}
-        as={Link}
-        to={`/app/${app.id}/settings/ports`}
-      >
-        Port Management
-      </Button>
-      <Button
-        variant="ghost"
-        justifyContent="left"
-        isActive={selectedRoute === 'domains'}
-        as={Link}
-        to={`/app/${app.id}/settings/domains`}
-      >
-        Domains
-      </Button>
-      <Button
-        variant="ghost"
-        justifyContent="left"
-        isActive={selectedRoute === 'advanced'}
-        as={Link}
-        to={`/app/${app.id}/settings/advanced`}
-      >
-        Advanced
-      </Button>
-    </VStack>
+    <Navbar disableShadow css={{ maxH: "inherit" }}>
+      <Navbar.Content variant={'highlight-rounded'} className="flex flex-col">
+        <Navbar.Link
+          css={{ padding: 16 }}
+          isActive={selectedRoute === 'ports'}
+          href={`/app/${app.id}/settings/ports`}
+        >
+          Configuración de puertos
+        </Navbar.Link>
+        <Navbar.Link
+          css={{ padding: 16 }}
+          isActive={selectedRoute === 'domains'}
+          href={`/app/${app.id}/settings/domains`}
+        >
+          Dominios
+        </Navbar.Link>
+        <Navbar.Link
+          css={{ padding: 16 }}
+          isActive={selectedRoute === 'advanced'}
+          href={`/app/${app.id}/settings/advanced`}
+        >
+          Avanzado
+        </Navbar.Link>
+      </Navbar.Content>
+    </Navbar>
   );
 };

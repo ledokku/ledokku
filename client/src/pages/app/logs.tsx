@@ -1,18 +1,12 @@
 import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
-import {
-  Container,
-  Heading,
-  Alert,
-  AlertDescription,
-  Text,
-} from '@chakra-ui/react';
 import AnsiUp from 'ansi_up';
-import { Header } from '../../modules/layout/Header';
 import { useAppByIdQuery, useAppLogsQuery } from '../../generated/graphql';
-import { HeaderContainer, Terminal } from '../../ui';
+import { Header, Terminal } from '../../ui';
 import { AppHeaderTabNav } from '../../modules/app/AppHeaderTabNav';
 import { AppHeaderInfo } from '../../modules/app/AppHeaderInfo';
+import { Container, Loading, Text } from '@nextui-org/react';
+import { Alert } from '../../ui/components/Alert';
 
 export const Logs = () => {
   const { id: appId } = useParams<{ id: string }>();
@@ -67,51 +61,38 @@ export const Logs = () => {
 
   return (
     <div>
-      <HeaderContainer>
+      <div>
         <Header />
         <AppHeaderInfo app={app} />
         <AppHeaderTabNav app={app} />
-      </HeaderContainer>
+      </div>
 
-      <Container maxW="5xl" mt={10}>
-        <Heading as="h2" size="md" py={5}>
-          Logs for {app.name} app:
-        </Heading>
+      <Container>
+        <Text h3 className='mt-16'>
+          Registros de "{app.name}":
+        </Text>
 
         {appLogsLoading ? (
-          <Text fontSize="sm" color="gray.400">
-            Loading...
-          </Text>
+          <Loading />
         ) : null}
 
         {appLogsError ? (
           <Alert
-            status="error"
-            variant="top-accent"
-            borderBottomRadius="base"
-            boxShadow="md"
-          >
-            <AlertDescription>{appLogsError.message}</AlertDescription>
-          </Alert>
+            type="error"
+            message={appLogsError.message}
+          />
         ) : null}
 
         {!appLogsLoading && !appLogsError && !appLogsData ? (
           <Alert
-            status="info"
-            variant="top-accent"
-            borderBottomRadius="base"
-            boxShadow="md"
-          >
-            <AlertDescription>
-              There are no logs for {app.name}.
-              <br />
-              App is not deployed or still deploying.
-            </AlertDescription>
-          </Alert>
+            type="info"
+            message={`No hay logs de "${app.name}".
+            La aplicación no se ha lanzado o se esta lanzando.`}
+          />
         ) : null}
 
         {memoizedLogsHtml ? (
-          <Terminal mb="8">
+          <Terminal>
             {memoizedLogsHtml.map((html, index) => (
               <p key={index} dangerouslySetInnerHTML={{ __html: html }}></p>
             ))}

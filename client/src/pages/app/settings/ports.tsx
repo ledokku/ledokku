@@ -1,12 +1,11 @@
-import { Container, Grid, GridItem } from '@chakra-ui/layout';
+import { Container, Grid, Loading } from '@nextui-org/react';
 import { useParams } from 'react-router';
 import { useAppByIdQuery } from '../../../generated/graphql';
 import { AppHeaderInfo } from '../../../modules/app/AppHeaderInfo';
 import { AppHeaderTabNav } from '../../../modules/app/AppHeaderTabNav';
 import { AppSettingsMenu } from '../../../modules/app/AppSettingsMenu';
 import { AppProxyPorts } from '../../../modules/appProxyPorts/AppProxyPorts';
-import { Header } from '../../../modules/layout/Header';
-import { HeaderContainer } from '../../../ui';
+import { Header } from '../../../ui';
 
 export const AppSettingsPorts = () => {
   const { id: appId } = useParams<{ id: string }>();
@@ -20,8 +19,7 @@ export const AppSettingsPorts = () => {
   // TODO display error
 
   if (loading) {
-    // TODO nice loading
-    return <p>Loading...</p>;
+    return <Loading />;
   }
 
   if (!data?.app) {
@@ -33,24 +31,22 @@ export const AppSettingsPorts = () => {
 
   return (
     <>
-      <HeaderContainer>
+      <div>
         <Header />
         <AppHeaderInfo app={app} />
         <AppHeaderTabNav app={app} />
-      </HeaderContainer>
+      </div>
 
-      <Container maxW="5xl" mt={10}>
-        <Grid
-          templateColumns={{ sm: 'repeat(1, 1fr)', md: 'repeat(6, 1fr)' }}
-          gap={{ sm: 0, md: 16 }}
-        >
-          <GridItem colSpan={2} py={5}>
+      <Container className='mt-16'>
+        <Grid.Container
+          gap={4}>
+          <Grid xs={3}>
             <AppSettingsMenu app={app} />
-          </GridItem>
-          <GridItem colSpan={4}>
+          </Grid>
+          <Grid xs={9}>
             <AppProxyPorts appId={app.id} />
-          </GridItem>
-        </Grid>
+          </Grid>
+        </Grid.Container>
       </Container>
     </>
   );

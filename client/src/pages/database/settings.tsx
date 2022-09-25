@@ -1,14 +1,13 @@
 import * as yup from 'yup';
 import { useParams, useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
-import { Header } from '../../modules/layout/Header';
 import {
   useDatabaseByIdQuery,
   useDestroyDatabaseMutation,
   DashboardDocument,
   useDatabaseInfoQuery,
 } from '../../generated/graphql';
-import { Button, FormInput, FormHelper, HeaderContainer } from '../../ui';
+import { Button, FormInput, FormHelper, Header } from '../../ui';
 import { Container, Heading } from '@chakra-ui/react';
 import { useToast } from '../../ui/toast';
 import { DatabaseHeaderInfo } from '../../modules/database/DatabaseHeaderInfo';
@@ -110,11 +109,11 @@ export const Settings = () => {
 
   return (
     <div>
-      <HeaderContainer>
+      <div>
         <Header />
         <DatabaseHeaderInfo database={database} />
         <DatabaseHeaderTabNav database={database} />
-      </HeaderContainer>
+      </div>
 
       <Container maxW="5xl" mt={10}>
         <div className="grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 gap-4 mt-10">
@@ -127,11 +126,11 @@ export const Settings = () => {
             ) : null}
             {!databaseInfoLoading && databaseInfos
               ? databaseInfos.map((info) => (
-                  <div key={info.name} className="py-2">
-                    <div className="font-semibold">{info.name}</div>
-                    <div>{info.value}</div>
-                  </div>
-                ))
+                <div key={info.name} className="py-2">
+                  <div className="font-semibold">{info.name}</div>
+                  <div>{info.value}</div>
+                </div>
+              ))
               : null}
           </div>
           <div className="w-3/3 mb-6">

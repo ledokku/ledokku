@@ -3,14 +3,7 @@ import { useHistory, Redirect } from 'react-router-dom';
 import { FiGithub } from 'react-icons/fi';
 import {
   Box,
-  Heading,
   Text,
-  Button,
-  Spinner,
-  Container,
-  Alert,
-  AlertTitle,
-  AlertDescription,
 } from '@chakra-ui/react';
 import { config } from '../config';
 import {
@@ -21,6 +14,9 @@ import {
 import { useAuth } from '../modules/auth/AuthContext';
 import { Terminal } from '../ui';
 import { useToast } from '../ui/toast';
+import { OCStudiosLogo } from '../ui/icons/OCStudiosLogo';
+import { Button, Container, Loading } from '@nextui-org/react';
+import { Alert } from '../ui/components/Alert';
 
 export const Home = () => {
   const toast = useToast();
@@ -57,7 +53,7 @@ export const Home = () => {
             login(data.data.loginWithGithub.token);
             history.push('/dashboard');
           }
-        } catch (error) {
+        } catch (error: any) {
           toast.error(error.message);
         }
 
@@ -95,7 +91,7 @@ export const Home = () => {
 
             setShowAppSuccessAlert(true);
           }
-        } catch (error) {
+        } catch (error: any) {
           toast.error(error.message);
         }
       }
@@ -119,17 +115,13 @@ export const Home = () => {
   }
 
   return (
-    <Container maxW="5xl">
-      <Box
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        justifyContent="center"
-        minHeight="100vh"
+    <Container>
+      <div
+        className='flex flex-col items-center justify-center h-screen'
       >
-        <Heading as="h2" size="lg">
-          Ledokku
-        </Heading>
+        <div className='mb-6'>
+          <OCStudiosLogo size={150} />
+        </div>
 
         {error && (
           <Text mt={4} color="red.500">
@@ -138,7 +130,7 @@ export const Home = () => {
         )}
 
         {(loading || registerGithubAppLoading || loginWithGithubLoading) && (
-          <Spinner mt={4} />
+          <Loading className='mt-8' />
         )}
 
         {data?.setup.canConnectSsh === false && (
@@ -147,7 +139,7 @@ export const Home = () => {
               In order to setup the ssh connection, run the following command on
               your Dokku server.
             </Text>
-            <Terminal wordBreak="break-all">
+            <Terminal>
               {`echo "${data.setup.sshPublicKey}" | dokku ssh-keys:add ledokku`}
             </Terminal>
             <Text mt={3}>Once you are done, just refresh this page.</Text>
@@ -180,10 +172,9 @@ export const Home = () => {
                   style={{ display: 'none' }}
                 />
                 <Button
-                  mt={4}
-                  colorScheme="gray"
+                  className='mt-4'
                   type="submit"
-                  leftIcon={<FiGithub size={18} />}
+                  icon={<FiGithub size={18} />}
                   size="lg"
                 >
                   Create Github Application
@@ -204,35 +195,25 @@ export const Home = () => {
             >
               {showAppSuccessAlert ? (
                 <Alert
-                  mt={4}
-                  status="success"
-                  variant="top-accent"
-                  flexDirection="column"
-                  alignItems="flex-start"
-                  borderBottomRadius="base"
-                  boxShadow="md"
-                >
-                  <AlertTitle mr={2}>
-                    Github application successfully created
-                  </AlertTitle>
-                  <AlertDescription>
-                    You can now login to create your first user.
-                  </AlertDescription>
-                </Alert>
+                  title='Aplicación de Github creada'
+                  type='success'
+                  message='Ahora puedes iniciar sesión para registrar a tu primer usuario'
+                />
               ) : null}
 
               <Button
-                mt={4}
-                colorScheme="gray"
+                shadow
+                className='mt-4'
                 onClick={handleLogin}
-                leftIcon={<FiGithub size={18} />}
+                icon={<FiGithub size={18} />}
                 size="lg"
+                color="gradient"
               >
                 Log in with Github
               </Button>
             </Box>
           )}
-      </Box>
+      </div>
     </Container>
   );
 };

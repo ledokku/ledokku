@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Header } from '../../modules/layout/Header';
 import {
   useAppByIdQuery,
   useEnvVarsQuery,
@@ -9,23 +8,12 @@ import {
   EnvVarsDocument,
 } from '../../generated/graphql';
 import { useFormik } from 'formik';
-import { HeaderContainer } from '../../ui';
-import {
-  Box,
-  Container,
-  Grid,
-  GridItem,
-  Heading,
-  Link,
-  Text,
-  Input,
-  Button,
-  IconButton,
-} from '@chakra-ui/react';
+import { Header } from '../../ui';
 import { FiTrash2 } from 'react-icons/fi';
 import { useToast } from '../../ui/toast';
 import { AppHeaderTabNav } from '../../modules/app/AppHeaderTabNav';
 import { AppHeaderInfo } from '../../modules/app/AppHeaderInfo';
+import { Button, Container, Divider, Grid, Input, Link, Loading, Text, Textarea } from '@nextui-org/react';
 
 interface EnvFormProps {
   name: string;
@@ -53,7 +41,7 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
         variables: { key: name, appId },
         refetchQueries: [{ query: EnvVarsDocument, variables: { appId } }],
       });
-    } catch (error) {
+    } catch (error: any) {
       toast.error(error.message);
     }
   };
@@ -75,7 +63,7 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
           formik.resetForm();
         }
         toast.success('Environment variable set successfully');
-      } catch (error) {
+      } catch (error: any) {
         toast.error(error.message);
       }
     },
@@ -85,24 +73,23 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
     //TODO Handle visual feedback on changing env
     //TODO Provide infos about env vars
     <form onSubmit={formik.handleSubmit} autoComplete="off">
-      <Grid
-        templateColumns={{ sm: 'repeat(1, 1fr)', md: 'repeat(3, 1fr)' }}
-        gap="3"
-        mt="3"
-      >
-        <GridItem>
+      <Grid.Container gap={1} direction="column">
+        <Grid xs md={6}>
           <Input
+            width='100%'
             autoComplete="off"
             id={isNewVar ? 'newVarName' : name}
             name="name"
-            placeholder="Name"
+            placeholder="Nombre"
+            label='Nombre'
             key={name}
             value={formik.values.name}
             onChange={formik.handleChange}
           />
-        </GridItem>
-        <GridItem>
-          <Input
+        </Grid>
+        <Grid xs md={6}>
+          <Textarea
+            width='100%'
             autoComplete="off"
             onMouseEnter={() => setInputType('text')}
             onMouseLeave={() => setInputType('password')}
@@ -110,30 +97,31 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
             onBlur={() => setInputType('password')}
             id={isNewVar ? 'newVarValue' : value}
             name="value"
-            placeholder="Value"
+            placeholder="Valor"
+            label='Valor'
             key={value}
             value={formik.values.value}
             onChange={formik.handleChange}
-            type={inputType}
+          // type={inputType}
           />
-        </GridItem>
-        <GridItem display="flex">
-          <Button isLoading={setEnvVarLoading} type="submit">
-            {isNewVar ? 'Add' : 'Save'}
+        </Grid>
+        <Grid className='flex flex-row'>
+          <Button type="submit" className='mr-4'>
+            {setEnvVarLoading ? <Loading color="currentColor" size='sm' /> : isNewVar ? 'Agregar' : 'Guardar'}
           </Button>
           {!isNewVar && (
-            <IconButton
+            <Button
+              css={{ minWidth: "0px" }}
+              color="error"
               aria-label="Delete"
-              variant="outline"
-              ml="3"
-              icon={<FiTrash2 />}
-              isLoading={unsetEnvVarLoading}
+              disabled={unsetEnvVarLoading}
+              icon={unsetEnvVarLoading ? <Loading color="currentColor" /> : <FiTrash2 />}
               onClick={handleDeleteEnvVar}
             />
           )}
-        </GridItem>
-      </Grid>
-    </form>
+        </Grid>
+      </Grid.Container>
+    </form >
   );
 };
 
@@ -178,41 +166,46 @@ export const Env = () => {
 
   return (
     <div>
-      <HeaderContainer>
+      <div>
         <Header />
         <AppHeaderInfo app={app} />
         <AppHeaderTabNav app={app} />
-      </HeaderContainer>
+      </div>
 
-      <Container maxW="5xl" mt={10}>
-        <Box py="5">
-          <Heading as="h2" size="md">
-            Set env variables
-          </Heading>
-          <Text color="gray.400" fontSize="sm">
-            Environment variables change the way your app behaves. They are
-            available both at run time and during the application
-            build/compilation step for buildpack-based deploys.{' '}
+      <Container className='py-16'>
+        <div >
+          <Text h2>
+            Configurar variables de entorno
+          </Text>
+          <Text>
+            Las variables de entorno cambian la manera en la que la aplicación se comporta.
+            Estan disponibles tanto en tiempo de ejecución como en compilación para lanzamientos
+            basados en buildpack.{' '}
             <Link
-              textDecoration="underline"
               href="https://dokku.com/docs/configuration/environment-variables/"
               isExternal
+              css={{ display: 'inline' }}
             >
-              Read more.
+              Leer más
             </Link>
           </Text>
-        </Box>
+        </div>
 
         {!envVarLoading && !envVarError && envVarData?.envVars.envVars && (
-          <Box mb="8">
+          <div>
             {envVarData.envVars.envVars.map((envVar) => {
               return (
-                <EnvForm
-                  key={envVar.key}
-                  name={envVar.key}
-                  value={envVar.value}
-                  appId={appId}
-                />
+                <div>
+                  <EnvForm
+                    key={envVar.key}
+                    name={envVar.key}
+                    value={envVar.value}
+                    appId={appId}
+                  />
+                  <div className='my-8'>
+                    <Divider />
+                  </div>
+                </div>
               );
             })}
             <EnvForm
@@ -222,7 +215,7 @@ export const Env = () => {
               appId={appId}
               isNewVar={true}
             />
-          </Box>
+          </div>
         )}
       </Container>
     </div>

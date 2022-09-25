@@ -6,4 +6,4 @@ export * from './Spinner';
 export * from './DatabaseLabel';
 export * from './Modal';
 
-export * from './HeaderContainer';
+export * from './Header';

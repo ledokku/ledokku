@@ -2,15 +2,15 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 const colors = require('tailwindcss/colors');
 
 module.exports = {
-  purge: ['./src/**/*.ts', './src/**/*.tsx'],
-  darkMode: false,
+  content: ['./src/**/*.ts', './src/**/*.tsx'],
+  darkMode: 'media',
   theme: {
     extend: {
       fontFamily: {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans],
       },
       colors: {
-        gray: colors.blueGray,
+        gray: colors.slate,
       },
       width: {
         156: '39rem',

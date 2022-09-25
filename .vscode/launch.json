@@ -1,0 +1,45 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug server",
+            "request": "launch",
+            "runtimeArgs": [
+                "dev",
+            ],
+            "cwd": "${workspaceFolder}/server",
+            "runtimeExecutable": "yarn",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
+        {
+            "name": "Debug client",
+            "request": "launch",
+            "runtimeArgs": [
+                "dev",
+            ],
+            "cwd": "${workspaceFolder}/client",
+            "runtimeExecutable": "yarn",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        }
+    ],
+    "compounds": [
+        {
+            "presentation": {
+                "hidden": false,
+                "group": "Compounds",
+                "order": 1
+            },
+            "name": "Development",
+            "configurations": [
+                "Debug server",
+                "Debug client"
+            ]
+        }
+    ]
+}

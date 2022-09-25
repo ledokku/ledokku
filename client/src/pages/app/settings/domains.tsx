@@ -5,8 +5,7 @@ import { AppHeaderInfo } from '../../../modules/app/AppHeaderInfo';
 import { AppHeaderTabNav } from '../../../modules/app/AppHeaderTabNav';
 import { AppSettingsMenu } from '../../../modules/app/AppSettingsMenu';
 import { AppDomains } from '../../../modules/domains/AppDomains';
-import { Header } from '../../../modules/layout/Header';
-import { HeaderContainer } from '../../../ui';
+import { Header } from '../../../ui';
 
 export const AppSettingsDomains = () => {
   const { id: appId } = useParams<{ id: string }>();
@@ -33,11 +32,11 @@ export const AppSettingsDomains = () => {
 
   return (
     <>
-      <HeaderContainer>
+      <div>
         <Header />
         <AppHeaderInfo app={app} />
         <AppHeaderTabNav app={app} />
-      </HeaderContainer>
+      </div>
 
       <Container maxW="5xl" mt={10}>
         <Grid
