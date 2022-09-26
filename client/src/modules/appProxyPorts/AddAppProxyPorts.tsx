@@ -2,12 +2,6 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 
 import { useAddAppProxyPortMutation } from '../../generated/graphql';
-import {
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
-  SimpleGrid,
-} from '@chakra-ui/react';
 import { useToast } from '../../ui/toast';
 import { Button, Input, Loading, Modal, Text } from '@nextui-org/react';
 

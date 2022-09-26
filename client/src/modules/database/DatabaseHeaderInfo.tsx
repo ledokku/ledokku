@@ -1,4 +1,4 @@
-import { Badge, Container, Flex, Text } from '@chakra-ui/layout';
+import { Badge, Container, Text } from '@nextui-org/react';
 import { DatabaseTypes } from '../../generated/graphql';
 import { dbTypeToIcon, dbTypeToReadableName } from '../../pages/utils';
 
@@ -14,24 +14,21 @@ export const DatabaseHeaderInfo = ({ database }: DatabaseHeaderInfoProps) => {
   const DbIcon = dbTypeToIcon(database.type);
 
   return (
-    <Container maxW="5xl" py="5">
-      <Text fontSize="md" fontWeight="bold">
-        {database.name}
-      </Text>
-      <Flex mt="1" alignItems="center" color="gray.700">
-        <DbIcon size={16} />
-        <Text fontSize="sm" ml="1">
-          {dbTypeToReadableName(database.type)}
+    <Container className='py-5'>
+      <div className='flex flex-row items-center'>
+        <Text h2>
+          {database.name}
         </Text>
-        <Badge
-          backgroundColor="gray.200"
-          borderRadius="base"
-          textTransform="none"
-          ml="2"
-        >
-          {database.version}
-        </Badge>
-      </Flex>
+        <div className='flex items-center mt-1 rounded-full border-2 border-gray-300 justify-center ml-4 pl-2'>
+          <DbIcon size={16} />
+          <Text className='mx-2'>
+            {dbTypeToReadableName(database.type)}
+          </Text>
+          <Badge color="primary">
+            {database.version}
+          </Badge>
+        </div>
+      </div>
     </Container>
   );
 };

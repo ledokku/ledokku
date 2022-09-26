@@ -1,5 +1,6 @@
 import { Button, Loading, Modal, Text } from '@nextui-org/react';
 import { useState } from 'react';
+import { TerminalOutput } from 'react-terminal-ui';
 import {
   useAppByIdQuery,
   useRebuildAppMutation,
@@ -102,7 +103,7 @@ export const AppRebuild = ({ appId }: AppRebuildProps) => {
           Re-compilar
         </Button>
       </div>
-      <Modal preventClose={processStatus === 'running'} width={processStatus === 'running' ? "90%" : undefined} blur closeButton onClose={() => {
+      <Modal preventClose={processStatus === 'running'} width={isTerminalVisible ? "90%" : undefined} blur closeButton onClose={() => {
         setIsRebuildAppModalOpen(false);
         refetch({ appId });
         setRebuildLoading(false);
@@ -118,14 +119,7 @@ export const AppRebuild = ({ appId }: AppRebuildProps) => {
                 Re-compilar la app toma algunos minutos. Respira un poco, los registros aparecerán pronto:
               </p>
               <Terminal className={'w-6/6'}>
-                {arrayOfRebuildLogs.map((log) => (
-                  <p
-                    key={arrayOfRebuildLogs.indexOf(log)}
-                    className="text-s leading-5"
-                  >
-                    {log.message}
-                  </p>
-                ))}
+                {arrayOfRebuildLogs.map((log) => (<TerminalOutput>{log.message}</TerminalOutput>))}
               </Terminal>
             </>
           ) : (

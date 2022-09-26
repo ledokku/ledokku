@@ -1,12 +1,29 @@
-import { Card, Divider, Text } from '@nextui-org/react';
+import { ColorMode, TerminalOutput } from 'react-terminal-ui';
+import TerminalUI from 'react-terminal-ui';
+import { HTMLAttributes, useMemo } from 'react';
+import AnsiUp from 'ansi_up';
+import innerText from 'react-innertext';
 
-export const Terminal = (props: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>) => (
-  <Card css={{ bgColor: "$black", color: "$white", maxH: 500 }}>
-    <div></div>
-    <Card.Header><Text h6 color='$white' className='mb-1'>Terminal</Text></Card.Header>
-    <Card.Divider css={{ bgColor: "$gray800" }} />
-    <Card.Body css={{ lineHeight: 1.5, fontSmooth: 'auto' }}>
-      {props.children}
-    </Card.Body>
-  </Card>
-);
+
+interface TerminalProps {
+  children?: TerminalOutput[]
+}
+
+
+export const Terminal = ({ children }: TerminalProps & Omit<HTMLAttributes<any>, "children">) => {
+  const memoizedLogs = useMemo(() => {
+    return children?.map((log, index) => {
+      const ansiIUp = new AnsiUp();
+      const html = ansiIUp.ansi_to_html(innerText(log));
+      console.log(html);
+
+      return (<TerminalOutput key={index}><span dangerouslySetInnerHTML={{ __html: html }} /></TerminalOutput >);
+    });
+  }, [children]);
+
+  return (
+    <TerminalUI name="Terminal" colorMode={ColorMode.Dark} >
+      {memoizedLogs}
+    </TerminalUI>
+  )
+}

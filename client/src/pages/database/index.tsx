@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import cx from 'classnames';
-import { Container, Heading, Table, Tbody, Td, Tr } from '@chakra-ui/react';
 import {
   useDatabaseByIdQuery,
   useAppsQuery,
@@ -13,7 +12,6 @@ import {
 } from '../../generated/graphql';
 import { useParams, Link } from 'react-router-dom';
 import {
-  Button,
   Modal,
   ModalTitle,
   ModalDescription,
@@ -24,6 +22,7 @@ import {
 import { useToast } from '../../ui/toast';
 import { DatabaseHeaderInfo } from '../../modules/database/DatabaseHeaderInfo';
 import { DatabaseHeaderTabNav } from '../../modules/database/DatabaseHeaderTabNav';
+import { Button, Container, Grid, Loading, Table, Text } from '@nextui-org/react';
 
 export const Database = () => {
   const { id: databaseId } = useParams<{ id: string }>();
@@ -107,7 +106,7 @@ export const Database = () => {
 
   if (loading) {
     // TODO nice loading
-    return <p>Loading...</p>;
+    return <Loading />;
   }
 
   const { database } = data;
@@ -125,7 +124,7 @@ export const Database = () => {
       });
       setIsTerminalVisible(true);
       setUnlinkLoading(true);
-    } catch (e) {
+    } catch (e: any) {
       toast.error(e.message);
     }
   };
@@ -164,7 +163,7 @@ export const Database = () => {
       });
       setIsTerminalVisible(true);
       setLinkLoading(true);
-    } catch (e) {
+    } catch (e: any) {
       toast.error(e.message);
     }
   };
@@ -177,57 +176,46 @@ export const Database = () => {
         <DatabaseHeaderTabNav database={database} />
       </div>
 
-      <Container maxW="5xl" mt={10}>
-        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4 mt-10">
-          <div>
-            <Heading as="h2" size="md" py={5}>
-              Database info
-            </Heading>
-            <div className="bg-gray-100 shadow overflow-hidden rounded-lg border-b border-gray-200">
-              <Table mt="4" mb="4" variant="simple">
-                <Tbody mt="10">
-                  <Tr py="4">
-                    <Td className="font-semibold" py="3" px="4">
-                      Database name
-                    </Td>
-                    <Td py="3" px="4">
-                      {database.name}
-                    </Td>
-                  </Tr>
-                  <Tr>
-                    <Td className="font-semibold" py="7" px="4">
-                      id
-                    </Td>
-                    <Td w="1/3" py="3" px="4">
-                      {database.id}
-                    </Td>
-                  </Tr>
-                  <Tr>
-                    <Td className="font-semibold" py="3" px="4">
-                      Type
-                    </Td>
-                    <Td py="3" px="4">
-                      {database.type}
-                    </Td>
-                  </Tr>
-                </Tbody>
-              </Table>
-            </div>
-          </div>
+      <Container>
+        <Grid.Container gap={3}>
+          <Grid xs={12} md={6} direction="column">
+            <Text h2 className='mb-8'>
+              Información de la base de datos
+            </Text>
+            <Table>
+              <Table.Header>
+                <Table.Column> </Table.Column>
+                <Table.Column>Valor</Table.Column>
+              </Table.Header>
+              <Table.Body>
+                <Table.Row>
+                  <Table.Cell>Nombre</Table.Cell>
+                  <Table.Cell>{database.name}</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Identificador</Table.Cell>
+                  <Table.Cell>{database.id}</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Tipo</Table.Cell>
+                  <Table.Cell>{database.type}</Table.Cell>
+                </Table.Row>
+              </Table.Body>
+            </Table>
+          </Grid>
 
-          <div className="w-full">
-            <h1 className="font-bold text-lg font-bold py-5">Apps</h1>
+          <Grid xs={12} md={6} direction="column">
+            <Text h2 className='mb-8'>
+              Aplicaciones conectadas
+            </Text>
             {apps.length === 0 ? (
               <>
-                <div className="mt-3 mb-4">
-                  <h2 className="text-gray-400">
-                    Currently you haven't created apps, to do so proceed with
-                    the app creation flow
-                  </h2>
-                </div>
+                <Text className="mb-4">
+                  Actualmente no tienes aplicaciones creadas. Para crear una realiza el proceso de creación.
+                </Text>
                 <Link to="/create-app">
-                  <Button width="large" color={'grey'}>
-                    Create app
+                  <Button>
+                    Crear aplicación
                   </Button>
                 </Link>
               </>
@@ -314,14 +302,12 @@ export const Database = () => {
                       </p>
                     )}
                     <Button
-                      color="grey"
-                      width="large"
                       className="mt-2"
-                      isLoading={
-                        databaseLinkLoading &&
-                        !databaseLinkData &&
-                        !databaseLinkError
-                      }
+                      // isLoading={
+                      //   databaseLinkLoading &&
+                      //   !databaseLinkData &&
+                      //   !databaseLinkError
+                      // }
                       disabled={!selectedApp.value.id}
                       onClick={() => setIsLinkModalOpen(true)}
                     >
@@ -391,11 +377,10 @@ export const Database = () => {
                     <div className="ml-80">
                       <Link to="/create-app">
                         <Button
-                          color={'grey'}
-                          variant="outline"
+                          bordered
                           className="text-sm mr-3"
                         >
-                          Create app
+                          Crear aplicación
                         </Button>
                       </Link>
                     </div>
@@ -418,9 +403,8 @@ export const Database = () => {
                           </div>
                         </Link>
                         <Button
-                          width="normal"
                           className="mt-4 ml-2 h-10"
-                          color="red"
+                          color="error"
                           onClick={() => {
                             setIsUnlinkModalOpen(true);
                             setAppAboutToUnlink(app.name);
@@ -494,8 +478,8 @@ export const Database = () => {
                 )}
               </>
             )}
-          </div>
-        </div>
+          </Grid>
+        </Grid.Container>
       </Container>
     </div>
   );

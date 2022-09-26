@@ -1,19 +1,14 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import {
-  Alert,
-  AlertDescription,
-  Container,
-  Heading,
-  Text,
-} from '@chakra-ui/react';
-import {
   useDatabaseByIdQuery,
   useDatabaseLogsQuery,
 } from '../../generated/graphql';
 import { Terminal, Header } from '../../ui';
 import { DatabaseHeaderInfo } from '../../modules/database/DatabaseHeaderInfo';
 import { DatabaseHeaderTabNav } from '../../modules/database/DatabaseHeaderTabNav';
+import { Container, Loading, Text } from '@nextui-org/react';
+import { Alert } from '../../ui/components/Alert';
 
 export const Logs = () => {
   const { id: databaseId } = useParams<{ id: string }>();
@@ -61,26 +56,20 @@ export const Logs = () => {
         <DatabaseHeaderTabNav database={database} />
       </div>
 
-      <Container maxW="5xl" mt={10}>
-        <Heading as="h2" size="md" py={5}>
-          Logs
-        </Heading>
+      <Container className='py-12'>
+        <Text h2>
+          Registros de la base de datos "{database.name}":
+        </Text>
 
         {databaseLogsLoading ? (
-          <Text fontSize="sm" color="gray.400">
-            Loading...
-          </Text>
+          <Loading />
         ) : null}
 
         {databaseLogsError ? (
           <Alert
-            status="error"
-            variant="top-accent"
-            borderBottomRadius="base"
-            boxShadow="md"
-          >
-            <AlertDescription>{databaseLogsError.message}</AlertDescription>
-          </Alert>
+            type="error"
+            message={databaseLogsError.message}
+          />
         ) : null}
 
         {!databaseLogsLoading && !databaseLogsError && databaseLogsData ? (

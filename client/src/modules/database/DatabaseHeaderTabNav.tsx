@@ -1,6 +1,5 @@
-import { Container } from '@chakra-ui/layout';
+import { Container, Navbar } from '@nextui-org/react';
 import { useLocation } from 'react-router';
-import { TabNav, TabNavLink } from '../../ui';
 
 interface DatabaseHeaderTabNavProps {
   database: {
@@ -16,32 +15,34 @@ export const DatabaseHeaderTabNav = ({
   const selectedRoute = location.pathname.endsWith('/settings')
     ? 'settings'
     : location.pathname.endsWith('/logs')
-    ? 'logs'
-    : 'index';
+      ? 'logs'
+      : 'index';
 
   return (
-    <Container maxW="5xl">
-      <TabNav>
-        <TabNavLink
-          to={`/database/${database.id}`}
-          selected={selectedRoute === 'index'}
-        >
-          Database
-        </TabNavLink>
+    <Container>
+      <Navbar disableShadow>
+        <Navbar.Content variant="underline-rounded">
+          <Navbar.Link
+            href={`/database/${database.id}`}
+            isActive={selectedRoute === 'index'}
+          >
+            Database
+          </Navbar.Link>
 
-        <TabNavLink
-          to={`/database/${database.id}/logs`}
-          selected={selectedRoute === 'logs'}
-        >
-          Logs
-        </TabNavLink>
-        <TabNavLink
-          to={`/database/${database.id}/settings`}
-          selected={selectedRoute === 'settings'}
-        >
-          Settings
-        </TabNavLink>
-      </TabNav>
+          <Navbar.Link
+            href={`/database/${database.id}/logs`}
+            isActive={selectedRoute === 'logs'}
+          >
+            Logs
+          </Navbar.Link>
+          <Navbar.Link
+            href={`/database/${database.id}/settings`}
+            isActive={selectedRoute === 'settings'}
+          >
+            Settings
+          </Navbar.Link>
+        </Navbar.Content>
+      </Navbar>
     </Container>
   );
 };

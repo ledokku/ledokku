@@ -1,5 +1,6 @@
 import { Button, Loading, Modal, Text } from '@nextui-org/react';
 import { useState } from 'react';
+import { TerminalOutput } from 'react-terminal-ui';
 
 import {
   useAppByIdQuery,
@@ -104,7 +105,7 @@ export const AppRestart = ({ appId }: AppRestartProps) => {
           Reiniciar
         </Button>
       </div>
-      <Modal preventClose={processStatus === 'running'} width={processStatus === 'running' ? "90%" : undefined} blur onClose={() => {
+      <Modal preventClose={processStatus === 'running'} width={isTerminalVisible ? "90%" : undefined} blur onClose={() => {
         setIsRestartAppModalOpen(false)
         refetch({ appId });
         setRestartLoading(false);
@@ -121,12 +122,11 @@ export const AppRestart = ({ appId }: AppRestartProps) => {
               </p>
               <Terminal className={'w-6/6'}>
                 {arrayOfRestartLogs.map((log) => (
-                  <p
+                  <TerminalOutput
                     key={arrayOfRestartLogs.indexOf(log)}
-                    className="text-s leading-5"
                   >
                     {log.message}
-                  </p>
+                  </TerminalOutput>
                 ))}
               </Terminal>
             </>

@@ -1,6 +1,5 @@
-import { Container, Link, Navbar } from '@nextui-org/react';
+import { Container, Navbar } from '@nextui-org/react';
 import { useLocation } from 'react-router';
-import { TabNav, TabNavLink } from '../../ui';
 
 interface AppHeaderTabNavProps {
   app: {

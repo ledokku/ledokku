@@ -21,6 +21,7 @@ import { FiArrowRight, FiArrowLeft } from 'react-icons/fi';
 import { useAuth } from '../../modules/auth/AuthContext';
 import { Button, Container, Dropdown, Grid, Link, Loading, Modal, Text, User } from '@nextui-org/react';
 import { Alert } from '../../ui/components/Alert';
+import { TerminalOutput } from 'react-terminal-ui';
 
 enum AppCreationStatus {
   FAILURE = 'Failure',
@@ -285,10 +286,10 @@ export const CreateAppGithub = () => {
   // Effect for app creation
   useEffect(() => {
     isAppCreationSuccess === AppCreationStatus.FAILURE && !isToastShown
-      ? toast.error('Failed to create an app') && setIsToastShown(true)
+      ? toast.error('Error al crear aplicación') && setIsToastShown(true)
       : isAppCreationSuccess === AppCreationStatus.SUCCESS &&
       !isToastShown &&
-      toast.success('App created successfully') &&
+      toast.success('Aplicación creada') &&
       setIsToastShown(true);
   }, [isToastShown, isAppCreationSuccess, toast]);
 
@@ -303,18 +304,11 @@ export const CreateAppGithub = () => {
               Creando la aplicación <b>{formik.values.name}</b> desde{' '}
               <b>{formik.values.repo.name}</b>
             </Text>
-            <p className="text-gray-500 mb-2">
+            <p className="mb-2">
               Crear una aplicación usualmente toma unos cuantos minutos. Respira un poco, los registros aparecerán pronto:
             </p>
             <Terminal>
-              {arrayOfCreateAppLogs.map((log) => (
-                <Text
-                  key={arrayOfCreateAppLogs.indexOf(log)}
-                  css={{ fontFamily: "monospace" }}
-                >
-                  {log.message?.replaceAll('[1G', '')}
-                </Text>
-              ))}
+              {arrayOfCreateAppLogs.map((log) => (<TerminalOutput>{log.message}</TerminalOutput>))}
             </Terminal>
 
             {!!isAppCreationSuccess &&

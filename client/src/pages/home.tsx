@@ -12,11 +12,11 @@ import {
   useLoginWithGithubMutation,
 } from '../generated/graphql';
 import { useAuth } from '../modules/auth/AuthContext';
-import { Terminal } from '../ui';
 import { useToast } from '../ui/toast';
 import { OCStudiosLogo } from '../ui/icons/OCStudiosLogo';
 import { Button, Container, Loading } from '@nextui-org/react';
 import { Alert } from '../ui/components/Alert';
+import { CodeBox } from '../ui/components/CodeBox';
 
 export const Home = () => {
   const toast = useToast();
@@ -136,13 +136,12 @@ export const Home = () => {
         {data?.setup.canConnectSsh === false && (
           <>
             <Text mt={4}>
-              In order to setup the ssh connection, run the following command on
-              your Dokku server.
+              Para conectarse por SSH, ejecuta el siguiente comando en tu servidor de Dokku.
             </Text>
-            <Terminal>
+            <CodeBox lang='bash'>
               {`echo "${data.setup.sshPublicKey}" | dokku ssh-keys:add ledokku`}
-            </Terminal>
-            <Text mt={3}>Once you are done, just refresh this page.</Text>
+            </CodeBox>
+            <Text mt={3}>Una vez finalizado, refresca la página.</Text>
           </>
         )}
 
@@ -157,8 +156,7 @@ export const Home = () => {
               justifyContent="center"
             >
               <Text mt={4} textAlign="center">
-                In order to be able to login and interact with the Github API,
-                let's create a new Github Application.
+                Para poder iniciar sesión e interactuar con la API de Github, crea una aplicación de Github.
               </Text>
               <form
                 action="https://github.com/settings/apps/new?state=github_application_setup"
@@ -177,7 +175,7 @@ export const Home = () => {
                   icon={<FiGithub size={18} />}
                   size="lg"
                 >
-                  Create Github Application
+                  Crear aplicación de Github
                 </Button>
               </form>
             </Box>
@@ -206,10 +204,11 @@ export const Home = () => {
                 className='mt-4'
                 onClick={handleLogin}
                 icon={<FiGithub size={18} />}
+                iconLeftCss={{ display: "contents", marginRight: "8px" }}
                 size="lg"
                 color="gradient"
               >
-                Log in with Github
+                &nbsp; Iniciar sesión con Github
               </Button>
             </Box>
           )}

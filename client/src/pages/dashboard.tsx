@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import format from 'date-fns/format';
 import { useDashboardQuery } from '../generated/graphql';
 import { Header } from '../ui';
-import { dbTypeToIcon, dbTypeToReadableName } from './utils';
+import { dbTypeToIcon } from './utils';
 import { GithubIcon } from '../ui/icons/GithubIcon';
 import { Button, Card, Container, Grid, Image, Text } from '@nextui-org/react';
 
@@ -76,7 +76,7 @@ export const Dashboard = () => {
                             </Text>
                           </Grid>
                           <Grid xs={12}>
-                            <Text css={{ color: "$accents8" }} h6>{app.id}</Text>
+                            <Text css={{ color: "$accents8" }} small>{app.id}</Text>
                           </Grid>
                         </Grid.Container>
                       </Card.Header>
@@ -102,35 +102,40 @@ export const Dashboard = () => {
               <Text h6>
                 Sin bases de datos
               </Text>
-            ) : null}
-            {data?.databases.map((database) => {
-              const DbIcon = dbTypeToIcon(database.type);
-
-              return (
-                <div
-                  key={database.id}
-                  className="py-3 border-gray-200"
-                >
-                  <div className='mb-1 bg-gray-900'>
-                    <Link to={`/database/${database.id}`}>{database.name}</Link>
-                  </div>
-                  <div
-                    className='bg-gray-400 flex justify-between'
-                  >
-                    <Text h6>
-                      <span className='mr-1'>
-                        <DbIcon size={16} />
-                      </span>
-                      {dbTypeToReadableName(database.type)}
-                    </Text>
-                    <Text>
-                      Created on{' '}
-                      {format(new Date(database.createdAt), 'MM/DD/YYYY')}
-                    </Text>
-                  </div>
-                </div>
-              );
-            })}
+            ) : (
+              <Grid.Container gap={1}>
+                {data?.databases.map((database) => {
+                  const DbIcon = dbTypeToIcon(database.type)
+                  return (
+                    <Grid xs={12} sm={6}>
+                      <Link to={`/database/${database.id}`} className='w-full'>
+                        <Card isHoverable isPressable className='w-full'>
+                          <Card.Header>
+                            <div style={{ width: "auto", height: "auto", padding: "0.3rem" }} className="border-2 rounded-lg">
+                              <div style={{ width: 40, height: 40 }}>
+                                <DbIcon size={40} />
+                              </div>
+                            </div>
+                            <Grid.Container css={{ pl: "$6" }}>
+                              <Grid xs={12}>
+                                <Text h4 css={{ lineHeight: "$xs" }}>
+                                  {database.name}
+                                </Text>
+                              </Grid>
+                              <Grid xs={12}>
+                                <Text css={{ color: "$accents8" }} small>{database.id}</Text>
+                              </Grid>
+                            </Grid.Container>
+                          </Card.Header>
+                          <Card.Footer>
+                            <Text h6 className='mb-1'>Creado el {format(new Date(database.createdAt), 'MM/DD/YYYY')}</Text>
+                          </Card.Footer>
+                        </Card></Link>
+                    </Grid>
+                  )
+                })}
+              </Grid.Container>
+            )}
           </Grid>
 
           <Grid xs={12} md={5} className="flex flex-col">
