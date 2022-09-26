@@ -26,20 +26,20 @@ export const DatabaseHeaderTabNav = ({
             href={`/database/${database.id}`}
             isActive={selectedRoute === 'index'}
           >
-            Database
+            Base de datos
           </Navbar.Link>
 
           <Navbar.Link
             href={`/database/${database.id}/logs`}
             isActive={selectedRoute === 'logs'}
           >
-            Logs
+            Registros
           </Navbar.Link>
           <Navbar.Link
             href={`/database/${database.id}/settings`}
             isActive={selectedRoute === 'settings'}
           >
-            Settings
+            Configuración
           </Navbar.Link>
         </Navbar.Content>
       </Navbar>

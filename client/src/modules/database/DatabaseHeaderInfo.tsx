@@ -14,7 +14,7 @@ export const DatabaseHeaderInfo = ({ database }: DatabaseHeaderInfoProps) => {
   const DbIcon = dbTypeToIcon(database.type);
 
   return (
-    <Container className='py-5'>
+    <Container className='mt-8'>
       <div className='flex flex-row items-center'>
         <Text h2>
           {database.name}

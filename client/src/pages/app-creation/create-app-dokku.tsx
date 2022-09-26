@@ -26,8 +26,8 @@ export const CreateAppDokku = () => {
       .required('App name is required')
       .matches(/^[a-z0-9-]+$/)
       .test(
-        'Name exists',
-        'App with this name already exists',
+        'El nombre ya existe',
+        'Ya hay una aplicación con este nombre',
         (val) => !dataApps?.apps.find((app) => app.name === val)
       ),
   });
@@ -55,7 +55,7 @@ export const CreateAppDokku = () => {
 
         if (res.data) {
           history.push(`app/${res.data?.createAppDokku.appId}`);
-          toast.success('App created successfully');
+          toast.success('Aplicación creada');
         }
       } catch (error: any) {
         toast.error(error);

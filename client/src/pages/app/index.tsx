@@ -15,10 +15,6 @@ import {
   Terminal,
   Header,
 } from '../../ui';
-import { PostgreSQLIcon } from '../../ui/icons/PostgreSQLIcon';
-import { MongoIcon } from '../../ui/icons/MongoIcon';
-import { RedisIcon } from '../../ui/icons/RedisIcon';
-import { MySQLIcon } from '../../ui/icons/MySQLIcon';
 import { useToast } from '../../ui/toast';
 import { AppHeaderTabNav } from '../../modules/app/AppHeaderTabNav';
 import { AppHeaderInfo } from '../../modules/app/AppHeaderInfo';
@@ -186,15 +182,15 @@ export const App = () => {
         <AppHeaderTabNav app={app} />
       </div>
 
-      <Container className="mt-12">
+      <Container className="my-8">
         <Grid.Container gap={4} >
           <Grid xs={12} md={6} className="flex flex-col">
-            <Text h3>
+            <Text h3 className='mb-8'>
               Información de la aplicación
             </Text>
             <Table>
               <Table.Header>
-                <Table.Column>NOMBRE</Table.Column>
+                <Table.Column> </Table.Column>
                 <Table.Column>VALOR</Table.Column>
               </Table.Header>
               <Table.Body>
@@ -226,8 +222,8 @@ export const App = () => {
             </Table>
           </Grid>
           <Grid xs={12} md={6} className="flex flex-col">
-            <Text h3>
-              Bases de datos
+            <Text h3 className='mb-8'>
+              Bases de datos conectadas
             </Text>
             {databases.length === 0 ? (
               <>
@@ -271,13 +267,12 @@ export const App = () => {
                             })
                           }
                         }} color="primary">
-                        {
-                          [
-                            ...dbOptions.map(database => (<Dropdown.Item key={database.value.id}>{database.label}</Dropdown.Item>)),
-                            <Dropdown.Item key="create-new-database-internal-id">Crear base de datos nueva</Dropdown.Item>
-                          ]
-                        }
-
+                        <Dropdown.Section>
+                          {dbOptions.map(database => (<Dropdown.Item key={database.value.id}>{database.label}</Dropdown.Item>))}
+                        </Dropdown.Section>
+                        <Dropdown.Section>
+                          <Dropdown.Item key="create-new-database-internal-id">Crear base de datos nueva</Dropdown.Item>
+                        </Dropdown.Section>
                       </Dropdown.Menu>
                     </Dropdown>
                     {databaseLinkError && (
@@ -381,7 +376,7 @@ export const App = () => {
                 )}
                 {!loading && app && app.databases && (
                   <>
-                    <Text h3 className='mt-8'>
+                    <Text h3 className='mt-8 mb-4'>
                       {app.databases.length > 0 && 'Bases de datos enlazadas'}
                     </Text>
                     <div className='flex flex-col'>
@@ -406,10 +401,6 @@ export const App = () => {
                                       color="primary"
                                       size="sm"
                                       icon={<FiInfo size={16} />}
-                                      onClick={() => {
-                                        setIsUnlinkModalOpen(true);
-                                        setdatabaseAboutToUnlink(database.name);
-                                      }}
                                     />
                                   </Link>
                                   <Button

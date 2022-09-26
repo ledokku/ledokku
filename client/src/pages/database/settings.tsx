@@ -5,16 +5,17 @@ import {
   useDatabaseByIdQuery,
   useDestroyDatabaseMutation,
   DashboardDocument,
-  useDatabaseInfoQuery,
 } from '../../generated/graphql';
-import { Button, FormInput, FormHelper, Header } from '../../ui';
-import { Container, Heading } from '@chakra-ui/react';
+import { Header } from '../../ui';
 import { useToast } from '../../ui/toast';
 import { DatabaseHeaderInfo } from '../../modules/database/DatabaseHeaderInfo';
 import { DatabaseHeaderTabNav } from '../../modules/database/DatabaseHeaderTabNav';
+import { Button, Card, Container, Input, Loading, Modal, Spacer, Text } from '@nextui-org/react';
+import { useState } from 'react';
 
 export const Settings = () => {
   const { id: databaseId } = useParams<{ id: string }>();
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   let history = useHistory();
   const toast = useToast();
   const [
@@ -29,25 +30,15 @@ export const Settings = () => {
     skip: !databaseId,
   });
 
-  const {
-    data: databaseInfoData,
-    loading: databaseInfoLoading,
-  } = useDatabaseInfoQuery({
-    variables: {
-      databaseId,
-    },
-    ssr: false,
-    skip: !databaseId,
-    pollInterval: 15000,
-  });
+
 
   const DeleteDatabaseNameSchema = yup.object().shape({
     databaseName: yup
       .string()
-      .required('Required')
+      .required('Requerido')
       .test(
-        'Equals database name',
-        'Must match database name',
+        'Equivale al nombre de la base de datos',
+        'Debe coincidir con el nombre de la base de datos',
         (val) => val === data?.database?.name
       ),
   });
@@ -89,7 +80,7 @@ export const Settings = () => {
 
   if (loading) {
     // TODO nice loading
-    return <p>Loading...</p>;
+    return <Loading />;
   }
 
   const { database } = data;
@@ -99,13 +90,7 @@ export const Settings = () => {
     return <p>Database not found.</p>;
   }
 
-  const databaseInfos = databaseInfoData?.databaseInfo.info
-    .map((data) => data.trim())
-    .map((info) => {
-      const name = info.split(':')[0];
-      const value = info.substring(info.indexOf(':') + 1).trim();
-      return { name, value };
-    });
+
 
   return (
     <div>
@@ -115,66 +100,64 @@ export const Settings = () => {
         <DatabaseHeaderTabNav database={database} />
       </div>
 
-      <Container maxW="5xl" mt={10}>
+      <Container>
         <div className="grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 gap-4 mt-10">
-          <div className="col-span-2 w-5/5">
-            <Heading as="h2" size="md" py={5}>
-              Infos
-            </Heading>
-            {databaseInfoLoading ? (
-              <p className="text-gray-400 text-sm">Loading...</p>
-            ) : null}
-            {!databaseInfoLoading && databaseInfos
-              ? databaseInfos.map((info) => (
-                <div key={info.name} className="py-2">
-                  <div className="font-semibold">{info.name}</div>
-                  <div>{info.value}</div>
-                </div>
-              ))
-              : null}
-          </div>
           <div className="w-3/3 mb-6">
-            <h1 className="text-lg font-bold py-5">Database settings</h1>
+            <Text h2>Configuración</Text>
+            <Spacer y={3} />
+            <Card className='mt-8' variant='bordered' borderWeight='normal'>
+              <Card.Header>
+                <Text h3 className='mb-1'>
+                  Eliminar base de datos
+                </Text>
+              </Card.Header>
+              <Card.Divider />
+              <Card.Body>
+                <Text>
+                  Esta acción no se puede deshacer. Esto eliminará permanentemente la base de datos "{database.name}" y todo lo relacionado con ella.
+                </Text>
+              </Card.Body>
+              <Card.Footer>
+                <Button color="error" onClick={() => setShowDeleteModal(true)}>
+                  Eliminar base de datos
+                </Button>
+              </Card.Footer>
+            </Card>
 
-            <h2 className="text-gray-400 w-6/6">
-              This action cannot be undone. This will permanently delete{' '}
-              {database.name} database and everything related to it. Please type{' '}
-              <b>{database.name}</b> to confirm deletion.
-            </h2>
-            <form onSubmit={formik.handleSubmit}>
-              <div className="grid md:grid-cols-3">
-                <div className="mt-4">
-                  <FormInput
-                    autoComplete="off"
-                    id="databaseName"
-                    name="databaseName"
-                    value={formik.values.databaseName}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={Boolean(
-                      formik.errors.databaseName && formik.touched.databaseName
-                    )}
-                  />
-                  {formik.errors.databaseName && formik.errors.databaseName ? (
-                    <FormHelper status="error">
-                      {formik.errors.databaseName}
-                    </FormHelper>
-                  ) : null}
-                  <Button
-                    type="submit"
-                    isLoading={destroyDbLoading}
-                    disabled={
-                      !formik.values.databaseName ||
-                      !!formik.errors.databaseName
-                    }
-                    color="red"
-                    className="mt-2"
-                  >
-                    Delete
-                  </Button>
-                </div>
-              </div>
-            </form>
+            <Modal blur closeButton open={showDeleteModal} onClose={() => setShowDeleteModal(false)}>
+              <Modal.Header>
+                <Text h4>Eliminar base de datos</Text>
+              </Modal.Header>
+              <Modal.Body>
+                <Input
+                  css={{ marginBottom: 0 }}
+                  autoComplete="off"
+                  id="databaseName"
+                  name="databaseName"
+                  label="Nombre de la base de datos"
+                  placeholder={database.name}
+                  value={formik.values.databaseName}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+                <Text color='$error'>{formik.errors.databaseName}</Text>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button
+                  size="sm"
+                  bordered
+                  onClick={() => setShowDeleteModal(false)}>Cancelar</Button>
+                <Button
+                  size="sm"
+                  type="submit"
+                  color="error"
+                  onClick={() => formik.handleSubmit()}
+                  disabled={!formik.values.databaseName || !!formik.errors.databaseName}
+                >
+                  {destroyDbLoading ? <Loading size='sm' color="currentColor" /> : "Eliminar"}
+                </Button>
+              </Modal.Footer>
+            </Modal>
           </div>
         </div>
       </Container>

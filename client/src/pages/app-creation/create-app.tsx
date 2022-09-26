@@ -7,7 +7,7 @@ import { useToast } from '../../ui/toast';
 import { GithubIcon } from '../../ui/icons/GithubIcon';
 import { GitlabIcon } from '../../ui/icons/GitlabIcon';
 import { DockerIcon } from '../../ui/icons/DockerIcon';
-import { Container, Grid, Text, Image, Badge, Button, Loading } from '@nextui-org/react';
+import { Container, Grid, Text, Image, Badge, Button, Loading, Spacer } from '@nextui-org/react';
 
 interface SourceBoxProps {
   label: string;
@@ -76,16 +76,17 @@ export const CreateApp = () => {
       <Header />
 
       <Container>
-        <Text h2 className='py-2'>
-          App source
+        <Text h2 className='mt-16'>
+          Crear aplicación
         </Text>
-        <div className='mt-24'>
-          <div className='mt-4'>
+        <div>
+          <div>
             <form onSubmit={formik.handleSubmit}>
-              <div className='mt-16'>
-                <Text className='mb-5 text-gray-500'>
+              <div className='mt-4'>
+                <Text className=' text-gray-500'>
                   Elige entre crear una aplicación desde un repositorio de Github o una aplicación de Dokku.
                 </Text>
+                <Spacer y={3} />
                 <Grid.Container
                   gap={4}
                 >
