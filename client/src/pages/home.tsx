@@ -1,22 +1,20 @@
-import { useEffect, useState } from 'react';
-import { useHistory, Redirect } from 'react-router-dom';
-import { FiGithub } from 'react-icons/fi';
 import {
   Box,
-  Text,
+  Text
 } from '@chakra-ui/react';
+import { Button, Container, Loading } from '@nextui-org/react';
+import { useEffect, useState } from 'react';
+import { FiGithub } from 'react-icons/fi';
+import { Redirect, useHistory } from 'react-router-dom';
 import { config } from '../config';
 import {
-  useSetupQuery,
-  useRegisterGithubAppMutation,
-  useLoginWithGithubMutation,
+  useLoginWithGithubMutation, useRegisterGithubAppMutation, useSetupQuery
 } from '../generated/graphql';
 import { useAuth } from '../modules/auth/AuthContext';
-import { useToast } from '../ui/toast';
-import { OCStudiosLogo } from '../ui/icons/OCStudiosLogo';
-import { Button, Container, Loading } from '@nextui-org/react';
 import { Alert } from '../ui/components/Alert';
 import { CodeBox } from '../ui/components/CodeBox';
+import { OCStudiosLogo } from '../ui/icons/OCStudiosLogo';
+import { useToast } from '../ui/toast';
 
 export const Home = () => {
   const toast = useToast();
@@ -134,7 +132,7 @@ export const Home = () => {
         )}
 
         {data?.setup.canConnectSsh === false && (
-          <>
+          <div className='w-156 flex flex-col justify-center'>
             <Text mt={4}>
               Para conectarse por SSH, ejecuta el siguiente comando en tu servidor de Dokku.
             </Text>
@@ -142,7 +140,7 @@ export const Home = () => {
               {`echo "${data.setup.sshPublicKey}" | dokku ssh-keys:add ledokku`}
             </CodeBox>
             <Text mt={3}>Una vez finalizado, refresca la página.</Text>
-          </>
+          </div>
         )}
 
         {data?.setup.canConnectSsh === true &&

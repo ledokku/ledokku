@@ -4,6 +4,7 @@
         {
             "name": "Debug server",
             "request": "launch",
+            "outputCapture": "std",
             "runtimeArgs": [
                 "dev",
             ],
@@ -20,6 +21,7 @@
             "runtimeArgs": [
                 "dev",
             ],
+            "outputCapture": "std",
             "cwd": "${workspaceFolder}/client",
             "runtimeExecutable": "yarn",
             "skipFiles": [

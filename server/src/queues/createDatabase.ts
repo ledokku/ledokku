@@ -2,7 +2,7 @@ import { dbTypeToDokkuPlugin } from './../graphql/utils';
 import { Worker, Queue } from 'bullmq';
 import createDebug from 'debug';
 import Redis from 'ioredis';
-import { pubsub } from './../index';
+import { pubsub } from '..';
 import { config } from '../config';
 import { sshConnect } from '../lib/ssh';
 import { dokku } from '../lib/dokku';

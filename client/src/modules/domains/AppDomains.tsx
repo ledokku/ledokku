@@ -61,7 +61,7 @@ export const AppDomains = ({ appId }: AppDomainProps) => {
 
   // // TODO display error
 
-  if (loading) {
+  if (loading || domainsDataLoading) {
     // TODO nice loading
     return <Loading />;
   }

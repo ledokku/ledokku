@@ -1,27 +1,37 @@
+import 'reflect-metadata';
+import {
+  ApolloServer,
+  gql,
+  makeExecutableSchema,
+  mergeSchemas,
+} from 'apollo-server-express';
+import createDebug from 'debug';
 import dotenv from 'dotenv';
 dotenv.config();
-import { ApolloServer, gql } from 'apollo-server-express';
-import { DateTimeResolver } from 'graphql-scalars';
-import jsonwebtoken from 'jsonwebtoken';
-import { PubSub } from 'apollo-server';
 import express from 'express';
+import { DateTimeResolver } from 'graphql-scalars';
+import { PubSub } from 'graphql-subscriptions';
+import jsonwebtoken from 'jsonwebtoken';
 import path from 'path';
-import createDebug from 'debug';
-import { Resolvers } from './generated/graphql';
-import { customResolvers } from './graphql/resolvers';
-import { mutations } from './graphql/mutations';
+import { container } from 'tsyringe';
+import { buildSchemaSync } from 'type-graphql';
 import { config } from './config';
-import { app, http } from './server';
+import { ContextFactory } from './config/context_factory';
+import { PORT } from './constants';
+import { Resolvers } from './generated/graphql';
+import { mutations } from './graphql/mutations';
 import { queries } from './graphql/queries';
+import { customResolvers } from './graphql/resolvers';
 import { handleWebhooks } from './lib/webhooks/handleWebhooks';
-import { synchroniseServerQueue } from './queues/synchroniseServer';
 import { prisma } from './prisma';
+import { synchroniseServerQueue } from './queues/synchroniseServer';
+import { app, http } from './server.old';
 
 app.use(express.json());
 
 app.use(express.static(path.join(__dirname, '..', '..', 'client', 'build')));
 
-const typeDefs = gql`
+export const typeDefs = gql`
   scalar DateTime
 
   type App {
@@ -361,7 +371,7 @@ export const APP_RESTARTED = 'APP_RESTARTED';
 export const APP_REBUILT = 'APP_REBUILT';
 export const APP_CREATED = 'APP_CREATED';
 
-const resolvers: Resolvers<{ userId?: string }> = {
+export const resolvers: Resolvers<{ userId?: string }> = {
   Query: queries,
   Mutation: mutations,
   Subscription: {
@@ -392,12 +402,30 @@ interface SubscriptionContext {
   token?: string;
 }
 
-const apolloServer = new ApolloServer({
+const oldSchema = makeExecutableSchema({
   typeDefs,
   resolvers: {
     ...resolvers,
     DateTime: DateTimeResolver,
   },
+});
+
+const newSchema = buildSchemaSync({
+  resolvers: [__dirname + '/modules/**/*.resolver.{ts,js}'],
+  container: { get: (clazz) => container.resolve(clazz) },
+});
+
+export const stitchedSchema = mergeSchemas({
+  schemas: [oldSchema, newSchema],
+});
+
+export const apolloServer = new ApolloServer({
+  schema: stitchedSchema,
+  // typeDefs,
+  // resolvers: {
+  //   ...resolvers,
+  //   DateTime: DateTimeResolver,
+  // },
   subscriptions: {
     onConnect: async (context: SubscriptionContext) => {
       if (!context.token) {
@@ -424,7 +452,7 @@ const apolloServer = new ApolloServer({
     },
   },
 
-  context: ({ req, connection }) => {
+  context: async ({ req, connection }) => {
     if (connection) {
       return connection.context;
     }
@@ -441,12 +469,15 @@ const apolloServer = new ApolloServer({
     } catch (err) {
       // Invalid token
     }
+    const newContext = await ContextFactory.createFromHTTP(req)
+    
     return {
       userId,
+      ...newContext,
     };
   },
 });
-apolloServer.applyMiddleware({ app });
+apolloServer.applyMiddleware({ app: app as any });
 
 apolloServer.installSubscriptionHandlers(http);
 
@@ -477,7 +508,7 @@ app.post('/api/webhooks', async (req, res) => {
 
   if (req.header('x-github-event') === 'push') {
     try {
-      await handleWebhooks(req);
+      await handleWebhooks(req as any);
       res.status(200).end();
     } catch (e) {
       res.status(500).send(e);
@@ -487,12 +518,12 @@ app.post('/api/webhooks', async (req, res) => {
   res.json({ success: true });
 });
 
-http.listen({ port: 4000 }, () => {
+http.listen({ port: PORT }, () => {
   console.log(
-    `🚀 Server ready at http://localhost:4000${apolloServer.graphqlPath}`
+    `🚀 Server ready at http://localhost:${PORT}${apolloServer.graphqlPath}`
   );
   console.log(
-    `🚀 Subscriptions ready at ws://localhost:4000${apolloServer.subscriptionsPath}`
+    `🚀 Subscriptions ready at ws://localhost:${PORT}${apolloServer.subscriptionsPath}`
   );
 
   /**

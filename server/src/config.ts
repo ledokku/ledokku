@@ -35,7 +35,7 @@ https://github.com/ledokku/ledokku/blob/master/CONTRIBUTING.md`);
  * We generate a new ssh key if it's the first time server is booted
  */
 const sshKeyFolderPath = join(process.env.HOME, '/.ssh');
-const sshKeyPath = join(sshKeyFolderPath, 'id_rsa');
+export const sshKeyPath = join(sshKeyFolderPath, 'id_rsa');
 if (!existsSync(sshKeyPath)) {
   //   create public and private ssh key
   const { privateKey, publicKey } = generateKeyPairSync('rsa', {

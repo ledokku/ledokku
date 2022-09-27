@@ -9,7 +9,6 @@ import { database } from './database';
 import { dokkuPlugins } from './dokkuPlugins';
 import { appLogs } from './appLogs';
 import { envVars } from './envVars';
-import { setup } from './setup';
 import { isPluginInstalled } from './isPluginInstalled';
 import { databaseInfo } from './databaseInfo';
 import { databaseLogs } from './databaseLogs';
@@ -30,7 +29,6 @@ export const queries = {
   dokkuPlugins,
   appLogs,
   envVars,
-  setup,
   isPluginInstalled,
   appProxyPorts,
   githubInstallationId,

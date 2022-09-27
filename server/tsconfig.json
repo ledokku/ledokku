@@ -1,7 +1,10 @@
 {
   "compilerOptions": {
-    "target": "ES2019",
-    "lib": ["dom", "esnext"],
+    "target": "ESNext",
+    "lib": [
+      "dom",
+      "esnext"
+    ],
     "outDir": "build",
     "allowJs": false,
     "skipLibCheck": true,
@@ -12,8 +15,14 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "sourceMap": true,
-    "importHelpers": true
+    "importHelpers": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
   },
-  "exclude": ["node_modules"],
-  "include": ["src/**/*.ts"]
+  "exclude": [
+    "node_modules"
+  ],
+  "include": [
+    "src/**/*.ts"
+  ]
 }

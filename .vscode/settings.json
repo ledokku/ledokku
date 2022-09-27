@@ -1,4 +1,15 @@
 {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true,
+        "source.organizeImports": true,
+        "source.sortMembers": true
+    },
+    "files.eol": "\n",
+    "jest.jestCommandLine": "jest",
+    "jest.autoRun": {
+        "onStartup": []
+    },
     "nuxt.isNuxtApp": false,
-    "editor.formatOnSave": true
+    "debug.inlineValues": true
 }

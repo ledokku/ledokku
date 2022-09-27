@@ -1,10 +1,10 @@
-import { Worker, Queue } from 'bullmq';
+import { Queue, Worker } from 'bullmq';
 import createDebug from 'debug';
 import Redis from 'ioredis';
-import { pubsub } from './../index';
 import { config } from '../config';
-import { sshConnect } from '../lib/ssh';
+import { pubsub } from '..';
 import { dokku } from '../lib/dokku';
+import { sshConnect } from '../lib/ssh';
 
 const queueName = 'restart-app';
 const debug = createDebug(`queue:${queueName}`);
