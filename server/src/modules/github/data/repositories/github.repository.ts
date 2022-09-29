@@ -7,6 +7,9 @@ import fetch from 'node-fetch';
 import { injectable } from 'tsyringe';
 import { synchroniseServerQueue } from '../../../../queues/synchroniseServer';
 import { Branch } from '../models/branch.model';
+import { GithubPagination } from '../models/github_pagination.model';
+import { Installation } from '../models/installation.model';
+import { formatGithubPem } from './../../../../config';
 import {
   GITHUB_APP_CLIENT_ID,
   GITHUB_APP_CLIENT_SECRET,
@@ -16,11 +19,58 @@ import {
 } from './../../../../constants';
 import { GithubError } from './../models/github_error';
 import { GithubOAuthLoginResponse } from './../models/github_oauth_login_response';
+import { Repository } from './../models/repository.model';
 
 @Injectable()
 @injectable()
 export class GithubRepository {
   constructor(private prisma: PrismaClient) {}
+
+  private installationAuth = createAppAuth({
+    appId: GITHUB_APP_ID,
+    privateKey: formatGithubPem(GITHUB_APP_PEM),
+    clientId: GITHUB_APP_CLIENT_ID,
+    clientSecret: GITHUB_APP_CLIENT_SECRET,
+  });
+
+  async repository(
+    installationId: string,
+    per_page = 30,
+    page = 1
+  ): Promise<GithubPagination<'repositories', Repository>> {
+    const installationAuthentication = (await this.installationAuth({
+      type: 'installation',
+      installationId,
+    })) as AppAuthentication;
+
+    const octo = new Octokit({
+      auth: installationAuthentication.token,
+    });
+
+    return octo
+      .request('GET /installation/repositories', {
+        per_page,
+        page,
+      })
+      .then((res) => res.data);
+  }
+
+  async installations(
+    token: string,
+    per_page = 30,
+    page = 1
+  ): Promise<GithubPagination<'installations', Installation>> {
+    const octo = new Octokit({
+      auth: token,
+    });
+
+    return octo
+      .request('GET /user/installations', {
+        per_page,
+        page,
+      })
+      .then((res) => res.data);
+  }
 
   async loginOAuthApp(
     code: string
@@ -110,14 +160,7 @@ export class GithubRepository {
     repositoryName: string,
     installationId: string
   ): Promise<Branch[]> {
-    const auth = createAppAuth({
-      appId: GITHUB_APP_ID,
-      privateKey: GITHUB_APP_PEM,
-      clientId: GITHUB_APP_CLIENT_ID,
-      clientSecret: GITHUB_APP_CLIENT_SECRET,
-    });
-
-    const installationAuthentication = (await auth({
+    const installationAuthentication = (await this.installationAuth({
       type: 'installation',
       installationId,
     })) as AppAuthentication;

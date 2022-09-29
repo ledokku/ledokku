@@ -7,6 +7,7 @@ import { dokku } from '../lib/dokku';
 import { prisma } from '../prisma';
 import { dbTypeToDokkuPlugin } from '../graphql/utils';
 import { DatabaseTypes } from '../generated/graphql';
+import { DokkuPluginRepository } from '../lib/dokku/dokku.plugin.repository';
 
 const queueName = 'synchronise-server';
 const redisClient = new Redis(config.redisUrl);
@@ -81,7 +82,7 @@ const worker = new Worker(
       'MONGODB',
       'MYSQL',
     ];
-    const dokkuPlugins = await dokku.plugin.list(ssh);
+    const dokkuPlugins = await new DokkuPluginRepository().list(ssh);
 
     for (const databaseToCheck of databasesToCheck) {
       // First we check if the db is installed

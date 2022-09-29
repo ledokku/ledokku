@@ -1,6 +1,7 @@
-import { App, AppMetaGithub, PrismaClient } from '@prisma/client';
+import { App, PrismaClient } from '@prisma/client';
 import { Injectable } from '@tsed/di';
 import { injectable } from 'tsyringe';
+import { Database } from '../../../databases/data/models/database.model';
 
 @Injectable()
 @injectable()
@@ -15,5 +16,13 @@ export class AppRepository {
     return this.prisma.app.findUnique({
       where: { id },
     });
+  }
+
+  async databases(id: string): Promise<Database[]> {
+    return this.prisma.app
+      .findUnique({
+        where: { id },
+      })
+      .databases();
   }
 }

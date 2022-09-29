@@ -311,27 +311,8 @@ export const typeDefs = gql`
   }
 
   type Query {
-    githubInstallationId: GithubAppInstallationId!
-    setup: SetupResult!
-    apps: [App!]!
-    repositories(installationId: String!): [Repository!]!
-    branches(repositoryName: String!, installationId: String!): [Branch!]!
-    appMetaGithub(appId: String!): AppMetaGithub
-    app(appId: String!): App
     domains(appId: String!): Domains!
-    database(databaseId: String!): Database
-    databases: [Database!]!
-    isPluginInstalled(pluginName: String!): IsPluginInstalledResult!
     dokkuPlugins: DokkuPluginResult!
-    appLogs(appId: String!): AppLogsResult!
-    databaseInfo(databaseId: String!): DatabaseInfoResult!
-    databaseLogs(databaseId: String!): DatabaseLogsResult!
-    isDatabaseLinked(
-      databaseId: String!
-      appId: String!
-    ): IsDatabaseLinkedResult!
-    envVars(appId: String!): EnvVarsResult!
-    appProxyPorts(appId: String!): [AppProxyPort!]!
   }
 
   type Subscription {

@@ -1,27 +1,21 @@
-import { useHistory } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { useFormik } from 'formik';
-import { trackGoal } from 'fathom-client';
-import * as yup from 'yup';
-import {
-  useAppsQuery,
-  RealTimeLog,
-  useAppCreateLogsSubscription,
-  useCreateAppGithubMutation,
-  useGithubInstallationIdQuery,
-  useRepositoriesLazyQuery,
-  useBranchesLazyQuery,
-  Repository,
-  Branch,
-} from '../../generated/graphql';
-import { Terminal, Header } from '../../ui';
-import { useToast } from '../../ui/toast';
-import { config, trackingGoals } from '../../config';
-import { FiArrowRight, FiArrowLeft } from 'react-icons/fi';
-import { useAuth } from '../../modules/auth/AuthContext';
 import { Button, Container, Dropdown, Grid, Link, Loading, Modal, Text, User } from '@nextui-org/react';
-import { Alert } from '../../ui/components/Alert';
+import { trackGoal } from 'fathom-client';
+import { useFormik } from 'formik';
+import { useEffect, useState } from 'react';
+import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
+import { useHistory } from 'react-router-dom';
 import { TerminalOutput } from 'react-terminal-ui';
+import * as yup from 'yup';
+import { config, trackingGoals } from '../../config';
+import {
+  Branch, RealTimeLog, Repository, useAppCreateLogsSubscription, useAppsQuery, useBranchesLazyQuery, useCreateAppGithubMutation,
+  useGithubInstallationIdQuery,
+  useRepositoriesLazyQuery
+} from '../../generated/graphql';
+import { useAuth } from '../../modules/auth/AuthContext';
+import { Header, Terminal } from '../../ui';
+import { Alert } from '../../ui/components/Alert';
+import { useToast } from '../../ui/toast';
 
 enum AppCreationStatus {
   FAILURE = 'Failure',
@@ -389,7 +383,7 @@ export const CreateAppGithub = () => {
 
                       <Text h5 className='mt-8'>Rama a lanzar</Text>
                       <Dropdown >
-                        <Dropdown.Button flat isDisabled={!branchesData ||
+                        <Dropdown.Button flat disabled={!branchesData ||
                           branchesLoading ||
                           reposLoading ||
                           !reposData}>

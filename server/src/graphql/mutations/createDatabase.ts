@@ -5,6 +5,7 @@ import { MutationResolvers } from '../../generated/graphql';
 import { prisma } from '../../prisma';
 import { dokku } from '../../lib/dokku';
 import { sshConnect } from '../../lib/ssh';
+import { DokkuPluginRepository } from '../../lib/dokku/dokku.plugin.repository';
 
 // Validate the name to make sure there are no security risks by adding it to the ssh exec command.
 // Only lowercase letters and "-" allowed
@@ -43,7 +44,7 @@ export const createDatabase: MutationResolvers['createDatabase'] = async (
 
   const ssh = await sshConnect();
 
-  const dokkuPlugins = await dokku.plugin.list(ssh);
+  const dokkuPlugins = await new DokkuPluginRepository().list(ssh); //TODO: cambiar
 
   const isDbInstalled =
     dokkuPlugins.plugins.filter(

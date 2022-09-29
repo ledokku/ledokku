@@ -1,8 +1,7 @@
 import { Field, ObjectType } from 'type-graphql';
 
 @ObjectType()
-export class Logs {
-  //TODO: Innecesario
+export class DatabaseInfo { //TODO: innecesario
   @Field((type) => [String])
-  logs: string[];
+  info: string[];
 }
