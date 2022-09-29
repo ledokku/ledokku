@@ -4,9 +4,9 @@ import { ResolverService } from '@tsed/typegraphql';
 import jsonwebtoken from 'jsonwebtoken';
 import { injectable } from 'tsyringe';
 import { Arg, Mutation, Resolver } from 'type-graphql';
+import { GithubRepository } from '../github/data/repositories/github.repository';
 import { JWT_SECRET } from './../../constants';
 import { Auth } from './data/models/auth.model';
-import { GithubRepository } from './data/repositories/github.repository';
 
 @injectable()
 @Resolver(Auth)

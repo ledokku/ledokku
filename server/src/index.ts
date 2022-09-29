@@ -16,6 +16,7 @@ import path from 'path';
 import { container } from 'tsyringe';
 import { buildSchemaSync } from 'type-graphql';
 import { config } from './config';
+import { authChecker } from './config/auth_checker';
 import { ContextFactory } from './config/context_factory';
 import { PORT } from './constants';
 import { Resolvers } from './generated/graphql';
@@ -23,6 +24,7 @@ import { mutations } from './graphql/mutations';
 import { queries } from './graphql/queries';
 import { customResolvers } from './graphql/resolvers';
 import { handleWebhooks } from './lib/webhooks/handleWebhooks';
+import { DokkuContext } from './models/dokku_context';
 import { prisma } from './prisma';
 import { synchroniseServerQueue } from './queues/synchroniseServer';
 import { app, http } from './server.old';
@@ -413,6 +415,7 @@ const oldSchema = makeExecutableSchema({
 const newSchema = buildSchemaSync({
   resolvers: [__dirname + '/modules/**/*.resolver.{ts,js}'],
   container: { get: (clazz) => container.resolve(clazz) },
+  authChecker,
 });
 
 export const stitchedSchema = mergeSchemas({
@@ -426,6 +429,13 @@ export const apolloServer = new ApolloServer({
   //   ...resolvers,
   //   DateTime: DateTimeResolver,
   // },
+  formatResponse(response, requestContext) {
+    if ('sshContext' in requestContext.context) {
+      (requestContext.context as DokkuContext).sshContext.connection.dispose();
+    }
+
+    return response;
+  },
   subscriptions: {
     onConnect: async (context: SubscriptionContext) => {
       if (!context.token) {
@@ -456,25 +466,8 @@ export const apolloServer = new ApolloServer({
     if (connection) {
       return connection.context;
     }
-    const token =
-      req.headers['authorization'] &&
-      (req.headers['authorization'] as string).replace('Bearer ', '');
 
-    let userId: string | undefined;
-    try {
-      const decoded = jsonwebtoken.verify(token, config.jwtSecret) as {
-        userId: string;
-      };
-      userId = decoded.userId;
-    } catch (err) {
-      // Invalid token
-    }
-    const newContext = await ContextFactory.createFromHTTP(req)
-    
-    return {
-      userId,
-      ...newContext,
-    };
+    return ContextFactory.createFromHTTP(req);
   },
 });
 apolloServer.applyMiddleware({ app: app as any });

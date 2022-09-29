@@ -1,36 +1,22 @@
-import { repositories } from './repositories';
 import { branches } from './branches';
-import { githubInstallationId } from './githubInstallationId';
-import { appMetaGithub } from './appGithubMeta';
-import { app } from './app';
-import { apps } from './apps';
-import { databases } from './databases';
-import { database } from './database';
-import { dokkuPlugins } from './dokkuPlugins';
-import { appLogs } from './appLogs';
-import { envVars } from './envVars';
-import { isPluginInstalled } from './isPluginInstalled';
 import { databaseInfo } from './databaseInfo';
 import { databaseLogs } from './databaseLogs';
-import { isDatabaseLinked } from './isDatabaseLinked';
-import { appProxyPorts } from './appProxyPorts';
+import { dokkuPlugins } from './dokkuPlugins';
 import { domains } from './domains';
+import { envVars } from './envVars';
+import { githubInstallationId } from './githubInstallationId';
+import { isDatabaseLinked } from './isDatabaseLinked';
+import { isPluginInstalled } from './isPluginInstalled';
+import { repositories } from './repositories';
 
 export const queries = {
-  app,
-  appMetaGithub,
-  apps,
-  database,
-  databases,
   databaseInfo,
   databaseLogs,
   domains,
   isDatabaseLinked,
   dokkuPlugins,
-  appLogs,
   envVars,
   isPluginInstalled,
-  appProxyPorts,
   githubInstallationId,
   repositories,
   branches,

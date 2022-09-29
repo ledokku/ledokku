@@ -1,13 +1,17 @@
+import { AppAuthentication, createAppAuth } from '@octokit/auth-app';
 import { Octokit } from '@octokit/rest';
-import { PrismaClient, User } from '@prisma/client';
+import { AppMetaGithub, PrismaClient, User } from '@prisma/client';
 import { Injectable } from '@tsed/di';
 import { Unauthorized } from '@tsed/exceptions';
 import fetch from 'node-fetch';
 import { injectable } from 'tsyringe';
 import { synchroniseServerQueue } from '../../../../queues/synchroniseServer';
+import { Branch } from '../models/branch.model';
 import {
   GITHUB_APP_CLIENT_ID,
   GITHUB_APP_CLIENT_SECRET,
+  GITHUB_APP_ID,
+  GITHUB_APP_PEM,
   NUMBER_USERS_ALLOWED,
 } from './../../../../constants';
 import { GithubError } from './../models/github_error';
@@ -48,6 +52,12 @@ export class GithubRepository {
     });
   }
 
+  async getUser(id: string): Promise<User> {
+    return this.prisma.user.findUnique({
+      where: { id },
+    });
+  }
+
   async createUser(oauthData: GithubOAuthLoginResponse): Promise<User> {
     const userCount = await this.prisma.user.count();
     if (userCount >= NUMBER_USERS_ALLOWED) {
@@ -85,5 +95,39 @@ export class GithubRepository {
         await synchroniseServerQueue.add('synchronise-server', {});
         return res;
       });
+  }
+
+  async appMeta(id: string): Promise<AppMetaGithub> {
+    return this.prisma.app
+      .findUnique({
+        where: { id },
+      })
+      .AppMetaGithub();
+  }
+
+  async branches(
+    username: string,
+    repositoryName: string,
+    installationId: string
+  ): Promise<Branch[]> {
+    const auth = createAppAuth({
+      appId: GITHUB_APP_ID,
+      privateKey: GITHUB_APP_PEM,
+      clientId: GITHUB_APP_CLIENT_ID,
+      clientSecret: GITHUB_APP_CLIENT_SECRET,
+    });
+
+    const installationAuthentication = (await auth({
+      type: 'installation',
+      installationId,
+    })) as AppAuthentication;
+
+    const octo = new Octokit({
+      auth: installationAuthentication.token,
+    });
+
+    return (
+      await octo.request(`GET /repos/${username}/${repositoryName}/branches`)
+    ).data;
   }
 }
