@@ -1,11 +1,33 @@
+import { BadRequest, Conflict, NotFound } from '@tsed/exceptions';
 import { ResolverService } from '@tsed/typegraphql';
 import { injectable } from 'tsyringe';
-import { Arg, Authorized, Ctx, Query, Resolver } from 'type-graphql';
+import {
+  Arg,
+  Authorized,
+  Ctx,
+  FieldResolver,
+  Mutation,
+  Query,
+  Resolver,
+  Root,
+  Subscription,
+} from 'type-graphql';
+import { dbTypeToDokkuPlugin } from '../../graphql/utils';
 import { DokkuDatabaseRepository } from '../../lib/dokku/dokku.database.repository';
+import { DokkuPluginRepository } from '../../lib/dokku/dokku.plugin.repository';
 import { DokkuContext } from '../../models/dokku_context';
+import { SubscriptionTopics } from '../../models/subscription_topics';
+import { createDatabaseQueue } from '../../queues/createDatabase';
+import { App } from '../apps/data/models/app.model';
 import { Logs } from '../apps/data/models/logs.model';
+import { BooleanResult } from '../apps/data/models/result.model';
+import { CreateDatabaseInput } from './data/inputs/create_database.input';
+import { DestroyDatabaseInput } from './data/inputs/destroy_database.input';
 import { Database } from './data/models/database.model';
+import { DatabaseCreatedPayload } from './data/models/database_created.payload';
 import { DatabaseInfo } from './data/models/database_info.model';
+import { DatabaseLinkPayload } from './data/models/database_link.payload';
+import { DatabaseUnlinkPayload } from './data/models/database_unlink.payload';
 import { IsDatabaseLinked } from './data/models/is_database_linked.model';
 import { DatabaseRepository } from './data/repositories/database.repository';
 
@@ -15,7 +37,8 @@ import { DatabaseRepository } from './data/repositories/database.repository';
 export class DatabaseResolver {
   constructor(
     private databaseRepository: DatabaseRepository,
-    private dokkuRepository: DokkuDatabaseRepository
+    private dokkuDatabaseRepository: DokkuDatabaseRepository,
+    private dokkuPluginRepository: DokkuPluginRepository
   ) {}
 
   @Authorized()
@@ -41,10 +64,10 @@ export class DatabaseResolver {
     const database = await this.databaseRepository.get(databaseId);
 
     if (!database) {
-      throw new Error(`La base de datos no existe con ID ${databaseId}`);
+      throw new NotFound(`La base de datos no existe con ID ${databaseId}`);
     }
 
-    const info = await this.dokkuRepository.database(
+    const info = await this.dokkuDatabaseRepository.database(
       context.sshContext.connection,
       database.name,
       database.type
@@ -62,10 +85,10 @@ export class DatabaseResolver {
     const database = await this.databaseRepository.get(databaseId);
 
     if (!database) {
-      throw new Error(`La base de datos no existe con ID ${databaseId}`);
+      throw new NotFound(`La base de datos no existe con ID ${databaseId}`);
     }
 
-    const logs = await this.dokkuRepository.logs(
+    const logs = await this.dokkuDatabaseRepository.logs(
       context.sshContext.connection,
       database.name,
       database.type
@@ -80,11 +103,109 @@ export class DatabaseResolver {
     @Arg('databaseId') databaseId: string,
     @Arg('appId') appId: string
   ): Promise<IsDatabaseLinked> {
-    const linkedApps = await this.databaseRepository.linkedApps(
+    const linkedApps = await this.databaseRepository.linkedApp(
       databaseId,
       appId
     );
 
     return { isLinked: linkedApps.length === 1 };
+  }
+
+  @Authorized()
+  @Mutation((returns) => BooleanResult)
+  async createDatabase(
+    @Arg('input', (type) => CreateDatabaseInput) input: CreateDatabaseInput,
+    @Ctx() context: DokkuContext
+  ): Promise<BooleanResult> {
+    if (/^[a-z0-9-]+$/.test(input.name))
+      throw new BadRequest('Mal formato del nombre');
+
+    const databaseExists = await this.databaseRepository.exists(input.name);
+
+    if (databaseExists) {
+      throw new Conflict('Nombre ya utilizado');
+    }
+
+    const dokkuPlugins = await this.dokkuPluginRepository.list(
+      context.sshContext.connection
+    );
+
+    const isDbInstalled =
+      dokkuPlugins.plugins.filter(
+        (plugin) => plugin.name === dbTypeToDokkuPlugin(input.type)
+      ).length !== 0;
+
+    if (!isDbInstalled) {
+      throw new NotFound(`La base de datos ${input.type} no esta instalada`);
+    }
+
+    await createDatabaseQueue.add('create-database', {
+      databaseName: input.name,
+      databaseType: input.type,
+      userId: context.auth.userId,
+    });
+
+    return { result: true };
+  }
+
+  @Authorized()
+  @Mutation((returns) => BooleanResult)
+  async destroyDatabase(
+    @Arg('input', (type) => DestroyDatabaseInput) input: DestroyDatabaseInput,
+    @Ctx() context: DokkuContext
+  ) {
+    const databaseToDelete = await this.databaseRepository.get(
+      input.databaseId
+    );
+
+    if (!databaseToDelete) {
+      throw new NotFound(
+        `La base de datos no existe con ID ${input.databaseId}`
+      );
+    }
+
+    const result = await this.dokkuDatabaseRepository.destroy(
+      context.sshContext.connection,
+      databaseToDelete.name,
+      databaseToDelete.type
+    );
+
+    await this.databaseRepository.delete(input.databaseId);
+
+    return { result };
+  }
+
+  @Authorized()
+  @Subscription((type) => DatabaseUnlinkPayload, {
+    topics: SubscriptionTopics.DATABASE_UNLINKED,
+  })
+  unlinkDatabaseLogs(
+    @Root() payload: DatabaseUnlinkPayload
+  ): DatabaseUnlinkPayload {
+    return payload;
+  }
+
+  @Authorized()
+  @Subscription((type) => DatabaseLinkPayload, {
+    topics: SubscriptionTopics.DATABASE_LINKED,
+  })
+  linkDatabaseLogs(@Root() payload: DatabaseLinkPayload): DatabaseLinkPayload {
+    return payload;
+  }
+
+  @Authorized()
+  @Subscription((type) => DatabaseCreatedPayload, {
+    topics: SubscriptionTopics.DATABASE_CREATED,
+  })
+  createDatabaseLogs(
+    @Root() payload: DatabaseCreatedPayload
+  ): DatabaseCreatedPayload {
+    return payload;
+  }
+
+  @Authorized()
+  @FieldResolver((returns) => [App])
+  apps(@Root() database: Database): Promise<App[]> {
+    return this.databaseRepository.linkedApps(database.id);
   }
 }

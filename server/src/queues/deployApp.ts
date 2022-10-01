@@ -1,15 +1,19 @@
 import { Queue, Worker } from 'bullmq';
 import createDebug from 'debug';
 import Redis from 'ioredis';
+import { container } from 'tsyringe';
 import { config } from '../config';
-import { pubsub } from '..';
-import { dokku } from '../lib/dokku';
+import { DokkuGitRepository } from './../lib/dokku/dokku.git.repository';
+import { AppCreatedPayload } from './../modules/apps/data/models/app_created.payload';
+
+import { pubsub } from '../index.old';
 import { sshConnect } from '../lib/ssh';
 import { prisma } from '../prisma';
 
 const queueName = 'deploy-app';
 const debug = createDebug(`queue:${queueName}`);
 const redisClient = new Redis(config.redisUrl);
+const dokkuGit = container.resolve(DokkuGitRepository);
 
 interface QueueArgs {
   appId: string;
@@ -55,22 +59,18 @@ const worker = new Worker(
 
     const ssh = await sshConnect();
 
-    await dokku.git.auth({
-      ssh,
-      username: userName,
-      token,
-    });
+    await dokkuGit.auth(ssh, userName, token);
 
-    await dokku.git.unlock(ssh, app.name);
+    await dokkuGit.unlock(ssh, app.name);
 
-    const res = await dokku.git.sync({
+    const res = await dokkuGit.sync(
       ssh,
-      appName: app.name,
-      gitRepoUrl: `https://github.com/${repoOwner}/${repoName}.git`,
+      app.name,
+      `https://github.com/${repoOwner}/${repoName}.git`,
       branchName,
-      options: {
+      {
         onStdout: (chunk) => {
-          pubsub.publish('APP_CREATED', {
+          pubsub.publish('APP_CREATED', <AppCreatedPayload>{
             appCreateLogs: {
               message: chunk.toString(),
               type: 'stdout',
@@ -85,8 +85,8 @@ const worker = new Worker(
             },
           });
         },
-      },
-    });
+      }
+    );
     debug(
       `finishing create app ${app.name} from https://github.com/${repoOwner}/${repoName}.git`
     );

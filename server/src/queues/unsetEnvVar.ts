@@ -1,13 +1,15 @@
-import { Worker, Queue } from 'bullmq';
+import { Queue, Worker } from 'bullmq';
 import createDebug from 'debug';
 import Redis from 'ioredis';
+import { container } from 'tsyringe';
 import { config } from '../config';
 import { sshConnect } from '../lib/ssh';
-import { dokku } from '../lib/dokku';
+import { DokkuAppRepository } from './../lib/dokku/dokku.app.repository';
 
 const queueName = 'unset-env-var';
 const debug = createDebug(`queue:${queueName}`);
 const redisClient = new Redis(config.redisUrl);
+const dokkuApp = container.resolve(DokkuAppRepository);
 
 interface QueueArgs {
   appName: string;
@@ -33,7 +35,7 @@ const worker = new Worker(
 
     const ssh = await sshConnect();
 
-    await dokku.config.unset(ssh, appName, key);
+    await dokkuApp.unsetEnvVar(ssh, appName, key);
 
     debug(`finished unsetEnvVarQueue for app:  ${appName} with ${key}`);
     ssh.dispose();

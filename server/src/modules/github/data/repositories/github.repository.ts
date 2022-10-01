@@ -1,10 +1,11 @@
 import { AppAuthentication, createAppAuth } from '@octokit/auth-app';
 import { Octokit } from '@octokit/rest';
-import { AppMetaGithub, PrismaClient, User } from '@prisma/client';
+import { App, AppMetaGithub, PrismaClient, User } from '@prisma/client';
 import { Injectable } from '@tsed/di';
 import { Unauthorized } from '@tsed/exceptions';
 import fetch from 'node-fetch';
 import { injectable } from 'tsyringe';
+import { deployAppQueue } from '../../../../queues/deployApp';
 import { synchroniseServerQueue } from '../../../../queues/synchroniseServer';
 import { Branch } from '../models/branch.model';
 import { GithubPagination } from '../models/github_pagination.model';
@@ -33,7 +34,109 @@ export class GithubRepository {
     clientSecret: GITHUB_APP_CLIENT_SECRET,
   });
 
-  async repository(
+  async createApp(
+    installationId: string,
+    appName: string,
+    repoFullName: string,
+    repoId: string,
+    user: User,
+    branch?: string
+  ): Promise<App> {
+    const installationAuthentication = (await this.installationAuth({
+      type: 'installation',
+      installationId,
+    })) as AppAuthentication;
+
+    const fullName = repoFullName.split('/');
+
+    const repoData = {
+      owner: fullName[0],
+      repoName: fullName[1],
+    };
+
+    return this.prisma.app
+      .create({
+        data: {
+          userId: user.id,
+          name: appName,
+          type: 'GITHUB',
+          AppMetaGithub: {
+            create: {
+              repoName: repoData.repoName,
+              repoOwner: repoData.owner,
+              repoId,
+              githubAppInstallationId: installationId,
+              branch: branch ? branch : 'main',
+            },
+          },
+        },
+        include: {
+          AppMetaGithub: true,
+        },
+      })
+      .then(async (res) => {
+        await deployAppQueue.add('deploy-app', {
+          appId: res.id,
+          userName: user.username,
+          token: installationAuthentication.token,
+        });
+
+        return res;
+      });
+  }
+
+  async repository(installationId: string, repoFullName: string) {
+    const installationAuthentication = (await this.installationAuth({
+      type: 'installation',
+      installationId,
+    })) as AppAuthentication;
+
+    const octo = new Octokit({
+      auth: installationAuthentication.token,
+    });
+
+    const fullName = repoFullName.split('/');
+
+    const repoData = {
+      owner: fullName[0],
+      repoName: fullName[1],
+    };
+
+    return octo.repos
+      .get({
+        owner: repoData.owner,
+        repo: repoData.repoName,
+      })
+      .then((res) => res.data);
+  }
+
+  async branch(installationId: string, repoFullName: string, branch: string) {
+    const installationAuthentication = (await this.installationAuth({
+      type: 'installation',
+      installationId,
+    })) as AppAuthentication;
+
+    const octo = new Octokit({
+      auth: installationAuthentication.token,
+    });
+
+    const fullName = repoFullName.split('/');
+
+    const repoData = {
+      owner: fullName[0],
+      repoName: fullName[1],
+    };
+
+    return octo.repos
+      .getBranch({
+        owner: repoData.owner,
+        repo: repoData.repoName,
+        branch: branch,
+      })
+      .then((res) => res.data);
+  }
+
+  async repositories(
     installationId: string,
     per_page = 30,
     page = 1

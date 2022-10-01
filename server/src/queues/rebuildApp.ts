@@ -1,14 +1,17 @@
 import { Queue, Worker } from 'bullmq';
 import createDebug from 'debug';
 import Redis from 'ioredis';
+import { container } from 'tsyringe';
+import { pubsub } from '../index.old';
 import { config } from '../config';
-import { pubsub } from '..';
-import { dokku } from '../lib/dokku';
+import { DokkuAppRepository } from './../lib/dokku/dokku.app.repository';
+
 import { sshConnect } from '../lib/ssh';
 
 const queueName = 'rebuild-app';
 const debug = createDebug(`queue:${queueName}`);
 const redisClient = new Redis(config.redisUrl);
+const dokkuApp = container.resolve(DokkuAppRepository);
 
 interface QueueArgs {
   appName: string;
@@ -33,7 +36,7 @@ const worker = new Worker(
     debug(`starting rebuild app queue for ${appName} app`);
 
     const ssh = await sshConnect();
-    const res = await dokku.process.restart(
+    const res = await dokkuApp.restart(
       ssh,
       appName,
 

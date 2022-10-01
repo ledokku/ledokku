@@ -46,11 +46,35 @@ export class ContextFactory {
 
     return <DokkuContext>{
       ...(await ContextFactory.generateBaseContext()),
-      userId, // TODO: Eliminar al migrar
-      auth: {
-        token,
-        userId,
-      },
+      auth: userId
+        ? {
+            token,
+            userId,
+          }
+        : undefined,
+    };
+  }
+
+  static async createFromWS(connectionParams: any): Promise<DokkuContext> {
+    let userId: string | undefined;
+    try {
+      const decoded = jsonwebtoken.verify(
+        connectionParams.token,
+        JWT_SECRET
+      ) as {
+        userId: string;
+      };
+      userId = decoded.userId;
+    } catch (e) {}
+
+    return <DokkuContext>{
+      ...(await ContextFactory.generateBaseContext()),
+      auth: userId
+        ? {
+            token: connectionParams.token,
+            userId,
+          }
+        : undefined,
     };
   }
 }

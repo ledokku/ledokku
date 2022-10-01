@@ -19,7 +19,7 @@ export class GithubResolver {
   async repositories(
     @Arg('installationId') installationId: string
   ): Promise<Repository[]> {
-    return (await this.ghRepository.repository(installationId)).repositories;
+    return (await this.ghRepository.repositories(installationId)).repositories;
   }
 
   @Authorized()

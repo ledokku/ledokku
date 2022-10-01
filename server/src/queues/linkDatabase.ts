@@ -1,9 +1,11 @@
 import { Queue, Worker } from 'bullmq';
 import createDebug from 'debug';
 import Redis from 'ioredis';
+import { container } from 'tsyringe';
+import { pubsub } from '../index.old';
 import { config } from '../config';
-import { pubsub } from '..';
-import { dokku } from '../lib/dokku';
+import { DokkuDatabaseRepository } from './../lib/dokku/dokku.database.repository';
+
 import { sshConnect } from '../lib/ssh';
 import { prisma } from '../prisma';
 import { dbTypeToDokkuPlugin } from './../graphql/utils';
@@ -11,6 +13,7 @@ import { dbTypeToDokkuPlugin } from './../graphql/utils';
 const queueName = 'link-database';
 const debug = createDebug(`queue:${queueName}`);
 const redisClient = new Redis(config.redisUrl);
+const dokkuDatabase = container.resolve(DokkuDatabaseRepository);
 
 interface QueueArgs {
   appId: string;
@@ -51,30 +54,24 @@ const worker = new Worker(
     const dbType = dbTypeToDokkuPlugin(database.type);
 
     const ssh = await sshConnect();
-    const res = await dokku.database.link(
-      ssh,
-      database.name,
-      dbType,
-      app.name,
-      {
-        onStdout: (chunk) => {
-          pubsub.publish('DATABASE_LINKED', {
-            linkDatabaseLogs: {
-              message: chunk.toString(),
-              type: 'stdout',
-            },
-          });
-        },
-        onStderr: (chunk) => {
-          pubsub.publish('DATABASE_LINKED', {
-            linkkDatabaseLogs: {
-              message: chunk.toString(),
-              type: 'stderr',
-            },
-          });
-        },
-      }
-    );
+    const res = await dokkuDatabase.link(ssh, database.name, dbType, app.name, {
+      onStdout: (chunk) => {
+        pubsub.publish('DATABASE_LINKED', {
+          linkDatabaseLogs: {
+            message: chunk.toString(),
+            type: 'stdout',
+          },
+        });
+      },
+      onStderr: (chunk) => {
+        pubsub.publish('DATABASE_LINKED', {
+          linkkDatabaseLogs: {
+            message: chunk.toString(),
+            type: 'stderr',
+          },
+        });
+      },
+    });
 
     await prisma.database.update({
       where: { id: database.id },

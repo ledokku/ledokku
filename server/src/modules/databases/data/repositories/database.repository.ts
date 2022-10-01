@@ -17,7 +17,39 @@ export class DatabaseRepository {
     return this.prisma.database.findMany();
   }
 
-  async linkedApps(databaseId: string, appId: string): Promise<App[]> {
+  delete(id: string): Promise<Database> {
+    return this.prisma.database.delete({
+      where: { id },
+    });
+  }
+
+  async exists(name: string): Promise<boolean> {
+    return (
+      (await this.prisma.database.count({
+        where: { name },
+      })) > 0
+    );
+  }
+
+  async databaseWithApps(
+    databaseId: string,
+    appId: string
+  ): Promise<Database & { apps: App[] }> {
+    return this.prisma.database.findUnique({
+      where: {
+        id: databaseId,
+      },
+      include: {
+        apps: {
+          where: {
+            id: appId,
+          },
+        },
+      },
+    });
+  }
+
+  async linkedApp(databaseId: string, appId: string): Promise<App[]> {
     return this.prisma.database
       .findUnique({
         where: {
@@ -29,6 +61,16 @@ export class DatabaseRepository {
               id: appId,
             },
           },
+        },
+      })
+      .apps();
+  }
+
+  async linkedApps(databaseId: string): Promise<App[]> {
+    return this.prisma.database
+      .findUnique({
+        where: {
+          id: databaseId,
         },
       })
       .apps();

@@ -1,37 +1,104 @@
-import { PlatformApplication } from '@tsed/common';
+import {
+  $log,
+  BeforeRoutesInit,
+  OnReady,
+  PlatformApplication,
+} from '@tsed/common';
 import { Configuration, Inject } from '@tsed/di';
 import '@tsed/platform-express';
 import '@tsed/typegraphql';
-import { ApolloServer } from 'apollo-server-express';
+import { TypeGraphQLService } from '@tsed/typegraphql';
+import { ExpressContext } from 'apollo-server-express';
+import express from 'express';
+import { execute, subscribe } from 'graphql';
+import * as http from 'http';
 import 'reflect-metadata';
-import { PORT } from './constants';
-import { stitchedSchema } from '.';
+import { SubscriptionServer } from 'subscriptions-transport-ws';
+import { authChecker } from './config/auth_checker';
+import { ContextFactory } from './config/context_factory';
+import { IS_PRODUCTION, PORT } from './constants';
+import { MainController } from './controllers/main.controller';
+import { WebhookController } from './controllers/webhook.controller';
+import { pubsub } from './index.old';
+import { DokkuContext } from './models/dokku_context';
+import { synchroniseServerQueue } from './queues/synchroniseServer';
 
 @Configuration({
   port: PORT,
   rootDir: __dirname,
   acceptMimes: ['application/json'],
+  componentsScan: [`${__dirname}/**/*.resolver.{ts,js}`],
+
+  mount: {
+    '/': [MainController],
+    '/api': [WebhookController],
+  },
   typegraphql: {
-    default: <any>{
-      server: (config) =>
-        new ApolloServer({
-          ...config,
-          schema: stitchedSchema,
-        }),
+    default: {
       path: '/graphql',
       buildSchemaOptions: {
         dateScalarMode: 'isoDate',
+        authChecker,
+        pubSub: pubsub
       },
-      tracing: true,
+      context: (expressContext: ExpressContext) =>
+        ContextFactory.createFromHTTP(expressContext.req),
+      formatError: (err: any) => {
+        if (!IS_PRODUCTION) {
+          $log.error(err);
+        }
+        return err;
+      },
+      formatResponse: (response, requestContext) => {
+        if ('sshContext' in requestContext.context) {
+          (requestContext.context as DokkuContext).sshContext.connection.dispose();
+        }
+
+        return response;
+      },
     },
   },
 })
-export class Server {
+export class Server implements BeforeRoutesInit, OnReady {
   @Inject()
   app: PlatformApplication;
 
   @Configuration()
   settings: Configuration;
 
-  //   public $beforeRoutesInit(): void | Promise<void> {}
+  @Inject()
+  private typegql!: TypeGraphQLService;
+
+  @Inject()
+  httpServer!: http.Server;
+
+  $beforeRoutesInit(): void | Promise<void> {
+    this.app
+      .use(express.json({ limit: '1mb' }))
+      .use(express.urlencoded({ limit: '1mb', extended: true }));
+  }
+
+  $onReady(): void | Promise<any> {
+    const schema = this.typegql.getSchema('main');
+
+    SubscriptionServer.create(
+      {
+        schema,
+        execute,
+        subscribe,
+        onConnect: async (connectionParams: any) => {
+          return ContextFactory.createFromWS(connectionParams);
+        },
+      },
+      {
+        server: this.httpServer,
+      }
+    );
+
+    if (!IS_PRODUCTION) {
+      require('./smeeClient');
+    }
+
+    synchroniseServerQueue.add('synchronise-server', {});
+  }
 }

@@ -1,16 +1,21 @@
-import { Worker, Queue } from 'bullmq';
+import { DbTypes } from '@prisma/client';
+import { Queue, Worker } from 'bullmq';
 import createDebug from 'debug';
 import Redis from 'ioredis';
+import { container } from 'tsyringe';
 import { config } from '../config';
-import { sshConnect } from '../lib/ssh';
-import { dokku } from '../lib/dokku';
-import { prisma } from '../prisma';
 import { dbTypeToDokkuPlugin } from '../graphql/utils';
-import { DatabaseTypes } from '../generated/graphql';
+import { DokkuAppRepository } from '../lib/dokku/dokku.app.repository';
+import { DokkuDatabaseRepository } from '../lib/dokku/dokku.database.repository';
 import { DokkuPluginRepository } from '../lib/dokku/dokku.plugin.repository';
+import { sshConnect } from '../lib/ssh';
+import { prisma } from '../prisma';
 
 const queueName = 'synchronise-server';
 const redisClient = new Redis(config.redisUrl);
+const plugin = container.resolve(DokkuPluginRepository);
+const apps = container.resolve(DokkuAppRepository);
+const dokkuDb = container.resolve(DokkuDatabaseRepository);
 
 export const synchroniseServerQueue = new Queue(queueName, {
   defaultJobOptions: {
@@ -45,7 +50,7 @@ const worker = new Worker(
     /**
      * First we synchronise the existing apps
      */
-    const dokkuApps = await dokku.apps.list(ssh);
+    const dokkuApps = await apps.list(ssh);
 
     for (const dokkuApp of dokkuApps) {
       // We skip the ledokku application as we don't want to see it in the dashboard
@@ -76,13 +81,8 @@ const worker = new Worker(
      * We also create the links with the existing apps
      */
 
-    const databasesToCheck: DatabaseTypes[] = [
-      'POSTGRESQL',
-      'REDIS',
-      'MONGODB',
-      'MYSQL',
-    ];
-    const dokkuPlugins = await new DokkuPluginRepository().list(ssh);
+    const databasesToCheck: DbTypes[] = Object.values(DbTypes);
+    const dokkuPlugins = await plugin.list(ssh);
 
     for (const databaseToCheck of databasesToCheck) {
       // First we check if the db is installed
@@ -96,7 +96,7 @@ const worker = new Worker(
         continue;
       }
 
-      const dokkuDatabases = await dokku.database.list(ssh, dbDokkuName);
+      const dokkuDatabases = await dokkuDb.list(ssh, dbDokkuName);
 
       for (const dokkuDatabase of dokkuDatabases) {
         // We skip the ledokku databases as we don't want to see them in the dashboard
@@ -111,10 +111,10 @@ const worker = new Worker(
         let database = databases[0];
         // If database is not in our system we add it
         if (!database) {
-          const dokkuDatabaseVersion = await dokku.database.infoVersion(
+          const dokkuDatabaseVersion = await dokkuDb.version(
             ssh,
             dokkuDatabase,
-            dbDokkuName
+            databaseToCheck
           );
 
           console.log(`=> Added ${dbDokkuName} database ${dokkuDatabase}`);
@@ -128,11 +128,7 @@ const worker = new Worker(
         }
 
         // For each database we need to register the links
-        const dokkuLinks = await dokku.database.listLinks(
-          ssh,
-          dbDokkuName,
-          dokkuDatabase
-        );
+        const dokkuLinks = await dokkuDb.links(ssh, dbDokkuName, dokkuDatabase);
 
         for (const dokkuLink of dokkuLinks) {
           const apps = await prisma.app.findMany({

@@ -7,6 +7,42 @@ import { ProxyPort } from './models/proxy_ports.model';
 @Injectable()
 @injectable()
 export class DokkuProxyRepository {
+  async add(
+    ssh: NodeSSH,
+    appName: string,
+    scheme: string,
+    host: string,
+    container: string
+  ): Promise<boolean> {
+    const resultProxyPorts = await ssh.execCommand(
+      `proxy:ports-add ${appName} ${scheme}:${host}:${container}`
+    );
+
+    if (resultProxyPorts.code === 1) {
+      throw new InternalServerError(resultProxyPorts.stderr);
+    }
+
+    return true;
+  }
+
+  async remove(
+    ssh: NodeSSH,
+    appName: string,
+    scheme: string,
+    host: string,
+    container: string
+  ): Promise<boolean> {
+    const resultProxyPorts = await ssh.execCommand(
+      `proxy:ports-remove ${appName} ${scheme}:${host}:${container}`
+    );
+
+    if (resultProxyPorts.code === 1) {
+      throw new InternalServerError(resultProxyPorts.stderr);
+    }
+
+    return true;
+  }
+
   async ports(ssh: NodeSSH, appName: string): Promise<ProxyPort[]> {
     const resultProxyPorts = await ssh.execCommand(`proxy:ports ${appName}`);
 

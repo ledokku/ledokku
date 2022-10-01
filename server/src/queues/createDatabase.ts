@@ -1,16 +1,19 @@
-import { dbTypeToDokkuPlugin } from './../graphql/utils';
-import { Worker, Queue } from 'bullmq';
+import { Queue, Worker } from 'bullmq';
 import createDebug from 'debug';
 import Redis from 'ioredis';
-import { pubsub } from '..';
+import { container } from 'tsyringe';
+import { pubsub } from '../index.old';
 import { config } from '../config';
 import { sshConnect } from '../lib/ssh';
-import { dokku } from '../lib/dokku';
+import { dbTypeToDokkuPlugin } from './../graphql/utils';
+import { DokkuDatabaseRepository } from './../lib/dokku/dokku.database.repository';
+
 import { prisma } from '../prisma';
 
 const queueName = 'create-database';
 const debug = createDebug(`queue:${queueName}`);
 const redisClient = new Redis(config.redisUrl);
+const dokkuDatabase = container.resolve(DokkuDatabaseRepository);
 
 interface QueueArgs {
   databaseName: string;
@@ -41,7 +44,7 @@ const worker = new Worker(
     );
 
     const ssh = await sshConnect();
-    const res = await dokku.database.create(
+    const res = await dokkuDatabase.create(
       ssh,
       databaseName,
       dbType,
@@ -66,10 +69,10 @@ const worker = new Worker(
       }
     );
 
-    const dokkuDatabaseVersion = await dokku.database.infoVersion(
+    const dokkuDatabaseVersion = await dokkuDatabase.version(
       ssh,
       databaseName,
-      dbType
+      databaseType
     );
 
     const createdDb = await prisma.database.create({

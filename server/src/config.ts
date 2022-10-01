@@ -4,32 +4,6 @@ import { join } from 'path';
 import { generateKeyPairSync } from 'crypto';
 import sshpk from 'sshpk';
 
-const envSchema = yup.object({
-  JWT_SECRET: yup
-    .string()
-    .required('Please provide a valid JWT_SECRET env variable.'),
-  REDIS_URL: yup
-    .string()
-    .required('Please provide a valid REDIS_URL env variable.'),
-  DOKKU_SSH_HOST: yup
-    .string()
-    .required('Please provide a valid DOKKU_SSH_HOST env variable.'),
-  DOKKU_SSH_PORT: yup.string(),
-  /**
-   * Temporary solution until we have proper user management.
-   */
-  NUMBER_USERS_ALLOWED: yup.string(),
-});
-
-try {
-  envSchema.validateSync(process.env);
-} catch (error) {
-  const validationError: yup.ValidationError = error;
-  console.error(`Environment validation failed. ${validationError.message}
-Take a look at the contributing guide to see how to setup the project.
-https://github.com/ledokku/ledokku/blob/master/CONTRIBUTING.md`);
-  process.exit(1);
-}
 
 /**
  * We generate a new ssh key if it's the first time server is booted
@@ -78,7 +52,7 @@ const privateKey = readFileSync(sshKeyPath, {
   encoding: 'utf8',
 });
 
-// helper function to parse github PEM
+
 export const formatGithubPem = (base64Pem?: string) => {
   if (!base64Pem) {
     return '';

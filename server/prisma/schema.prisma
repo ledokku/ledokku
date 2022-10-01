@@ -30,7 +30,7 @@ model App {
   name          String
   type          AppTypes
   appBuild      AppBuild[]
-  databases     Database[]     
+  databases     Database[]
   User          User?          @relation(fields: [userId], references: [id])
   userId        String?
   AppMetaGithub AppMetaGithub?
@@ -45,8 +45,8 @@ enum AppTypes {
 
 model AppMetaGithub {
   id                      String   @id @default(uuid())
-  app                     App      @relation(fields: [appId], references: [id])
-  appId                   String @unique
+  app                     App      @relation(fields: [appId], references: [id], onDelete: Cascade)
+  appId                   String   @unique
   repoId                  String
   repoOwner               String
   repoName                String
@@ -81,7 +81,7 @@ model Database {
   name      String
   type      DbTypes
   version   String?
-  apps      App[]  
+  apps      App[]
   User      User?    @relation(fields: [userId], references: [id])
   userId    String?
 }
