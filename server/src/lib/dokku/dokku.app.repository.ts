@@ -1,11 +1,9 @@
 import { Injectable } from '@tsed/di';
 import { InternalServerError } from '@tsed/exceptions';
 import { NodeSSH, SSHExecOptions } from 'node-ssh';
-import { injectable } from 'tsyringe';
 import { EnvVar } from './models/env_var.model';
 
 @Injectable()
-@injectable()
 export class DokkuAppRepository {
   async create(ssh: NodeSSH, appName: string): Promise<boolean> {
     const resultAppsCreate = await ssh.execCommand(`apps:create ${appName}`);

@@ -1,10 +1,8 @@
 import { App, PrismaClient } from '@prisma/client';
 import { Injectable } from '@tsed/di';
-import { injectable } from 'tsyringe';
 import { Database } from '../../../databases/data/models/database.model';
 
 @Injectable()
-@injectable()
 export class AppRepository {
   constructor(private prisma: PrismaClient) {}
 

@@ -1,11 +1,15 @@
-import { App, Database, PrismaClient } from '@prisma/client';
+import { App, Database, Prisma, PrismaClient } from '@prisma/client';
 import { Injectable } from '@tsed/di';
-import { injectable } from 'tsyringe';
 
 @Injectable()
-@injectable()
 export class DatabaseRepository {
   constructor(private prisma: PrismaClient) {}
+
+  create(data: Prisma.DatabaseCreateInput): Promise<Database> {
+    return this.prisma.database.create({
+      data,
+    });
+  }
 
   get(id: string): Promise<Database> {
     return this.prisma.database.findUnique({

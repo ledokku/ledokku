@@ -2,7 +2,7 @@ import { readFileSync, writeFileSync } from 'fs';
 import SmeeClient from 'smee-client-patched';
 import { config } from './config';
 
-const startSmeeClient = async () => {
+export const startSmeeClient = async () => {
   /**
    * If webhookProxyUrl url is not set we automatically generate a new one
    * for the user and save it .env file.
@@ -37,5 +37,3 @@ const startSmeeClient = async () => {
     events.close();
   });
 };
-
-startSmeeClient();

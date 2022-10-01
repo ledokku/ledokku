@@ -1,11 +1,9 @@
 import { Injectable } from '@tsed/di';
 import { InternalServerError } from '@tsed/exceptions';
 import { NodeSSH } from 'node-ssh';
-import { injectable } from 'tsyringe';
 import { ProxyPort } from './models/proxy_ports.model';
 
 @Injectable()
-@injectable()
 export class DokkuProxyRepository {
   async add(
     ssh: NodeSSH,

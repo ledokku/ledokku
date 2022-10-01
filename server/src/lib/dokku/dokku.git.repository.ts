@@ -1,10 +1,8 @@
 import { Injectable } from '@tsed/di';
 import { InternalServerError } from '@tsed/exceptions';
 import { NodeSSH, SSHExecOptions } from 'node-ssh';
-import { injectable } from 'tsyringe';
 
 @Injectable()
-@injectable()
 export class DokkuGitRepository {
   async auth(
     ssh: NodeSSH,

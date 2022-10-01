@@ -1,6 +1,5 @@
 import { BadRequest, Conflict, NotFound } from '@tsed/exceptions';
 import { ResolverService } from '@tsed/typegraphql';
-import { injectable } from 'tsyringe';
 import {
   Arg,
   Authorized,
@@ -8,16 +7,15 @@ import {
   FieldResolver,
   Mutation,
   Query,
-  Resolver,
   Root,
   Subscription,
 } from 'type-graphql';
 import { dbTypeToDokkuPlugin } from '../../graphql/utils';
 import { DokkuDatabaseRepository } from '../../lib/dokku/dokku.database.repository';
 import { DokkuPluginRepository } from '../../lib/dokku/dokku.plugin.repository';
-import { DokkuContext } from '../../models/dokku_context';
-import { SubscriptionTopics } from '../../models/subscription_topics';
-import { createDatabaseQueue } from '../../queues/createDatabase';
+import { DokkuContext } from '../../data/models/dokku_context';
+import { SubscriptionTopics } from '../../data/models/subscription_topics';
+import { CreateDatabaseQueue } from '../../queues/create_database.queue';
 import { App } from '../apps/data/models/app.model';
 import { Logs } from '../apps/data/models/logs.model';
 import { BooleanResult } from '../apps/data/models/result.model';
@@ -31,14 +29,13 @@ import { DatabaseUnlinkPayload } from './data/models/database_unlink.payload';
 import { IsDatabaseLinked } from './data/models/is_database_linked.model';
 import { DatabaseRepository } from './data/repositories/database.repository';
 
-@injectable()
-@Resolver(Database)
 @ResolverService(Database)
 export class DatabaseResolver {
   constructor(
     private databaseRepository: DatabaseRepository,
     private dokkuDatabaseRepository: DokkuDatabaseRepository,
-    private dokkuPluginRepository: DokkuPluginRepository
+    private dokkuPluginRepository: DokkuPluginRepository,
+    private createDatabaseQueue: CreateDatabaseQueue
   ) {}
 
   @Authorized()
@@ -139,7 +136,7 @@ export class DatabaseResolver {
       throw new NotFound(`La base de datos ${input.type} no esta instalada`);
     }
 
-    await createDatabaseQueue.add('create-database', {
+    await this.createDatabaseQueue.add({
       databaseName: input.name,
       databaseType: input.type,
       userId: context.auth.userId,

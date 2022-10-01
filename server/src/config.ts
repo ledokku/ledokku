@@ -1,9 +1,7 @@
-import * as yup from 'yup';
-import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
-import { join } from 'path';
 import { generateKeyPairSync } from 'crypto';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import { join } from 'path';
 import sshpk from 'sshpk';
-
 
 /**
  * We generate a new ssh key if it's the first time server is booted
@@ -51,7 +49,6 @@ if (!existsSync(sshKeyPath)) {
 const privateKey = readFileSync(sshKeyPath, {
   encoding: 'utf8',
 });
-
 
 export const formatGithubPem = (base64Pem?: string) => {
   if (!base64Pem) {

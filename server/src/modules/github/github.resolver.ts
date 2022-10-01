@@ -1,15 +1,12 @@
 import { ResolverService } from '@tsed/typegraphql';
-import { injectable } from 'tsyringe';
 import { Arg, Authorized, Ctx, Query, Resolver } from 'type-graphql';
-import { DokkuContext } from './../../models/dokku_context';
+import { DokkuContext } from '../../data/models/dokku_context';
 import { AppGithubMeta } from './data/models/app_meta_github.model';
 import { Branch } from './data/models/branch.model';
 import { Installation } from './data/models/installation.model';
 import { Repository } from './data/models/repository.model';
 import { GithubRepository } from './data/repositories/github.repository';
 
-@injectable()
-@Resolver(Repository)
 @ResolverService(Repository)
 export class GithubResolver {
   constructor(private ghRepository: GithubRepository) {}

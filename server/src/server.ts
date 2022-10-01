@@ -1,18 +1,19 @@
+import { PrismaClient } from '@prisma/client';
 import {
   $log,
   BeforeRoutesInit,
   OnReady,
   PlatformApplication,
 } from '@tsed/common';
-import { Configuration, Inject } from '@tsed/di';
+import { Configuration, Inject, registerProvider } from '@tsed/di';
 import '@tsed/platform-express';
 import '@tsed/typegraphql';
 import { TypeGraphQLService } from '@tsed/typegraphql';
 import { ExpressContext } from 'apollo-server-express';
 import express from 'express';
 import { execute, subscribe } from 'graphql';
+import { PubSub } from 'graphql-subscriptions';
 import * as http from 'http';
-import 'reflect-metadata';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { authChecker } from './config/auth_checker';
 import { ContextFactory } from './config/context_factory';
@@ -20,15 +21,15 @@ import { IS_PRODUCTION, PORT } from './constants';
 import { MainController } from './controllers/main.controller';
 import { WebhookController } from './controllers/webhook.controller';
 import { pubsub } from './index.old';
-import { DokkuContext } from './models/dokku_context';
+import { DokkuContext } from './data/models/dokku_context';
 import { synchroniseServerQueue } from './queues/synchroniseServer';
+import { startSmeeClient } from './smeeClient';
 
 @Configuration({
   port: PORT,
   rootDir: __dirname,
   acceptMimes: ['application/json'],
   componentsScan: [`${__dirname}/**/*.resolver.{ts,js}`],
-
   mount: {
     '/': [MainController],
     '/api': [WebhookController],
@@ -39,7 +40,7 @@ import { synchroniseServerQueue } from './queues/synchroniseServer';
       buildSchemaOptions: {
         dateScalarMode: 'isoDate',
         authChecker,
-        pubSub: pubsub
+        pubSub: pubsub,
       },
       context: (expressContext: ExpressContext) =>
         ContextFactory.createFromHTTP(expressContext.req),
@@ -96,9 +97,19 @@ export class Server implements BeforeRoutesInit, OnReady {
     );
 
     if (!IS_PRODUCTION) {
-      require('./smeeClient');
+      startSmeeClient();
     }
 
     synchroniseServerQueue.add('synchronise-server', {});
   }
 }
+
+registerProvider({
+  provide: PubSub,
+  useValue: pubsub,
+});
+
+registerProvider({
+  provide: PrismaClient,
+  useValue: new PrismaClient(),
+});

@@ -1,13 +1,11 @@
 import { Queue, Worker } from 'bullmq';
 import createDebug from 'debug';
 import Redis from 'ioredis';
-import { container } from 'tsyringe';
 import { pubsub } from '../index.old';
 import { config } from '../config';
 import { DokkuDatabaseRepository } from './../lib/dokku/dokku.database.repository';
 
 import { sshConnect } from '../lib/ssh';
-import { prisma } from '../prisma';
 import { dbTypeToDokkuPlugin } from './../graphql/utils';
 
 const queueName = 'link-database';

@@ -1,14 +1,22 @@
 import { $log, Req } from '@tsed/common';
 import { Controller } from '@tsed/di';
-import { InternalServerError } from '@tsed/exceptions';
+import {
+  BadRequest,
+  InternalServerError,
+  Unauthorized,
+} from '@tsed/exceptions';
 import { PlatformExpressRequest } from '@tsed/platform-express';
-import { ContentType, Header, Post } from '@tsed/schema';
-import { handleWebhooks } from '../lib/webhooks/handleWebhooks';
+import { ContentType, Header, Post, Returns } from '@tsed/schema';
+import { verifyWebhookSecret } from '../lib/webhooks/verifyGithubSecret';
+import { GithubRepository } from './../modules/github/data/repositories/github.repository';
 
 @Controller('/webhooks')
 export class WebhookController {
+  constructor(private githubRepository: GithubRepository) {}
+
   @Post()
   @ContentType('application/json')
+  @Returns(200)
   async onMessage(
     @Header('x-github-event') githubEvent: string,
     @Req() req: PlatformExpressRequest
@@ -16,12 +24,29 @@ export class WebhookController {
     if (githubEvent === 'push') {
       $log.debug('Webhook', req.body);
       try {
-        await handleWebhooks(req as any);
+        await this.handleWebhooks(req);
       } catch (e) {
         throw new InternalServerError(e);
       }
     }
 
     return { success: true };
+  }
+
+  async handleWebhooks(req: PlatformExpressRequest) {
+    if (!req.body) {
+      throw new BadRequest('Failed to fetch the request from github');
+    }
+
+    const requestVerified = verifyWebhookSecret(req as any);
+
+    if (!requestVerified) {
+      throw new Unauthorized('Invalid request');
+    }
+
+    return this.githubRepository.deployRepository(
+      req.body.installation.id.toString(),
+      req.body.repository.id.toString()
+    );
   }
 }

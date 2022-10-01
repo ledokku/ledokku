@@ -8,12 +8,11 @@ import {
 } from './../../constants';
 import { DokkuPluginRepository } from './../../lib/dokku/dokku.plugin.repository';
 import { PluginList } from './../../lib/dokku/models/plugin_list.model';
-import { DokkuContext } from './../../models/dokku_context';
+import { DokkuContext } from '../../data/models/dokku_context';
 import { GithubAppManifest } from './models/github_app_manifest.model';
 import { GithubPermission } from './models/github_app_permissions.model';
 import { SetupResult } from './models/setup_result.model';
 
-@Resolver()
 @ResolverService()
 export class SystemResolver {
   constructor(private dokkuPluginRepository: DokkuPluginRepository) {}

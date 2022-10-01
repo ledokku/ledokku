@@ -1,6 +1,5 @@
 import { BadRequest, Conflict, NotFound } from '@tsed/exceptions';
 import { ResolverService } from '@tsed/typegraphql';
-import { injectable } from 'tsyringe';
 import {
   Arg,
   Authorized,
@@ -8,7 +7,6 @@ import {
   FieldResolver,
   Mutation,
   Query,
-  Resolver,
   Root,
   Subscription,
 } from 'type-graphql';
@@ -16,8 +14,8 @@ import { DokkuAppRepository } from '../../lib/dokku/dokku.app.repository';
 import { DokkuDomainsRepository } from '../../lib/dokku/dokku.domains.repository';
 import { DokkuProxyRepository } from '../../lib/dokku/dokku.proxy.repository';
 import { ProxyPort } from '../../lib/dokku/models/proxy_ports.model';
-import { DokkuContext } from '../../models/dokku_context';
-import { SubscriptionTopics } from '../../models/subscription_topics';
+import { DokkuContext } from '../../data/models/dokku_context';
+import { SubscriptionTopics } from '../../data/models/subscription_topics';
 import { linkDatabaseQueue } from '../../queues/linkDatabase';
 import { rebuildAppQueue } from '../../queues/rebuildApp';
 import { setEnvVarQueue } from '../../queues/setEnvVar';
@@ -53,9 +51,7 @@ import { Logs } from './data/models/logs.model';
 import { BooleanResult } from './data/models/result.model';
 import { AppRepository } from './data/repositories/app.repository';
 
-@Resolver(App)
 @ResolverService(App)
-@injectable()
 export class AppResolver {
   constructor(
     private appRepository: AppRepository,

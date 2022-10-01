@@ -2,11 +2,9 @@ import { DbTypes } from '@prisma/client';
 import { Injectable } from '@tsed/di';
 import { InternalServerError } from '@tsed/exceptions';
 import { NodeSSH, SSHExecOptions } from 'node-ssh';
-import { injectable } from 'tsyringe';
 import { dbTypeToDokkuPlugin } from '../../graphql/utils';
 
 @Injectable()
-@injectable()
 export class DokkuDatabaseRepository {
   async create(
     ssh: NodeSSH,

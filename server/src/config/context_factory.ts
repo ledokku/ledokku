@@ -1,16 +1,18 @@
 import { PrismaClient } from '@prisma/client';
-import { $log } from '@tsed/common';
+import { $log, InjectorService } from '@tsed/common';
 import express from 'express';
 import { readFile } from 'fs/promises';
 import jsonwebtoken from 'jsonwebtoken';
-import { container } from 'tsyringe';
 import { sshKeyPath } from '../config';
 import { sshConnect } from '../lib/ssh';
 import { JWT_SECRET } from './../constants';
-import { DokkuContext } from './../models/dokku_context';
+import { DokkuContext } from '../data/models/dokku_context';
 
 export class ContextFactory {
   private static async generateBaseContext(): Promise<Partial<DokkuContext>> {
+    const injector = new InjectorService();
+    await injector.loadAsync();
+
     let sshConnection = undefined;
     const publicKey = await readFile(`${sshKeyPath}.pub`, {
       encoding: 'utf8',
@@ -23,7 +25,7 @@ export class ContextFactory {
     }
 
     return {
-      prisma: container.resolve(PrismaClient),
+      prisma: injector.get(PrismaClient),
       sshContext: {
         publicKey,
         connection: sshConnection,

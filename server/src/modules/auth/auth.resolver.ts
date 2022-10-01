@@ -2,14 +2,11 @@ import { $log } from '@tsed/common';
 import { InternalServerError } from '@tsed/exceptions';
 import { ResolverService } from '@tsed/typegraphql';
 import jsonwebtoken from 'jsonwebtoken';
-import { injectable } from 'tsyringe';
 import { Arg, Mutation, Resolver } from 'type-graphql';
 import { GithubRepository } from '../github/data/repositories/github.repository';
 import { JWT_SECRET } from './../../constants';
 import { Auth } from './data/models/auth.model';
 
-@injectable()
-@Resolver(Auth)
 @ResolverService(Auth)
 export class AuthResolver {
   constructor(private githubRepository: GithubRepository) {}
