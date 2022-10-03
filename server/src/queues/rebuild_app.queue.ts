@@ -23,7 +23,7 @@ export class RebuildAppQueue extends IQueue<QueueArgs> {
   protected async execute(job: Job<QueueArgs, any, string>) {
     const { appName } = job.data;
 
-    $log.debug(`Iniciando rebuild de ${appName}`);
+    $log.info(`Iniciando rebuild de ${appName}`);
 
     const ssh = await sshConnect();
 
@@ -46,7 +46,7 @@ export class RebuildAppQueue extends IQueue<QueueArgs> {
       },
     });
 
-    $log.debug(`Finalizando rebuild de ${appName}`);
+    $log.info(`Finalizando rebuild de ${appName}`);
 
     if (!res.stderr) {
       this.pubsub.publish(SubscriptionTopics.APP_REBUILT, <AppRebuildPayload>{

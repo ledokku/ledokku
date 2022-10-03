@@ -1,55 +1,37 @@
-// Disable outline style for non keyboard users https://github.com/chakra-ui/chakra-ui/issues/3449#issuecomment-785607510
-import 'focus-visible/dist/focus-visible';
-
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { createGlobalStyle } from 'styled-components';
-import { BrowserRouter } from 'react-router-dom';
 import {
-  split,
-  from,
-  HttpLink,
-  ApolloProvider,
-  ApolloClient,
-  InMemoryCache,
+  ApolloClient, ApolloProvider, from,
+  HttpLink, InMemoryCache, split
 } from '@apollo/client';
-import { getMainDefinition } from '@apollo/client/utilities';
-import { WebSocketLink } from '@apollo/client/link/ws';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
+import { getMainDefinition } from '@apollo/client/utilities';
+import { createClient } from 'graphql-ws';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
 import './generated/index.css';
 import { config } from './config';
 import { AuthProvider } from './modules/auth/AuthContext';
 import { Router } from './Router';
-import { NextUIProvider } from '@nextui-org/react';
+import { createTheme, NextUIProvider } from '@nextui-org/react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-// TODO remove this after chakra migration is done
-const GlobalStyle = createGlobalStyle`
-  body {
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    font-smoothing: antialiased;
-  }
-`;
+import useDarkMode from 'use-dark-mode';
 
 const httpLink = new HttpLink({
   uri: `${config.serverUrl}/graphql`,
 });
 
-const wsLink = new WebSocketLink({
-  uri: `${config.serverWsUrl}/graphql`,
-  options: {
-    reconnect: true,
-    connectionParams: () => {
-      return {
-        token: localStorage.getItem('accessToken'),
-      };
-    },
+const wsLink = new GraphQLWsLink(createClient({
+  url: `${config.serverWsUrl}/graphql`,
+  connectionParams: () => {
+    return {
+      token: localStorage.getItem('accessToken'),
+    };
   },
-});
+
+}));
 
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem('accessToken');
@@ -92,19 +74,33 @@ const apolloClient = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
+const lightTheme = createTheme({
+  type: 'light',
+
+})
+
+const darkTheme = createTheme({
+  type: 'dark',
+
+})
+
+const App = () => {
+  const darkMode = useDarkMode(false);
+
+  return (<React.StrictMode>
+  <ApolloProvider client={apolloClient}>
+    <NextUIProvider theme={darkMode.value ? darkTheme : lightTheme}>
+      <AuthProvider>
+        <BrowserRouter>
+          <Router />
+        </BrowserRouter>
+      </AuthProvider>
+      <ToastContainer />
+    </NextUIProvider>
+  </ApolloProvider>
+</React.StrictMode>)}
+
 ReactDOM.render(
-  <React.StrictMode>
-    <ApolloProvider client={apolloClient}>
-      <NextUIProvider>
-        <AuthProvider>
-          <GlobalStyle />
-          <BrowserRouter>
-            <Router />
-          </BrowserRouter>
-        </AuthProvider>
-        <ToastContainer />
-      </NextUIProvider>
-    </ApolloProvider>
-  </React.StrictMode>,
+  <App />,
   document.getElementById('root')
 );

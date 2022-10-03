@@ -1,8 +1,8 @@
 import { $log } from '@tsed/common';
 import { Job } from 'bullmq';
+import { DokkuAppRepository } from '../lib/dokku/dokku.app.repository';
 import { IQueue, Queue } from '../lib/queues/queue.decorator';
 import { sshConnect } from '../lib/ssh';
-import { DokkuAppRepository } from '../lib/dokku/dokku.app.repository';
 
 interface QueueArgs {
   appName: string;
@@ -18,7 +18,7 @@ export class UnsetEnvVarQueue extends IQueue<QueueArgs> {
   protected async execute(job: Job<QueueArgs, any, string>) {
     const { appName, key } = job.data;
 
-    $log.debug(
+    $log.info(
       `Iniciando resignacion de la variable de entorno ${appName} con ${key}`
     );
 
@@ -26,7 +26,7 @@ export class UnsetEnvVarQueue extends IQueue<QueueArgs> {
 
     await this.dokkuAppRepository.unsetEnvVar(ssh, appName, key);
 
-    $log.debug(
+    $log.info(
       `Finalizando resignacion de la variable de entorno ${appName} con ${key}`
     );
 

@@ -33,6 +33,11 @@ export class DokkuGitRepository {
       `git:sync --build ${appName} ${gitRepoUrl} ${branchName}`,
       options
     );
+
+    if (resultGitSync.code === 1) {
+      throw new InternalServerError(resultGitSync.stderr);
+    }
+
     return resultGitSync;
   }
 
@@ -41,6 +46,11 @@ export class DokkuGitRepository {
       `git:unlock ${appName} --force`,
       options
     );
+
+    if (resultGitUnlock.code === 1) {
+      throw new InternalServerError(resultGitUnlock.stderr);
+    }
+
     return resultGitUnlock;
   }
 }

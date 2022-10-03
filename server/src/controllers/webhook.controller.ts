@@ -22,7 +22,7 @@ export class WebhookController {
     @Req() req: PlatformExpressRequest
   ): Promise<any> {
     if (githubEvent === 'push') {
-      $log.debug('Webhook', req.body);
+      $log.info('Webhook', req.body);
       try {
         await this.handleWebhooks(req);
       } catch (e) {

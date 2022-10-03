@@ -1,29 +1,24 @@
-import { useEffect, useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { Button, Container, Grid, Input, Loading, Text } from '@nextui-org/react';
 import { trackGoal } from 'fathom-client';
 import { useFormik } from 'formik';
-import * as yup from 'yup';
-import { FiArrowRight, FiArrowLeft } from 'react-icons/fi';
-import {
-  useCreateDatabaseMutation,
-  DatabaseTypes,
-  useIsPluginInstalledLazyQuery,
-  useCreateDatabaseLogsSubscription,
-  RealTimeLog,
-  useDatabaseQuery,
-} from '../generated/graphql';
-import { PostgreSQLIcon } from '../ui/icons/PostgreSQLIcon';
-import { MySQLIcon } from '../ui/icons/MySQLIcon';
-import { MongoIcon } from '../ui/icons/MongoIcon';
-import { RedisIcon } from '../ui/icons/RedisIcon';
-import { dbTypeToDokkuPlugin } from './utils';
-import { Header, Terminal } from '../ui';
-import { useToast } from '../ui/toast';
-import { trackingGoals } from '../config';
+import { useEffect, useState } from 'react';
+import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
+import { useHistory, useLocation } from 'react-router-dom';
 import { TerminalOutput } from 'react-terminal-ui';
-import { Button, Container, Grid, Input, Loading, Text } from '@nextui-org/react';
-import { CodeBox } from '../ui/components/CodeBox';
+import * as yup from 'yup';
+import { trackingGoals } from '../config';
+import {
+  DbTypes, LogPayload, useCreateDatabaseLogsSubscription, useCreateDatabaseMutation, useDatabaseQuery, useIsPluginInstalledLazyQuery
+} from '../generated/graphql';
+import { Header, Terminal } from '../ui';
 import { Alert } from '../ui/components/Alert';
+import { CodeBox } from '../ui/components/CodeBox';
+import { MongoIcon } from '../ui/icons/MongoIcon';
+import { MySQLIcon } from '../ui/icons/MySQLIcon';
+import { PostgreSQLIcon } from '../ui/icons/PostgreSQLIcon';
+import { RedisIcon } from '../ui/icons/RedisIcon';
+import { useToast } from '../ui/toast';
+import { dbTypeToDokkuPlugin } from './utils';
 
 interface DatabaseBoxProps {
   label: string;
@@ -60,7 +55,7 @@ export const CreateDatabase = () => {
   const toast = useToast();
 
   const { data: dataDb } = useDatabaseQuery();
-  const [arrayOfCreateDbLogs, setArrayofCreateDbLogs] = useState<RealTimeLog[]>(
+  const [arrayOfCreateDbLogs, setArrayofCreateDbLogs] = useState<LogPayload[]>(
     []
   );
   const [isTerminalVisible, setIsTerminalVisible] = useState(false);
@@ -92,7 +87,7 @@ export const CreateDatabase = () => {
       .string()
       .oneOf(['POSTGRESQL', 'MYSQL', 'MONGODB', 'REDIS'])
       .required(),
-    name: yup.string().when('type', (type: DatabaseTypes) => {
+    name: yup.string().when('type', (type: DbTypes) => {
       return yup
         .string()
         .required('Nombre de la base de datos requerido')
@@ -115,7 +110,7 @@ export const CreateDatabase = () => {
     // we poll every 5 sec
     pollInterval: 5000,
   });
-  const formik = useFormik<{ name: string; type: DatabaseTypes }>({
+  const formik = useFormik<{ name: string; type: DbTypes }>({
     initialValues: {
       name: location.state ? (location.state as string) : '',
       type: 'POSTGRESQL',
@@ -255,20 +250,20 @@ export const CreateDatabase = () => {
                     !loading && (
                       <Grid.Container gap={2} className="mt-8">
                         <Grid xs={12} css={{ padding: 0 }} direction="column">
-                            <Input
-                              autoComplete="off"
-                              id="name"
-                              label='Nombre de la base de datos'
-                              name="name"
-                              width='300px'
-                              placeholder='Nombre'
-                              value={formik.values.name}
-                              onChange={formik.handleChange}
-                              onBlur={formik.handleBlur}
-                            />
-                            <Text color='$error'>
-                              {formik.errors.name}
-                            </Text>
+                          <Input
+                            autoComplete="off"
+                            id="name"
+                            label='Nombre de la base de datos'
+                            name="name"
+                            width='300px'
+                            placeholder='Nombre'
+                            value={formik.values.name}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                          />
+                          <Text color='$error'>
+                            {formik.errors.name}
+                          </Text>
                         </Grid>
 
                       </Grid.Container>

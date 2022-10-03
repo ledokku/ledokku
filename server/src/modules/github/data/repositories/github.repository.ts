@@ -229,7 +229,7 @@ export class GithubRepository {
         },
       })
       .then(async (res) => {
-        await this.syncServerQueue.add({});
+        await this.syncServerQueue.add();
         return res;
       });
   }

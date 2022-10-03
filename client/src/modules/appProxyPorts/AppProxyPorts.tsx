@@ -2,7 +2,7 @@ import { useState } from 'react';
 import {
   useAppProxyPortsQuery,
   useRemoveAppProxyPortMutation,
-  AppProxyPort,
+  ProxyPort,
 } from '../../generated/graphql';
 import { AddAppProxyPorts } from './AddAppProxyPorts';
 import { useToast } from '../../ui/toast';
@@ -17,7 +17,7 @@ export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
   const toast = useToast();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<
-    false | AppProxyPort
+    false | ProxyPort
   >(false);
   const {
     data: appProxyPortsData,

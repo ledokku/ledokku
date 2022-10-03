@@ -8,7 +8,7 @@ import { TerminalOutput } from 'react-terminal-ui';
 import * as yup from 'yup';
 import { config, trackingGoals } from '../../config';
 import {
-  Branch, RealTimeLog, Repository, useAppCreateLogsSubscription, useAppsQuery, useBranchesLazyQuery, useCreateAppGithubMutation,
+  Branch, LogPayload, Repository, useAppCreateLogsSubscription, useAppsQuery, useBranchesLazyQuery, useCreateAppGithubMutation,
   useGithubInstallationIdQuery,
   useRepositoriesLazyQuery
 } from '../../generated/graphql';
@@ -57,7 +57,7 @@ export const CreateAppGithub = () => {
   ] = useBranchesLazyQuery({ fetchPolicy: 'network-only' });
 
   const [arrayOfCreateAppLogs, setArrayOfCreateAppLogs] = useState<
-    RealTimeLog[]
+    LogPayload[]
   >([]);
   const [isTerminalVisible, setIsTerminalVisible] = useState(false);
   const [isToastShown, setIsToastShown] = useState(false);

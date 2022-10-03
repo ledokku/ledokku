@@ -19,7 +19,7 @@ export class SetEnvVarQueue extends IQueue<QueueArgs> {
   protected async execute(job: Job<QueueArgs, any, string>) {
     const { appName, key, value } = job.data;
 
-    $log.debug(
+    $log.info(
       `Iniciando asignacion de la variable de entorno ${appName} con ${key}=${value}`
     );
 
@@ -27,7 +27,7 @@ export class SetEnvVarQueue extends IQueue<QueueArgs> {
 
     await this.dokkuAppRepository.setEnvVar(ssh, appName, { key, value });
 
-    $log.debug(
+    $log.info(
       `Finalizando asignacion de la variable de entorno ${appName} con ${key}=${value}`
     );
 

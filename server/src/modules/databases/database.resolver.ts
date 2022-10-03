@@ -11,10 +11,11 @@ import {
   Subscription,
 } from 'type-graphql';
 import { dbTypeToDokkuPlugin } from '../../config/utils';
+import { DokkuContext } from '../../data/models/dokku_context';
+import { LogPayload } from '../../data/models/log_payload';
+import { SubscriptionTopics } from '../../data/models/subscription_topics';
 import { DokkuDatabaseRepository } from '../../lib/dokku/dokku.database.repository';
 import { DokkuPluginRepository } from '../../lib/dokku/dokku.plugin.repository';
-import { DokkuContext } from '../../data/models/dokku_context';
-import { SubscriptionTopics } from '../../data/models/subscription_topics';
 import { CreateDatabaseQueue } from '../../queues/create_database.queue';
 import { App } from '../apps/data/models/app.model';
 import { Logs } from '../apps/data/models/logs.model';
@@ -114,7 +115,7 @@ export class DatabaseResolver {
     @Arg('input', (type) => CreateDatabaseInput) input: CreateDatabaseInput,
     @Ctx() context: DokkuContext
   ): Promise<BooleanResult> {
-    if (/^[a-z0-9-]+$/.test(input.name))
+    if (!/^[a-z0-9-]+$/.test(input.name))
       throw new BadRequest('Mal formato del nombre');
 
     const databaseExists = await this.databaseRepository.exists(input.name);
@@ -173,31 +174,27 @@ export class DatabaseResolver {
   }
 
   @Authorized()
-  @Subscription((type) => DatabaseUnlinkPayload, {
+  @Subscription((type) => LogPayload, {
     topics: SubscriptionTopics.DATABASE_UNLINKED,
   })
-  unlinkDatabaseLogs(
-    @Root() payload: DatabaseUnlinkPayload
-  ): DatabaseUnlinkPayload {
-    return payload;
+  unlinkDatabaseLogs(@Root() payload: DatabaseUnlinkPayload): LogPayload {
+    return payload.unlinkDatabaseLogs;
   }
 
   @Authorized()
-  @Subscription((type) => DatabaseLinkPayload, {
+  @Subscription((type) => LogPayload, {
     topics: SubscriptionTopics.DATABASE_LINKED,
   })
-  linkDatabaseLogs(@Root() payload: DatabaseLinkPayload): DatabaseLinkPayload {
-    return payload;
+  linkDatabaseLogs(@Root() payload: DatabaseLinkPayload): LogPayload {
+    return payload.linkDatabaseLogs;
   }
 
   @Authorized()
-  @Subscription((type) => DatabaseCreatedPayload, {
+  @Subscription((type) => LogPayload, {
     topics: SubscriptionTopics.DATABASE_CREATED,
   })
-  createDatabaseLogs(
-    @Root() payload: DatabaseCreatedPayload
-  ): DatabaseCreatedPayload {
-    return payload;
+  createDatabaseLogs(@Root() payload: DatabaseCreatedPayload): LogPayload {
+    return payload.createDatabaseLogs;
   }
 
   @Authorized()

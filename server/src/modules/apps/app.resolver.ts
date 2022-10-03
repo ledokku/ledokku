@@ -6,11 +6,14 @@ import {
   Ctx,
   FieldResolver,
   Mutation,
+  PubSub,
+  PubSubEngine,
   Query,
   Root,
   Subscription,
 } from 'type-graphql';
 import { DokkuContext } from '../../data/models/dokku_context';
+import { LogPayload } from '../../data/models/log_payload';
 import { SubscriptionTopics } from '../../data/models/subscription_topics';
 import { UserRepository } from '../../data/repositories/user_repository';
 import { DokkuAppRepository } from '../../lib/dokku/dokku.app.repository';
@@ -248,7 +251,7 @@ export class AppResolver {
     @Arg('input', (type) => CreateAppDokkuInput) input: CreateAppDokkuInput,
     @Ctx() context: DokkuContext
   ): Promise<CreateAppResult> {
-    if (/^[a-z0-9-]+$/.test(input.name))
+    if (!/^[a-z0-9-]+$/.test(input.name))
       throw new BadRequest('Mal formato del nombre');
 
     const appNameExists = await this.appRepository.exists(input.name);
@@ -294,9 +297,10 @@ export class AppResolver {
   @Mutation((returns) => BooleanResult)
   async createAppGithub(
     @Arg('input', (type) => CreateAppGithubInput) input: CreateAppGithubInput,
-    @Ctx() context: DokkuContext
+    @Ctx() context: DokkuContext,
+    @PubSub() pubSub: PubSubEngine
   ): Promise<BooleanResult> {
-    if (/^[a-z0-9-]+$/.test(input.name))
+    if (!/^[a-z0-9-]+$/.test(input.name))
       throw new BadRequest('Mal formato del nombre');
 
     const user = await this.userRepository.get(context.auth.userId);
@@ -591,27 +595,27 @@ export class AppResolver {
   }
 
   @Authorized()
-  @Subscription((type) => AppCreatedPayload, {
+  @Subscription((type) => LogPayload, {
     topics: SubscriptionTopics.APP_CREATED,
   })
-  appCreateLogs(@Root() payload: AppCreatedPayload): AppCreatedPayload {
-    return payload;
+  appCreateLogs(@Root() payload: AppCreatedPayload): LogPayload {
+    return payload.appCreateLogs;
   }
 
   @Authorized()
-  @Subscription((type) => AppRestartPayload, {
+  @Subscription((type) => LogPayload, {
     topics: SubscriptionTopics.APP_RESTARTED,
   })
-  appRestartLogs(@Root() payload: AppRestartPayload): AppRestartPayload {
-    return payload;
+  appRestartLogs(@Root() payload: AppRestartPayload): LogPayload {
+    return payload.appRestartLogs;
   }
 
   @Authorized()
-  @Subscription((type) => AppRebuildPayload, {
+  @Subscription((type) => LogPayload, {
     topics: SubscriptionTopics.APP_REBUILT,
   })
-  appRebuildLogs(@Root() payload: AppRebuildPayload): AppRebuildPayload {
-    return payload;
+  appRebuildLogs(@Root() payload: AppRebuildPayload): LogPayload {
+    return payload.appRebuildLogs;
   }
 
   @Authorized()

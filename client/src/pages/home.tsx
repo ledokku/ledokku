@@ -3,15 +3,14 @@ import {
   Text
 } from '@chakra-ui/react';
 import { Button, Container, Loading } from '@nextui-org/react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { FiGithub } from 'react-icons/fi';
 import { Redirect, useHistory } from 'react-router-dom';
 import { config } from '../config';
 import {
-  useLoginWithGithubMutation, useRegisterGithubAppMutation, useSetupQuery
+  useLoginWithGithubMutation, useSetupQuery
 } from '../generated/graphql';
 import { useAuth } from '../modules/auth/AuthContext';
-import { Alert } from '../ui/components/Alert';
 import { CodeBox } from '../ui/components/CodeBox';
 import { OCStudiosLogo } from '../ui/icons/OCStudiosLogo';
 import { useToast } from '../ui/toast';
@@ -22,14 +21,9 @@ export const Home = () => {
   const { loggedIn, login } = useAuth();
   const { data, loading, error } = useSetupQuery({});
   const [
-    registerGithubAppMutation,
-    { loading: registerGithubAppLoading },
-  ] = useRegisterGithubAppMutation();
-  const [
     loginWithGithubMutation,
     { loading: loginWithGithubLoading },
   ] = useLoginWithGithubMutation();
-  const [showAppSuccessAlert, setShowAppSuccessAlert] = useState(false);
 
   // On mount we check if there is a github code present
   useEffect(() => {
@@ -56,42 +50,6 @@ export const Home = () => {
         }
 
         return;
-      }
-
-      if (githubState === 'github_application_setup' && githubCode) {
-        // Remove hash in url
-        window.history.replaceState({}, document.title, '.');
-        try {
-          const data = await registerGithubAppMutation({
-            variables: { code: githubCode },
-            update: (cache, { data }) => {
-              cache.modify({
-                fields: {
-                  setup: (existingSetup) => {
-                    if (data?.registerGithubApp?.githubAppClientId) {
-                      // Change the local cache so we don't have to call the server again
-                      const newSetup = {
-                        ...existingSetup,
-                        isGithubAppSetup: true,
-                      };
-                      return newSetup;
-                    }
-                    return existingSetup;
-                  },
-                },
-              });
-            },
-          });
-          if (data.data?.registerGithubApp?.githubAppClientId) {
-            // Manually set the config so we don't have to reload the page
-            config.githubClientId =
-              data.data?.registerGithubApp?.githubAppClientId;
-
-            setShowAppSuccessAlert(true);
-          }
-        } catch (error: any) {
-          toast.error(error.message);
-        }
       }
     };
 
@@ -127,7 +85,7 @@ export const Home = () => {
           </Text>
         )}
 
-        {(loading || registerGithubAppLoading || loginWithGithubLoading) && (
+        {(loading || loginWithGithubLoading) && (
           <Loading className='mt-8' />
         )}
 
@@ -144,42 +102,6 @@ export const Home = () => {
         )}
 
         {data?.setup.canConnectSsh === true &&
-          data?.setup.isGithubAppSetup === false &&
-          !registerGithubAppLoading && (
-            <Box
-              maxWidth="xl"
-              display="flex"
-              flexDirection="column"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <Text mt={4} textAlign="center">
-                Para poder iniciar sesión e interactuar con la API de Github, crea una aplicación de Github.
-              </Text>
-              <form
-                action="https://github.com/settings/apps/new?state=github_application_setup"
-                method="post"
-              >
-                <input
-                  type="text"
-                  name="manifest"
-                  id="manifest"
-                  defaultValue={data.setup.githubAppManifest}
-                  style={{ display: 'none' }}
-                />
-                <Button
-                  className='mt-4'
-                  type="submit"
-                  icon={<FiGithub size={18} />}
-                  size="lg"
-                >
-                  Crear aplicación de Github
-                </Button>
-              </form>
-            </Box>
-          )}
-
-        {data?.setup.canConnectSsh === true &&
           data?.setup.isGithubAppSetup === true &&
           !loginWithGithubLoading && (
             <Box
@@ -189,13 +111,6 @@ export const Home = () => {
               alignItems="center"
               justifyContent="center"
             >
-              {showAppSuccessAlert ? (
-                <Alert
-                  title='Aplicación de Github creada'
-                  type='success'
-                  message='Ahora puedes iniciar sesión para registrar a tu primer usuario'
-                />
-              ) : null}
 
               <Button
                 shadow

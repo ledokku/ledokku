@@ -7,7 +7,7 @@ import {
   useUnlinkDatabaseMutation,
   useUnlinkDatabaseLogsSubscription,
   useLinkDatabaseLogsSubscription,
-  RealTimeLog,
+  LogPayload,
 } from '../../generated/graphql';
 
 import {
@@ -29,8 +29,8 @@ export const App = () => {
   const { id: appId } = useParams<{ id: string }>();
   const [isUnlinkModalOpen, setIsUnlinkModalOpen] = useState(false);
   const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
-  const [arrayOfLinkLogs, setArrayOfLinkLogs] = useState<RealTimeLog[]>([]);
-  const [arrayOfUnlinkLogs, setArrayOfUnlinkLogs] = useState<RealTimeLog[]>([]);
+  const [arrayOfLinkLogs, setArrayOfLinkLogs] = useState<LogPayload[]>([]);
+  const [arrayOfUnlinkLogs, setArrayOfUnlinkLogs] = useState<LogPayload[]>([]);
   const [databaseAboutToUnlink, setdatabaseAboutToUnlink] = useState<string>();
   const [isTerminalVisible, setIsTerminalVisible] = useState(false);
   const [processStatus, setProcessStatus] = useState<

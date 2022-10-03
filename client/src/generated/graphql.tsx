@@ -2,9 +2,11 @@
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
+export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -12,44 +14,60 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
   DateTime: string;
-  /** The `Upload` scalar type represents a file upload. */
-  Upload: any;
 };
 
+export type AddAppProxyPortInput = {
+  appId: Scalars['String'];
+  container: Scalars['String'];
+  host: Scalars['String'];
+};
 
+export type AddDomainInput = {
+  appId: Scalars['String'];
+  domainName: Scalars['String'];
+};
 
 export type App = {
   __typename?: 'App';
-  id: Scalars['ID'];
-  name: Scalars['String'];
+  appMetaGithub?: Maybe<AppGithubMeta>;
   createdAt: Scalars['DateTime'];
-  type: AppTypes;
-  databases?: Maybe<Array<Database>>;
-  appMetaGithub?: Maybe<AppMetaGithub>;
-};
-
-export type GithubAppInstallationId = {
-  __typename?: 'GithubAppInstallationId';
+  databases: Array<Database>;
   id: Scalars['String'];
+  logs: Logs;
+  name: Scalars['String'];
+  type: AppTypes;
+  updatedAt: Scalars['DateTime'];
+  userId: Scalars['String'];
 };
 
-export type AppMetaGithub = {
-  __typename?: 'AppMetaGithub';
+export type AppGithubMeta = {
+  __typename?: 'AppGithubMeta';
+  appId: Scalars['String'];
+  branch: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  githubAppInstallationId: Scalars['String'];
+  id: Scalars['String'];
   repoId: Scalars['String'];
   repoName: Scalars['String'];
   repoOwner: Scalars['String'];
-  branch: Scalars['String'];
-  githubAppInstallationId: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
 };
 
-export type Repository = {
-  __typename?: 'Repository';
-  id: Scalars['String'];
-  name: Scalars['String'];
-  fullName: Scalars['String'];
-  private: Scalars['Boolean'];
+export type AppTypes =
+  | 'DOCKER'
+  | 'DOKKU'
+  | 'GITHUB'
+  | 'GITLAB';
+
+export type Auth = {
+  __typename?: 'Auth';
+  token: Scalars['String'];
+};
+
+export type BooleanResult = {
+  __typename?: 'BooleanResult';
+  result: Scalars['Boolean'];
 };
 
 export type Branch = {
@@ -57,146 +75,62 @@ export type Branch = {
   name: Scalars['String'];
 };
 
-export type AppTypes =
-  | 'DOKKU'
-  | 'GITHUB'
-  | 'GITLAB'
-  | 'DOCKER';
-
-export type AppBuild = {
-  __typename?: 'AppBuild';
-  id: Scalars['ID'];
-  status: AppBuildStatus;
-};
-
-export type AppBuildStatus =
-  | 'PENDING'
-  | 'IN_PROGRESS'
-  | 'COMPLETED'
-  | 'ERRORED';
-
-export type Database = {
-  __typename?: 'Database';
-  id: Scalars['ID'];
+export type CreateAppDokkuInput = {
   name: Scalars['String'];
-  type: DatabaseTypes;
-  version?: Maybe<Scalars['String']>;
-  createdAt: Scalars['DateTime'];
-  apps?: Maybe<Array<App>>;
 };
 
-export type DatabaseTypes =
-  | 'REDIS'
-  | 'POSTGRESQL'
-  | 'MONGODB'
-  | 'MYSQL';
-
-export type Domains = {
-  __typename?: 'Domains';
-  domains: Array<Scalars['String']>;
+export type CreateAppGithubInput = {
+  branchName: Scalars['String'];
+  githubInstallationId: Scalars['String'];
+  gitRepoFullName: Scalars['String'];
+  gitRepoId: Scalars['String'];
+  name: Scalars['String'];
 };
 
-export type RealTimeLog = {
-  __typename?: 'RealTimeLog';
-  message?: Maybe<Scalars['String']>;
-  type?: Maybe<Scalars['String']>;
-};
-
-export type LoginResult = {
-  __typename?: 'LoginResult';
-  token: Scalars['String'];
-};
-
-export type RegisterGithubAppResult = {
-  __typename?: 'RegisterGithubAppResult';
-  githubAppClientId: Scalars['String'];
-};
-
-export type CreateAppDokkuResult = {
-  __typename?: 'CreateAppDokkuResult';
+export type CreateAppResult = {
+  __typename?: 'CreateAppResult';
   appId: Scalars['String'];
 };
 
-export type CreateAppGithubResult = {
-  __typename?: 'CreateAppGithubResult';
-  result: Scalars['Boolean'];
-};
-
-export type DestroyAppResult = {
-  __typename?: 'DestroyAppResult';
-  result: Scalars['Boolean'];
-};
-
-export type RestartAppResult = {
-  __typename?: 'RestartAppResult';
-  result: Scalars['Boolean'];
-};
-
-export type RebuildAppResult = {
-  __typename?: 'RebuildAppResult';
-  result: Scalars['Boolean'];
-};
-
-export type DestroyDatabaseResult = {
-  __typename?: 'DestroyDatabaseResult';
-  result: Scalars['Boolean'];
-};
-
-export type LinkDatabaseResult = {
-  __typename?: 'LinkDatabaseResult';
-  result: Scalars['Boolean'];
-};
-
-export type UnlinkDatabaseResult = {
-  __typename?: 'UnlinkDatabaseResult';
-  result: Scalars['Boolean'];
-};
-
-export type DokkuPlugin = {
-  __typename?: 'DokkuPlugin';
+export type CreateDatabaseInput = {
   name: Scalars['String'];
+  type: DbTypes;
+};
+
+export type Database = {
+  __typename?: 'Database';
+  apps: Array<App>;
+  createdAt: Scalars['DateTime'];
+  id: Scalars['String'];
+  name: Scalars['String'];
+  type: DbTypes;
+  updatedAt: Scalars['DateTime'];
+  userId: Scalars['String'];
   version: Scalars['String'];
 };
 
-export type DokkuPluginResult = {
-  __typename?: 'DokkuPluginResult';
-  version: Scalars['String'];
-  plugins: Array<DokkuPlugin>;
-};
-
-export type SetEnvVarResult = {
-  __typename?: 'SetEnvVarResult';
-  result: Scalars['Boolean'];
-};
-
-export type UnsetEnvVarResult = {
-  __typename?: 'UnsetEnvVarResult';
-  result: Scalars['Boolean'];
-};
-
-export type CreateDatabaseResult = {
-  __typename?: 'CreateDatabaseResult';
-  result: Scalars['Boolean'];
-};
-
-export type AppLogsResult = {
-  __typename?: 'AppLogsResult';
-  logs: Array<Scalars['String']>;
-};
-
-export type DatabaseInfoResult = {
-  __typename?: 'DatabaseInfoResult';
+export type DatabaseInfo = {
+  __typename?: 'DatabaseInfo';
   info: Array<Scalars['String']>;
 };
 
-export type DatabaseLogsResult = {
-  __typename?: 'DatabaseLogsResult';
-  logs: Array<Maybe<Scalars['String']>>;
+export type DbTypes =
+  | 'MONGODB'
+  | 'MYSQL'
+  | 'POSTGRESQL'
+  | 'REDIS';
+
+export type DestroyAppInput = {
+  appId: Scalars['String'];
 };
 
-export type IsDatabaseLinkedResult = {
-  __typename?: 'IsDatabaseLinkedResult';
-  isLinked: Scalars['Boolean'];
+export type DestroyDatabaseInput = {
+  databaseId: Scalars['String'];
+};
+
+export type DomainList = {
+  __typename?: 'DomainList';
+  domains: Array<Scalars['String']>;
 };
 
 export type EnvVar = {
@@ -205,104 +139,24 @@ export type EnvVar = {
   value: Scalars['String'];
 };
 
-export type EnvVarsResult = {
-  __typename?: 'EnvVarsResult';
+export type EnvVarList = {
+  __typename?: 'EnvVarList';
   envVars: Array<EnvVar>;
 };
 
-export type SetDomainResult = {
-  __typename?: 'SetDomainResult';
-  result: Scalars['Boolean'];
+export type Installation = {
+  __typename?: 'Installation';
+  id: Scalars['ID'];
 };
 
-export type AddDomainResult = {
-  __typename?: 'AddDomainResult';
-  result: Scalars['Boolean'];
+export type IsDatabaseLinked = {
+  __typename?: 'IsDatabaseLinked';
+  isLinked: Scalars['String'];
 };
 
-export type RemoveDomainResult = {
-  __typename?: 'RemoveDomainResult';
-  result: Scalars['Boolean'];
-};
-
-export type SetupResult = {
-  __typename?: 'SetupResult';
-  canConnectSsh: Scalars['Boolean'];
-  sshPublicKey: Scalars['String'];
-  isGithubAppSetup: Scalars['Boolean'];
-  githubAppManifest: Scalars['String'];
-};
-
-export type IsPluginInstalledResult = {
-  __typename?: 'IsPluginInstalledResult';
+export type IsPluginInstalled = {
+  __typename?: 'IsPluginInstalled';
   isPluginInstalled: Scalars['Boolean'];
-};
-
-export type AppProxyPort = {
-  __typename?: 'AppProxyPort';
-  scheme: Scalars['String'];
-  host: Scalars['String'];
-  container: Scalars['String'];
-};
-
-export type CreateAppDokkuInput = {
-  name: Scalars['String'];
-};
-
-export type CreateAppGithubInput = {
-  name: Scalars['String'];
-  gitRepoFullName: Scalars['String'];
-  branchName: Scalars['String'];
-  gitRepoId: Scalars['String'];
-  githubInstallationId: Scalars['String'];
-};
-
-export type RestartAppInput = {
-  appId: Scalars['String'];
-};
-
-export type RebuildAppInput = {
-  appId: Scalars['String'];
-};
-
-export type CreateDatabaseInput = {
-  name: Scalars['String'];
-  type: DatabaseTypes;
-};
-
-export type UnlinkDatabaseInput = {
-  appId: Scalars['String'];
-  databaseId: Scalars['String'];
-};
-
-export type SetEnvVarInput = {
-  appId: Scalars['String'];
-  key: Scalars['String'];
-  value: Scalars['String'];
-};
-
-export type UnsetEnvVarInput = {
-  appId: Scalars['String'];
-  key: Scalars['String'];
-};
-
-export type DestroyAppInput = {
-  appId: Scalars['String'];
-};
-
-export type AddDomainInput = {
-  appId: Scalars['String'];
-  domainName: Scalars['String'];
-};
-
-export type RemoveDomainInput = {
-  appId: Scalars['String'];
-  domainName: Scalars['String'];
-};
-
-export type SetDomainInput = {
-  appId: Scalars['String'];
-  domainName: Scalars['String'];
 };
 
 export type LinkDatabaseInput = {
@@ -310,152 +164,41 @@ export type LinkDatabaseInput = {
   databaseId: Scalars['String'];
 };
 
-export type DestroyDatabaseInput = {
-  databaseId: Scalars['String'];
+export type LogPayload = {
+  __typename?: 'LogPayload';
+  message: Scalars['String'];
+  type: Scalars['String'];
 };
 
-export type AddAppProxyPortInput = {
-  appId: Scalars['String'];
-  host: Scalars['String'];
-  container: Scalars['String'];
-};
-
-export type RemoveAppProxyPortInput = {
-  appId: Scalars['String'];
-  scheme: Scalars['String'];
-  host: Scalars['String'];
-  container: Scalars['String'];
-};
-
-export type Query = {
-  __typename?: 'Query';
-  githubInstallationId: GithubAppInstallationId;
-  setup: SetupResult;
-  apps: Array<App>;
-  repositories: Array<Repository>;
-  branches: Array<Branch>;
-  appMetaGithub?: Maybe<AppMetaGithub>;
-  app?: Maybe<App>;
-  domains: Domains;
-  database?: Maybe<Database>;
-  databases: Array<Database>;
-  isPluginInstalled: IsPluginInstalledResult;
-  dokkuPlugins: DokkuPluginResult;
-  appLogs: AppLogsResult;
-  databaseInfo: DatabaseInfoResult;
-  databaseLogs: DatabaseLogsResult;
-  isDatabaseLinked: IsDatabaseLinkedResult;
-  envVars: EnvVarsResult;
-  appProxyPorts: Array<AppProxyPort>;
-};
-
-
-export type QueryRepositoriesArgs = {
-  installationId: Scalars['String'];
-};
-
-
-export type QueryBranchesArgs = {
-  repositoryName: Scalars['String'];
-  installationId: Scalars['String'];
-};
-
-
-export type QueryAppMetaGithubArgs = {
-  appId: Scalars['String'];
-};
-
-
-export type QueryAppArgs = {
-  appId: Scalars['String'];
-};
-
-
-export type QueryDomainsArgs = {
-  appId: Scalars['String'];
-};
-
-
-export type QueryDatabaseArgs = {
-  databaseId: Scalars['String'];
-};
-
-
-export type QueryIsPluginInstalledArgs = {
-  pluginName: Scalars['String'];
-};
-
-
-export type QueryAppLogsArgs = {
-  appId: Scalars['String'];
-};
-
-
-export type QueryDatabaseInfoArgs = {
-  databaseId: Scalars['String'];
-};
-
-
-export type QueryDatabaseLogsArgs = {
-  databaseId: Scalars['String'];
-};
-
-
-export type QueryIsDatabaseLinkedArgs = {
-  databaseId: Scalars['String'];
-  appId: Scalars['String'];
-};
-
-
-export type QueryEnvVarsArgs = {
-  appId: Scalars['String'];
-};
-
-
-export type QueryAppProxyPortsArgs = {
-  appId: Scalars['String'];
-};
-
-export type Subscription = {
-  __typename?: 'Subscription';
-  unlinkDatabaseLogs: RealTimeLog;
-  linkDatabaseLogs: RealTimeLog;
-  createDatabaseLogs: RealTimeLog;
-  appRestartLogs: RealTimeLog;
-  appRebuildLogs: RealTimeLog;
-  appCreateLogs: RealTimeLog;
+export type Logs = {
+  __typename?: 'Logs';
+  logs: Array<Scalars['String']>;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  loginWithGithub?: Maybe<LoginResult>;
-  registerGithubApp?: Maybe<RegisterGithubAppResult>;
-  addDomain: AddDomainResult;
-  removeDomain: RemoveDomainResult;
-  setDomain: SetDomainResult;
-  createAppDokku: CreateAppDokkuResult;
-  createDatabase: CreateDatabaseResult;
-  setEnvVar: SetEnvVarResult;
-  unsetEnvVar: UnsetEnvVarResult;
-  destroyApp: DestroyAppResult;
-  restartApp: RestartAppResult;
-  rebuildApp: RebuildAppResult;
-  destroyDatabase: DestroyDatabaseResult;
-  linkDatabase: LinkDatabaseResult;
-  unlinkDatabase: UnlinkDatabaseResult;
-  addAppProxyPort?: Maybe<Scalars['Boolean']>;
-  removeAppProxyPort?: Maybe<Scalars['Boolean']>;
-  createAppGithub: CreateAppGithubResult;
+  addAppProxyPort: Scalars['Boolean'];
+  addDomain: BooleanResult;
+  createAppDokku: CreateAppResult;
+  createAppGithub: BooleanResult;
+  createDatabase: BooleanResult;
+  destroyApp: BooleanResult;
+  destroyDatabase: BooleanResult;
+  linkDatabase: BooleanResult;
+  loginWithGithub: Auth;
+  rebuildApp: BooleanResult;
+  removeAppProxyPort: Scalars['Boolean'];
+  removeDomain: BooleanResult;
+  restartApp: BooleanResult;
+  setDomain: BooleanResult;
+  setEnvVar: BooleanResult;
+  unlinkDatabase: BooleanResult;
+  unsetEnvVar: BooleanResult;
 };
 
 
-export type MutationLoginWithGithubArgs = {
-  code: Scalars['String'];
-};
-
-
-export type MutationRegisterGithubAppArgs = {
-  code: Scalars['String'];
+export type MutationAddAppProxyPortArgs = {
+  input: AddAppProxyPortInput;
 };
 
 
@@ -464,18 +207,13 @@ export type MutationAddDomainArgs = {
 };
 
 
-export type MutationRemoveDomainArgs = {
-  input: RemoveDomainInput;
-};
-
-
-export type MutationSetDomainArgs = {
-  input: SetDomainInput;
-};
-
-
 export type MutationCreateAppDokkuArgs = {
   input: CreateAppDokkuInput;
+};
+
+
+export type MutationCreateAppGithubArgs = {
+  input: CreateAppGithubInput;
 };
 
 
@@ -484,28 +222,8 @@ export type MutationCreateDatabaseArgs = {
 };
 
 
-export type MutationSetEnvVarArgs = {
-  input: SetEnvVarInput;
-};
-
-
-export type MutationUnsetEnvVarArgs = {
-  input: UnsetEnvVarInput;
-};
-
-
 export type MutationDestroyAppArgs = {
   input: DestroyAppInput;
-};
-
-
-export type MutationRestartAppArgs = {
-  input: RestartAppInput;
-};
-
-
-export type MutationRebuildAppArgs = {
-  input: RebuildAppInput;
 };
 
 
@@ -519,13 +237,13 @@ export type MutationLinkDatabaseArgs = {
 };
 
 
-export type MutationUnlinkDatabaseArgs = {
-  input: UnlinkDatabaseInput;
+export type MutationLoginWithGithubArgs = {
+  code: Scalars['String'];
 };
 
 
-export type MutationAddAppProxyPortArgs = {
-  input: AddAppProxyPortInput;
+export type MutationRebuildAppArgs = {
+  input: RebuildAppInput;
 };
 
 
@@ -534,203 +252,307 @@ export type MutationRemoveAppProxyPortArgs = {
 };
 
 
-export type MutationCreateAppGithubArgs = {
-  input: CreateAppGithubInput;
+export type MutationRemoveDomainArgs = {
+  input: RemoveDomainInput;
 };
 
-export type CacheControlScope =
-  | 'PUBLIC'
-  | 'PRIVATE';
 
+export type MutationRestartAppArgs = {
+  input: RestartAppInput;
+};
+
+
+export type MutationSetDomainArgs = {
+  input: SetDomainInput;
+};
+
+
+export type MutationSetEnvVarArgs = {
+  input: SetEnvVarInput;
+};
+
+
+export type MutationUnlinkDatabaseArgs = {
+  input: UnlinkDatabaseInput;
+};
+
+
+export type MutationUnsetEnvVarArgs = {
+  input: UnsetEnvVarInput;
+};
+
+export type Plugin = {
+  __typename?: 'Plugin';
+  name: Scalars['String'];
+  version: Scalars['String'];
+};
+
+export type PluginList = {
+  __typename?: 'PluginList';
+  plugins: Array<Plugin>;
+  version: Scalars['String'];
+};
+
+export type ProxyPort = {
+  __typename?: 'ProxyPort';
+  container: Scalars['String'];
+  host: Scalars['String'];
+  scheme: Scalars['String'];
+};
+
+export type Query = {
+  __typename?: 'Query';
+  app: App;
+  appLogs: Logs;
+  appMetaGithub?: Maybe<AppGithubMeta>;
+  appProxyPorts: Array<ProxyPort>;
+  apps: Array<App>;
+  branches: Array<Branch>;
+  database: Database;
+  databaseInfo: DatabaseInfo;
+  databaseLogs: Logs;
+  databases: Array<Database>;
+  dokkuPlugins: PluginList;
+  domains: DomainList;
+  envVars: EnvVarList;
+  githubInstallationId: Installation;
+  isDatabaseLinked: IsDatabaseLinked;
+  isPluginInstalled: IsPluginInstalled;
+  repositories: Array<Repository>;
+  setup: SetupResult;
+};
+
+
+export type QueryAppArgs = {
+  appId: Scalars['String'];
+};
+
+
+export type QueryAppLogsArgs = {
+  appId: Scalars['String'];
+};
+
+
+export type QueryAppMetaGithubArgs = {
+  appId: Scalars['String'];
+};
+
+
+export type QueryAppProxyPortsArgs = {
+  appId: Scalars['String'];
+};
+
+
+export type QueryBranchesArgs = {
+  installationId: Scalars['String'];
+  repositoryName: Scalars['String'];
+};
+
+
+export type QueryDatabaseArgs = {
+  databaseId: Scalars['String'];
+};
+
+
+export type QueryDatabaseInfoArgs = {
+  databaseId: Scalars['String'];
+};
+
+
+export type QueryDatabaseLogsArgs = {
+  databaseId: Scalars['String'];
+};
+
+
+export type QueryDomainsArgs = {
+  appId: Scalars['String'];
+};
+
+
+export type QueryEnvVarsArgs = {
+  appId: Scalars['String'];
+};
+
+
+export type QueryIsDatabaseLinkedArgs = {
+  appId: Scalars['String'];
+  databaseId: Scalars['String'];
+};
+
+
+export type QueryIsPluginInstalledArgs = {
+  pluginName: Scalars['String'];
+};
+
+
+export type QueryRepositoriesArgs = {
+  installationId: Scalars['String'];
+};
+
+export type RebuildAppInput = {
+  appId: Scalars['String'];
+};
+
+export type RemoveAppProxyPortInput = {
+  appId: Scalars['String'];
+  container: Scalars['String'];
+  host: Scalars['String'];
+  scheme: Scalars['String'];
+};
+
+export type RemoveDomainInput = {
+  appId: Scalars['String'];
+  domainName: Scalars['String'];
+};
+
+export type Repository = {
+  __typename?: 'Repository';
+  fullName: Scalars['String'];
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  private: Scalars['String'];
+};
+
+export type RestartAppInput = {
+  appId: Scalars['String'];
+};
+
+export type SetDomainInput = {
+  appId: Scalars['String'];
+  domainName: Scalars['String'];
+};
+
+export type SetEnvVarInput = {
+  appId: Scalars['String'];
+  key: Scalars['String'];
+  value: Scalars['String'];
+};
+
+export type SetupResult = {
+  __typename?: 'SetupResult';
+  canConnectSsh: Scalars['Boolean'];
+  githubAppManifest: Scalars['String'];
+  isGithubAppSetup: Scalars['Boolean'];
+  sshPublicKey: Scalars['String'];
+};
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  appCreateLogs: LogPayload;
+  appRebuildLogs: LogPayload;
+  appRestartLogs: LogPayload;
+  createDatabaseLogs: LogPayload;
+  linkDatabaseLogs: LogPayload;
+  unlinkDatabaseLogs: LogPayload;
+};
+
+export type UnlinkDatabaseInput = {
+  appId: Scalars['String'];
+  databaseId: Scalars['String'];
+};
+
+export type UnsetEnvVarInput = {
+  appId: Scalars['String'];
+  key: Scalars['String'];
+};
 
 export type AddAppProxyPortMutationVariables = Exact<{
   input: AddAppProxyPortInput;
 }>;
 
 
-export type AddAppProxyPortMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<Mutation, 'addAppProxyPort'>
-);
+export type AddAppProxyPortMutation = { __typename?: 'Mutation', addAppProxyPort: boolean };
 
 export type AddDomainMutationVariables = Exact<{
   input: AddDomainInput;
 }>;
 
 
-export type AddDomainMutation = (
-  { __typename?: 'Mutation' }
-  & { addDomain: (
-    { __typename?: 'AddDomainResult' }
-    & Pick<AddDomainResult, 'result'>
-  ) }
-);
+export type AddDomainMutation = { __typename?: 'Mutation', addDomain: { __typename?: 'BooleanResult', result: boolean } };
 
 export type CreateAppDokkuMutationVariables = Exact<{
   input: CreateAppDokkuInput;
 }>;
 
 
-export type CreateAppDokkuMutation = (
-  { __typename?: 'Mutation' }
-  & { createAppDokku: (
-    { __typename?: 'CreateAppDokkuResult' }
-    & Pick<CreateAppDokkuResult, 'appId'>
-  ) }
-);
+export type CreateAppDokkuMutation = { __typename?: 'Mutation', createAppDokku: { __typename?: 'CreateAppResult', appId: string } };
 
 export type CreateAppGithubMutationVariables = Exact<{
   input: CreateAppGithubInput;
 }>;
 
 
-export type CreateAppGithubMutation = (
-  { __typename?: 'Mutation' }
-  & { createAppGithub: (
-    { __typename?: 'CreateAppGithubResult' }
-    & Pick<CreateAppGithubResult, 'result'>
-  ) }
-);
+export type CreateAppGithubMutation = { __typename?: 'Mutation', createAppGithub: { __typename?: 'BooleanResult', result: boolean } };
 
 export type CreateDatabaseMutationVariables = Exact<{
   input: CreateDatabaseInput;
 }>;
 
 
-export type CreateDatabaseMutation = (
-  { __typename?: 'Mutation' }
-  & { createDatabase: (
-    { __typename?: 'CreateDatabaseResult' }
-    & Pick<CreateDatabaseResult, 'result'>
-  ) }
-);
+export type CreateDatabaseMutation = { __typename?: 'Mutation', createDatabase: { __typename?: 'BooleanResult', result: boolean } };
 
 export type DestroyAppMutationVariables = Exact<{
   input: DestroyAppInput;
 }>;
 
 
-export type DestroyAppMutation = (
-  { __typename?: 'Mutation' }
-  & { destroyApp: (
-    { __typename?: 'DestroyAppResult' }
-    & Pick<DestroyAppResult, 'result'>
-  ) }
-);
+export type DestroyAppMutation = { __typename?: 'Mutation', destroyApp: { __typename?: 'BooleanResult', result: boolean } };
 
 export type DestroyDatabaseMutationVariables = Exact<{
   input: DestroyDatabaseInput;
 }>;
 
 
-export type DestroyDatabaseMutation = (
-  { __typename?: 'Mutation' }
-  & { destroyDatabase: (
-    { __typename?: 'DestroyDatabaseResult' }
-    & Pick<DestroyDatabaseResult, 'result'>
-  ) }
-);
+export type DestroyDatabaseMutation = { __typename?: 'Mutation', destroyDatabase: { __typename?: 'BooleanResult', result: boolean } };
 
 export type LinkDatabaseMutationVariables = Exact<{
   input: LinkDatabaseInput;
 }>;
 
 
-export type LinkDatabaseMutation = (
-  { __typename?: 'Mutation' }
-  & { linkDatabase: (
-    { __typename?: 'LinkDatabaseResult' }
-    & Pick<LinkDatabaseResult, 'result'>
-  ) }
-);
+export type LinkDatabaseMutation = { __typename?: 'Mutation', linkDatabase: { __typename?: 'BooleanResult', result: boolean } };
 
 export type LoginWithGithubMutationVariables = Exact<{
   code: Scalars['String'];
 }>;
 
 
-export type LoginWithGithubMutation = (
-  { __typename?: 'Mutation' }
-  & { loginWithGithub?: Maybe<(
-    { __typename?: 'LoginResult' }
-    & Pick<LoginResult, 'token'>
-  )> }
-);
+export type LoginWithGithubMutation = { __typename?: 'Mutation', loginWithGithub: { __typename?: 'Auth', token: string } };
 
 export type RebuildAppMutationVariables = Exact<{
   input: RebuildAppInput;
 }>;
 
 
-export type RebuildAppMutation = (
-  { __typename?: 'Mutation' }
-  & { rebuildApp: (
-    { __typename?: 'RebuildAppResult' }
-    & Pick<RebuildAppResult, 'result'>
-  ) }
-);
-
-export type RegisterGithubAppMutationVariables = Exact<{
-  code: Scalars['String'];
-}>;
-
-
-export type RegisterGithubAppMutation = (
-  { __typename?: 'Mutation' }
-  & { registerGithubApp?: Maybe<(
-    { __typename?: 'RegisterGithubAppResult' }
-    & Pick<RegisterGithubAppResult, 'githubAppClientId'>
-  )> }
-);
+export type RebuildAppMutation = { __typename?: 'Mutation', rebuildApp: { __typename?: 'BooleanResult', result: boolean } };
 
 export type RemoveAppProxyPortMutationVariables = Exact<{
   input: RemoveAppProxyPortInput;
 }>;
 
 
-export type RemoveAppProxyPortMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<Mutation, 'removeAppProxyPort'>
-);
+export type RemoveAppProxyPortMutation = { __typename?: 'Mutation', removeAppProxyPort: boolean };
 
 export type RemoveDomainMutationVariables = Exact<{
   input: RemoveDomainInput;
 }>;
 
 
-export type RemoveDomainMutation = (
-  { __typename?: 'Mutation' }
-  & { removeDomain: (
-    { __typename?: 'RemoveDomainResult' }
-    & Pick<RemoveDomainResult, 'result'>
-  ) }
-);
+export type RemoveDomainMutation = { __typename?: 'Mutation', removeDomain: { __typename?: 'BooleanResult', result: boolean } };
 
 export type RestartAppMutationVariables = Exact<{
   input: RestartAppInput;
 }>;
 
 
-export type RestartAppMutation = (
-  { __typename?: 'Mutation' }
-  & { restartApp: (
-    { __typename?: 'RestartAppResult' }
-    & Pick<RestartAppResult, 'result'>
-  ) }
-);
+export type RestartAppMutation = { __typename?: 'Mutation', restartApp: { __typename?: 'BooleanResult', result: boolean } };
 
 export type SetDomainMutationVariables = Exact<{
   input: SetDomainInput;
 }>;
 
 
-export type SetDomainMutation = (
-  { __typename?: 'Mutation' }
-  & { setDomain: (
-    { __typename?: 'SetDomainResult' }
-    & Pick<SetDomainResult, 'result'>
-  ) }
-);
+export type SetDomainMutation = { __typename?: 'Mutation', setDomain: { __typename?: 'BooleanResult', result: boolean } };
 
 export type SetEnvVarMutationVariables = Exact<{
   key: Scalars['String'];
@@ -739,26 +561,14 @@ export type SetEnvVarMutationVariables = Exact<{
 }>;
 
 
-export type SetEnvVarMutation = (
-  { __typename?: 'Mutation' }
-  & { setEnvVar: (
-    { __typename?: 'SetEnvVarResult' }
-    & Pick<SetEnvVarResult, 'result'>
-  ) }
-);
+export type SetEnvVarMutation = { __typename?: 'Mutation', setEnvVar: { __typename?: 'BooleanResult', result: boolean } };
 
 export type UnlinkDatabaseMutationVariables = Exact<{
   input: UnlinkDatabaseInput;
 }>;
 
 
-export type UnlinkDatabaseMutation = (
-  { __typename?: 'Mutation' }
-  & { unlinkDatabase: (
-    { __typename?: 'UnlinkDatabaseResult' }
-    & Pick<UnlinkDatabaseResult, 'result'>
-  ) }
-);
+export type UnlinkDatabaseMutation = { __typename?: 'Mutation', unlinkDatabase: { __typename?: 'BooleanResult', result: boolean } };
 
 export type UnsetEnvVarMutationVariables = Exact<{
   key: Scalars['String'];
@@ -766,70 +576,33 @@ export type UnsetEnvVarMutationVariables = Exact<{
 }>;
 
 
-export type UnsetEnvVarMutation = (
-  { __typename?: 'Mutation' }
-  & { unsetEnvVar: (
-    { __typename?: 'UnsetEnvVarResult' }
-    & Pick<UnsetEnvVarResult, 'result'>
-  ) }
-);
+export type UnsetEnvVarMutation = { __typename?: 'Mutation', unsetEnvVar: { __typename?: 'BooleanResult', result: boolean } };
 
 export type AppByIdQueryVariables = Exact<{
   appId: Scalars['String'];
 }>;
 
 
-export type AppByIdQuery = (
-  { __typename?: 'Query' }
-  & { app?: Maybe<(
-    { __typename?: 'App' }
-    & Pick<App, 'id' | 'name' | 'createdAt'>
-    & { databases?: Maybe<Array<(
-      { __typename?: 'Database' }
-      & Pick<Database, 'id' | 'name' | 'type'>
-    )>>, appMetaGithub?: Maybe<(
-      { __typename?: 'AppMetaGithub' }
-      & Pick<AppMetaGithub, 'repoId' | 'repoName' | 'repoOwner' | 'branch' | 'githubAppInstallationId'>
-    )> }
-  )> }
-);
+export type AppByIdQuery = { __typename?: 'Query', app: { __typename?: 'App', id: string, name: string, createdAt: string, databases: Array<{ __typename?: 'Database', id: string, name: string, type: DbTypes }>, appMetaGithub?: { __typename?: 'AppGithubMeta', repoId: string, repoName: string, repoOwner: string, branch: string, githubAppInstallationId: string } | null } };
 
 export type AppLogsQueryVariables = Exact<{
   appId: Scalars['String'];
 }>;
 
 
-export type AppLogsQuery = (
-  { __typename?: 'Query' }
-  & { appLogs: (
-    { __typename?: 'AppLogsResult' }
-    & Pick<AppLogsResult, 'logs'>
-  ) }
-);
+export type AppLogsQuery = { __typename?: 'Query', appLogs: { __typename?: 'Logs', logs: Array<string> } };
 
 export type AppProxyPortsQueryVariables = Exact<{
   appId: Scalars['String'];
 }>;
 
 
-export type AppProxyPortsQuery = (
-  { __typename?: 'Query' }
-  & { appProxyPorts: Array<(
-    { __typename?: 'AppProxyPort' }
-    & Pick<AppProxyPort, 'scheme' | 'host' | 'container'>
-  )> }
-);
+export type AppProxyPortsQuery = { __typename?: 'Query', appProxyPorts: Array<{ __typename?: 'ProxyPort', scheme: string, host: string, container: string }> };
 
 export type AppsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AppsQuery = (
-  { __typename?: 'Query' }
-  & { apps: Array<(
-    { __typename?: 'App' }
-    & Pick<App, 'id' | 'name'>
-  )> }
-);
+export type AppsQuery = { __typename?: 'Query', apps: Array<{ __typename?: 'App', id: string, name: string }> };
 
 export type BranchesQueryVariables = Exact<{
   installationId: Scalars['String'];
@@ -837,228 +610,106 @@ export type BranchesQueryVariables = Exact<{
 }>;
 
 
-export type BranchesQuery = (
-  { __typename?: 'Query' }
-  & { branches: Array<(
-    { __typename?: 'Branch' }
-    & Pick<Branch, 'name'>
-  )> }
-);
+export type BranchesQuery = { __typename?: 'Query', branches: Array<{ __typename?: 'Branch', name: string }> };
 
 export type DashboardQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type DashboardQuery = (
-  { __typename?: 'Query' }
-  & { apps: Array<(
-    { __typename?: 'App' }
-    & Pick<App, 'id' | 'name' | 'createdAt'>
-    & { appMetaGithub?: Maybe<(
-      { __typename?: 'AppMetaGithub' }
-      & Pick<AppMetaGithub, 'repoName' | 'repoOwner'>
-    )> }
-  )>, databases: Array<(
-    { __typename?: 'Database' }
-    & Pick<Database, 'id' | 'name' | 'type' | 'createdAt'>
-  )> }
-);
+export type DashboardQuery = { __typename?: 'Query', apps: Array<{ __typename?: 'App', id: string, name: string, createdAt: string, appMetaGithub?: { __typename?: 'AppGithubMeta', repoName: string, repoOwner: string } | null }>, databases: Array<{ __typename?: 'Database', id: string, name: string, type: DbTypes, createdAt: string }> };
 
 export type DatabaseByIdQueryVariables = Exact<{
   databaseId: Scalars['String'];
 }>;
 
 
-export type DatabaseByIdQuery = (
-  { __typename?: 'Query' }
-  & { database?: Maybe<(
-    { __typename?: 'Database' }
-    & Pick<Database, 'id' | 'name' | 'type' | 'version'>
-    & { apps?: Maybe<Array<(
-      { __typename?: 'App' }
-      & Pick<App, 'id' | 'name'>
-    )>> }
-  )> }
-);
+export type DatabaseByIdQuery = { __typename?: 'Query', database: { __typename?: 'Database', id: string, name: string, type: DbTypes, version: string, apps: Array<{ __typename?: 'App', id: string, name: string }> } };
 
 export type DatabaseInfoQueryVariables = Exact<{
   databaseId: Scalars['String'];
 }>;
 
 
-export type DatabaseInfoQuery = (
-  { __typename?: 'Query' }
-  & { databaseInfo: (
-    { __typename?: 'DatabaseInfoResult' }
-    & Pick<DatabaseInfoResult, 'info'>
-  ) }
-);
+export type DatabaseInfoQuery = { __typename?: 'Query', databaseInfo: { __typename?: 'DatabaseInfo', info: Array<string> } };
 
 export type DatabaseLogsQueryVariables = Exact<{
   databaseId: Scalars['String'];
 }>;
 
 
-export type DatabaseLogsQuery = (
-  { __typename?: 'Query' }
-  & { databaseLogs: (
-    { __typename?: 'DatabaseLogsResult' }
-    & Pick<DatabaseLogsResult, 'logs'>
-  ) }
-);
+export type DatabaseLogsQuery = { __typename?: 'Query', databaseLogs: { __typename?: 'Logs', logs: Array<string> } };
 
 export type DatabaseQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type DatabaseQuery = (
-  { __typename?: 'Query' }
-  & { databases: Array<(
-    { __typename?: 'Database' }
-    & Pick<Database, 'id' | 'name' | 'type'>
-  )> }
-);
+export type DatabaseQuery = { __typename?: 'Query', databases: Array<{ __typename?: 'Database', id: string, name: string, type: DbTypes }> };
 
 export type DomainsQueryVariables = Exact<{
   appId: Scalars['String'];
 }>;
 
 
-export type DomainsQuery = (
-  { __typename?: 'Query' }
-  & { domains: (
-    { __typename?: 'Domains' }
-    & Pick<Domains, 'domains'>
-  ) }
-);
+export type DomainsQuery = { __typename?: 'Query', domains: { __typename?: 'DomainList', domains: Array<string> } };
 
 export type EnvVarsQueryVariables = Exact<{
   appId: Scalars['String'];
 }>;
 
 
-export type EnvVarsQuery = (
-  { __typename?: 'Query' }
-  & { envVars: (
-    { __typename?: 'EnvVarsResult' }
-    & { envVars: Array<(
-      { __typename?: 'EnvVar' }
-      & Pick<EnvVar, 'key' | 'value'>
-    )> }
-  ) }
-);
+export type EnvVarsQuery = { __typename?: 'Query', envVars: { __typename?: 'EnvVarList', envVars: Array<{ __typename?: 'EnvVar', key: string, value: string }> } };
 
 export type GithubInstallationIdQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GithubInstallationIdQuery = (
-  { __typename?: 'Query' }
-  & { githubInstallationId: (
-    { __typename?: 'GithubAppInstallationId' }
-    & Pick<GithubAppInstallationId, 'id'>
-  ) }
-);
+export type GithubInstallationIdQuery = { __typename?: 'Query', githubInstallationId: { __typename?: 'Installation', id: string } };
 
 export type IsPluginInstalledQueryVariables = Exact<{
   pluginName: Scalars['String'];
 }>;
 
 
-export type IsPluginInstalledQuery = (
-  { __typename?: 'Query' }
-  & { isPluginInstalled: (
-    { __typename?: 'IsPluginInstalledResult' }
-    & Pick<IsPluginInstalledResult, 'isPluginInstalled'>
-  ) }
-);
+export type IsPluginInstalledQuery = { __typename?: 'Query', isPluginInstalled: { __typename?: 'IsPluginInstalled', isPluginInstalled: boolean } };
 
 export type RepositoriesQueryVariables = Exact<{
   installationId: Scalars['String'];
 }>;
 
 
-export type RepositoriesQuery = (
-  { __typename?: 'Query' }
-  & { repositories: Array<(
-    { __typename?: 'Repository' }
-    & Pick<Repository, 'id' | 'name' | 'fullName' | 'private'>
-  )> }
-);
+export type RepositoriesQuery = { __typename?: 'Query', repositories: Array<{ __typename?: 'Repository', id: string, name: string, fullName: string, private: string }> };
 
 export type SetupQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SetupQuery = (
-  { __typename?: 'Query' }
-  & { setup: (
-    { __typename?: 'SetupResult' }
-    & Pick<SetupResult, 'canConnectSsh' | 'sshPublicKey' | 'isGithubAppSetup' | 'githubAppManifest'>
-  ) }
-);
+export type SetupQuery = { __typename?: 'Query', setup: { __typename?: 'SetupResult', canConnectSsh: boolean, sshPublicKey: string, isGithubAppSetup: boolean, githubAppManifest: string } };
 
 export type AppCreateLogsSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AppCreateLogsSubscription = (
-  { __typename?: 'Subscription' }
-  & { appCreateLogs: (
-    { __typename?: 'RealTimeLog' }
-    & Pick<RealTimeLog, 'message' | 'type'>
-  ) }
-);
+export type AppCreateLogsSubscription = { __typename?: 'Subscription', appCreateLogs: { __typename?: 'LogPayload', message: string, type: string } };
 
 export type CreateDatabaseLogsSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CreateDatabaseLogsSubscription = (
-  { __typename?: 'Subscription' }
-  & { createDatabaseLogs: (
-    { __typename?: 'RealTimeLog' }
-    & Pick<RealTimeLog, 'message' | 'type'>
-  ) }
-);
+export type CreateDatabaseLogsSubscription = { __typename?: 'Subscription', createDatabaseLogs: { __typename?: 'LogPayload', message: string, type: string } };
 
 export type LinkDatabaseLogsSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type LinkDatabaseLogsSubscription = (
-  { __typename?: 'Subscription' }
-  & { linkDatabaseLogs: (
-    { __typename?: 'RealTimeLog' }
-    & Pick<RealTimeLog, 'message' | 'type'>
-  ) }
-);
+export type LinkDatabaseLogsSubscription = { __typename?: 'Subscription', linkDatabaseLogs: { __typename?: 'LogPayload', message: string, type: string } };
 
 export type AppRebuildLogsSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AppRebuildLogsSubscription = (
-  { __typename?: 'Subscription' }
-  & { appRebuildLogs: (
-    { __typename?: 'RealTimeLog' }
-    & Pick<RealTimeLog, 'message' | 'type'>
-  ) }
-);
+export type AppRebuildLogsSubscription = { __typename?: 'Subscription', appRebuildLogs: { __typename?: 'LogPayload', message: string, type: string } };
 
 export type AppRestartLogsSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AppRestartLogsSubscription = (
-  { __typename?: 'Subscription' }
-  & { appRestartLogs: (
-    { __typename?: 'RealTimeLog' }
-    & Pick<RealTimeLog, 'message' | 'type'>
-  ) }
-);
+export type AppRestartLogsSubscription = { __typename?: 'Subscription', appRestartLogs: { __typename?: 'LogPayload', message: string, type: string } };
 
 export type UnlinkDatabaseLogsSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UnlinkDatabaseLogsSubscription = (
-  { __typename?: 'Subscription' }
-  & { unlinkDatabaseLogs: (
-    { __typename?: 'RealTimeLog' }
-    & Pick<RealTimeLog, 'message' | 'type'>
-  ) }
-);
+export type UnlinkDatabaseLogsSubscription = { __typename?: 'Subscription', unlinkDatabaseLogs: { __typename?: 'LogPayload', message: string, type: string } };
 
 
 export const AddAppProxyPortDocument = gql`
@@ -1086,7 +737,8 @@ export type AddAppProxyPortMutationFn = Apollo.MutationFunction<AddAppProxyPortM
  * });
  */
 export function useAddAppProxyPortMutation(baseOptions?: Apollo.MutationHookOptions<AddAppProxyPortMutation, AddAppProxyPortMutationVariables>) {
-        return Apollo.useMutation<AddAppProxyPortMutation, AddAppProxyPortMutationVariables>(AddAppProxyPortDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddAppProxyPortMutation, AddAppProxyPortMutationVariables>(AddAppProxyPortDocument, options);
       }
 export type AddAppProxyPortMutationHookResult = ReturnType<typeof useAddAppProxyPortMutation>;
 export type AddAppProxyPortMutationResult = Apollo.MutationResult<AddAppProxyPortMutation>;
@@ -1118,7 +770,8 @@ export type AddDomainMutationFn = Apollo.MutationFunction<AddDomainMutation, Add
  * });
  */
 export function useAddDomainMutation(baseOptions?: Apollo.MutationHookOptions<AddDomainMutation, AddDomainMutationVariables>) {
-        return Apollo.useMutation<AddDomainMutation, AddDomainMutationVariables>(AddDomainDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddDomainMutation, AddDomainMutationVariables>(AddDomainDocument, options);
       }
 export type AddDomainMutationHookResult = ReturnType<typeof useAddDomainMutation>;
 export type AddDomainMutationResult = Apollo.MutationResult<AddDomainMutation>;
@@ -1150,7 +803,8 @@ export type CreateAppDokkuMutationFn = Apollo.MutationFunction<CreateAppDokkuMut
  * });
  */
 export function useCreateAppDokkuMutation(baseOptions?: Apollo.MutationHookOptions<CreateAppDokkuMutation, CreateAppDokkuMutationVariables>) {
-        return Apollo.useMutation<CreateAppDokkuMutation, CreateAppDokkuMutationVariables>(CreateAppDokkuDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateAppDokkuMutation, CreateAppDokkuMutationVariables>(CreateAppDokkuDocument, options);
       }
 export type CreateAppDokkuMutationHookResult = ReturnType<typeof useCreateAppDokkuMutation>;
 export type CreateAppDokkuMutationResult = Apollo.MutationResult<CreateAppDokkuMutation>;
@@ -1182,7 +836,8 @@ export type CreateAppGithubMutationFn = Apollo.MutationFunction<CreateAppGithubM
  * });
  */
 export function useCreateAppGithubMutation(baseOptions?: Apollo.MutationHookOptions<CreateAppGithubMutation, CreateAppGithubMutationVariables>) {
-        return Apollo.useMutation<CreateAppGithubMutation, CreateAppGithubMutationVariables>(CreateAppGithubDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateAppGithubMutation, CreateAppGithubMutationVariables>(CreateAppGithubDocument, options);
       }
 export type CreateAppGithubMutationHookResult = ReturnType<typeof useCreateAppGithubMutation>;
 export type CreateAppGithubMutationResult = Apollo.MutationResult<CreateAppGithubMutation>;
@@ -1214,7 +869,8 @@ export type CreateDatabaseMutationFn = Apollo.MutationFunction<CreateDatabaseMut
  * });
  */
 export function useCreateDatabaseMutation(baseOptions?: Apollo.MutationHookOptions<CreateDatabaseMutation, CreateDatabaseMutationVariables>) {
-        return Apollo.useMutation<CreateDatabaseMutation, CreateDatabaseMutationVariables>(CreateDatabaseDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateDatabaseMutation, CreateDatabaseMutationVariables>(CreateDatabaseDocument, options);
       }
 export type CreateDatabaseMutationHookResult = ReturnType<typeof useCreateDatabaseMutation>;
 export type CreateDatabaseMutationResult = Apollo.MutationResult<CreateDatabaseMutation>;
@@ -1246,7 +902,8 @@ export type DestroyAppMutationFn = Apollo.MutationFunction<DestroyAppMutation, D
  * });
  */
 export function useDestroyAppMutation(baseOptions?: Apollo.MutationHookOptions<DestroyAppMutation, DestroyAppMutationVariables>) {
-        return Apollo.useMutation<DestroyAppMutation, DestroyAppMutationVariables>(DestroyAppDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DestroyAppMutation, DestroyAppMutationVariables>(DestroyAppDocument, options);
       }
 export type DestroyAppMutationHookResult = ReturnType<typeof useDestroyAppMutation>;
 export type DestroyAppMutationResult = Apollo.MutationResult<DestroyAppMutation>;
@@ -1278,7 +935,8 @@ export type DestroyDatabaseMutationFn = Apollo.MutationFunction<DestroyDatabaseM
  * });
  */
 export function useDestroyDatabaseMutation(baseOptions?: Apollo.MutationHookOptions<DestroyDatabaseMutation, DestroyDatabaseMutationVariables>) {
-        return Apollo.useMutation<DestroyDatabaseMutation, DestroyDatabaseMutationVariables>(DestroyDatabaseDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DestroyDatabaseMutation, DestroyDatabaseMutationVariables>(DestroyDatabaseDocument, options);
       }
 export type DestroyDatabaseMutationHookResult = ReturnType<typeof useDestroyDatabaseMutation>;
 export type DestroyDatabaseMutationResult = Apollo.MutationResult<DestroyDatabaseMutation>;
@@ -1310,7 +968,8 @@ export type LinkDatabaseMutationFn = Apollo.MutationFunction<LinkDatabaseMutatio
  * });
  */
 export function useLinkDatabaseMutation(baseOptions?: Apollo.MutationHookOptions<LinkDatabaseMutation, LinkDatabaseMutationVariables>) {
-        return Apollo.useMutation<LinkDatabaseMutation, LinkDatabaseMutationVariables>(LinkDatabaseDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LinkDatabaseMutation, LinkDatabaseMutationVariables>(LinkDatabaseDocument, options);
       }
 export type LinkDatabaseMutationHookResult = ReturnType<typeof useLinkDatabaseMutation>;
 export type LinkDatabaseMutationResult = Apollo.MutationResult<LinkDatabaseMutation>;
@@ -1342,7 +1001,8 @@ export type LoginWithGithubMutationFn = Apollo.MutationFunction<LoginWithGithubM
  * });
  */
 export function useLoginWithGithubMutation(baseOptions?: Apollo.MutationHookOptions<LoginWithGithubMutation, LoginWithGithubMutationVariables>) {
-        return Apollo.useMutation<LoginWithGithubMutation, LoginWithGithubMutationVariables>(LoginWithGithubDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginWithGithubMutation, LoginWithGithubMutationVariables>(LoginWithGithubDocument, options);
       }
 export type LoginWithGithubMutationHookResult = ReturnType<typeof useLoginWithGithubMutation>;
 export type LoginWithGithubMutationResult = Apollo.MutationResult<LoginWithGithubMutation>;
@@ -1374,43 +1034,12 @@ export type RebuildAppMutationFn = Apollo.MutationFunction<RebuildAppMutation, R
  * });
  */
 export function useRebuildAppMutation(baseOptions?: Apollo.MutationHookOptions<RebuildAppMutation, RebuildAppMutationVariables>) {
-        return Apollo.useMutation<RebuildAppMutation, RebuildAppMutationVariables>(RebuildAppDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RebuildAppMutation, RebuildAppMutationVariables>(RebuildAppDocument, options);
       }
 export type RebuildAppMutationHookResult = ReturnType<typeof useRebuildAppMutation>;
 export type RebuildAppMutationResult = Apollo.MutationResult<RebuildAppMutation>;
 export type RebuildAppMutationOptions = Apollo.BaseMutationOptions<RebuildAppMutation, RebuildAppMutationVariables>;
-export const RegisterGithubAppDocument = gql`
-    mutation registerGithubApp($code: String!) {
-  registerGithubApp(code: $code) {
-    githubAppClientId
-  }
-}
-    `;
-export type RegisterGithubAppMutationFn = Apollo.MutationFunction<RegisterGithubAppMutation, RegisterGithubAppMutationVariables>;
-
-/**
- * __useRegisterGithubAppMutation__
- *
- * To run a mutation, you first call `useRegisterGithubAppMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRegisterGithubAppMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [registerGithubAppMutation, { data, loading, error }] = useRegisterGithubAppMutation({
- *   variables: {
- *      code: // value for 'code'
- *   },
- * });
- */
-export function useRegisterGithubAppMutation(baseOptions?: Apollo.MutationHookOptions<RegisterGithubAppMutation, RegisterGithubAppMutationVariables>) {
-        return Apollo.useMutation<RegisterGithubAppMutation, RegisterGithubAppMutationVariables>(RegisterGithubAppDocument, baseOptions);
-      }
-export type RegisterGithubAppMutationHookResult = ReturnType<typeof useRegisterGithubAppMutation>;
-export type RegisterGithubAppMutationResult = Apollo.MutationResult<RegisterGithubAppMutation>;
-export type RegisterGithubAppMutationOptions = Apollo.BaseMutationOptions<RegisterGithubAppMutation, RegisterGithubAppMutationVariables>;
 export const RemoveAppProxyPortDocument = gql`
     mutation removeAppProxyPort($input: RemoveAppProxyPortInput!) {
   removeAppProxyPort(input: $input)
@@ -1436,7 +1065,8 @@ export type RemoveAppProxyPortMutationFn = Apollo.MutationFunction<RemoveAppProx
  * });
  */
 export function useRemoveAppProxyPortMutation(baseOptions?: Apollo.MutationHookOptions<RemoveAppProxyPortMutation, RemoveAppProxyPortMutationVariables>) {
-        return Apollo.useMutation<RemoveAppProxyPortMutation, RemoveAppProxyPortMutationVariables>(RemoveAppProxyPortDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveAppProxyPortMutation, RemoveAppProxyPortMutationVariables>(RemoveAppProxyPortDocument, options);
       }
 export type RemoveAppProxyPortMutationHookResult = ReturnType<typeof useRemoveAppProxyPortMutation>;
 export type RemoveAppProxyPortMutationResult = Apollo.MutationResult<RemoveAppProxyPortMutation>;
@@ -1468,7 +1098,8 @@ export type RemoveDomainMutationFn = Apollo.MutationFunction<RemoveDomainMutatio
  * });
  */
 export function useRemoveDomainMutation(baseOptions?: Apollo.MutationHookOptions<RemoveDomainMutation, RemoveDomainMutationVariables>) {
-        return Apollo.useMutation<RemoveDomainMutation, RemoveDomainMutationVariables>(RemoveDomainDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveDomainMutation, RemoveDomainMutationVariables>(RemoveDomainDocument, options);
       }
 export type RemoveDomainMutationHookResult = ReturnType<typeof useRemoveDomainMutation>;
 export type RemoveDomainMutationResult = Apollo.MutationResult<RemoveDomainMutation>;
@@ -1500,7 +1131,8 @@ export type RestartAppMutationFn = Apollo.MutationFunction<RestartAppMutation, R
  * });
  */
 export function useRestartAppMutation(baseOptions?: Apollo.MutationHookOptions<RestartAppMutation, RestartAppMutationVariables>) {
-        return Apollo.useMutation<RestartAppMutation, RestartAppMutationVariables>(RestartAppDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RestartAppMutation, RestartAppMutationVariables>(RestartAppDocument, options);
       }
 export type RestartAppMutationHookResult = ReturnType<typeof useRestartAppMutation>;
 export type RestartAppMutationResult = Apollo.MutationResult<RestartAppMutation>;
@@ -1532,7 +1164,8 @@ export type SetDomainMutationFn = Apollo.MutationFunction<SetDomainMutation, Set
  * });
  */
 export function useSetDomainMutation(baseOptions?: Apollo.MutationHookOptions<SetDomainMutation, SetDomainMutationVariables>) {
-        return Apollo.useMutation<SetDomainMutation, SetDomainMutationVariables>(SetDomainDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetDomainMutation, SetDomainMutationVariables>(SetDomainDocument, options);
       }
 export type SetDomainMutationHookResult = ReturnType<typeof useSetDomainMutation>;
 export type SetDomainMutationResult = Apollo.MutationResult<SetDomainMutation>;
@@ -1566,7 +1199,8 @@ export type SetEnvVarMutationFn = Apollo.MutationFunction<SetEnvVarMutation, Set
  * });
  */
 export function useSetEnvVarMutation(baseOptions?: Apollo.MutationHookOptions<SetEnvVarMutation, SetEnvVarMutationVariables>) {
-        return Apollo.useMutation<SetEnvVarMutation, SetEnvVarMutationVariables>(SetEnvVarDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetEnvVarMutation, SetEnvVarMutationVariables>(SetEnvVarDocument, options);
       }
 export type SetEnvVarMutationHookResult = ReturnType<typeof useSetEnvVarMutation>;
 export type SetEnvVarMutationResult = Apollo.MutationResult<SetEnvVarMutation>;
@@ -1598,7 +1232,8 @@ export type UnlinkDatabaseMutationFn = Apollo.MutationFunction<UnlinkDatabaseMut
  * });
  */
 export function useUnlinkDatabaseMutation(baseOptions?: Apollo.MutationHookOptions<UnlinkDatabaseMutation, UnlinkDatabaseMutationVariables>) {
-        return Apollo.useMutation<UnlinkDatabaseMutation, UnlinkDatabaseMutationVariables>(UnlinkDatabaseDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UnlinkDatabaseMutation, UnlinkDatabaseMutationVariables>(UnlinkDatabaseDocument, options);
       }
 export type UnlinkDatabaseMutationHookResult = ReturnType<typeof useUnlinkDatabaseMutation>;
 export type UnlinkDatabaseMutationResult = Apollo.MutationResult<UnlinkDatabaseMutation>;
@@ -1631,7 +1266,8 @@ export type UnsetEnvVarMutationFn = Apollo.MutationFunction<UnsetEnvVarMutation,
  * });
  */
 export function useUnsetEnvVarMutation(baseOptions?: Apollo.MutationHookOptions<UnsetEnvVarMutation, UnsetEnvVarMutationVariables>) {
-        return Apollo.useMutation<UnsetEnvVarMutation, UnsetEnvVarMutationVariables>(UnsetEnvVarDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UnsetEnvVarMutation, UnsetEnvVarMutationVariables>(UnsetEnvVarDocument, options);
       }
 export type UnsetEnvVarMutationHookResult = ReturnType<typeof useUnsetEnvVarMutation>;
 export type UnsetEnvVarMutationResult = Apollo.MutationResult<UnsetEnvVarMutation>;
@@ -1675,10 +1311,12 @@ export const AppByIdDocument = gql`
  * });
  */
 export function useAppByIdQuery(baseOptions: Apollo.QueryHookOptions<AppByIdQuery, AppByIdQueryVariables>) {
-        return Apollo.useQuery<AppByIdQuery, AppByIdQueryVariables>(AppByIdDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AppByIdQuery, AppByIdQueryVariables>(AppByIdDocument, options);
       }
 export function useAppByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AppByIdQuery, AppByIdQueryVariables>) {
-          return Apollo.useLazyQuery<AppByIdQuery, AppByIdQueryVariables>(AppByIdDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AppByIdQuery, AppByIdQueryVariables>(AppByIdDocument, options);
         }
 export type AppByIdQueryHookResult = ReturnType<typeof useAppByIdQuery>;
 export type AppByIdLazyQueryHookResult = ReturnType<typeof useAppByIdLazyQuery>;
@@ -1708,10 +1346,12 @@ export const AppLogsDocument = gql`
  * });
  */
 export function useAppLogsQuery(baseOptions: Apollo.QueryHookOptions<AppLogsQuery, AppLogsQueryVariables>) {
-        return Apollo.useQuery<AppLogsQuery, AppLogsQueryVariables>(AppLogsDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AppLogsQuery, AppLogsQueryVariables>(AppLogsDocument, options);
       }
 export function useAppLogsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AppLogsQuery, AppLogsQueryVariables>) {
-          return Apollo.useLazyQuery<AppLogsQuery, AppLogsQueryVariables>(AppLogsDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AppLogsQuery, AppLogsQueryVariables>(AppLogsDocument, options);
         }
 export type AppLogsQueryHookResult = ReturnType<typeof useAppLogsQuery>;
 export type AppLogsLazyQueryHookResult = ReturnType<typeof useAppLogsLazyQuery>;
@@ -1743,10 +1383,12 @@ export const AppProxyPortsDocument = gql`
  * });
  */
 export function useAppProxyPortsQuery(baseOptions: Apollo.QueryHookOptions<AppProxyPortsQuery, AppProxyPortsQueryVariables>) {
-        return Apollo.useQuery<AppProxyPortsQuery, AppProxyPortsQueryVariables>(AppProxyPortsDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AppProxyPortsQuery, AppProxyPortsQueryVariables>(AppProxyPortsDocument, options);
       }
 export function useAppProxyPortsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AppProxyPortsQuery, AppProxyPortsQueryVariables>) {
-          return Apollo.useLazyQuery<AppProxyPortsQuery, AppProxyPortsQueryVariables>(AppProxyPortsDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AppProxyPortsQuery, AppProxyPortsQueryVariables>(AppProxyPortsDocument, options);
         }
 export type AppProxyPortsQueryHookResult = ReturnType<typeof useAppProxyPortsQuery>;
 export type AppProxyPortsLazyQueryHookResult = ReturnType<typeof useAppProxyPortsLazyQuery>;
@@ -1776,10 +1418,12 @@ export const AppsDocument = gql`
  * });
  */
 export function useAppsQuery(baseOptions?: Apollo.QueryHookOptions<AppsQuery, AppsQueryVariables>) {
-        return Apollo.useQuery<AppsQuery, AppsQueryVariables>(AppsDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AppsQuery, AppsQueryVariables>(AppsDocument, options);
       }
 export function useAppsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AppsQuery, AppsQueryVariables>) {
-          return Apollo.useLazyQuery<AppsQuery, AppsQueryVariables>(AppsDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AppsQuery, AppsQueryVariables>(AppsDocument, options);
         }
 export type AppsQueryHookResult = ReturnType<typeof useAppsQuery>;
 export type AppsLazyQueryHookResult = ReturnType<typeof useAppsLazyQuery>;
@@ -1810,10 +1454,12 @@ export const BranchesDocument = gql`
  * });
  */
 export function useBranchesQuery(baseOptions: Apollo.QueryHookOptions<BranchesQuery, BranchesQueryVariables>) {
-        return Apollo.useQuery<BranchesQuery, BranchesQueryVariables>(BranchesDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BranchesQuery, BranchesQueryVariables>(BranchesDocument, options);
       }
 export function useBranchesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BranchesQuery, BranchesQueryVariables>) {
-          return Apollo.useLazyQuery<BranchesQuery, BranchesQueryVariables>(BranchesDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BranchesQuery, BranchesQueryVariables>(BranchesDocument, options);
         }
 export type BranchesQueryHookResult = ReturnType<typeof useBranchesQuery>;
 export type BranchesLazyQueryHookResult = ReturnType<typeof useBranchesLazyQuery>;
@@ -1854,10 +1500,12 @@ export const DashboardDocument = gql`
  * });
  */
 export function useDashboardQuery(baseOptions?: Apollo.QueryHookOptions<DashboardQuery, DashboardQueryVariables>) {
-        return Apollo.useQuery<DashboardQuery, DashboardQueryVariables>(DashboardDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<DashboardQuery, DashboardQueryVariables>(DashboardDocument, options);
       }
 export function useDashboardLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DashboardQuery, DashboardQueryVariables>) {
-          return Apollo.useLazyQuery<DashboardQuery, DashboardQueryVariables>(DashboardDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<DashboardQuery, DashboardQueryVariables>(DashboardDocument, options);
         }
 export type DashboardQueryHookResult = ReturnType<typeof useDashboardQuery>;
 export type DashboardLazyQueryHookResult = ReturnType<typeof useDashboardLazyQuery>;
@@ -1894,10 +1542,12 @@ export const DatabaseByIdDocument = gql`
  * });
  */
 export function useDatabaseByIdQuery(baseOptions: Apollo.QueryHookOptions<DatabaseByIdQuery, DatabaseByIdQueryVariables>) {
-        return Apollo.useQuery<DatabaseByIdQuery, DatabaseByIdQueryVariables>(DatabaseByIdDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<DatabaseByIdQuery, DatabaseByIdQueryVariables>(DatabaseByIdDocument, options);
       }
 export function useDatabaseByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DatabaseByIdQuery, DatabaseByIdQueryVariables>) {
-          return Apollo.useLazyQuery<DatabaseByIdQuery, DatabaseByIdQueryVariables>(DatabaseByIdDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<DatabaseByIdQuery, DatabaseByIdQueryVariables>(DatabaseByIdDocument, options);
         }
 export type DatabaseByIdQueryHookResult = ReturnType<typeof useDatabaseByIdQuery>;
 export type DatabaseByIdLazyQueryHookResult = ReturnType<typeof useDatabaseByIdLazyQuery>;
@@ -1927,10 +1577,12 @@ export const DatabaseInfoDocument = gql`
  * });
  */
 export function useDatabaseInfoQuery(baseOptions: Apollo.QueryHookOptions<DatabaseInfoQuery, DatabaseInfoQueryVariables>) {
-        return Apollo.useQuery<DatabaseInfoQuery, DatabaseInfoQueryVariables>(DatabaseInfoDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<DatabaseInfoQuery, DatabaseInfoQueryVariables>(DatabaseInfoDocument, options);
       }
 export function useDatabaseInfoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DatabaseInfoQuery, DatabaseInfoQueryVariables>) {
-          return Apollo.useLazyQuery<DatabaseInfoQuery, DatabaseInfoQueryVariables>(DatabaseInfoDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<DatabaseInfoQuery, DatabaseInfoQueryVariables>(DatabaseInfoDocument, options);
         }
 export type DatabaseInfoQueryHookResult = ReturnType<typeof useDatabaseInfoQuery>;
 export type DatabaseInfoLazyQueryHookResult = ReturnType<typeof useDatabaseInfoLazyQuery>;
@@ -1960,10 +1612,12 @@ export const DatabaseLogsDocument = gql`
  * });
  */
 export function useDatabaseLogsQuery(baseOptions: Apollo.QueryHookOptions<DatabaseLogsQuery, DatabaseLogsQueryVariables>) {
-        return Apollo.useQuery<DatabaseLogsQuery, DatabaseLogsQueryVariables>(DatabaseLogsDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<DatabaseLogsQuery, DatabaseLogsQueryVariables>(DatabaseLogsDocument, options);
       }
 export function useDatabaseLogsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DatabaseLogsQuery, DatabaseLogsQueryVariables>) {
-          return Apollo.useLazyQuery<DatabaseLogsQuery, DatabaseLogsQueryVariables>(DatabaseLogsDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<DatabaseLogsQuery, DatabaseLogsQueryVariables>(DatabaseLogsDocument, options);
         }
 export type DatabaseLogsQueryHookResult = ReturnType<typeof useDatabaseLogsQuery>;
 export type DatabaseLogsLazyQueryHookResult = ReturnType<typeof useDatabaseLogsLazyQuery>;
@@ -1994,10 +1648,12 @@ export const DatabaseDocument = gql`
  * });
  */
 export function useDatabaseQuery(baseOptions?: Apollo.QueryHookOptions<DatabaseQuery, DatabaseQueryVariables>) {
-        return Apollo.useQuery<DatabaseQuery, DatabaseQueryVariables>(DatabaseDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<DatabaseQuery, DatabaseQueryVariables>(DatabaseDocument, options);
       }
 export function useDatabaseLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DatabaseQuery, DatabaseQueryVariables>) {
-          return Apollo.useLazyQuery<DatabaseQuery, DatabaseQueryVariables>(DatabaseDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<DatabaseQuery, DatabaseQueryVariables>(DatabaseDocument, options);
         }
 export type DatabaseQueryHookResult = ReturnType<typeof useDatabaseQuery>;
 export type DatabaseLazyQueryHookResult = ReturnType<typeof useDatabaseLazyQuery>;
@@ -2027,10 +1683,12 @@ export const DomainsDocument = gql`
  * });
  */
 export function useDomainsQuery(baseOptions: Apollo.QueryHookOptions<DomainsQuery, DomainsQueryVariables>) {
-        return Apollo.useQuery<DomainsQuery, DomainsQueryVariables>(DomainsDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<DomainsQuery, DomainsQueryVariables>(DomainsDocument, options);
       }
 export function useDomainsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DomainsQuery, DomainsQueryVariables>) {
-          return Apollo.useLazyQuery<DomainsQuery, DomainsQueryVariables>(DomainsDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<DomainsQuery, DomainsQueryVariables>(DomainsDocument, options);
         }
 export type DomainsQueryHookResult = ReturnType<typeof useDomainsQuery>;
 export type DomainsLazyQueryHookResult = ReturnType<typeof useDomainsLazyQuery>;
@@ -2063,10 +1721,12 @@ export const EnvVarsDocument = gql`
  * });
  */
 export function useEnvVarsQuery(baseOptions: Apollo.QueryHookOptions<EnvVarsQuery, EnvVarsQueryVariables>) {
-        return Apollo.useQuery<EnvVarsQuery, EnvVarsQueryVariables>(EnvVarsDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<EnvVarsQuery, EnvVarsQueryVariables>(EnvVarsDocument, options);
       }
 export function useEnvVarsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EnvVarsQuery, EnvVarsQueryVariables>) {
-          return Apollo.useLazyQuery<EnvVarsQuery, EnvVarsQueryVariables>(EnvVarsDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<EnvVarsQuery, EnvVarsQueryVariables>(EnvVarsDocument, options);
         }
 export type EnvVarsQueryHookResult = ReturnType<typeof useEnvVarsQuery>;
 export type EnvVarsLazyQueryHookResult = ReturnType<typeof useEnvVarsLazyQuery>;
@@ -2095,10 +1755,12 @@ export const GithubInstallationIdDocument = gql`
  * });
  */
 export function useGithubInstallationIdQuery(baseOptions?: Apollo.QueryHookOptions<GithubInstallationIdQuery, GithubInstallationIdQueryVariables>) {
-        return Apollo.useQuery<GithubInstallationIdQuery, GithubInstallationIdQueryVariables>(GithubInstallationIdDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GithubInstallationIdQuery, GithubInstallationIdQueryVariables>(GithubInstallationIdDocument, options);
       }
 export function useGithubInstallationIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GithubInstallationIdQuery, GithubInstallationIdQueryVariables>) {
-          return Apollo.useLazyQuery<GithubInstallationIdQuery, GithubInstallationIdQueryVariables>(GithubInstallationIdDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GithubInstallationIdQuery, GithubInstallationIdQueryVariables>(GithubInstallationIdDocument, options);
         }
 export type GithubInstallationIdQueryHookResult = ReturnType<typeof useGithubInstallationIdQuery>;
 export type GithubInstallationIdLazyQueryHookResult = ReturnType<typeof useGithubInstallationIdLazyQuery>;
@@ -2128,10 +1790,12 @@ export const IsPluginInstalledDocument = gql`
  * });
  */
 export function useIsPluginInstalledQuery(baseOptions: Apollo.QueryHookOptions<IsPluginInstalledQuery, IsPluginInstalledQueryVariables>) {
-        return Apollo.useQuery<IsPluginInstalledQuery, IsPluginInstalledQueryVariables>(IsPluginInstalledDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<IsPluginInstalledQuery, IsPluginInstalledQueryVariables>(IsPluginInstalledDocument, options);
       }
 export function useIsPluginInstalledLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IsPluginInstalledQuery, IsPluginInstalledQueryVariables>) {
-          return Apollo.useLazyQuery<IsPluginInstalledQuery, IsPluginInstalledQueryVariables>(IsPluginInstalledDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<IsPluginInstalledQuery, IsPluginInstalledQueryVariables>(IsPluginInstalledDocument, options);
         }
 export type IsPluginInstalledQueryHookResult = ReturnType<typeof useIsPluginInstalledQuery>;
 export type IsPluginInstalledLazyQueryHookResult = ReturnType<typeof useIsPluginInstalledLazyQuery>;
@@ -2164,10 +1828,12 @@ export const RepositoriesDocument = gql`
  * });
  */
 export function useRepositoriesQuery(baseOptions: Apollo.QueryHookOptions<RepositoriesQuery, RepositoriesQueryVariables>) {
-        return Apollo.useQuery<RepositoriesQuery, RepositoriesQueryVariables>(RepositoriesDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<RepositoriesQuery, RepositoriesQueryVariables>(RepositoriesDocument, options);
       }
 export function useRepositoriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RepositoriesQuery, RepositoriesQueryVariables>) {
-          return Apollo.useLazyQuery<RepositoriesQuery, RepositoriesQueryVariables>(RepositoriesDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<RepositoriesQuery, RepositoriesQueryVariables>(RepositoriesDocument, options);
         }
 export type RepositoriesQueryHookResult = ReturnType<typeof useRepositoriesQuery>;
 export type RepositoriesLazyQueryHookResult = ReturnType<typeof useRepositoriesLazyQuery>;
@@ -2199,10 +1865,12 @@ export const SetupDocument = gql`
  * });
  */
 export function useSetupQuery(baseOptions?: Apollo.QueryHookOptions<SetupQuery, SetupQueryVariables>) {
-        return Apollo.useQuery<SetupQuery, SetupQueryVariables>(SetupDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SetupQuery, SetupQueryVariables>(SetupDocument, options);
       }
 export function useSetupLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SetupQuery, SetupQueryVariables>) {
-          return Apollo.useLazyQuery<SetupQuery, SetupQueryVariables>(SetupDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SetupQuery, SetupQueryVariables>(SetupDocument, options);
         }
 export type SetupQueryHookResult = ReturnType<typeof useSetupQuery>;
 export type SetupLazyQueryHookResult = ReturnType<typeof useSetupLazyQuery>;
@@ -2232,7 +1900,8 @@ export const AppCreateLogsDocument = gql`
  * });
  */
 export function useAppCreateLogsSubscription(baseOptions?: Apollo.SubscriptionHookOptions<AppCreateLogsSubscription, AppCreateLogsSubscriptionVariables>) {
-        return Apollo.useSubscription<AppCreateLogsSubscription, AppCreateLogsSubscriptionVariables>(AppCreateLogsDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<AppCreateLogsSubscription, AppCreateLogsSubscriptionVariables>(AppCreateLogsDocument, options);
       }
 export type AppCreateLogsSubscriptionHookResult = ReturnType<typeof useAppCreateLogsSubscription>;
 export type AppCreateLogsSubscriptionResult = Apollo.SubscriptionResult<AppCreateLogsSubscription>;
@@ -2261,7 +1930,8 @@ export const CreateDatabaseLogsDocument = gql`
  * });
  */
 export function useCreateDatabaseLogsSubscription(baseOptions?: Apollo.SubscriptionHookOptions<CreateDatabaseLogsSubscription, CreateDatabaseLogsSubscriptionVariables>) {
-        return Apollo.useSubscription<CreateDatabaseLogsSubscription, CreateDatabaseLogsSubscriptionVariables>(CreateDatabaseLogsDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<CreateDatabaseLogsSubscription, CreateDatabaseLogsSubscriptionVariables>(CreateDatabaseLogsDocument, options);
       }
 export type CreateDatabaseLogsSubscriptionHookResult = ReturnType<typeof useCreateDatabaseLogsSubscription>;
 export type CreateDatabaseLogsSubscriptionResult = Apollo.SubscriptionResult<CreateDatabaseLogsSubscription>;
@@ -2290,7 +1960,8 @@ export const LinkDatabaseLogsDocument = gql`
  * });
  */
 export function useLinkDatabaseLogsSubscription(baseOptions?: Apollo.SubscriptionHookOptions<LinkDatabaseLogsSubscription, LinkDatabaseLogsSubscriptionVariables>) {
-        return Apollo.useSubscription<LinkDatabaseLogsSubscription, LinkDatabaseLogsSubscriptionVariables>(LinkDatabaseLogsDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<LinkDatabaseLogsSubscription, LinkDatabaseLogsSubscriptionVariables>(LinkDatabaseLogsDocument, options);
       }
 export type LinkDatabaseLogsSubscriptionHookResult = ReturnType<typeof useLinkDatabaseLogsSubscription>;
 export type LinkDatabaseLogsSubscriptionResult = Apollo.SubscriptionResult<LinkDatabaseLogsSubscription>;
@@ -2319,7 +1990,8 @@ export const AppRebuildLogsDocument = gql`
  * });
  */
 export function useAppRebuildLogsSubscription(baseOptions?: Apollo.SubscriptionHookOptions<AppRebuildLogsSubscription, AppRebuildLogsSubscriptionVariables>) {
-        return Apollo.useSubscription<AppRebuildLogsSubscription, AppRebuildLogsSubscriptionVariables>(AppRebuildLogsDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<AppRebuildLogsSubscription, AppRebuildLogsSubscriptionVariables>(AppRebuildLogsDocument, options);
       }
 export type AppRebuildLogsSubscriptionHookResult = ReturnType<typeof useAppRebuildLogsSubscription>;
 export type AppRebuildLogsSubscriptionResult = Apollo.SubscriptionResult<AppRebuildLogsSubscription>;
@@ -2348,7 +2020,8 @@ export const AppRestartLogsDocument = gql`
  * });
  */
 export function useAppRestartLogsSubscription(baseOptions?: Apollo.SubscriptionHookOptions<AppRestartLogsSubscription, AppRestartLogsSubscriptionVariables>) {
-        return Apollo.useSubscription<AppRestartLogsSubscription, AppRestartLogsSubscriptionVariables>(AppRestartLogsDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<AppRestartLogsSubscription, AppRestartLogsSubscriptionVariables>(AppRestartLogsDocument, options);
       }
 export type AppRestartLogsSubscriptionHookResult = ReturnType<typeof useAppRestartLogsSubscription>;
 export type AppRestartLogsSubscriptionResult = Apollo.SubscriptionResult<AppRestartLogsSubscription>;
@@ -2377,7 +2050,8 @@ export const UnlinkDatabaseLogsDocument = gql`
  * });
  */
 export function useUnlinkDatabaseLogsSubscription(baseOptions?: Apollo.SubscriptionHookOptions<UnlinkDatabaseLogsSubscription, UnlinkDatabaseLogsSubscriptionVariables>) {
-        return Apollo.useSubscription<UnlinkDatabaseLogsSubscription, UnlinkDatabaseLogsSubscriptionVariables>(UnlinkDatabaseLogsDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<UnlinkDatabaseLogsSubscription, UnlinkDatabaseLogsSubscriptionVariables>(UnlinkDatabaseLogsDocument, options);
       }
 export type UnlinkDatabaseLogsSubscriptionHookResult = ReturnType<typeof useUnlinkDatabaseLogsSubscription>;
 export type UnlinkDatabaseLogsSubscriptionResult = Apollo.SubscriptionResult<UnlinkDatabaseLogsSubscription>;

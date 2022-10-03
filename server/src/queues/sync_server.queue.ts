@@ -1,8 +1,8 @@
 import { DbTypes } from '@prisma/client';
-import { $log, Injectable, ProviderScope } from '@tsed/common';
+import { $log } from '@tsed/common';
 import { Job } from 'bullmq';
-import { UserRepository } from '../data/repositories/user_repository';
 import { dbTypeToDokkuPlugin } from '../config/utils';
+import { UserRepository } from '../data/repositories/user_repository';
 import { DokkuAppRepository } from '../lib/dokku/dokku.app.repository';
 import { DokkuDatabaseRepository } from '../lib/dokku/dokku.database.repository';
 import { DokkuPluginRepository } from '../lib/dokku/dokku.plugin.repository';
@@ -25,18 +25,18 @@ export class SyncServerQueue extends IQueue {
   }
 
   protected async execute(job: Job<any, any, string>) {
-    $log.debug(`Iniciando sincronizacion con Dokku`);
+    $log.info(`Iniciando sincronizacion con Dokku`);
 
     const users = await this.userRepository.getAll();
 
     if (users.length === 0) {
-      $log.debug(`No hay usuarios. Saltando sincronizacion`);
+      $log.info(`No hay usuarios. Saltando sincronizacion`);
       return;
     }
 
     const ssh = await sshConnect();
 
-    $log.debug(`Sincroninzando aplicaciones`);
+    $log.info(`Sincroninzando aplicaciones`);
 
     const dokkuApps = await this.dokkuAppRepository.list(ssh);
 
@@ -49,10 +49,10 @@ export class SyncServerQueue extends IQueue {
         await this.appRepository.create(dokkuApp);
       }
 
-      $log.debug(`- ${dokkuApp} sincronizado`);
+      $log.info(`- ${dokkuApp} sincronizado`);
     }
 
-    $log.debug(`Sincroninzando bases de datos`);
+    $log.info(`Sincroninzando bases de datos`);
 
     const databasesToCheck: DbTypes[] = Object.values(DbTypes);
     const dokkuPlugins = await this.dokkuPluginRepository.list(ssh);
@@ -64,7 +64,7 @@ export class SyncServerQueue extends IQueue {
           .length !== 0;
 
       if (!isInstalled) {
-        $log.debug(`${pluginName} no instalado`);
+        $log.info(`${pluginName} no instalado`);
         continue;
       }
 
@@ -117,7 +117,7 @@ export class SyncServerQueue extends IQueue {
           }
         }
 
-        $log.debug(`- ${dokkuDatabase} sincronizado`);
+        $log.info(`- ${dokkuDatabase} sincronizado`);
       }
     }
 

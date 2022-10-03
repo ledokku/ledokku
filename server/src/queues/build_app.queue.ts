@@ -23,7 +23,7 @@ export class BuildApp extends IQueue<QueueArgs> {
   protected async execute(job: Job<QueueArgs, any>) {
     const { buildId } = job.data;
 
-    $log.debug(`Iniciando la construccion con el ID ${buildId}`);
+    $log.info(`Iniciando la construccion con el ID ${buildId}`);
 
     const appBuild = await this.appBuildRepository.get(buildId);
 

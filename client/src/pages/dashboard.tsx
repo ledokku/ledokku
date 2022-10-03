@@ -1,10 +1,11 @@
-import { Link } from 'react-router-dom';
-import format from 'date-fns/format';
-import { useDashboardQuery } from '../generated/graphql';
-import { Header } from '../ui';
-import { dbTypeToIcon } from './utils';
-import { GithubIcon } from '../ui/icons/GithubIcon';
 import { Button, Card, Container, Grid, Image, Text } from '@nextui-org/react';
+import format from 'date-fns/format';
+import { Link } from 'react-router-dom';
+import { useDashboardQuery } from '../generated/graphql';
+import { ActivityFeed } from '../modules/activity/ActivityFeed';
+import { Header } from '../ui';
+import { GithubIcon } from '../ui/icons/GithubIcon';
+import { dbTypeToIcon } from './utils';
 
 export const Dashboard = () => {
   // const history = useHistory();
@@ -88,7 +89,7 @@ export const Dashboard = () => {
                         </Text>
                       </Card.Body>
                       <Card.Footer>
-                        <Text h6 className='mb-1'>Creado el {format(new Date(app.createdAt), 'MM/DD/YYYY')}</Text>
+                        <Text h6 className='mb-1'>Creado el {format(new Date(app.createdAt), 'dd/MM/yyyy')}</Text>
                       </Card.Footer>
                     </Card></Link>
                 </Grid>
@@ -128,7 +129,7 @@ export const Dashboard = () => {
                             </Grid.Container>
                           </Card.Header>
                           <Card.Footer>
-                            <Text h6 className='mb-1'>Creado el {format(new Date(database.createdAt), 'MM/DD/YYYY')}</Text>
+                            <Text h6 className='mb-1'>Creado el {format(new Date(database.createdAt), 'dd/MM/yyyy')}</Text>
                           </Card.Footer>
                         </Card></Link>
                     </Grid>
@@ -142,9 +143,7 @@ export const Dashboard = () => {
             <Text h2>
               Última actividad
             </Text>
-            <Text h6>
-              Proximamente
-            </Text>
+            <ActivityFeed isSinglePage={true} />
           </Grid>
         </Grid.Container>
       </Container>

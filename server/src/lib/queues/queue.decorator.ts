@@ -7,16 +7,14 @@ export abstract class IQueue<Args = any, ReturnValue = any> {
   protected queue: QueueBull<Args>;
   protected worker: Worker<Args, ReturnValue>;
 
-  add(args: Args): Promise<Job<Args, ReturnValue>> {
+  add(args?: Args): Promise<Job<Args, ReturnValue>> {
     return this.queue.add(this.queue.name, args);
   }
 
   protected execute(
     job: Job<Args, ReturnValue, string>
   ): ReturnValue | Promise<ReturnValue> {
-    $log.warn(`Queue ${this.constructor.name} not implemented`);
-
-    return;
+    throw new Error(`Queue ${this.constructor.name} not implemented`);
   }
 
   onFailed?(job: Job<Args, ReturnValue>, error: Error): Promise<any> | any;
@@ -55,14 +53,14 @@ export function Queue(options?: QueueOptions) {
         this.worker = new Worker(
           queueName,
           async (job) => {
-            $log.debug(queueName, "new job ID:", job.id);
+            $log.info(queueName, 'new job ID:', job.id);
             return await this.execute(job);
           },
           { connection: redisClient }
         );
 
         this.worker.on('failed', async (job, err) => {
-          $log.debug(
+          $log.info(
             `${job.id} has failed on Queue ${constructor.name}:`,
             err.message
           );
@@ -75,7 +73,7 @@ export function Queue(options?: QueueOptions) {
             this.onSuccess?.call(job, returnvalue)
         );
 
-        $log.debug(`Queue ${constructor.name} initialized`);
+        $log.info(`Queue ${constructor.name} initialized`);
       }
     };
   };

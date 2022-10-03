@@ -1,10 +1,10 @@
-import { DatabaseTypes } from '../generated/graphql';
-import { PostgreSQLIcon } from '../ui/icons/PostgreSQLIcon';
-import { MySQLIcon } from '../ui/icons/MySQLIcon';
+import { DbTypes } from '../generated/graphql';
 import { MongoIcon } from '../ui/icons/MongoIcon';
+import { MySQLIcon } from '../ui/icons/MySQLIcon';
+import { PostgreSQLIcon } from '../ui/icons/PostgreSQLIcon';
 import { RedisIcon } from '../ui/icons/RedisIcon';
 
-export const dbTypeToDokkuPlugin = (dbType: DatabaseTypes) => {
+export const dbTypeToDokkuPlugin = (dbType: DbTypes) => {
   switch (dbType) {
     case 'MONGODB':
       return 'mongo';
@@ -17,7 +17,7 @@ export const dbTypeToDokkuPlugin = (dbType: DatabaseTypes) => {
   }
 };
 
-export const dbTypeToReadableName = (dbType: DatabaseTypes) => {
+export const dbTypeToReadableName = (dbType: DbTypes) => {
   switch (dbType) {
     case 'MONGODB':
       return 'MongoDB';
@@ -30,7 +30,7 @@ export const dbTypeToReadableName = (dbType: DatabaseTypes) => {
   }
 };
 
-export const dbTypeToIcon = (dbType: DatabaseTypes) => {
+export const dbTypeToIcon = (dbType: DbTypes) => {
   switch (dbType) {
     case 'MONGODB':
       return MongoIcon;

@@ -10,7 +10,7 @@ generator client {
 model User {
   id                    String     @id @default(uuid())
   createdAt             DateTime   @default(now())
-  updatedAt             DateTime   @default(now())
+  updatedAt             DateTime   @updatedAt
   username              String     @unique
   avatarUrl             String
   email                 String
@@ -21,12 +21,13 @@ model User {
   App                   App[]
   Database              Database[]
   AppBuild              AppBuild[]
+  Activity              Activity[]
 }
 
 model App {
   id            String         @id @default(uuid())
   createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
   name          String
   type          AppTypes
   appBuild      AppBuild[]
@@ -34,6 +35,7 @@ model App {
   User          User?          @relation(fields: [userId], references: [id])
   userId        String?
   AppMetaGithub AppMetaGithub?
+  Activity      Activity[]
 }
 
 enum AppTypes {
@@ -53,18 +55,19 @@ model AppMetaGithub {
   branch                  String
   githubAppInstallationId String
   createdAt               DateTime @default(now())
-  updatedAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
 }
 
 model AppBuild {
   id        String         @id @default(uuid())
   createdAt DateTime       @default(now())
-  updatedAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
   status    AppBuildStatus
   app       App            @relation(fields: [appId], references: [id])
   appId     String
   User      User?          @relation(fields: [userId], references: [id])
   userId    String?
+  Activity  Activity[]
 }
 
 enum AppBuildStatus {
@@ -75,15 +78,16 @@ enum AppBuildStatus {
 }
 
 model Database {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  id        String     @id @default(uuid())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
   name      String
   type      DbTypes
   version   String?
   apps      App[]
-  User      User?    @relation(fields: [userId], references: [id])
+  User      User?      @relation(fields: [userId], references: [id])
   userId    String?
+  Activity  Activity[]
 }
 
 enum DbTypes {
@@ -91,4 +95,25 @@ enum DbTypes {
   POSTGRESQL
   MONGODB
   MYSQL
+}
+
+model Activity {
+  id            String           @id @default(uuid())
+  name          String
+  description   String?
+  refersToModel ModelReferences?
+  referenceId   String?
+  Database      Database?        @relation(fields: [referenceId], references: [id], map: "database_activity")
+  App           App?             @relation(fields: [referenceId], references: [id], map: "app_activity")
+  AppBuild      AppBuild?        @relation(fields: [referenceId], references: [id], map: "app_build_activity")
+  modifierId    String
+  modifier      User             @relation(fields: [modifierId], references: [id])
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+}
+
+enum ModelReferences {
+  Database
+  App
+  AppBuild
 }

@@ -6,7 +6,7 @@ import {
   useUnlinkDatabaseMutation,
   useUnlinkDatabaseLogsSubscription,
   useLinkDatabaseLogsSubscription,
-  RealTimeLog,
+  LogPayload,
   useDatabaseInfoQuery,
 } from '../../generated/graphql';
 import { useParams, useHistory } from 'react-router-dom';
@@ -26,8 +26,8 @@ export const Database = () => {
   const history = useHistory();
   const [isUnlinkModalOpen, setIsUnlinkModalOpen] = useState(false);
   const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
-  const [arrayOfUnlinkLogs, setArrayOfUnlinkLogs] = useState<RealTimeLog[]>([]);
-  const [arrayOfLinkLogs, setArrayOfLinkLogs] = useState<RealTimeLog[]>([]);
+  const [arrayOfUnlinkLogs, setArrayOfUnlinkLogs] = useState<LogPayload[]>([]);
+  const [arrayOfLinkLogs, setArrayOfLinkLogs] = useState<LogPayload[]>([]);
   const [appAboutToUnlink, setAppAboutToUnlink] = useState<string>();
   const [isTerminalVisible, setIsTerminalVisible] = useState(false);
   const [processStatus, setProcessStatus] = useState<

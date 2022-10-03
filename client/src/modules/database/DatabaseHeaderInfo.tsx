@@ -1,11 +1,11 @@
 import { Badge, Container, Text } from '@nextui-org/react';
-import { DatabaseTypes } from '../../generated/graphql';
+import { DbTypes } from '../../generated/graphql';
 import { dbTypeToIcon, dbTypeToReadableName } from '../../pages/utils';
 
 interface DatabaseHeaderInfoProps {
   database: {
     name: string;
-    type: DatabaseTypes;
+    type: DbTypes;
     version?: string | null;
   };
 }

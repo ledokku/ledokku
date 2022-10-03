@@ -31,7 +31,7 @@ export class UnlinkDatabaseQueue extends IQueue<QueueArgs> {
 
     const database = await this.databaseRepository.get(databaseId);
 
-    $log.debug(
+    $log.info(
       `Empezando desenlace de ${database.type} ${database.name} con ${app.name}`
     );
 
@@ -71,7 +71,7 @@ export class UnlinkDatabaseQueue extends IQueue<QueueArgs> {
       },
     });
 
-    $log.debug(
+    $log.info(
       `Finalizando desenlace de ${database.type} ${database.name} con ${app.name}`
     );
     if (!res.stderr) {

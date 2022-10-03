@@ -2,9 +2,9 @@ import { DbTypes } from '@prisma/client';
 import { $log } from '@tsed/common';
 import { Job } from 'bullmq';
 import { PubSub } from 'graphql-subscriptions';
+import { SubscriptionTopics } from '../data/models/subscription_topics';
 import { IQueue, Queue } from '../lib/queues/queue.decorator';
 import { sshConnect } from '../lib/ssh';
-import { SubscriptionTopics } from '../data/models/subscription_topics';
 import { DatabaseCreatedPayload } from '../modules/databases/data/models/database_created.payload';
 import { DokkuDatabaseRepository } from './../lib/dokku/dokku.database.repository';
 import { DatabaseRepository } from './../modules/databases/data/repositories/database.repository';
@@ -28,7 +28,7 @@ export class CreateDatabaseQueue extends IQueue<QueueArgs> {
   protected async execute(job: Job<QueueArgs, any>) {
     const { databaseName, databaseType } = job.data;
 
-    $log.debug(
+    $log.info(
       `Iniciando construccion de la base de datos ${databaseType} llamada ${databaseName}`
     );
 
@@ -74,7 +74,7 @@ export class CreateDatabaseQueue extends IQueue<QueueArgs> {
       version: dokkuDatabaseVersion,
     });
 
-    $log.debug(
+    $log.info(
       `Finalizando la creacion de la base de datos ${databaseType} llamada ${databaseName}`
     );
 

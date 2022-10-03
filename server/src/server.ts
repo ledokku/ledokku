@@ -13,23 +13,37 @@ import { ExpressContext } from 'apollo-server-express';
 import express from 'express';
 import { execute, subscribe } from 'graphql';
 import { PubSub } from 'graphql-subscriptions';
+import { useServer } from 'graphql-ws/lib/use/ws';
 import * as http from 'http';
-import { SubscriptionServer } from 'subscriptions-transport-ws';
+import { Server as WebSocketServer } from 'ws';
 import { authChecker } from './config/auth_checker';
 import { ContextFactory } from './config/context_factory';
 import { IS_PRODUCTION, PORT } from './constants';
 import { MainController } from './controllers/main.controller';
 import { WebhookController } from './controllers/webhook.controller';
 import { DokkuContext } from './data/models/dokku_context';
+import { SubscriptionTopics } from './data/models/subscription_topics';
 import { SyncServerQueue } from './queues/sync_server.queue';
 import { startSmeeClient } from './smeeClient';
 
 const pubsub = new PubSub();
 
+(pubsub as any).secretId = 123;
+
+registerProvider({
+  provide: PubSub,
+  useValue: pubsub,
+});
+
+registerProvider({
+  provide: PrismaClient,
+  useValue: new PrismaClient(),
+});
+
 @Configuration({
   port: PORT,
   logger: {
-    level: !IS_PRODUCTION ? 'debug' : 'info',
+    logRequest: false,
   },
   rootDir: __dirname,
   acceptMimes: ['application/json'],
@@ -86,37 +100,30 @@ export class Server implements BeforeRoutesInit, OnReady {
       .use(express.urlencoded({ limit: '1mb', extended: true }));
   }
 
-  $onReady(): void | Promise<any> {
-    const schema = this.typegql.getSchema('main');
+  async $onReady(): Promise<void | Promise<any>> {
+    const schema = this.typegql.getSchema('default');
 
-    SubscriptionServer.create(
+    const wsServer = new WebSocketServer({
+      server: this.httpServer,
+      path: '/graphql',
+    });
+
+    useServer(
       {
         schema,
-        execute,
         subscribe,
-        onConnect: async (connectionParams: any) => {
-          return ContextFactory.createFromWS(connectionParams);
-        },
+        execute,
+        context: (ctx) => ContextFactory.createFromWS(ctx.connectionParams),
       },
-      {
-        server: this.httpServer,
-      }
+      wsServer
     );
 
     if (!IS_PRODUCTION) {
       startSmeeClient();
     }
 
-    this.syncServerQueue.add({});
+    await this.syncServerQueue.add();
+
+    pubsub.publish(SubscriptionTopics.APP_CREATED, 'holis');
   }
 }
-
-registerProvider({
-  provide: PubSub,
-  useValue: pubsub,
-});
-
-registerProvider({
-  provide: PrismaClient,
-  useValue: new PrismaClient(),
-});

@@ -53,7 +53,6 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
       value,
     },
     onSubmit: async (values) => {
-      // TODO validate values
       try {
         await setEnvVarMutation({
           variables: { key: values.name, value: values.value, appId },
@@ -71,8 +70,6 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
   });
 
   return (
-    //TODO Handle visual feedback on changing env
-    //TODO Provide infos about env vars
     <form onSubmit={formik.handleSubmit} autoComplete="off">
       <Grid.Container gap={1} direction="column">
         <Grid xs md={6}>
@@ -128,7 +125,7 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
 
 export const Env = () => {
   const { id: appId } = useParams<{ id: string }>();
-  const { data, loading /* error */ } = useAppByIdQuery({
+  const { data, loading} = useAppByIdQuery({
     variables: {
       appId,
     },
@@ -151,17 +148,14 @@ export const Env = () => {
     return null;
   }
 
-  // // TODO display error
 
   if (loading) {
-    // TODO nice loading
     return <Loading />;
   }
 
   const { app } = data;
 
   if (!app) {
-    // TODO nice 404
     return <p>App not found.</p>;
   }
 

@@ -1,11 +1,11 @@
 import { Badge, Card, Container, Grid, Text } from '@nextui-org/react';
-import { AppMetaGithub } from '../../generated/graphql';
+import { AppGithubMeta } from '../../generated/graphql';
 import { GithubIcon } from '../../ui/icons/GithubIcon';
 
 interface AppHeaderInfoProps {
   app: {
     name: string;
-    appMetaGithub?: AppMetaGithub | null;
+    appGithubMeta?: AppGithubMeta | null;
   };
 }
 
@@ -19,16 +19,16 @@ export const AppHeaderInfo = ({ app }: AppHeaderInfoProps) => {
           </Text>
         </Grid>
         <Grid xs={12} md className='flex md:justify-end'>
-          {app.appMetaGithub ? (
+          {app.appGithubMeta ? (
             <Card variant='bordered' css={{ w: "auto" }}>
               <Card.Body css={{ paddingTop: "0.75rem", paddingBottom: "0.75rem" }}>
                 <div className='flex flex-row items-center'>
                   <GithubIcon size={16} />
                   <Text className='mx-4'>
-                    {app.appMetaGithub.repoOwner}/{app.appMetaGithub.repoName}
+                    {app.appGithubMeta.repoOwner}/{app.appGithubMeta.repoName}
                   </Text>
                   <Badge>
-                    {app.appMetaGithub.branch}
+                    {app.appGithubMeta.branch}
                   </Badge>
                 </div>
               </Card.Body>

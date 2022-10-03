@@ -4,9 +4,9 @@ import express from 'express';
 import { readFile } from 'fs/promises';
 import jsonwebtoken from 'jsonwebtoken';
 import { sshKeyPath } from '../config';
+import { DokkuContext } from '../data/models/dokku_context';
 import { sshConnect } from '../lib/ssh';
 import { JWT_SECRET } from './../constants';
-import { DokkuContext } from '../data/models/dokku_context';
 
 export class ContextFactory {
   private static async generateBaseContext(): Promise<Partial<DokkuContext>> {
@@ -57,11 +57,12 @@ export class ContextFactory {
     };
   }
 
-  static async createFromWS(connectionParams: any): Promise<DokkuContext> {
+  static async createFromWS(connectionParams?: any): Promise<DokkuContext> {
     let userId: string | undefined;
+
     try {
       const decoded = jsonwebtoken.verify(
-        connectionParams.token,
+        connectionParams?.token,
         JWT_SECRET
       ) as {
         userId: string;

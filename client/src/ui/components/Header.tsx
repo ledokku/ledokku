@@ -1,10 +1,12 @@
 import { Avatar, Dropdown, Navbar } from '@nextui-org/react';
 import { useLocation } from 'react-router';
+import useDarkMode from 'use-dark-mode';
 import { useAuth } from '../../modules/auth/AuthContext';
 import { OCStudiosLogo } from '../icons/OCStudiosLogo';
 
 export const Header = () => {
   const { user, logout } = useAuth();
+  const darkMode = useDarkMode(false);
   const location = useLocation();
 
   return (
@@ -25,8 +27,12 @@ export const Header = () => {
                 case "logout":
                   logout()
                   break;
+                case "theme":
+                  darkMode.toggle()
+                  break;
               }
             }}>
+              <Dropdown.Item color='primary' key="theme">Cambiar tema</Dropdown.Item>
               <Dropdown.Item color='error' key="logout">Cerrar sesión</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>

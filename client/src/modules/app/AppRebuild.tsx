@@ -2,13 +2,10 @@ import { Button, Loading, Modal, Text } from '@nextui-org/react';
 import { useState } from 'react';
 import { TerminalOutput } from 'react-terminal-ui';
 import {
-  useAppByIdQuery,
-  useRebuildAppMutation,
-  useAppRebuildLogsSubscription,
-  RealTimeLog,
+  LogPayload, useAppByIdQuery, useAppRebuildLogsSubscription, useRebuildAppMutation
 } from '../../generated/graphql';
 import {
-  Terminal,
+  Terminal
 } from '../../ui';
 import { useToast } from '../../ui/toast';
 
@@ -19,7 +16,7 @@ interface AppRebuildProps {
 export const AppRebuild = ({ appId }: AppRebuildProps) => {
   const toast = useToast();
   const [isRebuildAppModalOpen, setIsRebuildAppModalOpen] = useState(false);
-  const [arrayOfRebuildLogs, setArrayOfRebuildLogs] = useState<RealTimeLog[]>(
+  const [arrayOfRebuildLogs, setArrayOfRebuildLogs] = useState<LogPayload[]>(
     []
   );
   const [isTerminalVisible, setIsTerminalVisible] = useState(false);
@@ -39,8 +36,8 @@ export const AppRebuild = ({ appId }: AppRebuildProps) => {
   });
 
   useAppRebuildLogsSubscription({
-    onSubscriptionData: (data) => {
-      const logsExist = data.subscriptionData.data?.appRebuildLogs;
+    onData: (options) => {
+      const logsExist = options.data.data?.appRebuildLogs;
       if (logsExist) {
         setArrayOfRebuildLogs((currentLogs) => {
           return [...currentLogs, logsExist];

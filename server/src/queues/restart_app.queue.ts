@@ -23,7 +23,7 @@ export class RestartAppQueue extends IQueue<QueueArgs> {
   protected async execute(job: Job<QueueArgs, any, string>) {
     const { appName } = job.data;
 
-    $log.debug(`Iniciando reinicio de ${appName}`);
+    $log.info(`Iniciando reinicio de ${appName}`);
 
     const ssh = await sshConnect();
     const res = await this.dokkuAppRepository.restart(
@@ -54,7 +54,7 @@ export class RestartAppQueue extends IQueue<QueueArgs> {
       }
     );
 
-    $log.debug(`Finalizando reinicio de ${appName}`);
+    $log.info(`Finalizando reinicio de ${appName}`);
 
     if (!res.stderr) {
       this.pubsub.publish(SubscriptionTopics.APP_RESTARTED, <AppRestartPayload>{

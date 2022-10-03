@@ -3,13 +3,10 @@ import { useState } from 'react';
 import { TerminalOutput } from 'react-terminal-ui';
 
 import {
-  useAppByIdQuery,
-  useRestartAppMutation,
-  useAppRestartLogsSubscription,
-  RealTimeLog,
+  LogPayload, useAppByIdQuery, useAppRestartLogsSubscription, useRestartAppMutation
 } from '../../generated/graphql';
 import {
-  Terminal,
+  Terminal
 } from '../../ui';
 import { useToast } from '../../ui/toast';
 
@@ -20,7 +17,7 @@ interface AppRestartProps {
 export const AppRestart = ({ appId }: AppRestartProps) => {
   const toast = useToast();
   const [isRestartAppModalOpen, setIsRestartAppModalOpen] = useState(false);
-  const [arrayOfRestartLogs, setArrayOfRestartLogs] = useState<RealTimeLog[]>(
+  const [arrayOfRestartLogs, setArrayOfRestartLogs] = useState<LogPayload[]>(
     []
   );
   const [isTerminalVisible, setIsTerminalVisible] = useState(false);

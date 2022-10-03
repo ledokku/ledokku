@@ -31,7 +31,7 @@ export class LinkDatabaseQueue extends IQueue<QueueArgs> {
 
     const database = await this.databaseRepository.get(databaseId);
 
-    $log.debug(
+    $log.info(
       `Iniciando el enlace a la base de datos ${database.type} ${database.name} con ${app.name}`
     );
 
@@ -72,7 +72,7 @@ export class LinkDatabaseQueue extends IQueue<QueueArgs> {
       },
     });
 
-    $log.debug(
+    $log.info(
       `Terminando de enlazar ${database.type} ${database.name} con ${app.name}`
     );
     if (!res.stderr) {

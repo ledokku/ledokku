@@ -1,15 +1,15 @@
+import { DbTypes } from '../../generated/graphql';
 import { MongoIcon } from '../icons/MongoIcon';
 import { MySQLIcon } from '../icons/MySQLIcon';
-import { RedisIcon } from '../icons/RedisIcon';
 import { PostgreSQLIcon } from '../icons/PostgreSQLIcon';
-import { DatabaseTypes } from '../../generated/graphql';
+import { RedisIcon } from '../icons/RedisIcon';
 
 interface LabelProps {
   name: string;
-  type: DatabaseTypes;
+  type: DbTypes;
 }
 
-export const labelIcon = (type: DatabaseTypes) => {
+export const labelIcon = (type: DbTypes) => {
   if (type === 'MONGODB') {
     return <MongoIcon className="mt-1 mr-2" size={20} />;
   } else if (type === 'REDIS') {

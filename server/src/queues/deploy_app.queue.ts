@@ -1,4 +1,3 @@
-import { PrismaClient } from '@prisma/client';
 import { $log } from '@tsed/common';
 import { Job } from 'bullmq';
 import { PubSub } from 'graphql-subscriptions';
@@ -20,16 +19,15 @@ export class DeployAppQueue extends IQueue<QueueArgs> {
   constructor(
     private appRepository: AppRepository,
     private dokkuGitRepository: DokkuGitRepository,
-    private pubsub: PubSub,
-    private prisma: PrismaClient
+    private pubsub: PubSub
   ) {
     super();
   }
 
-  /*protected async execute(job: Job<QueueArgs, any>) {
+  protected async execute(job: Job<QueueArgs, any>) {
     const { appId, userName, token } = job.data;
 
-    $log.debug(`Iniciando el lanzamiento de la app ${appId}`);
+    $log.info(`Iniciando el lanzamiento de la app ${appId}`);
 
     const app = await this.appRepository.get(appId);
     const appMetaGithub = await this.appRepository.get(appId).AppMetaGithub();
@@ -71,7 +69,7 @@ export class DeployAppQueue extends IQueue<QueueArgs> {
       }
     );
 
-    $log.debug(
+    $log.info(
       `Finalizando de crear ${app.name} desde https://github.com/${repoOwner}/${repoName}.git`
     );
 
@@ -90,7 +88,7 @@ export class DeployAppQueue extends IQueue<QueueArgs> {
         },
       });
     }
-  }*/
+  }
 
   onFailed(job: Job<QueueArgs, any>, error: Error) {
     this.pubsub.publish(SubscriptionTopics.APP_CREATED, <AppCreatedPayload>{
