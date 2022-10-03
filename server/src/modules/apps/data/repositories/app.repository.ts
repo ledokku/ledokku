@@ -1,12 +1,11 @@
-import { App, PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { Injectable } from '@tsed/di';
-import { Database } from '../../../databases/data/models/database.model';
 
 @Injectable()
 export class AppRepository {
   constructor(private prisma: PrismaClient) {}
 
-  async create(name: string): Promise<App> {
+  create(name: string) {
     return this.prisma.app.create({
       data: {
         name: name,
@@ -15,17 +14,23 @@ export class AppRepository {
     });
   }
 
-  async getAll(): Promise<App[]> {
+  getAll() {
     return this.prisma.app.findMany();
   }
 
-  async get(id: string): Promise<App> {
+  get(id: string) {
     return this.prisma.app.findUnique({
       where: { id },
     });
   }
 
-  async delete(id: string): Promise<App> {
+  getByName(name: string) {
+    return this.prisma.app.findFirst({
+      where: { name },
+    });
+  }
+
+  delete(id: string) {
     return this.prisma.app.delete({
       where: { id },
     });
@@ -39,7 +44,7 @@ export class AppRepository {
     );
   }
 
-  async databases(id: string): Promise<Database[]> {
+  databases(id: string) {
     return this.prisma.app
       .findUnique({
         where: { id },

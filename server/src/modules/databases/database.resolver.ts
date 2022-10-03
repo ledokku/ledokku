@@ -10,7 +10,7 @@ import {
   Root,
   Subscription,
 } from 'type-graphql';
-import { dbTypeToDokkuPlugin } from '../../graphql/utils';
+import { dbTypeToDokkuPlugin } from '../../config/utils';
 import { DokkuDatabaseRepository } from '../../lib/dokku/dokku.database.repository';
 import { DokkuPluginRepository } from '../../lib/dokku/dokku.plugin.repository';
 import { DokkuContext } from '../../data/models/dokku_context';

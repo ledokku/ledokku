@@ -10,21 +10,22 @@ import {
   Root,
   Subscription,
 } from 'type-graphql';
+import { DokkuContext } from '../../data/models/dokku_context';
+import { SubscriptionTopics } from '../../data/models/subscription_topics';
+import { UserRepository } from '../../data/repositories/user_repository';
 import { DokkuAppRepository } from '../../lib/dokku/dokku.app.repository';
 import { DokkuDomainsRepository } from '../../lib/dokku/dokku.domains.repository';
 import { DokkuProxyRepository } from '../../lib/dokku/dokku.proxy.repository';
 import { ProxyPort } from '../../lib/dokku/models/proxy_ports.model';
-import { DokkuContext } from '../../data/models/dokku_context';
-import { SubscriptionTopics } from '../../data/models/subscription_topics';
-import { linkDatabaseQueue } from '../../queues/linkDatabase';
-import { rebuildAppQueue } from '../../queues/rebuildApp';
-import { setEnvVarQueue } from '../../queues/setEnvVar';
-import { unlinkDatabaseQueue } from '../../queues/unlinkDatabase';
-import { unsetEnvVarQueue } from '../../queues/unsetEnvVar';
+import { LinkDatabaseQueue } from '../../queues/link_database.queue';
+import { RebuildAppQueue } from '../../queues/rebuild_app.queue';
+import { RestartAppQueue } from '../../queues/restart_app.queue';
+import { UnlinkDatabaseQueue } from '../../queues/unlink_database.queue';
 import { Database } from '../databases/data/models/database.model';
 import { AppGithubMeta } from '../github/data/models/app_meta_github.model';
 import { GithubRepository } from '../github/data/repositories/github.repository';
-import { restartAppQueue } from './../../queues/restartApp';
+import { SetEnvVarQueue } from './../../queues/set_env_var.queue';
+import { UnsetEnvVarQueue } from './../../queues/unset_env_var.queue';
 import { DatabaseRepository } from './../databases/data/repositories/database.repository';
 import { AddAppProxyPortInput } from './data/inputs/add_app_proxy_port.input';
 import { AddDomainInput } from './data/inputs/add_domain.input';
@@ -59,7 +60,14 @@ export class AppResolver {
     private githubRepository: GithubRepository,
     private dokkuAppRepository: DokkuAppRepository,
     private dokkuProxyRepository: DokkuProxyRepository,
-    private dokkuDomainsRepository: DokkuDomainsRepository
+    private dokkuDomainsRepository: DokkuDomainsRepository,
+    private linkDatabaseQueue: LinkDatabaseQueue,
+    private rebuildAppQueue: RebuildAppQueue,
+    private setEnvVarQueue: SetEnvVarQueue,
+    private unlinkDatabaseQueue: UnlinkDatabaseQueue,
+    private unsetEnvVarQueue: UnsetEnvVarQueue,
+    private restartAppQueue: RestartAppQueue,
+    private userRepository: UserRepository
   ) {}
 
   @Authorized()
@@ -163,7 +171,7 @@ export class AppResolver {
       throw new NotFound(`No se encontró la app con ID ${input.appId}`);
     }
 
-    await setEnvVarQueue.add('set-env-var', {
+    await this.setEnvVarQueue.add({
       appName: app.name,
       ...input,
     });
@@ -182,7 +190,7 @@ export class AppResolver {
       throw new NotFound(`No se encontró la app con ID ${input.appId}`);
     }
 
-    await unsetEnvVarQueue.add('unset-env-var', {
+    await this.unsetEnvVarQueue.add({
       appName: app.name,
       key: input.key,
     });
@@ -291,7 +299,7 @@ export class AppResolver {
     if (/^[a-z0-9-]+$/.test(input.name))
       throw new BadRequest('Mal formato del nombre');
 
-    const user = await this.githubRepository.getUser(context.auth.userId);
+    const user = await this.userRepository.get(context.auth.userId);
     const appNameExists = await this.appRepository.exists(input.name);
 
     if (appNameExists) {
@@ -499,7 +507,7 @@ export class AppResolver {
       );
     }
 
-    await linkDatabaseQueue.add('link-database', {
+    await this.linkDatabaseQueue.add({
       ...input,
     });
 
@@ -537,7 +545,7 @@ export class AppResolver {
       );
     }
 
-    await unlinkDatabaseQueue.add('unlink-database', {
+    await this.unlinkDatabaseQueue.add({
       ...input,
     });
 
@@ -556,7 +564,7 @@ export class AppResolver {
       throw new NotFound(`No se encontró la app con ID ${input.appId}`);
     }
 
-    await rebuildAppQueue.add('rebuild-app', {
+    await this.rebuildAppQueue.add({
       appName: app.name,
     });
 
@@ -575,7 +583,7 @@ export class AppResolver {
       throw new NotFound(`No se encontró la app con ID ${input.appId}`);
     }
 
-    await restartAppQueue.add('restart-app', {
+    await this.restartAppQueue.add({
       appName: app.name,
     });
 

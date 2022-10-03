@@ -1,4 +1,4 @@
-import { App, Database, Prisma, PrismaClient } from '@prisma/client';
+import { App, Database, DbTypes, Prisma, PrismaClient } from '@prisma/client';
 import { Injectable } from '@tsed/di';
 
 @Injectable()
@@ -11,9 +11,22 @@ export class DatabaseRepository {
     });
   }
 
+  update(id: string, data: Prisma.DatabaseUpdateInput): Promise<Database> {
+    return this.prisma.database.update({
+      where: { id },
+      data,
+    });
+  }
+
   get(id: string): Promise<Database> {
     return this.prisma.database.findUnique({
       where: { id },
+    });
+  }
+
+  getByName(name: string, type: DbTypes): Promise<Database> {
+    return this.prisma.database.findFirst({
+      where: { name, type },
     });
   }
 

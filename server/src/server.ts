@@ -20,13 +20,17 @@ import { ContextFactory } from './config/context_factory';
 import { IS_PRODUCTION, PORT } from './constants';
 import { MainController } from './controllers/main.controller';
 import { WebhookController } from './controllers/webhook.controller';
-import { pubsub } from './index.old';
 import { DokkuContext } from './data/models/dokku_context';
-import { synchroniseServerQueue } from './queues/synchroniseServer';
+import { SyncServerQueue } from './queues/sync_server.queue';
 import { startSmeeClient } from './smeeClient';
+
+const pubsub = new PubSub();
 
 @Configuration({
   port: PORT,
+  logger: {
+    level: !IS_PRODUCTION ? 'debug' : 'info',
+  },
   rootDir: __dirname,
   acceptMimes: ['application/json'],
   componentsScan: [`${__dirname}/**/*.resolver.{ts,js}`],
@@ -68,10 +72,13 @@ export class Server implements BeforeRoutesInit, OnReady {
   settings: Configuration;
 
   @Inject()
-  private typegql!: TypeGraphQLService;
+  private typegql: TypeGraphQLService;
 
   @Inject()
-  httpServer!: http.Server;
+  httpServer: http.Server;
+
+  @Inject()
+  syncServerQueue: SyncServerQueue;
 
   $beforeRoutesInit(): void | Promise<void> {
     this.app
@@ -100,7 +107,7 @@ export class Server implements BeforeRoutesInit, OnReady {
       startSmeeClient();
     }
 
-    synchroniseServerQueue.add('synchronise-server', {});
+    this.syncServerQueue.add({});
   }
 }
 

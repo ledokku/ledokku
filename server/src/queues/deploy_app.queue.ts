@@ -1,13 +1,13 @@
+import { PrismaClient } from '@prisma/client';
 import { $log } from '@tsed/common';
 import { Job } from 'bullmq';
 import { PubSub } from 'graphql-subscriptions';
+import { SubscriptionTopics } from '../data/models/subscription_topics';
 import { IQueue, Queue } from '../lib/queues/queue.decorator';
 import { sshConnect } from '../lib/ssh';
-import { SubscriptionTopics } from '../data/models/subscription_topics';
 import { AppCreatedPayload } from '../modules/apps/data/models/app_created.payload';
 import { DokkuGitRepository } from './../lib/dokku/dokku.git.repository';
 import { AppRepository } from './../modules/apps/data/repositories/app.repository';
-import { GithubRepository } from './../modules/github/data/repositories/github.repository';
 
 interface QueueArgs {
   appId: string;
@@ -19,20 +19,20 @@ interface QueueArgs {
 export class DeployAppQueue extends IQueue<QueueArgs> {
   constructor(
     private appRepository: AppRepository,
-    private githubRepository: GithubRepository,
     private dokkuGitRepository: DokkuGitRepository,
-    private pubsub: PubSub
+    private pubsub: PubSub,
+    private prisma: PrismaClient
   ) {
     super();
   }
 
-  protected async execute(job: Job<QueueArgs, any>) {
+  /*protected async execute(job: Job<QueueArgs, any>) {
     const { appId, userName, token } = job.data;
 
     $log.debug(`Iniciando el lanzamiento de la app ${appId}`);
 
     const app = await this.appRepository.get(appId);
-    const appMetaGithub = await this.githubRepository.appMeta(appId);
+    const appMetaGithub = await this.appRepository.get(appId).AppMetaGithub();
 
     const { branch, repoName, repoOwner } = appMetaGithub;
     const branchName = branch ? branch : 'main';
@@ -90,7 +90,7 @@ export class DeployAppQueue extends IQueue<QueueArgs> {
         },
       });
     }
-  }
+  }*/
 
   onFailed(job: Job<QueueArgs, any>, error: Error) {
     this.pubsub.publish(SubscriptionTopics.APP_CREATED, <AppCreatedPayload>{

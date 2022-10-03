@@ -2,7 +2,7 @@ import { DbTypes } from '@prisma/client';
 import { Injectable } from '@tsed/di';
 import { InternalServerError } from '@tsed/exceptions';
 import { NodeSSH, SSHExecOptions } from 'node-ssh';
-import { dbTypeToDokkuPlugin } from '../../graphql/utils';
+import { dbTypeToDokkuPlugin } from '../../config/utils';
 
 @Injectable()
 export class DokkuDatabaseRepository {
@@ -55,12 +55,12 @@ export class DokkuDatabaseRepository {
   async link(
     ssh: NodeSSH,
     databaseName: string,
-    databaseType: string,
+    databaseType: DbTypes,
     appName: string,
     options?: SSHExecOptions
   ) {
     const resultDatabaseLink = await ssh.execCommand(
-      `${databaseType}:link ${databaseName} ${appName}`,
+      `${dbTypeToDokkuPlugin(databaseType)}:link ${databaseName} ${appName}`,
       options
     );
 
@@ -70,12 +70,12 @@ export class DokkuDatabaseRepository {
   async unlink(
     ssh: NodeSSH,
     databaseName: string,
-    databaseType: string,
+    databaseType: DbTypes,
     appName: string,
     options?: SSHExecOptions
   ) {
     const resultDatabaseUnLink = await ssh.execCommand(
-      `${databaseType}:unlink ${databaseName} ${appName}`,
+      `${dbTypeToDokkuPlugin(databaseType)}:unlink ${databaseName} ${appName}`,
       options
     );
 
@@ -84,11 +84,11 @@ export class DokkuDatabaseRepository {
 
   async links(
     ssh: NodeSSH,
-    databaseType: string,
+    databaseType: DbTypes,
     databaseName: string
   ): Promise<string[]> {
     const resultDatabaseLinks = await ssh.execCommand(
-      `${databaseType}:links ${databaseName}`
+      `${dbTypeToDokkuPlugin(databaseType)}:links ${databaseName}`
     );
 
     if (resultDatabaseLinks.code === 1) {
@@ -99,8 +99,8 @@ export class DokkuDatabaseRepository {
     return resultDatabaseLinks.stdout.split('\n');
   }
 
-  async list(ssh: NodeSSH, databaseType: string): Promise<string[]> {
-    const resultAppsCreate = await ssh.execCommand(`${databaseType}:list`);
+  async list(ssh: NodeSSH, databaseType: DbTypes): Promise<string[]> {
+    const resultAppsCreate = await ssh.execCommand(`${dbTypeToDokkuPlugin(databaseType)}:list`);
     if (resultAppsCreate.code === 1) {
       console.error(resultAppsCreate);
       throw new Error(resultAppsCreate.stderr);

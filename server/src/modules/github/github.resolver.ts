@@ -1,6 +1,7 @@
 import { ResolverService } from '@tsed/typegraphql';
-import { Arg, Authorized, Ctx, Query, Resolver } from 'type-graphql';
+import { Arg, Authorized, Ctx, Query } from 'type-graphql';
 import { DokkuContext } from '../../data/models/dokku_context';
+import { UserRepository } from './../../data/repositories/user_repository';
 import { AppGithubMeta } from './data/models/app_meta_github.model';
 import { Branch } from './data/models/branch.model';
 import { Installation } from './data/models/installation.model';
@@ -9,7 +10,10 @@ import { GithubRepository } from './data/repositories/github.repository';
 
 @ResolverService(Repository)
 export class GithubResolver {
-  constructor(private ghRepository: GithubRepository) {}
+  constructor(
+    private ghRepository: GithubRepository,
+    private userRepository: UserRepository
+  ) {}
 
   @Authorized()
   @Query((returns) => [Repository])
@@ -24,7 +28,7 @@ export class GithubResolver {
   async githubInstallationId(
     @Ctx() context: DokkuContext
   ): Promise<Installation> {
-    const user = await this.ghRepository.getUser(context.auth.userId);
+    const user = await this.userRepository.get(context.auth.userId);
 
     return (await this.ghRepository.installations(user.githubAccessToken))
       .installations[0];
@@ -43,7 +47,7 @@ export class GithubResolver {
     @Arg('installationId') installationId: string,
     @Ctx() context: DokkuContext
   ): Promise<Branch[]> {
-    const user = await this.ghRepository.getUser(context.auth.userId);
+    const user = await this.userRepository.get(context.auth.userId);
 
     return this.ghRepository.branches(
       user.username,

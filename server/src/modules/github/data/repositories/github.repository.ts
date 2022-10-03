@@ -5,7 +5,6 @@ import { Injectable } from '@tsed/di';
 import { Unauthorized } from '@tsed/exceptions';
 import fetch from 'node-fetch';
 import { DeployAppQueue } from '../../../../queues/deploy_app.queue';
-import { synchroniseServerQueue } from '../../../../queues/synchroniseServer';
 import { formatGithubPem } from './../../../../config';
 import {
   GITHUB_APP_CLIENT_ID,
@@ -14,6 +13,7 @@ import {
   GITHUB_APP_PEM,
   NUMBER_USERS_ALLOWED,
 } from './../../../../constants';
+import { SyncServerQueue } from './../../../../queues/sync_server.queue';
 import { GithubError } from './../models/github_error';
 import { GithubOAuthLoginResponse } from './../models/github_oauth_login_response';
 
@@ -21,7 +21,8 @@ import { GithubOAuthLoginResponse } from './../models/github_oauth_login_respons
 export class GithubRepository {
   constructor(
     private prisma: PrismaClient,
-    private deployAppQueue: DeployAppQueue
+    private deployAppQueue: DeployAppQueue,
+    private syncServerQueue: SyncServerQueue
   ) {}
 
   private installationAuth = createAppAuth({
@@ -194,12 +195,6 @@ export class GithubRepository {
     });
   }
 
-  async getUser(id: string): Promise<User> {
-    return this.prisma.user.findUnique({
-      where: { id },
-    });
-  }
-
   async createUser(oauthData: GithubOAuthLoginResponse): Promise<User> {
     const userCount = await this.prisma.user.count();
     if (userCount >= NUMBER_USERS_ALLOWED) {
@@ -234,7 +229,7 @@ export class GithubRepository {
         },
       })
       .then(async (res) => {
-        await synchroniseServerQueue.add('synchronise-server', {});
+        await this.syncServerQueue.add({});
         return res;
       });
   }

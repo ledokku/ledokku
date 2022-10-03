@@ -1,14 +1,15 @@
 import { NodeSSH } from 'node-ssh';
-import { config } from '../config';
+import { DOKKU_SSH_HOST, DOKKU_SSH_PORT } from '../constants';
+import { privateKey } from './../config';
 
 export const sshConnect = async () => {
   const ssh = new NodeSSH();
 
   await ssh.connect({
-    host: config.dokkuSshHost,
-    port: config.dokkuSshPort,
+    host: DOKKU_SSH_HOST,
+    port: DOKKU_SSH_PORT,
     username: 'dokku',
-    privateKey: config.privateKey,
+    privateKey: privateKey,
   });
 
   return ssh;

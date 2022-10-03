@@ -1,19 +1,23 @@
 import { $log } from '@tsed/common';
-import { registerProvider } from '@tsed/di';
 import { Job, Queue as QueueBull, Worker } from 'bullmq';
 import Redis from 'ioredis';
 import { REDIS_URL } from '../../constants';
 
 export abstract class IQueue<Args = any, ReturnValue = any> {
   protected queue: QueueBull<Args>;
+  protected worker: Worker<Args, ReturnValue>;
 
   add(args: Args): Promise<Job<Args, ReturnValue>> {
     return this.queue.add(this.queue.name, args);
   }
 
-  protected abstract execute(
-    job: Job<Args, ReturnValue>
-  ): Promise<ReturnValue> | ReturnValue;
+  protected execute(
+    job: Job<Args, ReturnValue, string>
+  ): ReturnValue | Promise<ReturnValue> {
+    $log.warn(`Queue ${this.constructor.name} not implemented`);
+
+    return;
+  }
 
   onFailed?(job: Job<Args, ReturnValue>, error: Error): Promise<any> | any;
   onSuccess?(
@@ -32,34 +36,32 @@ export function Queue(options?: QueueOptions) {
     ReturnValue,
     T extends { new (...args: any[]): IQueue<Args, ReturnValue> }
   >(constructor: T) {
-    const redisClient = new Redis(REDIS_URL);
+    const redisClient = new Redis(REDIS_URL, {
+      maxRetriesPerRequest: null,
+    });
 
     const queueName = options?.queueName ?? constructor.name;
 
-    const queue = new QueueBull<Args>(queueName, {
+    const bullQueue = new QueueBull<Args>(queueName, {
       connection: redisClient,
     });
 
-    registerProvider({
-      provide: constructor,
-      useValue: queue,
-    });
-
     return class extends constructor {
-      protected queue: QueueBull<Args> = queue;
+      protected queue: QueueBull<Args, any, string> = bullQueue;
 
       constructor(...args: any[]) {
         super(...args);
-        const worker = new Worker(
+
+        this.worker = new Worker(
           queueName,
           async (job) => {
-            $log.debug(queueName, job);
-            await this.execute(job);
+            $log.debug(queueName, "new job ID:", job.id);
+            return await this.execute(job);
           },
           { connection: redisClient }
         );
 
-        worker.on('failed', async (job, err) => {
+        this.worker.on('failed', async (job, err) => {
           $log.debug(
             `${job.id} has failed on Queue ${constructor.name}:`,
             err.message
@@ -67,19 +69,13 @@ export function Queue(options?: QueueOptions) {
           this.onFailed?.call(job, err);
         });
 
-        worker.on(
+        this.worker.on(
           'completed',
           (job: Job<Args, ReturnValue>, returnvalue: ReturnValue) =>
-            this.onSuccess?.call(job.returnvalue)
+            this.onSuccess?.call(job, returnvalue)
         );
 
         $log.debug(`Queue ${constructor.name} initialized`);
-      }
-
-      protected execute(job: Job<Args, ReturnValue>): ReturnValue {
-        $log.warn(`No execution implementation on ${constructor.name}`);
-
-        return;
       }
     };
   };

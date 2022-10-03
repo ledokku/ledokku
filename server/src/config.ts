@@ -46,7 +46,7 @@ if (!existsSync(sshKeyPath)) {
   `);
 }
 
-const privateKey = readFileSync(sshKeyPath, {
+export const privateKey = readFileSync(sshKeyPath, {
   encoding: 'utf8',
 });
 
@@ -69,28 +69,4 @@ export const formatGithubPem = (base64Pem?: string) => {
   );
 
   return formattedPem;
-};
-
-export const config = {
-  jwtSecret: process.env.JWT_SECRET,
-  githubAppClientId: process.env.GITHUB_APP_CLIENT_ID,
-  githubAppClientSecret: process.env.GITHUB_APP_CLIENT_SECRET,
-  githubAppWebhookSecret: process.env.GITHUB_APP_WEBHOOK_SECRET,
-  githubAppName: process.env.GITHUB_APP_NAME,
-  githubAppId: process.env.GITHUB_APP_ID,
-  githubAppPem: formatGithubPem(process.env.GITHUB_APP_PEM),
-  redisUrl: process.env.REDIS_URL,
-  dokkuSshHost: process.env.DOKKU_SSH_HOST,
-  dokkuSshPort: process.env.DOKKU_SSH_PORT ? +process.env.DOKKU_SSH_PORT : 22,
-  privateKey,
-  sshKeyPath,
-  numberUsersAllowed: process.env.NUMBER_USERS_ALLOWED
-    ? +process.env.NUMBER_USERS_ALLOWED
-    : 1,
-  telemetryDisabled:
-    process.env.NODE_ENV === 'production'
-      ? process.env.TELEMETRY_DISABLED
-      : // Always disabled in dev mode
-        '1',
-  webhookProxyUrl: process.env.WEBHOOK_PROXY_URL,
 };

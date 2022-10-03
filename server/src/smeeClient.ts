@@ -1,13 +1,10 @@
+import { $log } from '@tsed/common';
 import { readFileSync, writeFileSync } from 'fs';
 import SmeeClient from 'smee-client-patched';
-import { config } from './config';
+import { changeWebhookProxyUrl, WEBHOOK_PROXY_URL } from './constants';
 
 export const startSmeeClient = async () => {
-  /**
-   * If webhookProxyUrl url is not set we automatically generate a new one
-   * for the user and save it .env file.
-   */
-  if (!config.webhookProxyUrl) {
+  if (!WEBHOOK_PROXY_URL) {
     const smeeUrl = await SmeeClient.createChannel();
 
     const dotenvPath = `${process.cwd()}/.env`;
@@ -16,19 +13,15 @@ export const startSmeeClient = async () => {
     });
     dotenvData += `\nWEBHOOK_PROXY_URL="${smeeUrl}"\n`;
     writeFileSync(dotenvPath, dotenvData, { encoding: 'utf8' });
-    console.log(`WEBHOOK_PROXY_URL config added to .env file.`);
+    $log.info(`WEBHOOK_PROXY_URL config added to .env file.`);
 
-    config.webhookProxyUrl = smeeUrl;
+    changeWebhookProxyUrl(smeeUrl);
   }
 
-  /**
-   * Start proxy that redirects the events received from external sources to the local server.
-   */
-
   const smeeClient = new SmeeClient({
-    source: config.webhookProxyUrl,
+    source: WEBHOOK_PROXY_URL,
     target: 'http://localhost:4000/api/webhooks',
-    logger: console,
+    logger: $log,
   });
 
   const events = smeeClient.start();

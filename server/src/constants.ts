@@ -38,14 +38,20 @@ export const REDIS_URL =
 export const DOKKU_SSH_HOST =
   process.env.DOKKU_SSH_HOST ??
   throwError('Variable de entorno DOKKU_SSH_HOST es requerido');
-export const DOKKU_SSH_PORT = process.env.DOKKU_SSH_PORT ?? 3022;
+export const DOKKU_SSH_PORT = Number(process.env.DOKKU_SSH_PORT) ?? 3022;
 
 export const NUMBER_USERS_ALLOWED = process.env.NUMBER_USERS_ALLOWED ?? 1;
 
 export const TELEMETRY_DISABLED = process.env.TELEMETRY_DISABLED ?? 1;
-export const WEBHOOK_PROXY_URL =
+export let WEBHOOK_PROXY_URL =
   process.env.WEBHOOK_PROXY_URL ?? 'https://smee.io/dW2WX9OSa1AnFpN';
 
 export const NODE_ENV = process.env.NODE_ENV ?? 'development';
 export const PORT = process.env.PORT ?? 4000;
 export const IS_PRODUCTION = NODE_ENV === 'production';
+
+export function changeWebhookProxyUrl(url: string) {
+  WEBHOOK_PROXY_URL = url;
+
+  return WEBHOOK_PROXY_URL;
+}
