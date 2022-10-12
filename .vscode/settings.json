@@ -11,5 +11,6 @@
         "onStartup": []
     },
     "nuxt.isNuxtApp": false,
-    "debug.inlineValues": true
+    "debug.inlineValues": true,
+    "typescript.tsdk": "node_modules\\typescript\\lib"
 }

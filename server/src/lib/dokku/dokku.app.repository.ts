@@ -5,8 +5,15 @@ import { EnvVar } from './models/env_var.model';
 
 @Injectable()
 export class DokkuAppRepository {
-  async create(ssh: NodeSSH, appName: string): Promise<boolean> {
-    const resultAppsCreate = await ssh.execCommand(`apps:create ${appName}`);
+  async create(
+    ssh: NodeSSH,
+    appName: string,
+    options?: SSHExecOptions
+  ): Promise<boolean> {
+    const resultAppsCreate = await ssh.execCommand(
+      `apps:create ${appName}`,
+      options
+    );
 
     if (resultAppsCreate.code === 1) {
       throw new InternalServerError(resultAppsCreate.stderr);

@@ -1,6 +1,10 @@
-import { GraphQLDateTime } from './../../../../utils';
 import { Activity as ActivityClass, ModelReferences } from '@prisma/client';
-import { Field, ObjectType } from 'type-graphql';
+import { createUnionType, Field, ObjectType } from 'type-graphql';
+import { createBasePaginationInfo } from '../../../../data/models/pagination_info';
+import { App } from '../../../apps/data/models/app.model';
+import { AppBuild } from '../../../app_build/data/models/app_build.model';
+import { Database } from '../../../databases/data/models/database.model';
+import { GraphQLDateTime } from './../../../../utils';
 
 @ObjectType()
 export class Activity implements ActivityClass {
@@ -10,8 +14,8 @@ export class Activity implements ActivityClass {
   @Field((type) => String)
   name: string;
 
-  @Field((type) => String)
-  description: string;
+  @Field((type) => String, { nullable: true })
+  description: string | null;
 
   @Field((type) => GraphQLDateTime)
   createdAt: Date;
@@ -19,7 +23,16 @@ export class Activity implements ActivityClass {
   @Field((type) => GraphQLDateTime)
   updatedAt: Date;
 
-  refersToModel: ModelReferences;
-  referenceId: string;
-  modifierId: string;
+  refersToModel: ModelReferences | null;
+  referenceId: string | null;
+  modifierId: string | null;
 }
+
+const BasePagination = createBasePaginationInfo(Activity);
+@ObjectType({ implements: BasePagination })
+export class ActivityPaginationInfo extends BasePagination {}
+
+export const ActivityModelUnion = createUnionType({
+  name: 'ActivityModelUnion',
+  types: () => [AppBuild, App, Database],
+});

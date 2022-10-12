@@ -106,8 +106,8 @@ model Activity {
   Database      Database?        @relation(fields: [referenceId], references: [id], map: "database_activity")
   App           App?             @relation(fields: [referenceId], references: [id], map: "app_activity")
   AppBuild      AppBuild?        @relation(fields: [referenceId], references: [id], map: "app_build_activity")
-  modifierId    String
-  modifier      User             @relation(fields: [modifierId], references: [id])
+  modifierId    String?
+  Modifier      User?            @relation(fields: [modifierId], references: [id])
   createdAt     DateTime         @default(now())
   updatedAt     DateTime         @updatedAt
 }

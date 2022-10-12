@@ -62,7 +62,7 @@ export function Queue(options?: QueueOptions) {
         this.worker.on('failed', async (job, err) => {
           $log.info(
             `${job.id} has failed on Queue ${constructor.name}:`,
-            err.message
+            err
           );
           this.onFailed?.call(job, err);
         });

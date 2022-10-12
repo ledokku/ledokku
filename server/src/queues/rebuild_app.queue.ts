@@ -1,3 +1,4 @@
+import { ActivityRepository } from './../modules/activity/data/repositories/activity.repository';
 import { $log } from '@tsed/common';
 import { Job } from 'bullmq';
 import { PubSub } from 'graphql-subscriptions';
@@ -15,7 +16,8 @@ interface QueueArgs {
 export class RebuildAppQueue extends IQueue<QueueArgs> {
   constructor(
     private dokkuAppRepository: DokkuAppRepository,
-    private pubsub: PubSub
+    private pubsub: PubSub,
+    private activityRepository: ActivityRepository
   ) {
     super();
   }
@@ -47,6 +49,10 @@ export class RebuildAppQueue extends IQueue<QueueArgs> {
     });
 
     $log.info(`Finalizando rebuild de ${appName}`);
+
+    await this.activityRepository.add({
+      name: `Rebuild de "${appName}"`,
+    });
 
     if (!res.stderr) {
       this.pubsub.publish(SubscriptionTopics.APP_REBUILT, <AppRebuildPayload>{

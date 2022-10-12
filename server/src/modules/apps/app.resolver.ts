@@ -71,7 +71,10 @@ export class AppResolver {
     private unsetEnvVarQueue: UnsetEnvVarQueue,
     private restartAppQueue: RestartAppQueue,
     private userRepository: UserRepository
-  ) {}
+  ) // private activityRepository: ActivityRepository,
+  // private appBuildRepository: AppBuildRepository,
+  // private buildAppQueue: BuildAppQueue
+  {}
 
   @Authorized()
   @Query((returns) => App)
@@ -267,28 +270,14 @@ export class AppResolver {
 
     const app = await this.appRepository.create(input.name);
 
-    // for apps created w/o gitRepoUrl we send down to client
-    // data via  subscription
+    // const appBuild = await this.appBuildRepository.updateStatus(
+    //   app.id,
+    //   AppBuildStatus.PENDING
+    // );
 
-    // TODO enable again once we start the github app autodeployment
-    // const appBuild = await prisma.appBuild.create({
-    //   data: {
-    //     status: 'PENDING',
-    //     user: {
-    //       connect: {
-    //         id: userId,
-    //       },
-    //     },
-    //     app: {
-    //       connect: {
-    //         id: app.id,
-    //       },
-    //     },
-    //   },
+    // this.buildAppQueue.add({
+    //   buildId: appBuild.id,
     // });
-
-    // // We trigger the queue that will add dokku to the server
-    // await buildAppQueue.add('build-app', { buildId: appBuild.id });
 
     return { appId: app.id };
   }

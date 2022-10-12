@@ -6,6 +6,7 @@ import { sshConnect } from '../lib/ssh';
 import { DatabaseUnlinkPayload } from '../modules/databases/data/models/database_unlink.payload';
 import { SubscriptionTopics } from './../data/models/subscription_topics';
 import { DokkuDatabaseRepository } from './../lib/dokku/dokku.database.repository';
+import { ActivityRepository } from './../modules/activity/data/repositories/activity.repository';
 import { AppRepository } from './../modules/apps/data/repositories/app.repository';
 import { DatabaseRepository } from './../modules/databases/data/repositories/database.repository';
 
@@ -20,7 +21,8 @@ export class UnlinkDatabaseQueue extends IQueue<QueueArgs> {
     private appRepository: AppRepository,
     private databaseRepository: DatabaseRepository,
     private dokkuDatabaseRepository: DokkuDatabaseRepository,
-    private pubsub: PubSub
+    private pubsub: PubSub,
+    private activityRepository: ActivityRepository
   ) {
     super();
   }
@@ -69,6 +71,12 @@ export class UnlinkDatabaseQueue extends IQueue<QueueArgs> {
       apps: {
         disconnect: { id: app.id },
       },
+    });
+
+    await this.activityRepository.add({
+      name: `Base de datos "${database.name}" desenlazada de "${app.name}"`,
+      description: database.id,
+      instance: database,
     });
 
     $log.info(

@@ -10,6 +10,7 @@ import { IQueue, Queue } from '../lib/queues/queue.decorator';
 import { sshConnect } from '../lib/ssh';
 import { AppRepository } from '../modules/apps/data/repositories/app.repository';
 import { DatabaseRepository } from '../modules/databases/data/repositories/database.repository';
+import { ActivityRepository } from './../modules/activity/data/repositories/activity.repository';
 
 @Queue()
 export class SyncServerQueue extends IQueue {
@@ -19,7 +20,8 @@ export class SyncServerQueue extends IQueue {
     private dokkuPluginRepository: DokkuPluginRepository,
     private appRepository: AppRepository,
     private databaseRepository: DatabaseRepository,
-    private userRepository: UserRepository
+    private userRepository: UserRepository,
+    private activityRepository: ActivityRepository
   ) {
     super();
   }
@@ -119,6 +121,10 @@ export class SyncServerQueue extends IQueue {
 
         $log.info(`- ${dokkuDatabase} sincronizado`);
       }
+
+      await this.activityRepository.add({
+        name: `Sistema sincronizado`,
+      });
     }
 
     ssh.dispose();

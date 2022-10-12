@@ -1,7 +1,7 @@
 import { AppBuildStatus } from '@prisma/client';
 import { $log } from '@tsed/common';
 import { Job } from 'bullmq';
-import { execa } from 'execa';
+import execa from 'execa';
 import { existsSync } from 'fs';
 import { readFile, writeFile } from 'fs/promises';
 import { join, resolve } from 'path';
@@ -9,14 +9,18 @@ import { LogPayload } from '../data/models/log_payload';
 import { AppBuildRepository } from '../data/repositories/app_build.repository';
 import { IQueue, Queue } from '../lib/queues/queue.decorator';
 import { DOKKU_SSH_HOST, DOKKU_SSH_PORT } from './../constants';
+import { ActivityRepository } from './../modules/activity/data/repositories/activity.repository';
 
 interface QueueArgs {
   buildId: string;
 }
 
 @Queue()
-export class BuildApp extends IQueue<QueueArgs> {
-  constructor(private appBuildRepository: AppBuildRepository) {
+export class BuildAppQueue extends IQueue<QueueArgs> {
+  constructor(
+    private appBuildRepository: AppBuildRepository,
+    private activityRepository: ActivityRepository
+  ) {
     super();
   }
 
@@ -26,6 +30,12 @@ export class BuildApp extends IQueue<QueueArgs> {
     $log.info(`Iniciando la construccion con el ID ${buildId}`);
 
     const appBuild = await this.appBuildRepository.get(buildId);
+
+    await this.activityRepository.add({
+      name: `Construcción de "${appBuild.app.name}"`,
+      description: appBuild.appId,
+      instance: appBuild,
+    });
 
     if (!appBuild) {
       throw new Error(`AppBuild ${buildId} no encontrada en el Job ${job.id}`);
@@ -68,7 +78,7 @@ export class BuildApp extends IQueue<QueueArgs> {
       //     type: 'command',
       //   },
       // ]);
-      const subprocess = execa(command, args, options);
+      const subprocess = execa.execa(command, args, options);
       subprocess.stdout.on('data', onStdout);
       subprocess.stderr.on('data', onStderr);
       const resultCommand = await subprocess;

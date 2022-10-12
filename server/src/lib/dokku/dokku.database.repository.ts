@@ -9,11 +9,11 @@ export class DokkuDatabaseRepository {
   async create(
     ssh: NodeSSH,
     name: string,
-    databaseType: string,
+    databaseType: DbTypes,
     options?: SSHExecOptions
   ) {
     const resultDatabaseCreate = await ssh.execCommand(
-      `${databaseType}:create ${name}`,
+      `${dbTypeToDokkuPlugin(databaseType)}:create ${name}`,
       options
     );
 

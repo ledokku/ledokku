@@ -1,4 +1,5 @@
 import { Container, Text } from '@nextui-org/react';
+import { ActivityFeed } from '../modules/activity/ActivityFeed';
 import { Header } from '../ui';
 
 export const Activity = () => {
@@ -10,9 +11,7 @@ export const Activity = () => {
         <Text h2 className='py-5'>
           Actividad
         </Text>
-        <Text>
-          Proximamente
-        </Text>
+        <ActivityFeed />
       </Container>
     </div>
   );

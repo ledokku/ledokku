@@ -17,6 +17,28 @@ export type Scalars = {
   DateTime: string;
 };
 
+export type Activity = {
+  __typename?: 'Activity';
+  createdAt: Scalars['DateTime'];
+  description?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  name: Scalars['String'];
+  reference?: Maybe<ActivityModelUnion>;
+  updatedAt: Scalars['DateTime'];
+};
+
+export type ActivityModelUnion = App | AppBuild | Database;
+
+export type ActivityPaginationInfo = BasePaginationInfo & {
+  __typename?: 'ActivityPaginationInfo';
+  items: Array<Activity>;
+  nextPage?: Maybe<Scalars['Int']>;
+  page: Scalars['Int'];
+  prevPage?: Maybe<Scalars['Int']>;
+  totalItems: Scalars['Int'];
+  totalPages: Scalars['Int'];
+};
+
 export type AddAppProxyPortInput = {
   appId: Scalars['String'];
   container: Scalars['String'];
@@ -41,6 +63,16 @@ export type App = {
   userId: Scalars['String'];
 };
 
+export type AppBuild = {
+  __typename?: 'AppBuild';
+  appId: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ID'];
+  status: Scalars['ID'];
+  updatedAt: Scalars['DateTime'];
+  userId?: Maybe<Scalars['ID']>;
+};
+
 export type AppGithubMeta = {
   __typename?: 'AppGithubMeta';
   appId: Scalars['String'];
@@ -63,6 +95,15 @@ export type AppTypes =
 export type Auth = {
   __typename?: 'Auth';
   token: Scalars['String'];
+};
+
+export type BasePaginationInfo = {
+  items: Array<Activity>;
+  nextPage?: Maybe<Scalars['Int']>;
+  page: Scalars['Int'];
+  prevPage?: Maybe<Scalars['Int']>;
+  totalItems: Scalars['Int'];
+  totalPages: Scalars['Int'];
 };
 
 export type BooleanResult = {
@@ -302,6 +343,7 @@ export type ProxyPort = {
 
 export type Query = {
   __typename?: 'Query';
+  activity: ActivityPaginationInfo;
   app: App;
   appLogs: Logs;
   appMetaGithub?: Maybe<AppGithubMeta>;
@@ -320,6 +362,12 @@ export type Query = {
   isPluginInstalled: IsPluginInstalled;
   repositories: Array<Repository>;
   setup: SetupResult;
+};
+
+
+export type QueryActivityArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -577,6 +625,14 @@ export type UnsetEnvVarMutationVariables = Exact<{
 
 
 export type UnsetEnvVarMutation = { __typename?: 'Mutation', unsetEnvVar: { __typename?: 'BooleanResult', result: boolean } };
+
+export type ActivityQueryVariables = Exact<{
+  page?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type ActivityQuery = { __typename?: 'Query', activity: { __typename?: 'ActivityPaginationInfo', nextPage?: number | null, prevPage?: number | null, totalItems: number, totalPages: number, items: Array<{ __typename?: 'Activity', name: string, description?: string | null, createdAt: string, reference?: { __typename?: 'App', id: string, name: string, type: AppTypes, appMetaGithub?: { __typename?: 'AppGithubMeta', repoOwner: string, repoName: string } | null } | { __typename?: 'AppBuild', status: string, buildId: string } | { __typename?: 'Database', name: string, version: string, dbId: string, dbType: DbTypes } | null }> } };
 
 export type AppByIdQueryVariables = Exact<{
   appId: Scalars['String'];
@@ -1272,6 +1328,71 @@ export function useUnsetEnvVarMutation(baseOptions?: Apollo.MutationHookOptions<
 export type UnsetEnvVarMutationHookResult = ReturnType<typeof useUnsetEnvVarMutation>;
 export type UnsetEnvVarMutationResult = Apollo.MutationResult<UnsetEnvVarMutation>;
 export type UnsetEnvVarMutationOptions = Apollo.BaseMutationOptions<UnsetEnvVarMutation, UnsetEnvVarMutationVariables>;
+export const ActivityDocument = gql`
+    query Activity($page: Int, $limit: Int) {
+  activity(limit: $limit, page: $page) {
+    nextPage
+    prevPage
+    totalItems
+    totalPages
+    items {
+      name
+      description
+      createdAt
+      reference {
+        ... on App {
+          id
+          name
+          type
+          appMetaGithub {
+            repoOwner
+            repoName
+          }
+        }
+        ... on AppBuild {
+          buildId: id
+          status
+        }
+        ... on Database {
+          dbId: id
+          name
+          dbType: type
+          version
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useActivityQuery__
+ *
+ * To run a query within a React component, call `useActivityQuery` and pass it any options that fit your needs.
+ * When your component renders, `useActivityQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useActivityQuery({
+ *   variables: {
+ *      page: // value for 'page'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useActivityQuery(baseOptions?: Apollo.QueryHookOptions<ActivityQuery, ActivityQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ActivityQuery, ActivityQueryVariables>(ActivityDocument, options);
+      }
+export function useActivityLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ActivityQuery, ActivityQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ActivityQuery, ActivityQueryVariables>(ActivityDocument, options);
+        }
+export type ActivityQueryHookResult = ReturnType<typeof useActivityQuery>;
+export type ActivityLazyQueryHookResult = ReturnType<typeof useActivityLazyQuery>;
+export type ActivityQueryResult = Apollo.QueryResult<ActivityQuery, ActivityQueryVariables>;
 export const AppByIdDocument = gql`
     query appById($appId: String!) {
   app(appId: $appId) {

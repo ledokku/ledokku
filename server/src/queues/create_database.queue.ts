@@ -7,6 +7,7 @@ import { IQueue, Queue } from '../lib/queues/queue.decorator';
 import { sshConnect } from '../lib/ssh';
 import { DatabaseCreatedPayload } from '../modules/databases/data/models/database_created.payload';
 import { DokkuDatabaseRepository } from './../lib/dokku/dokku.database.repository';
+import { ActivityRepository } from './../modules/activity/data/repositories/activity.repository';
 import { DatabaseRepository } from './../modules/databases/data/repositories/database.repository';
 
 interface QueueArgs {
@@ -20,7 +21,8 @@ export class CreateDatabaseQueue extends IQueue<QueueArgs> {
   constructor(
     private pubsub: PubSub,
     private dokkuDatabaseRepository: DokkuDatabaseRepository,
-    private databaseRepository: DatabaseRepository
+    private databaseRepository: DatabaseRepository,
+    private activityRepository: ActivityRepository
   ) {
     super();
   }
@@ -72,6 +74,12 @@ export class CreateDatabaseQueue extends IQueue<QueueArgs> {
       name: databaseName,
       type: databaseType,
       version: dokkuDatabaseVersion,
+    });
+
+    await this.activityRepository.add({
+      name: `Base de datos "${createdDb.name}" creada`,
+      description: createdDb.id,
+      instance: createdDb,
     });
 
     $log.info(

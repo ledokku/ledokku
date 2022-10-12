@@ -6,6 +6,7 @@ import { IQueue, Queue } from '../lib/queues/queue.decorator';
 import { sshConnect } from '../lib/ssh';
 import { AppCreatedPayload } from '../modules/apps/data/models/app_created.payload';
 import { DokkuGitRepository } from './../lib/dokku/dokku.git.repository';
+import { ActivityRepository } from './../modules/activity/data/repositories/activity.repository';
 import { AppRepository } from './../modules/apps/data/repositories/app.repository';
 
 interface QueueArgs {
@@ -19,7 +20,8 @@ export class DeployAppQueue extends IQueue<QueueArgs> {
   constructor(
     private appRepository: AppRepository,
     private dokkuGitRepository: DokkuGitRepository,
-    private pubsub: PubSub
+    private pubsub: PubSub,
+    private activityRepository: ActivityRepository
   ) {
     super();
   }
@@ -72,6 +74,12 @@ export class DeployAppQueue extends IQueue<QueueArgs> {
     $log.info(
       `Finalizando de crear ${app.name} desde https://github.com/${repoOwner}/${repoName}.git`
     );
+
+    await this.activityRepository.add({
+      name: `Proyecto "${app.name}" creado`,
+      description: `Creado desde https://github.com/${repoOwner}/${repoName}.git`,
+      instance: app,
+    });
 
     if (!res.stderr) {
       this.pubsub.publish(SubscriptionTopics.APP_CREATED, <AppCreatedPayload>{

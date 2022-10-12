@@ -3,6 +3,7 @@ import { Job } from 'bullmq';
 import { DokkuAppRepository } from '../lib/dokku/dokku.app.repository';
 import { IQueue, Queue } from '../lib/queues/queue.decorator';
 import { sshConnect } from '../lib/ssh';
+import { ActivityRepository } from './../modules/activity/data/repositories/activity.repository';
 
 interface QueueArgs {
   appName: string;
@@ -11,7 +12,10 @@ interface QueueArgs {
 
 @Queue()
 export class UnsetEnvVarQueue extends IQueue<QueueArgs> {
-  constructor(private dokkuAppRepository: DokkuAppRepository) {
+  constructor(
+    private dokkuAppRepository: DokkuAppRepository,
+    private activityRepository: ActivityRepository
+  ) {
     super();
   }
 
@@ -25,6 +29,9 @@ export class UnsetEnvVarQueue extends IQueue<QueueArgs> {
     const ssh = await sshConnect();
 
     await this.dokkuAppRepository.unsetEnvVar(ssh, appName, key);
+    await this.activityRepository.add({
+      name: `Variable de entorno "${key}" eliminada`,
+    });
 
     $log.info(
       `Finalizando resignacion de la variable de entorno ${appName} con ${key}`

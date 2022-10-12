@@ -6,6 +6,7 @@ import { IQueue, Queue } from '../lib/queues/queue.decorator';
 import { sshConnect } from '../lib/ssh';
 import { DatabaseLinkPayload } from '../modules/databases/data/models/database_link.payload';
 import { DokkuDatabaseRepository } from './../lib/dokku/dokku.database.repository';
+import { ActivityRepository } from './../modules/activity/data/repositories/activity.repository';
 import { AppRepository } from './../modules/apps/data/repositories/app.repository';
 import { DatabaseRepository } from './../modules/databases/data/repositories/database.repository';
 
@@ -20,7 +21,8 @@ export class LinkDatabaseQueue extends IQueue<QueueArgs> {
     private appRepository: AppRepository,
     private databaseRepository: DatabaseRepository,
     private dokkuDatabaseRepository: DokkuDatabaseRepository,
-    private pubsub: PubSub
+    private pubsub: PubSub,
+    private activityRepository: ActivityRepository
   ) {
     super();
   }
@@ -66,10 +68,16 @@ export class LinkDatabaseQueue extends IQueue<QueueArgs> {
       }
     );
 
-    this.databaseRepository.update(database.id, {
+    await this.databaseRepository.update(database.id, {
       apps: {
         connect: { id: app.id },
       },
+    });
+
+    await this.activityRepository.add({
+      name: `Base de datos "${database.name}" enlazada con "${app.name}"`,
+      description: database.id,
+      instance: database,
     });
 
     $log.info(
