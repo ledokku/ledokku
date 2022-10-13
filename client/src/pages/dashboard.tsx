@@ -25,7 +25,7 @@ export const Dashboard = () => {
     <>
       <div className='w-full flex flex-col md:flex-row justify-end mb-8 items-end'>
         <Link to="/create-database">
-          <Button bordered className='mr-4 mb-4 md:mb-0'>
+          <Button bordered className='mr-0 md:mr-4 mb-4 md:mb-0'>
             Crear base de datos
           </Button>
         </Link>

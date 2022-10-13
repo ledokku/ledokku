@@ -1,6 +1,7 @@
 import { Container, Image } from "@nextui-org/react"
 import { ReactNode } from "react"
 import useDarkMode from "use-dark-mode";
+import { Footer } from "../components/Footer";
 import { Header } from "../components/Header"
 
 interface AdminLayoutProps {
@@ -18,5 +19,6 @@ export const AdminLayout = ({ children }: AdminLayoutProps) => {
         <Container className="py-16" id="container-up">
             {children}
         </Container>
+        <Footer />
     </>
 }
