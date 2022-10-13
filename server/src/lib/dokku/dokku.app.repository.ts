@@ -65,8 +65,10 @@ export class DokkuAppRepository {
     const envVars = resultListEnv.stdout.split('\n');
     envVars.splice(0, 1);
 
+    console.log(envVars);
+
     return envVars.map((envVar) => {
-      const split = envVar.split(': ');
+      const split = envVar.split(':');
       return {
         key: split[0],
         value: split[1].trim(),

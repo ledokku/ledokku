@@ -1,4 +1,4 @@
-import { Avatar, Dropdown, Navbar } from '@nextui-org/react';
+import { Avatar, Dropdown, Link, Navbar } from '@nextui-org/react';
 import { useLocation } from 'react-router';
 import useDarkMode from 'use-dark-mode';
 import { useAuth } from '../../modules/auth/AuthContext';
@@ -9,15 +9,24 @@ export const Header = () => {
   const darkMode = useDarkMode(false);
   const location = useLocation();
 
+  const menuItems: { link: string, name: string }[] = [
+    { link: '/dashboard', name: "Inicio" },
+    { link: '/apps', name: "Aplicaciones" },
+    { link: '/databases', name: "Bases de datos" },
+    { link: '/activity', name: "Actividad" },
+    { link: '/metrics', name: "Metricas" },
+    { link: '/settings', name: "Configuración" },
+  ];
+
   return (
-    <Navbar >
-      <Navbar.Brand><OCStudiosLogo /></Navbar.Brand>
-      <Navbar.Content variant='underline-rounded'>
-        <Navbar.Link href='/dashboard' isActive={location.pathname === '/dashboard'}>Panel de control</Navbar.Link>
-        <Navbar.Link href='/activity' isActive={location.pathname === '/activity'}>Actividad</Navbar.Link>
-        <Navbar.Link href='/metrics' isActive={location.pathname === '/metrics'}>Metricas</Navbar.Link>
-        <Navbar.Link href='/settings' isActive={location.pathname === '/settings'}>Configuración</Navbar.Link>
+    <Navbar variant="floating" css={{ background: "transparent" }}>
+      <Navbar.Brand><Navbar.Toggle showIn="xs" className='mr-4' /><Link href='/dashboard'><OCStudiosLogo /></Link></Navbar.Brand>
+      <Navbar.Content variant='underline-rounded' hideIn="xs">
+        {menuItems.map(it => <Navbar.Link href={it.link} isActive={location.pathname === it.link}>{it.name}</Navbar.Link>)}
       </Navbar.Content>
+      <Navbar.Collapse>
+        {menuItems.map(it => <Navbar.CollapseItem><Link color="inherit" href={it.link}>{it.name}</Link></Navbar.CollapseItem>)}
+      </Navbar.Collapse>
       <Navbar.Content>
         <Navbar.Item>
           <Dropdown>

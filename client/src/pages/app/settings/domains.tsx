@@ -5,7 +5,6 @@ import { AppHeaderInfo } from '../../../modules/app/AppHeaderInfo';
 import { AppHeaderTabNav } from '../../../modules/app/AppHeaderTabNav';
 import { AppSettingsMenu } from '../../../modules/app/AppSettingsMenu';
 import { AppDomains } from '../../../modules/domains/AppDomains';
-import { Header } from '../../../ui';
 
 export const AppSettingsDomains = () => {
   const { id: appId } = useParams<{ id: string }>();
@@ -33,12 +32,11 @@ export const AppSettingsDomains = () => {
   return (
     <>
       <div>
-        <Header />
         <AppHeaderInfo app={app} />
         <AppHeaderTabNav app={app} />
       </div>
 
-      <Container className='mt-16'>
+      <Container className='mt-4'>
         <Grid.Container
           gap={4}
         >

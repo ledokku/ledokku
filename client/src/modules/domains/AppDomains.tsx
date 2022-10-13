@@ -8,6 +8,7 @@ import {
 import { AddAppDomain } from './AddAppDomain';
 import { useToast } from '../../ui/toast';
 import { Button, Grid, Link, Loading, Table, Text } from '@nextui-org/react';
+import { LoadingSection } from '../../ui/components/LoadingSection';
 
 interface AppDomainProps {
   appId: string;
@@ -63,7 +64,7 @@ export const AppDomains = ({ appId }: AppDomainProps) => {
 
   if (loading || domainsDataLoading) {
     // TODO nice loading
-    return <Loading />;
+    return <LoadingSection />;
   }
 
   const { app } = data;
@@ -76,7 +77,7 @@ export const AppDomains = ({ appId }: AppDomainProps) => {
   return (
     <Grid.Container gap={2}>
       <Grid xs={12} direction='column'>
-        <Text h2>
+        <Text h3>
           Configuración de dominios
         </Text>
         <Text>

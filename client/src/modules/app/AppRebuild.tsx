@@ -4,9 +4,10 @@ import { TerminalOutput } from 'react-terminal-ui';
 import {
   LogPayload, useAppByIdQuery, useAppRebuildLogsSubscription, useRebuildAppMutation
 } from '../../generated/graphql';
+import { LoadingSection } from '../../ui/components/LoadingSection';
 import {
   Terminal
-} from '../../ui';
+} from '../../ui/components/Terminal';
 import { useToast } from '../../ui/toast';
 
 interface AppRebuildProps {
@@ -76,7 +77,7 @@ export const AppRebuild = ({ appId }: AppRebuildProps) => {
 
   if (loading) {
     // TODO nice loading
-    return <Loading />;
+    return <LoadingSection />;
   }
 
   const { app } = data;

@@ -1,4 +1,4 @@
-import { Container, Navbar } from '@nextui-org/react';
+import { Navbar } from '@nextui-org/react';
 import { useLocation } from 'react-router';
 
 interface DatabaseHeaderTabNavProps {
@@ -19,30 +19,28 @@ export const DatabaseHeaderTabNav = ({
       : 'index';
 
   return (
-    <Container>
-      <Navbar disableShadow>
-        <Navbar.Content variant="underline-rounded">
-          <Navbar.Link
-            href={`/database/${database.id}`}
-            isActive={selectedRoute === 'index'}
-          >
-            Base de datos
-          </Navbar.Link>
+    <Navbar disableShadow className='z-0'>
+      <Navbar.Content variant="underline-rounded">
+        <Navbar.Link
+          href={`/database/${database.id}`}
+          isActive={selectedRoute === 'index'}
+        >
+          Base de datos
+        </Navbar.Link>
 
-          <Navbar.Link
-            href={`/database/${database.id}/logs`}
-            isActive={selectedRoute === 'logs'}
-          >
-            Registros
-          </Navbar.Link>
-          <Navbar.Link
-            href={`/database/${database.id}/settings`}
-            isActive={selectedRoute === 'settings'}
-          >
-            Configuración
-          </Navbar.Link>
-        </Navbar.Content>
-      </Navbar>
-    </Container>
+        <Navbar.Link
+          href={`/database/${database.id}/logs`}
+          isActive={selectedRoute === 'logs'}
+        >
+          Registros
+        </Navbar.Link>
+        <Navbar.Link
+          href={`/database/${database.id}/settings`}
+          isActive={selectedRoute === 'settings'}
+        >
+          Configuración
+        </Navbar.Link>
+      </Navbar.Content>
+    </Navbar>
   );
 };

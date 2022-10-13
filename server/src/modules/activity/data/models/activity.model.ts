@@ -1,6 +1,6 @@
 import { Activity as ActivityClass, ModelReferences } from '@prisma/client';
 import { createUnionType, Field, ObjectType } from 'type-graphql';
-import { createBasePaginationInfo } from '../../../../data/models/pagination_info';
+import { BasePaginationInfo } from '../../../../data/models/pagination_info';
 import { App } from '../../../apps/data/models/app.model';
 import { AppBuild } from '../../../app_build/data/models/app_build.model';
 import { Database } from '../../../databases/data/models/database.model';
@@ -27,10 +27,8 @@ export class Activity implements ActivityClass {
   referenceId: string | null;
   modifierId: string | null;
 }
-
-const BasePagination = createBasePaginationInfo(Activity);
-@ObjectType({ implements: BasePagination })
-export class ActivityPaginationInfo extends BasePagination {}
+@ObjectType()
+export class ActivityPaginationInfo extends BasePaginationInfo(Activity) {}
 
 export const ActivityModelUnion = createUnionType({
   name: 'ActivityModelUnion',

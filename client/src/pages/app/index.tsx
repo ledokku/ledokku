@@ -9,19 +9,15 @@ import {
   useLinkDatabaseLogsSubscription,
   LogPayload,
 } from '../../generated/graphql';
-
-import {
-  DatabaseLabel,
-  Terminal,
-  Header,
-} from '../../ui';
 import { useToast } from '../../ui/toast';
 import { AppHeaderTabNav } from '../../modules/app/AppHeaderTabNav';
 import { AppHeaderInfo } from '../../modules/app/AppHeaderInfo';
-import { Button, Card, Container, Dropdown, Grid, Link, Loading, Modal, Spacer, Table, Text } from '@nextui-org/react';
+import { Button, Card, Dropdown, Grid, Link, Loading, Modal, Spacer, Table, Text } from '@nextui-org/react';
 import { TerminalOutput } from 'react-terminal-ui';
 import { dbTypeToIcon } from '../utils';
 import { FiInfo } from 'react-icons/fi';
+import { DatabaseLabel } from '../../ui/components/DatabaseLabel';
+import { Terminal } from '../../ui/components/Terminal';
 
 export const App = () => {
   const history = useHistory();
@@ -92,7 +88,11 @@ export const App = () => {
   const {
     data: databaseData,
     loading: databaseDataLoading,
-  } = useDatabaseQuery();
+  } = useDatabaseQuery({
+    variables: {
+      limit: 1_000_000
+    }
+  });
 
   const { data, loading, refetch /* error */ } = useAppByIdQuery({
     variables: {
@@ -125,7 +125,7 @@ export const App = () => {
 
   const linkedDatabases = app.databases;
   const linkedIds = linkedDatabases?.map((db) => db.id);
-  const notLinkedDatabases = databases.filter((db) => {
+  const notLinkedDatabases = databases.items.filter((db) => {
     return linkedIds?.indexOf(db.id) === -1;
   });
 
@@ -175,326 +175,322 @@ export const App = () => {
   };
 
   return (
-    <div>
+    <>
       <div>
-        <Header />
         <AppHeaderInfo app={app} />
         <AppHeaderTabNav app={app} />
       </div>
+      <Grid.Container gap={4} >
+        <Grid xs={12} md={6} className="flex flex-col">
+          <Text h3 className='mb-8'>
+            Información de la aplicación
+          </Text>
+          <Table>
+            <Table.Header>
+              <Table.Column> </Table.Column>
+              <Table.Column>VALOR</Table.Column>
+            </Table.Header>
+            <Table.Body>
+              <Table.Row>
+                <Table.Cell>
+                  Nombre
+                </Table.Cell>
+                <Table.Cell>
+                  {app.name}
+                </Table.Cell>
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell>
+                  Identificador
+                </Table.Cell>
+                <Table.Cell>
+                  {app.id}
+                </Table.Cell>
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell>
+                  Creado el
+                </Table.Cell>
+                <Table.Cell>
+                  {new Date(app.createdAt).toLocaleString("es", { dateStyle: 'full', timeStyle: 'long' })}
+                </Table.Cell>
+              </Table.Row>
+            </Table.Body>
+          </Table>
+        </Grid>
+        <Grid xs={12} md={6} className="flex flex-col">
+          <Text h3 className='mb-8'>
+            Bases de datos conectadas
+          </Text>
+          {databases.items.length === 0 ? (
+            <>
+              <div className="mt-4 mb-4">
+                <Text className="text-gray-400">
+                  Actualmente no has creado bases de datos, para hacerlo haz el procesos de creación de bases de datos.
+                </Text>
+              </div>
+              <RouterLink
+                to={{
+                  pathname: '/create-database/',
+                  state: app.name,
+                }}
+              >
+                <Button>
+                  Crear una base de datos
+                </Button>
+              </RouterLink>
+            </>
+          ) : (
+            <>
+              {notLinkedDatabases.length !== 0 ? (
+                <div>
+                  <Dropdown>
+                    <Dropdown.Button flat>{selectedDb.label}</Dropdown.Button>
+                    <Dropdown.Menu
+                      selectionMode='single'
+                      selectedKeys={new Set([selectedDb.value.id])}
+                      onAction={(key) => {
+                        const db = dbOptions.find((option) => option.value.id === key)
 
-      <Container className="my-8">
-        <Grid.Container gap={4} >
-          <Grid xs={12} md={6} className="flex flex-col">
-            <Text h3 className='mb-8'>
-              Información de la aplicación
-            </Text>
-            <Table>
-              <Table.Header>
-                <Table.Column> </Table.Column>
-                <Table.Column>VALOR</Table.Column>
-              </Table.Header>
-              <Table.Body>
-                <Table.Row>
-                  <Table.Cell>
-                    Nombre
-                  </Table.Cell>
-                  <Table.Cell>
-                    {app.name}
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>
-                    Identificador
-                  </Table.Cell>
-                  <Table.Cell>
-                    {app.id}
-                  </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>
-                    Creado el
-                  </Table.Cell>
-                  <Table.Cell>
-                    {new Date(app.createdAt).toLocaleString("es", { dateStyle: 'full', timeStyle: 'long' })}
-                  </Table.Cell>
-                </Table.Row>
-              </Table.Body>
-            </Table>
-          </Grid>
-          <Grid xs={12} md={6} className="flex flex-col">
-            <Text h3 className='mb-8'>
-              Bases de datos conectadas
-            </Text>
-            {databases.length === 0 ? (
-              <>
-                <div className="mt-4 mb-4">
-                  <Text className="text-gray-400">
-                    Actualmente no has creado bases de datos, para hacerlo haz el procesos de creación de bases de datos.
-                  </Text>
-                </div>
-                <RouterLink
-                  to={{
-                    pathname: '/create-database/',
-                    state: app.name,
-                  }}
-                >
-                  <Button>
-                    Crear una base de datos
+                        if (key === 'create-new-database-internal-id') {
+                          history.push({
+                            pathname: '/create-database',
+                            state: app.name,
+                          })
+                        } else if (db) {
+                          setSelectedDb({
+                            label: db.value.name,
+                            value: db.value
+                          })
+                        }
+                      }} color="primary">
+                      <Dropdown.Section>
+                        {dbOptions.map(database => (<Dropdown.Item key={database.value.id}>{database.label}</Dropdown.Item>))}
+                      </Dropdown.Section>
+                      <Dropdown.Section>
+                        <Dropdown.Item key="create-new-database-internal-id">Crear base de datos nueva</Dropdown.Item>
+                      </Dropdown.Section>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                  {databaseLinkError && (
+                    <Text color='$error'>
+                      {databaseLinkError.graphQLErrors[0].message}
+                    </Text>
+                  )}
+
+                  <Button
+                    className="mt-4"
+                    disabled={!selectedDb.value.id || linkLoading}
+                    onClick={() => {
+                      setIsLinkModalOpen(true);
+                    }}
+                  >
+                    {databaseLinkLoading &&
+                      !databaseLinkData &&
+                      !databaseLinkError ? <Loading color="currentColor" /> : "Enlazar base de datos"}
                   </Button>
-                </RouterLink>
-              </>
-            ) : (
-              <>
-                {notLinkedDatabases.length !== 0 ? (
-                  <div>
-                    <Dropdown>
-                      <Dropdown.Button flat>{selectedDb.label}</Dropdown.Button>
-                      <Dropdown.Menu
-                        selectionMode='single'
-                        selectedKeys={new Set([selectedDb.value.id])}
-                        onAction={(key) => {
-                          const db = dbOptions.find((option) => option.value.id === key)
 
-                          if (key === 'create-new-database-internal-id') {
-                            history.push({
-                              pathname: '/create-database',
-                              state: app.name,
-                            })
-                          } else if (db) {
-                            setSelectedDb({
-                              label: db.value.name,
-                              value: db.value
-                            })
-                          }
-                        }} color="primary">
-                        <Dropdown.Section>
-                          {dbOptions.map(database => (<Dropdown.Item key={database.value.id}>{database.label}</Dropdown.Item>))}
-                        </Dropdown.Section>
-                        <Dropdown.Section>
-                          <Dropdown.Item key="create-new-database-internal-id">Crear base de datos nueva</Dropdown.Item>
-                        </Dropdown.Section>
-                      </Dropdown.Menu>
-                    </Dropdown>
-                    {databaseLinkError && (
-                      <Text color='$error'>
-                        {databaseLinkError.graphQLErrors[0].message}
-                      </Text>
-                    )}
-
-                    <Button
-                      className="mt-4"
-                      disabled={!selectedDb.value.id || linkLoading}
-                      onClick={() => {
-                        setIsLinkModalOpen(true);
-                      }}
-                    >
-                      {databaseLinkLoading &&
-                        !databaseLinkData &&
-                        !databaseLinkError ? <Loading color="currentColor" /> : "Enlazar base de datos"}
-                    </Button>
-
-                    <Modal
-                      preventClose={processStatus === 'running'}
-                      width={isTerminalVisible ? "70%" : undefined}
-                      open={isLinkModalOpen} closeButton blur onClose={() => {
-                        setIsLinkModalOpen(false);
-                        refetch({ appId });
-                        setLinkLoading(false);
-                        setIsTerminalVisible(false);
-                        setProcessStatus('notStarted');
-                      }}>
-                      <Modal.Header><Text h4>Enlazar base de datos</Text></Modal.Header>
-                      <Modal.Body>
-                        {isTerminalVisible ? (
-                          <>
-                            <Text className="mb-2 " >
-                              ¡Enlazando base de datos <b>{selectedDb.value.name}</b> con <b>{app.name}</b>!
-                            </Text>
-                            <Text>
-                              El proceso de enlace usualmente tarda unos minutos. Respira un poco, los registros aparecerán pronto:
-                            </Text>
-                            <Terminal className={'w-6/6'}>
-                              {arrayOfLinkLogs.map((log) => (
-                                <TerminalOutput
-                                  key={arrayOfLinkLogs.indexOf(log)}
-                                >
-                                  {log.message}
-                                </TerminalOutput>
-                              ))}
-                            </Terminal>
-                          </>
-                        ) : (
-                          <p>
-                            ¿Estás seguro de enlazar la base de datos <b>{selectedDb.value.name}</b> con <b>{app.name}</b>?
-                          </p>
-                        )}
-                      </Modal.Body>
-                      <Modal.Footer>
-                        <Button
-                          disabled={processStatus === 'running'}
-                          size="sm"
-                          color="error"
-                          bordered
-                          onClick={() => {
-                            setIsLinkModalOpen(false);
-                            refetch({ appId });
-                            setLinkLoading(false);
-                            setIsTerminalVisible(false);
-                            setProcessStatus('notStarted');
-                          }}
-                        >Cancelar</Button>
-                        <Button
-                          size="sm"
-                          type="submit"
-                          onClick={() => {
-                            setProcessStatus('running');
-                            handleConnect(selectedDb.value.id, appId);
-                          }}
-                          disabled={isTerminalVisible}
-                        >
-                          {(isTerminalVisible ? false : linkLoading) ? <Loading size='sm' color="currentColor" /> : "Enlazar"}
-                        </Button>
-                      </Modal.Footer>
-                    </Modal>
+                  <Modal
+                    preventClose={processStatus === 'running'}
+                    width={isTerminalVisible ? "70%" : undefined}
+                    open={isLinkModalOpen} closeButton blur onClose={() => {
+                      setIsLinkModalOpen(false);
+                      refetch({ appId });
+                      setLinkLoading(false);
+                      setIsTerminalVisible(false);
+                      setProcessStatus('notStarted');
+                    }}>
+                    <Modal.Header><Text h4>Enlazar base de datos</Text></Modal.Header>
+                    <Modal.Body>
+                      {isTerminalVisible ? (
+                        <>
+                          <Text className="mb-2 " >
+                            ¡Enlazando base de datos <b>{selectedDb.value.name}</b> con <b>{app.name}</b>!
+                          </Text>
+                          <Text>
+                            El proceso de enlace usualmente tarda unos minutos. Respira un poco, los registros aparecerán pronto:
+                          </Text>
+                          <Terminal className={'w-6/6'}>
+                            {arrayOfLinkLogs.map((log) => (
+                              <TerminalOutput
+                                key={arrayOfLinkLogs.indexOf(log)}
+                              >
+                                {log.message}
+                              </TerminalOutput>
+                            ))}
+                          </Terminal>
+                        </>
+                      ) : (
+                        <p>
+                          ¿Estás seguro de enlazar la base de datos <b>{selectedDb.value.name}</b> con <b>{app.name}</b>?
+                        </p>
+                      )}
+                    </Modal.Body>
+                    <Modal.Footer>
+                      <Button
+                        disabled={processStatus === 'running'}
+                        size="sm"
+                        color="error"
+                        bordered
+                        onClick={() => {
+                          setIsLinkModalOpen(false);
+                          refetch({ appId });
+                          setLinkLoading(false);
+                          setIsTerminalVisible(false);
+                          setProcessStatus('notStarted');
+                        }}
+                      >Cancelar</Button>
+                      <Button
+                        size="sm"
+                        type="submit"
+                        onClick={() => {
+                          setProcessStatus('running');
+                          handleConnect(selectedDb.value.id, appId);
+                        }}
+                        disabled={isTerminalVisible}
+                      >
+                        {(isTerminalVisible ? false : linkLoading) ? <Loading size='sm' color="currentColor" /> : "Enlazar"}
+                      </Button>
+                    </Modal.Footer>
+                  </Modal>
+                </div>
+              ) : (
+                <>
+                  <Text>
+                    Todas las bases de datos ya están enlazadas con esta aplicación. Si quieres crear más bases de datos inicia el proceso de creación de bases de datos.
+                  </Text>
+                  <div className='mt-4'>
+                    <Link href="/create-database">
+                      <Button
+                        bordered
+                        className="text-sm mr-3"
+                      >
+                        Crear base de datos
+                      </Button>
+                    </Link>
                   </div>
-                ) : (
-                  <>
-                    <Text>
-                      Todas las bases de datos ya están enlazadas con esta aplicación. Si quieres crear más bases de datos inicia el proceso de creación de bases de datos.
-                    </Text>
-                    <div className='mt-4'>
-                      <Link href="/create-database">
-                        <Button
-                          bordered
-                          className="text-sm mr-3"
-                        >
-                          Crear base de datos
-                        </Button>
-                      </Link>
-                    </div>
-                  </>
-                )}
-                {!loading && app && app.databases && (
-                  <>
-                    <Text h3 className='mt-8 mb-4'>
-                      {app.databases.length > 0 && 'Bases de datos enlazadas'}
-                    </Text>
-                    <div className='flex flex-col'>
-                      {app.databases.map((database, index) => {
-                        const DbIcon = dbTypeToIcon(database.type)
-                        return (
-                          <div>
-                            <Card
-                              variant='bordered'
-                              key={index}
-                            >
-                              <Card.Body>
-                                <div className='flex flex-row items-center'>
-                                  <DbIcon size={24} />
-                                  <Text className='mx-4 text-lg' b css={{ flexGrow: 1 }}>{database.name}</Text>
-                                  <Link
-                                    href={`/database/${database.id}`}
-                                  >
-                                    <Button
-                                      className='mr-2'
-                                      css={{ minWidth: "fit-content" }}
-                                      color="primary"
-                                      size="sm"
-                                      icon={<FiInfo size={16} />}
-                                    />
-                                  </Link>
-                                  <Button
-                                    color="error"
-                                    size="sm"
-                                    onClick={() => {
-                                      setIsUnlinkModalOpen(true);
-                                      setdatabaseAboutToUnlink(database.name);
-                                    }}
-                                  >
-                                    Desenlazar
-                                  </Button>
-                                </div>
-                              </Card.Body>
-                            </Card>
-
-                            <Modal preventClose={processStatus === 'running'}
-                              width={isTerminalVisible ? "70%" : undefined}
-                              open={isUnlinkModalOpen} closeButton blur onClose={() => {
-                                setIsUnlinkModalOpen(false);
-                                refetch({ appId });
-                                setUnlinkLoading(false);
-                                setIsTerminalVisible(false);
-                                setdatabaseAboutToUnlink('');
-                                setProcessStatus('notStarted');
-                              }}>
-                              <Modal.Header><Text h4>Desenlazar base de datos</Text></Modal.Header>
-                              <Modal.Body>
-                                {isTerminalVisible ? (
-                                  <>
-                                    <p className="mb-2 ">
-                                      ¡Desenlazando <b>{app.name}</b> de <b>{databaseAboutToUnlink}</b>!
-                                    </p>
-                                    <p className="text-gray-500 mb-2">
-                                      El proceso de desenlace usualmente tarda unos minutos. Respira un poco, los registros apareceran pronto:
-                                    </p>
-                                    <Terminal className={'w-6/6'}>
-                                      {arrayOfUnlinkLogs.map((log) => (
-                                        <TerminalOutput
-                                          key={arrayOfUnlinkLogs.indexOf(log)}
-                                        >
-                                          {log.message}
-                                        </TerminalOutput>
-                                      ))}
-                                    </Terminal>
-                                  </>
-                                ) : (
-                                  <p>
-                                    ¿Estás seguro de desenlazar <b>{app.name}</b> de <b>{databaseAboutToUnlink}</b>?
-                                  </p>
-                                )}
-                              </Modal.Body>
-                              <Modal.Footer>
-                                <Button
-                                  disabled={processStatus === 'running'}
-                                  size="sm"
-
-                                  bordered
-                                  onClick={() => {
-                                    setIsUnlinkModalOpen(false);
-                                    refetch({ appId });
-                                    setUnlinkLoading(false);
-                                    setIsTerminalVisible(false);
-                                    setdatabaseAboutToUnlink('');
-                                    setProcessStatus('notStarted');
-                                  }}
-                                >Cancelar</Button>
-                                <Button
-                                  size="sm"
-                                  type="submit"
-                                  color="error"
-                                  onClick={() => {
-                                    setProcessStatus('running');
-                                    handleUnlink(database.id, appId);
-                                  }}
-                                  disabled={isTerminalVisible}
+                </>
+              )}
+              {!loading && app && app.databases && (
+                <>
+                  <Text h3 className='mt-8 mb-4'>
+                    {app.databases.length > 0 && 'Bases de datos enlazadas'}
+                  </Text>
+                  <div className='flex flex-col'>
+                    {app.databases.map((database, index) => {
+                      const DbIcon = dbTypeToIcon(database.type)
+                      return (
+                        <div>
+                          <Card
+                            variant='bordered'
+                            key={index}
+                          >
+                            <Card.Body>
+                              <div className='flex flex-row items-center'>
+                                <DbIcon size={24} />
+                                <Text className='mx-4 text-lg' b css={{ flexGrow: 1 }}>{database.name}</Text>
+                                <Link
+                                  href={`/database/${database.id}`}
                                 >
-                                  {(isTerminalVisible ? false : unlinkLoading) ? <Loading size='sm' color="currentColor" /> : "Desenlazar"}
+                                  <Button
+                                    className='mr-2'
+                                    css={{ minWidth: "fit-content" }}
+                                    color="primary"
+                                    size="sm"
+                                    icon={<FiInfo size={16} />}
+                                  />
+                                </Link>
+                                <Button
+                                  color="error"
+                                  size="sm"
+                                  onClick={() => {
+                                    setIsUnlinkModalOpen(true);
+                                    setdatabaseAboutToUnlink(database.name);
+                                  }}
+                                >
+                                  Desenlazar
                                 </Button>
-                              </Modal.Footer>
-                            </Modal>
+                              </div>
+                            </Card.Body>
+                          </Card>
 
-                            <Spacer />
-                          </div>
-                        )
-                      })}
-                    </div>
-                  </>
-                )}
-              </>
-            )}
-          </Grid>
-        </Grid.Container>
-      </Container>
-    </div>
+                          <Modal preventClose={processStatus === 'running'}
+                            width={isTerminalVisible ? "70%" : undefined}
+                            open={isUnlinkModalOpen} closeButton blur onClose={() => {
+                              setIsUnlinkModalOpen(false);
+                              refetch({ appId });
+                              setUnlinkLoading(false);
+                              setIsTerminalVisible(false);
+                              setdatabaseAboutToUnlink('');
+                              setProcessStatus('notStarted');
+                            }}>
+                            <Modal.Header><Text h4>Desenlazar base de datos</Text></Modal.Header>
+                            <Modal.Body>
+                              {isTerminalVisible ? (
+                                <>
+                                  <p className="mb-2 ">
+                                    ¡Desenlazando <b>{app.name}</b> de <b>{databaseAboutToUnlink}</b>!
+                                  </p>
+                                  <p className="text-gray-500 mb-2">
+                                    El proceso de desenlace usualmente tarda unos minutos. Respira un poco, los registros apareceran pronto:
+                                  </p>
+                                  <Terminal className={'w-6/6'}>
+                                    {arrayOfUnlinkLogs.map((log) => (
+                                      <TerminalOutput
+                                        key={arrayOfUnlinkLogs.indexOf(log)}
+                                      >
+                                        {log.message}
+                                      </TerminalOutput>
+                                    ))}
+                                  </Terminal>
+                                </>
+                              ) : (
+                                <p>
+                                  ¿Estás seguro de desenlazar <b>{app.name}</b> de <b>{databaseAboutToUnlink}</b>?
+                                </p>
+                              )}
+                            </Modal.Body>
+                            <Modal.Footer>
+                              <Button
+                                disabled={processStatus === 'running'}
+                                size="sm"
+
+                                bordered
+                                onClick={() => {
+                                  setIsUnlinkModalOpen(false);
+                                  refetch({ appId });
+                                  setUnlinkLoading(false);
+                                  setIsTerminalVisible(false);
+                                  setdatabaseAboutToUnlink('');
+                                  setProcessStatus('notStarted');
+                                }}
+                              >Cancelar</Button>
+                              <Button
+                                size="sm"
+                                type="submit"
+                                color="error"
+                                onClick={() => {
+                                  setProcessStatus('running');
+                                  handleUnlink(database.id, appId);
+                                }}
+                                disabled={isTerminalVisible}
+                              >
+                                {(isTerminalVisible ? false : unlinkLoading) ? <Loading size='sm' color="currentColor" /> : "Desenlazar"}
+                              </Button>
+                            </Modal.Footer>
+                          </Modal>
+
+                          <Spacer />
+                        </div>
+                      )
+                    })}
+                  </div>
+                </>
+              )}
+            </>
+          )}
+        </Grid>
+      </Grid.Container>
+    </>
   );
 };

@@ -29,7 +29,7 @@ export type Activity = {
 
 export type ActivityModelUnion = App | AppBuild | Database;
 
-export type ActivityPaginationInfo = BasePaginationInfo & {
+export type ActivityPaginationInfo = {
   __typename?: 'ActivityPaginationInfo';
   items: Array<Activity>;
   nextPage?: Maybe<Scalars['Int']>;
@@ -86,6 +86,16 @@ export type AppGithubMeta = {
   updatedAt: Scalars['DateTime'];
 };
 
+export type AppPaginationInfo = {
+  __typename?: 'AppPaginationInfo';
+  items: Array<App>;
+  nextPage?: Maybe<Scalars['Int']>;
+  page: Scalars['Int'];
+  prevPage?: Maybe<Scalars['Int']>;
+  totalItems: Scalars['Int'];
+  totalPages: Scalars['Int'];
+};
+
 export type AppTypes =
   | 'DOCKER'
   | 'DOKKU'
@@ -95,15 +105,6 @@ export type AppTypes =
 export type Auth = {
   __typename?: 'Auth';
   token: Scalars['String'];
-};
-
-export type BasePaginationInfo = {
-  items: Array<Activity>;
-  nextPage?: Maybe<Scalars['Int']>;
-  page: Scalars['Int'];
-  prevPage?: Maybe<Scalars['Int']>;
-  totalItems: Scalars['Int'];
-  totalPages: Scalars['Int'];
 };
 
 export type BooleanResult = {
@@ -153,6 +154,16 @@ export type Database = {
 export type DatabaseInfo = {
   __typename?: 'DatabaseInfo';
   info: Array<Scalars['String']>;
+};
+
+export type DatabasePaginationInfo = {
+  __typename?: 'DatabasePaginationInfo';
+  items: Array<Database>;
+  nextPage?: Maybe<Scalars['Int']>;
+  page: Scalars['Int'];
+  prevPage?: Maybe<Scalars['Int']>;
+  totalItems: Scalars['Int'];
+  totalPages: Scalars['Int'];
 };
 
 export type DbTypes =
@@ -348,12 +359,12 @@ export type Query = {
   appLogs: Logs;
   appMetaGithub?: Maybe<AppGithubMeta>;
   appProxyPorts: Array<ProxyPort>;
-  apps: Array<App>;
+  apps: AppPaginationInfo;
   branches: Array<Branch>;
   database: Database;
   databaseInfo: DatabaseInfo;
   databaseLogs: Logs;
-  databases: Array<Database>;
+  databases: DatabasePaginationInfo;
   dokkuPlugins: PluginList;
   domains: DomainList;
   envVars: EnvVarList;
@@ -391,6 +402,12 @@ export type QueryAppProxyPortsArgs = {
 };
 
 
+export type QueryAppsArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
+};
+
+
 export type QueryBranchesArgs = {
   installationId: Scalars['String'];
   repositoryName: Scalars['String'];
@@ -409,6 +426,12 @@ export type QueryDatabaseInfoArgs = {
 
 export type QueryDatabaseLogsArgs = {
   databaseId: Scalars['String'];
+};
+
+
+export type QueryDatabasesArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -655,10 +678,13 @@ export type AppProxyPortsQueryVariables = Exact<{
 
 export type AppProxyPortsQuery = { __typename?: 'Query', appProxyPorts: Array<{ __typename?: 'ProxyPort', scheme: string, host: string, container: string }> };
 
-export type AppsQueryVariables = Exact<{ [key: string]: never; }>;
+export type AppsQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
+}>;
 
 
-export type AppsQuery = { __typename?: 'Query', apps: Array<{ __typename?: 'App', id: string, name: string }> };
+export type AppsQuery = { __typename?: 'Query', apps: { __typename?: 'AppPaginationInfo', totalPages: number, items: Array<{ __typename?: 'App', id: string, name: string, type: AppTypes, appMetaGithub?: { __typename?: 'AppGithubMeta', repoOwner: string, repoName: string } | null }> } };
 
 export type BranchesQueryVariables = Exact<{
   installationId: Scalars['String'];
@@ -668,10 +694,15 @@ export type BranchesQueryVariables = Exact<{
 
 export type BranchesQuery = { __typename?: 'Query', branches: Array<{ __typename?: 'Branch', name: string }> };
 
-export type DashboardQueryVariables = Exact<{ [key: string]: never; }>;
+export type DashboardQueryVariables = Exact<{
+  appLimit?: InputMaybe<Scalars['Int']>;
+  databaseLimit?: InputMaybe<Scalars['Int']>;
+  appPage?: InputMaybe<Scalars['Int']>;
+  databasePage?: InputMaybe<Scalars['Int']>;
+}>;
 
 
-export type DashboardQuery = { __typename?: 'Query', apps: Array<{ __typename?: 'App', id: string, name: string, createdAt: string, appMetaGithub?: { __typename?: 'AppGithubMeta', repoName: string, repoOwner: string } | null }>, databases: Array<{ __typename?: 'Database', id: string, name: string, type: DbTypes, createdAt: string }> };
+export type DashboardQuery = { __typename?: 'Query', apps: { __typename?: 'AppPaginationInfo', totalPages: number, items: Array<{ __typename?: 'App', id: string, name: string, createdAt: string, appMetaGithub?: { __typename?: 'AppGithubMeta', repoName: string, repoOwner: string } | null }> }, databases: { __typename?: 'DatabasePaginationInfo', totalPages: number, items: Array<{ __typename?: 'Database', id: string, name: string, type: DbTypes, createdAt: string }> } };
 
 export type DatabaseByIdQueryVariables = Exact<{
   databaseId: Scalars['String'];
@@ -694,10 +725,13 @@ export type DatabaseLogsQueryVariables = Exact<{
 
 export type DatabaseLogsQuery = { __typename?: 'Query', databaseLogs: { __typename?: 'Logs', logs: Array<string> } };
 
-export type DatabaseQueryVariables = Exact<{ [key: string]: never; }>;
+export type DatabaseQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
+}>;
 
 
-export type DatabaseQuery = { __typename?: 'Query', databases: Array<{ __typename?: 'Database', id: string, name: string, type: DbTypes }> };
+export type DatabaseQuery = { __typename?: 'Query', databases: { __typename?: 'DatabasePaginationInfo', totalPages: number, items: Array<{ __typename?: 'Database', id: string, name: string, type: DbTypes, version: string }> } };
 
 export type DomainsQueryVariables = Exact<{
   appId: Scalars['String'];
@@ -1515,10 +1549,18 @@ export type AppProxyPortsQueryHookResult = ReturnType<typeof useAppProxyPortsQue
 export type AppProxyPortsLazyQueryHookResult = ReturnType<typeof useAppProxyPortsLazyQuery>;
 export type AppProxyPortsQueryResult = Apollo.QueryResult<AppProxyPortsQuery, AppProxyPortsQueryVariables>;
 export const AppsDocument = gql`
-    query apps {
-  apps {
-    id
-    name
+    query apps($limit: Int, $page: Int) {
+  apps(limit: $limit, page: $page) {
+    items {
+      id
+      name
+      type
+      appMetaGithub {
+        repoOwner
+        repoName
+      }
+    }
+    totalPages
   }
 }
     `;
@@ -1535,6 +1577,8 @@ export const AppsDocument = gql`
  * @example
  * const { data, loading, error } = useAppsQuery({
  *   variables: {
+ *      limit: // value for 'limit'
+ *      page: // value for 'page'
  *   },
  * });
  */
@@ -1586,21 +1630,27 @@ export type BranchesQueryHookResult = ReturnType<typeof useBranchesQuery>;
 export type BranchesLazyQueryHookResult = ReturnType<typeof useBranchesLazyQuery>;
 export type BranchesQueryResult = Apollo.QueryResult<BranchesQuery, BranchesQueryVariables>;
 export const DashboardDocument = gql`
-    query dashboard {
-  apps {
-    id
-    name
-    createdAt
-    appMetaGithub {
-      repoName
-      repoOwner
+    query dashboard($appLimit: Int, $databaseLimit: Int, $appPage: Int, $databasePage: Int) {
+  apps(limit: $appLimit, page: $appPage) {
+    items {
+      id
+      name
+      createdAt
+      appMetaGithub {
+        repoName
+        repoOwner
+      }
     }
+    totalPages
   }
-  databases {
-    id
-    name
-    type
-    createdAt
+  databases(limit: $databaseLimit, page: $databasePage) {
+    items {
+      id
+      name
+      type
+      createdAt
+    }
+    totalPages
   }
 }
     `;
@@ -1617,6 +1667,10 @@ export const DashboardDocument = gql`
  * @example
  * const { data, loading, error } = useDashboardQuery({
  *   variables: {
+ *      appLimit: // value for 'appLimit'
+ *      databaseLimit: // value for 'databaseLimit'
+ *      appPage: // value for 'appPage'
+ *      databasePage: // value for 'databasePage'
  *   },
  * });
  */
@@ -1744,11 +1798,15 @@ export type DatabaseLogsQueryHookResult = ReturnType<typeof useDatabaseLogsQuery
 export type DatabaseLogsLazyQueryHookResult = ReturnType<typeof useDatabaseLogsLazyQuery>;
 export type DatabaseLogsQueryResult = Apollo.QueryResult<DatabaseLogsQuery, DatabaseLogsQueryVariables>;
 export const DatabaseDocument = gql`
-    query database {
-  databases {
-    id
-    name
-    type
+    query database($limit: Int, $page: Int) {
+  databases(limit: $limit, page: $page) {
+    items {
+      id
+      name
+      type
+      version
+    }
+    totalPages
   }
 }
     `;
@@ -1765,6 +1823,8 @@ export const DatabaseDocument = gql`
  * @example
  * const { data, loading, error } = useDatabaseQuery({
  *   variables: {
+ *      limit: // value for 'limit'
+ *      page: // value for 'page'
  *   },
  * });
  */

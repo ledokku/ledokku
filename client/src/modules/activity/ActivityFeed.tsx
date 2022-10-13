@@ -1,7 +1,8 @@
-import { Divider, Loading, Pagination, Text } from "@nextui-org/react";
+import { Divider, Pagination, Text } from "@nextui-org/react";
 import format from 'date-fns/format';
 import { useState } from "react";
 import { Activity, App, useActivityQuery } from "../../generated/graphql";
+import { LoadingSection } from "../../ui/components/LoadingSection";
 
 interface Props {
     isSinglePage?: boolean
@@ -37,7 +38,7 @@ export const ActivityFeed = ({ isSinglePage = false }: Props) => {
     })
 
     if (loading) {
-        return <Loading />
+        return <LoadingSection />
     }
 
     if (!data) {

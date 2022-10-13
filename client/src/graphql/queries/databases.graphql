@@ -1,7 +1,11 @@
-query database {
-  databases {
-    id
-    name
-    type
+query database($limit: Int, $page: Int) {
+  databases(limit: $limit, page: $page) {
+    items{
+      id
+      name
+      type
+      version
+    }
+    totalPages
   }
 }

@@ -5,7 +5,7 @@ import { AppHeaderInfo } from '../../../modules/app/AppHeaderInfo';
 import { AppHeaderTabNav } from '../../../modules/app/AppHeaderTabNav';
 import { AppSettingsMenu } from '../../../modules/app/AppSettingsMenu';
 import { AppProxyPorts } from '../../../modules/appProxyPorts/AppProxyPorts';
-import { Header } from '../../../ui';
+import { LoadingSection } from '../../../ui/components/LoadingSection';
 
 export const AppSettingsPorts = () => {
   const { id: appId } = useParams<{ id: string }>();
@@ -19,7 +19,7 @@ export const AppSettingsPorts = () => {
   // TODO display error
 
   if (loading) {
-    return <Loading />;
+    return <LoadingSection />;
   }
 
   if (!data?.app) {
@@ -32,12 +32,11 @@ export const AppSettingsPorts = () => {
   return (
     <>
       <div>
-        <Header />
         <AppHeaderInfo app={app} />
         <AppHeaderTabNav app={app} />
       </div>
 
-      <Container className='mt-16'>
+      <Container className='mt-4'>
         <Grid.Container
           gap={4}>
           <Grid xs={3}>

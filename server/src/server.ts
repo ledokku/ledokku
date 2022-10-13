@@ -11,7 +11,7 @@ import '@tsed/typegraphql';
 import { TypeGraphQLService } from '@tsed/typegraphql';
 import { ExpressContext } from 'apollo-server-express';
 import express from 'express';
-import { execute, subscribe } from 'graphql';
+import { execute, GraphQLError, subscribe } from 'graphql';
 import { PubSub } from 'graphql-subscriptions';
 import { useServer } from 'graphql-ws/lib/use/ws';
 import * as http from 'http';
@@ -62,9 +62,18 @@ registerProvider({
       },
       context: (expressContext: ExpressContext) =>
         ContextFactory.createFromHTTP(expressContext.req),
-      formatError: (err: any) => {
+      formatError: (err: GraphQLError) => {
         if (!IS_PRODUCTION) {
           $log.error(err);
+        }
+
+        if (err.message.startsWith('!     ')) {
+          return {
+            message: err.message.replace(/^!\s*/, ''),
+            extensions: err.extensions,
+            locations: err.locations,
+            path: err.path,
+          };
         }
         return err;
       },

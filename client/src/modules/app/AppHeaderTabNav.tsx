@@ -1,4 +1,4 @@
-import { Container, Navbar } from '@nextui-org/react';
+import { Navbar } from '@nextui-org/react';
 import { useLocation } from 'react-router';
 
 interface AppHeaderTabNavProps {
@@ -21,23 +21,21 @@ export const AppHeaderTabNav = ({ app }: AppHeaderTabNavProps) => {
         : 'index';
 
   return (
-    <Container>
-      <Navbar disableShadow>
-        <Navbar.Content variant="underline-rounded">
-          <Navbar.Link isActive={selectedRoute === 'index'} href={`/app/${app.id}`}>
-            Aplicación
-          </Navbar.Link>
-          <Navbar.Link isActive={selectedRoute === 'logs'} href={`/app/${app.id}/logs`}>
-            Registros
-          </Navbar.Link>
-          <Navbar.Link isActive={selectedRoute === 'env'} href={`/app/${app.id}/env`}>
-            Variables de entorno
-          </Navbar.Link>
-          <Navbar.Link isActive={selectedRoute === 'settings'} href={`/app/${app.id}/settings/ports`}>
-            Configuración
-          </Navbar.Link>
-        </Navbar.Content>
-      </Navbar>
-    </Container>
+    <Navbar disableShadow>
+      <Navbar.Content variant="underline-rounded">
+        <Navbar.Link isActive={selectedRoute === 'index'} href={`/app/${app.id}`}>
+          Aplicación
+        </Navbar.Link>
+        <Navbar.Link isActive={selectedRoute === 'logs'} href={`/app/${app.id}/logs`}>
+          Registros
+        </Navbar.Link>
+        <Navbar.Link isActive={selectedRoute === 'env'} href={`/app/${app.id}/env`}>
+          Variables de entorno
+        </Navbar.Link>
+        <Navbar.Link isActive={selectedRoute === 'settings'} href={`/app/${app.id}/settings/ports`}>
+          Configuración
+        </Navbar.Link>
+      </Navbar.Content>
+    </Navbar>
   );
 };

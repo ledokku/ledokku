@@ -5,9 +5,10 @@ import { TerminalOutput } from 'react-terminal-ui';
 import {
   LogPayload, useAppByIdQuery, useAppRestartLogsSubscription, useRestartAppMutation
 } from '../../generated/graphql';
+import { LoadingSection } from '../../ui/components/LoadingSection';
 import {
   Terminal
-} from '../../ui';
+} from '../../ui/components/Terminal';
 import { useToast } from '../../ui/toast';
 
 interface AppRestartProps {
@@ -77,7 +78,7 @@ export const AppRestart = ({ appId }: AppRestartProps) => {
 
   if (loading) {
     // TODO nice loading
-    return <Loading />;
+    return <LoadingSection />;
   }
 
   const { app } = data;

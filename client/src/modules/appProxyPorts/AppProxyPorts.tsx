@@ -8,6 +8,7 @@ import { AddAppProxyPorts } from './AddAppProxyPorts';
 import { useToast } from '../../ui/toast';
 import { Button, Grid, Loading, Modal, Table, Text } from '@nextui-org/react';
 import { Alert } from '../../ui/components/Alert';
+import { LoadingSection } from '../../ui/components/LoadingSection';
 
 interface AppProxyPortsProps {
   appId: string;
@@ -64,7 +65,7 @@ export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
   return (
     <Grid.Container gap={2}>
       <Grid xs={12} className='flex flex-col'>
-        <Text h2>
+        <Text h3>
           Configuración de puertos
         </Text>
         <Text>
@@ -72,7 +73,7 @@ export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
         </Text>
 
         {appProxyPortsLoading ? (
-          <Loading />
+          <LoadingSection />
         ) : null}
       </Grid>
 

@@ -2,9 +2,11 @@ import { BadRequest, Conflict, NotFound } from '@tsed/exceptions';
 import { ResolverService } from '@tsed/typegraphql';
 import {
   Arg,
+  Args,
   Authorized,
   Ctx,
   FieldResolver,
+  Int,
   Mutation,
   PubSub,
   PubSubEngine,
@@ -12,6 +14,7 @@ import {
   Root,
   Subscription,
 } from 'type-graphql';
+import { PaginationArgs } from '../../data/args/pagination';
 import { DokkuContext } from '../../data/models/dokku_context';
 import { LogPayload } from '../../data/models/log_payload';
 import { SubscriptionTopics } from '../../data/models/subscription_topics';
@@ -44,7 +47,7 @@ import { SetDomainInput } from './data/inputs/set_domain.input';
 import { SetEnvVarInput } from './data/inputs/set_env_var.input';
 import { UnlinkDatabaseInput } from './data/inputs/unlink_database.input';
 import { UnsetEnvVarInput } from './data/inputs/unset_env_var.input';
-import { App } from './data/models/app.model';
+import { App, AppPaginationInfo } from './data/models/app.model';
 import { AppCreatedPayload } from './data/models/app_created.payload';
 import { AppRebuildPayload } from './data/models/app_rebuild.payload';
 import { AppRestartPayload } from './data/models/app_restart.payload';
@@ -70,11 +73,8 @@ export class AppResolver {
     private unlinkDatabaseQueue: UnlinkDatabaseQueue,
     private unsetEnvVarQueue: UnsetEnvVarQueue,
     private restartAppQueue: RestartAppQueue,
-    private userRepository: UserRepository
-  ) // private activityRepository: ActivityRepository,
-  // private appBuildRepository: AppBuildRepository,
-  // private buildAppQueue: BuildAppQueue
-  {}
+    private userRepository: UserRepository // private activityRepository: ActivityRepository, // private appBuildRepository: AppBuildRepository, // private buildAppQueue: BuildAppQueue
+  ) {}
 
   @Authorized()
   @Query((returns) => App)
@@ -83,9 +83,11 @@ export class AppResolver {
   }
 
   @Authorized()
-  @Query((returns) => [App])
-  async apps(): Promise<App[]> {
-    return this.appRepository.getAll();
+  @Query((returns) => AppPaginationInfo)
+  async apps(
+    @Args((type) => PaginationArgs) pagination: PaginationArgs
+  ): Promise<AppPaginationInfo> {
+    return this.appRepository.getAllPaginated(pagination);
   }
 
   @Authorized()

@@ -1,5 +1,6 @@
 import { App as AppClass, AppTypes } from '@prisma/client';
 import { Field, ObjectType, registerEnumType } from 'type-graphql';
+import { BasePaginationInfo } from '../../../../data/models/pagination_info';
 import { GraphQLDateTime } from './../../../../utils';
 
 @ObjectType()
@@ -26,3 +27,5 @@ export class App implements AppClass {
 registerEnumType(AppTypes, {
   name: 'AppTypes',
 });
+@ObjectType()
+export class AppPaginationInfo extends BasePaginationInfo(App) {}

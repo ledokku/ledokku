@@ -33,6 +33,9 @@ export class ActivityRepository {
     const items = await this.prisma.activity.findMany({
       take: limit,
       skip,
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
 
     const total = await this.prisma.activity.count();

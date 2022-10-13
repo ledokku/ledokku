@@ -11,10 +11,10 @@ import { AppHeaderTabNav } from '../../../modules/app/AppHeaderTabNav';
 import { AppRebuild } from '../../../modules/app/AppRebuild';
 import { AppRestart } from '../../../modules/app/AppRestart';
 import { AppSettingsMenu } from '../../../modules/app/AppSettingsMenu';
-import { Header } from '../../../ui';
 import { useToast } from '../../../ui/toast';
 import { Button, Card, Container, Grid, Input, Loading, Modal, Spacer, Text } from '@nextui-org/react';
 import { useState } from 'react';
+import { LoadingSection } from '../../../ui/components/LoadingSection';
 
 export const AppSettingsAdvanced = () => {
   const { id: appId } = useParams<{ id: string }>();
@@ -77,7 +77,7 @@ export const AppSettingsAdvanced = () => {
 
   if (loading) {
     // TODO nice loading
-    return <Loading />;
+    return <LoadingSection />;
   }
 
   if (!data?.app) {
@@ -90,12 +90,11 @@ export const AppSettingsAdvanced = () => {
   return (
     <>
       <div>
-        <Header />
         <AppHeaderInfo app={app} />
         <AppHeaderTabNav app={app} />
       </div>
 
-      <Container className='mt-16'>
+      <Container className='mt-4'>
         <Grid.Container
           gap={3}
         >
@@ -104,9 +103,9 @@ export const AppSettingsAdvanced = () => {
           </Grid>
           <Grid xs={9} direction='column'>
             <AppRestart appId={app.id} />
-            <Spacer y={2}/>
+            <Spacer y={2} />
             <AppRebuild appId={app.id} />
-            <Spacer y={2}/>
+            <Spacer y={2} />
             <Card className='mt-8' variant='bordered' borderWeight='normal'>
               <Card.Header>
                 <Text h3 className='mb-1'>

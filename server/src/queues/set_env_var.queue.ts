@@ -31,8 +31,8 @@ export class SetEnvVarQueue extends IQueue<QueueArgs> {
 
     await this.dokkuAppRepository.setEnvVar(ssh, appName, { key, value });
     await this.activityRepository.add({
-      name: `Variable de entorno "${key}" actualizada`,
-      description: `Nuevo valor: ${value}`,
+      name: `Variable de entorno en "${appName}"`,
+      description: `${key}: ${value}`,
     });
 
     $log.info(

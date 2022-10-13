@@ -1,7 +1,7 @@
-import { ClassType, Field, Int, InterfaceType } from 'type-graphql';
+import { ClassType, Field, Int, ObjectType } from 'type-graphql';
 
-export function createBasePaginationInfo<T extends ClassType>(clazz: T) {
-  @InterfaceType()
+export function BasePaginationInfo<T extends ClassType>(clazz: T) {
+  @ObjectType({ isAbstract: true })
   class BasePaginationInfo {
     @Field((type) => [clazz])
     items: T[];

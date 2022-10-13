@@ -8,12 +8,12 @@ import {
   EnvVarsDocument,
 } from '../../generated/graphql';
 import { useFormik } from 'formik';
-import { Header } from '../../ui';
 import { FiTrash2 } from 'react-icons/fi';
 import { useToast } from '../../ui/toast';
 import { AppHeaderTabNav } from '../../modules/app/AppHeaderTabNav';
 import { AppHeaderInfo } from '../../modules/app/AppHeaderInfo';
-import { Button, Container, Divider, Grid, Input, Link, Loading, Text, Textarea } from '@nextui-org/react';
+import { Button, Divider, Grid, Input, Link, Loading, Text, Textarea } from '@nextui-org/react';
+import { LoadingSection } from '../../ui/components/LoadingSection';
 
 interface EnvFormProps {
   name: string;
@@ -125,7 +125,7 @@ export const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
 
 export const Env = () => {
   const { id: appId } = useParams<{ id: string }>();
-  const { data, loading} = useAppByIdQuery({
+  const { data, loading } = useAppByIdQuery({
     variables: {
       appId,
     },
@@ -150,7 +150,7 @@ export const Env = () => {
 
 
   if (loading) {
-    return <Loading />;
+    return <LoadingSection />;
   }
 
   const { app } = data;
@@ -160,59 +160,55 @@ export const Env = () => {
   }
 
   return (
-    <div>
+    <>
       <div>
-        <Header />
         <AppHeaderInfo app={app} />
         <AppHeaderTabNav app={app} />
       </div>
+      <div className='my-6'>
+        <Text h3>
+          Configurar variables de entorno
+        </Text>
+        <Text>
+          Las variables de entorno cambian la manera en la que la aplicación se comporta.
+          Estan disponibles tanto en tiempo de ejecución como en compilación para lanzamientos
+          basados en buildpack.{' '}
+          <Link
+            href="https://dokku.com/docs/configuration/environment-variables/"
+            isExternal
+            css={{ display: 'inline' }}
+          >
+            Leer más
+          </Link>
+        </Text>
+      </div>
 
-      <Container className='py-16'>
-        <div >
-          <Text h2>
-            Configurar variables de entorno
-          </Text>
-          <Text>
-            Las variables de entorno cambian la manera en la que la aplicación se comporta.
-            Estan disponibles tanto en tiempo de ejecución como en compilación para lanzamientos
-            basados en buildpack.{' '}
-            <Link
-              href="https://dokku.com/docs/configuration/environment-variables/"
-              isExternal
-              css={{ display: 'inline' }}
-            >
-              Leer más
-            </Link>
-          </Text>
-        </div>
-
-        {!envVarLoading && !envVarError && envVarData?.envVars.envVars && (
-          <div>
-            {envVarData.envVars.envVars.map((envVar) => {
-              return (
-                <div>
-                  <EnvForm
-                    key={envVar.key}
-                    name={envVar.key}
-                    value={envVar.value}
-                    appId={appId}
-                  />
-                  <div className='my-8'>
-                    <Divider />
-                  </div>
+      {!envVarLoading && !envVarError && envVarData?.envVars.envVars && (
+        <div>
+          {envVarData.envVars.envVars.map((envVar) => {
+            return (
+              <div>
+                <EnvForm
+                  key={envVar.key}
+                  name={envVar.key}
+                  value={envVar.value}
+                  appId={appId}
+                />
+                <div className='my-8'>
+                  <Divider />
                 </div>
-              );
-            })}
-            <EnvForm
-              key="newVar"
-              name=""
-              value=""
-              appId={appId}
-              isNewVar={true}
-            />
-          </div>
-        )}
-      </Container>
-    </div>
+              </div>
+            );
+          })}
+          <EnvForm
+            key="newVar"
+            name=""
+            value=""
+            appId={appId}
+            isNewVar={true}
+          />
+        </div>
+      )}
+    </>
   );
 };

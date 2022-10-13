@@ -1,5 +1,7 @@
 import { App, Database, DbTypes, Prisma, PrismaClient } from '@prisma/client';
 import { Injectable } from '@tsed/di';
+import { PaginationArgs } from '../../../../data/args/pagination';
+import { DatabasePaginationInfo } from '../models/database.model';
 
 @Injectable()
 export class DatabaseRepository {
@@ -30,8 +32,33 @@ export class DatabaseRepository {
     });
   }
 
-  getAll(): Promise<Database[]> {
-    return this.prisma.database.findMany();
+  getAll(limit?: number): Promise<Database[]> {
+    return this.prisma.database.findMany({
+      take: limit,
+    });
+  }
+
+  async getAllPaginated({
+    limit,
+    page,
+  }: PaginationArgs): Promise<DatabasePaginationInfo> {
+    const items = await this.prisma.database.findMany({
+      take: limit,
+      skip: limit * page,
+    });
+
+    const total = await this.prisma.database.count();
+
+    const totalPages = Math.ceil(total / limit);
+
+    return {
+      items: items as any,
+      page,
+      totalItems: total,
+      totalPages,
+      nextPage: page < totalPages ? page + 1 : undefined,
+      prevPage: page > 0 ? page - 1 : undefined,
+    };
   }
 
   delete(id: string): Promise<Database> {

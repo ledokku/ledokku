@@ -4,11 +4,12 @@ import {
   useDatabaseByIdQuery,
   useDatabaseLogsQuery,
 } from '../../generated/graphql';
-import { Terminal, Header } from '../../ui';
+import { Terminal } from '../../ui/components/Terminal';
 import { DatabaseHeaderInfo } from '../../modules/database/DatabaseHeaderInfo';
 import { DatabaseHeaderTabNav } from '../../modules/database/DatabaseHeaderTabNav';
-import { Container, Loading, Text } from '@nextui-org/react';
+import { Loading, Text } from '@nextui-org/react';
 import { Alert } from '../../ui/components/Alert';
+import { LoadingSection } from '../../ui/components/LoadingSection';
 
 export const Logs = () => {
   const { id: databaseId } = useParams<{ id: string }>();
@@ -49,39 +50,35 @@ export const Logs = () => {
   }
 
   return (
-    <div>
+    <>
       <div>
-        <Header />
         <DatabaseHeaderInfo database={database} />
         <DatabaseHeaderTabNav database={database} />
       </div>
+      <Text h3 className='my-8'>
+        Registros de la base de datos "{database.name}":
+      </Text>
 
-      <Container className='py-12'>
-        <Text h2>
-          Registros de la base de datos "{database.name}":
-        </Text>
+      {databaseLogsLoading ? (
+        <LoadingSection />
+      ) : null}
 
-        {databaseLogsLoading ? (
-          <Loading />
-        ) : null}
+      {databaseLogsError ? (
+        <Alert
+          type="error"
+          message={databaseLogsError.message}
+        />
+      ) : null}
 
-        {databaseLogsError ? (
-          <Alert
-            type="error"
-            message={databaseLogsError.message}
-          />
-        ) : null}
-
-        {!databaseLogsLoading && !databaseLogsError && databaseLogsData ? (
-          <Terminal>
-            {databaseLogsData.databaseLogs.logs.map((dblog, index) => (
-              <React.Fragment key={index}>
-                {dblog ? <p>{dblog}</p> : <p>&nbsp;</p>}
-              </React.Fragment>
-            ))}
-          </Terminal>
-        ) : null}
-      </Container>
-    </div>
+      {!databaseLogsLoading && !databaseLogsError && databaseLogsData ? (
+        <Terminal>
+          {databaseLogsData.databaseLogs.logs.map((dblog, index) => (
+            <React.Fragment key={index}>
+              {dblog ? <p>{dblog}</p> : <p>&nbsp;</p>}
+            </React.Fragment>
+          ))}
+        </Terminal>
+      ) : null}
+    </>
   );
 };

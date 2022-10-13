@@ -35,9 +35,9 @@
   },
   "dependencies": {
     "@apollo/client": "^3.7.0",
-    "@chakra-ui/react": "1.5.0",
     "@emotion/react": "11.4.0",
     "@emotion/styled": "11.3.0",
+    "@graphql-codegen/cli": "^2.13.6",
     "@headlessui/react": "0.2.0",
     "@nextui-org/react": "^1.0.0-beta.10",
     "ansi_up": "5.0.0",
@@ -60,7 +60,6 @@
     "react-terminal-ui": "^1.0.0",
     "react-toastify": "9.0.0",
     "styled-components": "5.2.1",
-    "subscriptions-transport-ws": "0.9.18",
     "use-dark-mode": "^2.3.1",
     "yup": "0.32.9"
   },

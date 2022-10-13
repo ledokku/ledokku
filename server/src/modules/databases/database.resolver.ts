@@ -2,15 +2,18 @@ import { BadRequest, Conflict, NotFound } from '@tsed/exceptions';
 import { ResolverService } from '@tsed/typegraphql';
 import {
   Arg,
+  Args,
   Authorized,
   Ctx,
   FieldResolver,
+  Int,
   Mutation,
   Query,
   Root,
   Subscription,
 } from 'type-graphql';
 import { dbTypeToDokkuPlugin } from '../../config/utils';
+import { PaginationArgs } from '../../data/args/pagination';
 import { DokkuContext } from '../../data/models/dokku_context';
 import { LogPayload } from '../../data/models/log_payload';
 import { SubscriptionTopics } from '../../data/models/subscription_topics';
@@ -22,7 +25,7 @@ import { Logs } from '../apps/data/models/logs.model';
 import { BooleanResult } from '../apps/data/models/result.model';
 import { CreateDatabaseInput } from './data/inputs/create_database.input';
 import { DestroyDatabaseInput } from './data/inputs/destroy_database.input';
-import { Database } from './data/models/database.model';
+import { Database, DatabasePaginationInfo } from './data/models/database.model';
 import { DatabaseCreatedPayload } from './data/models/database_created.payload';
 import { DatabaseInfo } from './data/models/database_info.model';
 import { DatabaseLinkPayload } from './data/models/database_link.payload';
@@ -48,9 +51,11 @@ export class DatabaseResolver {
   }
 
   @Authorized()
-  @Query((returns) => [Database])
-  async databases(): Promise<Database[]> {
-    return this.databaseRepository.getAll();
+  @Query((returns) => DatabasePaginationInfo)
+  async databases(
+    @Args((type) => PaginationArgs) pagination: PaginationArgs
+  ): Promise<DatabasePaginationInfo> {
+    return this.databaseRepository.getAllPaginated(pagination);
   }
 
   @Authorized()

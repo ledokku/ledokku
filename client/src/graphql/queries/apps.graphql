@@ -1,6 +1,14 @@
-query apps {
-  apps {
-    id
-    name
+query apps($limit: Int, $page: Int) {
+  apps(limit: $limit, page: $page) {
+    items {
+      id
+      name
+      type
+      appMetaGithub {
+        repoOwner
+        repoName
+      }
+    }
+    totalPages
   }
 }

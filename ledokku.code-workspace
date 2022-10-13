@@ -1,0 +1,34 @@
+{
+	"folders": [
+		{
+			"path": "client"
+		},
+		{
+			"path": "server"
+		}
+	],
+	"settings": {
+		"nuxt.isNuxtApp": false,
+		"debug.inlineValues": "on",
+		"typescript.tsdk": "node_modules\\typescript\\lib",
+		"editor.formatOnSave": true,
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [],
+		"compounds": [
+			{
+				"presentation": {
+					"hidden": false,
+					"group": "Development",
+					"order": 1
+				},
+				"name": "Development ALL",
+				"configurations": [
+					"Development SERVER",
+					"Development FRONTEND",
+				]
+			}
+		]
+	}
+}

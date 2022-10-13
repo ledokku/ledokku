@@ -1,11 +1,12 @@
 import { useParams } from 'react-router-dom';
 import { useAppByIdQuery, useAppLogsQuery } from '../../generated/graphql';
-import { Header, Terminal } from '../../ui';
 import { AppHeaderTabNav } from '../../modules/app/AppHeaderTabNav';
 import { AppHeaderInfo } from '../../modules/app/AppHeaderInfo';
-import { Container, Loading, Text } from '@nextui-org/react';
+import { Loading, Text } from '@nextui-org/react';
 import { Alert } from '../../ui/components/Alert';
 import { TerminalOutput } from 'react-terminal-ui';
+import { Terminal } from '../../ui/components/Terminal';
+import { LoadingSection } from '../../ui/components/LoadingSection';
 
 export const Logs = () => {
   const { id: appId } = useParams<{ id: string }>();
@@ -47,45 +48,42 @@ export const Logs = () => {
   }
 
   return (
-    <div>
+    <>
       <div>
-        <Header />
         <AppHeaderInfo app={app} />
         <AppHeaderTabNav app={app} />
       </div>
 
-      <Container className='py-16'>
-        <Text h3 >
-          Registros de "{app.name}":
-        </Text>
+      <Text h3 className='mt-6'>
+        Registros de "{app.name}":
+      </Text>
 
-        {appLogsLoading ? (
-          <Loading />
-        ) : null}
+      {appLogsLoading ? (
+        <LoadingSection />
+      ) : null}
 
-        {appLogsError ? (
-          <Alert
-            type="error"
-            message={appLogsError.message}
-          />
-        ) : null}
+      {appLogsError ? (
+        <Alert
+          type="error"
+          message={appLogsError.message}
+        />
+      ) : null}
 
-        {!appLogsLoading && !appLogsError && !appLogsData ? (
-          <Alert
-            type="info"
-            message={`No hay registros de "${app.name}".
+      {!appLogsLoading && !appLogsError && !appLogsData ? (
+        <Alert
+          type="info"
+          message={`No hay registros de "${app.name}".
             La aplicación no se ha lanzado o se esta lanzando.`}
-          />
-        ) : null}
+        />
+      ) : null}
 
-        {appLogsData?.appLogs ? (
-          <Terminal>
-            {appLogsData.appLogs.logs.map((log, index) => (
-              <TerminalOutput key={index}>{log}</TerminalOutput>
-            ))}
-          </Terminal>
-        ) : null}
-      </Container>
-    </div>
+      {appLogsData?.appLogs ? (
+        <Terminal>
+          {appLogsData.appLogs.logs.map((log, index) => (
+            <TerminalOutput key={index}>{log}</TerminalOutput>
+          ))}
+        </Terminal>
+      ) : null}
+    </>
   );
 };
