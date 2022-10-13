@@ -3,10 +3,10 @@
 
 ## Preview
 
-![App](/images/app1.png) \
-![App](/images/app2.png) \
-![App](/images/app3.png) \
-![App](/images/app.png)
+<img src="images/app1.png" alt="App" width="49.5%"/>
+<img src="images/app2.png" alt="App" width="49.5%"/>
+<img src="images/app3.png" alt="App" width="49.5%"/>
+<img src="images/app.png" alt="App" width="49.5%"/>
 
 Ledokku is a beautiful UI powered by [Dokku](http://dokku.viewdocs.io/dokku/)
 
