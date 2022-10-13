@@ -1,19 +1,19 @@
-# Ledokku - beautiful web UI for all things Dokku
+# Ledokku Fork - Beautiful web UI for all things Dokku
+##### Migrated and maintained by Overclock Studios SA de CV
 
-### Dashboard preview
+## Preview
 
-![Dashboard](/images/Dashboard1.png)
+![App](/images/app1.png) \
+![App](/images/app2.png) \
+![App](/images/app3.png) \
+![App](/images/app.png)
 
-### App info preview
+Ledokku is a beautiful UI powered by [Dokku](http://dokku.viewdocs.io/dokku/)
 
-![App](/images/App1.png)
+With Ledokku you will be able to deploy apps written in:
+**Node js, PHP, Ruby and many more**.
 
-Ledokku is a beautiful UI powered by [dokku](http://dokku.viewdocs.io/dokku/)
-
-With us you will be able to deploy apps written in:
-**node.js, php, ruby and many more**.
-
-And link them with most popular dbs : **postgresql, mongodb, redis**.
+And link them with most popular databases: **PostgreSQL, MongoDB, Redis**.
 
 ## Just few clicks and your app is live
 
@@ -46,9 +46,10 @@ To get initial feedback we are working on the MVP state where current Dokku user
 
 - Dokku 🐳
 - Node.js 💚
-- GraphQL 💓
+- TypeGraphQL 💓
 - Prisma △
 - TypeScript 💙
+- NextUI 💄
 - GithubAPI 🐱
 - Tailwind CSS 🌪
 - Docusaurus 🦖
