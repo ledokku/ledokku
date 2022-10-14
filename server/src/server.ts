@@ -61,7 +61,7 @@ registerProvider({
         pubSub: pubsub,
       },
       context: (expressContext: ExpressContext) =>
-        ContextFactory.createFromHTTP(expressContext.req),
+        ContextFactory.createFromHTTP(expressContext.req as any),
       formatError: (err: GraphQLError) => {
         if (!IS_PRODUCTION) {
           $log.error(err);

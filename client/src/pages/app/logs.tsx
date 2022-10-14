@@ -1,12 +1,12 @@
+import { Text } from '@nextui-org/react';
 import { useParams } from 'react-router-dom';
-import { useAppByIdQuery, useAppLogsQuery } from '../../generated/graphql';
-import { AppHeaderTabNav } from '../../modules/app/AppHeaderTabNav';
-import { AppHeaderInfo } from '../../modules/app/AppHeaderInfo';
-import { Loading, Text } from '@nextui-org/react';
-import { Alert } from '../../ui/components/Alert';
 import { TerminalOutput } from 'react-terminal-ui';
-import { Terminal } from '../../ui/components/Terminal';
+import { useAppByIdQuery, useAppLogsQuery } from '../../generated/graphql';
+import { AppHeaderInfo } from '../../modules/app/AppHeaderInfo';
+import { AppHeaderTabNav } from '../../modules/app/AppHeaderTabNav';
+import { Alert } from '../../ui/components/Alert';
 import { LoadingSection } from '../../ui/components/LoadingSection';
+import { Terminal } from '../../ui/components/Terminal';
 
 export const Logs = () => {
   const { id: appId } = useParams<{ id: string }>();

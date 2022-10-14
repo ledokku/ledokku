@@ -1,14 +1,9 @@
+import { Button, Grid, Link, Table, Text } from '@nextui-org/react';
 import { FiTrash2 } from 'react-icons/fi';
-import { DomainsDocument } from '../../generated/graphql';
-import {
-  useAppByIdQuery,
-  useRemoveDomainMutation,
-  useDomainsQuery,
-} from '../../generated/graphql';
-import { AddAppDomain } from './AddAppDomain';
-import { useToast } from '../../ui/toast';
-import { Button, Grid, Link, Loading, Table, Text } from '@nextui-org/react';
+import { DomainsDocument, useAppByIdQuery, useDomainsQuery, useRemoveDomainMutation } from '../../generated/graphql';
 import { LoadingSection } from '../../ui/components/LoadingSection';
+import { useToast } from '../../ui/toast';
+import { AddAppDomain } from './AddAppDomain';
 
 interface AppDomainProps {
   appId: string;

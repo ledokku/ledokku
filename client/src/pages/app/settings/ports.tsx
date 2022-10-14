@@ -1,4 +1,4 @@
-import { Container, Grid, Loading } from '@nextui-org/react';
+import { Container, Grid } from '@nextui-org/react';
 import { useParams } from 'react-router';
 import { useAppByIdQuery } from '../../../generated/graphql';
 import { AppHeaderInfo } from '../../../modules/app/AppHeaderInfo';

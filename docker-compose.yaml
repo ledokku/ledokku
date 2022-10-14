@@ -2,46 +2,84 @@ version: '3.6'
 services:
   client:
     build:
-      context: ./client
+      context: .
+      dockerfile: Dockerfile.client
+    links:
+      - "server"
     volumes:
       - ./client:/usr/src/app
       - /usr/src/app/node_modules/
+    depends_on:
+      - server
     ports:
-      - '3000:3000'
+      - '80:80'
     environment:
-      - NODE_ENV=development
+      - PORT=80
+      - NODE_ENV=production
+      - http://server:4000/graphql
+
+  dokku:
+    image: dokku/dokku:latest
+    environment:
+      - DOKKU_HOSTNAME=proclo.ocstudios.mx
+      - DOKKU_HOST_ROOT=/var/lib/dokku/home/dokku
+    container_name: dokku
+    ports:
+      - "3022:22"
+      - "8080:80"
+      - "8443:443"
+    volumes:
+      - /var/lib/dokku:/mnt/dokku
+      - /var/run/docker.sock:/var/run/docker.sock
 
   server:
     build:
-      context: ./server
+      context: .
+      dockerfile: Dockerfile.server
     volumes:
       - ./server:/usr/src/app
       - /usr/src/app/node_modules/
       - server_ssh_key:/root/.ssh
     ports:
       - '4000:4000'
+    links:
+      - "dokku"
+      - "redis"
+      - "db"
     depends_on:
-      - postgres
+      - db
       - redis
+      - dokku
     environment:
-      - NODE_ENV=development
-      - DATABASE_URL=postgres://postgres:postgrespassword@postgres:5432/postgres
-      - REDIS_URL=redis://redis:6379
+      - NODE_ENV=production
+      - DATABASE_URL=postgres://postgres:eP8NHS4W%23Be%2A5Ay3@db:5432/ledokku?schema=public&connect_timeout=300
+      - REDIS_URL=redis://redis:6379/0
+      - JWT_SECRET=SEcreT
+      - GITHUB_APP_ID=
+      - GITHUB_APP_NAME=
+      - GITHUB_APP_CLIENT_ID=
+      - GITHUB_APP_CLIENT_SECRET=
+      - GITHUB_APP_WEBHOOK_SECRET=
+      - GITHUB_APP_PEM=
+      - DOKKU_SSH_HOST=dokku
+      - DOKKU_SSH_PORT=22
+      - NUMBER_USERS_ALLOWED=1
+      - TELEMETRY_DISABLED=1
 
-  postgres:
+  db:
     image: postgres:12
     restart: always
     ports:
-      - '5433:5432'
+      - '5432:5432'
     volumes:
       - db_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_PASSWORD: eP8NHS4W#Be*5Ay3
 
   redis:
-    image: 'redis:5'
+    image: 'redis:6'
     ports:
-      - '6380:6379'
+      - '6379:6379'
 
 volumes:
   server_ssh_key:

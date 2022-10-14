@@ -3,9 +3,6 @@ import { useFormik } from 'formik';
 import { trackGoal } from 'fathom-client';
 import * as yup from 'yup';
 import {
-  FormControl,
-} from '@chakra-ui/react';
-import {
   useCreateAppDokkuMutation,
   useAppsQuery,
 } from '../../generated/graphql';
@@ -79,22 +76,17 @@ export const CreateAppDokku = () => {
       <Grid.Container>
         <Grid>
           <form onSubmit={formik.handleSubmit}>
-            <FormControl
-              id="v"
-              isInvalid={Boolean(formik.errors.name && formik.touched.name)}
-            >
-              <Input
-                label='Nombre de la aplicación'
-                autoComplete="off"
-                id="name"
-                name="name"
-                placeholder="Nombre"
-                value={formik.values.name}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-              <Text color='error'>{formik.errors.name}</Text>
-            </FormControl>
+            <Input
+              label='Nombre de la aplicación'
+              autoComplete="off"
+              id="name"
+              name="name"
+              placeholder="Nombre"
+              value={formik.values.name}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+            <Text color='error'>{formik.errors.name}</Text>
 
             <div className='mt-4 flex justify-end'>
               <Button

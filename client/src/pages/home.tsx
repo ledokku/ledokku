@@ -1,8 +1,4 @@
-import {
-  Box,
-  Text
-} from '@chakra-ui/react';
-import { Button, Container, Loading } from '@nextui-org/react';
+import { Button, Container, Loading, Text } from '@nextui-org/react';
 import { useEffect } from 'react';
 import { FiGithub } from 'react-icons/fi';
 import { Redirect, useHistory } from 'react-router-dom';
@@ -80,7 +76,7 @@ export const Home = () => {
         </div>
 
         {error && (
-          <Text mt={4} color="red.500">
+          <Text className='mt-4 text-red-500'>
             {error.message}
           </Text>
         )}
@@ -91,26 +87,21 @@ export const Home = () => {
 
         {data?.setup.canConnectSsh === false && (
           <div className='w-156 flex flex-col justify-center'>
-            <Text mt={4}>
+            <Text className='mt-4'>
               Para conectarse por SSH, ejecuta el siguiente comando en tu servidor de Dokku.
             </Text>
             <CodeBox lang='bash'>
               {`echo "${data.setup.sshPublicKey}" | dokku ssh-keys:add ledokku`}
             </CodeBox>
-            <Text mt={3}>Una vez finalizado, refresca la página.</Text>
+            <Text className='mt-3'>Una vez finalizado, refresca la página.</Text>
           </div>
         )}
 
         {data?.setup.canConnectSsh === true &&
           data?.setup.isGithubAppSetup === true &&
           !loginWithGithubLoading && (
-            <Box
-              maxWidth="2xl"
-              display="flex"
-              flexDirection="column"
-              alignItems="center"
-              justifyContent="center"
-            >
+            <div
+            className='flex flex-col justify-center items-center'>
 
               <Button
                 shadow
@@ -123,7 +114,7 @@ export const Home = () => {
               >
                 &nbsp; Iniciar sesión con Github
               </Button>
-            </Box>
+            </div>
           )}
       </div>
     </Container>
