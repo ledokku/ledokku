@@ -15,10 +15,13 @@ export const AdminLayout = ({ children }: AdminLayoutProps) => {
         <div className="blur-3xl absolute w-full" style={{ zIndex: -10 }}>
             <Image src={darkMode.value ? "/bg_dark.jpg" : "/bg_light.jpg"} height="20vh" objectFit="cover" />
         </div>
-        <Header />
-        <Container className="py-16" id="container-up">
-            {children}
-        </Container>
-        <Footer />
+        <div className="flex flex-col" style={{ minHeight: "100vh" }}>
+            <Header />
+            <Container className="py-16" id="container-up">
+                {children}
+            </Container>
+            <div className="flex-grow" />
+            <Footer />
+        </div>
     </>
 }
