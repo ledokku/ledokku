@@ -57,6 +57,9 @@ To get initial feedback we are working on the MVP state where current Dokku user
 - Docusaurus 🦖
 - Docs hosted on [Netlify](https://www.netlify.com/)
 
+### TODO
+- Localization
+
 ## Contributing
 
 Read our [contributing guide](CONTRIBUTING.md) to see how to locally setup the repository and see our development process.
