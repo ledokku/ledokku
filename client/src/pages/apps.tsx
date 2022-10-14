@@ -29,12 +29,14 @@ export const Apps = () => {
             <Table.Header>
                 <Table.Column>Nombre</Table.Column>
                 <Table.Column>Repositorio</Table.Column>
+                <Table.Column>Puertos</Table.Column>
             </Table.Header>
             <Table.Body loadingState={loading ? "loading" : "idle"}>
                 {data?.apps.items.map((it, index) =>
                     <Table.Row key={index}>
                         <Table.Cell><Text b h4>{it.name}</Text></Table.Cell>
                         <Table.Cell>{it.appMetaGithub ? `${it.appMetaGithub.repoOwner}/${it.appMetaGithub.repoName}` : " "}</Table.Cell>
+                        <Table.Cell>{it.ports}</Table.Cell>
                     </Table.Row>
                 ) ?? []}
             </Table.Body>

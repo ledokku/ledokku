@@ -1,4 +1,5 @@
 import { Avatar, Dropdown, Link, Navbar } from '@nextui-org/react';
+import { FcIdea, FcImport } from 'react-icons/fc';
 import { useLocation } from 'react-router';
 import useDarkMode from 'use-dark-mode';
 import { useAuth } from '../../modules/auth/AuthContext';
@@ -41,8 +42,8 @@ export const Header = () => {
                   break;
               }
             }}>
-              <Dropdown.Item color='primary' key="theme">Cambiar tema</Dropdown.Item>
-              <Dropdown.Item color='error' key="logout">Cerrar sesión</Dropdown.Item>
+              <Dropdown.Item icon={<FcIdea />} color='primary' key="theme">Cambiar tema</Dropdown.Item>
+              <Dropdown.Item icon={<FcImport />} color='error' key="logout">Cerrar sesión</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </Navbar.Item>

@@ -626,4 +626,20 @@ export class AppResolver {
   async databases(@Root() app: App): Promise<Database[]> {
     return this.appRepository.databases(app.id);
   }
+
+  @Authorized()
+  @FieldResolver((returns) => [ProxyPort])
+  async ports(
+    @Root() app: App,
+    @Ctx() context: DokkuContext
+  ): Promise<ProxyPort[]> {
+    try {
+      return await this.dokkuProxyRepository.ports(
+        context.sshContext.connection,
+        app.name
+      );
+    } catch (e) {
+      return [];
+    }
+  }
 }

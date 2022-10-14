@@ -37,7 +37,7 @@ export const Databases = () => {
                     <Table.Row key={index}>
                         <Table.Cell><Text b h4>{it.name}</Text></Table.Cell>
                         <Table.Cell>{it.type}</Table.Cell>
-                        <Table.Cell css={{ maxW: "3rem" }}><DatabaseVersionBadge database={it} /></Table.Cell>
+                        <Table.Cell css={{ w: "3rem" }}><DatabaseVersionBadge database={it} /></Table.Cell>
                     </Table.Row>
                 ) ?? []}
             </Table.Body>

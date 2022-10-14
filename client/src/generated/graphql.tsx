@@ -58,6 +58,7 @@ export type App = {
   id: Scalars['String'];
   logs: Logs;
   name: Scalars['String'];
+  ports: Array<ProxyPort>;
   type: AppTypes;
   updatedAt: Scalars['DateTime'];
   userId: Scalars['String'];
@@ -662,7 +663,7 @@ export type AppByIdQueryVariables = Exact<{
 }>;
 
 
-export type AppByIdQuery = { __typename?: 'Query', app: { __typename?: 'App', id: string, name: string, createdAt: string, databases: Array<{ __typename?: 'Database', id: string, name: string, type: DbTypes }>, appMetaGithub?: { __typename?: 'AppGithubMeta', repoId: string, repoName: string, repoOwner: string, branch: string, githubAppInstallationId: string } | null } };
+export type AppByIdQuery = { __typename?: 'Query', app: { __typename?: 'App', id: string, name: string, createdAt: string, databases: Array<{ __typename?: 'Database', id: string, name: string, type: DbTypes }>, appMetaGithub?: { __typename?: 'AppGithubMeta', repoId: string, repoName: string, repoOwner: string, branch: string, githubAppInstallationId: string } | null, ports: Array<{ __typename?: 'ProxyPort', scheme: string, host: string, container: string }> } };
 
 export type AppLogsQueryVariables = Exact<{
   appId: Scalars['String'];
@@ -684,7 +685,7 @@ export type AppsQueryVariables = Exact<{
 }>;
 
 
-export type AppsQuery = { __typename?: 'Query', apps: { __typename?: 'AppPaginationInfo', totalPages: number, items: Array<{ __typename?: 'App', id: string, name: string, type: AppTypes, appMetaGithub?: { __typename?: 'AppGithubMeta', repoOwner: string, repoName: string } | null }> } };
+export type AppsQuery = { __typename?: 'Query', apps: { __typename?: 'AppPaginationInfo', totalPages: number, items: Array<{ __typename?: 'App', id: string, name: string, type: AppTypes, appMetaGithub?: { __typename?: 'AppGithubMeta', repoOwner: string, repoName: string } | null, ports: Array<{ __typename?: 'ProxyPort', scheme: string, host: string, container: string }> }> } };
 
 export type BranchesQueryVariables = Exact<{
   installationId: Scalars['String'];
@@ -1445,6 +1446,11 @@ export const AppByIdDocument = gql`
       branch
       githubAppInstallationId
     }
+    ports {
+      scheme
+      host
+      container
+    }
   }
 }
     `;
@@ -1558,6 +1564,11 @@ export const AppsDocument = gql`
       appMetaGithub {
         repoOwner
         repoName
+      }
+      ports {
+        scheme
+        host
+        container
       }
     }
     totalPages

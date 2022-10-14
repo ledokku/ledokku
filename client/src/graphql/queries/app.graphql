@@ -15,5 +15,10 @@ query appById($appId: String!) {
       branch
       githubAppInstallationId
     }
+    ports {
+      scheme
+      host
+      container
+    }
   }
 }

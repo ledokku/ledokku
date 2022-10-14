@@ -8,6 +8,11 @@ query apps($limit: Int, $page: Int) {
         repoOwner
         repoName
       }
+      ports {
+        scheme
+        host
+        container
+      }
     }
     totalPages
   }

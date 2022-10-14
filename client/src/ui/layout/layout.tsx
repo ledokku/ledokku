@@ -13,7 +13,7 @@ export const AdminLayout = ({ children }: AdminLayoutProps) => {
 
     return <>
         <div className="blur-3xl absolute w-full" style={{ zIndex: -10 }}>
-            <Image src={darkMode.value ? "/bg_dark.jpg" : "/bg_light.jpg"} height="20vh" objectFit="cover" />
+            <Image src={darkMode.value ? "/bg_dark.jpg" : "/bg_light.jpg"} height="15vh" objectFit="cover" />
         </div>
         <div className="flex flex-col" style={{ minHeight: "100vh" }}>
             <Header />

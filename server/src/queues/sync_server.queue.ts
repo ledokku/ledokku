@@ -105,12 +105,12 @@ export class SyncServerQueue extends IQueue {
 
         for (const dokkuLink of dokkuLinks) {
           const app = await this.appRepository.getByName(dokkuLink);
+
+          if (!app) continue;
+
           const databases = await this.appRepository.databases(app.id);
 
-          if (
-            app &&
-            !!databases.find((database) => database.name === dokkuDatabase)
-          ) {
+          if (!!databases.find((database) => database.name === dokkuDatabase)) {
             this.databaseRepository.update(database.id, {
               apps: {
                 connect: { id: app.id },
