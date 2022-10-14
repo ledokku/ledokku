@@ -3,10 +3,12 @@
 
 ## Preview
 
-<img src="images/app1.png" alt="App" width="49.5%"/>
-<img src="images/app2.png" alt="App" width="49.5%"/>
-<img src="images/app3.png" alt="App" width="49.5%"/>
-<img src="images/app.png" alt="App" width="49.5%"/>
+<div style="display: flex; flex-direction: row; flex-wrap: wrap; ">
+    <img src="images/app1.png" alt="App" style="width: 50%"/>
+    <img src="images/app2.png" alt="App" style="width: 50%"/>
+    <img src="images/app3.png" alt="App" style="width: 50%"/>
+    <img src="images/app.png" alt="App" style="width: 50%"/>
+</div>
 
 Ledokku is a beautiful UI powered by [Dokku](http://dokku.viewdocs.io/dokku/)
 
