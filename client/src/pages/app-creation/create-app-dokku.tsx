@@ -7,7 +7,7 @@ import {
   useAppsQuery,
 } from '../../generated/graphql';
 import { useToast } from '../../ui/toast';
-import { trackingGoals } from '../../config';
+import { trackingGoals } from '../../constants';
 import { Button, Grid, Input, Loading, Text } from '@nextui-org/react';
 
 export const CreateAppDokku = () => {

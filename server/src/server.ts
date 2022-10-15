@@ -79,7 +79,10 @@ registerProvider({
       },
       formatResponse: (response, requestContext) => {
         if ('sshContext' in requestContext.context) {
-          (requestContext.context as DokkuContext).sshContext.connection.dispose();
+          const context = requestContext.context as DokkuContext;
+          if(context.sshContext.connection){
+            context.sshContext.connection.dispose();
+          }
         }
 
         return response;

@@ -2,7 +2,7 @@ import { Button, Container, Loading, Text } from '@nextui-org/react';
 import { useEffect } from 'react';
 import { FiGithub } from 'react-icons/fi';
 import { Redirect, useHistory } from 'react-router-dom';
-import { config } from '../config';
+import { GITHUB_APP_CLIENT_ID } from '../constants';
 import {
   useLoginWithGithubMutation, useSetupQuery
 } from '../generated/graphql';
@@ -57,7 +57,7 @@ export const Home = () => {
     // The redirect_uri parameter should only be used on production,
     // on dev env we force the redirection to localhost
     window.location.replace(
-      `https://github.com/login/oauth/authorize?client_id=${config.githubClientId}&state=github_login`
+      `https://github.com/login/oauth/authorize?client_id=${GITHUB_APP_CLIENT_ID}&state=github_login`
     );
   };
 

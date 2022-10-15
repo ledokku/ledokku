@@ -6,7 +6,7 @@ import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
 import { useHistory } from 'react-router-dom';
 import { TerminalOutput } from 'react-terminal-ui';
 import * as yup from 'yup';
-import { config, trackingGoals } from '../../config';
+import { GITHUB_APP_NAME, trackingGoals } from '../../constants';
 import {
   Branch, LogPayload, Repository, useAppCreateLogsSubscription, useAppsQuery, useBranchesLazyQuery, useCreateAppGithubMutation,
   useGithubInstallationIdQuery,
@@ -164,7 +164,7 @@ export const CreateAppGithub = () => {
 
   const handleOpen = () => {
     const newWindow = window.open(
-      `https://github.com/apps/${config.githubAppName}/installations/new`,
+      `https://github.com/apps/${GITHUB_APP_NAME}/installations/new`,
       'Install App',
       'resizable=1, scrollbars=1, fullscreen=0, height=1000, width=1020,top=' +
       window.screen.width +

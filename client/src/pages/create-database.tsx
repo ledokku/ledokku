@@ -6,7 +6,7 @@ import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
 import { useHistory, useLocation } from 'react-router-dom';
 import { TerminalOutput } from 'react-terminal-ui';
 import * as yup from 'yup';
-import { trackingGoals } from '../config';
+import { trackingGoals } from '../constants';
 import {
   DbTypes, LogPayload, useCreateDatabaseLogsSubscription, useCreateDatabaseMutation, useDatabaseQuery, useIsPluginInstalledLazyQuery
 } from '../generated/graphql';
