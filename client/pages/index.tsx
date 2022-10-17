@@ -4,7 +4,8 @@ import { useEffect } from 'react';
 import { FiGithub } from 'react-icons/fi';
 import { GITHUB_APP_CLIENT_ID } from '../constants';
 import {
-  useLoginWithGithubMutation, useSetupQuery
+  useLoginWithGithubMutation,
+  useSetupQuery,
 } from '../generated/graphql';
 import { CodeBox } from '../ui/components/CodeBox';
 import { OCStudiosLogo } from '../ui/icons/OCStudiosLogo';
@@ -15,7 +16,7 @@ const Index = () => {
   const toast = useToast();
   const history = useRouter();
   const { loggedIn, login } = useAuth();
-  const { data, loading, error } = useSetupQuery({});
+  const { data, loading, error } = useSetupQuery();
   const [
     loginWithGithubMutation,
     { loading: loginWithGithubLoading },
@@ -58,53 +59,53 @@ const Index = () => {
   };
 
   if (loggedIn) {
-    history.replace("/dashboard");
+    history.replace('/dashboard');
   }
 
   return (
-    <Container className='h-screen'>
+    <Container className="h-screen">
       <div
-        style={{ left: "50%", top: "50%", transform: "translate(-50%, -50%)", maxWidth: "700px" }}
-        className='flex flex-col justify-center relative'
+        style={{
+          left: '50%',
+          top: '50%',
+          transform: 'translate(-50%, -50%)',
+          maxWidth: '700px',
+        }}
+        className="flex flex-col justify-center relative"
       >
-        <div className='mb-6 mx-auto'>
+        <div className="mb-6 mx-auto">
           <OCStudiosLogo size={150} />
         </div>
 
-        {error && (
-          <Text className='mt-4 text-red-500'>
-            {error.message}
-          </Text>
-        )}
+        {error && <Text className="mt-4 text-red-500">{error.message}</Text>}
 
-        {(loading || loginWithGithubLoading) && (
-          <Loading className='mt-8' />
-        )}
+        {(loading || loginWithGithubLoading) && <Loading className="mt-8" />}
 
         {data?.setup.canConnectSsh === false && (
-          <div className='w-156 flex flex-col justify-center'>
-            <Text className='mt-4'>
-              Para conectarse por SSH, ejecuta el siguiente comando en tu servidor de Dokku.
+          <div className="w-156 flex flex-col justify-center">
+            <Text className="mt-4">
+              Para conectarse por SSH, ejecuta el siguiente comando en tu
+              servidor de Dokku.
             </Text>
-            <CodeBox lang='bash'>
+            <CodeBox lang="bash">
               {`echo "${data.setup.sshPublicKey}" | dokku ssh-keys:add ledokku`}
             </CodeBox>
-            <Text className='mt-3'>Una vez finalizado, refresca la página.</Text>
+            <Text className="mt-3">
+              Una vez finalizado, refresca la página.
+            </Text>
           </div>
         )}
 
         {data?.setup.canConnectSsh === true &&
           data?.setup.isGithubAppSetup === true &&
           !loginWithGithubLoading && (
-            <div
-              className='flex flex-col justify-center items-center'>
-
+            <div className="flex flex-col justify-center items-center">
               <Button
                 shadow
-                className='mt-4'
+                className="mt-4"
                 onClick={handleLogin}
                 icon={<FiGithub size={18} />}
-                iconLeftCss={{ display: "contents", marginRight: "8px" }}
+                iconLeftCss={{ display: 'contents', marginRight: '8px' }}
                 size="lg"
                 color="gradient"
               >

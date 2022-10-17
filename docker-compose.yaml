@@ -4,11 +4,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.client
-    links:
-      - "server"
-    volumes:
-      - ./client:/usr/src/app
-      - /usr/src/app/node_modules/
     depends_on:
       - server
     ports:
@@ -16,7 +11,11 @@ services:
     environment:
       - PORT=80
       - NODE_ENV=production
-      - http://server:4000/graphql
+      - NEXT_PUBLIC_SERVER_URL=
+      - NEXT_PUBLIC_GITHUB_APP_ID=
+      - NEXT_PUBLIC_GITHUB_APP_NAME=
+      - NEXT_PUBLIC_GITHUB_APP_CLIENT_ID=
+
 
   dokku:
     image: dokku/dokku:latest
@@ -36,10 +35,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.server
-    volumes:
-      - ./server:/usr/src/app
-      - /usr/src/app/node_modules/
-      - server_ssh_key:/root/.ssh
     ports:
       - '4000:4000'
     links:
@@ -51,6 +46,7 @@ services:
       - redis
       - dokku
     environment:
+      - PORT=4000
       - NODE_ENV=production
       - DATABASE_URL=postgres://postgres:eP8NHS4W%23Be%2A5Ay3@db:5432/ledokku?schema=public&connect_timeout=300
       - REDIS_URL=redis://redis:6379/0
@@ -82,5 +78,4 @@ services:
       - '6379:6379'
 
 volumes:
-  server_ssh_key:
   db_data:

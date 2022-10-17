@@ -28,5 +28,8 @@ export const dbTypeToReadableName = (dbType: DbTypes) => {
   }
 };
 
-
 export const isServer = () => typeof window === 'undefined';
+
+export function throwError<T>(message: string): T {
+  throw new Error(message);
+}

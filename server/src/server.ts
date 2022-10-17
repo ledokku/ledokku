@@ -19,7 +19,6 @@ import { Server as WebSocketServer } from 'ws';
 import { authChecker } from './config/auth_checker';
 import { ContextFactory } from './config/context_factory';
 import { IS_PRODUCTION, PORT } from './constants';
-import { MainController } from './controllers/main.controller';
 import { WebhookController } from './controllers/webhook.controller';
 import { DokkuContext } from './data/models/dokku_context';
 import { SubscriptionTopics } from './data/models/subscription_topics';
@@ -49,7 +48,6 @@ registerProvider({
   acceptMimes: ['application/json'],
   componentsScan: [`${__dirname}/**/*.resolver.{ts,js}`],
   mount: {
-    '/': [MainController],
     '/api': [WebhookController],
   },
   typegraphql: {
@@ -80,7 +78,7 @@ registerProvider({
       formatResponse: (response, requestContext) => {
         if ('sshContext' in requestContext.context) {
           const context = requestContext.context as DokkuContext;
-          if(context.sshContext.connection){
+          if (context.sshContext.connection) {
             context.sshContext.connection.dispose();
           }
         }

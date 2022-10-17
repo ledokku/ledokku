@@ -205,7 +205,9 @@ export class GithubRepository {
       auth: oauthData.access_token,
     });
 
-    const { data: emails } = await octokit.users.listEmailsForAuthenticated();
+    const {
+      data: emails,
+    } = await octokit.users.listEmailsForAuthenticatedUser();
     const { data: githubUser } = await octokit.users.getAuthenticated();
 
     const email = emails.find((email) => email.primary);
