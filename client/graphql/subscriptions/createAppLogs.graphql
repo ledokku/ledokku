@@ -1,0 +1,6 @@
+subscription appCreateLogs {
+  appCreateLogs {
+    message
+    type
+  }
+}

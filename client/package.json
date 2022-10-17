@@ -1,87 +1,52 @@
 {
-  "name": "ledokku-client",
+  "name": "ledokku",
+  "version": "0.1.0",
   "private": true,
-  "version": "0.7.0",
-  "license": "MIT",
   "scripts": {
-    "dev": "yarn watch:css && react-scripts start",
-    "build": "yarn build:css && react-scripts build",
-    "test": "react-scripts test",
-    "build:css": "postcss src/styles/index.css -o src/generated/index.css",
-    "watch:css": "postcss src/styles/index.css -o src/generated/index.css",
-    "generate": "graphql-codegen --config codegen.yml"
-  },
-  "proxy": "http://localhost:4000",
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ],
-    "rules": {
-      "react/react-in-jsx-scope": "off"
-    }
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "gql": "graphql-codegen --config codegen.ts"
   },
   "dependencies": {
     "@apollo/client": "^3.7.0",
-    "@emotion/react": "11.4.0",
-    "@emotion/styled": "11.3.0",
-    "@headlessui/react": "0.2.0",
     "@nextui-org/react": "^1.0.0-beta.10",
-    "ansi_up": "5.0.0",
-    "classnames": "2.2.6",
+    "ansi_up": "^5.1.0",
     "date-fns": "^2.29.3",
-    "fathom-client": "3.0.0",
-    "focus-visible": "5.2.0",
-    "formik": "2.2.6",
-    "framer-motion": "4.0.0",
+    "fathom-client": "^3.5.0",
+    "formik": "^2.2.9",
     "graphql": "15.3.0",
     "graphql-ws": "^5.11.2",
-    "jwt-decode": "3.1.2",
-    "react": "^18.2.0",
-    "react-dom": "17.0.1",
-    "react-icons": "^4.4.0",
+    "jwt-decode": "^3.1.2",
+    "next": "12.3.1",
+    "next-themes": "^0.2.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-icons": "^4.6.0",
     "react-innertext": "^1.1.5",
-    "react-router-dom": "5.2.0",
-    "react-select": "4.3.0",
     "react-syntax-highlighter": "^15.5.0",
     "react-terminal-ui": "^1.0.0",
-    "react-toastify": "9.0.0",
-    "styled-components": "5.2.1",
-    "use-dark-mode": "^2.3.1",
-    "yup": "0.32.9"
+    "react-toastify": "^9.0.8",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
-    "@graphql-codegen/add": "^3.2.1",
-    "@graphql-codegen/cli": "^2.13.1",
-    "@graphql-codegen/typescript": "^2.7.3",
-    "@graphql-codegen/typescript-operations": "^2.5.3",
-    "@graphql-codegen/typescript-react-apollo": "^3.3.3",
-    "@tailwindcss/forms": "^0.5.3",
-    "@types/classnames": "2.2.11",
-    "@types/node": "14.14.2",
-    "@types/react-dom": "17.0.0",
-    "@types/react-router-dom": "5.1.6",
-    "@types/react-select": "4.0.14",
+    "@graphql-codegen/cli": "2.13.7",
+    "@graphql-codegen/introspection": "2.2.1",
+    "@graphql-codegen/typescript": "^2.7.4",
+    "@graphql-codegen/typescript-operations": "^2.5.4",
+    "@graphql-codegen/typescript-react-apollo": "^3.3.4",
+    "@types/node": "18.11.0",
+    "@types/react": "18.0.21",
+    "@types/react-dom": "18.0.6",
     "@types/react-syntax-highlighter": "^15.5.5",
-    "@types/react-transition-group": "4.4.0",
-    "@types/styled-components": "5.1.7",
-    "autoprefixer": "10.0.2",
+    "@typescript-eslint/parser": "^5.40.0",
+    "autoprefixer": "^10.4.12",
+    "eslint": "8.25.0",
+    "eslint-config-next": "12.3.1",
+    "graphql-codegen-apollo-next-ssr": "^1.7.4",
     "postcss": "^8.4.18",
-    "postcss-cli": "8.3.0",
-    "react-scripts": "4.0.3",
     "tailwindcss": "^3.1.8",
-    "typescript": "4.2.2"
+    "typescript": "4.8.4"
   }
 }

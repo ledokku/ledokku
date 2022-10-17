@@ -1,3 +1,0 @@
-mutation addAppProxyPort($input: AddAppProxyPortInput!) {
-  addAppProxyPort(input: $input)
-}

@@ -1,6 +1,0 @@
-subscription CreateDatabaseLogs {
-  createDatabaseLogs {
-    message
-    type
-  }
-}

@@ -1,0 +1,5 @@
+mutation setDomain($input: SetDomainInput!) {
+  setDomain(input: $input) {
+    result
+  }
+}

@@ -1,0 +1,5 @@
+mutation destroyDatabase($input: DestroyDatabaseInput!) {
+  destroyDatabase(input: $input) {
+    result
+  }
+}

@@ -1,5 +1,0 @@
-mutation rebuildApp($input: RebuildAppInput!) {
-  rebuildApp(input: $input) {
-    result
-  }
-}

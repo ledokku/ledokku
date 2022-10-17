@@ -1,0 +1,5 @@
+mutation createAppDokku($input: CreateAppDokkuInput!) {
+  createAppDokku(input: $input) {
+    appId
+  }
+}
