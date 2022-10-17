@@ -1,8 +1,0 @@
-query setup {
-  setup {
-    canConnectSsh
-    sshPublicKey
-    isGithubAppSetup
-    githubAppManifest
-  }
-}

@@ -1,5 +1,0 @@
-mutation removeDomain($input: RemoveDomainInput!) {
-  removeDomain(input: $input) {
-    result
-  }
-}

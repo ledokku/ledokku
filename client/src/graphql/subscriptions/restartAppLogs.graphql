@@ -1,6 +1,0 @@
-subscription appRestartLogs {
-  appRestartLogs {
-    message
-    type
-  }
-}
