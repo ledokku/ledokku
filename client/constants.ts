@@ -1,5 +1,5 @@
 export const SERVER_URL: string =
-  process.env.NEXT_PUBLIC_SERVER_URL;
+  process.env.NEXT_PUBLIC_SERVER_URL ?? "http://localhost:4000/";
 
 export const SERVER_WS_URL = SERVER_URL.replace('http', 'ws');
 
