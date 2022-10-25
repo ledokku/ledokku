@@ -1,5 +1,8 @@
+import { throwError } from './utils/utils';
+
 export const SERVER_URL: string =
-  process.env.NEXT_PUBLIC_SERVER_URL ?? "http://localhost:4000/";
+  process.env.NEXT_PUBLIC_SERVER_URL ??
+  throwError('Required Enviromental Variable: NEXT_PUBLIC_SERVER_URL');
 
 export const SERVER_WS_URL = SERVER_URL.replace('http', 'ws');
 
