@@ -8,6 +8,10 @@ services:
       - server
     ports:
       - '80:80'
+    volumes:
+      - ./client:/usr/src/app
+      - /usr/src/app/node_modules/
+    restart: unless-stopped
     environment:
       - PORT=80
       - NODE_ENV=production
@@ -19,6 +23,7 @@ services:
 
   dokku:
     image: dokku/dokku:latest
+    restart: unless-stopped
     environment:
       - DOKKU_HOSTNAME=proclo.ocstudios.mx
       - DOKKU_HOST_ROOT=/var/lib/dokku/home/dokku
@@ -41,6 +46,11 @@ services:
       - "dokku"
       - "redis"
       - "db"
+    restart: unless-stopped
+    volumes:
+      - ./server:/usr/src/app
+      - /usr/src/app/node_modules/
+      - server_ssh_key:/root/.ssh
     depends_on:
       - db
       - redis
@@ -73,9 +83,11 @@ services:
       POSTGRES_PASSWORD: eP8NHS4W#Be*5Ay3
 
   redis:
+    restart: always
     image: 'redis:6'
     ports:
       - '6379:6379'
 
 volumes:
   db_data:
+  server_ssh_key:
