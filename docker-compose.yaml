@@ -25,7 +25,7 @@ services:
     image: dokku/dokku:latest
     restart: unless-stopped
     environment:
-      - DOKKU_HOSTNAME=proclo.ocstudios.mx
+      - DOKKU_HOSTNAME=dev.ocstudios.mx
       - DOKKU_HOST_ROOT=/var/lib/dokku/home/dokku
     container_name: dokku
     ports:
