@@ -9,7 +9,7 @@ services:
     ports:
       - '80:80'
     volumes:
-      - ./client:/usr/src/app
+      - ./client/client:/usr/src/app
       - /usr/src/app/node_modules/
     restart: unless-stopped
     environment:
@@ -48,7 +48,7 @@ services:
       - "db"
     restart: unless-stopped
     volumes:
-      - ./server:/usr/src/app
+      - ./server/server:/usr/src/app
       - /usr/src/app/node_modules/
       - server_ssh_key:/root/.ssh
     depends_on:
