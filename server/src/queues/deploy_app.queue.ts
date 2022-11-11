@@ -82,14 +82,14 @@ export class DeployAppQueue extends IQueue<QueueArgs> {
     });
 
     if (!res.stderr) {
-      this.pubsub.publish(SubscriptionTopics.APP_CREATED, <AppCreatedPayload>{
+      this.pubsub?.publish(SubscriptionTopics.APP_CREATED, <AppCreatedPayload>{
         appCreateLogs: {
           message: appId,
           type: 'end:success',
         },
       });
     } else if (res.stderr) {
-      this.pubsub.publish(SubscriptionTopics.APP_CREATED, <AppCreatedPayload>{
+      this.pubsub?.publish(SubscriptionTopics.APP_CREATED, <AppCreatedPayload>{
         appCreateLogs: {
           message: 'Failed to create app',
           type: 'end:failure',
@@ -99,7 +99,7 @@ export class DeployAppQueue extends IQueue<QueueArgs> {
   }
 
   onFailed(job: Job<QueueArgs, any>, error: Error) {
-    this.pubsub.publish(SubscriptionTopics.APP_CREATED, <AppCreatedPayload>{
+    this.pubsub?.publish(SubscriptionTopics.APP_CREATED, <AppCreatedPayload>{
       appCreateLogs: {
         message: 'Failed to create an app',
         type: 'end:failure',
