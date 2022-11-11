@@ -6,8 +6,8 @@ import { NodeSSH, SSHExecOptions } from 'node-ssh';
 export class DokkuGitRepository {
   async auth(
     ssh: NodeSSH,
-    token: string,
     username: string,
+    token: string,
     options?: SSHExecOptions
   ): Promise<boolean> {
     const resultGitAuth = await ssh.execCommand(

@@ -35,7 +35,6 @@ model App {
   User          User?          @relation(fields: [userId], references: [id])
   userId        String?
   AppMetaGithub AppMetaGithub?
-  Activity      Activity[]
 }
 
 enum AppTypes {
@@ -67,7 +66,6 @@ model AppBuild {
   appId     String
   User      User?          @relation(fields: [userId], references: [id])
   userId    String?
-  Activity  Activity[]
 }
 
 enum AppBuildStatus {
@@ -87,7 +85,6 @@ model Database {
   apps      App[]
   User      User?      @relation(fields: [userId], references: [id])
   userId    String?
-  Activity  Activity[]
 }
 
 enum DbTypes {
@@ -103,9 +100,6 @@ model Activity {
   description   String?
   refersToModel ModelReferences?
   referenceId   String?
-  Database      Database?        @relation(fields: [referenceId], references: [id], map: "database_activity")
-  App           App?             @relation(fields: [referenceId], references: [id], map: "app_activity")
-  AppBuild      AppBuild?        @relation(fields: [referenceId], references: [id], map: "app_build_activity")
   modifierId    String?
   Modifier      User?            @relation(fields: [modifierId], references: [id])
   createdAt     DateTime         @default(now())

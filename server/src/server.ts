@@ -27,8 +27,6 @@ import { startSmeeClient } from './smeeClient';
 
 const pubsub = new PubSub();
 
-(pubsub as any).secretId = 123;
-
 registerProvider({
   provide: PubSub,
   useValue: pubsub,

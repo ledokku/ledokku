@@ -15,6 +15,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
+            "restart": true,
             "type": "node",
             "presentation": {
                 "hidden": false,

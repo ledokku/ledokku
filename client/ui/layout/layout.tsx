@@ -1,7 +1,7 @@
 import { Container, Image, useTheme } from '@nextui-org/react';
+import dynamic from 'next/dynamic';
 import { ReactNode } from 'react';
 import { Footer } from '../components/Footer';
-import dynamic from 'next/dynamic';
 const Header = dynamic(async () => (await import('../components/Header')).Header, { ssr: false });
 
 interface AdminLayoutProps {
@@ -23,7 +23,7 @@ export const AdminLayout = ({ children }: AdminLayoutProps) => {
             </div>
             <div className="flex flex-col" style={{ minHeight: '100vh' }}>
                 <Header />
-                <Container className="py-16" id="container-up">
+                <Container className="py-16" lg>
                     {children}
                 </Container>
                 <div className="flex-grow" />

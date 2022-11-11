@@ -24,7 +24,7 @@ export enum AppTypes {
     DOCKER = 'DOCKER',
 }
 
-const SourceBox = ({ label, selected, icon, onClick, badge }: SourceBoxProps) => {
+const SourceBox = ({ label, selected = false, icon, onClick, badge }: SourceBoxProps) => {
     const { theme } = useTheme();
     return (
         <div
