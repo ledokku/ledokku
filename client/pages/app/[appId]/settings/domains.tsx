@@ -8,50 +8,48 @@ import { AppSettingsMenu } from '../../../../ui/modules/app/AppSettingsMenu';
 import { AppDomains } from '../../../../ui/modules/domains/AppDomains';
 
 const AppSettingsDomains = () => {
-  const history = useRouter();
-  const appId = history.query.appId as string;
+    const history = useRouter();
+    const appId = history.query.appId as string;
 
-  const { data, loading } = useAppByIdQuery({
-    variables: {
-      appId,
-    },
-  });
+    const { data, loading } = useAppByIdQuery({
+        variables: {
+            appId,
+        },
+    });
 
-  // TODO display error
+    // TODO display error
 
-  if (loading) {
-    // TODO nice loading
-    return <p>Loading...</p>;
-  }
+    if (loading) {
+        // TODO nice loading
+        return <p>Loading...</p>;
+    }
 
-  if (!data?.app) {
-    // TODO nice 404
-    return <p>App not found.</p>;
-  }
+    if (!data?.app) {
+        // TODO nice 404
+        return <p>App not found.</p>;
+    }
 
-  const { app } = data;
+    const { app } = data;
 
-  return (
-    <AdminLayout>
-      <div>
-        <AppHeaderInfo app={app} />
-        <AppHeaderTabNav app={app} />
-      </div>
+    return (
+        <AdminLayout>
+            <div>
+                <AppHeaderInfo app={app} />
+                <AppHeaderTabNav app={app} />
+            </div>
 
-      <Container className='mt-4'>
-        <Grid.Container
-          gap={4}
-        >
-          <Grid xs={3}>
-            <AppSettingsMenu app={app} />
-          </Grid>
-          <Grid xs={9}>
-            <AppDomains appId={appId} />
-          </Grid>
-        </Grid.Container>
-      </Container>
-    </AdminLayout>
-  );
+            <Container className="mt-4">
+                <Grid.Container gap={4}>
+                    <Grid xs={3}>
+                        <AppSettingsMenu app={app} />
+                    </Grid>
+                    <Grid xs={9}>
+                        <AppDomains appId={appId} />
+                    </Grid>
+                </Grid.Container>
+            </Container>
+        </AdminLayout>
+    );
 };
 
 export default AppSettingsDomains;

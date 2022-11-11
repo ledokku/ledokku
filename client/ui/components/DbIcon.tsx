@@ -1,12 +1,12 @@
-import { DbTypes } from "../../generated/graphql";
-import { MongoIcon } from "../icons/MongoIcon";
-import { MySQLIcon } from "../icons/MySQLIcon";
-import { PostgreSQLIcon } from "../icons/PostgreSQLIcon";
-import { RedisIcon } from "../icons/RedisIcon";
+import { DbTypes } from '../../generated/graphql';
+import { MongoIcon } from '../icons/MongoIcon';
+import { MySQLIcon } from '../icons/MySQLIcon';
+import { PostgreSQLIcon } from '../icons/PostgreSQLIcon';
+import { RedisIcon } from '../icons/RedisIcon';
 
 interface DbIconProps {
-    database: DbTypes,
-    size?: number
+    database: DbTypes;
+    size?: number;
 }
 
 export const DbIcon = ({ database, size }: DbIconProps) => {
@@ -21,5 +21,5 @@ export const DbIcon = ({ database, size }: DbIconProps) => {
             return <MySQLIcon size={size} />;
     }
 
-    return <div />
-}
+    return <div />;
+};

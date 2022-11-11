@@ -15,7 +15,14 @@
 	},
 	"launch": {
 		"version": "0.2.0",
-		"configurations": [],
+		"configurations": [
+			{
+				"name": "Run Compose",
+				"type": "node-terminal",
+				"request": "launch",
+				"command": "docker-compose up --build",
+			}
+		],
 		"compounds": [
 			{
 				"presentation": {
@@ -26,7 +33,7 @@
 				"name": "Development ALL",
 				"configurations": [
 					"Development SERVER",
-					"Development FRONTEND",
+					"Development CLIENT",
 				]
 			}
 		]
