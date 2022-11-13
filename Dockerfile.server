@@ -1,14 +1,6 @@
-FROM dokku/dokku:latest
+FROM node:16
 
 WORKDIR /usr/src/app
-
-
-RUN sudo apt update
-
-RUN curl -sL https://deb.nodesource.com/setup_16.x | sudo bash -
-RUN sudo apt -y install nodejs
-
-RUN npm install --global yarn
 
 COPY server/package.json .
 COPY yarn.lock .
