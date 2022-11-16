@@ -81,12 +81,6 @@ volumes:
   server_ssh_key:
   certbot-etc:
   certbot-var:
-  web-root:
-    driver: local
-    driver_opts:
-      type: none
-      device: /home/ocstudios/ledokku/views/
-      o: bind
   dhparam:
     driver: local
     driver_opts:
