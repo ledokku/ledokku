@@ -11,7 +11,7 @@ services:
       - "redis"
       - "db"
     volumes:
-      - ./:/usr/src/app
+      - ./server/:/usr/src/app
       - /usr/src/app/node_modules/
       - /usr/src/app/build/
       - server_ssh_key:/root/.ssh
