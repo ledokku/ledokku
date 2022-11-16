@@ -71,7 +71,6 @@ services:
     volumes:
       - certbot-etc:/etc/letsencrypt
       - certbot-var:/var/lib/letsencrypt
-      - web-root:/var/www/html
     depends_on:
       - webserver
     command: certonly --webroot --webroot-path=/var/www/html --email contacto@ocstudios.mx --agree-tos --no-eff-email --staging -d ocstudios.mx  -d www.ocstudios.mx
