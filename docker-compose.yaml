@@ -42,10 +42,14 @@ services:
       - db_data:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: eP8NHS4WBe5Ay3
+    networks:
+      - app-network
 
   redis:
     restart: always
     image: 'redis:6'
+    networks:
+      - app-network
   
   webserver:
       image: nginx:mainline-alpine
