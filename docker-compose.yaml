@@ -5,8 +5,8 @@ services:
       context: .
       dockerfile: Dockerfile.server
     restart: always
-    ports:
-      - '4000:4000'
+    networks:
+      - app-network
     links:
       - "redis"
       - "db"
@@ -46,7 +46,53 @@ services:
   redis:
     restart: always
     image: 'redis:6'
+  
+  webserver:
+      image: nginx:mainline-alpine
+      container_name: webserver
+      restart: unless-stopped
+      ports:
+        - "4000:4000"
+        - "4443:4443"
+      volumes:
+        - web-root:/var/www/html
+        - ./nginx-conf:/etc/nginx/conf.d
+        - certbot-etc:/etc/letsencrypt
+        - certbot-var:/var/lib/letsencrypt
+        - dhparam:/etc/ssl/certs
+      depends_on:
+        - server
+      networks:
+        - app-network
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - web-root:/var/www/html
+    depends_on:
+      - webserver
+    command: certonly --webroot --webroot-path=/var/www/html --email contacto@ocstudios.mx --agree-tos --no-eff-email --staging -d ocstudios.mx  -d www.ocstudios.mx
 
 volumes:
   db_data:
   server_ssh_key:
+  certbot-etc:
+  certbot-var:
+  web-root:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/ocstudios/ledokku/views/
+      o: bind
+  dhparam:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/ocstudios/ledokku/dhparam/
+      o: bind
+
+networks:
+  app-network:
