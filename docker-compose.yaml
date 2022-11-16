@@ -42,14 +42,10 @@ services:
       - db_data:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: eP8NHS4WBe5Ay3
-    networks:
-      - app-network
 
   redis:
     restart: always
     image: 'redis:6'
-    networks:
-      - app-network
   
   webserver:
       image: nginx:mainline-alpine
@@ -59,6 +55,7 @@ services:
         - "4000:4000"
         - "4443:4443"
       volumes:
+        - web-root:/var/www/html
         - ./nginx-conf:/etc/nginx/conf.d
         - certbot-etc:/etc/letsencrypt
         - certbot-var:/var/lib/letsencrypt
@@ -74,6 +71,7 @@ services:
     volumes:
       - certbot-etc:/etc/letsencrypt
       - certbot-var:/var/lib/letsencrypt
+      - web-root:/var/www/html
     depends_on:
       - webserver
     command: certonly --webroot --webroot-path=/var/www/html --email contacto@ocstudios.mx --agree-tos --no-eff-email --staging -d ocstudios.mx  -d www.ocstudios.mx
@@ -83,6 +81,12 @@ volumes:
   server_ssh_key:
   certbot-etc:
   certbot-var:
+  web-root:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/ocstudios/ledokku/server/assets
+      o: bind
   dhparam:
     driver: local
     driver_opts:
