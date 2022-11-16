@@ -1,61 +1,23 @@
 version: '3.6'
 services:
-  client:
-    build:
-      context: .
-      dockerfile: Dockerfile.client
-    depends_on:
-      - server
-    ports:
-      - '8070:80'
-    restart: unless-stopped
-    environment:
-      - PORT=80
-      - NODE_ENV=production
-      - NEXT_PUBLIC_SERVER_URL=
-      - NEXT_PUBLIC_GITHUB_APP_ID=
-      - NEXT_PUBLIC_GITHUB_APP_NAME=
-      - NEXT_PUBLIC_GITHUB_APP_CLIENT_ID=
-
-  dokku:
-    build: 
-      context: .
-      dockerfile: Dockerfile.dokku
-    restart: unless-stopped
-    environment:
-      - DOKKU_HOSTNAME=localhost
-      - DOKKU_HOST_ROOT=/var/lib/dokku/home/dokku
-    container_name: dokku
-    network_mode: "host"
-    ports:
-      - "3022:22"
-      - "80:80"
-      - "443:443"
-    volumes:
-      - /var/lib/dokku:/mnt/dokku
-      - /var/run/docker.sock:/var/run/docker.sock
-
   server:
     build:
       context: .
       dockerfile: Dockerfile.server
+    restart: always
     ports:
       - '4000:4000'
     links:
-      - "dokku"
       - "redis"
       - "db"
-    restart: unless-stopped
     volumes:
-      - ./server:/usr/src/app
-      - ./config/dokku:/var/lib/dokku
+      - ./:/usr/src/app
       - /usr/src/app/node_modules/
       - /usr/src/app/build/
       - server_ssh_key:/root/.ssh
     depends_on:
       - db
       - redis
-      - dokku
     environment:
       - PORT=4000
       - NODE_ENV=production
@@ -76,8 +38,6 @@ services:
   db:
     image: postgres:12
     restart: always
-    ports:
-      - '5432:5432'
     volumes:
       - db_data:/var/lib/postgresql/data
     environment:
@@ -86,8 +46,6 @@ services:
   redis:
     restart: always
     image: 'redis:6'
-    ports:
-      - '6379:6379'
 
 volumes:
   db_data:
