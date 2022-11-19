@@ -56,6 +56,9 @@ registerProvider({
         authChecker,
         pubSub: pubsub,
       },
+      plugins: [
+        require('apollo-tracing').plugin()
+      ],
       context: (expressContext: ExpressContext) =>
         ContextFactory.createFromHTTP(expressContext.req as any),
       formatError: (err: GraphQLError) => {
