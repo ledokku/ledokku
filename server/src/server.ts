@@ -9,6 +9,7 @@ import { Configuration, Inject, registerProvider } from '@tsed/di';
 import '@tsed/platform-express';
 import '@tsed/typegraphql';
 import { TypeGraphQLService } from '@tsed/typegraphql';
+import { ApolloServerPluginInlineTrace } from 'apollo-server-core';
 import { ExpressContext } from 'apollo-server-express';
 import express from 'express';
 import { execute, GraphQLError, subscribe } from 'graphql';
@@ -58,7 +59,7 @@ registerProvider({
       },
       serverConfig: {
         plugins: [
-          require("apollo-tracing").plugin()
+          ApolloServerPluginInlineTrace()
         ]
       },
       context: (expressContext: ExpressContext) =>
