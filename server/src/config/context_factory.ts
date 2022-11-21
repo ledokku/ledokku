@@ -9,7 +9,7 @@ import { sshConnect } from '../lib/ssh';
 import { JWT_SECRET } from './../constants';
 
 export class ContextFactory {
-  private static async generateBaseContext(): Promise<Partial<DokkuContext>> {
+  static async generateBaseContext(): Promise<Partial<DokkuContext>> {
     const injector = new InjectorService();
     await injector.loadAsync();
 
@@ -33,9 +33,9 @@ export class ContextFactory {
     };
   }
 
-  static async createFromHTTP(req: express.Request): Promise<DokkuContext> {
+  static async createFromHTTP(req?: express.Request): Promise<DokkuContext> {
     const token =
-      req.headers['authorization'] &&
+      req?.headers?.['authorization'] &&
       (req.headers['authorization'] as string).replace('Bearer ', '');
 
     let userId: string | undefined;

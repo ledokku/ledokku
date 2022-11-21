@@ -7,7 +7,7 @@ import {
     Loading,
     Modal,
     Spacer,
-    Text,
+    Text
 } from '@nextui-org/react';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
@@ -16,7 +16,7 @@ import * as yup from 'yup';
 import {
     DashboardDocument,
     useAppByIdQuery,
-    useDestroyAppMutation,
+    useDestroyAppMutation
 } from '../../../../generated/graphql';
 import { LoadingSection } from '../../../../ui/components/LoadingSection';
 import { AdminLayout } from '../../../../ui/layout/layout';
@@ -143,6 +143,7 @@ const AppSettingsAdvanced = () => {
                                 <Text h4>Eliminar aplicación</Text>
                             </Modal.Header>
                             <Modal.Body>
+                                Escribre el nombre de la aplicación para eliminar <span className='font-mono text-sm'>{data.app.name}</span>
                                 <Input
                                     css={{ marginBottom: 0 }}
                                     autoComplete="off"

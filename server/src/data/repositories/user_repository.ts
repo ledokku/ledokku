@@ -11,6 +11,22 @@ export class UserRepository {
     });
   }
 
+  async getByEmail(email: string) {
+    return this.prisma.user.findUnique({
+      where: { email },
+    });
+  }
+
+  async getByEmails(emails: string[]) {
+    return this.prisma.user.findMany({
+      where: {
+        email: {
+          in: emails,
+        },
+      },
+    });
+  }
+
   async getAll() {
     return this.prisma.user.findMany();
   }

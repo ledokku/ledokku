@@ -1,6 +1,7 @@
+import { SettingsRepository } from './../../../settings/data/repositories/settings.repository';
 import { createAppAuth } from '@octokit/auth-app';
 import { Octokit } from '@octokit/rest';
-import { App, AppMetaGithub, PrismaClient, User } from '@prisma/client';
+import { App, AppMetaGithub, PrismaClient, Roles, User } from '@prisma/client';
 import { Injectable } from '@tsed/di';
 import { Unauthorized } from '@tsed/exceptions';
 import fetch from 'node-fetch';
@@ -22,7 +23,8 @@ export class GithubRepository {
   constructor(
     private prisma: PrismaClient,
     private deployAppQueue: DeployAppQueue,
-    private syncServerQueue: SyncServerQueue
+    private syncServerQueue: SyncServerQueue,
+    private settingsRepository: SettingsRepository
   ) {}
 
   private installationAuth = createAppAuth({
@@ -196,10 +198,8 @@ export class GithubRepository {
   }
 
   async createUser(oauthData: GithubOAuthLoginResponse): Promise<User> {
+    const settings = await this.settingsRepository.get();
     const userCount = await this.prisma.user.count();
-    if (userCount >= NUMBER_USERS_ALLOWED) {
-      throw new Unauthorized('Numero de usuarios excedido');
-    }
 
     const octokit = new Octokit({
       auth: oauthData.access_token,
@@ -211,6 +211,10 @@ export class GithubRepository {
     const { data: githubUser } = await octokit.users.getAuthenticated();
 
     const email = emails.find((email) => email.primary);
+
+    if (!settings.allowedEmails.includes(email.email)) {
+      throw new Unauthorized('Numero de usuarios excedido');
+    }
 
     const now = new Date();
     const time = now.getTime();
@@ -228,6 +232,7 @@ export class GithubRepository {
           refreshToken: oauthData.refresh_token,
           refreshTokenExpiresAt,
           githubId: githubUser.node_id,
+          role: userCount === 0 ? Roles.OWNER : Roles.ADMIN
         },
       })
       .then(async (res) => {

@@ -1,9 +1,12 @@
+import { App } from '@prisma/client';
 import { $log } from '@tsed/common';
 import { Job } from 'bullmq';
 import { PubSub } from 'graphql-subscriptions';
+import { ContextFactory } from '../config/context_factory';
 import { SubscriptionTopics } from '../data/models/subscription_topics';
 import { IQueue, Queue } from '../lib/queues/queue.decorator';
 import { sshConnect } from '../lib/ssh';
+import { AppResolver } from '../modules/apps/app.resolver';
 import { AppCreatedPayload } from '../modules/apps/data/models/app_created.payload';
 import { DokkuGitRepository } from './../lib/dokku/dokku.git.repository';
 import { ActivityRepository } from './../modules/activity/data/repositories/activity.repository';
@@ -16,12 +19,13 @@ interface QueueArgs {
 }
 
 @Queue()
-export class DeployAppQueue extends IQueue<QueueArgs> {
+export class DeployAppQueue extends IQueue<QueueArgs, App> {
   constructor(
     private appRepository: AppRepository,
     private dokkuGitRepository: DokkuGitRepository,
     private pubsub: PubSub,
-    private activityRepository: ActivityRepository
+    private activityRepository: ActivityRepository,
+    private appResolver: AppResolver
   ) {
     super();
   }
@@ -75,30 +79,34 @@ export class DeployAppQueue extends IQueue<QueueArgs> {
       `Finalizando de crear ${app.name} desde https://github.com/${repoOwner}/${repoName}.git`
     );
 
-    await this.activityRepository.add({
-      name: `Proyecto "${app.name}" creado`,
-      description: `Creado desde https://github.com/${repoOwner}/${repoName}.git`,
-      instance: app,
-    });
-
-    if (!res.stderr) {
-      this.pubsub?.publish(SubscriptionTopics.APP_CREATED, <AppCreatedPayload>{
-        appCreateLogs: {
-          message: appId,
-          type: 'end:success',
-        },
-      });
-    } else if (res.stderr) {
-      this.pubsub?.publish(SubscriptionTopics.APP_CREATED, <AppCreatedPayload>{
-        appCreateLogs: {
-          message: 'Failed to create app',
-          type: 'end:failure',
-        },
-      });
-    }
+    return app;
   }
 
-  onFailed(job: Job<QueueArgs, any>, error: Error) {
+  async onSuccess(job: Job<QueueArgs, any, string>, result: App) {
+    this.pubsub?.publish(SubscriptionTopics.APP_CREATED, <AppCreatedPayload>{
+      appCreateLogs: {
+        message: result.id,
+        type: 'end:success',
+      },
+    });
+    const { repoOwner, repoName } = await this.appRepository
+      .get(job.data.appId)
+      .AppMetaGithub();
+
+    await this.activityRepository.add({
+      name: `Proyecto "${result.name}" creado`,
+      description: `Creado desde https://github.com/${repoOwner}/${repoName}.git`,
+      instance: result,
+    });
+  }
+
+  async onFailed(job: Job<QueueArgs, any>, error: Error) {
+    const { appId } = job.data;
+
+    this.appResolver.destroyApp({
+      appId
+    }, await ContextFactory.createFromHTTP())
+
     this.pubsub?.publish(SubscriptionTopics.APP_CREATED, <AppCreatedPayload>{
       appCreateLogs: {
         message: 'Failed to create an app',

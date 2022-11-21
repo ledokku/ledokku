@@ -7,7 +7,7 @@ const Settings = () => {
             <Text h2 className="mb-8">
                 Configuración
             </Text>
-            <Text>Proximamente</Text>
+            
         </AdminLayout>
     );
 };

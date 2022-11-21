@@ -13,15 +13,21 @@ model User {
   updatedAt             DateTime   @updatedAt
   username              String     @unique
   avatarUrl             String
-  email                 String
+  email                 String     @unique
   githubId              String     @unique
   githubAccessToken     String
   refreshToken          String
   refreshTokenExpiresAt DateTime
   App                   App[]
+  role                  Roles
   Database              Database[]
   AppBuild              AppBuild[]
   Activity              Activity[]
+}
+
+enum Roles {
+  OWNER
+  ADMIN
 }
 
 model App {
@@ -76,14 +82,14 @@ enum AppBuildStatus {
 }
 
 model Database {
-  id        String     @id @default(uuid())
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   name      String
   type      DbTypes
   version   String?
   apps      App[]
-  User      User?      @relation(fields: [userId], references: [id])
+  User      User?    @relation(fields: [userId], references: [id])
   userId    String?
 }
 
@@ -110,4 +116,9 @@ enum ModelReferences {
   Database
   App
   AppBuild
+}
+
+model Settings {
+  id            String   @id @default(uuid())
+  allowedEmails String[] @default([])
 }

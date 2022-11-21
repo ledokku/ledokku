@@ -29,12 +29,12 @@ export const Header = () => {
             suppressHydrationWarning={true}
         >
             <Navbar.Brand>
-                <Navbar.Toggle showIn="sm" className="mr-4" />
+                <Navbar.Toggle showIn="md" className="mr-4" />
                 <Link href="/dashboard">
                     <OCStudiosLogo />
                 </Link>
             </Navbar.Brand>
-            <Navbar.Content variant="underline-rounded" hideIn="xs">
+            <Navbar.Content variant="underline-rounded" hideIn="md">
                 {menuItems.map((it, index) => {
                     const id = useId();
                     return (

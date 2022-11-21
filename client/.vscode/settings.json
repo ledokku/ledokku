@@ -1,14 +1,16 @@
 {
-    "nuxt.isNuxtApp": false,
-    "editor.formatOnSave": true,
-    "[typescript]": {
-        "editor.codeActionsOnSave": {
-            "source.organizeImports": true
-        }
-    },
-    "[typescriptreact]": {
-        "editor.codeActionsOnSave": {
-            "source.organizeImports": true
-        }
-    },
+  "nuxt.isNuxtApp": false,
+  "editor.formatOnSave": true,
+  "[typescript]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    }
+  },
+  "[typescriptreact]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    }
+  },
+  "typescript.tsdk": "../node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true
 }

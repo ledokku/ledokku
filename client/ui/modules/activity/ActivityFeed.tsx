@@ -44,7 +44,7 @@ export const ActivityFeed = ({ isSinglePage = false }: Props) => {
         return <LoadingSection />;
     }
 
-    if (!data) {
+    if (!data || data.activity.totalItems === 0) {
         return <Text h4>No hay datos</Text>;
     }
 
