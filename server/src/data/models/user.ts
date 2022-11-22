@@ -1,5 +1,5 @@
-import { User as UserClass } from '@prisma/client';
-import { Field, ID, ObjectType } from 'type-graphql';
+import { Roles, User as UserClass } from '@prisma/client';
+import { Field, ID, ObjectType, registerEnumType } from 'type-graphql';
 import { GraphQLDateTime } from '../../utils';
 
 @ObjectType()
@@ -33,4 +33,11 @@ export class User implements UserClass {
 
   @Field((type) => GraphQLDateTime)
   refreshTokenExpiresAt: Date;
+
+  @Field((type) => Roles)
+  role: Roles;
 }
+
+registerEnumType(Roles, {
+  name: 'Roles',
+});
