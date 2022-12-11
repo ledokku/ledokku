@@ -37,6 +37,8 @@ const Index = () => {
                     if (data.data?.loginWithGithub) {
                         login(data.data.loginWithGithub.token);
                         history.push('/dashboard');
+                    } else if (data.errors) {
+                        toast.error(data.errors[0]?.message ?? "Error al iniciar sesión");
                     }
                 } catch (error: any) {
                     toast.error(error.message);

@@ -211,8 +211,11 @@ export class GithubRepository {
 
     const email = emails.find((email) => email.primary);
 
-    if (!settings.allowedEmails.includes(email.email)) {
-      throw new Unauthorized('Numero de usuarios excedido');
+    if (
+      settings.allowedEmails.length > 0 &&
+      !settings.allowedEmails.includes(email.email)
+    ) {
+      throw new Unauthorized('Este correo electrónico no esta permitido');
     }
 
     const now = new Date();
