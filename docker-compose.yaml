@@ -51,3 +51,7 @@ volumes:
   db_data:
   server_ssh_key:
 
+networks:
+  default:
+    name: proxy
+    external: true
