@@ -1,11 +1,10 @@
-import { $log, Req } from '@tsed/common';
+import { $log, PlatformRequest, Req } from '@tsed/common';
 import { Controller } from '@tsed/di';
 import {
   BadRequest,
   InternalServerError,
   Unauthorized,
 } from '@tsed/exceptions';
-import { PlatformExpressRequest } from '@tsed/platform-express';
 import { ContentType, Header, Post, Returns } from '@tsed/schema';
 import { verifyWebhookSecret } from '../lib/webhooks/verifyGithubSecret';
 import { GithubRepository } from './../modules/github/data/repositories/github.repository';
@@ -19,7 +18,7 @@ export class WebhookController {
   @Returns(200)
   async onMessage(
     @Header('x-github-event') githubEvent: string,
-    @Req() req: PlatformExpressRequest
+    @Req() req: PlatformRequest
   ): Promise<any> {
     if (githubEvent === 'push') {
       $log.info('Webhook', req.body);
@@ -33,7 +32,7 @@ export class WebhookController {
     return { success: true };
   }
 
-  async handleWebhooks(req: PlatformExpressRequest) {
+  async handleWebhooks(req: PlatformRequest) {
     if (!req.body) {
       throw new BadRequest('Failed to fetch the request from github');
     }

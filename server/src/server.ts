@@ -25,6 +25,7 @@ import { DokkuContext } from './data/models/dokku_context';
 import { SubscriptionTopics } from './data/models/subscription_topics';
 import { SyncServerQueue } from './queues/sync_server.queue';
 import { startSmeeClient } from './smeeClient';
+import * as modules from './modules';
 
 const pubsub = new PubSub();
 
@@ -45,7 +46,6 @@ registerProvider({
   },
   rootDir: __dirname,
   acceptMimes: ['application/json'],
-  componentsScan: [`${__dirname}/**/*.resolver.{ts,js}`],
   mount: {
     '/api': [WebhookController],
   },
@@ -57,10 +57,9 @@ registerProvider({
         authChecker,
         pubSub: pubsub,
       },
+      resolvers: Object.values(modules) as any,
       serverConfig: {
-        plugins: [
-          ApolloServerPluginInlineTrace()
-        ]
+        plugins: [ApolloServerPluginInlineTrace()],
       },
       context: (expressContext: ExpressContext) =>
         ContextFactory.createFromHTTP(expressContext.req as any),

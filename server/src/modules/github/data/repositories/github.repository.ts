@@ -1,4 +1,3 @@
-import { SettingsRepository } from './../../../settings/data/repositories/settings.repository';
 import { createAppAuth } from '@octokit/auth-app';
 import { Octokit } from '@octokit/rest';
 import { App, AppMetaGithub, PrismaClient, Roles, User } from '@prisma/client';
@@ -6,13 +5,13 @@ import { Injectable } from '@tsed/di';
 import { Unauthorized } from '@tsed/exceptions';
 import fetch from 'node-fetch';
 import { DeployAppQueue } from '../../../../queues/deploy_app.queue';
+import { SettingsRepository } from '../../../../repositories';
 import { formatGithubPem } from './../../../../config';
 import {
   GITHUB_APP_CLIENT_ID,
   GITHUB_APP_CLIENT_SECRET,
   GITHUB_APP_ID,
   GITHUB_APP_PEM,
-  NUMBER_USERS_ALLOWED,
 } from './../../../../constants';
 import { SyncServerQueue } from './../../../../queues/sync_server.queue';
 import { GithubError } from './../models/github_error';
@@ -232,7 +231,7 @@ export class GithubRepository {
           refreshToken: oauthData.refresh_token,
           refreshTokenExpiresAt,
           githubId: githubUser.node_id,
-          role: userCount === 0 ? Roles.OWNER : Roles.ADMIN
+          role: userCount === 0 ? Roles.OWNER : Roles.ADMIN,
         },
       })
       .then(async (res) => {

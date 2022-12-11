@@ -18,21 +18,24 @@ import { PaginationArgs } from '../../data/args/pagination';
 import { DokkuContext } from '../../data/models/dokku_context';
 import { LogPayload } from '../../data/models/log_payload';
 import { SubscriptionTopics } from '../../data/models/subscription_topics';
-import { UserRepository } from '../../data/repositories/user_repository';
-import { DokkuAppRepository } from '../../lib/dokku/dokku.app.repository';
-import { DokkuDomainsRepository } from '../../lib/dokku/dokku.domains.repository';
-import { DokkuProxyRepository } from '../../lib/dokku/dokku.proxy.repository';
 import { ProxyPort } from '../../lib/dokku/models/proxy_ports.model';
 import { LinkDatabaseQueue } from '../../queues/link_database.queue';
 import { RebuildAppQueue } from '../../queues/rebuild_app.queue';
 import { RestartAppQueue } from '../../queues/restart_app.queue';
 import { UnlinkDatabaseQueue } from '../../queues/unlink_database.queue';
+import {
+  AppRepository,
+  DatabaseRepository,
+  DokkuAppRepository,
+  DokkuDomainsRepository,
+  DokkuProxyRepository,
+  GithubRepository,
+  UserRepository,
+} from '../../repositories';
 import { Database } from '../databases/data/models/database.model';
 import { AppGithubMeta } from '../github/data/models/app_meta_github.model';
-import { GithubRepository } from '../github/data/repositories/github.repository';
 import { SetEnvVarQueue } from './../../queues/set_env_var.queue';
 import { UnsetEnvVarQueue } from './../../queues/unset_env_var.queue';
-import { DatabaseRepository } from './../databases/data/repositories/database.repository';
 import { AddAppProxyPortInput } from './data/inputs/add_app_proxy_port.input';
 import { AddDomainInput } from './data/inputs/add_domain.input';
 import { CreateAppDokkuInput } from './data/inputs/create_app_dokku.input';
@@ -56,7 +59,6 @@ import { DomainList } from './data/models/domain_list.model';
 import { EnvVarList } from './data/models/env_var_list.model';
 import { Logs } from './data/models/logs.model';
 import { BooleanResult } from './data/models/result.model';
-import { AppRepository } from './data/repositories/app.repository';
 
 @ResolverService(App)
 export class AppResolver {

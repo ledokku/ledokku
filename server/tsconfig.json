@@ -1,26 +1,35 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "ES2018",
     "lib": [
       "dom",
-      "esnext"
+      "ES7",
+      "ESNext.AsyncIterable"
     ],
     "outDir": "build",
-    "allowJs": false,
+    "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
     "module": "commonjs",
+    "typeRoots": [
+      "./node_modules/@types"
+    ],
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "sourceMap": true,
     "importHelpers": true,
     "emitDecoratorMetadata": true,
+    "declaration": false,
+    "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "./public",
+    "dist",
+    "test"
   ],
   "include": [
     "src/**/*.ts"

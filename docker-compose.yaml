@@ -21,7 +21,7 @@ services:
     environment:
       - PORT=4000
       - NODE_ENV=production
-      - DATABASE_URL=postgres://postgres:@db:5432/ledokku?schema=public&connect_timeout=300
+      - DATABASE_URL=postgres://postgres:asdasd@db:5432/ledokku?schema=public&connect_timeout=300
       - REDIS_URL=redis://redis:6379/0
       - JWT_SECRET=
       - GITHUB_APP_ID=
@@ -41,7 +41,7 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_PASSWORD: 
+      POSTGRES_PASSWORD: asdasd
 
   redis:
     restart: always
@@ -51,7 +51,3 @@ volumes:
   db_data:
   server_ssh_key:
 
-networks:
-  default:
-    name: proxy
-    external: true

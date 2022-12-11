@@ -2,12 +2,11 @@ import { App } from '@prisma/client';
 import { $log } from '@tsed/common';
 import { Job } from 'bullmq';
 import { PubSub } from 'graphql-subscriptions';
-import { ContextFactory } from '../config/context_factory';
 import { SubscriptionTopics } from '../data/models/subscription_topics';
 import { IQueue, Queue } from '../lib/queues/queue.decorator';
 import { sshConnect } from '../lib/ssh';
-import { AppResolver } from '../modules/apps/app.resolver';
 import { AppCreatedPayload } from '../modules/apps/data/models/app_created.payload';
+import { DokkuAppRepository } from './../lib/dokku/dokku.app.repository';
 import { DokkuGitRepository } from './../lib/dokku/dokku.git.repository';
 import { ActivityRepository } from './../modules/activity/data/repositories/activity.repository';
 import { AppRepository } from './../modules/apps/data/repositories/app.repository';
@@ -25,7 +24,7 @@ export class DeployAppQueue extends IQueue<QueueArgs, App> {
     private dokkuGitRepository: DokkuGitRepository,
     private pubsub: PubSub,
     private activityRepository: ActivityRepository,
-    private appResolver: AppResolver
+    private dokkuAppRepository: DokkuAppRepository
   ) {
     super();
   }
@@ -103,15 +102,20 @@ export class DeployAppQueue extends IQueue<QueueArgs, App> {
   async onFailed(job: Job<QueueArgs, any>, error: Error) {
     const { appId } = job.data;
 
-    this.appResolver.destroyApp({
-      appId
-    }, await ContextFactory.createFromHTTP())
-
     this.pubsub?.publish(SubscriptionTopics.APP_CREATED, <AppCreatedPayload>{
       appCreateLogs: {
         message: 'Failed to create an app',
         type: 'end:failure',
       },
     });
+
+    const appToDelete = await this.appRepository.get(appId);
+
+    if (appToDelete) {
+      await this.appRepository.delete(appId);
+      const ssh = await sshConnect();
+
+      await this.dokkuAppRepository.destroy(ssh, appToDelete.name);
+    }
   }
 }
