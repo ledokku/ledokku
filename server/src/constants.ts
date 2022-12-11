@@ -55,3 +55,5 @@ export function changeWebhookProxyUrl(url: string) {
 
   return WEBHOOK_PROXY_URL;
 }
+
+export const CORS_ORIGIN = process.env.CORS_ORIGIN ?? '*';

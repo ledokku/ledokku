@@ -19,13 +19,14 @@ import * as http from 'http';
 import { Server as WebSocketServer } from 'ws';
 import { authChecker } from './config/auth_checker';
 import { ContextFactory } from './config/context_factory';
-import { IS_PRODUCTION, PORT } from './constants';
+import { CORS_ORIGIN, IS_PRODUCTION, PORT } from './constants';
 import { WebhookController } from './controllers/webhook.controller';
 import { DokkuContext } from './data/models/dokku_context';
 import { SubscriptionTopics } from './data/models/subscription_topics';
 import { SyncServerQueue } from './queues/sync_server.queue';
 import { startSmeeClient } from './smeeClient';
 import * as modules from './modules';
+import cors from 'cors';
 
 const pubsub = new PubSub();
 
@@ -49,6 +50,11 @@ registerProvider({
   mount: {
     '/api': [WebhookController],
   },
+  middlewares: [
+    cors({
+      origin: CORS_ORIGIN,
+    }),
+  ],
   typegraphql: {
     default: {
       path: '/graphql',
