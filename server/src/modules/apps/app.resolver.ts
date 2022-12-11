@@ -73,7 +73,7 @@ export class AppResolver {
     private unlinkDatabaseQueue: UnlinkDatabaseQueue,
     private unsetEnvVarQueue: UnsetEnvVarQueue,
     private restartAppQueue: RestartAppQueue,
-    private userRepository: UserRepository // private activityRepository: ActivityRepository, // private appBuildRepository: AppBuildRepository, // private buildAppQueue: BuildAppQueue
+    private userRepository: UserRepository
   ) {}
 
   @Authorized()
