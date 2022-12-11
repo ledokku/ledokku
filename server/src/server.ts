@@ -50,11 +50,6 @@ registerProvider({
   mount: {
     '/api': [WebhookController],
   },
-  middlewares: [
-    cors({
-      origin: CORS_ORIGIN,
-    }),
-  ],
   typegraphql: {
     default: {
       path: '/graphql',
@@ -115,6 +110,11 @@ export class Server implements BeforeRoutesInit, OnReady {
 
   $beforeRoutesInit(): void | Promise<void> {
     this.app
+      .use(
+        cors({
+          origin: CORS_ORIGIN,
+        })
+      )
       .use(express.json({ limit: '1mb' }))
       .use(express.urlencoded({ limit: '1mb', extended: true }));
   }
