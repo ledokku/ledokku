@@ -41,11 +41,7 @@ export class ContextFactory {
       req?.headers?.['authorization'] &&
       (req.headers['authorization'] as string).replace('Bearer ', '');
 
-    console.log(1);
-
     const baseContext = await ContextFactory.generateBaseContext();
-
-    console.log(2);
 
     const user = await this.decodeJWT(token);
 
@@ -80,9 +76,14 @@ export class ContextFactory {
 
   private static async decodeJWT(token: string): Promise<User> {
     try {
+      console.log(1);
+      
       const decoded = jsonwebtoken.verify(token, JWT_SECRET) as {
         userId: string;
       };
+
+      console.log(2);
+      
 
       return this.getUserAndRefreshIfNeeded(decoded.userId);
     } catch (e) {}
@@ -91,13 +92,15 @@ export class ContextFactory {
   }
 
   private static async getUserAndRefreshIfNeeded(userId: string) {
-    console.log(prisma);
+    console.log(3);
 
     const user = await prisma.user.findUnique({
       where: {
         id: userId,
       },
     });
+
+    console.log(user);
 
     if (user.refreshTokenExpiresAt < new Date()) {
       const res: {
