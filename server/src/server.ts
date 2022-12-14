@@ -27,6 +27,7 @@ import { SyncServerQueue } from './queues/sync_server.queue';
 import { startSmeeClient } from './smeeClient';
 import * as modules from './modules';
 import cors from 'cors';
+import prisma from './lib/prisma';
 
 const pubsub = new PubSub();
 
@@ -37,7 +38,7 @@ registerProvider({
 
 registerProvider({
   provide: PrismaClient,
-  useValue: new PrismaClient(),
+  useValue: prisma,
 });
 
 @Configuration({

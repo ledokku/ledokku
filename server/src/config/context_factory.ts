@@ -12,6 +12,7 @@ import {
   GITHUB_APP_CLIENT_SECRET,
 } from './../constants';
 import fetch from 'node-fetch';
+import prisma from '../lib/prisma';
 
 export class ContextFactory {
   static async generateBaseContext(): Promise<Partial<DokkuContext>> {
@@ -30,7 +31,7 @@ export class ContextFactory {
     }
 
     return {
-      prisma: injector.get(PrismaClient),
+      prisma: prisma,
       sshContext: {
         publicKey,
         connection: sshConnection,
@@ -45,7 +46,7 @@ export class ContextFactory {
 
     const baseContext = await ContextFactory.generateBaseContext();
 
-    const user = await this.decodeJWT(baseContext.prisma, token);
+    const user = await this.decodeJWT(token);
 
     return <DokkuContext>{
       ...baseContext,
@@ -61,10 +62,7 @@ export class ContextFactory {
   static async createFromWS(connectionParams?: any): Promise<DokkuContext> {
     const baseContext = await ContextFactory.generateBaseContext();
 
-    const user = await this.decodeJWT(
-      baseContext.prisma,
-      connectionParams?.token
-    );
+    const user = await this.decodeJWT(connectionParams?.token);
 
     return <DokkuContext>{
       ...baseContext,
@@ -77,25 +75,19 @@ export class ContextFactory {
     };
   }
 
-  private static async decodeJWT(
-    prisma: PrismaClient,
-    token: string
-  ): Promise<User> {
+  private static async decodeJWT(token: string): Promise<User> {
     try {
       const decoded = jsonwebtoken.verify(token, JWT_SECRET) as {
         userId: string;
       };
 
-      return this.getUserAndRefreshIfNeeded(prisma, decoded.userId);
+      return this.getUserAndRefreshIfNeeded(decoded.userId);
     } catch (e) {}
 
     return undefined;
   }
 
-  private static async getUserAndRefreshIfNeeded(
-    prisma: PrismaClient,
-    userId: string
-  ) {
+  private static async getUserAndRefreshIfNeeded(userId: string) {
     const user = await prisma.user.findUnique({
       where: {
         id: userId,
