@@ -113,11 +113,7 @@ export class ContextFactory {
           client_id: GITHUB_APP_CLIENT_ID,
           client_secret: GITHUB_APP_CLIENT_SECRET,
         }),
-      }).then(async (res) => {
-        console.log(await res.text());
-
-        return res.json();
-      });
+      }).then(async (res) => res.json());
 
       console.log(res);
 
