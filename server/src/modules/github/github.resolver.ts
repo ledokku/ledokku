@@ -28,7 +28,7 @@ export class GithubResolver {
   async githubInstallationId(
     @Ctx() context: DokkuContext
   ): Promise<Installation> {
-    const user = await this.userRepository.get(context.auth.userId);
+    const user = await this.userRepository.get(context.auth.user.id);
 
     return (await this.ghRepository.installations(user.githubAccessToken))
       .installations[0];
@@ -47,7 +47,7 @@ export class GithubResolver {
     @Arg('installationId') installationId: string,
     @Ctx() context: DokkuContext
   ): Promise<Branch[]> {
-    const user = await this.userRepository.get(context.auth.userId);
+    const user = await this.userRepository.get(context.auth.user.id);
 
     return this.ghRepository.branches(
       user.username,

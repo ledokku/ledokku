@@ -40,7 +40,7 @@ export class AuthResolver {
       },
       JWT_SECRET,
       {
-        expiresIn: '1d',
+        expiresIn: '365d',
       }
     );
 

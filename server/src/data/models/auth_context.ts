@@ -1,4 +1,6 @@
+import { User } from '@prisma/client';
+
 export class AuthContext {
-    token: string;
-    userId: string;
+  token: string;
+  user: User;
 }

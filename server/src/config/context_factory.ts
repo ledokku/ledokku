@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, User } from '@prisma/client';
 import { $log, InjectorService } from '@tsed/common';
 import express from 'express';
 import { readFile } from 'fs/promises';
@@ -6,7 +6,12 @@ import jsonwebtoken from 'jsonwebtoken';
 import { sshKeyPath } from '../config';
 import { DokkuContext } from '../data/models/dokku_context';
 import { sshConnect } from '../lib/ssh';
-import { JWT_SECRET } from './../constants';
+import {
+  GITHUB_APP_CLIENT_ID,
+  JWT_SECRET,
+  GITHUB_APP_CLIENT_SECRET,
+} from './../constants';
+import fetch from 'node-fetch';
 
 export class ContextFactory {
   static async generateBaseContext(): Promise<Partial<DokkuContext>> {
@@ -38,46 +43,101 @@ export class ContextFactory {
       req?.headers?.['authorization'] &&
       (req.headers['authorization'] as string).replace('Bearer ', '');
 
-    let userId: string | undefined;
-    try {
-      const decoded = jsonwebtoken.verify(token, JWT_SECRET) as {
-        userId: string;
-      };
-      userId = decoded.userId;
-    } catch (e) {}
+    const baseContext = await ContextFactory.generateBaseContext();
+
+    const user = await this.decodeJWT(baseContext.prisma, token);
 
     return <DokkuContext>{
-      ...(await ContextFactory.generateBaseContext()),
-      auth: userId
+      ...baseContext,
+      auth: user
         ? {
             token,
-            userId,
+            user,
           }
         : undefined,
     };
   }
 
   static async createFromWS(connectionParams?: any): Promise<DokkuContext> {
-    let userId: string | undefined;
+    const baseContext = await ContextFactory.generateBaseContext();
 
-    try {
-      const decoded = jsonwebtoken.verify(
-        connectionParams?.token,
-        JWT_SECRET
-      ) as {
-        userId: string;
-      };
-      userId = decoded.userId;
-    } catch (e) {}
+    const user = await this.decodeJWT(
+      baseContext.prisma,
+      connectionParams?.token
+    );
 
     return <DokkuContext>{
-      ...(await ContextFactory.generateBaseContext()),
-      auth: userId
+      ...baseContext,
+      auth: user
         ? {
             token: connectionParams.token,
-            userId,
+            user,
           }
         : undefined,
     };
+  }
+
+  private static async decodeJWT(
+    prisma: PrismaClient,
+    token: string
+  ): Promise<User> {
+    try {
+      const decoded = jsonwebtoken.verify(token, JWT_SECRET) as {
+        userId: string;
+      };
+
+      return this.getUserAndRefreshIfNeeded(prisma, decoded.userId);
+    } catch (e) {}
+
+    return undefined;
+  }
+
+  private static async getUserAndRefreshIfNeeded(
+    prisma: PrismaClient,
+    userId: string
+  ) {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (user.refreshTokenExpiresAt < new Date()) {
+      const res: {
+        access_token: string;
+        expires_in: number;
+        refresh_token: string;
+        refresh_token_expires_in: string;
+        scope: string;
+        token_type: string;
+      } = await fetch('https://github.com/login/oauth/access_token', {
+        method: 'POST',
+        body: JSON.stringify({
+          refresh_token: user.refreshToken,
+          grant_type: 'refresh_token',
+          client_id: GITHUB_APP_CLIENT_ID,
+          client_secret: GITHUB_APP_CLIENT_SECRET,
+        }),
+      }).then((res) => res.json());
+
+      const now = new Date();
+      const time = now.getTime();
+      const refreshTokenExpiresAt = new Date(
+        time + Number(res?.refresh_token_expires_in ?? 0)
+      );
+
+      return await prisma.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          githubAccessToken: res.access_token,
+          refreshToken: res.refresh_token,
+          refreshTokenExpiresAt,
+        },
+      });
+    }
+
+    return user;
   }
 }

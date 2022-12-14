@@ -296,7 +296,7 @@ export class AppResolver {
     if (!/^[a-z0-9-]+$/.test(input.name))
       throw new BadRequest('Mal formato del nombre');
 
-    const user = await this.userRepository.get(context.auth.userId);
+    const user = await this.userRepository.get(context.auth.user.id);
     const appNameExists = await this.appRepository.exists(input.name);
 
     if (appNameExists) {
