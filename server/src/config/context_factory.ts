@@ -16,9 +16,6 @@ import prisma from '../lib/prisma';
 
 export class ContextFactory {
   static async generateBaseContext(): Promise<Partial<DokkuContext>> {
-    const injector = new InjectorService();
-    await injector.loadAsync();
-
     let sshConnection = undefined;
     const publicKey = await readFile(`${sshKeyPath}.pub`, {
       encoding: 'utf8',
@@ -44,9 +41,15 @@ export class ContextFactory {
       req?.headers?.['authorization'] &&
       (req.headers['authorization'] as string).replace('Bearer ', '');
 
+    console.log(1);
+
     const baseContext = await ContextFactory.generateBaseContext();
 
+    console.log(2);
+
     const user = await this.decodeJWT(token);
+
+    console.log(3);
 
     return <DokkuContext>{
       ...baseContext,
