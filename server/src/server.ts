@@ -66,9 +66,7 @@ registerProvider({
       context: (expressContext: ExpressContext) =>
         ContextFactory.createFromHTTP(expressContext.req as any),
       formatError: (err: GraphQLError) => {
-        if (!IS_PRODUCTION) {
-          $log.error(err);
-        }
+        $log.error(err.message, err.path, err.stack, err.extensions);
 
         if (err.message.startsWith('!     ')) {
           return {

@@ -88,6 +88,8 @@ export class ContextFactory {
   }
 
   private static async getUserAndRefreshIfNeeded(userId: string) {
+    console.log(prisma);
+
     const user = await prisma.user.findUnique({
       where: {
         id: userId,
