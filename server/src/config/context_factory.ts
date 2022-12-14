@@ -76,14 +76,9 @@ export class ContextFactory {
 
   private static async decodeJWT(token: string): Promise<User> {
     try {
-      console.log(1);
-      
       const decoded = jsonwebtoken.verify(token, JWT_SECRET) as {
         userId: string;
       };
-
-      console.log(2);
-      
 
       return this.getUserAndRefreshIfNeeded(decoded.userId);
     } catch (e) {}
@@ -92,15 +87,11 @@ export class ContextFactory {
   }
 
   private static async getUserAndRefreshIfNeeded(userId: string) {
-    console.log(3);
-
     const user = await prisma.user.findUnique({
       where: {
         id: userId,
       },
     });
-
-    console.log(user);
 
     if (user.refreshTokenExpiresAt < new Date()) {
       const res: {
@@ -118,7 +109,13 @@ export class ContextFactory {
           client_id: GITHUB_APP_CLIENT_ID,
           client_secret: GITHUB_APP_CLIENT_SECRET,
         }),
-      }).then((res) => res.json());
+      }).then(async (res) => {
+        console.log(await res.text());
+
+        return res.json();
+      });
+
+      console.log(res);
 
       const now = new Date();
       const time = now.getTime();
