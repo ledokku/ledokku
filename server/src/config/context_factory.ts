@@ -103,6 +103,10 @@ export class ContextFactory {
         token_type: string;
       } = await fetch('https://github.com/login/oauth/access_token', {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
         body: JSON.stringify({
           refresh_token: user.refreshToken,
           grant_type: 'refresh_token',
