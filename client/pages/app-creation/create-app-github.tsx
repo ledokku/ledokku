@@ -1,4 +1,4 @@
-import { Button, Dropdown, Grid, Input, Link, Loading, Modal, Text, User } from '@nextui-org/react';
+import { Button, Checkbox, Dropdown, Grid, Input, Link, Loading, Modal, Text, User } from '@nextui-org/react';
 import { trackGoal } from 'fathom-client';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
@@ -54,6 +54,7 @@ const CreateAppGithub = () => {
     const [selectedRepo, setSelectedRepo] = useState<Repository>();
     const [selectedBranch, setSelectedBranch] = useState('');
     const [isProceedModalOpen, setIsProceedModalOpen] = useState(false);
+    const [isDockerfileEnabled, setIsDockerfileEnabled] = useState(false);
     const { data: installationData, loading: installationLoading } = useGithubInstallationIdQuery({
         fetchPolicy: 'network-only',
     });
@@ -116,6 +117,7 @@ const CreateAppGithub = () => {
         };
         installationId: string;
         gitBranch: string;
+        dockerfilePath: string;
     }>({
         initialValues: {
             name: '',
@@ -126,15 +128,12 @@ const CreateAppGithub = () => {
             },
             installationId: '',
             gitBranch: '',
+            dockerfilePath: "Dockerfile",
         },
 
         validateOnChange: true,
         validationSchema: createAppGithubSchema,
         onSubmit: async (values) => {
-            console.log("Hola");
-
-            console.log(installationData);
-
             if (installationData) {
                 try {
                     await createAppGithubMutation({
@@ -145,6 +144,7 @@ const CreateAppGithub = () => {
                                 branchName: values.gitBranch,
                                 gitRepoId: values.repo.id,
                                 githubInstallationId: values.installationId,
+                                dockerfilePath: isDockerfileEnabled ? values.dockerfilePath : undefined
                             },
                         },
                     });
@@ -239,6 +239,7 @@ const CreateAppGithub = () => {
                     id: active.value.id,
                 },
                 gitBranch: '',
+                dockerfilePath: "Dockerfile"
             });
         }
     };
@@ -454,7 +455,30 @@ const CreateAppGithub = () => {
                                                 ))}
                                             </Dropdown.Menu>
                                         </Dropdown>
+                                        <div className='mt-8 mb-4'>
+                                            <Checkbox
+                                                label='Directorio del Dockerfile personalizado'
+                                                isDisabled={formik.values.repo.id.length === 0}
+                                                isSelected={isDockerfileEnabled}
+                                                onChange={(val) => setIsDockerfileEnabled(val)} />
 
+                                            {
+                                                isDockerfileEnabled && <div className='mt-2'>
+                                                    <Input
+                                                        label='Directorio del Dockerfile'
+                                                        value={formik.values.dockerfilePath}
+                                                        onChange={(e) => {
+                                                            formik.setFieldValue("dockerfilePath", e.currentTarget.value, true);
+                                                        }}
+                                                        disabled={formik.values.repo.id.length === 0}
+                                                        labelLeft="./"
+                                                        fullWidth />
+                                                    <Text className='text-red-500'>
+                                                        {formik.errors.dockerfilePath}
+                                                    </Text>
+                                                </div>
+                                            }
+                                        </div>
                                         <Button
                                             className="mt-8"
                                             type="submit"

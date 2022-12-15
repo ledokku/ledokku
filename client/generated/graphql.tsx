@@ -54,6 +54,7 @@ export type App = {
   appMetaGithub?: Maybe<AppGithubMeta>;
   createdAt: Scalars['DateTime'];
   databases: Array<Database>;
+  dockerfilePath?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   logs: Logs;
   name: Scalars['String'];
@@ -125,6 +126,7 @@ export type CreateAppDokkuInput = {
 
 export type CreateAppGithubInput = {
   branchName: Scalars['String'];
+  dockerfilePath?: InputMaybe<Scalars['String']>;
   githubInstallationId: Scalars['String'];
   gitRepoFullName: Scalars['String'];
   gitRepoId: Scalars['String'];
