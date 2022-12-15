@@ -1,4 +1,4 @@
-import { Button, Dropdown, Grid, Link, Loading, Modal, Text, User } from '@nextui-org/react';
+import { Button, Dropdown, Grid, Input, Link, Loading, Modal, Text, User } from '@nextui-org/react';
 import { trackGoal } from 'fathom-client';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
@@ -92,7 +92,7 @@ const CreateAppGithub = () => {
         name: yup
             .string()
             .required('Nombre de la app requerido')
-            .matches(/^[a-z0-9-_]+$/)
+            .matches(/^[a-z0-9-]+$/)
             .test(
                 'El nombre ya existe',
                 'El nombre de la app ya existe',
@@ -224,10 +224,14 @@ const CreateAppGithub = () => {
         setSelectedRepo(active.value);
         setSelectedBranch('');
         if (installationData) {
-            console.log(active.value);
+            const name = [...active.value.name]
+                .map((it) => (/^[a-z0-9-]+$/.test(it) ? it : '-'))
+                .join('');
+
+            console.log(name);
 
             formik.setValues({
-                name: active.value.name,
+                name: name,
                 installationId: installationData?.githubInstallationId.id,
                 repo: {
                     fullName: active.value.fullName,
@@ -382,9 +386,7 @@ const CreateAppGithub = () => {
                                                 ))}
                                             </Dropdown.Menu>
                                         </Dropdown>
-                                        <Text className='text-red-500'>
-                                            {formik.errors.name}
-                                        </Text>
+
                                         <Text className="mt-1" h6>
                                             ¿No puedes ver los repositorios privados?{' '}
                                             <Link
@@ -394,7 +396,19 @@ const CreateAppGithub = () => {
                                                 Configura la app de Github
                                             </Link>
                                         </Text>
-
+                                        <div className='mt-8 mb-4'>
+                                            <Input
+                                                label='Nombre de la app'
+                                                value={formik.values.name}
+                                                onChange={(e) => {
+                                                    formik.setFieldValue("name", e.currentTarget.value, true);
+                                                }}
+                                                disabled={formik.values.repo.id.length === 0}
+                                                fullWidth />
+                                            <Text className='text-red-500'>
+                                                {formik.errors.name}
+                                            </Text>
+                                        </div>
                                         <Text h5 className="mt-8">
                                             Rama a lanzar
                                         </Text>

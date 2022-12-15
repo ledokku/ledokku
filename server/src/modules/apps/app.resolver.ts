@@ -293,7 +293,7 @@ export class AppResolver {
     @Ctx() context: DokkuContext,
     @PubSub() pubSub: PubSubEngine
   ): Promise<BooleanResult> {
-    if (!/^[a-z0-9-_]+$/.test(input.name))
+    if (!/^[a-z0-9-]+$/.test(input.name))
       throw new BadRequest('Mal formato del nombre');
 
     const user = await this.userRepository.get(context.auth.user.id);
