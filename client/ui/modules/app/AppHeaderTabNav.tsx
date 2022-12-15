@@ -13,12 +13,14 @@ export const AppHeaderTabNav = ({ app }: AppHeaderTabNavProps) => {
     const selectedRoute = location.pathname.endsWith('/logs')
         ? 'logs'
         : location.pathname.endsWith('/env')
-        ? 'env'
-        : location.pathname.endsWith('/settings/ports') ||
-          location.pathname.endsWith('/settings/domains') ||
-          location.pathname.endsWith('/settings/advanced')
-        ? 'settings'
-        : 'index';
+            ? 'env' :
+            location.pathname.endsWith('/activity')
+                ? 'activity'
+                : location.pathname.endsWith('/settings/ports') ||
+                    location.pathname.endsWith('/settings/domains') ||
+                    location.pathname.endsWith('/settings/advanced')
+                    ? 'settings'
+                    : 'index';
 
     return (
         <Navbar disableShadow>
@@ -27,7 +29,10 @@ export const AppHeaderTabNav = ({ app }: AppHeaderTabNavProps) => {
                     Aplicación
                 </Navbar.Link>
                 <Navbar.Link isActive={selectedRoute === 'logs'} href={`/app/${app.id}/logs`}>
-                    Registros
+                    Registros de ejecución
+                </Navbar.Link>
+                <Navbar.Link isActive={selectedRoute === 'activity'} href={`/app/${app.id}/activity`}>
+                    Actividad
                 </Navbar.Link>
                 <Navbar.Link isActive={selectedRoute === 'env'} href={`/app/${app.id}/env`}>
                     Variables de entorno

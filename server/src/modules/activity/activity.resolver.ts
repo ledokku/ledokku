@@ -1,5 +1,5 @@
 import { ResolverService } from '@tsed/typegraphql';
-import { Args, FieldResolver, Query, Root } from 'type-graphql';
+import { Arg, Args, FieldResolver, Query, Root } from 'type-graphql';
 import { PaginationArgs } from '../../data/args/pagination';
 import { AppBuild } from '../app_build/data/models/app_build.model';
 import { Database } from '../databases/data/models/database.model';
@@ -16,9 +16,13 @@ export class ActivityResolver {
 
   @Query((returns) => ActivityPaginationInfo)
   async activity(
-    @Args((type) => PaginationArgs) pagination: PaginationArgs
+    @Args((type) => PaginationArgs) pagination: PaginationArgs,
+    @Arg('refId', (type) => String, { nullable: true })
+    refId: string | undefined
   ): Promise<ActivityPaginationInfo> {
-    return this.activityRepository.getAllPaginated(pagination);
+    return this.activityRepository.getAllPaginated(pagination, {
+      referenceId: refId,
+    });
   }
 
   @FieldResolver((returns) => ActivityModelUnion, { nullable: true })

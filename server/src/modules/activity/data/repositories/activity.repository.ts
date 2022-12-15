@@ -24,13 +24,14 @@ interface AddActivity {
 export class ActivityRepository {
   constructor(private prisma: PrismaClient) {}
 
-  async getAllPaginated({
-    page,
-    limit,
-  }: PaginationArgs): Promise<ActivityPaginationInfo> {
+  async getAllPaginated(
+    { page, limit }: PaginationArgs,
+    filter?: Prisma.ActivityWhereInput
+  ): Promise<ActivityPaginationInfo> {
     const skip = page * limit;
 
     const items = await this.prisma.activity.findMany({
+      where: filter,
       take: limit,
       skip,
       orderBy: {
@@ -38,7 +39,9 @@ export class ActivityRepository {
       },
     });
 
-    const total = await this.prisma.activity.count();
+    const total = await this.prisma.activity.count({
+      where: filter,
+    });
 
     const totalPages = Math.ceil(total / limit);
 

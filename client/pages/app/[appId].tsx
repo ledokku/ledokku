@@ -101,6 +101,7 @@ const App = () => {
         ssr: false,
         skip: !appId,
     });
+    
 
     if (!data || !databaseData) {
         return null;

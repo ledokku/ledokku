@@ -52,7 +52,7 @@ const CreateAppDokku = () => {
                 trackGoal(trackingGoals.createAppDokku, 0);
 
                 if (res.data) {
-                    history.push(`app/${res.data?.createAppDokku.appId}`);
+                    history.push(`/app/${res.data?.createAppDokku.appId}`);
                     toast.success('Aplicación creada');
                 }
             } catch (error: any) {

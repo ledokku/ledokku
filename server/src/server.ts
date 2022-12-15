@@ -59,6 +59,7 @@ registerProvider({
         authChecker,
         pubSub: pubsub,
       },
+      introspection: true,
       resolvers: Object.values(modules) as any,
       serverConfig: {
         plugins: [ApolloServerPluginInlineTrace()],

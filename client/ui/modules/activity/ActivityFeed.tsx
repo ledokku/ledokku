@@ -12,7 +12,7 @@ const AppContent = ({ app }: { app: App }) => {
     return <div>{app.name}</div>;
 };
 
-const ActivityItem = ({ activity }: { activity: Activity }) => {
+export const ActivityItem = ({ activity }: { activity: Activity }) => {
     return (
         <div>
             <div className="flex flex-row">

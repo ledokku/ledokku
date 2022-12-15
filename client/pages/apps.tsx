@@ -1,5 +1,4 @@
 import { Button, Table, Text } from '@nextui-org/react';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useAppsQuery } from '../generated/graphql';
@@ -39,7 +38,7 @@ const Apps = () => {
                 <Table.Header>
                     <Table.Column>Nombre</Table.Column>
                     <Table.Column>Repositorio</Table.Column>
-                    <Table.Column>Puertos</Table.Column>
+                    <Table.Column>Status</Table.Column>
                 </Table.Header>
                 <Table.Body loadingState={loading ? 'loading' : 'idle'}>
                     {data?.apps.items.map((it, index) => (
@@ -55,7 +54,7 @@ const Apps = () => {
                                     : ' '}
                             </Table.Cell>
                             <Table.Cell>
-                                {it.ports.map((it) => `${it.container}:${it.host}`).join(', ')}
+                                {it.type}
                             </Table.Cell>
                         </Table.Row>
                     )) ?? []}

@@ -13,7 +13,7 @@ import {
     useCreateDatabaseLogsSubscription,
     useCreateDatabaseMutation,
     useDatabaseQuery,
-    useIsPluginInstalledLazyQuery,
+    useIsPluginInstalledLazyQuery
 } from '../generated/graphql';
 import { Alert } from '../ui/components/Alert';
 import { CodeBox } from '../ui/components/CodeBox';
@@ -40,17 +40,11 @@ enum DbCreationStatus {
 }
 
 const DatabaseBox = ({ label, selected, icon, onClick }: DatabaseBoxProps) => {
-    const { theme } = useTheme();
     return (
         <div
-            className={`w-full p-12 flex flex-col items-center border-2 rounded-lg  ${
-                onClick ? 'grayscale-0 opacity-100 cursor-pointer' : 'grayscale  opacity-50'
-            }`}
+            className={`w-full border-solid p-12 flex flex-col border-3 items-center rounded-2xl ${selected ? "border-blue-500" : "border-gray-600"} ${onClick ? `grayscale-0 opacity-100 cursor-pointer hover:bg-[#7a7a7a1f]` : 'grayscale-1 opacity-50'
+                }`}
             onClick={onClick}
-            style={{
-                borderColor: selected ? theme?.colors.primary.value : theme?.colors.border.value,
-                border: 'solid',
-            }}
         >
             <div className="mb-2 h-12">{icon}</div>
             <Text h3>{label}</Text>
@@ -157,7 +151,7 @@ const CreateDatabase = () => {
         isDbCreationSuccess === DbCreationStatus.FAILURE
             ? toast.error('Error al crear la base de datos')
             : isDbCreationSuccess === DbCreationStatus.SUCCESS &&
-              toast.success('Base de datos creada');
+            toast.success('Base de datos creada');
     }, [isDbCreationSuccess, toast]);
 
     console.log(arrayOfCreateDbLogs);
@@ -186,7 +180,7 @@ const CreateDatabase = () => {
                             </Terminal>
 
                             {!!isDbCreationSuccess &&
-                            isDbCreationSuccess === DbCreationStatus.SUCCESS ? (
+                                isDbCreationSuccess === DbCreationStatus.SUCCESS ? (
                                 <div className="mt-12 flex justify-end">
                                     <Button
                                         onClick={() => handleNext()}
@@ -196,7 +190,7 @@ const CreateDatabase = () => {
                                     </Button>
                                 </div>
                             ) : !!isDbCreationSuccess &&
-                              isDbCreationSuccess === DbCreationStatus.FAILURE ? (
+                                isDbCreationSuccess === DbCreationStatus.FAILURE ? (
                                 <div className="mt-12 flex justify-end">
                                     <Button
                                         onClick={() => {

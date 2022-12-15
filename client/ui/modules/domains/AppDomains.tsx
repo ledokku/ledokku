@@ -4,9 +4,10 @@ import {
     DomainsDocument,
     useAppByIdQuery,
     useDomainsQuery,
-    useRemoveDomainMutation,
+    useRemoveDomainMutation
 } from '../../../generated/graphql';
 import { LoadingSection } from '../../../ui/components/LoadingSection';
+import { UrlStatus } from '../../components/UrlStatus';
 import { useToast } from '../../toast';
 import { AddAppDomain } from './AddAppDomain';
 
@@ -87,6 +88,7 @@ export const AppDomains = ({ appId }: AppDomainProps) => {
                 ) : (
                     <Table width="100%">
                         <Table.Header>
+                            <Table.Column>Status</Table.Column>
                             <Table.Column>URL</Table.Column>
                             <Table.Column width={100}>Acciones</Table.Column>
                         </Table.Header>
@@ -94,7 +96,10 @@ export const AppDomains = ({ appId }: AppDomainProps) => {
                             {domainsData?.domains.domains.map((domain, index) => (
                                 <Table.Row key={index}>
                                     <Table.Cell>
-                                        <Link href={`http://${domain}`} isExternal>
+                                        <UrlStatus url={`http://${domain}`} />
+                                    </Table.Cell>
+                                    <Table.Cell>
+                                        <Link href={`http://${domain}`} isExternal target="_blank">
                                             {domain}
                                         </Link>
                                     </Table.Cell>
@@ -105,7 +110,7 @@ export const AppDomains = ({ appId }: AppDomainProps) => {
                                             css={{ minWidth: 'auto' }}
                                             aria-label="Delete"
                                             icon={<FiTrash2 />}
-                                            disabled={removeDomainMutationLoading}
+                                            disabled={removeDomainMutationLoading || domain.includes("on.ocstudios.mx")}
                                             onClick={() => handleRemoveDomain(domain)}
                                         />
                                     </Table.Cell>

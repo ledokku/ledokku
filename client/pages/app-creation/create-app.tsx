@@ -25,17 +25,11 @@ export enum AppTypes {
 }
 
 const SourceBox = ({ label, selected = false, icon, onClick, badge }: SourceBoxProps) => {
-    const { theme } = useTheme();
     return (
         <div
-            className={`w-full p-12 flex flex-col border-2 items-center rounded-lg  ${
-                onClick ? 'grayscale-0 opacity-100 cursor-pointer' : 'grayscale  opacity-50'
-            }`}
+            className={`w-full border-solid p-12 flex flex-col border-3 items-center rounded-2xl ${selected ? "border-blue-500" : "border-gray-600"} ${onClick ? `grayscale-0 opacity-100 cursor-pointer hover:bg-[#7a7a7a1f]` : 'grayscale-1 opacity-50'
+                }`}
             onClick={onClick}
-            style={{
-                borderColor: selected ? theme?.colors.primary.value : theme?.colors.border.value,
-                border: 'solid',
-            }}
         >
             <div className="mb-2 h-12">{icon}</div>
             <Text h3>{label}</Text>
@@ -71,7 +65,7 @@ const CreateApp = () => {
 
     return (
         <AdminLayout>
-            <Text h2 className="mt-16">
+            <Text h2>
                 Crear aplicación
             </Text>
             <div>
@@ -82,7 +76,7 @@ const CreateApp = () => {
                                 Elige entre crear una aplicación desde un repositorio de Github o
                                 una aplicación de Dokku.
                             </Text>
-                            <Spacer y={3} />
+                            <Spacer y={1} />
                             <Grid.Container gap={4}>
                                 <Grid md={3} xs={6}>
                                     <SourceBox
@@ -115,8 +109,8 @@ const CreateApp = () => {
                                         label="Gitlab"
                                         icon={<GitlabIcon size={40} />}
                                         badge={<Badge color="error">Proximamente</Badge>}
-                                        // Uncomment this when we can handle docker deployments
-                                        // onClick={() => formik.setFieldValue('type', 'GITLAB')}
+                                    // Uncomment this when we can handle docker deployments
+                                    // onClick={() => formik.setFieldValue('type', 'GITLAB')}
                                     />
                                 </Grid>
                                 <Grid md={3} xs={6}>
@@ -125,14 +119,14 @@ const CreateApp = () => {
                                         label="Docker"
                                         icon={<DockerIcon size={40} />}
                                         badge={<Badge color="error">Proximamente</Badge>}
-                                        // Uncomment this when we can handle docker deployments
-                                        // onClick={() => formik.setFieldValue('type', 'DOCKER')}
+                                    // Uncomment this when we can handle docker deployments
+                                    // onClick={() => formik.setFieldValue('type', 'DOCKER')}
                                     />
                                 </Grid>
                             </Grid.Container>
                         </div>
 
-                        <div className="mt-36 flex justify-end">
+                        <div className="mt-8 flex justify-end">
                             <Button
                                 flat
                                 disabled={!formik.values.type || !!formik.errors.type}
