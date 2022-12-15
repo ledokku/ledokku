@@ -1,5 +1,6 @@
 import { App } from '@prisma/client';
 import { $log } from '@tsed/common';
+import { InternalServerError } from '@tsed/exceptions';
 import { Job } from 'bullmq';
 import { PubSub } from 'graphql-subscriptions';
 import { SubscriptionTopics } from '../data/models/subscription_topics';
@@ -74,6 +75,10 @@ export class DeployAppQueue extends IQueue<QueueArgs, App> {
       }
     );
 
+    if (res.stderr) {
+      throw new InternalServerError(res.stderr);
+    }
+
     $log.info(
       `Finalizando de crear ${app.name} desde https://github.com/${repoOwner}/${repoName}.git`
     );
@@ -94,7 +99,7 @@ export class DeployAppQueue extends IQueue<QueueArgs, App> {
 
     await this.activityRepository.add({
       name: `Proyecto "${result.name}" creado`,
-      description: `Creado desde https://github.com/${repoOwner}/${repoName}.git`,
+      description: `Creado desde https://github.com/${repoOwner}/${repoName}`,
       instance: result,
     });
   }

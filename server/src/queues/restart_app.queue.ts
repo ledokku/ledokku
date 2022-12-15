@@ -6,10 +6,12 @@ import { DokkuAppRepository } from '../lib/dokku/dokku.app.repository';
 import { IQueue, Queue } from '../lib/queues/queue.decorator';
 import { sshConnect } from '../lib/ssh';
 import { AppRestartPayload } from '../modules/apps/data/models/app_restart.payload';
+import { AppRepository } from '../repositories';
 import { ActivityRepository } from './../modules/activity/data/repositories/activity.repository';
 
 interface QueueArgs {
   appName: string;
+  appId: string;
 }
 
 @Queue()
@@ -17,13 +19,14 @@ export class RestartAppQueue extends IQueue<QueueArgs> {
   constructor(
     private dokkuAppRepository: DokkuAppRepository,
     private pubsub: PubSub,
-    private activityRepository: ActivityRepository
+    private activityRepository: ActivityRepository,
+    private appRepository: AppRepository
   ) {
     super();
   }
 
   protected async execute(job: Job<QueueArgs, any, string>) {
-    const { appName } = job.data;
+    const { appName, appId } = job.data;
 
     $log.info(`Iniciando reinicio de ${appName}`);
 
@@ -60,6 +63,7 @@ export class RestartAppQueue extends IQueue<QueueArgs> {
 
     await this.activityRepository.add({
       name: `Reinicio de "${appName}"`,
+      instance: await this.appRepository.get(appId),
     });
 
     if (!res.stderr) {

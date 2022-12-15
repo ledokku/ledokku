@@ -32,6 +32,7 @@ const ActivityPage = () => {
         variables: {
             limit: 10,
             page: page - 1,
+            refId: appId
         },
     });
 

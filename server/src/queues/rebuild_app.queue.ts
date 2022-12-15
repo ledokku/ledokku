@@ -7,9 +7,11 @@ import { sshConnect } from '../lib/ssh';
 import { AppRebuildPayload } from '../modules/apps/data/models/app_rebuild.payload';
 import { SubscriptionTopics } from './../data/models/subscription_topics';
 import { DokkuAppRepository } from './../lib/dokku/dokku.app.repository';
+import { AppRepository } from '../repositories';
 
 interface QueueArgs {
   appName: string;
+  appId: string;
 }
 
 @Queue()
@@ -17,13 +19,14 @@ export class RebuildAppQueue extends IQueue<QueueArgs> {
   constructor(
     private dokkuAppRepository: DokkuAppRepository,
     private pubsub: PubSub,
-    private activityRepository: ActivityRepository
+    private activityRepository: ActivityRepository,
+    private appRepository: AppRepository
   ) {
     super();
   }
 
   protected async execute(job: Job<QueueArgs, any, string>) {
-    const { appName } = job.data;
+    const { appName, appId } = job.data;
 
     $log.info(`Iniciando rebuild de ${appName}`);
 
@@ -52,6 +55,7 @@ export class RebuildAppQueue extends IQueue<QueueArgs> {
 
     await this.activityRepository.add({
       name: `Rebuild de "${appName}"`,
+      instance: await this.appRepository.get(appId),
     });
 
     if (!res.stderr) {

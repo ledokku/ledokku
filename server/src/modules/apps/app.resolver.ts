@@ -202,7 +202,7 @@ export class AppResolver {
 
     await this.unsetEnvVarQueue.add({
       appName: app.name,
-      key: input.key,
+      ...input,
     });
 
     return { result: true };
@@ -563,6 +563,7 @@ export class AppResolver {
 
     await this.rebuildAppQueue.add({
       appName: app.name,
+      appId: input.appId,
     });
 
     return { result: true };
@@ -582,6 +583,7 @@ export class AppResolver {
 
     await this.restartAppQueue.add({
       appName: app.name,
+      appId: app.id,
     });
 
     return { result: true };
