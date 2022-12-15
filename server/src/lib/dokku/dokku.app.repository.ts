@@ -33,6 +33,21 @@ export class DokkuAppRepository {
     return true;
   }
 
+  async setDockerfilePath(
+    ssh: NodeSSH,
+    appName: string,
+    path: string
+  ): Promise<boolean> {
+    const resultAppsDestroy = await ssh.execCommand(
+      `builder-dockerfile:set ${appName} dockerfile-path ${path}`
+    );
+    if (resultAppsDestroy.code === 1) {
+      throw new InternalServerError(resultAppsDestroy.stderr);
+    }
+
+    return true;
+  }
+
   async list(ssh: NodeSSH): Promise<string[]> {
     const resultAppsCreate = await ssh.execCommand(`apps:list`);
     if (resultAppsCreate.code === 1) {

@@ -31,16 +31,17 @@ enum Roles {
 }
 
 model App {
-  id            String         @id @default(uuid())
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  name          String
-  type          AppTypes
-  appBuild      AppBuild[]
-  databases     Database[]
-  User          User?          @relation(fields: [userId], references: [id])
-  userId        String?
-  AppMetaGithub AppMetaGithub?
+  id             String         @id @default(uuid())
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  name           String
+  dockerfilePath String?
+  type           AppTypes
+  appBuild       AppBuild[]
+  databases      Database[]
+  User           User?          @relation(fields: [userId], references: [id])
+  userId         String?
+  AppMetaGithub  AppMetaGithub?
 }
 
 enum AppTypes {

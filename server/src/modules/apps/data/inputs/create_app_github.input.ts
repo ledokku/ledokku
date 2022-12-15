@@ -14,6 +14,9 @@ export class CreateAppGithubInput {
   @Field((type) => String)
   gitRepoId: string;
 
+  @Field((type) => String, { nullable: true })
+  dockerfilePath?: string;
+
   @Field((type) => String)
   githubInstallationId: string;
 }

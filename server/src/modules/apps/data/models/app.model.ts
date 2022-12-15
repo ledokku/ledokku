@@ -22,6 +22,9 @@ export class App implements AppClass {
 
   @Field((type) => String)
   userId: string;
+
+  @Field((type) => String, { nullable: true })
+  dockerfilePath: string | undefined;
 }
 
 registerEnumType(AppTypes, {

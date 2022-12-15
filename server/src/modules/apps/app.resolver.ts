@@ -326,6 +326,14 @@ export class AppResolver {
     );
 
     if (created) {
+      if (input.dockerfilePath) {
+        this.dokkuAppRepository.setDockerfilePath(
+          context.sshContext.connection,
+          appName,
+          input.dockerfilePath
+        );
+      }
+
       const app = await this.githubRepository.createApp(
         input.githubInstallationId,
         appName,
