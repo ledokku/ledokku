@@ -1,6 +1,7 @@
 import { Injectable } from '@tsed/di';
 import { InternalServerError } from '@tsed/exceptions';
 import { NodeSSH, SSHExecOptions } from 'node-ssh';
+import { sshConnect } from '../ssh';
 import { EnvVar } from './models/env_var.model';
 
 @Injectable()
@@ -53,9 +54,9 @@ export class DokkuAppRepository {
     appName: string,
     path: string
   ): Promise<boolean> {
-    await this.setBuilder(ssh, appName, 'dockerfile');
+    await this.setBuilder(await sshConnect(), appName, 'dockerfile');
     await this.unsetEnvVar(
-      ssh,
+      await sshConnect(),
       appName,
       'DOKKU_PROXY_PORT_MAP',
       false
