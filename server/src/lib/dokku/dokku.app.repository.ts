@@ -33,11 +33,33 @@ export class DokkuAppRepository {
     return true;
   }
 
+  async setBuilder(
+    ssh: NodeSSH,
+    appName: string,
+    builder: 'dockerfile' | 'herokuish'
+  ): Promise<boolean> {
+    const resultAppsDestroy = await ssh.execCommand(
+      `builder:set ${appName} selected ${builder}`
+    );
+    if (resultAppsDestroy.code === 1) {
+      throw new InternalServerError(resultAppsDestroy.stderr);
+    }
+
+    return true;
+  }
+
   async setDockerfilePath(
     ssh: NodeSSH,
     appName: string,
     path: string
   ): Promise<boolean> {
+    await this.setBuilder(ssh, appName, 'dockerfile');
+    await this.unsetEnvVar(
+      ssh,
+      appName,
+      'DOKKU_PROXY_PORT_MAP',
+      false
+    ).catch((e) => console.log(e));
     const resultAppsDestroy = await ssh.execCommand(
       `builder-dockerfile:set ${appName} dockerfile-path ${path}`
     );
@@ -118,10 +140,11 @@ export class DokkuAppRepository {
   async unsetEnvVar(
     ssh: NodeSSH,
     appName: string,
-    key: string
+    key: string,
+    restart: boolean = true
   ): Promise<boolean> {
     const resultUnsetEnv = await ssh.execCommand(
-      `config:unset ${appName} ${key}`
+      `config:unset ${restart ? '' : '--no-restart'} ${appName} ${key}`
     );
 
     if (resultUnsetEnv.code === 1) {
