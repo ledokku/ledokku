@@ -16,7 +16,7 @@ import {
     useBranchesLazyQuery,
     useCreateAppGithubMutation,
     useGithubInstallationIdQuery,
-    useRepositoriesLazyQuery,
+    useRepositoriesLazyQuery
 } from '../../generated/graphql';
 import { Alert } from '../../ui/components/Alert';
 import { LoadingSection } from '../../ui/components/LoadingSection';
@@ -91,11 +91,11 @@ const CreateAppGithub = () => {
     const createAppGithubSchema = yup.object().shape({
         name: yup
             .string()
-            .required('App name is required')
-            .matches(/^[a-z0-9-]+$/)
+            .required('Nombre de la app requerido')
+            .matches(/^[a-z0-9-_]+$/)
             .test(
-                'Name exists',
-                'App with this name already exists',
+                'El nombre ya existe',
+                'El nombre de la app ya existe',
                 (val) => !dataApps?.apps.items.find((app) => app.name === val)
             ),
         repo: yup.object({
@@ -131,6 +131,10 @@ const CreateAppGithub = () => {
         validateOnChange: true,
         validationSchema: createAppGithubSchema,
         onSubmit: async (values) => {
+            console.log("Hola");
+
+            console.log(installationData);
+
             if (installationData) {
                 try {
                     await createAppGithubMutation({
@@ -147,7 +151,7 @@ const CreateAppGithub = () => {
                     setIsTerminalVisible(true);
                 } catch (error: any) {
                     error.message === 'Not Found'
-                        ? toast.error(`Repository : ${values.repo.fullName} not found`)
+                        ? toast.error(`Repositorio: ${values.repo.fullName} no encontrado`)
                         : toast.error(error.message);
                 }
             }
@@ -166,10 +170,10 @@ const CreateAppGithub = () => {
             `https://github.com/apps/${GITHUB_APP_NAME}/installations/new`,
             'Install App',
             'resizable=1, scrollbars=1, fullscreen=0, height=1000, width=1020,top=' +
-                window.screen.width +
-                ', left=' +
-                window.screen.width +
-                ', toolbar=0, menubar=0, status=0'
+            window.screen.width +
+            ', left=' +
+            window.screen.width +
+            ', toolbar=0, menubar=0, status=0'
         );
         const timer = setInterval(async () => {
             if (newWindow && newWindow.closed) {
@@ -220,6 +224,8 @@ const CreateAppGithub = () => {
         setSelectedRepo(active.value);
         setSelectedBranch('');
         if (installationData) {
+            console.log(active.value);
+
             formik.setValues({
                 name: active.value.name,
                 installationId: installationData?.githubInstallationId.id,
@@ -276,9 +282,9 @@ const CreateAppGithub = () => {
         isAppCreationSuccess === AppCreationStatus.FAILURE && !isToastShown
             ? toast.error('Error al crear aplicación') && setIsToastShown(true)
             : isAppCreationSuccess === AppCreationStatus.SUCCESS &&
-              !isToastShown &&
-              toast.success('Aplicación creada') &&
-              setIsToastShown(true);
+            !isToastShown &&
+            toast.success('Aplicación creada') &&
+            setIsToastShown(true);
     }, [isToastShown, isAppCreationSuccess, toast]);
 
     return (
@@ -300,7 +306,7 @@ const CreateAppGithub = () => {
                     </Terminal>
 
                     {!!isAppCreationSuccess &&
-                    isAppCreationSuccess === AppCreationStatus.SUCCESS ? (
+                        isAppCreationSuccess === AppCreationStatus.SUCCESS ? (
                         <div className="mt-12 flex justify-end">
                             <Button
                                 flat
@@ -311,7 +317,7 @@ const CreateAppGithub = () => {
                             </Button>
                         </div>
                     ) : !!isAppCreationSuccess &&
-                      isAppCreationSuccess === AppCreationStatus.FAILURE ? (
+                        isAppCreationSuccess === AppCreationStatus.FAILURE ? (
                         <div className="mt-12 flex justify-start">
                             <Button
                                 flat
@@ -376,7 +382,9 @@ const CreateAppGithub = () => {
                                                 ))}
                                             </Dropdown.Menu>
                                         </Dropdown>
-
+                                        <Text className='text-red-500'>
+                                            {formik.errors.name}
+                                        </Text>
                                         <Text className="mt-1" h6>
                                             ¿No puedes ver los repositorios privados?{' '}
                                             <Link

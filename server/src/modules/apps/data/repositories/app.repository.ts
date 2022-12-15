@@ -63,6 +63,15 @@ export class AppRepository {
     });
   }
 
+  async generateAppName(appName: string, index: number = 0) {
+    const generatedName = appName + (index > 0 ? `-${index}` : '');
+    if (await this.exists(appName)) {
+      return await this.generateAppName(appName, index + 1);
+    }
+
+    return generatedName;
+  }
+
   async exists(name: string): Promise<boolean> {
     return (
       (await this.prisma.app.count({

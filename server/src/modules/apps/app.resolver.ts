@@ -293,15 +293,11 @@ export class AppResolver {
     @Ctx() context: DokkuContext,
     @PubSub() pubSub: PubSubEngine
   ): Promise<BooleanResult> {
-    if (!/^[a-z0-9-]+$/.test(input.name))
+    if (!/^[a-z0-9-_]+$/.test(input.name))
       throw new BadRequest('Mal formato del nombre');
 
     const user = await this.userRepository.get(context.auth.user.id);
-    const appNameExists = await this.appRepository.exists(input.name);
-
-    if (appNameExists) {
-      throw new Conflict('Nombre ya utilizado');
-    }
+    const appName = await this.appRepository.generateAppName(input.name);
 
     const repo = await this.githubRepository.repository(
       input.githubInstallationId,
@@ -326,13 +322,13 @@ export class AppResolver {
 
     const created = await this.dokkuAppRepository.create(
       context.sshContext.connection,
-      input.name
+      appName
     );
 
     if (created) {
       const app = await this.githubRepository.createApp(
         input.githubInstallationId,
-        input.name,
+        appName,
         input.gitRepoFullName,
         input.gitRepoId,
         user,

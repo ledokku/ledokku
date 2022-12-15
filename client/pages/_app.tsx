@@ -2,6 +2,7 @@ import { ApolloProvider } from '@apollo/client';
 import { createTheme, NextUIProvider } from '@nextui-org/react';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import Head from 'next/head';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import apollo from '../lib/apollo';
 import '../styles/globals.css';
@@ -35,6 +36,7 @@ function MyApp({ Component, pageProps }: any) {
                     </NextUIProvider>
                 </NextThemesProvider>
             </AuthProvider>
+            <ToastContainer />
         </ApolloProvider>
     );
 }
