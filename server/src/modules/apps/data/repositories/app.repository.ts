@@ -65,7 +65,7 @@ export class AppRepository {
 
   async generateAppName(appName: string, index: number = 0) {
     const generatedName = appName + (index > 0 ? `-${index}` : '');
-    if (await this.exists(appName)) {
+    if (await this.exists(generatedName)) {
       return await this.generateAppName(appName, index + 1);
     }
 
