@@ -3,7 +3,6 @@ import { $log } from '@tsed/common';
 import { Job } from 'bullmq';
 import { PubSub } from 'graphql-subscriptions';
 import { IQueue, Queue } from '../lib/queues/queue.decorator';
-import { sshConnect } from '../lib/ssh';
 import { AppRebuildPayload } from '../modules/apps/data/models/app_rebuild.payload';
 import { SubscriptionTopics } from './../data/models/subscription_topics';
 import { DokkuAppRepository } from './../lib/dokku/dokku.app.repository';
@@ -30,9 +29,7 @@ export class RebuildAppQueue extends IQueue<QueueArgs> {
 
     $log.info(`Iniciando rebuild de ${appName}`);
 
-    const ssh = await sshConnect();
-
-    const res = await this.dokkuAppRepository.restart(ssh, appName, {
+    const res = await this.dokkuAppRepository.restart(appName, {
       onStdout: (chunk) => {
         this.pubsub.publish(SubscriptionTopics.APP_REBUILT, <AppRebuildPayload>{
           appRebuildLogs: {
@@ -73,7 +70,6 @@ export class RebuildAppQueue extends IQueue<QueueArgs> {
         },
       });
     }
-    ssh.dispose();
   }
 
   onFailed(job: Job<QueueArgs, any, string>, error: Error) {

@@ -79,16 +79,6 @@ registerProvider({
         }
         return err;
       },
-      formatResponse: (response, requestContext) => {
-        if ('sshContext' in requestContext.context) {
-          const context = requestContext.context as DokkuContext;
-          if (context.sshContext.connection) {
-            context.sshContext.connection.dispose();
-          }
-        }
-
-        return response;
-      },
     },
   },
 })

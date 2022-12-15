@@ -1,13 +1,13 @@
 import { BadRequest, InternalServerError } from '@tsed/exceptions';
-import { NodeSSH } from 'node-ssh';
+import { execSSHCommand } from '../ssh';
 import { PluginList } from './models/plugin_list.model';
 
 export class DokkuPluginRepository {
-  async install(ssh: NodeSSH, pluginUrl: string): Promise<boolean> {
+  async install(pluginUrl: string): Promise<boolean> {
     if (!pluginUrl.endsWith('.git'))
       throw new BadRequest("La URL debe terminar con '.git'");
 
-    const resultPluginInstall = await ssh.execCommand(
+    const resultPluginInstall = await execSSHCommand(
       `plugin:install ${pluginUrl}`
     );
 
@@ -18,15 +18,15 @@ export class DokkuPluginRepository {
     return true;
   }
 
-  async installed(ssh: NodeSSH, pluginName: string): Promise<boolean> {
-    const resultPluginInstalled = await ssh.execCommand(
+  async installed(pluginName: string): Promise<boolean> {
+    const resultPluginInstalled = await execSSHCommand(
       `plugin:installed ${pluginName}`
     );
     return resultPluginInstalled.code !== 1;
   }
 
-  async list(ssh: NodeSSH): Promise<PluginList> {
-    const resultPluginList = await ssh.execCommand('plugin:list');
+  async list(): Promise<PluginList> {
+    const resultPluginList = await execSSHCommand('plugin:list');
 
     if (resultPluginList.code === 1) {
       throw new InternalServerError(resultPluginList.stderr);

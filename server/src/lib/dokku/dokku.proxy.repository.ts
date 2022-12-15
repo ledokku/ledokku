@@ -1,18 +1,17 @@
 import { Injectable } from '@tsed/di';
 import { InternalServerError } from '@tsed/exceptions';
-import { NodeSSH } from 'node-ssh';
+import { execSSHCommand } from '../ssh';
 import { ProxyPort } from './models/proxy_ports.model';
 
 @Injectable()
 export class DokkuProxyRepository {
   async add(
-    ssh: NodeSSH,
     appName: string,
     scheme: string,
     host: string,
     container: string
   ): Promise<boolean> {
-    const resultProxyPorts = await ssh.execCommand(
+    const resultProxyPorts = await execSSHCommand(
       `proxy:ports-add ${appName} ${scheme}:${host}:${container}`
     );
 
@@ -24,13 +23,12 @@ export class DokkuProxyRepository {
   }
 
   async remove(
-    ssh: NodeSSH,
     appName: string,
     scheme: string,
     host: string,
     container: string
   ): Promise<boolean> {
-    const resultProxyPorts = await ssh.execCommand(
+    const resultProxyPorts = await execSSHCommand(
       `proxy:ports-remove ${appName} ${scheme}:${host}:${container}`
     );
 
@@ -41,8 +39,8 @@ export class DokkuProxyRepository {
     return true;
   }
 
-  async ports(ssh: NodeSSH, appName: string): Promise<ProxyPort[]> {
-    const resultProxyPorts = await ssh.execCommand(`proxy:ports ${appName}`);
+  async ports(appName: string): Promise<ProxyPort[]> {
+    const resultProxyPorts = await execSSHCommand(`proxy:ports ${appName}`);
 
     if (resultProxyPorts.code === 1) {
       throw new InternalServerError(resultProxyPorts.stderr);

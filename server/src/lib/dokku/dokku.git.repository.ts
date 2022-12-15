@@ -1,16 +1,16 @@
 import { Injectable } from '@tsed/di';
 import { InternalServerError } from '@tsed/exceptions';
 import { NodeSSH, SSHExecOptions } from 'node-ssh';
+import { execSSHCommand } from '../ssh';
 
 @Injectable()
 export class DokkuGitRepository {
   async auth(
-    ssh: NodeSSH,
     username: string,
     token: string,
     options?: SSHExecOptions
   ): Promise<boolean> {
-    const resultGitAuth = await ssh.execCommand(
+    const resultGitAuth = await execSSHCommand(
       `git:auth github.com ${username} ${token}`,
       options
     );
@@ -23,13 +23,12 @@ export class DokkuGitRepository {
   }
 
   async sync(
-    ssh: NodeSSH,
     appName: string,
     gitRepoUrl: string,
     branchName: string,
     options: SSHExecOptions
   ) {
-    const resultGitSync = await ssh.execCommand(
+    const resultGitSync = await execSSHCommand(
       `git:sync --build ${appName} ${gitRepoUrl} ${branchName}`,
       options
     );
@@ -41,8 +40,8 @@ export class DokkuGitRepository {
     return resultGitSync;
   }
 
-  async unlock(ssh: NodeSSH, appName: string, options?: SSHExecOptions) {
-    const resultGitUnlock = await ssh.execCommand(
+  async unlock(appName: string, options?: SSHExecOptions) {
+    const resultGitUnlock = await execSSHCommand(
       `git:unlock ${appName} --force`,
       options
     );

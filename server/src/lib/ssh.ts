@@ -1,4 +1,4 @@
-import { NodeSSH } from 'node-ssh';
+import { NodeSSH, SSHExecCommandResponse, SSHExecOptions } from 'node-ssh';
 import { DOKKU_SSH_HOST, DOKKU_SSH_PORT } from '../constants';
 import { privateKey } from './../config';
 
@@ -14,3 +14,16 @@ export const sshConnect = async () => {
 
   return ssh;
 };
+
+export async function execSSHCommand<T>(
+  command: string,
+  options?: SSHExecOptions
+): Promise<SSHExecCommandResponse> {
+  const ssh = await sshConnect();
+
+  const res = await ssh.execCommand(command, options);
+
+  ssh.dispose();
+
+  return res;
+}

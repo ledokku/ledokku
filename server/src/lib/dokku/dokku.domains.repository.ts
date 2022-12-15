@@ -1,15 +1,12 @@
 import { Injectable } from '@tsed/di';
 import { InternalServerError } from '@tsed/exceptions';
 import { NodeSSH } from 'node-ssh';
+import { execSSHCommand } from '../ssh';
 
 @Injectable()
 export class DokkuDomainsRepository {
-  async add(
-    ssh: NodeSSH,
-    appName: string,
-    domainName: string
-  ): Promise<boolean> {
-    const resultAddDomain = await ssh.execCommand(
+  async add(appName: string, domainName: string): Promise<boolean> {
+    const resultAddDomain = await execSSHCommand(
       `domains:add ${appName} ${domainName}`
     );
 
@@ -20,12 +17,8 @@ export class DokkuDomainsRepository {
     return true;
   }
 
-  async remove(
-    ssh: NodeSSH,
-    appName: string,
-    domainName: string
-  ): Promise<boolean> {
-    const resultRemoveDomain = await ssh.execCommand(
+  async remove(appName: string, domainName: string): Promise<boolean> {
+    const resultRemoveDomain = await execSSHCommand(
       `domains:remove ${appName} ${domainName}`
     );
 
@@ -36,12 +29,8 @@ export class DokkuDomainsRepository {
     return true;
   }
 
-  async set(
-    ssh: NodeSSH,
-    appName: string,
-    domainName: string
-  ): Promise<boolean> {
-    const resultSetDomain = await ssh.execCommand(
+  async set(appName: string, domainName: string): Promise<boolean> {
+    const resultSetDomain = await execSSHCommand(
       `domains:set ${appName} ${domainName}`
     );
 
@@ -52,8 +41,8 @@ export class DokkuDomainsRepository {
     return true;
   }
 
-  async report(ssh: NodeSSH, appName: string): Promise<string[]> {
-    const resultReportDomains = await ssh.execCommand(
+  async report(appName: string): Promise<string[]> {
+    const resultReportDomains = await execSSHCommand(
       `domains:report ${appName} --domains-app-vhosts`
     );
 

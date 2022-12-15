@@ -12,6 +12,7 @@ import { DokkuContext } from '../../data/models/dokku_context';
 import { GithubAppManifest } from './models/github_app_manifest.model';
 import { GithubPermission } from './models/github_app_permissions.model';
 import { SetupResult } from './models/setup_result.model';
+import { sshConnect } from '../../lib/ssh';
 
 @ResolverService()
 export class SystemResolver {
@@ -19,8 +20,9 @@ export class SystemResolver {
 
   @Query((returns) => SetupResult)
   async setup(@Ctx() context: DokkuContext): Promise<SetupResult> {
+    const ssh = await sshConnect().catch((e) => undefined);
     return {
-      canConnectSsh: !!context.sshContext.connection,
+      canConnectSsh: ssh?.isConnected() === true,
       sshPublicKey: context.sshContext.publicKey,
       isGithubAppSetup: !!GITHUB_APP_CLIENT_ID,
       githubAppManifest: JSON.stringify(<GithubAppManifest>{
@@ -54,6 +56,6 @@ export class SystemResolver {
   @Authorized()
   @Query((returns) => PluginList)
   async dokkuPlugins(@Ctx() context: DokkuContext): Promise<PluginList> {
-    return this.dokkuPluginRepository.list(context.sshContext.connection);
+    return this.dokkuPluginRepository.list();
   }
 }

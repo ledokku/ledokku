@@ -1,12 +1,8 @@
-import { GithubError } from './../modules/github/data/models/github_error';
-import { PrismaClient, User } from '@prisma/client';
-import { $log, InjectorService } from '@tsed/common';
+import { User } from '@prisma/client';
 import express from 'express';
-import { readFile } from 'fs/promises';
 import jsonwebtoken from 'jsonwebtoken';
 import { sshKeyPath } from '../config';
 import { DokkuContext } from '../data/models/dokku_context';
-import { sshConnect } from '../lib/ssh';
 import {
   GITHUB_APP_CLIENT_ID,
   JWT_SECRET,
@@ -14,25 +10,18 @@ import {
 } from './../constants';
 import fetch from 'node-fetch';
 import prisma from '../lib/prisma';
+import { readFileSync } from 'fs';
+
+const publicKey = readFileSync(`${sshKeyPath}.pub`, {
+  encoding: 'utf8',
+});
 
 export class ContextFactory {
   static async generateBaseContext(): Promise<Partial<DokkuContext>> {
-    let sshConnection = undefined;
-    const publicKey = await readFile(`${sshKeyPath}.pub`, {
-      encoding: 'utf8',
-    });
-
-    try {
-      sshConnection = await sshConnect();
-    } catch (e) {
-      $log.warn(e);
-    }
-
     return {
       prisma: prisma,
       sshContext: {
         publicKey,
-        connection: sshConnection,
       },
     };
   }

@@ -7,7 +7,6 @@ import { DokkuAppRepository } from '../lib/dokku/dokku.app.repository';
 import { DokkuDatabaseRepository } from '../lib/dokku/dokku.database.repository';
 import { DokkuPluginRepository } from '../lib/dokku/dokku.plugin.repository';
 import { IQueue, Queue } from '../lib/queues/queue.decorator';
-import { sshConnect } from '../lib/ssh';
 import { AppRepository } from '../modules/apps/data/repositories/app.repository';
 import { DatabaseRepository } from '../modules/databases/data/repositories/database.repository';
 import { ActivityRepository } from './../modules/activity/data/repositories/activity.repository';
@@ -36,11 +35,9 @@ export class SyncServerQueue extends IQueue {
       return;
     }
 
-    const ssh = await sshConnect();
-
     $log.info(`Sincroninzando aplicaciones`);
 
-    const dokkuApps = await this.dokkuAppRepository.list(ssh);
+    const dokkuApps = await this.dokkuAppRepository.list();
 
     for (const dokkuApp of dokkuApps) {
       if (dokkuApp === 'ledokku') continue;
@@ -57,7 +54,7 @@ export class SyncServerQueue extends IQueue {
     $log.info(`Sincroninzando bases de datos`);
 
     const databasesToCheck: DbTypes[] = Object.values(DbTypes);
-    const dokkuPlugins = await this.dokkuPluginRepository.list(ssh);
+    const dokkuPlugins = await this.dokkuPluginRepository.list();
 
     for (const databaseToCheck of databasesToCheck) {
       const pluginName = dbTypeToDokkuPlugin(databaseToCheck);
@@ -71,7 +68,6 @@ export class SyncServerQueue extends IQueue {
       }
 
       const dokkuDatabases = await this.dokkuDatabaseRepository.list(
-        ssh,
         databaseToCheck
       );
 
@@ -85,7 +81,6 @@ export class SyncServerQueue extends IQueue {
 
         if (!database) {
           const dokkuDatabaseVersion = await this.dokkuDatabaseRepository.version(
-            ssh,
             dokkuDatabase,
             databaseToCheck
           );
@@ -98,7 +93,6 @@ export class SyncServerQueue extends IQueue {
         }
 
         const dokkuLinks = await this.dokkuDatabaseRepository.links(
-          ssh,
           databaseToCheck,
           dokkuDatabase
         );
@@ -126,7 +120,5 @@ export class SyncServerQueue extends IQueue {
         name: `Sistema sincronizado`,
       });
     }
-
-    ssh.dispose();
   }
 }

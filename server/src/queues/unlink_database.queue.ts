@@ -2,7 +2,6 @@ import { $log } from '@tsed/common';
 import { Job } from 'bullmq';
 import { PubSub } from 'graphql-subscriptions';
 import { IQueue, Queue } from '../lib/queues/queue.decorator';
-import { sshConnect } from '../lib/ssh';
 import { DatabaseUnlinkPayload } from '../modules/databases/data/models/database_unlink.payload';
 import { SubscriptionTopics } from './../data/models/subscription_topics';
 import { DokkuDatabaseRepository } from './../lib/dokku/dokku.database.repository';
@@ -37,9 +36,7 @@ export class UnlinkDatabaseQueue extends IQueue<QueueArgs> {
       `Empezando desenlace de ${database.type} ${database.name} con ${app.name}`
     );
 
-    const ssh = await sshConnect();
     const res = await this.dokkuDatabaseRepository.unlink(
-      ssh,
       database.name,
       database.type,
       app.name,
@@ -101,6 +98,5 @@ export class UnlinkDatabaseQueue extends IQueue<QueueArgs> {
         },
       });
     }
-    ssh.dispose();
   }
 }

@@ -1,7 +1,6 @@
 import { $log } from '@tsed/common';
 import { Job } from 'bullmq';
 import { IQueue, Queue } from '../lib/queues/queue.decorator';
-import { sshConnect } from '../lib/ssh';
 import { ActivityRepository } from '../modules/activity/data/repositories/activity.repository';
 import { AppRepository } from '../repositories';
 import { DokkuAppRepository } from './../lib/dokku/dokku.app.repository';
@@ -30,9 +29,7 @@ export class SetEnvVarQueue extends IQueue<QueueArgs> {
       `Iniciando asignacion de la variable de entorno ${appName} con ${key}=${value}`
     );
 
-    const ssh = await sshConnect();
-
-    await this.dokkuAppRepository.setEnvVar(ssh, appName, { key, value });
+    await this.dokkuAppRepository.setEnvVar(appName, { key, value });
     await this.activityRepository.add({
       name: `Variable de entorno en "${appName}"`,
       description: `${key}: ${value}`,
@@ -42,7 +39,5 @@ export class SetEnvVarQueue extends IQueue<QueueArgs> {
     $log.info(
       `Finalizando asignacion de la variable de entorno ${appName} con ${key}=${value}`
     );
-
-    ssh.dispose();
   }
 }

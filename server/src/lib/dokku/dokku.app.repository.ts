@@ -1,17 +1,13 @@
 import { Injectable } from '@tsed/di';
 import { InternalServerError } from '@tsed/exceptions';
 import { NodeSSH, SSHExecOptions } from 'node-ssh';
-import { sshConnect } from '../ssh';
+import { execSSHCommand } from '../ssh';
 import { EnvVar } from './models/env_var.model';
 
 @Injectable()
 export class DokkuAppRepository {
-  async create(
-    ssh: NodeSSH,
-    appName: string,
-    options?: SSHExecOptions
-  ): Promise<boolean> {
-    const resultAppsCreate = await ssh.execCommand(
+  async create(appName: string, options?: SSHExecOptions): Promise<boolean> {
+    const resultAppsCreate = await execSSHCommand(
       `apps:create ${appName}`,
       options
     );
@@ -23,8 +19,8 @@ export class DokkuAppRepository {
     return true;
   }
 
-  async destroy(ssh: NodeSSH, appName: string): Promise<boolean> {
-    const resultAppsDestroy = await ssh.execCommand(
+  async destroy(appName: string): Promise<boolean> {
+    const resultAppsDestroy = await execSSHCommand(
       `--force apps:destroy ${appName}`
     );
     if (resultAppsDestroy.code === 1) {
@@ -35,11 +31,10 @@ export class DokkuAppRepository {
   }
 
   async setBuilder(
-    ssh: NodeSSH,
     appName: string,
     builder: 'dockerfile' | 'herokuish'
   ): Promise<boolean> {
-    const resultAppsDestroy = await ssh.execCommand(
+    const resultAppsDestroy = await execSSHCommand(
       `builder:set ${appName} selected ${builder}`
     );
     if (resultAppsDestroy.code === 1) {
@@ -49,19 +44,13 @@ export class DokkuAppRepository {
     return true;
   }
 
-  async setDockerfilePath(
-    ssh: NodeSSH,
-    appName: string,
-    path: string
-  ): Promise<boolean> {
-    await this.setBuilder(await sshConnect(), appName, 'dockerfile');
-    await this.unsetEnvVar(
-      await sshConnect(),
-      appName,
-      'DOKKU_PROXY_PORT_MAP',
-      false
-    ).catch((e) => console.log(e));
-    const resultAppsDestroy = await ssh.execCommand(
+  async setDockerfilePath(appName: string, path: string): Promise<boolean> {
+    await this.setBuilder(appName, 'dockerfile');
+    await this.unsetEnvVar(appName, 'DOKKU_PROXY_PORT_MAP', false).catch((e) =>
+      console.log(e)
+    );
+
+    const resultAppsDestroy = await execSSHCommand(
       `builder-dockerfile:set ${appName} dockerfile-path ${path}`
     );
     if (resultAppsDestroy.code === 1) {
@@ -71,8 +60,8 @@ export class DokkuAppRepository {
     return true;
   }
 
-  async list(ssh: NodeSSH): Promise<string[]> {
-    const resultAppsCreate = await ssh.execCommand(`apps:list`);
+  async list(): Promise<string[]> {
+    const resultAppsCreate = await execSSHCommand(`apps:list`);
     if (resultAppsCreate.code === 1) {
       console.error(resultAppsCreate);
       throw new Error(resultAppsCreate.stderr);
@@ -84,8 +73,8 @@ export class DokkuAppRepository {
     return apps;
   }
 
-  async logs(ssh: NodeSSH, appName: string): Promise<string[]> {
-    const resultAppLogs = await ssh.execCommand(`logs ${appName}`);
+  async logs(appName: string): Promise<string[]> {
+    const resultAppLogs = await execSSHCommand(`logs ${appName}`);
     if (resultAppLogs.code === 1) {
       throw new InternalServerError(resultAppLogs.stderr);
     }
@@ -93,8 +82,8 @@ export class DokkuAppRepository {
     return resultAppLogs.stdout.split('\n');
   }
 
-  async envVars(ssh: NodeSSH, appName: string): Promise<EnvVar[]> {
-    const resultListEnv = await ssh.execCommand(`config ${appName}`);
+  async envVars(appName: string): Promise<EnvVar[]> {
+    const resultListEnv = await execSSHCommand(`config ${appName}`);
 
     if (resultListEnv.code === 1) {
       throw new Error(resultListEnv.stderr);
@@ -115,7 +104,6 @@ export class DokkuAppRepository {
   }
 
   async setEnvVar(
-    ssh: NodeSSH,
     appName: string,
     envVars: { key: string; value: string } | { key: string; value: string }[],
     { noRestart }: { noRestart: boolean } = { noRestart: false },
@@ -125,7 +113,7 @@ export class DokkuAppRepository {
       envVars = [envVars];
     }
 
-    const resultSetEnv = await ssh.execCommand(
+    const resultSetEnv = await execSSHCommand(
       `config:set ${noRestart ? '--no-restart' : ''} ${
         encoded ? '--encoded' : ''
       } ${appName} ${envVars.map((data) => ` ${data.key}=${data.value}`)}`
@@ -139,12 +127,11 @@ export class DokkuAppRepository {
   }
 
   async unsetEnvVar(
-    ssh: NodeSSH,
     appName: string,
     key: string,
     restart: boolean = true
   ): Promise<boolean> {
-    const resultUnsetEnv = await ssh.execCommand(
+    const resultUnsetEnv = await execSSHCommand(
       `config:unset ${restart ? '' : '--no-restart'} ${appName} ${key}`
     );
 
@@ -155,8 +142,8 @@ export class DokkuAppRepository {
     return true;
   }
 
-  async rebuild(ssh: NodeSSH, appName: string, options?: SSHExecOptions) {
-    const resultAppRebuild = await ssh.execCommand(
+  async rebuild(appName: string, options?: SSHExecOptions) {
+    const resultAppRebuild = await execSSHCommand(
       `ps:rebuild ${appName}`,
       options
     );
@@ -164,8 +151,8 @@ export class DokkuAppRepository {
     return resultAppRebuild;
   }
 
-  async restart(ssh: NodeSSH, appName: string, options?: SSHExecOptions) {
-    const resultAppRestart = await ssh.execCommand(
+  async restart(appName: string, options?: SSHExecOptions) {
+    const resultAppRestart = await execSSHCommand(
       `ps:restart ${appName}`,
       options
     );

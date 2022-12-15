@@ -4,7 +4,6 @@ import { PubSub } from 'graphql-subscriptions';
 import { SubscriptionTopics } from '../data/models/subscription_topics';
 import { DokkuAppRepository } from '../lib/dokku/dokku.app.repository';
 import { IQueue, Queue } from '../lib/queues/queue.decorator';
-import { sshConnect } from '../lib/ssh';
 import { AppRestartPayload } from '../modules/apps/data/models/app_restart.payload';
 import { AppRepository } from '../repositories';
 import { ActivityRepository } from './../modules/activity/data/repositories/activity.repository';
@@ -30,9 +29,7 @@ export class RestartAppQueue extends IQueue<QueueArgs> {
 
     $log.info(`Iniciando reinicio de ${appName}`);
 
-    const ssh = await sshConnect();
     const res = await this.dokkuAppRepository.restart(
-      ssh,
       appName,
 
       {
@@ -81,7 +78,6 @@ export class RestartAppQueue extends IQueue<QueueArgs> {
         },
       });
     }
-    ssh.dispose();
   }
 
   onFailed(job: Job<QueueArgs, any, string>, error: Error) {

@@ -104,10 +104,7 @@ export class AppResolver {
       throw new NotFound(`No se encontró la app con ID ${appId}`);
     }
 
-    const logs = await this.dokkuAppRepository.logs(
-      context.sshContext.connection,
-      app.name
-    );
+    const logs = await this.dokkuAppRepository.logs(app.name);
 
     return { logs };
   }
@@ -124,10 +121,7 @@ export class AppResolver {
       throw new NotFound(`No se encontró la app con ID ${appId}`);
     }
 
-    return this.dokkuProxyRepository.ports(
-      context.sshContext.connection,
-      app.name
-    );
+    return this.dokkuProxyRepository.ports(app.name);
   }
 
   @Authorized()
@@ -142,10 +136,7 @@ export class AppResolver {
       throw new NotFound(`No se encontró la app con ID ${appId}`);
     }
 
-    const domains = await this.dokkuDomainsRepository.report(
-      context.sshContext.connection,
-      app.name
-    );
+    const domains = await this.dokkuDomainsRepository.report(app.name);
 
     return { domains };
   }
@@ -162,10 +153,7 @@ export class AppResolver {
       throw new NotFound(`No se encontró la app con ID ${appId}`);
     }
 
-    const envVars = await this.dokkuAppRepository.envVars(
-      context.sshContext.connection,
-      app.name
-    );
+    const envVars = await this.dokkuAppRepository.envVars(app.name);
 
     return { envVars };
   }
@@ -221,7 +209,6 @@ export class AppResolver {
     }
 
     await this.dokkuProxyRepository.add(
-      context.sshContext.connection,
       app.name,
       'http',
       input.host,
@@ -243,11 +230,7 @@ export class AppResolver {
       throw new NotFound(`No se encontró la app con ID ${input.appId}`);
     }
 
-    await this.dokkuDomainsRepository.add(
-      context.sshContext.connection,
-      app.name,
-      input.domainName
-    );
+    await this.dokkuDomainsRepository.add(app.name, input.domainName);
 
     return { result: true };
   }
@@ -267,10 +250,7 @@ export class AppResolver {
       throw new Conflict('Nombre ya utilizado');
     }
 
-    await this.dokkuAppRepository.create(
-      context.sshContext.connection,
-      input.name
-    );
+    await this.dokkuAppRepository.create(input.name);
 
     const app = await this.appRepository.create(input.name);
 
@@ -320,15 +300,11 @@ export class AppResolver {
       throw new NotFound(`La rama ${input.branchName} no existe`);
     }
 
-    const created = await this.dokkuAppRepository.create(
-      context.sshContext.connection,
-      appName
-    );
+    const created = await this.dokkuAppRepository.create(appName);
 
     if (created) {
       if (input.dockerfilePath) {
         this.dokkuAppRepository.setDockerfilePath(
-          context.sshContext.connection,
           appName,
           input.dockerfilePath
         );
@@ -401,10 +377,7 @@ export class AppResolver {
 
     await this.appRepository.delete(appToDelete.id);
 
-    const result = await this.dokkuAppRepository.destroy(
-      context.sshContext.connection,
-      appToDelete.name
-    );
+    const result = await this.dokkuAppRepository.destroy(appToDelete.name);
 
     return { result };
   }
@@ -423,7 +396,6 @@ export class AppResolver {
     }
 
     await this.dokkuProxyRepository.remove(
-      context.sshContext.connection,
       app.name,
       input.scheme,
       input.host,
@@ -446,11 +418,7 @@ export class AppResolver {
       throw new NotFound(`No se encontró la app con ID ${input.appId}`);
     }
 
-    await this.dokkuDomainsRepository.remove(
-      context.sshContext.connection,
-      app.name,
-      input.domainName
-    );
+    await this.dokkuDomainsRepository.remove(app.name, input.domainName);
 
     return { result: true };
   }
@@ -468,11 +436,7 @@ export class AppResolver {
       throw new NotFound(`No se encontró la app con ID ${input.appId}`);
     }
 
-    await this.dokkuDomainsRepository.set(
-      context.sshContext.connection,
-      app.name,
-      input.domainName
-    );
+    await this.dokkuDomainsRepository.set(app.name, input.domainName);
 
     return { result: true };
   }
@@ -642,10 +606,7 @@ export class AppResolver {
     @Ctx() context: DokkuContext
   ): Promise<ProxyPort[]> {
     try {
-      return await this.dokkuProxyRepository.ports(
-        context.sshContext.connection,
-        app.name
-      );
+      return await this.dokkuProxyRepository.ports(app.name);
     } catch (e) {
       return [];
     }

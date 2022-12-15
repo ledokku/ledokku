@@ -15,9 +15,7 @@ export class PluginResolver {
     @Arg('pluginName', (type) => String) pluginName: string,
     @Ctx() context: DokkuContext
   ): Promise<IsPluginInstalled> {
-    const dokkuPlugins = await this.dokkuPluginRepository.list(
-      context.sshContext.connection
-    );
+    const dokkuPlugins = await this.dokkuPluginRepository.list();
 
     const isPluginInstalled = !!dokkuPlugins.plugins.find(
       (plugin) => plugin.name === pluginName

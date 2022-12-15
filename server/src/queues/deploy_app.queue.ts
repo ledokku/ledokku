@@ -5,7 +5,6 @@ import { Job } from 'bullmq';
 import { PubSub } from 'graphql-subscriptions';
 import { SubscriptionTopics } from '../data/models/subscription_topics';
 import { IQueue, Queue } from '../lib/queues/queue.decorator';
-import { sshConnect } from '../lib/ssh';
 import { AppCreatedPayload } from '../modules/apps/data/models/app_created.payload';
 import { DokkuAppRepository } from './../lib/dokku/dokku.app.repository';
 import { DokkuGitRepository } from './../lib/dokku/dokku.git.repository';
@@ -41,13 +40,10 @@ export class DeployAppQueue extends IQueue<QueueArgs, App> {
     const { branch, repoName, repoOwner } = appMetaGithub;
     const branchName = branch ? branch : 'main';
 
-    const ssh = await sshConnect();
-
-    await this.dokkuGitRepository.auth(ssh, userName, token);
-    await this.dokkuGitRepository.unlock(ssh, app.name);
+    await this.dokkuGitRepository.auth(userName, token);
+    await this.dokkuGitRepository.unlock(app.name);
 
     const res = await this.dokkuGitRepository.sync(
-      ssh,
       app.name,
       `https://github.com/${repoOwner}/${repoName}.git`,
       branchName,
@@ -80,9 +76,8 @@ export class DeployAppQueue extends IQueue<QueueArgs, App> {
 
       if (appToDelete) {
         await this.appRepository.delete(appId);
-        const ssh = await sshConnect();
 
-        await this.dokkuAppRepository.destroy(ssh, appToDelete.name);
+        await this.dokkuAppRepository.destroy(appToDelete.name);
       }
       throw new InternalServerError(res.stderr);
     }

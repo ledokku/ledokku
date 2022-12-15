@@ -3,7 +3,6 @@ import { Job } from 'bullmq';
 import { PubSub } from 'graphql-subscriptions';
 import { SubscriptionTopics } from '../data/models/subscription_topics';
 import { IQueue, Queue } from '../lib/queues/queue.decorator';
-import { sshConnect } from '../lib/ssh';
 import { DatabaseLinkPayload } from '../modules/databases/data/models/database_link.payload';
 import { DokkuDatabaseRepository } from './../lib/dokku/dokku.database.repository';
 import { ActivityRepository } from './../modules/activity/data/repositories/activity.repository';
@@ -37,10 +36,7 @@ export class LinkDatabaseQueue extends IQueue<QueueArgs> {
       `Iniciando el enlace a la base de datos ${database.type} ${database.name} con ${app.name}`
     );
 
-    const ssh = await sshConnect();
-
     const res = await this.dokkuDatabaseRepository.link(
-      ssh,
       database.name,
       database.type,
       app.name,
@@ -102,6 +98,5 @@ export class LinkDatabaseQueue extends IQueue<QueueArgs> {
         },
       });
     }
-    ssh.dispose();
   }
 }

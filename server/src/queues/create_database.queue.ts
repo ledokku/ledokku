@@ -4,7 +4,6 @@ import { Job } from 'bullmq';
 import { PubSub } from 'graphql-subscriptions';
 import { SubscriptionTopics } from '../data/models/subscription_topics';
 import { IQueue, Queue } from '../lib/queues/queue.decorator';
-import { sshConnect } from '../lib/ssh';
 import { DatabaseCreatedPayload } from '../modules/databases/data/models/database_created.payload';
 import { DokkuDatabaseRepository } from './../lib/dokku/dokku.database.repository';
 import { ActivityRepository } from './../modules/activity/data/repositories/activity.repository';
@@ -34,10 +33,7 @@ export class CreateDatabaseQueue extends IQueue<QueueArgs> {
       `Iniciando construccion de la base de datos ${databaseType} llamada ${databaseName}`
     );
 
-    const ssh = await sshConnect();
-
     const res = await this.dokkuDatabaseRepository.create(
-      ssh,
       databaseName,
       databaseType,
       {
@@ -65,7 +61,6 @@ export class CreateDatabaseQueue extends IQueue<QueueArgs> {
     );
 
     const dokkuDatabaseVersion = await this.dokkuDatabaseRepository.version(
-      ssh,
       databaseName,
       databaseType
     );
@@ -105,7 +100,6 @@ export class CreateDatabaseQueue extends IQueue<QueueArgs> {
         },
       });
     }
-    ssh.dispose();
   }
 
   onFailed(job: Job<QueueArgs, any>, error: Error) {

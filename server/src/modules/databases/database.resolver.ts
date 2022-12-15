@@ -71,7 +71,6 @@ export class DatabaseResolver {
     }
 
     const info = await this.dokkuDatabaseRepository.database(
-      context.sshContext.connection,
       database.name,
       database.type
     );
@@ -92,7 +91,6 @@ export class DatabaseResolver {
     }
 
     const logs = await this.dokkuDatabaseRepository.logs(
-      context.sshContext.connection,
       database.name,
       database.type
     );
@@ -129,9 +127,7 @@ export class DatabaseResolver {
       throw new Conflict('Nombre ya utilizado');
     }
 
-    const dokkuPlugins = await this.dokkuPluginRepository.list(
-      context.sshContext.connection
-    );
+    const dokkuPlugins = await this.dokkuPluginRepository.list();
 
     const isDbInstalled =
       dokkuPlugins.plugins.filter(
@@ -168,7 +164,6 @@ export class DatabaseResolver {
     }
 
     const result = await this.dokkuDatabaseRepository.destroy(
-      context.sshContext.connection,
       databaseToDelete.name,
       databaseToDelete.type
     );

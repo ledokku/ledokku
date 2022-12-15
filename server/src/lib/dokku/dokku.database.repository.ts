@@ -3,16 +3,12 @@ import { Injectable } from '@tsed/di';
 import { InternalServerError } from '@tsed/exceptions';
 import { NodeSSH, SSHExecOptions } from 'node-ssh';
 import { dbTypeToDokkuPlugin } from '../../config/utils';
+import { execSSHCommand } from '../ssh';
 
 @Injectable()
 export class DokkuDatabaseRepository {
-  async create(
-    ssh: NodeSSH,
-    name: string,
-    databaseType: DbTypes,
-    options?: SSHExecOptions
-  ) {
-    const resultDatabaseCreate = await ssh.execCommand(
+  async create(name: string, databaseType: DbTypes, options?: SSHExecOptions) {
+    const resultDatabaseCreate = await execSSHCommand(
       `${dbTypeToDokkuPlugin(databaseType)}:create ${name}`,
       options
     );
@@ -20,12 +16,8 @@ export class DokkuDatabaseRepository {
     return resultDatabaseCreate;
   }
 
-  async destroy(
-    ssh: NodeSSH,
-    databaseName: string,
-    databaseType: DbTypes
-  ): Promise<boolean> {
-    const resultDatabaseDestroy = await ssh.execCommand(
+  async destroy(databaseName: string, databaseType: DbTypes): Promise<boolean> {
+    const resultDatabaseDestroy = await execSSHCommand(
       `--force ${dbTypeToDokkuPlugin(databaseType)}:destroy ${databaseName}`
     );
 
@@ -36,12 +28,8 @@ export class DokkuDatabaseRepository {
     return true;
   }
 
-  async version(
-    ssh: NodeSSH,
-    databaseName: string,
-    databaseType: DbTypes
-  ): Promise<string> {
-    const resultDatabaseInfo = await ssh.execCommand(
+  async version(databaseName: string, databaseType: DbTypes): Promise<string> {
+    const resultDatabaseInfo = await execSSHCommand(
       `${dbTypeToDokkuPlugin(databaseType)}:info ${databaseName} --version`
     );
     if (resultDatabaseInfo.code === 1) {
@@ -53,13 +41,12 @@ export class DokkuDatabaseRepository {
   }
 
   async link(
-    ssh: NodeSSH,
     databaseName: string,
     databaseType: DbTypes,
     appName: string,
     options?: SSHExecOptions
   ) {
-    const resultDatabaseLink = await ssh.execCommand(
+    const resultDatabaseLink = await execSSHCommand(
       `${dbTypeToDokkuPlugin(databaseType)}:link ${databaseName} ${appName}`,
       options
     );
@@ -68,13 +55,12 @@ export class DokkuDatabaseRepository {
   }
 
   async unlink(
-    ssh: NodeSSH,
     databaseName: string,
     databaseType: DbTypes,
     appName: string,
     options?: SSHExecOptions
   ) {
-    const resultDatabaseUnLink = await ssh.execCommand(
+    const resultDatabaseUnLink = await execSSHCommand(
       `${dbTypeToDokkuPlugin(databaseType)}:unlink ${databaseName} ${appName}`,
       options
     );
@@ -82,12 +68,8 @@ export class DokkuDatabaseRepository {
     return resultDatabaseUnLink;
   }
 
-  async links(
-    ssh: NodeSSH,
-    databaseType: DbTypes,
-    databaseName: string
-  ): Promise<string[]> {
-    const resultDatabaseLinks = await ssh.execCommand(
+  async links(databaseType: DbTypes, databaseName: string): Promise<string[]> {
+    const resultDatabaseLinks = await execSSHCommand(
       `${dbTypeToDokkuPlugin(databaseType)}:links ${databaseName}`
     );
 
@@ -99,8 +81,10 @@ export class DokkuDatabaseRepository {
     return resultDatabaseLinks.stdout.split('\n');
   }
 
-  async list(ssh: NodeSSH, databaseType: DbTypes): Promise<string[]> {
-    const resultAppsCreate = await ssh.execCommand(`${dbTypeToDokkuPlugin(databaseType)}:list`);
+  async list(databaseType: DbTypes): Promise<string[]> {
+    const resultAppsCreate = await execSSHCommand(
+      `${dbTypeToDokkuPlugin(databaseType)}:list`
+    );
     if (resultAppsCreate.code === 1) {
       console.error(resultAppsCreate);
       throw new Error(resultAppsCreate.stderr);
@@ -111,12 +95,8 @@ export class DokkuDatabaseRepository {
     return apps;
   }
 
-  async database(
-    ssh: NodeSSH,
-    dbName: string,
-    dbType: DbTypes
-  ): Promise<string[]> {
-    const resultDatabaseInfo = await ssh.execCommand(
+  async database(dbName: string, dbType: DbTypes): Promise<string[]> {
+    const resultDatabaseInfo = await execSSHCommand(
       `${dbTypeToDokkuPlugin(dbType)}:info ${dbName}`
     );
     if (resultDatabaseInfo.code === 1) {
@@ -135,8 +115,8 @@ export class DokkuDatabaseRepository {
     return info;
   }
 
-  async logs(ssh: NodeSSH, dbName: string, dbType: DbTypes): Promise<string[]> {
-    const resultDatabaseInfo = await ssh.execCommand(
+  async logs(dbName: string, dbType: DbTypes): Promise<string[]> {
+    const resultDatabaseInfo = await execSSHCommand(
       `${dbTypeToDokkuPlugin(dbType)}:logs ${dbName}`
     );
     if (resultDatabaseInfo.code === 1) {
