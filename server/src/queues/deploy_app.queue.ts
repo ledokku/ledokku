@@ -76,6 +76,14 @@ export class DeployAppQueue extends IQueue<QueueArgs, App> {
     );
 
     if (res.stderr) {
+      const appToDelete = await this.appRepository.get(appId);
+
+      if (appToDelete) {
+        await this.appRepository.delete(appId);
+        const ssh = await sshConnect();
+
+        await this.dokkuAppRepository.destroy(ssh, appToDelete.name);
+      }
       throw new InternalServerError(res.stderr);
     }
 
@@ -105,22 +113,11 @@ export class DeployAppQueue extends IQueue<QueueArgs, App> {
   }
 
   async onFailed(job: Job<QueueArgs, any>, error: Error) {
-    const { appId } = job.data;
-
     this.pubsub?.publish(SubscriptionTopics.APP_CREATED, <AppCreatedPayload>{
       appCreateLogs: {
         message: 'Failed to create an app',
         type: 'end:failure',
       },
     });
-
-    const appToDelete = await this.appRepository.get(appId);
-
-    if (appToDelete) {
-      await this.appRepository.delete(appId);
-      const ssh = await sshConnect();
-
-      await this.dokkuAppRepository.destroy(ssh, appToDelete.name);
-    }
   }
 }
