@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { Injectable } from '@tsed/di';
 
 @Injectable()
@@ -8,6 +8,13 @@ export class UserRepository {
   async get(id: string) {
     return this.prisma.user.findUnique({
       where: { id },
+    });
+  }
+
+  async update(userId: string, data: Prisma.UserUpdateInput) {
+    return this.prisma.user.update({
+      where: { id: userId },
+      data,
     });
   }
 

@@ -1,3 +1,4 @@
+import { GithubError } from './../modules/github/data/models/github_error';
 import { PrismaClient, User } from '@prisma/client';
 import { $log, InjectorService } from '@tsed/common';
 import express from 'express';
@@ -44,8 +45,6 @@ export class ContextFactory {
     const baseContext = await ContextFactory.generateBaseContext();
 
     const user = await this.decodeJWT(token);
-
-    console.log(3);
 
     return <DokkuContext>{
       ...baseContext,
@@ -98,7 +97,7 @@ export class ContextFactory {
         access_token: string;
         expires_in: number;
         refresh_token: string;
-        refresh_token_expires_in: string;
+        refresh_token_expires_in: number;
         scope: string;
         token_type: string;
       } = await fetch('https://github.com/login/oauth/access_token', {
@@ -115,12 +114,10 @@ export class ContextFactory {
         }),
       }).then(async (res) => res.json());
 
-      console.log(res);
-
       const now = new Date();
       const time = now.getTime();
       const refreshTokenExpiresAt = new Date(
-        time + Number(res?.refresh_token_expires_in ?? 0)
+        time + (res?.refresh_token_expires_in ?? 0)
       );
 
       return await prisma.user.update({
