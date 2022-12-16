@@ -21,7 +21,6 @@ import { authChecker } from './config/auth_checker';
 import { ContextFactory } from './config/context_factory';
 import { CORS_ORIGIN, IS_PRODUCTION, PORT } from './constants';
 import { WebhookController } from './controllers/webhook.controller';
-import { DokkuContext } from './data/models/dokku_context';
 import { SubscriptionTopics } from './data/models/subscription_topics';
 import { SyncServerQueue } from './queues/sync_server.queue';
 import { startSmeeClient } from './smeeClient';
@@ -98,7 +97,7 @@ export class Server implements BeforeRoutesInit, OnReady {
   @Inject()
   syncServerQueue: SyncServerQueue;
 
-  $beforeRoutesInit(): void | Promise<void> {
+  async $beforeRoutesInit(): Promise<void> {
     this.app
       .use(
         cors({
@@ -107,6 +106,12 @@ export class Server implements BeforeRoutesInit, OnReady {
       )
       .use(express.json({ limit: '1mb' }))
       .use(express.urlencoded({ limit: '1mb', extended: true }));
+
+    await prisma.activity.deleteMany({
+      where: {
+        name: 'Sistema sincronizado',
+      },
+    });
   }
 
   async $onReady(): Promise<void | Promise<any>> {
@@ -132,7 +137,5 @@ export class Server implements BeforeRoutesInit, OnReady {
     }
 
     await this.syncServerQueue.add();
-
-    pubsub.publish(SubscriptionTopics.APP_CREATED, 'holis');
   }
 }

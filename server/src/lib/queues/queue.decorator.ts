@@ -53,24 +53,25 @@ export function Queue(options?: QueueOptions) {
         this.worker = new Worker(
           queueName,
           async (job) => {
-            $log.info(queueName, 'new job ID:', job.id);
-            return await this.execute(job);
+            return this.execute(job);
           },
           { connection: redisClient }
         );
 
         this.worker.on('failed', async (job, err) => {
-          $log.info(
-            `${job.id} has failed on Queue ${constructor.name}:`,
-            err
-          );
-          this.onFailed?.call(job, err);
+          $log.error(`${job.id} has failed on Queue ${constructor.name}:`, err);
+          this.onFailed?.call(this, job, err);
         });
 
         this.worker.on(
           'completed',
-          (job: Job<Args, ReturnValue>, returnvalue: ReturnValue) =>
-            this.onSuccess?.call(job, returnvalue)
+          (job: Job<Args, ReturnValue>, returnvalue: ReturnValue) => {
+            $log.info(
+              `${job.id} has completed on Queue ${constructor.name}:`,
+              returnvalue
+            );
+            this.onSuccess?.call(this, job, returnvalue);
+          }
         );
 
         $log.info(`Queue ${constructor.name} initialized`);

@@ -115,10 +115,10 @@ export class SyncServerQueue extends IQueue {
 
         $log.info(`- ${dokkuDatabase} sincronizado`);
       }
-
-      await this.activityRepository.add({
-        name: `Sistema sincronizado`,
-      });
     }
+
+    await this.activityRepository.add({
+      name: `Sistema sincronizado`,
+    });
   }
 }

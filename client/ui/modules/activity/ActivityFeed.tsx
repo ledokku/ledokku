@@ -12,21 +12,34 @@ const AppContent = ({ app }: { app: App }) => {
     return <div>{app.name}</div>;
 };
 
+function generateLink(activity: Activity) {
+    switch (activity.reference?.__typename) {
+        case "App": return `/app/${activity.reference.id}`
+        case "Database": return `/database/${activity.reference.id}`
+    }
+
+    return "#!"
+}
+
 export const ActivityItem = ({ activity }: { activity: Activity }) => {
+    console.log(activity);
+
     return (
-        <div>
-            <div className="flex flex-row">
-                <div className="flex-grow mr-4">
-                    <Text h4>{activity.name}</Text>
-                    <Text>{activity.description}</Text>
+        <a href={activity.reference ? generateLink(activity) : "#!"}>
+            <div>
+                <div className="flex flex-row">
+                    <div className="flex-grow mr-4">
+                        <Text h4>{activity.name}</Text>
+                        <Text>{activity.description}</Text>
+                    </div>
+                    <Text>{format(new Date(activity.createdAt), 'dd/MM/yyyy HH:mm:ss')}</Text>
                 </div>
-                <Text>{format(new Date(activity.createdAt), 'dd/MM/yyyy HH:mm:ss')}</Text>
+                {activity.reference?.__typename === 'App' ? (
+                    <AppContent app={activity.reference} />
+                ) : undefined}
+                <Divider y={2} />
             </div>
-            {activity.reference?.__typename === 'App' ? (
-                <AppContent app={activity.reference} />
-            ) : undefined}
-            <Divider y={2} />
-        </div>
+        </a>
     );
 };
 

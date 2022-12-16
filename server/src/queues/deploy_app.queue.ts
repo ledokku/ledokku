@@ -43,7 +43,7 @@ export class DeployAppQueue extends IQueue<QueueArgs, App> {
     await this.dokkuGitRepository.auth(userName, token);
     await this.dokkuGitRepository.unlock(app.name);
 
-    const res = await this.dokkuGitRepository.sync(
+    await this.dokkuGitRepository.sync(
       app.name,
       `https://github.com/${repoOwner}/${repoName}.git`,
       branchName,
@@ -70,17 +70,6 @@ export class DeployAppQueue extends IQueue<QueueArgs, App> {
         },
       }
     );
-
-    if (res.stderr) {
-      const appToDelete = await this.appRepository.get(appId);
-
-      if (appToDelete) {
-        await this.appRepository.delete(appId);
-
-        await this.dokkuAppRepository.destroy(appToDelete.name);
-      }
-      throw new InternalServerError(res.stderr);
-    }
 
     $log.info(
       `Finalizando de crear ${app.name} desde https://github.com/${repoOwner}/${repoName}.git`
@@ -114,5 +103,15 @@ export class DeployAppQueue extends IQueue<QueueArgs, App> {
         type: 'end:failure',
       },
     });
+
+    const { appId } = job.data;
+
+    const appToDelete = await this.appRepository.get(appId);
+
+    if (appToDelete) {
+      await this.appRepository.delete(appId);
+
+      await this.dokkuAppRepository.destroy(appToDelete.name);
+    }
   }
 }

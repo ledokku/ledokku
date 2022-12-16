@@ -16,7 +16,7 @@ import { PaginationArgs } from './../../../../data/args/pagination';
 interface AddActivity {
   name: string;
   description?: string;
-  instance?: any;
+  instance?: App | Database | AppBuild;
   modifierId?: string;
 }
 
@@ -77,14 +77,14 @@ export class ActivityRepository {
       } else if (
         'name' in instance &&
         'type' in instance &&
-        Object.values(AppTypes).includes(instance.type)
+        Object.keys(AppTypes).includes(instance.type)
       ) {
         refersTo = ModelReferences.App;
         referenceId = (instance as App).id;
       } else if (
         'name' in instance &&
         'type' in instance &&
-        Object.values(DbTypes).includes(instance.type)
+        Object.keys(DbTypes).includes(instance.type)
       ) {
         refersTo = ModelReferences.Database;
         referenceId = (instance as Database).id;
