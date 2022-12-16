@@ -1,0 +1,5 @@
+mutation setEnvVar($key: String!, $value: String!, $appId: String!) {
+  setEnvVar(input: { key: $key, value: $value, appId: $appId }) {
+    result
+  }
+}

@@ -1,0 +1,3 @@
+mutation removeAppProxyPort($input: RemoveAppProxyPortInput!) {
+  removeAppProxyPort(input: $input)
+}

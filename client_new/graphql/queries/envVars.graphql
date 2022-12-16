@@ -1,0 +1,8 @@
+query envVars($appId: String!) {
+  envVars(appId: $appId) {
+    envVars {
+      key
+      value
+    }
+  }
+}
