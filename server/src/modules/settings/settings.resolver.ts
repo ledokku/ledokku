@@ -27,6 +27,14 @@ export class SettingsResolver {
     return email;
   }
 
+  @Authorized(Roles.OWNER)
+  @Mutation((returns) => String)
+  async removeAllowedEmail(@Arg('email', (type) => String) email: string) {
+    this.settingsRepository.removeAllowedEmail(email);
+
+    return email;
+  }
+
   @FieldResolver((returns) => [User])
   async allowedUsers() {
     const settings = await this.settingsRepository.get();

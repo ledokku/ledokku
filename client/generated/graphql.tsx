@@ -709,7 +709,7 @@ export type ActivityQuery = { __typename?: 'Query', activity: { __typename?: 'Ac
 export type AllowedUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllowedUsersQuery = { __typename?: 'Query', settings: { __typename?: 'Settings', allowedUsers: Array<{ __typename?: 'User', id: string, username: string, avatarUrl: string, email: string }> } };
+export type AllowedUsersQuery = { __typename?: 'Query', settings: { __typename?: 'Settings', allowedEmails: Array<string>, allowedUsers: Array<{ __typename?: 'User', id: string, username: string, avatarUrl: string, email: string }> } };
 
 export type AppByIdQueryVariables = Exact<{
   appId: Scalars['String'];
@@ -1520,6 +1520,7 @@ export type ActivityQueryResult = Apollo.QueryResult<ActivityQuery, ActivityQuer
 export const AllowedUsersDocument = gql`
     query allowedUsers {
   settings {
+    allowedEmails
     allowedUsers {
       id
       username

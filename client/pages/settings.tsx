@@ -7,6 +7,7 @@ const Settings = () => {
     const { data, loading, refetch } = useAllowedUsersQuery();
     const [addAllowedUser, { loading: loadingAddUser }] = useAddAllowedUserMutation();
     const [showAddUser, setShowAddUser] = useState(false);
+    const [email, setEmail] = useState("");
 
     return (
         <AdminLayout>
@@ -31,12 +32,22 @@ const Settings = () => {
                         <Table.Column> </Table.Column>
                     </Table.Header>
                     <Table.Body loadingState={loading ? "loading" : "idle"}>
-                        {data?.settings.allowedUsers.map((it, index) => <Table.Row key={index}>
-                            <Table.Cell><Avatar src={it.avatarUrl} /></Table.Cell>
-                            <Table.Cell>{it.email}</Table.Cell>
-                            <Table.Cell> </Table.Cell>
-                        </Table.Row>) ?? []}
+                        {data?.settings.allowedEmails.map((it, index) => {
+                            const user = data.settings.allowedUsers.find(it2 => it2.email === it);
+
+                            return <Table.Row key={index}>
+                                <Table.Cell>
+                                    <div className='flex gap-4 items-center'>
+                                        <Avatar size="sm" src={user?.avatarUrl} />
+                                        {user?.username ?? "No registrado"}
+                                    </div>
+                                </Table.Cell>
+                                <Table.Cell>{it}</Table.Cell>
+                                <Table.Cell> </Table.Cell>
+                            </Table.Row>;
+                        }) ?? []}
                     </Table.Body>
+                    {/* <Table.Pagination rowsPerPage={10} /> */}
                 </Table>
             </div>
             <Modal
@@ -50,7 +61,7 @@ const Settings = () => {
                         onSubmit={(e) => {
                             addAllowedUser({
                                 variables: {
-                                    email: ""
+                                    email: email
                                 }
                             }).then(it => {
                                 refetch()
@@ -62,6 +73,8 @@ const Settings = () => {
                             fullWidth
                             label='Correo electrónico'
                             required
+                            value={email}
+                            onChange={(e) => setEmail(e.currentTarget.value)}
                             type="email" />
                         <Button size="sm" type='submit'>
                             Agregar

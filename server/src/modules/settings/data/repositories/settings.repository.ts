@@ -27,4 +27,17 @@ export class SettingsRepository {
       },
     });
   }
+
+  async removeAllowedEmail(email: string) {
+    const currentSettings = await this.get();
+
+    return this.prisma.settings.update({
+      where: { id: currentSettings.id },
+      data: {
+        allowedEmails: {
+          set: currentSettings.allowedEmails.filter((it) => it !== email),
+        },
+      },
+    });
+  }
 }
