@@ -2,7 +2,6 @@ import { Roles } from '@prisma/client';
 import { AuthChecker } from 'type-graphql';
 import { DokkuContext } from '../data/models/dokku_context';
 import prisma from '../lib/prisma';
-import { SettingsRepository } from '../repositories';
 
 export const authChecker: AuthChecker<DokkuContext, Roles> = async (
   { context },
@@ -10,10 +9,9 @@ export const authChecker: AuthChecker<DokkuContext, Roles> = async (
 ): Promise<boolean> => {
   if (!context.auth) return false;
 
-  const settingsRepository = new SettingsRepository(prisma);
-  const settings = await settingsRepository.get()
+  const settings = await prisma.settings.findFirst();
   if (
-    !settings.allowedEmails.includes(context.auth.user.email) &&
+    settings?.allowedEmails?.includes(context.auth.user.email) === false &&
     context.auth.user.role !== Roles.OWNER
   )
     return false;
