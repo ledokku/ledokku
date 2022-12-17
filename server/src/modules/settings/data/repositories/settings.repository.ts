@@ -12,4 +12,19 @@ export class SettingsRepository {
     }
     return res;
   }
+
+  async addAllowedEmail(email: string) {
+    const currentSettings = await this.get();
+
+    if (currentSettings.allowedEmails.includes(email)) return;
+
+    return this.prisma.settings.update({
+      where: { id: currentSettings.id },
+      data: {
+        allowedEmails: {
+          push: email,
+        },
+      },
+    });
+  }
 }
