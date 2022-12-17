@@ -33,7 +33,7 @@ export class AuthResolver {
 
     const settings = await this.settingsRepository.get();
 
-    if (settings.allowedEmails.includes(ghUser.email)) {
+    if (!settings.allowedEmails.includes(ghUser.email)) {
       throw new Forbidden('Usuario no permitido');
     }
 
