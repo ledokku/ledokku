@@ -184,12 +184,18 @@ export class GithubRepository {
     }).then<GithubOAuthLoginResponse | GithubError>((res) => res.json() as any);
   }
 
-  async getUserByAccessToken(access_token: string): Promise<User> {
+  async getGithubUser(access_token: string) {
     const octokit = new Octokit({
       auth: access_token,
     });
 
     const { data } = await octokit.users.getAuthenticated();
+
+    return data;
+  }
+
+  async getUserByAccessToken(access_token: string): Promise<User> {
+    const data = await this.getGithubUser(access_token);
 
     return await this.prisma.user.findUnique({
       where: { githubId: data.node_id },

@@ -11,6 +11,12 @@ export class UserRepository {
     });
   }
 
+  async getByGithubId(id: string) {
+    return this.prisma.user.findUnique({
+      where: { githubId: id },
+    });
+  }
+
   async update(userId: string, data: Prisma.UserUpdateInput) {
     return this.prisma.user.update({
       where: { id: userId },

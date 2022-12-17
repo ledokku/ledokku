@@ -235,6 +235,7 @@ export type Logs = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addAllowedEmail: Scalars['String'];
   addAppProxyPort: Scalars['Boolean'];
   addDomain: BooleanResult;
   createAppDokku: CreateAppResult;
@@ -252,6 +253,11 @@ export type Mutation = {
   setEnvVar: BooleanResult;
   unlinkDatabase: BooleanResult;
   unsetEnvVar: BooleanResult;
+};
+
+
+export type MutationAddAllowedEmailArgs = {
+  email: Scalars['String'];
 };
 
 
@@ -378,6 +384,7 @@ export type Query = {
   isDatabaseLinked: IsDatabaseLinked;
   isPluginInstalled: IsPluginInstalled;
   repositories: Array<Repository>;
+  settings: Settings;
   setup: SetupResult;
 };
 
@@ -511,6 +518,13 @@ export type SetEnvVarInput = {
   value: Scalars['String'];
 };
 
+export type Settings = {
+  __typename?: 'Settings';
+  allowedEmails: Array<Scalars['String']>;
+  allowedUsers: Array<User>;
+  id: Scalars['ID'];
+};
+
 export type SetupResult = {
   __typename?: 'SetupResult';
   canConnectSsh: Scalars['Boolean'];
@@ -553,6 +567,13 @@ export type User = {
   updatedAt: Scalars['DateTime'];
   username: Scalars['String'];
 };
+
+export type AddAllowedUserMutationVariables = Exact<{
+  email: Scalars['String'];
+}>;
+
+
+export type AddAllowedUserMutation = { __typename?: 'Mutation', addAllowedEmail: string };
 
 export type AddAppProxyPortMutationVariables = Exact<{
   input: AddAppProxyPortInput;
@@ -684,6 +705,11 @@ export type ActivityQueryVariables = Exact<{
 
 
 export type ActivityQuery = { __typename?: 'Query', activity: { __typename?: 'ActivityPaginationInfo', nextPage?: number | null, prevPage?: number | null, totalItems: number, totalPages: number, items: Array<{ __typename?: 'Activity', name: string, description?: string | null, createdAt: any, modifier?: { __typename?: 'User', username: string, avatarUrl: string } | null, reference?: { __typename?: 'App', id: string, name: string, type: AppTypes, appMetaGithub?: { __typename?: 'AppGithubMeta', repoOwner: string, repoName: string } | null } | { __typename?: 'AppBuild', status: string, buildId: string } | { __typename?: 'Database', name: string, version: string, dbId: string, dbType: DbTypes } | null }> } };
+
+export type AllowedUsersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllowedUsersQuery = { __typename?: 'Query', settings: { __typename?: 'Settings', allowedUsers: Array<{ __typename?: 'User', id: string, username: string, avatarUrl: string, email: string }> } };
 
 export type AppByIdQueryVariables = Exact<{
   appId: Scalars['String'];
@@ -830,6 +856,37 @@ export type UnlinkDatabaseLogsSubscriptionVariables = Exact<{ [key: string]: nev
 export type UnlinkDatabaseLogsSubscription = { __typename?: 'Subscription', unlinkDatabaseLogs: { __typename?: 'LogPayload', message: string, type: string } };
 
 
+export const AddAllowedUserDocument = gql`
+    mutation addAllowedUser($email: String!) {
+  addAllowedEmail(email: $email)
+}
+    `;
+export type AddAllowedUserMutationFn = Apollo.MutationFunction<AddAllowedUserMutation, AddAllowedUserMutationVariables>;
+
+/**
+ * __useAddAllowedUserMutation__
+ *
+ * To run a mutation, you first call `useAddAllowedUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddAllowedUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addAllowedUserMutation, { data, loading, error }] = useAddAllowedUserMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useAddAllowedUserMutation(baseOptions?: Apollo.MutationHookOptions<AddAllowedUserMutation, AddAllowedUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddAllowedUserMutation, AddAllowedUserMutationVariables>(AddAllowedUserDocument, options);
+      }
+export type AddAllowedUserMutationHookResult = ReturnType<typeof useAddAllowedUserMutation>;
+export type AddAllowedUserMutationResult = Apollo.MutationResult<AddAllowedUserMutation>;
+export type AddAllowedUserMutationOptions = Apollo.BaseMutationOptions<AddAllowedUserMutation, AddAllowedUserMutationVariables>;
 export const AddAppProxyPortDocument = gql`
     mutation addAppProxyPort($input: AddAppProxyPortInput!) {
   addAppProxyPort(input: $input)
@@ -1460,6 +1517,45 @@ export function useActivityLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<A
 export type ActivityQueryHookResult = ReturnType<typeof useActivityQuery>;
 export type ActivityLazyQueryHookResult = ReturnType<typeof useActivityLazyQuery>;
 export type ActivityQueryResult = Apollo.QueryResult<ActivityQuery, ActivityQueryVariables>;
+export const AllowedUsersDocument = gql`
+    query allowedUsers {
+  settings {
+    allowedUsers {
+      id
+      username
+      avatarUrl
+      email
+    }
+  }
+}
+    `;
+
+/**
+ * __useAllowedUsersQuery__
+ *
+ * To run a query within a React component, call `useAllowedUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAllowedUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAllowedUsersQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAllowedUsersQuery(baseOptions?: Apollo.QueryHookOptions<AllowedUsersQuery, AllowedUsersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AllowedUsersQuery, AllowedUsersQueryVariables>(AllowedUsersDocument, options);
+      }
+export function useAllowedUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AllowedUsersQuery, AllowedUsersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AllowedUsersQuery, AllowedUsersQueryVariables>(AllowedUsersDocument, options);
+        }
+export type AllowedUsersQueryHookResult = ReturnType<typeof useAllowedUsersQuery>;
+export type AllowedUsersLazyQueryHookResult = ReturnType<typeof useAllowedUsersLazyQuery>;
+export type AllowedUsersQueryResult = Apollo.QueryResult<AllowedUsersQuery, AllowedUsersQueryVariables>;
 export const AppByIdDocument = gql`
     query appById($appId: String!) {
   app(appId: $appId) {

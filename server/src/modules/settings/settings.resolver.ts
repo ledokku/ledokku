@@ -13,6 +13,7 @@ export class SettingsResolver {
     private settingsRepository: SettingsRepository
   ) {}
 
+  @Authorized()
   @Query((returns) => Settings)
   async settings() {
     return this.settingsRepository.get();

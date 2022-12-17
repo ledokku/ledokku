@@ -1,5 +1,10 @@
-query allowedUsers(){
-    allowedUsers{
-        
+query allowedUsers {
+    settings {
+        allowedUsers {
+            id
+            username
+            avatarUrl
+            email
+        }
     }
 }

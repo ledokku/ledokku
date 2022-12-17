@@ -1,9 +1,9 @@
 import { $log } from '@tsed/common';
-import { InternalServerError } from '@tsed/exceptions';
+import { Forbidden, InternalServerError } from '@tsed/exceptions';
 import { ResolverService } from '@tsed/typegraphql';
 import jsonwebtoken from 'jsonwebtoken';
 import { Arg, Mutation, Resolver } from 'type-graphql';
-import { UserRepository } from '../../repositories';
+import { SettingsRepository, UserRepository } from '../../repositories';
 import { GithubRepository } from '../github/data/repositories/github.repository';
 import { JWT_SECRET } from './../../constants';
 import { Auth } from './data/models/auth.model';
@@ -12,7 +12,8 @@ import { Auth } from './data/models/auth.model';
 export class AuthResolver {
   constructor(
     private githubRepository: GithubRepository,
-    private userRepository: UserRepository
+    private userRepository: UserRepository,
+    private settingsRepository: SettingsRepository
   ) {}
 
   @Mutation((returns) => Auth)
@@ -28,9 +29,15 @@ export class AuthResolver {
       throw new InternalServerError(data.error_description);
     }
 
-    let user = await this.githubRepository.getUserByAccessToken(
-      data.access_token
-    );
+    const ghUser = await this.githubRepository.getGithubUser(data.access_token);
+
+    const settings = await this.settingsRepository.get();
+
+    if (settings.allowedEmails.includes(ghUser.email)) {
+      throw new Forbidden('Usuario no permitido');
+    }
+
+    let user = await this.userRepository.getByGithubId(ghUser.node_id);
 
     if (!user) {
       user = await this.githubRepository.createUser(data);
