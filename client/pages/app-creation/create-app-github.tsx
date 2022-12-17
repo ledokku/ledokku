@@ -69,7 +69,7 @@ const CreateAppGithub = () => {
     const [arrayOfCreateAppLogs, setArrayOfCreateAppLogs] = useState<LogPayload[]>([]);
     const [isTerminalVisible, setIsTerminalVisible] = useState(false);
     const [isToastShown, setIsToastShown] = useState(false);
-    const [createAppGithubMutation, { loading }] = useCreateAppGithubMutation();
+    const [createAppGithubMutation, { loading, data: createAppData }] = useCreateAppGithubMutation();
     const [isAppCreationSuccess, setIsAppCreationSuccess] = useState<AppCreationStatus>();
 
     useAppCreateLogsSubscription({
@@ -160,8 +160,9 @@ const CreateAppGithub = () => {
 
     const handleNext = () => {
         setIsTerminalVisible(false);
-        const appId = arrayOfCreateAppLogs[arrayOfCreateAppLogs.length - 1].message;
-        history.push(`app/${appId}`, 'new');
+        history.push(`/`);
+
+        // history.push(`/app/${createAppData?.createAppGithub.result}`);
         trackGoal(trackingGoals.createAppGithub, 0);
     };
 
