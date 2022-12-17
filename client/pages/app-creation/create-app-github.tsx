@@ -457,7 +457,7 @@ const CreateAppGithub = () => {
                                         </Dropdown>
                                         <div className='mt-8 mb-4'>
                                             <Checkbox
-                                                label='Directorio del Dockerfile personalizado'
+                                                label='Usar Docker'
                                                 isDisabled={formik.values.repo.id.length === 0}
                                                 isSelected={isDockerfileEnabled}
                                                 onChange={(val) => setIsDockerfileEnabled(val)} />
