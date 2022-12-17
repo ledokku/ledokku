@@ -1,11 +1,16 @@
+import { ApolloError } from '@apollo/client';
 import { Avatar, Button, Input, Loading, Modal, Table, Text } from '@nextui-org/react';
 import { useState } from 'react';
-import { useAddAllowedUserMutation, useAllowedUsersQuery } from '../generated/graphql';
+import { FaTrash } from "react-icons/fa";
+import { toast } from 'react-toastify';
+import { useAddAllowedUserMutation, useAllowedUsersQuery, useRemoveAllowedUserMutation } from '../generated/graphql';
+import { IconButton } from '../ui/components/IconButton';
 import { AdminLayout } from '../ui/layout/layout';
 
 const Settings = () => {
     const { data, loading, refetch } = useAllowedUsersQuery();
     const [addAllowedUser, { loading: loadingAddUser }] = useAddAllowedUserMutation();
+    const [removeAllowedUser, { loading: loadingRemoveUser }] = useRemoveAllowedUserMutation();
     const [showAddUser, setShowAddUser] = useState(false);
     const [email, setEmail] = useState("");
 
@@ -43,7 +48,22 @@ const Settings = () => {
                                     </div>
                                 </Table.Cell>
                                 <Table.Cell>{it}</Table.Cell>
-                                <Table.Cell> </Table.Cell>
+                                <Table.Cell>
+                                    <IconButton
+                                        onClick={() => {
+                                            removeAllowedUser({
+                                                variables: {
+                                                    email: it
+                                                }
+                                            }).then(it => {
+                                                refetch()
+                                            }).catch((it: ApolloError) => {
+                                                toast.error(it.message)
+                                            })
+                                        }}
+                                        color='error'
+                                        icon={<FaTrash />} />
+                                </Table.Cell>
                             </Table.Row>;
                         }) ?? []}
                     </Table.Body>
@@ -66,6 +86,7 @@ const Settings = () => {
                             }).then(it => {
                                 refetch()
                                 setShowAddUser(false)
+                                setEmail("")
                             })
                             e.preventDefault()
                         }}>

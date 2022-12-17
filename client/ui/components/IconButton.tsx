@@ -5,6 +5,7 @@ interface IconButtonProps {
     icon: ReactNode;
     color?: NormalColors;
     className?: string;
+    onClick?: () => void
 }
 
 export const IconButton = (props: IconButtonProps) => {
@@ -15,6 +16,7 @@ export const IconButton = (props: IconButtonProps) => {
             color={props.color}
             size="sm"
             icon={props.icon}
+            onClick={props.onClick}
         />
     );
 };

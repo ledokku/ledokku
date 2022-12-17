@@ -246,6 +246,7 @@ export type Mutation = {
   linkDatabase: BooleanResult;
   loginWithGithub: Auth;
   rebuildApp: BooleanResult;
+  removeAllowedEmail: Scalars['String'];
   removeAppProxyPort: Scalars['Boolean'];
   removeDomain: BooleanResult;
   restartApp: BooleanResult;
@@ -308,6 +309,11 @@ export type MutationLoginWithGithubArgs = {
 
 export type MutationRebuildAppArgs = {
   input: RebuildAppInput;
+};
+
+
+export type MutationRemoveAllowedEmailArgs = {
+  email: Scalars['String'];
 };
 
 
@@ -644,6 +650,13 @@ export type RebuildAppMutationVariables = Exact<{
 
 
 export type RebuildAppMutation = { __typename?: 'Mutation', rebuildApp: { __typename?: 'BooleanResult', result: boolean } };
+
+export type RemoveAllowedUserMutationVariables = Exact<{
+  email: Scalars['String'];
+}>;
+
+
+export type RemoveAllowedUserMutation = { __typename?: 'Mutation', removeAllowedEmail: string };
 
 export type RemoveAppProxyPortMutationVariables = Exact<{
   input: RemoveAppProxyPortInput;
@@ -1215,6 +1228,37 @@ export function useRebuildAppMutation(baseOptions?: Apollo.MutationHookOptions<R
 export type RebuildAppMutationHookResult = ReturnType<typeof useRebuildAppMutation>;
 export type RebuildAppMutationResult = Apollo.MutationResult<RebuildAppMutation>;
 export type RebuildAppMutationOptions = Apollo.BaseMutationOptions<RebuildAppMutation, RebuildAppMutationVariables>;
+export const RemoveAllowedUserDocument = gql`
+    mutation removeAllowedUser($email: String!) {
+  removeAllowedEmail(email: $email)
+}
+    `;
+export type RemoveAllowedUserMutationFn = Apollo.MutationFunction<RemoveAllowedUserMutation, RemoveAllowedUserMutationVariables>;
+
+/**
+ * __useRemoveAllowedUserMutation__
+ *
+ * To run a mutation, you first call `useRemoveAllowedUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveAllowedUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeAllowedUserMutation, { data, loading, error }] = useRemoveAllowedUserMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useRemoveAllowedUserMutation(baseOptions?: Apollo.MutationHookOptions<RemoveAllowedUserMutation, RemoveAllowedUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveAllowedUserMutation, RemoveAllowedUserMutationVariables>(RemoveAllowedUserDocument, options);
+      }
+export type RemoveAllowedUserMutationHookResult = ReturnType<typeof useRemoveAllowedUserMutation>;
+export type RemoveAllowedUserMutationResult = Apollo.MutationResult<RemoveAllowedUserMutation>;
+export type RemoveAllowedUserMutationOptions = Apollo.BaseMutationOptions<RemoveAllowedUserMutation, RemoveAllowedUserMutationVariables>;
 export const RemoveAppProxyPortDocument = gql`
     mutation removeAppProxyPort($input: RemoveAppProxyPortInput!) {
   removeAppProxyPort(input: $input)
