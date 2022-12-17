@@ -92,7 +92,13 @@ export class DeployAppQueue extends IQueue<QueueArgs, App> {
     await this.activityRepository.add({
       name: `Proyecto "${result.name}" creado`,
       description: `Creado desde https://github.com/${repoOwner}/${repoName}`,
-      instance: result,
+      referenceId: job.data.appId,
+      refersToModel: 'App',
+      Modifier: {
+        connect: {
+          username: job.data.userName,
+        },
+      },
     });
   }
 

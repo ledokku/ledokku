@@ -9,6 +9,7 @@ interface QueueArgs {
   appName: string;
   appId: string;
   key: string;
+  userId: string;
 }
 
 @Queue()
@@ -22,7 +23,7 @@ export class UnsetEnvVarQueue extends IQueue<QueueArgs> {
   }
 
   protected async execute(job: Job<QueueArgs, any, string>) {
-    const { appName, key, appId } = job.data;
+    const { appName, key, appId, userId } = job.data;
 
     $log.info(
       `Iniciando resignacion de la variable de entorno ${appName} con ${key}`
@@ -31,7 +32,13 @@ export class UnsetEnvVarQueue extends IQueue<QueueArgs> {
     await this.dokkuAppRepository.unsetEnvVar(appName, key);
     await this.activityRepository.add({
       name: `Variable de entorno "${key}" eliminada`,
-      instance: await this.appRepository.get(appId),
+      referenceId: appId,
+      refersToModel: 'App',
+      Modifier: {
+        connect: {
+          id: userId,
+        },
+      },
     });
 
     $log.info(

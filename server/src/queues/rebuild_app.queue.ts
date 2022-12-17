@@ -11,6 +11,7 @@ import { AppRepository } from '../repositories';
 interface QueueArgs {
   appName: string;
   appId: string;
+  userId: string;
 }
 
 @Queue()
@@ -25,7 +26,7 @@ export class RebuildAppQueue extends IQueue<QueueArgs> {
   }
 
   protected async execute(job: Job<QueueArgs, any, string>) {
-    const { appName, appId } = job.data;
+    const { appName, appId, userId } = job.data;
 
     $log.info(`Iniciando rebuild de ${appName}`);
 
@@ -52,7 +53,13 @@ export class RebuildAppQueue extends IQueue<QueueArgs> {
 
     await this.activityRepository.add({
       name: `Rebuild de "${appName}"`,
-      instance: await this.appRepository.get(appId),
+      referenceId: appId,
+      refersToModel: 'App',
+      Modifier: {
+        connect: {
+          id: userId,
+        },
+      },
     });
 
     if (!res.stderr) {

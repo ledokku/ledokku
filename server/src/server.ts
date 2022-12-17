@@ -106,12 +106,6 @@ export class Server implements BeforeRoutesInit, OnReady {
       )
       .use(express.json({ limit: '1mb' }))
       .use(express.urlencoded({ limit: '1mb', extended: true }));
-
-    await prisma.activity.deleteMany({
-      where: {
-        name: 'Sistema sincronizado',
-      },
-    });
   }
 
   async $onReady(): Promise<void | Promise<any>> {

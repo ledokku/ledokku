@@ -12,6 +12,7 @@ import { DatabaseRepository } from './../modules/databases/data/repositories/dat
 interface QueueArgs {
   appId: string;
   databaseId: string;
+  userId: string;
 }
 
 @Queue()
@@ -27,7 +28,7 @@ export class UnlinkDatabaseQueue extends IQueue<QueueArgs> {
   }
 
   protected async execute(job: Job<QueueArgs, any, string>) {
-    const { appId, databaseId } = job.data;
+    const { appId, databaseId, userId } = job.data;
     const app = await this.appRepository.get(appId);
 
     const database = await this.databaseRepository.get(databaseId);
@@ -73,7 +74,13 @@ export class UnlinkDatabaseQueue extends IQueue<QueueArgs> {
     await this.activityRepository.add({
       name: `Base de datos "${database.name}" desenlazada de "${app.name}"`,
       description: database.id,
-      instance: database,
+      referenceId: database.id,
+      refersToModel: 'Database',
+      Modifier: {
+        connect: {
+          id: userId,
+        },
+      },
     });
 
     $log.info(

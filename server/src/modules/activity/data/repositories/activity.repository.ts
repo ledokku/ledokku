@@ -13,13 +13,6 @@ import { Injectable } from '@tsed/di';
 import { ActivityPaginationInfo } from '../models/activity.model';
 import { PaginationArgs } from './../../../../data/args/pagination';
 
-interface AddActivity {
-  name: string;
-  description?: string;
-  instance?: App | Database | AppBuild;
-  modifierId?: string;
-}
-
 @Injectable()
 export class ActivityRepository {
   constructor(private prisma: PrismaClient) {}
@@ -66,37 +59,17 @@ export class ActivityRepository {
     });
   }
 
-  add({ instance, ...activity }: AddActivity) {
-    let refersTo: ModelReferences;
-    let referenceId: string;
+  getModifier(activityId: string) {
+    return this.prisma.activity
+      .findUnique({
+        where: { id: activityId },
+      })
+      .Modifier();
+  }
 
-    if (instance) {
-      if ('status' in instance && 'appId' in instance) {
-        refersTo = ModelReferences.AppBuild;
-        referenceId = (instance as AppBuild).id;
-      } else if (
-        'name' in instance &&
-        'type' in instance &&
-        Object.keys(AppTypes).includes(instance.type)
-      ) {
-        refersTo = ModelReferences.App;
-        referenceId = (instance as App).id;
-      } else if (
-        'name' in instance &&
-        'type' in instance &&
-        Object.keys(DbTypes).includes(instance.type)
-      ) {
-        refersTo = ModelReferences.Database;
-        referenceId = (instance as Database).id;
-      }
-    }
-
+  add(data: Prisma.ActivityCreateInput) {
     return this.prisma.activity.create({
-      data: {
-        ...activity,
-        refersToModel: refersTo,
-        referenceId: referenceId,
-      },
+      data,
     });
   }
 

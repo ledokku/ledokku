@@ -27,7 +27,7 @@ export class CreateDatabaseQueue extends IQueue<QueueArgs> {
   }
 
   protected async execute(job: Job<QueueArgs, any>) {
-    const { databaseName, databaseType } = job.data;
+    const { databaseName, databaseType, userId } = job.data;
 
     $log.info(
       `Iniciando construccion de la base de datos ${databaseType} llamada ${databaseName}`
@@ -74,7 +74,13 @@ export class CreateDatabaseQueue extends IQueue<QueueArgs> {
     await this.activityRepository.add({
       name: `Base de datos "${createdDb.name}" creada`,
       description: createdDb.id,
-      instance: createdDb,
+      referenceId: createdDb.id,
+      refersToModel: 'Database',
+      Modifier: {
+        connect: {
+          id: userId,
+        },
+      },
     });
 
     $log.info(

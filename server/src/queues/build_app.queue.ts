@@ -34,7 +34,8 @@ export class BuildAppQueue extends IQueue<QueueArgs> {
     await this.activityRepository.add({
       name: `Construcción de "${appBuild.app.name}"`,
       description: appBuild.appId,
-      instance: appBuild,
+      referenceId: appBuild.id,
+      refersToModel: 'AppBuild',
     });
 
     if (!appBuild) {

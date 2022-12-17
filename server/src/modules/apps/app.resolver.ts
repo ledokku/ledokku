@@ -161,7 +161,8 @@ export class AppResolver {
   @Authorized()
   @Mutation((returns) => BooleanResult)
   async setEnvVar(
-    @Arg('input', (type) => SetEnvVarInput) input: SetEnvVarInput
+    @Arg('input', (type) => SetEnvVarInput) input: SetEnvVarInput,
+    @Ctx() context: DokkuContext
   ): Promise<BooleanResult> {
     const app = await this.appRepository.get(input.appId);
 
@@ -172,6 +173,7 @@ export class AppResolver {
     await this.setEnvVarQueue.add({
       appName: app.name,
       ...input,
+      userId: context.auth.user.id,
     });
 
     return { result: true };
@@ -180,7 +182,8 @@ export class AppResolver {
   @Authorized()
   @Mutation((returns) => BooleanResult)
   async unsetEnvVar(
-    @Arg('input', (type) => UnsetEnvVarInput) input: UnsetEnvVarInput
+    @Arg('input', (type) => UnsetEnvVarInput) input: UnsetEnvVarInput,
+    @Ctx() context: DokkuContext
   ): Promise<BooleanResult> {
     const app = await this.appRepository.get(input.appId);
 
@@ -191,6 +194,7 @@ export class AppResolver {
     await this.unsetEnvVarQueue.add({
       appName: app.name,
       ...input,
+      userId: context.auth.user.id
     });
 
     return { result: true };
@@ -445,7 +449,8 @@ export class AppResolver {
   @Mutation((returns) => BooleanResult)
   async linkDatabase(
     @Arg('input', (type) => LinkDatabaseInput)
-    input: LinkDatabaseInput
+    input: LinkDatabaseInput,
+    @Ctx() context: DokkuContext
   ) {
     const app = await this.appRepository.get(input.appId);
 
@@ -473,6 +478,7 @@ export class AppResolver {
     }
 
     await this.linkDatabaseQueue.add({
+      userId: context.auth.user.id,
       ...input,
     });
 
@@ -483,7 +489,8 @@ export class AppResolver {
   @Mutation((returns) => BooleanResult)
   async unlinkDatabase(
     @Arg('input', (type) => UnlinkDatabaseInput)
-    input: UnlinkDatabaseInput
+    input: UnlinkDatabaseInput,
+    @Ctx() context: DokkuContext
   ): Promise<BooleanResult> {
     const app = await this.appRepository.get(input.appId);
 
@@ -512,6 +519,7 @@ export class AppResolver {
 
     await this.unlinkDatabaseQueue.add({
       ...input,
+      userId: context.auth.user.id,
     });
 
     return { result: true };
@@ -521,7 +529,8 @@ export class AppResolver {
   @Mutation((returns) => BooleanResult)
   async rebuildApp(
     @Arg('input', (type) => RebuildAppInput)
-    input: RebuildAppInput
+    input: RebuildAppInput,
+    @Ctx() context: DokkuContext
   ) {
     const app = await this.appRepository.get(input.appId);
 
@@ -532,6 +541,7 @@ export class AppResolver {
     await this.rebuildAppQueue.add({
       appName: app.name,
       appId: input.appId,
+      userId: context.auth.user.id,
     });
 
     return { result: true };
@@ -541,7 +551,8 @@ export class AppResolver {
   @Mutation((returns) => BooleanResult)
   async restartApp(
     @Arg('input', (type) => RestartAppInput)
-    input: RestartAppInput
+    input: RestartAppInput,
+    @Ctx() context: DokkuContext
   ): Promise<BooleanResult> {
     const app = await this.appRepository.get(input.appId);
 
@@ -552,6 +563,7 @@ export class AppResolver {
     await this.restartAppQueue.add({
       appName: app.name,
       appId: app.id,
+      userId: context.auth.user.id,
     });
 
     return { result: true };

@@ -10,6 +10,7 @@ interface QueueArgs {
   key: string;
   value: string;
   appId: string;
+  userId: string;
 }
 
 @Queue()
@@ -23,7 +24,7 @@ export class SetEnvVarQueue extends IQueue<QueueArgs> {
   }
 
   protected async execute(job: Job<QueueArgs, any, string>) {
-    const { appName, key, value, appId } = job.data;
+    const { appName, key, value, appId, userId } = job.data;
 
     $log.info(
       `Iniciando asignacion de la variable de entorno ${appName} con ${key}=${value}`
@@ -33,7 +34,13 @@ export class SetEnvVarQueue extends IQueue<QueueArgs> {
     await this.activityRepository.add({
       name: `Variable de entorno en "${appName}"`,
       description: `${key}: ${value}`,
-      instance: await this.appRepository.get(appId),
+      referenceId: appId,
+      refersToModel: 'App',
+      Modifier: {
+        connect: {
+          id: userId,
+        },
+      },
     });
 
     $log.info(
