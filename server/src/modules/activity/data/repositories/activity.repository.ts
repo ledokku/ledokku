@@ -1,10 +1,7 @@
 import {
   Activity,
-  App,
   AppBuild,
-  AppTypes,
   Database,
-  DbTypes,
   ModelReferences,
   Prisma,
   PrismaClient,
@@ -52,7 +49,9 @@ export class ActivityRepository {
     referenceType: ModelReferences,
     referenceId: string
   ): Promise<Activity | Database | AppBuild | undefined> {
-    return this.referenceToTable(referenceType)?.findUnique({
+    const table = this.referenceToTable(referenceType) as any;
+
+    return table?.findUnique({
       where: {
         id: referenceId,
       },
@@ -84,17 +83,18 @@ export class ActivityRepository {
       : false
   >(
     referenceType: ModelReferences
-  ): Prisma.ActivityDelegate<GlobalReject> | undefined {
+  ):
+    | Prisma.AppDelegate<GlobalReject>
+    | Prisma.DatabaseDelegate<GlobalReject>
+    | Prisma.AppBuildDelegate<GlobalReject>
+    | undefined {
     switch (referenceType) {
       case ModelReferences.App:
-        this.prisma.app;
-        break;
+        return this.prisma.app;
       case ModelReferences.AppBuild:
-        this.prisma.appBuild;
-        break;
+        return this.prisma.appBuild;
       case ModelReferences.Database:
-        this.prisma.database;
-        break;
+        return this.prisma.database;
     }
 
     return undefined;

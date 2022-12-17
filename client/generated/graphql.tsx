@@ -21,6 +21,7 @@ export type Activity = {
   createdAt: Scalars['DateTime'];
   description?: Maybe<Scalars['String']>;
   id: Scalars['String'];
+  modifier?: Maybe<User>;
   name: Scalars['String'];
   reference?: Maybe<ActivityModelUnion>;
   updatedAt: Scalars['DateTime'];
@@ -494,6 +495,11 @@ export type RestartAppInput = {
   appId: Scalars['String'];
 };
 
+export enum Roles {
+  Admin = 'ADMIN',
+  Owner = 'OWNER'
+}
+
 export type SetDomainInput = {
   appId: Scalars['String'];
   domainName: Scalars['String'];
@@ -531,6 +537,21 @@ export type UnlinkDatabaseInput = {
 export type UnsetEnvVarInput = {
   appId: Scalars['String'];
   key: Scalars['String'];
+};
+
+export type User = {
+  __typename?: 'User';
+  avatarUrl: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  email: Scalars['String'];
+  githubAccessToken: Scalars['String'];
+  githubId: Scalars['String'];
+  id: Scalars['ID'];
+  refreshToken: Scalars['String'];
+  refreshTokenExpiresAt: Scalars['DateTime'];
+  role: Roles;
+  updatedAt: Scalars['DateTime'];
+  username: Scalars['String'];
 };
 
 export type AddAppProxyPortMutationVariables = Exact<{
@@ -662,7 +683,7 @@ export type ActivityQueryVariables = Exact<{
 }>;
 
 
-export type ActivityQuery = { __typename?: 'Query', activity: { __typename?: 'ActivityPaginationInfo', nextPage?: number | null, prevPage?: number | null, totalItems: number, totalPages: number, items: Array<{ __typename?: 'Activity', name: string, description?: string | null, createdAt: any, reference?: { __typename?: 'App', id: string, name: string, type: AppTypes, appMetaGithub?: { __typename?: 'AppGithubMeta', repoOwner: string, repoName: string } | null } | { __typename?: 'AppBuild', status: string, buildId: string } | { __typename?: 'Database', name: string, version: string, dbId: string, dbType: DbTypes } | null }> } };
+export type ActivityQuery = { __typename?: 'Query', activity: { __typename?: 'ActivityPaginationInfo', nextPage?: number | null, prevPage?: number | null, totalItems: number, totalPages: number, items: Array<{ __typename?: 'Activity', name: string, description?: string | null, createdAt: any, modifier?: { __typename?: 'User', username: string, avatarUrl: string } | null, reference?: { __typename?: 'App', id: string, name: string, type: AppTypes, appMetaGithub?: { __typename?: 'AppGithubMeta', repoOwner: string, repoName: string } | null } | { __typename?: 'AppBuild', status: string, buildId: string } | { __typename?: 'Database', name: string, version: string, dbId: string, dbType: DbTypes } | null }> } };
 
 export type AppByIdQueryVariables = Exact<{
   appId: Scalars['String'];
@@ -1380,6 +1401,10 @@ export const ActivityDocument = gql`
       name
       description
       createdAt
+      modifier {
+        username
+        avatarUrl
+      }
       reference {
         ... on App {
           id

@@ -1,4 +1,4 @@
-import { Divider, Pagination, Text } from '@nextui-org/react';
+import { Avatar, Divider, Pagination, Text } from '@nextui-org/react';
 import format from 'date-fns/format';
 import { useState } from 'react';
 import { Activity, App, useActivityQuery } from '../../../generated/graphql';
@@ -32,11 +32,15 @@ export const ActivityItem = ({ activity }: { activity: Activity }) => {
                         <Text h4>{activity.name}</Text>
                         <Text>{activity.description}</Text>
                     </div>
-                    <Text>{format(new Date(activity.createdAt), 'dd/MM/yyyy HH:mm:ss')}</Text>
+                    <div className='flex flex-col items-end'>
+                        <Text>{format(new Date(activity.createdAt), 'dd/MM/yyyy HH:mm:ss')}</Text>
+                        {activity.modifier && <div className='flex mt-4'>
+                            <Avatar className='mr-2' size={'sm'} src={activity.modifier?.avatarUrl} />
+                            {activity.modifier?.username}
+                        </div>
+                        }
+                    </div>
                 </div>
-                {activity.reference?.__typename === 'App' ? (
-                    <AppContent app={activity.reference} />
-                ) : undefined}
                 <Divider y={2} />
             </div>
         </a>

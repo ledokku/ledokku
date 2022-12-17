@@ -8,6 +8,10 @@ query Activity($page: Int, $limit: Int, $refId: String) {
             name
             description
             createdAt
+            modifier {
+                username
+                avatarUrl
+            }
             reference {
                 ... on App {
                     id
