@@ -202,6 +202,24 @@ export class GithubRepository {
     });
   }
 
+  async getUserEmails(access_token: string) {
+    const octokit = new Octokit({
+      auth: access_token,
+    });
+
+    const {
+      data: emails,
+    } = await octokit.users.listEmailsForAuthenticatedUser();
+
+    return emails;
+  }
+
+  async getPrimaryEmail(access_token: string) {
+    const emails = await this.getUserEmails(access_token);
+
+    return emails.find((email) => email.primary);
+  }
+
   async createUser(oauthData: GithubOAuthLoginResponse): Promise<User> {
     const settings = await this.settingsRepository.get();
     const userCount = await this.prisma.user.count();
@@ -210,12 +228,8 @@ export class GithubRepository {
       auth: oauthData.access_token,
     });
 
-    const {
-      data: emails,
-    } = await octokit.users.listEmailsForAuthenticatedUser();
     const { data: githubUser } = await octokit.users.getAuthenticated();
-
-    const email = emails.find((email) => email.primary);
+    const email = await this.getPrimaryEmail(oauthData.access_token);
 
     if (
       settings.allowedEmails.length > 0 &&

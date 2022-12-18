@@ -30,10 +30,13 @@ export class AuthResolver {
     }
 
     const ghUser = await this.githubRepository.getGithubUser(data.access_token);
+    const email = await this.githubRepository.getPrimaryEmail(
+      data.access_token
+    );
 
     const settings = await this.settingsRepository.get();
 
-    if (!settings.allowedEmails.includes(ghUser.email)) {
+    if (!settings.allowedEmails.includes(email.email)) {
       throw new Forbidden('Usuario no permitido');
     }
 
