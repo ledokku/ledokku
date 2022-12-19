@@ -298,7 +298,7 @@ export class GithubRepository {
   ) {
     const installationAuthentication = await this.installationAuth({
       type: 'installation',
-      installationId: installationId,
+      installationId,
     });
 
     const appsToRedeploy = await this.prisma.appMetaGithub.findMany({

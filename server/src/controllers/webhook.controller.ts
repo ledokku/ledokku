@@ -26,8 +26,6 @@ export class WebhookController {
     @RawBodyParams()
     rawBody: any
   ): Promise<any> {
-    $log.info(JSON.stringify(rawBody));
-
     if (githubEvent === 'push') {
       try {
         await this.handleWebhooks(
