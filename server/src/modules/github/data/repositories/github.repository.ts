@@ -290,7 +290,11 @@ export class GithubRepository {
     ).data;
   }
 
-  async deployRepository(installationId: string, repositoryId: string) {
+  async deployRepository(
+    installationId: string,
+    repositoryId: string,
+    branchName: string
+  ) {
     const installationAuthentication = await this.installationAuth({
       type: 'installation',
       installationId: installationId,
@@ -299,6 +303,7 @@ export class GithubRepository {
     const appsToRedeploy = await this.prisma.appMetaGithub.findMany({
       where: {
         repoId: repositoryId,
+        branch: branchName,
       },
     });
 

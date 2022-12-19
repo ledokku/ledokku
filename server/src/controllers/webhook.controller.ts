@@ -1,19 +1,13 @@
-import {
-  $log,
-  BodyParams,
-  PlatformRequest,
-  RawBodyParams,
-  Req,
-} from '@tsed/common';
+import { BodyParams, HeaderParams, RawBodyParams } from '@tsed/common';
 import { Controller } from '@tsed/di';
-import {
-  BadRequest,
-  InternalServerError,
-  Unauthorized,
-} from '@tsed/exceptions';
-import { ContentType, Header, Post, Returns } from '@tsed/schema';
+import { InternalServerError, Unauthorized } from '@tsed/exceptions';
+import { ContentType, Post, Returns } from '@tsed/schema';
 import { verifyWebhookSecret } from '../lib/webhooks/verifyGithubSecret';
 import { GithubRepository } from './../modules/github/data/repositories/github.repository';
+
+class GitNode {
+  id: number;
+}
 
 @Controller('/webhooks')
 export class WebhookController {
@@ -23,10 +17,11 @@ export class WebhookController {
   @ContentType('application/json')
   @Returns(200)
   async onMessage(
-    @Header('x-github-event') githubEvent: string,
-    @Header('x-hub-signature-256') secret: string,
-    @BodyParams('installation') installation: any,
-    @BodyParams('repository') repository: any,
+    @HeaderParams('x-github-event') githubEvent: string,
+    @HeaderParams('x-hub-signature-256') secret: string,
+    @BodyParams('installation', GitNode) installation: GitNode,
+    @BodyParams('repository', GitNode) repository: GitNode,
+    @BodyParams('ref') ref: string,
     @RawBodyParams()
     rawBody: Buffer
   ): Promise<any> {
@@ -36,7 +31,8 @@ export class WebhookController {
           secret,
           rawBody,
           installation.id.toString(),
-          repository.id.toString()
+          repository.id.toString(),
+          ref.replace('refs/heads/', '')
         );
       } catch (e) {
         throw new InternalServerError(e);
@@ -50,7 +46,8 @@ export class WebhookController {
     secret: string,
     rawBody: Buffer,
     installation: string,
-    repository: string
+    repository: string,
+    branch: string
   ) {
     const requestVerified = verifyWebhookSecret(secret, rawBody);
 
@@ -58,6 +55,10 @@ export class WebhookController {
       throw new Unauthorized('Invalid request');
     }
 
-    return this.githubRepository.deployRepository(installation, repository);
+    return this.githubRepository.deployRepository(
+      installation,
+      repository,
+      branch
+    );
   }
 }
