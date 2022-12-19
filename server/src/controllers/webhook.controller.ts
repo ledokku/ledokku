@@ -24,9 +24,9 @@ export class WebhookController {
     @BodyParams('ref') ref: string,
     @BodyParams('pusher') pusher: any,
     @RawBodyParams()
-    rawBody: Buffer
+    rawBody: any
   ): Promise<any> {
-    $log.info(rawBody.toString('utf-8'));
+    $log.info(JSON.stringify(rawBody));
 
     if (githubEvent === 'push') {
       try {
