@@ -16,7 +16,7 @@ export const Terminal = ({ children }: TerminalProps & Omit<HTMLAttributes<any>,
 
             return (
                 <TerminalOutput key={index}>
-                    <span dangerouslySetInnerHTML={{ __html: html }} className="whitespace-normal" />
+                    <span dangerouslySetInnerHTML={{ __html: html }} className="whitespace-pre-wrap" />
                 </TerminalOutput>
             );
         });
