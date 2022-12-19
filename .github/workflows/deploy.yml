@@ -20,7 +20,7 @@ jobs:
         script: |
           sudo su
           cd ${{ secrets.LEDOKKU_PATH }}
-          git fetch
-          git pull
+          printf "${{ secrets.PASSWORD }}\n" | sudo -S git fetch
+          printf "${{ secrets.PASSWORD }}\n" | sudo -S git pull
           printf "${{ secrets.PASSWORD }}\n" | sudo -S docker compose down
           printf "${{ secrets.PASSWORD }}\n" | sudo -S docker compose up -d --build --force-recreate
