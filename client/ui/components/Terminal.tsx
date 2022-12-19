@@ -1,8 +1,7 @@
-import { ColorMode, TerminalOutput } from 'react-terminal-ui';
-import TerminalUI from 'react-terminal-ui';
-import { HTMLAttributes, useMemo } from 'react';
 import AnsiUp from 'ansi_up';
+import { HTMLAttributes, useMemo } from 'react';
 import innerText from 'react-innertext';
+import TerminalUI, { ColorMode, TerminalOutput } from 'react-terminal-ui';
 
 interface TerminalProps {
     children?: TerminalOutput[];
@@ -17,7 +16,7 @@ export const Terminal = ({ children }: TerminalProps & Omit<HTMLAttributes<any>,
 
             return (
                 <TerminalOutput key={index}>
-                    <span dangerouslySetInnerHTML={{ __html: html }} />
+                    <span dangerouslySetInnerHTML={{ __html: html }} className="whitespace-normal" />
                 </TerminalOutput>
             );
         });

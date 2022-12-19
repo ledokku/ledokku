@@ -1,3 +1,4 @@
+import { App } from '@prisma/client';
 import { ResolverService } from '@tsed/typegraphql';
 import {
   Arg,
@@ -37,7 +38,7 @@ export class ActivityResolver {
   @FieldResolver((returns) => ActivityModelUnion, { nullable: true })
   async reference(
     @Root() activity: Activity
-  ): Promise<Activity | Database | AppBuild | undefined> {
+  ): Promise<App | Database | AppBuild | undefined> {
     return this.activityRepository.getModelReference(
       activity.refersToModel,
       activity.referenceId

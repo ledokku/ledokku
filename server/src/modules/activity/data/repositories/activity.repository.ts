@@ -1,12 +1,8 @@
-import {
-  Activity,
-  AppBuild,
-  Database,
-  ModelReferences,
-  Prisma,
-  PrismaClient,
-} from '@prisma/client';
+import { ModelReferences, Prisma, PrismaClient } from '@prisma/client';
 import { Injectable } from '@tsed/di';
+import { App } from '../../../apps/data/models/app.model';
+import { AppBuild } from '../../../app_build/data/models/app_build.model';
+import { Database } from '../../../databases/data/models/database.model';
 import { ActivityPaginationInfo } from '../models/activity.model';
 import { PaginationArgs } from './../../../../data/args/pagination';
 
@@ -48,14 +44,23 @@ export class ActivityRepository {
   getModelReference(
     referenceType: ModelReferences,
     referenceId: string
-  ): Promise<Activity | Database | AppBuild | undefined> {
+  ): Promise<App | Database | AppBuild | undefined> {
     const table = this.referenceToTable(referenceType) as any;
 
-    return table?.findUnique({
+    const data = table?.findUnique({
       where: {
         id: referenceId,
       },
     });
+
+    switch (referenceType) {
+      case ModelReferences.App:
+        return Object.assign(new App(), data);
+      case ModelReferences.AppBuild:
+        return Object.assign(new AppBuild(), data);
+      case ModelReferences.Database:
+        return Object.assign(new Database(), data);
+    }
   }
 
   getModifier(activityId: string) {
@@ -96,7 +101,5 @@ export class ActivityRepository {
       case ModelReferences.Database:
         return this.prisma.database;
     }
-
-    return undefined;
   }
 }
