@@ -19,10 +19,9 @@ jobs:
         port: ${{ secrets.PORT }}
         script: |
           sudo su
-          ${{ secrets.PASSWORD }}
           cd ${{ secrets.LEDOKKU_PATH }}
           git fetch
           git pull
-          docker compose down
-          docker compose build --no-cache
-          docker compose up
+          printf "${{ secrets.PASSWORD }}\n" | sudo -S docker compose down
+          printf "${{ secrets.PASSWORD }}\n" | sudo -S docker compose build --no-cache
+          printf "${{ secrets.PASSWORD }}\n" | sudo -S docker compose up
