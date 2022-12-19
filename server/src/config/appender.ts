@@ -7,12 +7,10 @@ const consoleLog = console.log.bind(console);
 @Appender({ name: 'publisher_appender' })
 export class ConsoleAppender extends BaseAppender {
   write(loggingEvent: LogEvent) {
-    console.log(loggingEvent);
-
     pubsub.publish(SubscriptionTopics.LEDOKKU_LOGS, {
       ledokkuLogs: {
-        message: '',
-        type: '',
+        message: loggingEvent.data.join(' '),
+        type: loggingEvent.level.levelStr === 'ERROR' ? 'stderr' : 'stdout',
       },
     } as LedokkuLogsPayload);
     consoleLog(this.layout(loggingEvent, this.config.timezoneOffset));
