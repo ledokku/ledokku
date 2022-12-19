@@ -389,6 +389,7 @@ export type Query = {
   githubInstallationId: Installation;
   isDatabaseLinked: IsDatabaseLinked;
   isPluginInstalled: IsPluginInstalled;
+  ledokkuLogs: Array<LogPayload>;
   repositories: Array<Repository>;
   settings: Settings;
   setup: SetupResult;
@@ -546,6 +547,7 @@ export type Subscription = {
   appRestartLogs: LogPayload;
   createDatabaseLogs: LogPayload;
   linkDatabaseLogs: LogPayload;
+  onLedokkuLog: LogPayload;
   unlinkDatabaseLogs: LogPayload;
 };
 
@@ -826,6 +828,11 @@ export type IsPluginInstalledQueryVariables = Exact<{
 
 export type IsPluginInstalledQuery = { __typename?: 'Query', isPluginInstalled: { __typename?: 'IsPluginInstalled', isPluginInstalled: boolean } };
 
+export type LedokkuLogsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LedokkuLogsQuery = { __typename?: 'Query', ledokkuLogs: Array<{ __typename?: 'LogPayload', message: string, type: string }> };
+
 export type RepositoriesQueryVariables = Exact<{
   installationId: Scalars['String'];
 }>;
@@ -847,6 +854,11 @@ export type CreateDatabaseLogsSubscriptionVariables = Exact<{ [key: string]: nev
 
 
 export type CreateDatabaseLogsSubscription = { __typename?: 'Subscription', createDatabaseLogs: { __typename?: 'LogPayload', message: string, type: string } };
+
+export type OnLedokkuLogsSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OnLedokkuLogsSubscription = { __typename?: 'Subscription', onLedokkuLog: { __typename?: 'LogPayload', message: string, type: string } };
 
 export type LinkDatabaseLogsSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
@@ -2165,6 +2177,41 @@ export function useIsPluginInstalledLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type IsPluginInstalledQueryHookResult = ReturnType<typeof useIsPluginInstalledQuery>;
 export type IsPluginInstalledLazyQueryHookResult = ReturnType<typeof useIsPluginInstalledLazyQuery>;
 export type IsPluginInstalledQueryResult = Apollo.QueryResult<IsPluginInstalledQuery, IsPluginInstalledQueryVariables>;
+export const LedokkuLogsDocument = gql`
+    query LedokkuLogs {
+  ledokkuLogs {
+    message
+    type
+  }
+}
+    `;
+
+/**
+ * __useLedokkuLogsQuery__
+ *
+ * To run a query within a React component, call `useLedokkuLogsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useLedokkuLogsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useLedokkuLogsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useLedokkuLogsQuery(baseOptions?: Apollo.QueryHookOptions<LedokkuLogsQuery, LedokkuLogsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<LedokkuLogsQuery, LedokkuLogsQueryVariables>(LedokkuLogsDocument, options);
+      }
+export function useLedokkuLogsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LedokkuLogsQuery, LedokkuLogsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<LedokkuLogsQuery, LedokkuLogsQueryVariables>(LedokkuLogsDocument, options);
+        }
+export type LedokkuLogsQueryHookResult = ReturnType<typeof useLedokkuLogsQuery>;
+export type LedokkuLogsLazyQueryHookResult = ReturnType<typeof useLedokkuLogsLazyQuery>;
+export type LedokkuLogsQueryResult = Apollo.QueryResult<LedokkuLogsQuery, LedokkuLogsQueryVariables>;
 export const RepositoriesDocument = gql`
     query repositories($installationId: String!) {
   repositories(installationId: $installationId) {
@@ -2300,6 +2347,36 @@ export function useCreateDatabaseLogsSubscription(baseOptions?: Apollo.Subscript
       }
 export type CreateDatabaseLogsSubscriptionHookResult = ReturnType<typeof useCreateDatabaseLogsSubscription>;
 export type CreateDatabaseLogsSubscriptionResult = Apollo.SubscriptionResult<CreateDatabaseLogsSubscription>;
+export const OnLedokkuLogsDocument = gql`
+    subscription OnLedokkuLogs {
+  onLedokkuLog {
+    message
+    type
+  }
+}
+    `;
+
+/**
+ * __useOnLedokkuLogsSubscription__
+ *
+ * To run a query within a React component, call `useOnLedokkuLogsSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useOnLedokkuLogsSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOnLedokkuLogsSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useOnLedokkuLogsSubscription(baseOptions?: Apollo.SubscriptionHookOptions<OnLedokkuLogsSubscription, OnLedokkuLogsSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<OnLedokkuLogsSubscription, OnLedokkuLogsSubscriptionVariables>(OnLedokkuLogsDocument, options);
+      }
+export type OnLedokkuLogsSubscriptionHookResult = ReturnType<typeof useOnLedokkuLogsSubscription>;
+export type OnLedokkuLogsSubscriptionResult = Apollo.SubscriptionResult<OnLedokkuLogsSubscription>;
 export const LinkDatabaseLogsDocument = gql`
     subscription LinkDatabaseLogs {
   linkDatabaseLogs {

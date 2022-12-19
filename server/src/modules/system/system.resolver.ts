@@ -68,6 +68,8 @@ export class SystemResolver {
     }
     this.logs.push(payload.ledokkuLogs);
 
+    console.log(this.logs);
+
     return payload.ledokkuLogs;
   }
 
