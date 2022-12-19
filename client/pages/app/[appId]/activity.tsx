@@ -60,7 +60,7 @@ const ActivityPage = () => {
                 <AppHeaderInfo app={app} />
                 <AppHeaderTabNav app={app} />
             </div>
-            <div>
+            <div className='pt-8'>
                 {activityData.activity.items.map((it, index) => (
                     <ActivityItem activity={it as any} key={index} />
                 ))}

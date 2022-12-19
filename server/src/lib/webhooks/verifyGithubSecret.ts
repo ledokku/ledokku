@@ -2,15 +2,13 @@ import crypto from 'crypto';
 import { Request } from 'express';
 import { GITHUB_APP_WEBHOOK_SECRET } from './../../constants';
 
-export const verifyWebhookSecret = (req: Request) => {
-  const signature = req.header('x-hub-signature-256');
-
+export const verifyWebhookSecret = (signature: string, rawBody: Buffer) => {
   const bodyCrypted =
     'sha256=' +
     crypto
 
       .createHmac('sha256', GITHUB_APP_WEBHOOK_SECRET)
-      .update(JSON.stringify(req.body))
+      .update(rawBody)
       .digest('hex');
 
   if (signature !== bodyCrypted) {

@@ -1,4 +1,10 @@
-import { $log, PlatformRequest, Req } from '@tsed/common';
+import {
+  $log,
+  BodyParams,
+  PlatformRequest,
+  RawBodyParams,
+  Req,
+} from '@tsed/common';
 import { Controller } from '@tsed/di';
 import {
   BadRequest,
@@ -18,12 +24,20 @@ export class WebhookController {
   @Returns(200)
   async onMessage(
     @Header('x-github-event') githubEvent: string,
-    @Req() req: PlatformRequest
+    @Header('x-hub-signature-256') secret: string,
+    @BodyParams('installation') installation: any,
+    @BodyParams('repository') repository: any,
+    @RawBodyParams()
+    rawBody: Buffer
   ): Promise<any> {
     if (githubEvent === 'push') {
-      $log.info('Webhook', req.body);
       try {
-        await this.handleWebhooks(req);
+        await this.handleWebhooks(
+          secret,
+          rawBody,
+          installation.id.toString(),
+          repository.id.toString()
+        );
       } catch (e) {
         throw new InternalServerError(e);
       }
@@ -32,20 +46,18 @@ export class WebhookController {
     return { success: true };
   }
 
-  async handleWebhooks(req: PlatformRequest) {
-    if (!req.body) {
-      throw new BadRequest('Failed to fetch the request from github');
-    }
-
-    const requestVerified = verifyWebhookSecret(req as any);
+  async handleWebhooks(
+    secret: string,
+    rawBody: Buffer,
+    installation: string,
+    repository: string
+  ) {
+    const requestVerified = verifyWebhookSecret(secret, rawBody);
 
     if (!requestVerified) {
       throw new Unauthorized('Invalid request');
     }
 
-    return this.githubRepository.deployRepository(
-      req.body.installation.id.toString(),
-      req.body.repository.id.toString()
-    );
+    return this.githubRepository.deployRepository(installation, repository);
   }
 }
