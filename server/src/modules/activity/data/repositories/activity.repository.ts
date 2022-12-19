@@ -1,5 +1,6 @@
 import { ModelReferences, Prisma, PrismaClient } from '@prisma/client';
 import { Injectable } from '@tsed/di';
+import { toObjectType } from '../../../../utils';
 import { App } from '../../../apps/data/models/app.model';
 import { AppBuild } from '../../../app_build/data/models/app_build.model';
 import { Database } from '../../../databases/data/models/database.model';
@@ -41,25 +42,24 @@ export class ActivityRepository {
     };
   }
 
-  getModelReference(
+  async getModelReference(
     referenceType: ModelReferences,
     referenceId: string
   ): Promise<App | Database | AppBuild | undefined> {
-    const table = this.referenceToTable(referenceType) as any;
-
-    const data = table?.findUnique({
-      where: {
-        id: referenceId,
-      },
-    });
-
+    const filter = { where: { id: referenceId } };
     switch (referenceType) {
       case ModelReferences.App:
-        return Object.assign(new App(), data);
+        return toObjectType(App, await this.prisma.app.findUnique(filter));
       case ModelReferences.AppBuild:
-        return Object.assign(new AppBuild(), data);
+        return toObjectType(
+          AppBuild,
+          await this.prisma.appBuild.findUnique(filter)
+        );
       case ModelReferences.Database:
-        return Object.assign(new Database(), data);
+        return toObjectType(
+          Database,
+          await this.prisma.database.findUnique(filter)
+        );
     }
   }
 
@@ -75,31 +75,5 @@ export class ActivityRepository {
     return this.prisma.activity.create({
       data,
     });
-  }
-
-  referenceToTable<
-    T extends Prisma.PrismaClientOptions = Prisma.PrismaClientOptions,
-    GlobalReject extends
-      | Prisma.RejectOnNotFound
-      | Prisma.RejectPerOperation
-      | false
-      | undefined = 'rejectOnNotFound' extends keyof T
-      ? T['rejectOnNotFound']
-      : false
-  >(
-    referenceType: ModelReferences
-  ):
-    | Prisma.AppDelegate<GlobalReject>
-    | Prisma.DatabaseDelegate<GlobalReject>
-    | Prisma.AppBuildDelegate<GlobalReject>
-    | undefined {
-    switch (referenceType) {
-      case ModelReferences.App:
-        return this.prisma.app;
-      case ModelReferences.AppBuild:
-        return this.prisma.appBuild;
-      case ModelReferences.Database:
-        return this.prisma.database;
-    }
   }
 }
