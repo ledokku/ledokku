@@ -10,11 +10,13 @@ export const authChecker: AuthChecker<DokkuContext, Roles> = async (
   if (!context.auth) return false;
 
   const settings = await prisma.settings.findFirst();
-  if (
-    settings?.allowedEmails?.includes(context.auth.user.email) === false &&
-    context.auth.user.role !== Roles.OWNER
-  )
-    return false;
 
-  return roles.includes(context.auth.user.role) || roles.length === 0;
+  if (
+    !settings.allowedEmails.includes(context.auth.user.email) &&
+    context.auth.user.role !== Roles.OWNER
+  ) {
+    return false;
+  }
+
+  return roles.length === 0 || roles.includes(context.auth.user.role);
 };

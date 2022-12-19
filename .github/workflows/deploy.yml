@@ -1,0 +1,26 @@
+name: Deploy Ledokku
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: appleboy/ssh-action@v0.1.6
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        script: |
+          cd ${{ secrets.LEDOKKU_PATH }}
+          git fetch
+          git pull
+          docker compose down
+          docker compose build --no-cache
+          docker compose up

@@ -1,5 +1,12 @@
 import { ResolverService } from '@tsed/typegraphql';
-import { Arg, Args, FieldResolver, Query, Root } from 'type-graphql';
+import {
+  Arg,
+  Args,
+  Authorized,
+  FieldResolver,
+  Query,
+  Root,
+} from 'type-graphql';
 import { PaginationArgs } from '../../data/args/pagination';
 import { User } from '../../data/models/user';
 import { AppBuild } from '../app_build/data/models/app_build.model';
@@ -15,6 +22,7 @@ import { ActivityRepository } from './data/repositories/activity.repository';
 export class ActivityResolver {
   constructor(private activityRepository: ActivityRepository) {}
 
+  @Authorized()
   @Query((returns) => ActivityPaginationInfo)
   async activity(
     @Args((type) => PaginationArgs) pagination: PaginationArgs,
