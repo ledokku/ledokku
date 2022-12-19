@@ -9,7 +9,7 @@ export class ConsoleAppender extends BaseAppender {
   write(loggingEvent: LogEvent) {
     pubsub.publish(SubscriptionTopics.LEDOKKU_LOGS, {
       ledokkuLogs: {
-        message: loggingEvent.data.join(' '),
+        message: this.layout(loggingEvent, this.config.timezoneOffset),
         type: loggingEvent.level.levelStr === 'ERROR' ? 'stderr' : 'stdout',
       },
     } as LedokkuLogsPayload);

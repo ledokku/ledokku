@@ -1,17 +1,29 @@
 import { Text } from '@nextui-org/react';
+import { useEffect, useState } from 'react';
 import { TerminalOutput } from 'react-terminal-ui';
-import { useLedokkuLogsQuery, useOnLedokkuLogsSubscription } from '../generated/graphql';
+import { LogPayload, useLedokkuLogsQuery, useOnLedokkuLogsSubscription } from '../generated/graphql';
 import { Terminal } from '../ui/components/Terminal';
 import { AdminLayout } from '../ui/layout/layout';
 
 const Metrics = () => {
-    const { data } = useLedokkuLogsQuery();
+    const [data, setData] = useState<LogPayload[]>([]);
+    const { data: logs } = useLedokkuLogsQuery();
+
+    useEffect(() => {
+        if (logs) {
+            setData(logs.ledokkuLogs);
+        }
+    }, [logs])
 
     useOnLedokkuLogsSubscription({
         onSubscriptionData(options) {
-            data?.ledokkuLogs.push(options.subscriptionData.data?.onLedokkuLog)
+            const sub = options.subscriptionData.data?.onLedokkuLog;
+            if (sub) {
+                setData([...data, sub])
+            }
         },
     });
+
 
     return (
         <AdminLayout>
@@ -20,8 +32,8 @@ const Metrics = () => {
             </Text>
             <Text h3>Registros de Ledokku</Text>
             <Terminal>
-                {data?.ledokkuLogs.map((it, index) => <TerminalOutput key={index}>
-                    {it}
+                {data.map((it, index) => <TerminalOutput key={index}>
+                    {it.message}
                 </TerminalOutput>)}
             </Terminal>
         </AdminLayout>
