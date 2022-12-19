@@ -5,4 +5,5 @@ export enum SubscriptionTopics {
   APP_RESTARTED = 'APP_RESTARTED',
   APP_REBUILT = 'APP_REBUILT',
   APP_CREATED = 'APP_CREATED',
+  LEDOKKU_LOGS = 'LEDOKKU_LOGS',
 }

@@ -1,5 +1,9 @@
 import { ResolverService } from '@tsed/typegraphql';
-import { Authorized, Ctx, Query, Resolver } from 'type-graphql';
+import { Authorized, Ctx, Query, Root, Subscription } from 'type-graphql';
+import { DokkuContext } from '../../data/models/dokku_context';
+import { LogPayload } from '../../data/models/log_payload';
+import { SubscriptionTopics } from '../../data/models/subscription_topics';
+import { sshConnect } from '../../lib/ssh';
 import {
   DOKKU_SSH_HOST,
   GITHUB_APP_CLIENT_ID,
@@ -8,15 +12,16 @@ import {
 } from './../../constants';
 import { DokkuPluginRepository } from './../../lib/dokku/dokku.plugin.repository';
 import { PluginList } from './../../lib/dokku/models/plugin_list.model';
-import { DokkuContext } from '../../data/models/dokku_context';
 import { GithubAppManifest } from './models/github_app_manifest.model';
 import { GithubPermission } from './models/github_app_permissions.model';
+import { LedokkuLogsPayload } from './models/ledokku_logs_payload.model';
 import { SetupResult } from './models/setup_result.model';
-import { sshConnect } from '../../lib/ssh';
 
 @ResolverService()
 export class SystemResolver {
   constructor(private dokkuPluginRepository: DokkuPluginRepository) {}
+
+  private logs: LogPayload[] = [];
 
   @Query((returns) => SetupResult)
   async setup(@Ctx() context: DokkuContext): Promise<SetupResult> {
@@ -51,6 +56,25 @@ export class SystemResolver {
         default_events: ['push'],
       }),
     };
+  }
+
+  @Authorized()
+  @Subscription((type) => LogPayload, {
+    topics: SubscriptionTopics.LEDOKKU_LOGS,
+  })
+  onLedokkuLog(@Root() payload: LedokkuLogsPayload): LogPayload {
+    if (this.logs.length > 20) {
+      this.logs.shift();
+    }
+    this.logs.push(payload.ledokkuLogs);
+
+    return payload.ledokkuLogs;
+  }
+
+  @Authorized()
+  @Query((returns) => [LogPayload])
+  async ledokkuLogs(@Ctx() context: DokkuContext): Promise<LogPayload[]> {
+    return this.logs;
   }
 
   @Authorized()

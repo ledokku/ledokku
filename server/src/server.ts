@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import {
   $log,
   BeforeRoutesInit,
+  Logger,
   OnReady,
   PlatformApplication,
 } from '@tsed/common';
@@ -11,24 +12,24 @@ import '@tsed/typegraphql';
 import { TypeGraphQLService } from '@tsed/typegraphql';
 import { ApolloServerPluginInlineTrace } from 'apollo-server-core';
 import { ExpressContext } from 'apollo-server-express';
+import cors from 'cors';
 import express from 'express';
 import { execute, GraphQLError, subscribe } from 'graphql';
 import { PubSub } from 'graphql-subscriptions';
 import { useServer } from 'graphql-ws/lib/use/ws';
 import * as http from 'http';
 import { Server as WebSocketServer } from 'ws';
+import './config/appender';
 import { authChecker } from './config/auth_checker';
 import { ContextFactory } from './config/context_factory';
 import { CORS_ORIGIN, IS_PRODUCTION, PORT } from './constants';
 import { WebhookController } from './controllers/webhook.controller';
-import { SubscriptionTopics } from './data/models/subscription_topics';
+import prisma from './lib/prisma';
+import * as modules from './modules';
 import { SyncServerQueue } from './queues/sync_server.queue';
 import { startSmeeClient } from './smeeClient';
-import * as modules from './modules';
-import cors from 'cors';
-import prisma from './lib/prisma';
 
-const pubsub = new PubSub();
+export const pubsub = new PubSub();
 
 registerProvider({
   provide: PubSub,
@@ -95,6 +96,9 @@ export class Server implements BeforeRoutesInit, OnReady {
   httpServer: http.Server;
 
   @Inject()
+  logger: Logger;
+
+  @Inject()
   syncServerQueue: SyncServerQueue;
 
   async $beforeRoutesInit(): Promise<void> {
@@ -131,5 +135,10 @@ export class Server implements BeforeRoutesInit, OnReady {
     }
 
     await this.syncServerQueue.add();
+
+    this.logger.appenders.set('std-log', {
+      type: 'publisher_appender',
+      level: ['debug', 'info', 'trace', 'error', 'warning'],
+    });
   }
 }
