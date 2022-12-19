@@ -18,6 +18,8 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
         script: |
+          sudo su
+          ${{ secrets.PASSWORD }}
           cd ${{ secrets.LEDOKKU_PATH }}
           git fetch
           git pull
