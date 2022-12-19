@@ -24,4 +24,4 @@ jobs:
           git pull
           printf "${{ secrets.PASSWORD }}\n" | sudo -S docker compose down
           printf "${{ secrets.PASSWORD }}\n" | sudo -S docker compose build --no-cache
-          printf "${{ secrets.PASSWORD }}\n" | sudo -S docker compose up
+          printf "${{ secrets.PASSWORD }}\n" | sudo -S docker compose up -d
