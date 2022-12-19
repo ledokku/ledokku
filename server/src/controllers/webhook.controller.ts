@@ -1,4 +1,4 @@
-import { BodyParams, HeaderParams, RawBodyParams } from '@tsed/common';
+import { $log, BodyParams, HeaderParams, RawBodyParams } from '@tsed/common';
 import { Controller } from '@tsed/di';
 import { InternalServerError, Unauthorized } from '@tsed/exceptions';
 import { ContentType, Post, Returns } from '@tsed/schema';
@@ -26,6 +26,8 @@ export class WebhookController {
     @RawBodyParams()
     rawBody: Buffer
   ): Promise<any> {
+    $log.info(rawBody.toString('utf-8'));
+
     if (githubEvent === 'push') {
       try {
         await this.handleWebhooks(
