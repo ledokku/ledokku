@@ -23,5 +23,4 @@ jobs:
           git fetch
           git pull
           printf "${{ secrets.PASSWORD }}\n" | sudo -S docker compose down
-          printf "${{ secrets.PASSWORD }}\n" | sudo -S docker compose build --no-cache
-          printf "${{ secrets.PASSWORD }}\n" | sudo -S docker compose up -d
+          printf "${{ secrets.PASSWORD }}\n" | sudo -S docker compose up -d --build --force-recreate
