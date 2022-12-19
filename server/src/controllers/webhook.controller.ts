@@ -22,6 +22,7 @@ export class WebhookController {
     @BodyParams('installation', GitNode) installation: GitNode,
     @BodyParams('repository', GitNode) repository: GitNode,
     @BodyParams('ref') ref: string,
+    @BodyParams('pusher') pusher: any,
     @RawBodyParams()
     rawBody: Buffer
   ): Promise<any> {
@@ -32,7 +33,8 @@ export class WebhookController {
           rawBody,
           installation.id.toString(),
           repository.id.toString(),
-          ref.replace('refs/heads/', '')
+          ref.replace('refs/heads/', ''),
+          pusher.name
         );
       } catch (e) {
         throw new InternalServerError(e);
@@ -47,7 +49,8 @@ export class WebhookController {
     rawBody: Buffer,
     installation: string,
     repository: string,
-    branch: string
+    branch: string,
+    userName: string
   ) {
     const requestVerified = verifyWebhookSecret(secret, rawBody);
 
@@ -58,7 +61,8 @@ export class WebhookController {
     return this.githubRepository.deployRepository(
       installation,
       repository,
-      branch
+      branch,
+      userName
     );
   }
 }

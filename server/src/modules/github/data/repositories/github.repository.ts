@@ -293,7 +293,8 @@ export class GithubRepository {
   async deployRepository(
     installationId: string,
     repositoryId: string,
-    branchName: string
+    branchName: string,
+    userName: string
   ) {
     const installationAuthentication = await this.installationAuth({
       type: 'installation',
@@ -316,7 +317,7 @@ export class GithubRepository {
 
       await this.deployAppQueue.add({
         appId: appToRedeploy.id,
-        userName: app.repoOwner,
+        userName: userName,
         token: installationAuthentication.token,
       });
     }
