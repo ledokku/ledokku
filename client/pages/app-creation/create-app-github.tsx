@@ -1,4 +1,4 @@
-import { Button, Checkbox, Dropdown, Grid, Input, Link, Loading, Modal, Text, User } from '@nextui-org/react';
+import { Button, Checkbox, Divider, Dropdown, Grid, Input, Link, Loading, Modal, Text } from '@nextui-org/react';
 import { trackGoal } from 'fathom-client';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
@@ -9,6 +9,7 @@ import * as yup from 'yup';
 import { GITHUB_APP_NAME, trackingGoals } from '../../constants';
 import {
     Branch,
+    BuildEnvVar,
     LogPayload,
     Repository,
     useAppCreateLogsSubscription,
@@ -19,10 +20,10 @@ import {
     useRepositoriesLazyQuery
 } from '../../generated/graphql';
 import { Alert } from '../../ui/components/Alert';
+import { EnvForm } from '../../ui/components/EnvForm';
 import { LoadingSection } from '../../ui/components/LoadingSection';
 import { Terminal } from '../../ui/components/Terminal';
 import { AdminLayout } from '../../ui/layout/layout';
-import { useAuth } from '../../ui/modules/auth/AuthContext';
 import { useToast } from '../../ui/toast';
 
 enum AppCreationStatus {
@@ -43,13 +44,13 @@ interface BranchOption {
 const CreateAppGithub = () => {
     const router = useRouter();
     const toast = useToast();
-    const { user } = useAuth();
 
     const { data: dataApps } = useAppsQuery({
         variables: {
             limit: 1_000_000,
         },
     });
+    const [envVars, setEnvVars] = useState<BuildEnvVar[]>([]);
     const [isNewWindowClosed, setIsNewWindowClosed] = useState(false);
     const [selectedRepo, setSelectedRepo] = useState<Repository>();
     const [selectedBranch, setSelectedBranch] = useState('');
@@ -144,7 +145,8 @@ const CreateAppGithub = () => {
                                 branchName: values.gitBranch,
                                 gitRepoId: values.repo.id,
                                 githubInstallationId: values.installationId,
-                                dockerfilePath: isDockerfileEnabled ? values.dockerfilePath : undefined
+                                dockerfilePath: isDockerfileEnabled ? values.dockerfilePath : undefined,
+                                envVars: envVars
                             },
                         },
                     });
@@ -348,13 +350,8 @@ const CreateAppGithub = () => {
                             </Text>
 
                             <Grid.Container>
-                                <Grid>
-                                    <User
-                                        className="my-8"
-                                        name={user?.userName}
-                                        src={user?.avatarUrl}
-                                    />
-                                    <form onSubmit={formik.handleSubmit}>
+                                <Grid md xs={12}>
+                                    <form onSubmit={formik.handleSubmit} className="mt-8">
                                         <Text h5>Repositorio</Text>
                                         <Dropdown>
                                             <Dropdown.Button flat>
@@ -487,6 +484,55 @@ const CreateAppGithub = () => {
                                             {!loading ? 'Crear' : <Loading color="currentColor" />}
                                         </Button>
                                     </form>
+                                </Grid>
+                                <Grid md xs={12}>
+                                    <div className='mt-8 w-full'>
+                                        <Text h5>Variables de entorno</Text>
+                                        {(
+                                            <div className='w-full'>
+                                                {envVars.map((envVar, index) => {
+                                                    return (
+                                                        <div key={index}>
+                                                            <EnvForm
+                                                                key={envVar.key}
+                                                                name={envVar.key}
+                                                                value={envVar.value}
+                                                                onSubmit={(data) => {
+                                                                    setEnvVars(envVars.map(it => {
+                                                                        if (it.key === data.name) {
+                                                                            return {
+                                                                                key: data.name,
+                                                                                value: data.value
+                                                                            }
+                                                                        } else {
+                                                                            return it
+                                                                        }
+                                                                    }))
+                                                                }}
+                                                                onDelete={(key) => {
+                                                                    setEnvVars(envVars.filter(it => it.key !== key))
+                                                                }}
+                                                            />
+                                                            <div className="my-8">
+                                                                <Divider />
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })}
+                                                <EnvForm
+                                                    key="newVar"
+                                                    name=""
+                                                    value=""
+                                                    isNewVar={true}
+                                                    onSubmit={(data) => {
+                                                        setEnvVars([...envVars, {
+                                                            key: data.name,
+                                                            value: data.value
+                                                        }])
+                                                    }} />
+                                            </div>
+                                        )}
+                                    </div>
                                 </Grid>
                             </Grid.Container>
                         </>

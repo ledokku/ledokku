@@ -1,130 +1,19 @@
-import { Button, Divider, Grid, Input, Link, Loading, Text, Textarea } from '@nextui-org/react';
-import { useFormik } from 'formik';
+import { Divider, Link, Text } from '@nextui-org/react';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
-import { FiTrash2 } from 'react-icons/fi';
 import {
     EnvVarsDocument,
     useAppByIdQuery,
     useEnvVarsQuery,
     useSetEnvVarMutation,
-    useUnsetEnvVarMutation,
+    useUnsetEnvVarMutation
 } from '../../../generated/graphql';
+import { EnvForm } from '../../../ui/components/EnvForm';
 import { LoadingSection } from '../../../ui/components/LoadingSection';
 import { AdminLayout } from '../../../ui/layout/layout';
 import { AppHeaderInfo } from '../../../ui/modules/app/AppHeaderInfo';
 import { AppHeaderTabNav } from '../../../ui/modules/app/AppHeaderTabNav';
 import { useToast } from '../../../ui/toast';
 
-interface EnvFormProps {
-    name: string;
-    value: string;
-    appId: string;
-    isNewVar?: boolean;
-}
-
-const EnvForm = ({ name, value, appId, isNewVar }: EnvFormProps) => {
-    const [inputType, setInputType] = useState('password');
-    const toast = useToast();
-    const [setEnvVarMutation, { loading: setEnvVarLoading }] = useSetEnvVarMutation();
-    const [unsetEnvVarMutation, { loading: unsetEnvVarLoading }] = useUnsetEnvVarMutation();
-
-    const handleDeleteEnvVar = async (event: any) => {
-        // event.preventDefault();
-        try {
-            await unsetEnvVarMutation({
-                variables: { key: name, appId },
-                refetchQueries: [{ query: EnvVarsDocument, variables: { appId } }],
-            });
-            toast.success('Variable de entorno eliminada');
-        } catch (error: any) {
-            toast.error(error.message);
-        }
-    };
-
-    const formik = useFormik<{ name: string; value: string }>({
-        initialValues: {
-            name,
-            value,
-        },
-        onSubmit: async (values) => {
-            try {
-                await setEnvVarMutation({
-                    variables: { key: values.name, value: values.value, appId },
-                    refetchQueries: [{ query: EnvVarsDocument, variables: { appId } }],
-                });
-
-                if (isNewVar) {
-                    formik.resetForm();
-                }
-                toast.success('Variable de entorno asignada');
-            } catch (error: any) {
-                toast.error(error.message);
-            }
-        },
-    });
-
-    return (
-        <form onSubmit={formik.handleSubmit} autoComplete="off">
-            <Grid.Container gap={1} direction="column">
-                <Grid xs md={6}>
-                    <Input
-                        width="100%"
-                        autoComplete="off"
-                        id={isNewVar ? 'newVarName' : name}
-                        name="name"
-                        placeholder="Nombre"
-                        label="Nombre"
-                        key={name}
-                        value={formik.values.name}
-                        onChange={formik.handleChange}
-                    />
-                </Grid>
-                <Grid xs md={6}>
-                    <Textarea
-                        width="100%"
-                        autoComplete="off"
-                        onMouseEnter={() => setInputType('text')}
-                        onMouseLeave={() => setInputType('password')}
-                        onFocus={() => setInputType('text')}
-                        onBlur={() => setInputType('password')}
-                        id={isNewVar ? 'newVarValue' : value}
-                        name="value"
-                        placeholder="Valor"
-                        label="Valor"
-                        key={value}
-                        value={formik.values.value}
-                        onChange={formik.handleChange}
-                        // type={inputType}
-                    />
-                </Grid>
-                <Grid className="flex flex-row">
-                    <Button type="submit" className="mr-4">
-                        {setEnvVarLoading ? (
-                            <Loading color="currentColor" size="sm" />
-                        ) : isNewVar ? (
-                            'Agregar'
-                        ) : (
-                            'Guardar'
-                        )}
-                    </Button>
-                    {!isNewVar && (
-                        <Button
-                            css={{ minWidth: '0px' }}
-                            color="error"
-                            aria-label="Delete"
-                            disabled={unsetEnvVarLoading}
-                            icon={
-                                unsetEnvVarLoading ? <Loading color="currentColor" /> : <FiTrash2 />
-                            }
-                            onClick={handleDeleteEnvVar}
-                        />
-                    )}
-                </Grid>
-            </Grid.Container>
-        </form>
-    );
-};
 
 const Env = () => {
     const history = useRouter();
@@ -136,6 +25,9 @@ const Env = () => {
         ssr: false,
         skip: !appId,
     });
+    const toast = useToast();
+    const [unsetEnvVarMutation, { loading: unsetEnvVarLoading }] = useUnsetEnvVarMutation();
+    const [setEnvVarMutation, { loading: setEnvVarLoading }] = useSetEnvVarMutation();
 
     const { data: envVarData, loading: envVarLoading, error: envVarError } = useEnvVarsQuery({
         variables: {
@@ -189,7 +81,30 @@ const Env = () => {
                                     key={envVar.key}
                                     name={envVar.key}
                                     value={envVar.value}
-                                    appId={appId}
+                                    onSubmit={
+                                        async (values) => {
+                                            try {
+                                                await setEnvVarMutation({
+                                                    variables: { key: values.name, value: values.value, appId },
+                                                    refetchQueries: [{ query: EnvVarsDocument, variables: { appId } }],
+                                                });
+                                                toast.success('Variable de entorno asignada');
+                                            } catch (error: any) {
+                                                toast.error(error.message);
+                                            }
+                                        }
+                                    }
+                                    onDelete={async () => {
+                                        try {
+                                            await unsetEnvVarMutation({
+                                                variables: { key: envVar.key, appId },
+                                                refetchQueries: [{ query: EnvVarsDocument, variables: { appId } }],
+                                            });
+                                            toast.success('Variable de entorno eliminada');
+                                        } catch (error: any) {
+                                            toast.error(error.message);
+                                        }
+                                    }}
                                 />
                                 <div className="my-8">
                                     <Divider />
@@ -197,7 +112,24 @@ const Env = () => {
                             </div>
                         );
                     })}
-                    <EnvForm key="newVar" name="" value="" appId={appId} isNewVar={true} />
+                    <EnvForm
+                        key="newVar"
+                        name=""
+                        value=""
+                        isNewVar={true} onSubmit={
+                            async (values) => {
+                                try {
+                                    await setEnvVarMutation({
+                                        variables: { key: values.name, value: values.value, appId },
+                                        refetchQueries: [{ query: EnvVarsDocument, variables: { appId } }],
+                                    });
+
+                                    toast.success('Variable de entorno asignada');
+                                } catch (error: any) {
+                                    toast.error(error.message);
+                                }
+                            }
+                        } />
                 </div>
             )}
         </AdminLayout>

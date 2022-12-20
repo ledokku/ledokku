@@ -127,6 +127,11 @@ export type Branch = {
   name: Scalars['String'];
 };
 
+export type BuildEnvVar = {
+  key: Scalars['String'];
+  value: Scalars['String'];
+};
+
 export type CreateAppDokkuInput = {
   name: Scalars['String'];
 };
@@ -134,6 +139,7 @@ export type CreateAppDokkuInput = {
 export type CreateAppGithubInput = {
   branchName: Scalars['String'];
   dockerfilePath?: InputMaybe<Scalars['String']>;
+  envVars?: InputMaybe<Array<BuildEnvVar>>;
   githubInstallationId: Scalars['String'];
   gitRepoFullName: Scalars['String'];
   gitRepoId: Scalars['String'];
