@@ -20,7 +20,6 @@ export const authChecker: AuthChecker<DokkuContext, Roles> = async (
   ) {
     return false;
   }
-
-  $log.info(roles.length === 0, roles.includes(context.auth.user.role));
+  
   return roles.length === 0 || roles.includes(context.auth.user.role);
 };
