@@ -27,8 +27,8 @@ export const AppHeaderInfo = ({ app }: AppHeaderInfoProps) => {
                 <Text h2>{app.name}</Text>
             </Grid>
             <Grid xs={12} md className="flex flex-col items-end">
-                <Link href={`http://${domainsData?.domains?.domains?.at(0)}`} isExternal target="_blank">
-                    {domainsData?.domains?.domains?.at(0)}
+                <Link href={`http://${domainsData?.domains?.at(0)?.domain}`} isExternal target="_blank">
+                    {domainsData?.domains?.at(0)?.domain}
                 </Link>
                 {app.appMetaGithub ? (
                     <Link href={`https://github.com/${app.appMetaGithub.repoOwner}/${app.appMetaGithub.repoName}/tree/${app.appMetaGithub.branch}`} target="_blank">
