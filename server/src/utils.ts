@@ -7,6 +7,6 @@ export function throwError(message: string): undefined {
 }
 
 export function toObjectType<T>(Type: new (...args: any[]) => T, object: T) {
-  if (typeof object === 'undefined') return undefined;
+  if (!object) return object;
   return Object.assign(new Type(), object);
 }
