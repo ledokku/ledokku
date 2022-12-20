@@ -1,5 +1,6 @@
 import { BadRequest, Conflict, NotFound } from '@tsed/exceptions';
 import { ResolverService } from '@tsed/typegraphql';
+import fetch from 'node-fetch';
 import {
   Arg,
   Args,
@@ -55,7 +56,7 @@ import { AppCreatedPayload } from './data/models/app_created.payload';
 import { AppRebuildPayload } from './data/models/app_rebuild.payload';
 import { AppRestartPayload } from './data/models/app_restart.payload';
 import { CreateAppResult } from './data/models/create_app.model';
-import { DomainList } from './data/models/domain_list.model';
+import { AppDomain } from './data/models/domain_list.model';
 import { EnvVarList } from './data/models/env_var_list.model';
 import { Logs } from './data/models/logs.model';
 import { BooleanResult } from './data/models/result.model';
@@ -125,11 +126,11 @@ export class AppResolver {
   }
 
   @Authorized()
-  @Query((returns) => DomainList)
+  @Query((returns) => [AppDomain])
   async domains(
     @Arg('appId') appId: string,
     @Ctx() context: DokkuContext
-  ): Promise<DomainList> {
+  ): Promise<AppDomain[]> {
     const app = await this.appRepository.get(appId);
 
     if (!app) {
@@ -138,7 +139,14 @@ export class AppResolver {
 
     const domains = await this.dokkuDomainsRepository.report(app.name);
 
-    return { domains };
+    return await Promise.all(
+      domains.map(async (it) => ({
+        domain: it,
+        status: await fetch(`http://${it}`)
+          .then((it2) => it2.status)
+          .catch((err) => 500),
+      }))
+    );
   }
 
   @Authorized()
@@ -194,7 +202,7 @@ export class AppResolver {
     await this.unsetEnvVarQueue.add({
       appName: app.name,
       ...input,
-      userId: context.auth.user.id
+      userId: context.auth.user.id,
     });
 
     return { result: true };

@@ -1,7 +1,10 @@
-import { Field, ObjectType } from 'type-graphql';
+import { Field, Int, ObjectType } from 'type-graphql';
 
 @ObjectType()
-export class DomainList {
-  @Field((type) => [String])
-  domains: string[];
+export class AppDomain {
+  @Field((type) => String)
+  domain: string;
+
+  @Field((type) => Int)
+  status: number;
 }

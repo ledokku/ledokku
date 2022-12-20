@@ -85,13 +85,13 @@ export class DeployAppQueue extends IQueue<QueueArgs, App> {
         type: 'end:success',
       },
     });
-    const { repoOwner, repoName } = await this.appRepository
+    const { repoOwner, repoName, branch } = await this.appRepository
       .get(job.data.appId)
       .AppMetaGithub();
 
     await this.activityRepository.add({
-      name: `Proyecto "${result.name}" creado`,
-      description: `Creado desde https://github.com/${repoOwner}/${repoName}`,
+      name: `Proyecto "${result.name}" lanzado`,
+      description: `Creado desde https://github.com/${repoOwner}/${repoName}/tree/${branch}`,
       referenceId: job.data.appId,
       refersToModel: 'App',
       Modifier: {
