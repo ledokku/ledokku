@@ -397,6 +397,7 @@ export type Query = {
   isDatabaseLinked: IsDatabaseLinked;
   isPluginInstalled: IsPluginInstalled;
   ledokkuLogs: Array<LogPayload>;
+  plugins: Array<Plugin>;
   repositories: Array<Repository>;
   settings: Settings;
   setup: SetupResult;
@@ -839,6 +840,11 @@ export type LedokkuLogsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type LedokkuLogsQuery = { __typename?: 'Query', ledokkuLogs: Array<{ __typename?: 'LogPayload', message: string, type: string }> };
+
+export type PluginsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PluginsQuery = { __typename?: 'Query', plugins: Array<{ __typename?: 'Plugin', name: string, version: string }> };
 
 export type RepositoriesQueryVariables = Exact<{
   installationId: Scalars['String'];
@@ -2220,6 +2226,41 @@ export function useLedokkuLogsLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type LedokkuLogsQueryHookResult = ReturnType<typeof useLedokkuLogsQuery>;
 export type LedokkuLogsLazyQueryHookResult = ReturnType<typeof useLedokkuLogsLazyQuery>;
 export type LedokkuLogsQueryResult = Apollo.QueryResult<LedokkuLogsQuery, LedokkuLogsQueryVariables>;
+export const PluginsDocument = gql`
+    query plugins {
+  plugins {
+    name
+    version
+  }
+}
+    `;
+
+/**
+ * __usePluginsQuery__
+ *
+ * To run a query within a React component, call `usePluginsQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePluginsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePluginsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function usePluginsQuery(baseOptions?: Apollo.QueryHookOptions<PluginsQuery, PluginsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PluginsQuery, PluginsQueryVariables>(PluginsDocument, options);
+      }
+export function usePluginsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PluginsQuery, PluginsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PluginsQuery, PluginsQueryVariables>(PluginsDocument, options);
+        }
+export type PluginsQueryHookResult = ReturnType<typeof usePluginsQuery>;
+export type PluginsLazyQueryHookResult = ReturnType<typeof usePluginsLazyQuery>;
+export type PluginsQueryResult = Apollo.QueryResult<PluginsQuery, PluginsQueryVariables>;
 export const RepositoriesDocument = gql`
     query repositories($installationId: String!) {
   repositories(installationId: $installationId) {

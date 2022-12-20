@@ -3,16 +3,18 @@ import { Avatar, Button, Input, Loading, Modal, Table, Text } from '@nextui-org/
 import { useState } from 'react';
 import { FaTrash } from "react-icons/fa";
 import { toast } from 'react-toastify';
-import { useAddAllowedUserMutation, useAllowedUsersQuery, useRemoveAllowedUserMutation } from '../generated/graphql';
+import { useAddAllowedUserMutation, useAllowedUsersQuery, usePluginsQuery, useRemoveAllowedUserMutation } from '../generated/graphql';
 import { IconButton } from '../ui/components/IconButton';
 import { AdminLayout } from '../ui/layout/layout';
 
 const Settings = () => {
     const { data, loading, refetch } = useAllowedUsersQuery();
     const [addAllowedUser, { loading: loadingAddUser }] = useAddAllowedUserMutation();
-    const [removeAllowedUser, { loading: loadingRemoveUser }] = useRemoveAllowedUserMutation();
+    const [removeAllowedUser] = useRemoveAllowedUserMutation();
     const [showAddUser, setShowAddUser] = useState(false);
     const [email, setEmail] = useState("");
+    const { data: plugins, loading: loadingPlugins } = usePluginsQuery();
+    const [pluginPage, setPluginPage] = useState(1);
 
     return (
         <AdminLayout>
@@ -67,18 +69,28 @@ const Settings = () => {
                             </Table.Row>;
                         }) ?? []}
                     </Table.Body>
-                    {/* <Table.Pagination rowsPerPage={10} /> */}
                 </Table>
                 <Text h3 className="mb-8 mt-16">
-                    Plugins
+                    Plugins instalados
                 </Text>
                 <Table>
                     <Table.Header>
                         <Table.Column>Nombre</Table.Column>
+                        <Table.Column>Versión</Table.Column>
                     </Table.Header>
-                    <Table.Body>
-                        
+                    <Table.Body loadingState={loadingPlugins ? "loading" : "idle"}>
+                        {plugins?.plugins
+                            // ?.slice(10 * (pluginPage - 1), (10 * (pluginPage - 1)) + 10)
+                            ?.map((it) => <Table.Row key={it.name}>
+                                <Table.Cell>{it.name}</Table.Cell>
+                                <Table.Cell>{it.version}</Table.Cell>
+                            </Table.Row>) ?? []}
                     </Table.Body>
+                    {/* <Table.Pagination
+                        rowsPerPage={20}
+                        page={pluginPage}
+                        total={plugins?.plugins ? Math.ceil(plugins.plugins.length / 10) : undefined}
+                        onPageChange={setPluginPage} /> */}
                 </Table>
             </div>
             <Modal
