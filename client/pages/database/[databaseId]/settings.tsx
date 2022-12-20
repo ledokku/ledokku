@@ -6,8 +6,9 @@ import * as yup from 'yup';
 import {
     DashboardDocument,
     useDatabaseByIdQuery,
-    useDestroyDatabaseMutation,
+    useDestroyDatabaseMutation
 } from '../../../generated/graphql';
+import { CodeBox } from '../../../ui/components/CodeBox';
 import { LoadingSection } from '../../../ui/components/LoadingSection';
 import { AdminLayout } from '../../../ui/layout/layout';
 import { DatabaseHeaderInfo } from '../../../ui/modules/database/DatabaseHeaderInfo';
@@ -128,6 +129,10 @@ const Settings = () => {
                             <Text h4>Eliminar base de datos</Text>
                         </Modal.Header>
                         <Modal.Body>
+                            Escribre el nombre de la base de datos para eliminar
+                            <CodeBox>
+                                {data.database.name}
+                            </CodeBox>
                             <Input
                                 css={{ marginBottom: 0 }}
                                 autoComplete="off"

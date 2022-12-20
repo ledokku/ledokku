@@ -18,6 +18,7 @@ import {
     useAppByIdQuery,
     useDestroyAppMutation
 } from '../../../../generated/graphql';
+import { CodeBox } from '../../../../ui/components/CodeBox';
 import { LoadingSection } from '../../../../ui/components/LoadingSection';
 import { AdminLayout } from '../../../../ui/layout/layout';
 import { AppHeaderInfo } from '../../../../ui/modules/app/AppHeaderInfo';
@@ -143,7 +144,10 @@ const AppSettingsAdvanced = () => {
                                 <Text h4>Eliminar aplicación</Text>
                             </Modal.Header>
                             <Modal.Body>
-                                Escribre el nombre de la aplicación para eliminar <span className='font-mono text-sm'>{data.app.name}</span>
+                                Escribre el nombre de la aplicación para eliminar
+                                <CodeBox>
+                                    {data.app.name}
+                                </CodeBox>
                                 <Input
                                     css={{ marginBottom: 0 }}
                                     autoComplete="off"
