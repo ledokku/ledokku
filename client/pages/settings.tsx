@@ -69,6 +69,17 @@ const Settings = () => {
                     </Table.Body>
                     {/* <Table.Pagination rowsPerPage={10} /> */}
                 </Table>
+                <Text h3 className="mb-8 mt-16">
+                    Plugins
+                </Text>
+                <Table>
+                    <Table.Header>
+                        <Table.Column>Nombre</Table.Column>
+                    </Table.Header>
+                    <Table.Body>
+                        
+                    </Table.Body>
+                </Table>
             </div>
             <Modal
                 closeButton
