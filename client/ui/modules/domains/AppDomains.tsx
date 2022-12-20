@@ -83,7 +83,7 @@ export const AppDomains = ({ appId }: AppDomainProps) => {
             </Grid>
 
             <Grid xs={12} direction="column">
-                {domainsData?.domains.domains.length === 0 ? (
+                {domainsData?.domains.length === 0 ? (
                     <Text h5>Actualmente no hay ningún dominio asignado</Text>
                 ) : (
                     <Table width="100%">
@@ -93,14 +93,14 @@ export const AppDomains = ({ appId }: AppDomainProps) => {
                             <Table.Column width={100}>Acciones</Table.Column>
                         </Table.Header>
                         <Table.Body>
-                            {domainsData?.domains.domains.map((domain, index) => (
+                            {domainsData?.domains.map((it, index) => (
                                 <Table.Row key={index}>
                                     <Table.Cell>
-                                        <UrlStatus url={`http://${domain}`} />
+                                        <UrlStatus status={it.status} />
                                     </Table.Cell>
                                     <Table.Cell>
-                                        <Link href={`http://${domain}`} isExternal target="_blank">
-                                            {domain}
+                                        <Link href={`http://${it.domain}`} isExternal target="_blank">
+                                            {it.domain}
                                         </Link>
                                     </Table.Cell>
                                     <Table.Cell>
@@ -110,8 +110,8 @@ export const AppDomains = ({ appId }: AppDomainProps) => {
                                             css={{ minWidth: 'auto' }}
                                             aria-label="Delete"
                                             icon={<FiTrash2 />}
-                                            disabled={removeDomainMutationLoading || domain.includes("on.ocstudios.mx")}
-                                            onClick={() => handleRemoveDomain(domain)}
+                                            disabled={removeDomainMutationLoading || it.domain.includes("on.ocstudios.mx")}
+                                            onClick={() => handleRemoveDomain(it.domain)}
                                         />
                                     </Table.Cell>
                                 </Table.Row>

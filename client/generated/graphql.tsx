@@ -76,6 +76,12 @@ export type AppBuild = {
   userId?: Maybe<Scalars['ID']>;
 };
 
+export type AppDomain = {
+  __typename?: 'AppDomain';
+  domain: Scalars['String'];
+  status: Scalars['Int'];
+};
+
 export type AppGithubMeta = {
   __typename?: 'AppGithubMeta';
   appId: Scalars['String'];
@@ -184,11 +190,6 @@ export type DestroyAppInput = {
 
 export type DestroyDatabaseInput = {
   databaseId: Scalars['String'];
-};
-
-export type DomainList = {
-  __typename?: 'DomainList';
-  domains: Array<Scalars['String']>;
 };
 
 export type EnvVar = {
@@ -384,7 +385,7 @@ export type Query = {
   databaseLogs: Logs;
   databases: DatabasePaginationInfo;
   dokkuPlugins: PluginList;
-  domains: DomainList;
+  domains: Array<AppDomain>;
   envVars: EnvVarList;
   githubInstallationId: Installation;
   isDatabaseLinked: IsDatabaseLinked;
@@ -807,7 +808,7 @@ export type DomainsQueryVariables = Exact<{
 }>;
 
 
-export type DomainsQuery = { __typename?: 'Query', domains: { __typename?: 'DomainList', domains: Array<string> } };
+export type DomainsQuery = { __typename?: 'Query', domains: Array<{ __typename?: 'AppDomain', domain: string, status: number }> };
 
 export type EnvVarsQueryVariables = Exact<{
   appId: Scalars['String'];
@@ -2038,7 +2039,8 @@ export type DatabaseQueryResult = Apollo.QueryResult<DatabaseQuery, DatabaseQuer
 export const DomainsDocument = gql`
     query domains($appId: String!) {
   domains(appId: $appId) {
-    domains
+    domain
+    status
   }
 }
     `;
