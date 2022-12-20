@@ -22,26 +22,23 @@ function generateLink(activity: Activity) {
 }
 
 export const ActivityItem = ({ activity }: { activity: Activity }) => {
-    console.log(activity);
-
     return (
         <a href={activity.reference ? generateLink(activity) : "#!"}>
             <div>
                 <div className="flex flex-row">
                     <div className="flex-grow mr-4">
-                        <Text h4>{activity.name}</Text>
-                        <Text>{activity.description}</Text>
+                        <Text h5>{activity.name}</Text>
+                        <Text className='text-sm'>{activity.description}</Text>
                     </div>
                     <div className='flex flex-col items-end'>
-                        <Text>{format(new Date(activity.createdAt), 'dd/MM/yyyy HH:mm:ss')}</Text>
-                        {activity.modifier && <div className='flex mt-4'>
-                            <Avatar className='mr-2' size={'sm'} src={activity.modifier?.avatarUrl} />
+                        <Text className='text-sm'>{format(new Date(activity.createdAt), 'dd/MM/yyyy HH:mm:ss')}</Text>
+                        {activity.modifier && <div className='flex mt-2 text-sm'>
+                            <Avatar className='mr-2' size={'xs'} src={activity.modifier?.avatarUrl} />
                             {activity.modifier?.username}
-                        </div>
-                        }
+                        </div>}
                     </div>
                 </div>
-                <Divider y={2} />
+                <Divider y={1} />
             </div>
         </a>
     );
