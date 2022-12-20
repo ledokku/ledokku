@@ -9,8 +9,9 @@ interface QueueArgs {
   appName: string;
   key: string;
   value: string;
-  appId: string;
+  appId?: string;
   userId: string;
+  addToActivity?: boolean;
 }
 
 @Queue()
@@ -24,24 +25,34 @@ export class SetEnvVarQueue extends IQueue<QueueArgs> {
   }
 
   protected async execute(job: Job<QueueArgs, any, string>) {
-    const { appName, key, value, appId, userId } = job.data;
+    const {
+      appName,
+      key,
+      value,
+      appId,
+      userId,
+      addToActivity = true,
+    } = job.data;
 
     $log.info(
       `Iniciando asignacion de la variable de entorno ${appName} con ${key}=${value}`
     );
 
     await this.dokkuAppRepository.setEnvVar(appName, { key, value });
-    await this.activityRepository.add({
-      name: `Variable de entorno en "${appName}"`,
-      description: `${key}: ${value}`,
-      referenceId: appId,
-      refersToModel: 'App',
-      Modifier: {
-        connect: {
-          id: userId,
+
+    if (addToActivity) {
+      await this.activityRepository.add({
+        name: `Variable de entorno en "${appName}"`,
+        description: `${key}: ${value}`,
+        referenceId: appId,
+        refersToModel: 'App',
+        Modifier: {
+          connect: {
+            id: userId,
+          },
         },
-      },
-    });
+      });
+    }
 
     $log.info(
       `Finalizando asignacion de la variable de entorno ${appName} con ${key}=${value}`

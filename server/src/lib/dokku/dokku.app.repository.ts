@@ -113,6 +113,12 @@ export class DokkuAppRepository {
       envVars = [envVars];
     }
 
+    for (const env of envVars) {
+      await execSSHCommand(
+        `docker-options:add ${appName} build '--build-arg ${env.key}=${env.value}'`
+      );
+    }
+
     const resultSetEnv = await execSSHCommand(
       `config:set ${noRestart ? '--no-restart' : ''} ${
         encoded ? '--encoded' : ''
@@ -126,11 +132,37 @@ export class DokkuAppRepository {
     return true;
   }
 
+  async buildArgs(appName: string): Promise<string[]> {
+    const args = await execSSHCommand(
+      `docker-options:report ${appName} --docker-options-build`
+    );
+
+    if (args.code === 1) {
+      throw new InternalServerError(args.stderr);
+    }
+
+    return (
+      args.stdout.match(
+        /--build-arg [^\s]+=(.+?((?=\s*--build-arg)|(?=\s*$)))/gm
+      ) ?? []
+    );
+  }
+
   async unsetEnvVar(
     appName: string,
     key: string,
     restart: boolean = true
   ): Promise<boolean> {
+    const buildArg = (await this.buildArgs(appName)).find((it) =>
+      RegExp(`^--build-arg ${key}=.*$`).test(it)
+    );
+
+    if (buildArg) {
+      await execSSHCommand(
+        `docker-options:remove ${appName} build '${buildArg}'`
+      );
+    }
+
     const resultUnsetEnv = await execSSHCommand(
       `config:unset ${restart ? '' : '--no-restart'} ${appName} ${key}`
     );

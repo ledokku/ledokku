@@ -1,4 +1,5 @@
 import { Field, InputType } from 'type-graphql';
+import { BuildEnvVar } from './build_env_var.input';
 
 @InputType()
 export class CreateAppGithubInput {
@@ -19,4 +20,7 @@ export class CreateAppGithubInput {
 
   @Field((type) => String)
   githubInstallationId: string;
+
+  @Field((type) => [BuildEnvVar], { nullable: true })
+  envVars?: BuildEnvVar[];
 }

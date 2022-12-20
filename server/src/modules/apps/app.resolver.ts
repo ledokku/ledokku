@@ -316,10 +316,22 @@ export class AppResolver {
 
     if (created) {
       if (input.dockerfilePath) {
-        this.dokkuAppRepository.setDockerfilePath(
+        await this.dokkuAppRepository.setDockerfilePath(
           appName,
           input.dockerfilePath
         );
+      }
+
+      if (input.envVars && input.envVars.length > 0) {
+        for (const env of input.envVars) {
+          this.setEnvVarQueue.add({
+            appName,
+            userId: context.auth.user.id,
+            key: env.key,
+            value: env.value,
+            addToActivity: false,
+          });
+        }
       }
 
       const app = await this.githubRepository.createApp(

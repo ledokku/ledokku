@@ -41,7 +41,7 @@ interface BranchOption {
 }
 
 const CreateAppGithub = () => {
-    const history = useRouter();
+    const router = useRouter();
     const toast = useToast();
     const { user } = useAuth();
 
@@ -160,7 +160,7 @@ const CreateAppGithub = () => {
 
     const handleNext = () => {
         setIsTerminalVisible(false);
-        history.push(`/`);
+        router.push(`/`);
 
         // history.push(`/app/${createAppData?.createAppGithub.result}`);
         trackGoal(trackingGoals.createAppGithub, 0);
@@ -328,8 +328,7 @@ const CreateAppGithub = () => {
                             <Button
                                 flat
                                 onClick={() => {
-                                    setIsTerminalVisible(false);
-                                    formik.resetForm();
+                                    router.reload();
                                 }}
                                 icon={<FiArrowLeft size={20} />}
                             >
