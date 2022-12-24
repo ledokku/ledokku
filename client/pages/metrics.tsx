@@ -10,7 +10,7 @@ const Metrics = () => {
     const { data: logs, loading: loadingLogs, error } = useLedokkuLogsQuery();
 
     useEffect(() => {
-        if (logs) {
+        if (logs && logs.ledokkuLogs.length > 0) {
             setData(logs.ledokkuLogs);
         }
     }, [logs])
