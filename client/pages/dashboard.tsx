@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useDashboardQuery } from '../generated/graphql';
 import { DbIcon } from '../ui/components/DbIcon';
-import { LoadingSection } from '../ui/components/LoadingSection';
 import { GithubIcon } from '../ui/icons/GithubIcon';
 import { AdminLayout } from '../ui/layout/layout';
 import { ActivityFeed } from '../ui/modules/activity/ActivityFeed';
@@ -20,7 +19,7 @@ const Dashboard = () => {
     });
 
     return (
-        <AdminLayout>
+        <AdminLayout loading={loading} error={error}>
             <div className="w-full flex flex-col md:flex-row justify-end mb-8 items-end">
                 <Button
                     bordered

@@ -11,43 +11,33 @@ const AppSettingsDomains = () => {
     const history = useRouter();
     const appId = history.query.appId as string;
 
-    const { data, loading } = useAppByIdQuery({
+    const { data, loading, error } = useAppByIdQuery({
         variables: {
             appId,
         },
     });
 
-    // TODO display error
-
-    if (loading) {
-        // TODO nice loading
-        return <p>Loading...</p>;
-    }
-
-    if (!data?.app) {
-        // TODO nice 404
-        return <p>App not found.</p>;
-    }
-
-    const { app } = data;
+    const app = data?.app
 
     return (
-        <AdminLayout>
-            <div>
-                <AppHeaderInfo app={app} />
-                <AppHeaderTabNav app={app} />
-            </div>
+        <AdminLayout loading={loading} notFound={!app} error={error}>
+            {app && <>
+                <div>
+                    <AppHeaderInfo app={app} />
+                    <AppHeaderTabNav app={app} />
+                </div>
 
-            <Container className="mt-4">
-                <Grid.Container gap={4}>
-                    <Grid xs={3}>
-                        <AppSettingsMenu app={app} />
-                    </Grid>
-                    <Grid xs={9}>
-                        <AppDomains appId={appId} />
-                    </Grid>
-                </Grid.Container>
-            </Container>
+                <Container className="mt-4">
+                    <Grid.Container gap={4}>
+                        <Grid xs={3}>
+                            <AppSettingsMenu app={app} />
+                        </Grid>
+                        <Grid xs={9}>
+                            <AppDomains appId={appId} />
+                        </Grid>
+                    </Grid.Container>
+                </Container>
+            </>}
         </AdminLayout>
     );
 };

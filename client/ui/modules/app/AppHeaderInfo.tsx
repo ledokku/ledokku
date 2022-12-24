@@ -1,4 +1,4 @@
-import { Badge, Card, Grid, Link, Text } from '@nextui-org/react';
+import { Badge, Card, Grid, Link, Loading, Text } from '@nextui-org/react';
 import { useDomainsQuery } from '../../../generated/graphql';
 import { GithubIcon } from '../../../ui/icons/GithubIcon';
 
@@ -27,9 +27,9 @@ export const AppHeaderInfo = ({ app }: AppHeaderInfoProps) => {
                 <Text h2>{app.name}</Text>
             </Grid>
             <Grid xs={12} md className="flex flex-col items-end">
-                <Link href={`http://${domainsData?.domains?.at(0)?.domain}`} isExternal target="_blank">
+                {domainsDataLoading ? <Loading size='xs' /> : <Link href={`http://${domainsData?.domains?.at(0)?.domain}`} isExternal target="_blank">
                     {domainsData?.domains?.at(0)?.domain}
-                </Link>
+                </Link>}
                 {app.appMetaGithub ? (
                     <Link href={`https://github.com/${app.appMetaGithub.repoOwner}/${app.appMetaGithub.repoName}/tree/${app.appMetaGithub.branch}`} target="_blank">
                         <Card variant="bordered" css={{ w: 'auto', marginTop: 8 }}>

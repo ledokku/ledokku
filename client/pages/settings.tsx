@@ -17,7 +17,7 @@ const Settings = () => {
     const [pluginPage, setPluginPage] = useState(1);
 
     return (
-        <AdminLayout>
+        <AdminLayout loading={loading || loadingPlugins}>
             <Text h2 className="mb-8">
                 Configuración
             </Text>
@@ -73,24 +73,24 @@ const Settings = () => {
                 <Text h3 className="mb-8 mt-16">
                     Plugins instalados
                 </Text>
-                <Table>
+                <Table key={pluginPage}>{/*  TODO: Workarround */}
                     <Table.Header>
                         <Table.Column>Nombre</Table.Column>
-                        <Table.Column>Versión</Table.Column>
+                        <Table.Column width={150}>Versión</Table.Column>
                     </Table.Header>
                     <Table.Body loadingState={loadingPlugins ? "loading" : "idle"}>
                         {plugins?.plugins
-                            // ?.slice(10 * (pluginPage - 1), (10 * (pluginPage - 1)) + 10)
+                            ?.slice(10 * (pluginPage - 1), (10 * (pluginPage - 1)) + 10)
                             ?.map((it) => <Table.Row key={it.name}>
                                 <Table.Cell>{it.name}</Table.Cell>
                                 <Table.Cell>{it.version}</Table.Cell>
                             </Table.Row>) ?? []}
                     </Table.Body>
-                    {/* <Table.Pagination
-                        rowsPerPage={20}
+                    <Table.Pagination
+                        rowsPerPage={10}
                         page={pluginPage}
                         total={plugins?.plugins ? Math.ceil(plugins.plugins.length / 10) : undefined}
-                        onPageChange={setPluginPage} /> */}
+                        onPageChange={setPluginPage} />
                 </Table>
             </div>
             <Modal

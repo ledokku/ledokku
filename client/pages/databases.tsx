@@ -9,14 +9,14 @@ import { AdminLayout } from '../ui/layout/layout';
 const Databases = () => {
     const history = useRouter();
     const [page, setPage] = useState(0);
-    const { data, loading } = useDatabaseQuery({
+    const { data, loading, error } = useDatabaseQuery({
         variables: {
             page,
         },
     });
 
     return (
-        <AdminLayout>
+        <AdminLayout error={error}>
             <div className="w-full flex flex-row justify-between">
                 <Text h2 className="mb-8">
                     Bases de datos

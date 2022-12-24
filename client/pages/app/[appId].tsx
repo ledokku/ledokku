@@ -8,7 +8,7 @@ import {
     Modal,
     Spacer,
     Table,
-    Text,
+    Text
 } from '@nextui-org/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -21,7 +21,7 @@ import {
     useLinkDatabaseLogsSubscription,
     useLinkDatabaseMutation,
     useUnlinkDatabaseLogsSubscription,
-    useUnlinkDatabaseMutation,
+    useUnlinkDatabaseMutation
 } from '../../generated/graphql';
 import { DatabaseLabel } from '../../ui/components/DatabaseLabel';
 import { DbIcon } from '../../ui/components/DbIcon';
@@ -93,7 +93,7 @@ const App = () => {
         },
     });
 
-    const { data, loading, refetch /* error */ } = useAppByIdQuery({
+    const { data, loading, refetch, error } = useAppByIdQuery({
         variables: {
             appId,
         },
@@ -101,33 +101,14 @@ const App = () => {
         ssr: false,
         skip: !appId,
     });
-    
 
-    if (!data || !databaseData) {
-        return null;
-    }
-
-    // // TODO display error
-
-    if (loading || databaseDataLoading) {
-        // TODO nice loading
-        return <p>Loading...</p>;
-    }
-
-    const { databases } = databaseData;
-
-    const { app } = data;
-
-    if (!app) {
-        // TODO nice 404
-        return <p>App not found.</p>;
-    }
-
-    const linkedDatabases = app.databases;
-    const linkedIds = linkedDatabases?.map((db) => db.id);
-    const notLinkedDatabases = databases.items.filter((db) => {
+    const app = data?.app;
+    const databases = databaseData?.databases
+    const linkedDatabases = data?.app.databases ?? [];
+    const linkedIds = linkedDatabases.map((db) => db.id);
+    const notLinkedDatabases = databaseData?.databases.items.filter((db) => {
         return linkedIds?.indexOf(db.id) === -1;
-    });
+    }) ?? [];
 
     const dbOptions = notLinkedDatabases.map((db) => {
         return {
@@ -175,17 +156,17 @@ const App = () => {
     };
 
     return (
-        <AdminLayout>
-            <div>
+        <AdminLayout loading={loading} notFound={!data?.app}>
+            {app && <div>
                 <AppHeaderInfo app={app} />
                 <AppHeaderTabNav app={app} />
-            </div>
+            </div>}
             <Grid.Container gap={4}>
                 <Grid xs={12} md={6} className="flex flex-col">
                     <Text h3 className="mb-8">
                         Información de la aplicación
                     </Text>
-                    <Table>
+                    {app && <Table>
                         <Table.Header>
                             <Table.Column> </Table.Column>
                             <Table.Column>VALOR</Table.Column>
@@ -209,13 +190,13 @@ const App = () => {
                                 </Table.Cell>
                             </Table.Row>
                         </Table.Body>
-                    </Table>
+                    </Table>}
                 </Grid>
                 <Grid xs={12} md={6} className="flex flex-col">
                     <Text h3 className="mb-8">
                         Bases de datos conectadas
                     </Text>
-                    {databases.items.length === 0 ? (
+                    {databases && databases.items.length === 0 ? (
                         <>
                             <div className="mt-4 mb-4">
                                 <Text className="text-gray-400">
@@ -282,8 +263,8 @@ const App = () => {
                                         }}
                                     >
                                         {databaseLinkLoading &&
-                                        !databaseLinkData &&
-                                        !databaseLinkError ? (
+                                            !databaseLinkData &&
+                                            !databaseLinkError ? (
                                             <Loading color="currentColor" />
                                         ) : (
                                             'Enlazar base de datos'
@@ -313,7 +294,7 @@ const App = () => {
                                                     <Text className="mb-2 ">
                                                         ¡Enlazando base de datos{' '}
                                                         <b>{selectedDb.value.name}</b> con{' '}
-                                                        <b>{app.name}</b>!
+                                                        {app && <b>{app.name}</b>}!
                                                     </Text>
                                                     <Text>
                                                         El proceso de enlace usualmente tarda unos
@@ -334,7 +315,7 @@ const App = () => {
                                                 <p>
                                                     ¿Estás seguro de enlazar la base de datos{' '}
                                                     <b>{selectedDb.value.name}</b> con{' '}
-                                                    <b>{app.name}</b>?
+                                                    {app && <b>{app.name}</b>}?
                                                 </p>
                                             )}
                                         </Modal.Body>

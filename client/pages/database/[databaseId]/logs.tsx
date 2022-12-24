@@ -13,7 +13,7 @@ const Logs = () => {
     const history = useRouter();
     const databaseId = history.query.databaseId as string;
 
-    const { data, loading /* error */ } = useDatabaseByIdQuery({
+    const { data, loading, error } = useDatabaseByIdQuery({
         variables: {
             databaseId,
         },
@@ -30,44 +30,33 @@ const Logs = () => {
         pollInterval: 15000,
     });
 
-    if (!data) {
-        return null;
-    }
-
-    if (loading) {
-        return <p>Loading...</p>;
-    }
-
-    const { database } = data;
-
-    if (!database) {
-        // TODO nice 404
-        return <p>App not found.</p>;
-    }
+    const database = data?.database;
 
     return (
-        <AdminLayout>
-            <div>
-                <DatabaseHeaderInfo database={database} />
-                <DatabaseHeaderTabNav database={database} />
-            </div>
-            <Text h3 className="my-8">
-                Registros de la base de datos &quot;{database.name}&quot;:
-            </Text>
+        <AdminLayout loading={loading || databaseLogsLoading} error={error ?? databaseLogsError} notFound={!database}>
+            {database && <>
+                <div>
+                    <DatabaseHeaderInfo database={database} />
+                    <DatabaseHeaderTabNav database={database} />
+                </div>
+                <Text h3 className="my-8">
+                    Registros de la base de datos &quot;{database.name}&quot;:
+                </Text>
 
-            {databaseLogsLoading ? <LoadingSection /> : null}
+                {databaseLogsLoading ? <LoadingSection /> : null}
 
-            {databaseLogsError ? <Alert type="error" message={databaseLogsError.message} /> : null}
+                {databaseLogsError ? <Alert type="error" message={databaseLogsError.message} /> : null}
 
-            {!databaseLogsLoading && !databaseLogsError && databaseLogsData ? (
-                <Terminal>
-                    {databaseLogsData.databaseLogs.logs.map((dblog, index) => (
-                        <React.Fragment key={index}>
-                            {dblog ? <p>{dblog}</p> : <p>&nbsp;</p>}
-                        </React.Fragment>
-                    ))}
-                </Terminal>
-            ) : null}
+                {!databaseLogsLoading && !databaseLogsError && databaseLogsData ? (
+                    <Terminal>
+                        {databaseLogsData.databaseLogs.logs.map((dblog, index) => (
+                            <React.Fragment key={index}>
+                                {dblog ? <p>{dblog}</p> : <p>&nbsp;</p>}
+                            </React.Fragment>
+                        ))}
+                    </Terminal>
+                ) : null}
+            </>}
         </AdminLayout>
     );
 };

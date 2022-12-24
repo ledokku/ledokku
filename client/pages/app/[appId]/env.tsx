@@ -8,7 +8,6 @@ import {
     useUnsetEnvVarMutation
 } from '../../../generated/graphql';
 import { EnvForm } from '../../../ui/components/EnvForm';
-import { LoadingSection } from '../../../ui/components/LoadingSection';
 import { AdminLayout } from '../../../ui/layout/layout';
 import { AppHeaderInfo } from '../../../ui/modules/app/AppHeaderInfo';
 import { AppHeaderTabNav } from '../../../ui/modules/app/AppHeaderTabNav';
@@ -18,7 +17,7 @@ import { useToast } from '../../../ui/toast';
 const Env = () => {
     const history = useRouter();
     const appId = history.query.appId as string;
-    const { data, loading } = useAppByIdQuery({
+    const { data, loading, error } = useAppByIdQuery({
         variables: {
             appId,
         },
@@ -36,26 +35,14 @@ const Env = () => {
         fetchPolicy: 'network-only',
     });
 
-    if (!data) {
-        return null;
-    }
-
-    if (loading) {
-        return <LoadingSection />;
-    }
-
-    const { app } = data;
-
-    if (!app) {
-        return <p>App not found.</p>;
-    }
+    const app = data?.app
 
     return (
-        <AdminLayout>
-            <div>
+        <AdminLayout loading={loading || envVarLoading} error={error ?? envVarError}>
+            {app && <div>
                 <AppHeaderInfo app={app} />
                 <AppHeaderTabNav app={app} />
-            </div>
+            </div>}
             <div className="my-6">
                 <Text h3>Configurar variables de entorno</Text>
                 <Text>
@@ -72,7 +59,7 @@ const Env = () => {
                 </Text>
             </div>
 
-            {!envVarLoading && !envVarError && envVarData?.envVars.envVars && (
+            {envVarData?.envVars.envVars && (
                 <div>
                     {envVarData.envVars.envVars.map((envVar, index) => {
                         return (

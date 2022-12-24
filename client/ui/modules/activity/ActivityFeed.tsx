@@ -1,21 +1,18 @@
 import { Avatar, Divider, Pagination, Text } from '@nextui-org/react';
 import format from 'date-fns/format';
 import { useState } from 'react';
-import { Activity, App, useActivityQuery } from '../../../generated/graphql';
+import TinyCrossfade from 'react-tiny-crossfade';
+import { Activity, useActivityQuery } from '../../../generated/graphql';
 import { LoadingSection } from '../../../ui/components/LoadingSection';
 
 interface Props {
     isSinglePage?: boolean;
 }
 
-const AppContent = ({ app }: { app: App }) => {
-    return <div>{app.name}</div>;
-};
-
 function generateLink(activity: Activity) {
     switch (activity.reference?.__typename) {
         case "App": return `/app/${activity.reference.id}`
-        case "Database": return `/database/${activity.reference.id}`
+        case "Database": return `/database/${activity.reference.dbId}`
     }
 
     return "#!"
@@ -54,29 +51,24 @@ export const ActivityFeed = ({ isSinglePage = false }: Props) => {
         },
     });
 
-    if (loading) {
-        return <LoadingSection />;
-    }
-
-    if (!data || data.activity.totalItems === 0) {
-        return <Text h4>No hay datos</Text>;
-    }
 
     return (
-        <div>
-            {data.activity.items.map((it, index) => (
-                <ActivityItem activity={it as any} key={index} />
-            ))}
-            <div className="flex flex-col justify-center items-center mt-8">
-                {!isSinglePage ? (
-                    <Pagination
-                        page={page}
-                        initialPage={1}
-                        total={data.activity.totalPages}
-                        onChange={setPage}
-                    />
-                ) : undefined}
-            </div>
-        </div>
+        <TinyCrossfade className='container-wrapper'>
+            {loading ? <LoadingSection key="loading" /> : !data || data.activity.totalItems === 0 ? <Text h4 key="notFound">No hay datos</Text> : <div className='content'>
+                {data.activity.items.map((it, index) => (
+                    <ActivityItem activity={it as any} key={index} />
+                ))}
+                <div className="flex flex-col justify-center items-center mt-8">
+                    {!isSinglePage ? (
+                        <Pagination
+                            page={page}
+                            initialPage={1}
+                            total={data.activity.totalPages}
+                            onChange={setPage}
+                        />
+                    ) : undefined}
+                </div>
+            </div>}
+        </TinyCrossfade>
     );
 };

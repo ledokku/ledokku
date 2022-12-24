@@ -7,7 +7,7 @@ import { AdminLayout } from '../ui/layout/layout';
 
 const Metrics = () => {
     const [data, setData] = useState<LogPayload[]>([]);
-    const { data: logs } = useLedokkuLogsQuery();
+    const { data: logs, loading: loadingLogs, error } = useLedokkuLogsQuery();
 
     useEffect(() => {
         if (logs) {
@@ -26,7 +26,7 @@ const Metrics = () => {
 
 
     return (
-        <AdminLayout>
+        <AdminLayout loading={loadingLogs} error={error}>
             <Text h2 className="mb-8">
                 Métricas
             </Text>

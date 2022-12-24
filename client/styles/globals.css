@@ -28,3 +28,26 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background-color: #a8b2bf;
 }
+
+.component-wrapper {
+  transition: height 0.3s;
+  overflow: hidden;
+}
+
+.before-enter {
+  opacity: 0;
+}
+
+.entering {
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+
+.before-leave {
+  opacity: 1;
+}
+
+.leaving {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
