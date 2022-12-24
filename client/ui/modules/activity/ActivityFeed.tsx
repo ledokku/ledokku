@@ -12,7 +12,7 @@ interface Props {
 function generateLink(activity: Activity) {
     switch (activity.reference?.__typename) {
         case "App": return `/app/${activity.reference.id}`
-        case "Database": return `/database/${activity.reference.dbId}`
+        case "Database": return `/database/${(activity.reference as any).dbId}`
     }
 
     return "#!"
