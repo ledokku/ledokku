@@ -1,6 +1,5 @@
 query domains($appId: String!) {
   domains(appId: $appId) {
     domain
-    status
   }
 }

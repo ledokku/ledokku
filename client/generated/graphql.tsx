@@ -79,7 +79,6 @@ export type AppBuild = {
 export type AppDomain = {
   __typename?: 'AppDomain';
   domain: Scalars['String'];
-  status: Scalars['Int'];
 };
 
 export type AppGithubMeta = {
@@ -815,7 +814,7 @@ export type DomainsQueryVariables = Exact<{
 }>;
 
 
-export type DomainsQuery = { __typename?: 'Query', domains: Array<{ __typename?: 'AppDomain', domain: string, status: number }> };
+export type DomainsQuery = { __typename?: 'Query', domains: Array<{ __typename?: 'AppDomain', domain: string }> };
 
 export type EnvVarsQueryVariables = Exact<{
   appId: Scalars['String'];
@@ -2052,7 +2051,6 @@ export const DomainsDocument = gql`
     query domains($appId: String!) {
   domains(appId: $appId) {
     domain
-    status
   }
 }
     `;

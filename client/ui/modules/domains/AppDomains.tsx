@@ -96,10 +96,10 @@ export const AppDomains = ({ appId }: AppDomainProps) => {
                             {domainsData?.domains.map((it, index) => (
                                 <Table.Row key={index}>
                                     <Table.Cell>
-                                        <UrlStatus status={it.status} />
+                                        <UrlStatus url={`https://${it.domain}`} />
                                     </Table.Cell>
                                     <Table.Cell>
-                                        <Link href={`http://${it.domain}`} isExternal target="_blank">
+                                        <Link href={`https://${it.domain}`} isExternal target="_blank">
                                             {it.domain}
                                         </Link>
                                     </Table.Cell>
