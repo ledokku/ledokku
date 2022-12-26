@@ -142,9 +142,6 @@ export class AppResolver {
     return await Promise.all(
       domains.map(async (it) => ({
         domain: it,
-        status: await fetch(`http://${it}`)
-          .then((it2) => it2.status)
-          .catch((err) => 500),
       }))
     );
   }

@@ -4,7 +4,4 @@ import { Field, Int, ObjectType } from 'type-graphql';
 export class AppDomain {
   @Field((type) => String)
   domain: string;
-
-  @Field((type) => Int)
-  status: number;
 }
