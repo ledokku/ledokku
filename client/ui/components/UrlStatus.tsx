@@ -8,7 +8,7 @@ export const UrlStatus = ({ url }: { url: string }) => {
         fetch(url, { method: "GET" }).then(res => setStatus(res.status)).catch(err => console.log(err));
     })
 
-    return !status ? <Loading size="sm" /> : <div className="flex flex-row items-center">
+    return !status ? <Loading size="xs" /> : <div className="flex flex-row items-center">
         <div className={`w-3 h-3 rounded-full ${status === 200 ? "bg-green-500" : "bg-red-500"}`} />
         <span className="ml-2">{status === 200 ? "Correcto" : `Error ${status}`}</span>
     </div>

@@ -147,6 +147,14 @@ export class AppResolver {
   }
 
   @Authorized()
+  @Query((returns) => Int)
+  async checkDomainStatus(
+    @Arg('url', (type) => String) url: string
+  ): Promise<number> {
+    return fetch(url).then((it) => it.status);
+  }
+
+  @Authorized()
   @Query((returns) => EnvVarList)
   async envVars(
     @Arg('appId') appId: string,
