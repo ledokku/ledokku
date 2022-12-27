@@ -42,7 +42,7 @@ const Dashboard = () => {
             <Grid.Container as="main" gap={3}>
                 <Grid xs={12} md={7} className="flex flex-col">
                     <Text h2>Aplicaciones</Text>
-                    {data?.apps.items.length === 0 ? <Text h4>Sin aplicaciones</Text> : null}
+                    {data?.apps.items.length === 0 ? <Text h4 color='gray'>Sin aplicaciones</Text> : null}
                     <Grid.Container gap={1}>
                         {data?.apps.items.map((app, index) => (
                             <Grid xs={12} sm={6} key={index}>
@@ -107,7 +107,7 @@ const Dashboard = () => {
                         Bases de datos
                     </Text>
                     {data?.databases.items.length === 0 ? (
-                        <Text h4>Sin bases de datos</Text>
+                        <Text h4 color='gray'>Sin bases de datos</Text>
                     ) : (
                         <Grid.Container gap={1}>
                             {data?.databases.items.map((database, index) => {

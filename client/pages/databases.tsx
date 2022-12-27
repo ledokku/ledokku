@@ -1,5 +1,4 @@
 import { Button, Table, Text } from '@nextui-org/react';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useDatabaseQuery } from '../generated/graphql';
@@ -46,7 +45,7 @@ const Databases = () => {
                     {data?.databases.items.map((it, index) => (
                         <Table.Row key={index}>
                             <Table.Cell>
-                                <Text b h4>
+                                <Text b h4 className='mb-0'>
                                     {it.name}
                                 </Text>
                             </Table.Cell>

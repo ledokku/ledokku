@@ -1,4 +1,4 @@
-import { Badge, Button, Grid, Image, Loading, Spacer, Text, useTheme } from '@nextui-org/react';
+import { Badge, Button, Image, Loading, Spacer, Text } from '@nextui-org/react';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import { FiArrowRight } from 'react-icons/fi';
@@ -77,8 +77,8 @@ const CreateApp = () => {
                                 una aplicación de Dokku.
                             </Text>
                             <Spacer y={1} />
-                            <Grid.Container gap={4}>
-                                <Grid md={3} xs={6}>
+                            <div className='flex flex-col md:flex-row gap-4 md:gap-8'>
+                                <div className='w-full md:w-1/4'>
                                     <SourceBox
                                         selected={formik.values.type === AppTypes.GITHUB}
                                         label="GitHub"
@@ -87,8 +87,8 @@ const CreateApp = () => {
                                             formik.setFieldValue('type', AppTypes.GITHUB)
                                         }
                                     />
-                                </Grid>
-                                <Grid md={3} xs={6}>
+                                </div>
+                                <div className='w-full md:w-1/4'>
                                     <SourceBox
                                         selected={formik.values.type === AppTypes.DOKKU}
                                         label="Dokku"
@@ -102,8 +102,8 @@ const CreateApp = () => {
                                         }
                                         onClick={() => formik.setFieldValue('type', AppTypes.DOKKU)}
                                     />
-                                </Grid>
-                                <Grid md={3} xs={6}>
+                                </div>
+                                <div className='w-full md:w-1/4'>
                                     <SourceBox
                                         selected={formik.values.type === AppTypes.GITLAB}
                                         label="Gitlab"
@@ -112,8 +112,8 @@ const CreateApp = () => {
                                     // Uncomment this when we can handle docker deployments
                                     // onClick={() => formik.setFieldValue('type', 'GITLAB')}
                                     />
-                                </Grid>
-                                <Grid md={3} xs={6}>
+                                </div>
+                                <div className='w-full md:w-1/4'>
                                     <SourceBox
                                         selected={formik.values.type === AppTypes.DOCKER}
                                         label="Docker"
@@ -122,8 +122,8 @@ const CreateApp = () => {
                                     // Uncomment this when we can handle docker deployments
                                     // onClick={() => formik.setFieldValue('type', 'DOCKER')}
                                     />
-                                </Grid>
-                            </Grid.Container>
+                                </div>
+                            </div>
                         </div>
 
                         <div className="mt-8 flex justify-end">

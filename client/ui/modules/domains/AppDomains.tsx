@@ -88,18 +88,22 @@ export const AppDomains = ({ appId }: AppDomainProps) => {
                 ) : (
                     <Table width="100%">
                         <Table.Header>
-                            <Table.Column>Status</Table.Column>
+                            <Table.Column width={175}>Status</Table.Column>
+                            <Table.Column width={175}>SSL</Table.Column>
                             <Table.Column>URL</Table.Column>
-                            <Table.Column width={100}>Acciones</Table.Column>
+                            <Table.Column width={70}>Acciones</Table.Column>
                         </Table.Header>
                         <Table.Body>
                             {domainsData?.domains.map((it, index) => (
                                 <Table.Row key={index}>
                                     <Table.Cell>
+                                        <UrlStatus url={`http://${it.domain}`} />
+                                    </Table.Cell>
+                                    <Table.Cell>
                                         <UrlStatus url={`https://${it.domain}`} />
                                     </Table.Cell>
                                     <Table.Cell>
-                                        <Link href={`https://${it.domain}`} isExternal target="_blank">
+                                        <Link href={`http://${it.domain}`} isExternal target="_blank">
                                             {it.domain}
                                         </Link>
                                     </Table.Cell>

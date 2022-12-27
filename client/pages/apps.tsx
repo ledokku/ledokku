@@ -44,7 +44,7 @@ const Apps = () => {
                     {data?.apps.items.map((it, index) => (
                         <Table.Row key={index}>
                             <Table.Cell>
-                                <Text b h4>
+                                <Text b h4 className='mb-0'>
                                     {it.name}
                                 </Text>
                             </Table.Cell>

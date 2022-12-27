@@ -385,6 +385,7 @@ export type Query = {
   appProxyPorts: Array<ProxyPort>;
   apps: AppPaginationInfo;
   branches: Array<Branch>;
+  checkDomainStatus: Scalars['Int'];
   database: Database;
   databaseInfo: DatabaseInfo;
   databaseLogs: Logs;
@@ -439,6 +440,11 @@ export type QueryAppsArgs = {
 export type QueryBranchesArgs = {
   installationId: Scalars['String'];
   repositoryName: Scalars['String'];
+};
+
+
+export type QueryCheckDomainStatusArgs = {
+  url: Scalars['String'];
 };
 
 
@@ -769,6 +775,13 @@ export type BranchesQueryVariables = Exact<{
 
 
 export type BranchesQuery = { __typename?: 'Query', branches: Array<{ __typename?: 'Branch', name: string }> };
+
+export type CheckDomainStatusQueryVariables = Exact<{
+  url: Scalars['String'];
+}>;
+
+
+export type CheckDomainStatusQuery = { __typename?: 'Query', checkDomainStatus: number };
 
 export type DashboardQueryVariables = Exact<{
   appLimit?: InputMaybe<Scalars['Int']>;
@@ -1837,6 +1850,39 @@ export function useBranchesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<B
 export type BranchesQueryHookResult = ReturnType<typeof useBranchesQuery>;
 export type BranchesLazyQueryHookResult = ReturnType<typeof useBranchesLazyQuery>;
 export type BranchesQueryResult = Apollo.QueryResult<BranchesQuery, BranchesQueryVariables>;
+export const CheckDomainStatusDocument = gql`
+    query CheckDomainStatus($url: String!) {
+  checkDomainStatus(url: $url)
+}
+    `;
+
+/**
+ * __useCheckDomainStatusQuery__
+ *
+ * To run a query within a React component, call `useCheckDomainStatusQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCheckDomainStatusQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCheckDomainStatusQuery({
+ *   variables: {
+ *      url: // value for 'url'
+ *   },
+ * });
+ */
+export function useCheckDomainStatusQuery(baseOptions: Apollo.QueryHookOptions<CheckDomainStatusQuery, CheckDomainStatusQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CheckDomainStatusQuery, CheckDomainStatusQueryVariables>(CheckDomainStatusDocument, options);
+      }
+export function useCheckDomainStatusLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CheckDomainStatusQuery, CheckDomainStatusQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CheckDomainStatusQuery, CheckDomainStatusQueryVariables>(CheckDomainStatusDocument, options);
+        }
+export type CheckDomainStatusQueryHookResult = ReturnType<typeof useCheckDomainStatusQuery>;
+export type CheckDomainStatusLazyQueryHookResult = ReturnType<typeof useCheckDomainStatusLazyQuery>;
+export type CheckDomainStatusQueryResult = Apollo.QueryResult<CheckDomainStatusQuery, CheckDomainStatusQueryVariables>;
 export const DashboardDocument = gql`
     query dashboard($appLimit: Int, $databaseLimit: Int, $appPage: Int, $databasePage: Int) {
   apps(limit: $appLimit, page: $appPage) {

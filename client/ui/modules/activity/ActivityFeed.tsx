@@ -54,7 +54,7 @@ export const ActivityFeed = ({ isSinglePage = false }: Props) => {
 
     return (
         <TinyCrossfade className='container-wrapper'>
-            {loading ? <LoadingSection key="loading" /> : !data || data.activity.totalItems === 0 ? <Text h4 key="notFound">No hay datos</Text> : <div className='content'>
+            {loading ? <LoadingSection key="loading" /> : !data || data.activity.totalItems === 0 ? <Text h4 key="notFound" color='gray'>No hay datos</Text> : <div className='content'>
                 {data.activity.items.map((it, index) => (
                     <ActivityItem activity={it as any} key={index} />
                 ))}

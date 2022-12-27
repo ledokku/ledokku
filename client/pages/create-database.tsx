@@ -1,4 +1,4 @@
-import { Button, Grid, Input, Loading, Text, useTheme } from '@nextui-org/react';
+import { Button, Grid, Input, Loading, Text } from '@nextui-org/react';
 import { trackGoal } from 'fathom-client';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
@@ -159,175 +159,171 @@ const CreateDatabase = () => {
     return (
         <AdminLayout>
             <Text h2>Crear una base de datos</Text>
-            {loading ? (
-                <LoadingSection />
-            ) : (
-                <div className="mt-12">
-                    {isTerminalVisible ? (
-                        <div className="mb-12">
-                            <Text>
-                                Creando la base de datos <b>{formik.values.type}</b>{' '}
-                                <b>{formik.values.name}</b>
-                            </Text>
-                            <Text className="mb-8">
-                                Crear una base de datos usualmente toma unos cuantos minutos.
-                                Respira un poco, los registros apareceran pronto:
-                            </Text>
-                            <Terminal>
-                                {arrayOfCreateDbLogs.map((log, index) => (
-                                    <TerminalOutput key={index}>{log.message}</TerminalOutput>
-                                ))}
-                            </Terminal>
+            <div className="mt-12">
+                {isTerminalVisible ? (
+                    <div className="mb-12">
+                        <Text>
+                            Creando la base de datos <b>{formik.values.type}</b>{' '}
+                            <b>{formik.values.name}</b>
+                        </Text>
+                        <Text className="mb-8">
+                            Crear una base de datos usualmente toma unos cuantos minutos.
+                            Respira un poco, los registros apareceran pronto:
+                        </Text>
+                        <Terminal>
+                            {arrayOfCreateDbLogs.map((log, index) => (
+                                <TerminalOutput key={index}>{log.message}</TerminalOutput>
+                            ))}
+                        </Terminal>
 
-                            {!!isDbCreationSuccess &&
-                                isDbCreationSuccess === DbCreationStatus.SUCCESS ? (
-                                <div className="mt-12 flex justify-end">
-                                    <Button
-                                        onClick={() => handleNext()}
-                                        iconRight={<FiArrowRight size={20} />}
-                                    >
-                                        Siguiente
-                                    </Button>
-                                </div>
-                            ) : !!isDbCreationSuccess &&
-                                isDbCreationSuccess === DbCreationStatus.FAILURE ? (
-                                <div className="mt-12 flex justify-end">
-                                    <Button
-                                        onClick={() => {
-                                            setIsTerminalVisible(false);
-                                            formik.resetForm();
-                                        }}
-                                        icon={<FiArrowLeft size={20} />}
-                                    >
-                                        Atras
-                                    </Button>
-                                </div>
-                            ) : null}
-                        </div>
-                    ) : (
-                        <div className="mt-8">
-                            <form onSubmit={formik.handleSubmit}>
-                                <div className="mt-12">
-                                    {isDokkuPluginInstalledError ? (
-                                        <Alert
-                                            type="error"
-                                            title="Solicitud fallida"
-                                            message={isDokkuPluginInstalledError.message}
+                        {!!isDbCreationSuccess &&
+                            isDbCreationSuccess === DbCreationStatus.SUCCESS ? (
+                            <div className="mt-12 flex justify-end">
+                                <Button
+                                    onClick={() => handleNext()}
+                                    iconRight={<FiArrowRight size={20} />}
+                                >
+                                    Siguiente
+                                </Button>
+                            </div>
+                        ) : !!isDbCreationSuccess &&
+                            isDbCreationSuccess === DbCreationStatus.FAILURE ? (
+                            <div className="mt-12 flex justify-end">
+                                <Button
+                                    onClick={() => {
+                                        setIsTerminalVisible(false);
+                                        formik.resetForm();
+                                    }}
+                                    icon={<FiArrowLeft size={20} />}
+                                >
+                                    Atras
+                                </Button>
+                            </div>
+                        ) : null}
+                    </div>
+                ) : (
+                    <div className="mt-8">
+                        <form onSubmit={formik.handleSubmit}>
+                            {loading ? <LoadingSection py='py-8' /> : <div className="mt-12">
+                                {isDokkuPluginInstalledError ? (
+                                    <Alert
+                                        type="error"
+                                        title="Solicitud fallida"
+                                        message={isDokkuPluginInstalledError.message}
+                                    />
+                                ) : null}
+                                {data?.isPluginInstalled.isPluginInstalled === false &&
+                                    !loading && (
+                                        <>
+                                            <Text>
+                                                Antes de crear una base de datos{' '}
+                                                <b>{formik.values.type.toLowerCase()}</b>,
+                                                necesitas correr el siguiente comando en tu
+                                                servidor de Dokku:
+                                            </Text>
+                                            <CodeBox lang="bash">
+                                                {`sudo dokku plugin:install https://github.com/dokku/dokku-${dbTypeToDokkuPlugin(
+                                                    formik.values.type
+                                                )}.git ${dbTypeToDokkuPlugin(
+                                                    formik.values.type
+                                                )}`}
+                                            </CodeBox>
+                                            <Text>Unos segundos después puedes continuar</Text>
+                                        </>
+                                    )}
+                                {data?.isPluginInstalled.isPluginInstalled === true &&
+                                    !loading && (
+                                        <Grid.Container gap={2} className="mt-8">
+                                            <Grid
+                                                xs={12}
+                                                css={{ padding: 0 }}
+                                                direction="column"
+                                            >
+                                                <Input
+                                                    autoComplete="off"
+                                                    id="name"
+                                                    label="Nombre de la base de datos"
+                                                    name="name"
+                                                    width="300px"
+                                                    placeholder="Nombre"
+                                                    value={formik.values.name}
+                                                    onChange={formik.handleChange}
+                                                    onBlur={formik.handleBlur}
+                                                />
+                                                <Text color="$error">{formik.errors.name}</Text>
+                                            </Grid>
+                                        </Grid.Container>
+                                    )}
+                            </div>}
+
+                            <div className="mt-12">
+                                <Text h3>Elige tu base de datos</Text>
+                                <Grid.Container gap={3}>
+                                    <Grid xs={12} md={3}>
+                                        <DatabaseBox
+                                            selected={formik.values.type === 'POSTGRESQL'}
+                                            label="PostgreSQL"
+                                            icon={<PostgreSQLIcon size={40} />}
+                                            onClick={() =>
+                                                formik.setFieldValue('type', 'POSTGRESQL')
+                                            }
                                         />
-                                    ) : null}
-                                    {data?.isPluginInstalled.isPluginInstalled === false &&
-                                        !loading && (
-                                            <>
-                                                <Text>
-                                                    Antes de crear una base de datos{' '}
-                                                    <b>{formik.values.type.toLowerCase()}</b>,
-                                                    necesitas correr el siguiente comando en tu
-                                                    servidor de Dokku:
-                                                </Text>
-                                                <CodeBox lang="bash">
-                                                    {`sudo dokku plugin:install https://github.com/dokku/dokku-${dbTypeToDokkuPlugin(
-                                                        formik.values.type
-                                                    )}.git ${dbTypeToDokkuPlugin(
-                                                        formik.values.type
-                                                    )}`}
-                                                </CodeBox>
-                                                <Text>Unos segundos después puedes continuar</Text>
-                                            </>
-                                        )}
-                                    {data?.isPluginInstalled.isPluginInstalled === true &&
-                                        !loading && (
-                                            <Grid.Container gap={2} className="mt-8">
-                                                <Grid
-                                                    xs={12}
-                                                    css={{ padding: 0 }}
-                                                    direction="column"
-                                                >
-                                                    <Input
-                                                        autoComplete="off"
-                                                        id="name"
-                                                        label="Nombre de la base de datos"
-                                                        name="name"
-                                                        width="300px"
-                                                        placeholder="Nombre"
-                                                        value={formik.values.name}
-                                                        onChange={formik.handleChange}
-                                                        onBlur={formik.handleBlur}
-                                                    />
-                                                    <Text color="$error">{formik.errors.name}</Text>
-                                                </Grid>
-                                            </Grid.Container>
-                                        )}
-                                </div>
+                                    </Grid>
+                                    <Grid xs={12} md={3}>
+                                        <DatabaseBox
+                                            selected={formik.values.type === 'MYSQL'}
+                                            label="MySQL"
+                                            icon={<MySQLIcon size={40} />}
+                                            onClick={() =>
+                                                formik.setFieldValue('type', 'MYSQL')
+                                            }
+                                        />
+                                    </Grid>
+                                    <Grid xs={12} md={3}>
+                                        <DatabaseBox
+                                            selected={formik.values.type === 'MONGODB'}
+                                            label="MongoDB"
+                                            icon={<MongoIcon size={40} />}
+                                            onClick={() =>
+                                                formik.setFieldValue('type', 'MONGODB')
+                                            }
+                                        />
+                                    </Grid>
+                                    <Grid xs={12} md={3}>
+                                        <DatabaseBox
+                                            selected={formik.values.type === 'REDIS'}
+                                            label="Redis"
+                                            icon={<RedisIcon size={40} />}
+                                            onClick={() =>
+                                                formik.setFieldValue('type', 'REDIS')
+                                            }
+                                        />
+                                    </Grid>
+                                </Grid.Container>
+                            </div>
 
-                                <div className="mt-12">
-                                    <Text h3>Elige tu base de datos</Text>
-                                    <Grid.Container gap={3}>
-                                        <Grid xs={12} md={3}>
-                                            <DatabaseBox
-                                                selected={formik.values.type === 'POSTGRESQL'}
-                                                label="PostgreSQL"
-                                                icon={<PostgreSQLIcon size={40} />}
-                                                onClick={() =>
-                                                    formik.setFieldValue('type', 'POSTGRESQL')
-                                                }
-                                            />
-                                        </Grid>
-                                        <Grid xs={12} md={3}>
-                                            <DatabaseBox
-                                                selected={formik.values.type === 'MYSQL'}
-                                                label="MySQL"
-                                                icon={<MySQLIcon size={40} />}
-                                                onClick={() =>
-                                                    formik.setFieldValue('type', 'MYSQL')
-                                                }
-                                            />
-                                        </Grid>
-                                        <Grid xs={12} md={3}>
-                                            <DatabaseBox
-                                                selected={formik.values.type === 'MONGODB'}
-                                                label="MongoDB"
-                                                icon={<MongoIcon size={40} />}
-                                                onClick={() =>
-                                                    formik.setFieldValue('type', 'MONGODB')
-                                                }
-                                            />
-                                        </Grid>
-                                        <Grid xs={12} md={3}>
-                                            <DatabaseBox
-                                                selected={formik.values.type === 'REDIS'}
-                                                label="Redis"
-                                                icon={<RedisIcon size={40} />}
-                                                onClick={() =>
-                                                    formik.setFieldValue('type', 'REDIS')
-                                                }
-                                            />
-                                        </Grid>
-                                    </Grid.Container>
-                                </div>
-
-                                <div className="mt-12 flex justify-end">
-                                    <Button
-                                        disabled={
-                                            data?.isPluginInstalled.isPluginInstalled === false ||
-                                            !formik.values.name ||
-                                            !!formik.errors.name ||
-                                            !dataDb?.databases
-                                        }
-                                        iconRight={<FiArrowRight size={20} />}
-                                        type="submit"
-                                    >
-                                        {formik.isSubmitting ? (
-                                            <Loading color="currentColor" />
-                                        ) : (
-                                            'Crear'
-                                        )}
-                                    </Button>
-                                </div>
-                            </form>
-                        </div>
-                    )}
-                </div>
-            )}
+                            <div className="mt-12 flex justify-end">
+                                <Button
+                                    disabled={
+                                        data?.isPluginInstalled.isPluginInstalled === false ||
+                                        !formik.values.name ||
+                                        !!formik.errors.name ||
+                                        !dataDb?.databases
+                                    }
+                                    iconRight={<FiArrowRight size={20} />}
+                                    type="submit"
+                                >
+                                    {formik.isSubmitting ? (
+                                        <Loading color="currentColor" />
+                                    ) : (
+                                        'Crear'
+                                    )}
+                                </Button>
+                            </div>
+                        </form>
+                    </div>
+                )}
+            </div>
         </AdminLayout>
     );
 };
