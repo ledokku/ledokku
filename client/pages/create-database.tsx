@@ -1,4 +1,4 @@
-import { Button, Grid, Input, Loading, Text } from '@nextui-org/react';
+import { Button, Grid, Input, Link, Loading, Text } from '@nextui-org/react';
 import { trackGoal } from 'fathom-client';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
@@ -37,6 +37,21 @@ interface DatabaseBoxProps {
 enum DbCreationStatus {
     FAILURE = 'Failure',
     SUCCESS = 'Success',
+}
+
+function typeToDockerHub(type: DbTypes): string | undefined {
+    switch (type) {
+        case DbTypes.Postgresql:
+            return "postgres"
+        case DbTypes.Mongodb:
+            return "mongo"
+        case DbTypes.Mysql:
+            return "mysql"
+        case DbTypes.Redis:
+            return "redis"
+    }
+
+    return undefined;
 }
 
 const DatabaseBox = ({ label, selected, icon, onClick }: DatabaseBoxProps) => {
@@ -153,7 +168,7 @@ const CreateDatabase = () => {
             : isDbCreationSuccess === DbCreationStatus.SUCCESS &&
             toast.success('Base de datos creada');
     }, [isDbCreationSuccess, toast]);
-    
+
     return (
         <AdminLayout>
             <Text h2>Crear una base de datos</Text>
@@ -268,6 +283,16 @@ const CreateDatabase = () => {
                                                     onBlur={formik.handleBlur}
                                                 />
                                                 <Text color="$error">{formik.errors.version}</Text>
+                                                {typeToDockerHub(formik.values.type) && <Text className="mt-1" h6>
+                                                    ¿No recuerdas las versiones disponibles de <i>{typeToDockerHub(formik.values.type)}</i>?{' '}
+                                                    <Link
+                                                        href={`https://hub.docker.com/_/${typeToDockerHub(formik.values.type)}/tags`}
+                                                        target="_blank"
+                                                        isExternal
+                                                    >
+                                                        click aquí para verlas
+                                                    </Link>
+                                                </Text>}
                                             </Grid>
                                         </Grid.Container>
                                     )}
