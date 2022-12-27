@@ -2,7 +2,8 @@ import { Button, Checkbox, Divider, Dropdown, Grid, Input, Link, Loading, Modal,
 import { trackGoal } from 'fathom-client';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { FaUpload } from 'react-icons/fa';
 import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
 import { TerminalOutput } from 'react-terminal-ui';
 import * as yup from 'yup';
@@ -44,6 +45,7 @@ interface BranchOption {
 const CreateAppGithub = () => {
     const router = useRouter();
     const toast = useToast();
+    const envFile = useRef<HTMLInputElement>(null)
 
     const { data: dataApps } = useAppsQuery({
         variables: {
@@ -89,6 +91,29 @@ const CreateAppGithub = () => {
             }
         },
     });
+
+    const handleOpenEnvFile = (e: ChangeEvent<HTMLInputElement>) => {
+        const files = e.currentTarget.files;
+        if (files?.length === 1) {
+            const fileReader = new FileReader();
+
+            fileReader.onload = (e) => {
+                const contents = e.target?.result as string ?? "";
+
+                const lines = contents.split("\n");
+
+                setEnvVars(lines.filter(it => it.includes("=")).map((line) => {
+                    const values = line.split("=");
+                    return {
+                        key: values[0],
+                        value: values.slice(1).join("=").trim()
+                    };
+                }))
+            }
+
+            fileReader.readAsText(files[0]);
+        }
+    }
 
     const createAppGithubSchema = yup.object().shape({
         name: yup
@@ -297,6 +322,7 @@ const CreateAppGithub = () => {
 
     return (
         <AdminLayout>
+            <input type='file' id='file' ref={envFile} style={{ display: 'none' }} onChange={handleOpenEnvFile} />
             {isTerminalVisible ? (
                 <>
                     <Text className="mb-2">
@@ -487,7 +513,12 @@ const CreateAppGithub = () => {
                                 </Grid>
                                 <Grid md xs={12}>
                                     <div className='mt-8 w-full'>
-                                        <Text h5>Variables de entorno</Text>
+                                        <div className='flex flex-row justify-between'>
+                                            <Text h5>Variables de entorno</Text>
+                                            <Button size="sm" ghost onClick={() => envFile.current?.click()}>
+                                                <FaUpload className='mr-2' /> Desde archivo
+                                            </Button>
+                                        </div>
                                         {(
                                             <div className='w-full'>
                                                 {envVars.map((envVar, index) => {
