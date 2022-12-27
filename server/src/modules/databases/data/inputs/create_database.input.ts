@@ -6,8 +6,8 @@ export class CreateDatabaseInput {
   @Field((type) => String)
   name: string;
 
-  @Field((type) => String)
-  version: string;
+  @Field((type) => String, { nullable: true })
+  version?: string;
 
   @Field((type) => DbTypes)
   type: DbTypes;
