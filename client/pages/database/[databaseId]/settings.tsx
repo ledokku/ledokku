@@ -144,7 +144,7 @@ const Settings = () => {
                                     }
                                 >
                                     {destroyDbLoading ? (
-                                        <Loading size="sm" color="currentColor" />
+                                        <Loading size="sm" color="currentColor" type='points-opacity' />
                                     ) : (
                                         'Eliminar'
                                     )}

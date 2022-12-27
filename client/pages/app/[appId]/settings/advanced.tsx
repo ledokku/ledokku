@@ -167,7 +167,7 @@ const AppSettingsAdvanced = () => {
                                         }
                                     >
                                         {destroyAppMutationLoading ? (
-                                            <Loading size="sm" color="currentColor" />
+                                            <Loading size="sm" color="currentColor" type='points-opacity' />
                                         ) : (
                                             'Eliminar'
                                         )}

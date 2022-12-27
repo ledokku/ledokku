@@ -265,7 +265,7 @@ const App = () => {
                                         {databaseLinkLoading &&
                                             !databaseLinkData &&
                                             !databaseLinkError ? (
-                                            <Loading color="currentColor" />
+                                            <Loading color="currentColor" type='points-opacity' />
                                         ) : (
                                             'Enlazar base de datos'
                                         )}
@@ -345,7 +345,7 @@ const App = () => {
                                                 disabled={isTerminalVisible}
                                             >
                                                 {(isTerminalVisible ? false : linkLoading) ? (
-                                                    <Loading size="sm" color="currentColor" />
+                                                    <Loading size="sm" color="currentColor" type='points-opacity' />
                                                 ) : (
                                                     'Enlazar'
                                                 )}
@@ -520,6 +520,7 @@ const App = () => {
                                                                     <Loading
                                                                         size="sm"
                                                                         color="currentColor"
+                                                                        type='points-opacity'
                                                                     />
                                                                 ) : (
                                                                     'Desenlazar'

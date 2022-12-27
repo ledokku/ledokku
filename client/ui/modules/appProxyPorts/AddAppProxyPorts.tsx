@@ -92,7 +92,7 @@ export const AddAppProxyPorts = ({
                     disabled={!!formik.errors.host || !!formik.errors.container}
                     onClick={() => formik.handleSubmit()}
                 >
-                    {formik.isSubmitting ? <Loading color="currentColor" size="sm" /> : 'Crear'}
+                    {formik.isSubmitting ? <Loading color="currentColor" size="sm" type='points-opacity' /> : 'Crear'}
                 </Button>
             </Modal.Footer>
         </Modal>

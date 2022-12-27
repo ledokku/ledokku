@@ -159,7 +159,7 @@ export const AppRestart = ({ appId }: AppRestartProps) => {
                         }}
                     >
                         {(isTerminalVisible ? false : restartLoading) ? (
-                            <Loading size="sm" color="currentColor" />
+                            <Loading size="sm" color="currentColor" type='points-opacity' />
                         ) : (
                             'Reiniciar'
                         )}

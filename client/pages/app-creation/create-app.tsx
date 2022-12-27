@@ -136,7 +136,7 @@ const CreateApp = () => {
                                 {!formik.isSubmitting ? (
                                     'Siguiente'
                                 ) : (
-                                    <Loading color="currentColor" />
+                                    <Loading color="currentColor" type='points-opacity' />
                                 )}
                             </Button>
                         </div>

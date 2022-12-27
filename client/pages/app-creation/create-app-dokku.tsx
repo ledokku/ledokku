@@ -88,7 +88,7 @@ const CreateAppDokku = () => {
                                 type="submit"
                                 disabled={loading || !formik.values.name || !!formik.errors.name}
                             >
-                                {!loading ? 'Crear' : <Loading color="currentColor" />}
+                                {!loading ? 'Crear' : <Loading color="currentColor" type='points-opacity' />}
                             </Button>
                         </div>
                     </form>

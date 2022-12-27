@@ -30,7 +30,7 @@ const Settings = () => {
                         onClick={() => {
                             setShowAddUser(true)
                         }}
-                    >{loadingAddUser ? <Loading /> : "Agregar usuario"}</Button>
+                    >{loadingAddUser ? <Loading type='points-opacity' /> : "Agregar usuario"}</Button>
                 </div>
                 <Table >
                     <Table.Header>

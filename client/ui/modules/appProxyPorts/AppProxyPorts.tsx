@@ -127,7 +127,7 @@ export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
                     </Button>
                     <Button size="sm" color="error" onClick={handleRemovePort}>
                         {appProxyPortsLoading || removeAppPortLoading ? (
-                            <Loading color="currentColor" size="sm" />
+                            <Loading color="currentColor" size="sm" type='points-opacity' />
                         ) : (
                             'Eliminar'
                         )}

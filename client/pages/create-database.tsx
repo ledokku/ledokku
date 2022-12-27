@@ -356,7 +356,7 @@ const CreateDatabase = () => {
                                     type="submit"
                                 >
                                     {formik.isSubmitting ? (
-                                        <Loading color="currentColor" />
+                                        <Loading color="currentColor" type='points-opacity' />
                                     ) : (
                                         'Crear'
                                     )}

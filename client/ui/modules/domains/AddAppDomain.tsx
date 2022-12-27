@@ -82,7 +82,7 @@ export const AddAppDomain = ({ appId, appDomainsRefetch }: AddDomainProps) => {
                         size="sm"
                     >
                         {formik.isSubmitting ? (
-                            <Loading color="currentColor" size="sm" />
+                            <Loading color="currentColor" size="sm" type='points-opacity' />
                         ) : (
                             'Guardar'
                         )}

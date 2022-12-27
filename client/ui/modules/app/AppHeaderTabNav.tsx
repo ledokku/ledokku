@@ -23,7 +23,7 @@ export const AppHeaderTabNav = ({ app }: AppHeaderTabNavProps) => {
                     : 'index';
 
     return (
-        <Navbar disableShadow>
+        <Navbar disableShadow className='overflow-auto'>
             <Navbar.Content variant="underline-rounded">
                 <Navbar.Link isActive={selectedRoute === 'index'} href={`/app/${app.id}`}>
                     Aplicación

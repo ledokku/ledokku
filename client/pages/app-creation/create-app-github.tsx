@@ -507,7 +507,7 @@ const CreateAppGithub = () => {
                                             type="submit"
                                             disabled={!selectedBranch || !selectedRepo}
                                         >
-                                            {!loading ? 'Crear' : <Loading color="currentColor" />}
+                                            {!loading ? 'Crear' : <Loading color="currentColor" type='points-opacity' />}
                                         </Button>
                                     </form>
                                 </Grid>

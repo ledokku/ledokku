@@ -153,7 +153,7 @@ export const AppRebuild = ({ appId }: AppRebuildProps) => {
                         }}
                     >
                         {(isTerminalVisible ? false : rebuildLoading) ? (
-                            <Loading size="sm" color="currentColor" />
+                            <Loading size="sm" color="currentColor" type='points-opacity' />
                         ) : (
                             'Compilar'
                         )}
