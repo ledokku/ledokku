@@ -97,18 +97,20 @@ const CreateDatabase = () => {
                         !dataDb?.databases.items.find((db) => db.name === name && type === db.type)
                 );
         }),
+        version: yup.string()
+            .matches(/^([a-zA-Z0-9-]+\.?)+$/, `Debe cumplir el patron ${/([a-zA-Z0-9-]+\.?)+/}`)
     });
 
     const [
         isDokkuPluginInstalled,
         { data, loading, error: isDokkuPluginInstalledError },
     ] = useIsPluginInstalledLazyQuery({
-        // we poll every 5 sec
         pollInterval: 5000,
     });
-    const formik = useFormik<{ name: string; type: DbTypes }>({
+    const formik = useFormik<{ name: string; type: DbTypes, version: string }>({
         initialValues: {
             name: '',
+            version: "",
             type: DbTypes.Postgresql,
         },
         validateOnChange: true,
@@ -117,7 +119,7 @@ const CreateDatabase = () => {
             try {
                 await createDatabaseMutation({
                     variables: {
-                        input: { name: values.name, type: values.type },
+                        input: { name: values.name, type: values.type, version: values.version ? values.version : undefined },
                     },
                 });
                 setIsTerminalVisible(true);
@@ -134,10 +136,9 @@ const CreateDatabase = () => {
     const handleNext = () => {
         setIsTerminalVisible(false);
         const dbId = arrayOfCreateDbLogs[arrayOfCreateDbLogs.length - 1].message;
-        history.push(`database/${dbId}`);
+        history.push(`/database/${dbId}`);
     };
 
-    // Effect for checking whether plugin is installed
     useEffect(() => {
         isDokkuPluginInstalled({
             variables: {
@@ -146,16 +147,13 @@ const CreateDatabase = () => {
         });
     }, [formik.values.type, isPluginInstalled, isDokkuPluginInstalled]);
 
-    // Effect for db creation
     useEffect(() => {
         isDbCreationSuccess === DbCreationStatus.FAILURE
             ? toast.error('Error al crear la base de datos')
             : isDbCreationSuccess === DbCreationStatus.SUCCESS &&
             toast.success('Base de datos creada');
     }, [isDbCreationSuccess, toast]);
-
-    console.log(arrayOfCreateDbLogs);
-
+    
     return (
         <AdminLayout>
             <Text h2>Crear una base de datos</Text>
@@ -251,6 +249,25 @@ const CreateDatabase = () => {
                                                     onBlur={formik.handleBlur}
                                                 />
                                                 <Text color="$error">{formik.errors.name}</Text>
+                                            </Grid>
+                                            <Grid
+                                                xs={12}
+                                                css={{ padding: 0 }}
+                                                direction="column"
+                                                className='mt-4'
+                                            >
+                                                <Input
+                                                    autoComplete="off"
+                                                    id="version"
+                                                    label="Versión"
+                                                    name="version"
+                                                    width="300px"
+                                                    placeholder="x.x.x"
+                                                    value={formik.values.version}
+                                                    onChange={formik.handleChange}
+                                                    onBlur={formik.handleBlur}
+                                                />
+                                                <Text color="$error">{formik.errors.version}</Text>
                                             </Grid>
                                         </Grid.Container>
                                     )}

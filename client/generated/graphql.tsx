@@ -153,6 +153,7 @@ export type CreateAppResult = {
 export type CreateDatabaseInput = {
   name: Scalars['String'];
   type: DbTypes;
+  version?: InputMaybe<Scalars['String']>;
 };
 
 export type Database = {
