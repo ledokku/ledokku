@@ -141,6 +141,7 @@ export class DatabaseResolver {
     await this.createDatabaseQueue.add({
       databaseName: input.name,
       databaseType: input.type,
+      version: input.version,
       userId: context.auth.user.id,
     });
 

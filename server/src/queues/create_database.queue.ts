@@ -11,6 +11,7 @@ import { DatabaseRepository } from './../modules/databases/data/repositories/dat
 
 interface QueueArgs {
   databaseName: string;
+  version?: string;
   databaseType: DbTypes;
   userId: string;
 }
@@ -27,7 +28,7 @@ export class CreateDatabaseQueue extends IQueue<QueueArgs> {
   }
 
   protected async execute(job: Job<QueueArgs, any>) {
-    const { databaseName, databaseType, userId } = job.data;
+    const { databaseName, databaseType, userId, version } = job.data;
 
     $log.info(
       `Iniciando construccion de la base de datos ${databaseType} llamada ${databaseName}`
@@ -36,6 +37,7 @@ export class CreateDatabaseQueue extends IQueue<QueueArgs> {
     const res = await this.dokkuDatabaseRepository.create(
       databaseName,
       databaseType,
+      version,
       {
         onStdout: (chunk) => {
           this.pubsub.publish(SubscriptionTopics.DATABASE_CREATED, <

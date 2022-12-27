@@ -59,7 +59,7 @@ const Settings = () => {
                         },
                     ],
                 });
-                toast.success('Database deleted successfully');
+                toast.success('Base de datos eliminada');
 
                 history.push('/dashboard');
             } catch (error: any) {

@@ -7,9 +7,16 @@ import { execSSHCommand } from '../ssh';
 
 @Injectable()
 export class DokkuDatabaseRepository {
-  async create(name: string, databaseType: DbTypes, options?: SSHExecOptions) {
+  async create(
+    name: string,
+    databaseType: DbTypes,
+    version?: string,
+    options?: SSHExecOptions
+  ) {
     const resultDatabaseCreate = await execSSHCommand(
-      `${dbTypeToDokkuPlugin(databaseType)}:create ${name}`,
+      `${dbTypeToDokkuPlugin(databaseType)}:create ${name} ${
+        version ? `--image-version ${version}` : ''
+      }`,
       options
     );
 
