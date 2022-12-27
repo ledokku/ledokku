@@ -33,7 +33,7 @@ const Databases = () => {
                 onSelectionChange={(key: any) => {
                     const index = key.currentKey;
 
-                    history.push(`database/${data?.databases.items[index].id}`);
+                    history.push(`/database/${data?.databases.items[index].id}`);
                 }}
             >
                 <Table.Header>

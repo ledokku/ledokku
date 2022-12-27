@@ -108,15 +108,15 @@ export const AppDomains = ({ appId }: AppDomainProps) => {
                                         </Link>
                                     </Table.Cell>
                                     <Table.Cell>
-                                        <Button
+                                        {it.domain !== `${app.name}.on.ocstudios.mx` && <Button
                                             color="error"
                                             flat
                                             css={{ minWidth: 'auto' }}
                                             aria-label="Delete"
                                             icon={<FiTrash2 />}
-                                            disabled={removeDomainMutationLoading || it.domain.includes("on.ocstudios.mx")}
+                                            disabled={removeDomainMutationLoading}
                                             onClick={() => handleRemoveDomain(it.domain)}
-                                        />
+                                        />}
                                     </Table.Cell>
                                 </Table.Row>
                             )) ?? []}

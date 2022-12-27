@@ -2,17 +2,18 @@ import AnsiUp from 'ansi_up';
 import { HTMLAttributes, useMemo } from 'react';
 import innerText from 'react-innertext';
 import TerminalUI, { ColorMode, TerminalOutput } from 'react-terminal-ui';
+import { LoadingSection } from './LoadingSection';
 
 interface TerminalProps {
     children?: TerminalOutput[];
+    loading?: boolean;
 }
 
-export const Terminal = ({ children }: TerminalProps & Omit<HTMLAttributes<any>, 'children'>) => {
+export const Terminal = ({ children, loading }: TerminalProps & Omit<HTMLAttributes<any>, 'children'>) => {
     const memoizedLogs = useMemo(() => {
         return children?.map((log, index) => {
             const ansiIUp = new AnsiUp();
             const html = ansiIUp.ansi_to_html(innerText(log));
-            console.log(html);
 
             return (
                 <TerminalOutput key={index}>
@@ -24,7 +25,7 @@ export const Terminal = ({ children }: TerminalProps & Omit<HTMLAttributes<any>,
 
     return (
         <TerminalUI name="Terminal" colorMode={ColorMode.Dark}>
-            {memoizedLogs}
+            {loading ? <LoadingSection type='points-opacity' /> : memoizedLogs}
         </TerminalUI>
     );
 };

@@ -204,7 +204,7 @@ const CreateDatabase = () => {
                 ) : (
                     <div className="mt-8">
                         <form onSubmit={formik.handleSubmit}>
-                            {loading ? <LoadingSection py='py-8' /> : <div className="mt-12">
+                            {loading ? <LoadingSection py={8} /> : <div className="mt-12">
                                 {isDokkuPluginInstalledError ? (
                                     <Alert
                                         type="error"

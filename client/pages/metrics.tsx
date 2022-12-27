@@ -26,12 +26,12 @@ const Metrics = () => {
 
 
     return (
-        <AdminLayout loading={loadingLogs} error={error}>
+        <AdminLayout error={error}>
             <Text h2 className="mb-8">
                 Métricas
             </Text>
             <Text h3>Registros de Ledokku</Text>
-            <Terminal>
+            <Terminal loading={loadingLogs}>
                 {data.map((it, index) => <TerminalOutput key={index}>
                     {it.message}
                 </TerminalOutput>)}
