@@ -110,7 +110,7 @@ export class CreateDatabaseQueue extends IQueue<QueueArgs> {
     }
   }
 
-  onFailed(job: Job<QueueArgs, any>, error: Error) {
+  async onFailed(job: Job<QueueArgs, any, string>, error: Error) {
     this.pubsub.publish(SubscriptionTopics.DATABASE_CREATED, <
       DatabaseCreatedPayload
     >{
@@ -119,5 +119,19 @@ export class CreateDatabaseQueue extends IQueue<QueueArgs> {
         type: 'end:failure',
       },
     });
+
+    const dbToDelete = await this.databaseRepository.getByName(
+      job.data.databaseName,
+      job.data.databaseType
+    );
+
+    if (dbToDelete) {
+      await this.databaseRepository.delete(dbToDelete.id);
+
+      await this.dokkuDatabaseRepository.destroy(
+        dbToDelete.name,
+        dbToDelete.type
+      );
+    }
   }
 }
