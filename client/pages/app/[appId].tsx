@@ -15,6 +15,7 @@ import { useState } from 'react';
 import { FiInfo } from 'react-icons/fi';
 import { TerminalOutput } from 'react-terminal-ui';
 import {
+    AppStatus,
     LogPayload,
     useAppByIdQuery,
     useDatabaseQuery,
@@ -23,6 +24,7 @@ import {
     useUnlinkDatabaseLogsSubscription,
     useUnlinkDatabaseMutation
 } from '../../generated/graphql';
+import { BuildingAlert } from '../../ui/components/BuildingAlert';
 import { DatabaseLabel } from '../../ui/components/DatabaseLabel';
 import { DbIcon } from '../../ui/components/DbIcon';
 import { Terminal } from '../../ui/components/Terminal';
@@ -157,6 +159,10 @@ const App = () => {
 
     return (
         <AdminLayout loading={loading} notFound={!data?.app}>
+            {app?.status === AppStatus.Building && <>
+                <BuildingAlert app={app as any} />
+                <Spacer />
+            </>}
             {app && <div>
                 <AppHeaderInfo app={app} />
                 <AppHeaderTabNav app={app} />

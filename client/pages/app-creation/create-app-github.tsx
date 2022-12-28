@@ -1,20 +1,13 @@
 import { Button, Checkbox, Divider, Dropdown, Grid, Input, Link, Loading, Modal, Text } from '@nextui-org/react';
-import { trackGoal } from 'fathom-client';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { FaUpload } from 'react-icons/fa';
-import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
-import { TerminalOutput } from 'react-terminal-ui';
 import * as yup from 'yup';
-import { GITHUB_APP_NAME, trackingGoals } from '../../constants';
+import { GITHUB_APP_NAME } from '../../constants';
 import {
     Branch,
-    BuildEnvVar,
-    LogPayload,
-    Repository,
-    useAppCreateLogsSubscription,
-    useAppsQuery,
+    BuildEnvVar, Repository, useAppsQuery,
     useBranchesLazyQuery,
     useCreateAppGithubMutation,
     useGithubInstallationIdQuery,
@@ -23,14 +16,8 @@ import {
 import { Alert } from '../../ui/components/Alert';
 import { EnvForm } from '../../ui/components/EnvForm';
 import { LoadingSection } from '../../ui/components/LoadingSection';
-import { Terminal } from '../../ui/components/Terminal';
 import { AdminLayout } from '../../ui/layout/layout';
 import { useToast } from '../../ui/toast';
-
-enum AppCreationStatus {
-    FAILURE = 'Failure',
-    SUCCESS = 'Success',
-}
 
 interface RepoOption {
     value: Repository;
@@ -68,29 +55,7 @@ const CreateAppGithub = () => {
     const [getBranches, { data: branchesData, loading: branchesLoading }] = useBranchesLazyQuery({
         fetchPolicy: 'network-only',
     });
-
-    const [arrayOfCreateAppLogs, setArrayOfCreateAppLogs] = useState<LogPayload[]>([]);
-    const [isTerminalVisible, setIsTerminalVisible] = useState(false);
-    const [isToastShown, setIsToastShown] = useState(false);
-    const [createAppGithubMutation, { loading, data: createAppData }] = useCreateAppGithubMutation();
-    const [isAppCreationSuccess, setIsAppCreationSuccess] = useState<AppCreationStatus>();
-
-    useAppCreateLogsSubscription({
-        onSubscriptionData: (data) => {
-            const logsExist = data.subscriptionData.data?.appCreateLogs;
-
-            if (logsExist) {
-                setArrayOfCreateAppLogs((currentLogs) => {
-                    return [...currentLogs, logsExist];
-                });
-                if (logsExist.type === 'end:success') {
-                    setIsAppCreationSuccess(AppCreationStatus.SUCCESS);
-                } else if (logsExist.type === 'end:failure') {
-                    setIsAppCreationSuccess(AppCreationStatus.FAILURE);
-                }
-            }
-        },
-    });
+    const [createAppGithubMutation, { loading }] = useCreateAppGithubMutation();
 
     const handleOpenEnvFile = (e: ChangeEvent<HTMLInputElement>) => {
         const files = e.currentTarget.files;
@@ -162,7 +127,7 @@ const CreateAppGithub = () => {
         onSubmit: async (values) => {
             if (installationData) {
                 try {
-                    await createAppGithubMutation({
+                    const app = await createAppGithubMutation({
                         variables: {
                             input: {
                                 name: values.name,
@@ -175,7 +140,7 @@ const CreateAppGithub = () => {
                             },
                         },
                     });
-                    setIsTerminalVisible(true);
+                    router.push(`/app_build/${app.data?.createAppGithub.id}`)
                 } catch (error: any) {
                     error.message === 'Not Found'
                         ? toast.error(`Repositorio: ${values.repo.fullName} no encontrado`)
@@ -185,13 +150,6 @@ const CreateAppGithub = () => {
         },
     });
 
-    const handleNext = () => {
-        setIsTerminalVisible(false);
-        router.push(`/`);
-
-        // history.push(`/app/${createAppData?.createAppGithub.result}`);
-        trackGoal(trackingGoals.createAppGithub, 0);
-    };
 
     const handleOpen = () => {
         const newWindow = window.open(
@@ -310,282 +268,230 @@ const CreateAppGithub = () => {
         }
     }, [selectedRepo, getBranches, installationData]);
 
-    // Effect for app creation
-    useEffect(() => {
-        isAppCreationSuccess === AppCreationStatus.FAILURE && !isToastShown
-            ? toast.error('Error al crear aplicación') && setIsToastShown(true)
-            : isAppCreationSuccess === AppCreationStatus.SUCCESS &&
-            !isToastShown &&
-            toast.success('Aplicación creada') &&
-            setIsToastShown(true);
-    }, [isToastShown, isAppCreationSuccess, toast]);
-
     return (
         <AdminLayout>
             <input type='file' id='file' ref={envFile} style={{ display: 'none' }} onChange={handleOpenEnvFile} />
-            {isTerminalVisible ? (
-                <>
-                    <Text className="mb-2">
-                        Creando la aplicación <b>{formik.values.name}</b> desde{' '}
-                        <b>{formik.values.repo.name}</b>
-                    </Text>
-                    <p className="mb-2">
-                        Crear una aplicación usualmente toma unos cuantos minutos. Respira un poco,
-                        los registros aparecerán pronto:
-                    </p>
-                    <Terminal>
-                        {arrayOfCreateAppLogs.map((log, index) => (
-                            <TerminalOutput key={index}>{log.message}</TerminalOutput>
-                        ))}
-                    </Terminal>
 
-                    {!!isAppCreationSuccess &&
-                        isAppCreationSuccess === AppCreationStatus.SUCCESS ? (
-                        <div className="mt-12 flex justify-end">
-                            <Button
-                                flat
-                                onClick={() => handleNext()}
-                                iconRight={<FiArrowRight size={20} />}
-                            >
-                                Siguiente
-                            </Button>
-                        </div>
-                    ) : !!isAppCreationSuccess &&
-                        isAppCreationSuccess === AppCreationStatus.FAILURE ? (
-                        <div className="mt-12 flex justify-start">
-                            <Button
-                                flat
-                                onClick={() => {
-                                    router.reload();
-                                }}
-                                icon={<FiArrowLeft size={20} />}
-                            >
-                                Atras
-                            </Button>
-                        </div>
-                    ) : null}
-                </>
-            ) : (
-                <>
-                    <Text h2>Crear nueva aplicación de Github</Text>
-                    {installationData && !installationLoading && reposData && !reposLoading ? (
-                        <>
-                            <Text>
-                                Cuando hagas push a Git, tu aplicación va a lanzarse de nuevo
-                                automaticamente.
-                            </Text>
+            <>
+                <Text h2>Crear nueva aplicación de Github</Text>
+                {installationData && !installationLoading && reposData && !reposLoading ? (
+                    <>
+                        <Text>
+                            Cuando hagas push a Git, tu aplicación va a lanzarse de nuevo
+                            automaticamente.
+                        </Text>
 
-                            <Grid.Container>
-                                <Grid md xs={12}>
-                                    <form onSubmit={formik.handleSubmit} className="mt-8">
-                                        <Text h5>Repositorio</Text>
-                                        <Dropdown>
-                                            <Dropdown.Button flat>
-                                                {selectedRepo?.fullName ??
-                                                    'Selecciona un repositorio'}
-                                            </Dropdown.Button>
-                                            <Dropdown.Menu
-                                                color="primary"
-                                                css={{ $$dropdownMenuWidth: 'auto' }}
-                                                selectionMode="single"
-                                                selectedKeys={
-                                                    new Set(
-                                                        selectedRepo?.id ? [selectedRepo?.id] : []
-                                                    )
-                                                }
-                                                onAction={(key) => {
-                                                    const repo = repoOptions.find(
-                                                        (item) => item.value.id === key
-                                                    );
-
-                                                    if (repo) {
-                                                        handleChangeRepo(repo);
-                                                    }
-                                                }}
-                                            >
-                                                {repoOptions.map((option) => (
-                                                    <Dropdown.Item key={option.value.id}>
-                                                        {option.label}
-                                                    </Dropdown.Item>
-                                                ))}
-                                            </Dropdown.Menu>
-                                        </Dropdown>
-
-                                        <Text className="mt-1" h6>
-                                            ¿No puedes ver los repositorios privados?{' '}
-                                            <Link
-                                                onClick={() => setIsProceedModalOpen(true)}
-                                                css={{ display: 'inline' }}
-                                            >
-                                                Configura la app de Github
-                                            </Link>
-                                        </Text>
-                                        <div className='mt-8 mb-4'>
-                                            <Input
-                                                label='Nombre de la app'
-                                                value={formik.values.name}
-                                                onChange={(e) => {
-                                                    formik.setFieldValue("name", e.currentTarget.value, true);
-                                                }}
-                                                disabled={formik.values.repo.id.length === 0}
-                                                fullWidth />
-                                            <Text className='text-red-500'>
-                                                {formik.errors.name}
-                                            </Text>
-                                        </div>
-                                        <Text h5 className="mt-8">
-                                            Rama a lanzar
-                                        </Text>
-                                        <Dropdown>
-                                            <Dropdown.Button
-                                                flat
-                                                disabled={
-                                                    !branchesData ||
-                                                    branchesLoading ||
-                                                    reposLoading ||
-                                                    !reposData
-                                                }
-                                            >
-                                                {branchesLoading ? (
-                                                    <Loading color="currentColor" size="sm" />
-                                                ) : selectedBranch !== '' ? (
-                                                    selectedBranch
-                                                ) : (
-                                                    'Selecciona una rama'
-                                                )}
-                                            </Dropdown.Button>
-                                            <Dropdown.Menu
-                                                color="primary"
-                                                css={{ $$dropdownMenuWidth: 'auto' }}
-                                                selectionMode="single"
-                                                selectedKeys={
-                                                    new Set(selectedBranch ? [selectedBranch] : [])
-                                                }
-                                                onAction={(key) => {
-                                                    const repo = branchOptions.find(
-                                                        (item) => item.value.name === key
-                                                    );
-
-                                                    if (repo) {
-                                                        handleChangeBranch(repo);
-                                                    }
-                                                }}
-                                            >
-                                                {branchOptions.map((option) => (
-                                                    <Dropdown.Item key={option.value.name}>
-                                                        {option.label}
-                                                    </Dropdown.Item>
-                                                ))}
-                                            </Dropdown.Menu>
-                                        </Dropdown>
-                                        <div className='mt-8 mb-4'>
-                                            <Checkbox
-                                                label='Usar Docker'
-                                                isDisabled={formik.values.repo.id.length === 0}
-                                                isSelected={isDockerfileEnabled}
-                                                onChange={(val) => setIsDockerfileEnabled(val)} />
-
-                                            {
-                                                isDockerfileEnabled && <div className='mt-2'>
-                                                    <Input
-                                                        label='Directorio del Dockerfile'
-                                                        value={formik.values.dockerfilePath}
-                                                        onChange={(e) => {
-                                                            formik.setFieldValue("dockerfilePath", e.currentTarget.value, true);
-                                                        }}
-                                                        disabled={formik.values.repo.id.length === 0}
-                                                        labelLeft="./"
-                                                        fullWidth />
-                                                    <Text className='text-red-500'>
-                                                        {formik.errors.dockerfilePath}
-                                                    </Text>
-                                                </div>
+                        <Grid.Container>
+                            <Grid md xs={12}>
+                                <form onSubmit={formik.handleSubmit} className="mt-8">
+                                    <Text h5>Repositorio</Text>
+                                    <Dropdown>
+                                        <Dropdown.Button flat>
+                                            {selectedRepo?.fullName ??
+                                                'Selecciona un repositorio'}
+                                        </Dropdown.Button>
+                                        <Dropdown.Menu
+                                            color="primary"
+                                            css={{ $$dropdownMenuWidth: 'auto' }}
+                                            selectionMode="single"
+                                            selectedKeys={
+                                                new Set(
+                                                    selectedRepo?.id ? [selectedRepo?.id] : []
+                                                )
                                             }
-                                        </div>
-                                        <Button
-                                            className="mt-8"
-                                            type="submit"
-                                            disabled={!selectedBranch || !selectedRepo}
+                                            onAction={(key) => {
+                                                const repo = repoOptions.find(
+                                                    (item) => item.value.id === key
+                                                );
+
+                                                if (repo) {
+                                                    handleChangeRepo(repo);
+                                                }
+                                            }}
                                         >
-                                            {!loading ? 'Crear' : <Loading color="currentColor" type='points-opacity' />}
-                                        </Button>
-                                    </form>
-                                </Grid>
-                                <Grid md xs={12}>
-                                    <div className='mt-8 w-full'>
-                                        <div className='flex flex-row justify-between'>
-                                            <Text h5>Variables de entorno</Text>
-                                            <Button size="sm" ghost onClick={() => envFile.current?.click()}>
-                                                <FaUpload className='mr-2' /> Desde archivo
-                                            </Button>
-                                        </div>
-                                        {(
-                                            <div className='w-full'>
-                                                {envVars.map((envVar, index) => {
-                                                    return (
-                                                        <div key={index}>
-                                                            <EnvForm
-                                                                key={envVar.key}
-                                                                name={envVar.key}
-                                                                value={envVar.value}
-                                                                onSubmit={(data) => {
-                                                                    setEnvVars(envVars.map(it => {
-                                                                        if (it.key === data.name) {
-                                                                            return {
-                                                                                key: data.name,
-                                                                                value: data.value
-                                                                            }
-                                                                        } else {
-                                                                            return it
-                                                                        }
-                                                                    }))
-                                                                }}
-                                                                onDelete={(key) => {
-                                                                    setEnvVars(envVars.filter(it => it.key !== key))
-                                                                }}
-                                                            />
-                                                            <div className="my-8">
-                                                                <Divider />
-                                                            </div>
-                                                        </div>
-                                                    );
-                                                })}
-                                                <EnvForm
-                                                    key="newVar"
-                                                    name=""
-                                                    value=""
-                                                    isNewVar={true}
-                                                    onSubmit={(data) => {
-                                                        setEnvVars([...envVars, {
-                                                            key: data.name,
-                                                            value: data.value
-                                                        }])
-                                                    }} />
-                                            </div>
-                                        )}
+                                            {repoOptions.map((option) => (
+                                                <Dropdown.Item key={option.value.id}>
+                                                    {option.label}
+                                                </Dropdown.Item>
+                                            ))}
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+
+                                    <Text className="mt-1" h6>
+                                        ¿No puedes ver los repositorios privados?{' '}
+                                        <Link
+                                            onClick={() => setIsProceedModalOpen(true)}
+                                            css={{ display: 'inline' }}
+                                        >
+                                            Configura la app de Github
+                                        </Link>
+                                    </Text>
+                                    <div className='mt-8 mb-4'>
+                                        <Input
+                                            label='Nombre de la app'
+                                            value={formik.values.name}
+                                            onChange={(e) => {
+                                                formik.setFieldValue("name", e.currentTarget.value, true);
+                                            }}
+                                            disabled={formik.values.repo.id.length === 0}
+                                            fullWidth />
+                                        <Text className='text-red-500'>
+                                            {formik.errors.name}
+                                        </Text>
                                     </div>
-                                </Grid>
-                            </Grid.Container>
-                        </>
-                    ) : !reposLoading && !installationLoading && !reposData ? (
-                        <>
-                            <Alert
-                                className="my-8"
-                                title="Configura los permisos de repositorios"
-                                type="warning"
-                                message="Primero necesitas configurar los permisos de los repositorios
+                                    <Text h5 className="mt-8">
+                                        Rama a lanzar
+                                    </Text>
+                                    <Dropdown>
+                                        <Dropdown.Button
+                                            flat
+                                            disabled={
+                                                !branchesData ||
+                                                branchesLoading ||
+                                                reposLoading ||
+                                                !reposData
+                                            }
+                                        >
+                                            {branchesLoading ? (
+                                                <Loading color="currentColor" size="sm" />
+                                            ) : selectedBranch !== '' ? (
+                                                selectedBranch
+                                            ) : (
+                                                'Selecciona una rama'
+                                            )}
+                                        </Dropdown.Button>
+                                        <Dropdown.Menu
+                                            color="primary"
+                                            css={{ $$dropdownMenuWidth: 'auto' }}
+                                            selectionMode="single"
+                                            selectedKeys={
+                                                new Set(selectedBranch ? [selectedBranch] : [])
+                                            }
+                                            onAction={(key) => {
+                                                const repo = branchOptions.find(
+                                                    (item) => item.value.name === key
+                                                );
+
+                                                if (repo) {
+                                                    handleChangeBranch(repo);
+                                                }
+                                            }}
+                                        >
+                                            {branchOptions.map((option) => (
+                                                <Dropdown.Item key={option.value.name}>
+                                                    {option.label}
+                                                </Dropdown.Item>
+                                            ))}
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                    <div className='mt-8 mb-4'>
+                                        <Checkbox
+                                            label='Usar Docker'
+                                            isDisabled={formik.values.repo.id.length === 0}
+                                            isSelected={isDockerfileEnabled}
+                                            onChange={(val) => setIsDockerfileEnabled(val)} />
+
+                                        {
+                                            isDockerfileEnabled && <div className='mt-2'>
+                                                <Input
+                                                    label='Directorio del Dockerfile'
+                                                    value={formik.values.dockerfilePath}
+                                                    onChange={(e) => {
+                                                        formik.setFieldValue("dockerfilePath", e.currentTarget.value, true);
+                                                    }}
+                                                    disabled={formik.values.repo.id.length === 0}
+                                                    labelLeft="./"
+                                                    fullWidth />
+                                                <Text className='text-red-500'>
+                                                    {formik.errors.dockerfilePath}
+                                                </Text>
+                                            </div>
+                                        }
+                                    </div>
+                                    <Button
+                                        className="mt-8"
+                                        type="submit"
+                                        disabled={!selectedBranch || !selectedRepo}
+                                    >
+                                        {!loading ? 'Crear' : <Loading color="currentColor" type='points-opacity' />}
+                                    </Button>
+                                </form>
+                            </Grid>
+                            <Grid md xs={12}>
+                                <div className='mt-8 w-full'>
+                                    <div className='flex flex-row justify-between'>
+                                        <Text h5>Variables de entorno</Text>
+                                        <Button size="sm" ghost onClick={() => envFile.current?.click()}>
+                                            <FaUpload className='mr-2' /> Desde archivo
+                                        </Button>
+                                    </div>
+                                    {(
+                                        <div className='w-full'>
+                                            {envVars.map((envVar, index) => {
+                                                return (
+                                                    <div key={index}>
+                                                        <EnvForm
+                                                            key={envVar.key}
+                                                            name={envVar.key}
+                                                            value={envVar.value}
+                                                            onSubmit={(data) => {
+                                                                setEnvVars(envVars.map(it => {
+                                                                    if (it.key === data.name) {
+                                                                        return {
+                                                                            key: data.name,
+                                                                            value: data.value
+                                                                        }
+                                                                    } else {
+                                                                        return it
+                                                                    }
+                                                                }))
+                                                            }}
+                                                            onDelete={(key) => {
+                                                                setEnvVars(envVars.filter(it => it.key !== key))
+                                                            }}
+                                                        />
+                                                        <div className="my-8">
+                                                            <Divider />
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })}
+                                            <EnvForm
+                                                key="newVar"
+                                                name=""
+                                                value=""
+                                                isNewVar={true}
+                                                onSubmit={(data) => {
+                                                    setEnvVars([...envVars, {
+                                                        key: data.name,
+                                                        value: data.value
+                                                    }])
+                                                }} />
+                                        </div>
+                                    )}
+                                </div>
+                            </Grid>
+                        </Grid.Container>
+                    </>
+                ) : !reposLoading && !installationLoading && !reposData ? (
+                    <>
+                        <Alert
+                            className="my-8"
+                            title="Configura los permisos de repositorios"
+                            type="warning"
+                            message="Primero necesitas configurar los permisos de los repositorios
                 que te gustaria usar. Una vez completado,
                 es hora de escoger el repositorio y la rama que te gustaria para crear la aplicación."
-                            />
-                            <Button onClick={() => setIsProceedModalOpen(true)}>
-                                Configurar permisos
-                            </Button>
-                        </>
-                    ) : (
-                        <LoadingSection />
-                    )}
-                </>
-            )}
+                        />
+                        <Button onClick={() => setIsProceedModalOpen(true)}>
+                            Configurar permisos
+                        </Button>
+                    </>
+                ) : (
+                    <LoadingSection />
+                )}
+            </>
+
             <Modal
                 blur
                 closeButton

@@ -60,6 +60,7 @@ export type App = {
   logs: Logs;
   name: Scalars['String'];
   ports: Array<ProxyPort>;
+  status: AppStatus;
   type: AppTypes;
   updatedAt: Scalars['DateTime'];
   userId: Scalars['String'];
@@ -103,6 +104,12 @@ export type AppPaginationInfo = {
   totalItems: Scalars['Int'];
   totalPages: Scalars['Int'];
 };
+
+export enum AppStatus {
+  Building = 'BUILDING',
+  Idle = 'IDLE',
+  Running = 'RUNNING'
+}
 
 export enum AppTypes {
   Docker = 'DOCKER',
@@ -246,7 +253,7 @@ export type Mutation = {
   addAppProxyPort: Scalars['Boolean'];
   addDomain: BooleanResult;
   createAppDokku: CreateAppResult;
-  createAppGithub: BooleanResult;
+  createAppGithub: App;
   createDatabase: BooleanResult;
   destroyApp: BooleanResult;
   destroyDatabase: BooleanResult;
@@ -386,6 +393,7 @@ export type Query = {
   appProxyPorts: Array<ProxyPort>;
   apps: AppPaginationInfo;
   branches: Array<Branch>;
+  buildingApps: Array<App>;
   checkDomainStatus: Scalars['Int'];
   database: Database;
   databaseInfo: DatabaseInfo;
@@ -565,6 +573,11 @@ export type Subscription = {
   unlinkDatabaseLogs: LogPayload;
 };
 
+
+export type SubscriptionAppCreateLogsArgs = {
+  appId: Scalars['ID'];
+};
+
 export type UnlinkDatabaseInput = {
   appId: Scalars['String'];
   databaseId: Scalars['String'];
@@ -623,7 +636,7 @@ export type CreateAppGithubMutationVariables = Exact<{
 }>;
 
 
-export type CreateAppGithubMutation = { __typename?: 'Mutation', createAppGithub: { __typename?: 'BooleanResult', result: boolean } };
+export type CreateAppGithubMutation = { __typename?: 'Mutation', createAppGithub: { __typename?: 'App', id: string } };
 
 export type CreateDatabaseMutationVariables = Exact<{
   input: CreateDatabaseInput;
@@ -745,7 +758,7 @@ export type AppByIdQueryVariables = Exact<{
 }>;
 
 
-export type AppByIdQuery = { __typename?: 'Query', app: { __typename?: 'App', id: string, name: string, createdAt: any, databases: Array<{ __typename?: 'Database', id: string, name: string, type: DbTypes }>, appMetaGithub?: { __typename?: 'AppGithubMeta', repoId: string, repoName: string, repoOwner: string, branch: string, githubAppInstallationId: string } | null, ports: Array<{ __typename?: 'ProxyPort', scheme: string, host: string, container: string }> } };
+export type AppByIdQuery = { __typename?: 'Query', app: { __typename?: 'App', id: string, name: string, createdAt: any, status: AppStatus, databases: Array<{ __typename?: 'Database', id: string, name: string, type: DbTypes }>, appMetaGithub?: { __typename?: 'AppGithubMeta', repoId: string, repoName: string, repoOwner: string, branch: string, githubAppInstallationId: string } | null, ports: Array<{ __typename?: 'ProxyPort', scheme: string, host: string, container: string }> } };
 
 export type AppLogsQueryVariables = Exact<{
   appId: Scalars['String'];
@@ -837,6 +850,11 @@ export type EnvVarsQueryVariables = Exact<{
 
 export type EnvVarsQuery = { __typename?: 'Query', envVars: { __typename?: 'EnvVarList', envVars: Array<{ __typename?: 'EnvVar', key: string, value: string }> } };
 
+export type GetBuildingAppsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetBuildingAppsQuery = { __typename?: 'Query', buildingApps: Array<{ __typename?: 'App', id: string, name: string, status: AppStatus }> };
+
 export type GithubInstallationIdQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -871,7 +889,9 @@ export type SetupQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type SetupQuery = { __typename?: 'Query', setup: { __typename?: 'SetupResult', canConnectSsh: boolean, sshPublicKey: string, isGithubAppSetup: boolean, githubAppManifest: string } };
 
-export type AppCreateLogsSubscriptionVariables = Exact<{ [key: string]: never; }>;
+export type AppCreateLogsSubscriptionVariables = Exact<{
+  appId: Scalars['ID'];
+}>;
 
 
 export type AppCreateLogsSubscription = { __typename?: 'Subscription', appCreateLogs: { __typename?: 'LogPayload', message: string, type: string } };
@@ -1038,7 +1058,7 @@ export type CreateAppDokkuMutationOptions = Apollo.BaseMutationOptions<CreateApp
 export const CreateAppGithubDocument = gql`
     mutation createAppGithub($input: CreateAppGithubInput!) {
   createAppGithub(input: $input) {
-    result
+    id
   }
 }
     `;
@@ -1645,6 +1665,7 @@ export const AppByIdDocument = gql`
     id
     name
     createdAt
+    status
     databases {
       id
       name
@@ -2167,6 +2188,42 @@ export function useEnvVarsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<En
 export type EnvVarsQueryHookResult = ReturnType<typeof useEnvVarsQuery>;
 export type EnvVarsLazyQueryHookResult = ReturnType<typeof useEnvVarsLazyQuery>;
 export type EnvVarsQueryResult = Apollo.QueryResult<EnvVarsQuery, EnvVarsQueryVariables>;
+export const GetBuildingAppsDocument = gql`
+    query GetBuildingApps {
+  buildingApps {
+    id
+    name
+    status
+  }
+}
+    `;
+
+/**
+ * __useGetBuildingAppsQuery__
+ *
+ * To run a query within a React component, call `useGetBuildingAppsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBuildingAppsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBuildingAppsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetBuildingAppsQuery(baseOptions?: Apollo.QueryHookOptions<GetBuildingAppsQuery, GetBuildingAppsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetBuildingAppsQuery, GetBuildingAppsQueryVariables>(GetBuildingAppsDocument, options);
+      }
+export function useGetBuildingAppsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBuildingAppsQuery, GetBuildingAppsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetBuildingAppsQuery, GetBuildingAppsQueryVariables>(GetBuildingAppsDocument, options);
+        }
+export type GetBuildingAppsQueryHookResult = ReturnType<typeof useGetBuildingAppsQuery>;
+export type GetBuildingAppsLazyQueryHookResult = ReturnType<typeof useGetBuildingAppsLazyQuery>;
+export type GetBuildingAppsQueryResult = Apollo.QueryResult<GetBuildingAppsQuery, GetBuildingAppsQueryVariables>;
 export const GithubInstallationIdDocument = gql`
     query githubInstallationId {
   githubInstallationId {
@@ -2382,8 +2439,8 @@ export type SetupQueryHookResult = ReturnType<typeof useSetupQuery>;
 export type SetupLazyQueryHookResult = ReturnType<typeof useSetupLazyQuery>;
 export type SetupQueryResult = Apollo.QueryResult<SetupQuery, SetupQueryVariables>;
 export const AppCreateLogsDocument = gql`
-    subscription appCreateLogs {
-  appCreateLogs {
+    subscription appCreateLogs($appId: ID!) {
+  appCreateLogs(appId: $appId) {
     message
     type
   }
@@ -2402,10 +2459,11 @@ export const AppCreateLogsDocument = gql`
  * @example
  * const { data, loading, error } = useAppCreateLogsSubscription({
  *   variables: {
+ *      appId: // value for 'appId'
  *   },
  * });
  */
-export function useAppCreateLogsSubscription(baseOptions?: Apollo.SubscriptionHookOptions<AppCreateLogsSubscription, AppCreateLogsSubscriptionVariables>) {
+export function useAppCreateLogsSubscription(baseOptions: Apollo.SubscriptionHookOptions<AppCreateLogsSubscription, AppCreateLogsSubscriptionVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useSubscription<AppCreateLogsSubscription, AppCreateLogsSubscriptionVariables>(AppCreateLogsDocument, options);
       }

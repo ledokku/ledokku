@@ -1,8 +1,9 @@
-import { Button, Card, Grid, Image, Text } from '@nextui-org/react';
+import { Button, Card, Grid, Image, Spacer, Text } from '@nextui-org/react';
 import format from 'date-fns/format';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useDashboardQuery } from '../generated/graphql';
+import { useDashboardQuery, useGetBuildingAppsQuery } from '../generated/graphql';
+import { BuildingAlert } from '../ui/components/BuildingAlert';
 import { DbIcon } from '../ui/components/DbIcon';
 import { GithubIcon } from '../ui/icons/GithubIcon';
 import { AdminLayout } from '../ui/layout/layout';
@@ -17,9 +18,16 @@ const Dashboard = () => {
             databaseLimit: 4,
         },
     });
+    const { data: buildingApps } = useGetBuildingAppsQuery({
+        pollInterval: 5000
+    });
 
     return (
         <AdminLayout loading={loading} error={error}>
+            <div className='flex flex-col gap-2'>
+                {buildingApps && buildingApps.buildingApps.map((it, index) => <BuildingAlert key={index} app={it as any} />)}
+                {buildingApps && buildingApps.buildingApps.length > 0 && <Spacer />}
+            </div>
             <div className="w-full flex flex-col md:flex-row justify-end mb-8 items-end">
                 <Button
                     bordered
