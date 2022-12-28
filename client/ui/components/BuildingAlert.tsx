@@ -11,7 +11,9 @@ export const BuildingAlert = ({ app }: BuildingAlertProps) => {
 
     return <Card className="p-1">
         <div className="animated-gradient"/>
-        <Card variant="flat">
+        <Card variant="flat" css={{ 
+            borderRadius: "0.7rem"
+         }}>
             <div className='px-4 py-2 flex items-center'>
                 <div className='ml-4 grow'>
                     <Text h4>{app.name}</Text>
