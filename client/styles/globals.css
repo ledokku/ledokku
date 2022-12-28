@@ -51,3 +51,25 @@ body {
   opacity: 0;
   transition: opacity 0.3s;
 }
+
+.animated-gradient {
+  position: absolute;
+  background: linear-gradient(90deg, rgba(0,114,245,1) 45%, rgba(133,190,255,1) 50%, rgba(0,114,245,1) 55%);
+  width: 400%;
+  height: 100%;
+  top: 0px;
+  left: 0px;
+  animation: gradientAnimation 2s linear infinite;
+}
+
+@keyframes gradientAnimation {
+	0% {
+		transform: translate(0);
+	}
+  99.9% {
+		transform: translate(-60%);
+	}
+  100% {
+		transform: translate(0);
+	}
+}
