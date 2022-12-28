@@ -2,10 +2,12 @@ import { PaginationArgs } from './../../../../data/args/pagination';
 import { Prisma, PrismaClient } from '@prisma/client';
 import { Injectable } from '@tsed/di';
 import { AppPaginationInfo } from '../models/app.model';
+import { LogPayload } from '../../../../data/models/log_payload';
 
 @Injectable()
 export class AppRepository {
   constructor(private prisma: PrismaClient) {}
+  private createLogsCache = new Map<string, LogPayload[]>();
 
   create(name: string) {
     return this.prisma.app.create({
@@ -96,5 +98,22 @@ export class AppRepository {
         where: { id },
       })
       .databases();
+  }
+
+  clearCreateLogs(appId: string) {
+    this.createLogsCache.delete(appId);
+  }
+
+  addCreateLog(appId: string, log: LogPayload) {
+    this.createLogsCache.get(appId).push(log);
+  }
+
+  getCreateLogs(appId: string): LogPayload[] {
+    if (this.createLogsCache.has(appId)) {
+      return this.createLogsCache.get(appId);
+    } else {
+      this.createLogsCache.set(appId, []);
+      return [];
+    }
   }
 }

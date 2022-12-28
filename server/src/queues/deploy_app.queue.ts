@@ -40,6 +40,8 @@ export class DeployAppQueue extends IQueue<QueueArgs, App> {
       status: AppStatus.BUILDING,
     });
 
+    this.appRepository.clearCreateLogs(appId);
+
     const appMetaGithub = await this.appRepository.get(appId).AppMetaGithub();
 
     const { branch, repoName, repoOwner } = appMetaGithub;

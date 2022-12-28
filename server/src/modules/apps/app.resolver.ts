@@ -591,6 +591,12 @@ export class AppResolver {
   }
 
   @Authorized()
+  @Query((returns) => [LogPayload])
+  createLogs(@Arg('appId', (type) => ID) appId: string): LogPayload[] {
+    return this.appRepository.getCreateLogs(appId);
+  }
+
+  @Authorized()
   @Subscription((type) => LogPayload, {
     topics: SubscriptionTopics.APP_CREATED,
     filter: ({
@@ -603,6 +609,7 @@ export class AppResolver {
     @Root() payload: AppCreatedPayload,
     @Arg('appId', (type) => ID) appId: string
   ): LogPayload {
+    this.appRepository.addCreateLog(appId, payload.appCreateLogs);
     return payload.appCreateLogs;
   }
 
