@@ -1,3 +1,4 @@
+import { AppStatus } from '@prisma/client';
 import {
   BadRequest,
   Conflict,
@@ -98,6 +99,14 @@ export class AppResolver {
     @Args((type) => PaginationArgs) pagination: PaginationArgs
   ): Promise<AppPaginationInfo> {
     return this.appRepository.getAllPaginated(pagination);
+  }
+
+  @Authorized()
+  @Query((returns) => [App])
+  async buildingApps(): Promise<App[]> {
+    return this.appRepository.getAll({
+      status: AppStatus.BUILDING,
+    });
   }
 
   @Authorized()

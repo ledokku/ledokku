@@ -25,8 +25,9 @@ export class AppRepository {
     });
   }
 
-  getAll(limit?: number) {
+  getAll(filter?: Prisma.AppWhereInput, limit?: number) {
     return this.prisma.app.findMany({
+      where: filter,
       take: limit,
     });
   }
