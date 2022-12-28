@@ -1,9 +1,9 @@
 import { Text } from "@nextui-org/react";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Terminal, { TerminalOutput } from "react-terminal-ui";
 import { toast } from "react-toastify";
-import { LogPayload, useAppByIdQuery, useAppCreateLogsSubscription } from "../../generated/graphql";
+import { LogPayload, useAppByIdQuery, useAppCreateLogsSubscription, useGetCreateLogsQuery } from "../../generated/graphql";
 import { AdminLayout } from "../../ui/layout/layout";
 
 const AppBuild = () => {
@@ -15,6 +15,18 @@ const AppBuild = () => {
             appId
         }
     })
+
+    const { data: logs, loading: loadingLogs, error: errorLogs } = useGetCreateLogsQuery({
+        variables: {
+            appId
+        }
+    })
+
+    useEffect(() => {
+        if (logs) {
+            setArrayOfCreateAppLogs(logs.createLogs)
+        }
+    }, [logs])
 
     useAppCreateLogsSubscription({
         variables: {
@@ -36,7 +48,7 @@ const AppBuild = () => {
         },
     });
 
-    return <AdminLayout error={error} loading={loading}>
+    return <AdminLayout error={error ?? errorLogs} loading={loading || loadingLogs}>
         <Text className="mb-2">
             Creando la aplicación <b>{data?.app.name}</b> desde{' '}
             <b>{data?.app.appMetaGithub?.repoOwner}/{data?.app.appMetaGithub?.repoName}</b>

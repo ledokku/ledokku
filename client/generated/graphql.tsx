@@ -395,6 +395,7 @@ export type Query = {
   branches: Array<Branch>;
   buildingApps: Array<App>;
   checkDomainStatus: Scalars['Int'];
+  createLogs: Array<LogPayload>;
   database: Database;
   databaseInfo: DatabaseInfo;
   databaseLogs: Logs;
@@ -454,6 +455,11 @@ export type QueryBranchesArgs = {
 
 export type QueryCheckDomainStatusArgs = {
   url: Scalars['String'];
+};
+
+
+export type QueryCreateLogsArgs = {
+  appId: Scalars['ID'];
 };
 
 
@@ -854,6 +860,13 @@ export type GetBuildingAppsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetBuildingAppsQuery = { __typename?: 'Query', buildingApps: Array<{ __typename?: 'App', id: string, name: string, status: AppStatus }> };
+
+export type GetCreateLogsQueryVariables = Exact<{
+  appId: Scalars['ID'];
+}>;
+
+
+export type GetCreateLogsQuery = { __typename?: 'Query', createLogs: Array<{ __typename?: 'LogPayload', message: string, type: string }> };
 
 export type GithubInstallationIdQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2224,6 +2237,42 @@ export function useGetBuildingAppsLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type GetBuildingAppsQueryHookResult = ReturnType<typeof useGetBuildingAppsQuery>;
 export type GetBuildingAppsLazyQueryHookResult = ReturnType<typeof useGetBuildingAppsLazyQuery>;
 export type GetBuildingAppsQueryResult = Apollo.QueryResult<GetBuildingAppsQuery, GetBuildingAppsQueryVariables>;
+export const GetCreateLogsDocument = gql`
+    query GetCreateLogs($appId: ID!) {
+  createLogs(appId: $appId) {
+    message
+    type
+  }
+}
+    `;
+
+/**
+ * __useGetCreateLogsQuery__
+ *
+ * To run a query within a React component, call `useGetCreateLogsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCreateLogsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCreateLogsQuery({
+ *   variables: {
+ *      appId: // value for 'appId'
+ *   },
+ * });
+ */
+export function useGetCreateLogsQuery(baseOptions: Apollo.QueryHookOptions<GetCreateLogsQuery, GetCreateLogsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCreateLogsQuery, GetCreateLogsQueryVariables>(GetCreateLogsDocument, options);
+      }
+export function useGetCreateLogsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCreateLogsQuery, GetCreateLogsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCreateLogsQuery, GetCreateLogsQueryVariables>(GetCreateLogsDocument, options);
+        }
+export type GetCreateLogsQueryHookResult = ReturnType<typeof useGetCreateLogsQuery>;
+export type GetCreateLogsLazyQueryHookResult = ReturnType<typeof useGetCreateLogsLazyQuery>;
+export type GetCreateLogsQueryResult = Apollo.QueryResult<GetCreateLogsQuery, GetCreateLogsQueryVariables>;
 export const GithubInstallationIdDocument = gql`
     query githubInstallationId {
   githubInstallationId {
