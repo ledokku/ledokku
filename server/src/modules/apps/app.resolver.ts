@@ -1,4 +1,9 @@
-import { BadRequest, Conflict, NotFound } from '@tsed/exceptions';
+import {
+  BadRequest,
+  Conflict,
+  InternalServerError,
+  NotFound,
+} from '@tsed/exceptions';
 import { ResolverService } from '@tsed/typegraphql';
 import fetch from 'node-fetch';
 import {
@@ -284,7 +289,7 @@ export class AppResolver {
   }
 
   @Authorized()
-  @Mutation((returns) => BooleanResult)
+  @Mutation((returns) => App)
   async createAppGithub(
     @Arg('input', (type) => CreateAppGithubInput) input: CreateAppGithubInput,
     @Ctx() context: DokkuContext,
@@ -339,7 +344,7 @@ export class AppResolver {
         }
       }
 
-      const app = await this.githubRepository.createApp(
+      return this.githubRepository.createApp(
         input.githubInstallationId,
         appName,
         input.gitRepoFullName,
@@ -349,27 +354,7 @@ export class AppResolver {
       );
     }
 
-    // TODO enable again once we start the github app autodeployment
-    // const appBuild = await prisma.appBuild.create({
-    //   data: {
-    //     status: 'PENDING',
-    //     user: {
-    //       connect: {
-    //         id: userId,
-    //       },
-    //     },
-    //     app: {
-    //       connect: {
-    //         id: app.id,
-    //       },
-    //     },
-    //   },
-    // });
-
-    // // We trigger the queue that will add dokku to the server
-    // await buildAppQueue.add('build-app', { buildId: appBuild.id });
-
-    return { result: created };
+    throw new InternalServerError('No se creó la app');
   }
 
   @Authorized()
