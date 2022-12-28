@@ -1,4 +1,4 @@
-import { App } from '@prisma/client';
+import { App, AppStatus } from '@prisma/client';
 import { $log } from '@tsed/common';
 import { InternalServerError } from '@tsed/exceptions';
 import { Job } from 'bullmq';
@@ -35,6 +35,11 @@ export class DeployAppQueue extends IQueue<QueueArgs, App> {
     $log.info(`Iniciando el lanzamiento de la app ${appId}`);
 
     const app = await this.appRepository.get(appId);
+
+    await this.appRepository.update(appId, {
+      status: AppStatus.BUILDING,
+    });
+
     const appMetaGithub = await this.appRepository.get(appId).AppMetaGithub();
 
     const { branch, repoName, repoOwner } = appMetaGithub;
@@ -90,9 +95,13 @@ export class DeployAppQueue extends IQueue<QueueArgs, App> {
       .get(job.data.appId)
       .AppMetaGithub();
 
+    await this.appRepository.update(job.data.appId, {
+      status: AppStatus.RUNNING,
+    });
+
     await this.activityRepository.add({
       name: `Proyecto "${result.name}" lanzado`,
-      description: `Creado desde https://github.com/${repoOwner}/${repoName}/tree/${branch}`,
+      description: `Desde https://github.com/${repoOwner}/${repoName}/tree/${branch}`,
       referenceId: job.data.appId,
       refersToModel: 'App',
       Modifier: {

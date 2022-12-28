@@ -1,5 +1,5 @@
 import { PaginationArgs } from './../../../../data/args/pagination';
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { Injectable } from '@tsed/di';
 import { AppPaginationInfo } from '../models/app.model';
 
@@ -13,6 +13,15 @@ export class AppRepository {
         name: name,
         type: 'DOKKU',
       },
+    });
+  }
+
+  update(appId: string, data: Prisma.AppUpdateInput) {
+    return this.prisma.app.update({
+      where: {
+        id: appId,
+      },
+      data,
     });
   }
 

@@ -1,4 +1,4 @@
-import { App as AppClass, AppTypes } from '@prisma/client';
+import { App as AppClass, AppStatus, AppTypes } from '@prisma/client';
 import { Field, ObjectType, registerEnumType } from 'type-graphql';
 import { BasePaginationInfo } from '../../../../data/models/pagination_info';
 import { GraphQLDateTime } from './../../../../utils';
@@ -25,10 +25,17 @@ export class App implements AppClass {
 
   @Field((type) => String, { nullable: true })
   dockerfilePath: string | undefined;
+
+  @Field((type) => AppStatus)
+  status: AppStatus;
 }
 
 registerEnumType(AppTypes, {
   name: 'AppTypes',
+});
+
+registerEnumType(AppStatus, {
+  name: 'AppStatus',
 });
 @ObjectType()
 export class AppPaginationInfo extends BasePaginationInfo(App) {}
