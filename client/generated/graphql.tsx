@@ -786,7 +786,7 @@ export type AppsQueryVariables = Exact<{
 }>;
 
 
-export type AppsQuery = { __typename?: 'Query', apps: { __typename?: 'AppPaginationInfo', totalPages: number, items: Array<{ __typename?: 'App', id: string, name: string, type: AppTypes, appMetaGithub?: { __typename?: 'AppGithubMeta', repoOwner: string, repoName: string } | null, ports: Array<{ __typename?: 'ProxyPort', scheme: string, host: string, container: string }> }> } };
+export type AppsQuery = { __typename?: 'Query', apps: { __typename?: 'AppPaginationInfo', totalPages: number, items: Array<{ __typename?: 'App', id: string, name: string, type: AppTypes, status: AppStatus, appMetaGithub?: { __typename?: 'AppGithubMeta', repoOwner: string, repoName: string } | null, ports: Array<{ __typename?: 'ProxyPort', scheme: string, host: string, container: string }> }> } };
 
 export type BranchesQueryVariables = Exact<{
   installationId: Scalars['String'];
@@ -1815,6 +1815,7 @@ export const AppsDocument = gql`
         host
         container
       }
+      status
     }
     totalPages
   }

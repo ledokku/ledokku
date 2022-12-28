@@ -54,7 +54,7 @@ const Apps = () => {
                                     : ' '}
                             </Table.Cell>
                             <Table.Cell>
-                                {it.type}
+                                {it.status}
                             </Table.Cell>
                         </Table.Row>
                     )) ?? []}

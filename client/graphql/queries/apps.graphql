@@ -13,6 +13,7 @@ query apps($limit: Int, $page: Int) {
         host
         container
       }
+      status
     }
     totalPages
   }
