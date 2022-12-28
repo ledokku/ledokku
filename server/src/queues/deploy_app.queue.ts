@@ -49,14 +49,13 @@ export class DeployAppQueue extends IQueue<QueueArgs, App> {
       branchName,
       {
         onStdout: (chunk) => {
-          this.pubsub.publish(SubscriptionTopics.APP_CREATED, <
-            AppCreatedPayload
-          >{
+          this.pubsub.publish(SubscriptionTopics.APP_CREATED, {
             appCreateLogs: {
               message: chunk.toString(),
               type: 'stdout',
             },
-          });
+            appId,
+          } as AppCreatedPayload);
         },
         onStderr: (chunk) => {
           this.pubsub.publish(SubscriptionTopics.APP_CREATED, <
@@ -66,6 +65,7 @@ export class DeployAppQueue extends IQueue<QueueArgs, App> {
               message: chunk.toString(),
               type: 'stderr',
             },
+            appId,
           });
         },
       }
@@ -84,6 +84,7 @@ export class DeployAppQueue extends IQueue<QueueArgs, App> {
         message: result.id,
         type: 'end:success',
       },
+      appId: job.data.appId,
     });
     const { repoOwner, repoName, branch } = await this.appRepository
       .get(job.data.appId)

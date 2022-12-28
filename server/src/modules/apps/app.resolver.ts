@@ -12,11 +12,13 @@ import {
   Authorized,
   Ctx,
   FieldResolver,
+  ID,
   Int,
   Mutation,
   PubSub,
   PubSubEngine,
   Query,
+  ResolverFilterData,
   Root,
   Subscription,
 } from 'type-graphql';
@@ -294,7 +296,7 @@ export class AppResolver {
     @Arg('input', (type) => CreateAppGithubInput) input: CreateAppGithubInput,
     @Ctx() context: DokkuContext,
     @PubSub() pubSub: PubSubEngine
-  ): Promise<BooleanResult> {
+  ): Promise<App> {
     if (!/^[a-z0-9-]+$/.test(input.name))
       throw new BadRequest('Mal formato del nombre');
 
@@ -582,8 +584,16 @@ export class AppResolver {
   @Authorized()
   @Subscription((type) => LogPayload, {
     topics: SubscriptionTopics.APP_CREATED,
+    filter: ({
+      payload,
+      args,
+    }: ResolverFilterData<AppCreatedPayload, { appId: string }>) =>
+      payload.appId === args.appId,
   })
-  appCreateLogs(@Root() payload: AppCreatedPayload): LogPayload {
+  appCreateLogs(
+    @Root() payload: AppCreatedPayload,
+    @Arg('appId', (type) => ID) appId: string
+  ): LogPayload {
     return payload.appCreateLogs;
   }
 
