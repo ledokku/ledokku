@@ -34,16 +34,19 @@ export class AppRepository {
     });
   }
 
-  async getAllPaginated({
-    limit,
-    page,
-  }: PaginationArgs): Promise<AppPaginationInfo> {
+  async getAllPaginated(
+    { limit, page }: PaginationArgs,
+    filter?: Prisma.AppWhereInput
+  ): Promise<AppPaginationInfo> {
     const items = await this.prisma.app.findMany({
+      where: filter,
       take: limit,
       skip: limit * page,
     });
 
-    const total = await this.prisma.app.count();
+    const total = await this.prisma.app.count({
+      where: filter,
+    });
 
     const totalPages = Math.ceil(total / limit);
 
@@ -98,6 +101,10 @@ export class AppRepository {
         where: { id },
       })
       .databases();
+  }
+
+  tags(id: string) {
+    return this.get(id).tags();
   }
 
   clearCreateLogs(appId: string) {

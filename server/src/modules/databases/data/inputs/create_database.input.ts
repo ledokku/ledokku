@@ -11,4 +11,7 @@ export class CreateDatabaseInput {
 
   @Field((type) => DbTypes)
   type: DbTypes;
+
+  @Field((type) => [String], { nullable: true })
+  tags?: string[];
 }

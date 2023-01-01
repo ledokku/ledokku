@@ -23,4 +23,7 @@ export class CreateAppGithubInput {
 
   @Field((type) => [BuildEnvVar], { nullable: true })
   envVars?: BuildEnvVar[];
+
+  @Field((type) => [String], { nullable: true })
+  tags?: string[];
 }

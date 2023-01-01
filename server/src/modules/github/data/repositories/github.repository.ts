@@ -39,7 +39,8 @@ export class GithubRepository {
     repoFullName: string,
     repoId: string,
     user: User,
-    branch?: string
+    branch?: string,
+    tags?: string[]
   ): Promise<App> {
     const installationAuthentication = await this.installationAuth({
       type: 'installation',
@@ -59,6 +60,16 @@ export class GithubRepository {
           userId: user.id,
           name: appName,
           type: 'GITHUB',
+          tags: {
+            connectOrCreate: tags?.map((it) => ({
+              where: {
+                name: it,
+              },
+              create: {
+                name: it,
+              },
+            })),
+          },
           AppMetaGithub: {
             create: {
               repoName: repoData.repoName,

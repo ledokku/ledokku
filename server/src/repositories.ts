@@ -15,3 +15,4 @@ export * from "./modules/apps/data/repositories/app.repository";
 export * from "./modules/databases/data/repositories/database.repository";
 export * from "./modules/github/data/repositories/github.repository";
 export * from "./modules/settings/data/repositories/settings.repository";
+export * from "./modules/tags/data/repositories/tag.repository";

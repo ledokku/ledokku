@@ -20,7 +20,7 @@ export class DatabaseRepository {
     });
   }
 
-  get(id: string): Promise<Database> {
+  get(id: string) {
     return this.prisma.database.findUnique({
       where: { id },
     });
@@ -38,16 +38,19 @@ export class DatabaseRepository {
     });
   }
 
-  async getAllPaginated({
-    limit,
-    page,
-  }: PaginationArgs): Promise<DatabasePaginationInfo> {
+  async getAllPaginated(
+    { limit, page }: PaginationArgs,
+    filter?: Prisma.DatabaseWhereInput
+  ): Promise<DatabasePaginationInfo> {
     const items = await this.prisma.database.findMany({
       take: limit,
       skip: limit * page,
+      where: filter,
     });
 
-    const total = await this.prisma.database.count();
+    const total = await this.prisma.database.count({
+      where: filter,
+    });
 
     const totalPages = Math.ceil(total / limit);
 
@@ -108,6 +111,10 @@ export class DatabaseRepository {
         },
       })
       .apps();
+  }
+
+  tags(id: string) {
+    return this.get(id).Tags();
   }
 
   async linkedApps(databaseId: string): Promise<App[]> {

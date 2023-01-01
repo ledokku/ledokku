@@ -43,6 +43,7 @@ model App {
   User           User?          @relation(fields: [userId], references: [id])
   userId         String?
   AppMetaGithub  AppMetaGithub?
+  tags           Tag[]
 }
 
 enum AppTypes {
@@ -99,6 +100,7 @@ model Database {
   apps      App[]
   User      User?    @relation(fields: [userId], references: [id])
   userId    String?
+  Tags      Tag[]
 }
 
 enum DbTypes {
@@ -129,4 +131,11 @@ enum ModelReferences {
 model Settings {
   id            String   @id @default(uuid())
   allowedEmails String[] @default([])
+}
+
+model Tag {
+  id        String     @id @default(uuid())
+  name      String     @unique
+  Databases Database[]
+  Apps      App[]
 }

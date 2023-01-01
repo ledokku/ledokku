@@ -14,6 +14,7 @@ interface QueueArgs {
   version?: string;
   databaseType: DbTypes;
   userId: string;
+  tags?: string[];
 }
 
 @Queue()
@@ -28,7 +29,7 @@ export class CreateDatabaseQueue extends IQueue<QueueArgs> {
   }
 
   protected async execute(job: Job<QueueArgs, any>) {
-    const { databaseName, databaseType, userId, version } = job.data;
+    const { databaseName, databaseType, userId, version, tags } = job.data;
 
     $log.info(
       `Iniciando construccion de la base de datos ${databaseType} llamada ${databaseName}`
@@ -71,6 +72,16 @@ export class CreateDatabaseQueue extends IQueue<QueueArgs> {
       name: databaseName,
       type: databaseType,
       version: dokkuDatabaseVersion,
+      Tags: {
+        connectOrCreate: tags?.map((it) => ({
+          where: {
+            name: it,
+          },
+          create: {
+            name: it,
+          },
+        })),
+      },
     });
 
     await this.activityRepository.add({

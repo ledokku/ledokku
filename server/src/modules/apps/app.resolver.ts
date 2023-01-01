@@ -43,6 +43,7 @@ import {
 } from '../../repositories';
 import { Database } from '../databases/data/models/database.model';
 import { AppGithubMeta } from '../github/data/models/app_meta_github.model';
+import { Tag } from '../tags/data/models/tag.model';
 import { SetEnvVarQueue } from './../../queues/set_env_var.queue';
 import { UnsetEnvVarQueue } from './../../queues/unset_env_var.queue';
 import { AddAppProxyPortInput } from './data/inputs/add_app_proxy_port.input';
@@ -361,7 +362,8 @@ export class AppResolver {
         input.gitRepoFullName,
         input.gitRepoId,
         user,
-        input.branchName
+        input.branchName,
+        input.tags
       );
     }
 
@@ -645,6 +647,12 @@ export class AppResolver {
   @FieldResolver((returns) => [Database])
   async databases(@Root() app: App): Promise<Database[]> {
     return this.appRepository.databases(app.id);
+  }
+
+  @Authorized()
+  @FieldResolver((returns) => [Tag])
+  async tags(@Root() app: App): Promise<Tag[]> {
+    return this.appRepository.tags(app.id);
   }
 
   @Authorized()

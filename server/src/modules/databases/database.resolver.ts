@@ -23,6 +23,7 @@ import { CreateDatabaseQueue } from '../../queues/create_database.queue';
 import { App } from '../apps/data/models/app.model';
 import { Logs } from '../apps/data/models/logs.model';
 import { BooleanResult } from '../apps/data/models/result.model';
+import { Tag } from '../tags/data/models/tag.model';
 import { CreateDatabaseInput } from './data/inputs/create_database.input';
 import { DestroyDatabaseInput } from './data/inputs/destroy_database.input';
 import { Database, DatabasePaginationInfo } from './data/models/database.model';
@@ -143,6 +144,7 @@ export class DatabaseResolver {
       databaseType: input.type,
       version: input.version,
       userId: context.auth.user.id,
+      tags: input.tags,
     });
 
     return { result: true };
@@ -196,6 +198,12 @@ export class DatabaseResolver {
   })
   createDatabaseLogs(@Root() payload: DatabaseCreatedPayload): LogPayload {
     return payload.createDatabaseLogs;
+  }
+
+  @Authorized()
+  @FieldResolver((returns) => [Tag])
+  async tags(@Root() database: Database): Promise<Tag[]> {
+    return this.databaseRepository.tags(database.id);
   }
 
   @Authorized()
