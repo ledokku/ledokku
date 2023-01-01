@@ -269,7 +269,7 @@ const CreateAppGithub = () => {
     }, [selectedRepo, getBranches, installationData]);
 
     return (
-        <AdminLayout>
+        <AdminLayout pageTitle='Crear aplicación con Github'>
             <input type='file' id='file' ref={envFile} style={{ display: 'none' }} onChange={handleOpenEnvFile} />
 
             <>
@@ -418,7 +418,7 @@ const CreateAppGithub = () => {
                                 </form>
                             </Grid>
                             <Grid md xs={12}>
-                                <div className='mt-8 w-full'>
+                                <div className='w-full mt-8'>
                                     <div className='flex flex-row justify-between'>
                                         <Text h5>Variables de entorno</Text>
                                         <Button size="sm" ghost onClick={() => envFile.current?.click()}>

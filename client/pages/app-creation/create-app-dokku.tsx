@@ -62,7 +62,7 @@ const CreateAppDokku = () => {
     });
 
     return (
-        <AdminLayout>
+        <AdminLayout pageTitle='Crear aplicación con Dokku'>
             <Text h2>Crear aplicación nueva</Text>
 
             <Text className="mt-12 mb-8">Escribe el nombre de la apicación y estará listo!</Text>
@@ -82,7 +82,7 @@ const CreateAppDokku = () => {
                         />
                         <Text color="error">{formik.errors.name}</Text>
 
-                        <div className="mt-4 flex justify-end">
+                        <div className="flex justify-end mt-4">
                             <Button
                                 className="mt-8"
                                 type="submit"

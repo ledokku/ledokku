@@ -71,15 +71,15 @@ const Settings = () => {
     const database = data?.database;
 
     return (
-        <AdminLayout loading={loading} error={error} notFound={!database}>
+        <AdminLayout loading={loading} error={error} notFound={!database} pageTitle={`Registros | ${database?.name}`}>
             {database && <>
                 <div>
                     <DatabaseHeaderInfo database={database} />
                     <DatabaseHeaderTabNav database={database} />
                 </div>
 
-                <div className="grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 gap-4 mt-10">
-                    <div className="w-3/3 mb-6">
+                <div className="grid gap-4 mt-10 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1">
+                    <div className="mb-6 w-3/3">
                         <Text h2>Configuración</Text>
                         <Spacer y={3} />
                         <Card className="mt-8" variant="bordered" borderWeight="normal">

@@ -13,14 +13,21 @@ export const AppSettingsMenu = ({ app }: AppSettingsMenuProps) => {
     const selectedRoute = location.pathname.endsWith('/settings/ports')
         ? 'ports'
         : location.pathname.endsWith('/settings/domains')
-        ? 'domains'
-        : location.pathname.endsWith('/settings/advanced')
-        ? 'advanced'
-        : 'index';
+            ? 'domains'
+            : location.pathname.endsWith('/settings/general')
+                ? 'general'
+                : 'index';
 
     return (
         <Navbar disableShadow css={{ maxH: 'inherit', display: 'block' }}>
             <Navbar.Content variant={'highlight-rounded'} className="flex flex-col">
+                <Navbar.Link
+                    css={{ padding: 16 }}
+                    isActive={selectedRoute === 'general'}
+                    href={`/app/${app.id}/settings/general`}
+                >
+                    General
+                </Navbar.Link>
                 <Navbar.Link
                     css={{ padding: 16 }}
                     isActive={selectedRoute === 'ports'}
@@ -35,13 +42,7 @@ export const AppSettingsMenu = ({ app }: AppSettingsMenuProps) => {
                 >
                     Dominios
                 </Navbar.Link>
-                <Navbar.Link
-                    css={{ padding: 16 }}
-                    isActive={selectedRoute === 'advanced'}
-                    href={`/app/${app.id}/settings/advanced`}
-                >
-                    Avanzado
-                </Navbar.Link>
+
             </Navbar.Content>
         </Navbar>
     );

@@ -84,7 +84,7 @@ const AppSettingsAdvanced = () => {
     const app = data?.app;
 
     return (
-        <AdminLayout loading={loading} notFound={!app} error={error}>
+        <AdminLayout loading={loading} notFound={!app} error={error} pageTitle={`General | ${app?.name}`}>
             {app && <>
                 <div>
                     <AppHeaderInfo app={app} />

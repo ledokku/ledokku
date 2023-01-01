@@ -4,7 +4,7 @@ import { ActivityFeed } from '../ui/modules/activity/ActivityFeed';
 
 const Activity = () => {
     return (
-        <AdminLayout>
+        <AdminLayout pageTitle='Actividad'>
             <Text h2 className="mb-8">
                 Actividad
             </Text>

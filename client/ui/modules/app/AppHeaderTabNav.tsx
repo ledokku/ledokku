@@ -18,7 +18,7 @@ export const AppHeaderTabNav = ({ app }: AppHeaderTabNavProps) => {
                 ? 'activity'
                 : location.pathname.endsWith('/settings/ports') ||
                     location.pathname.endsWith('/settings/domains') ||
-                    location.pathname.endsWith('/settings/advanced')
+                    location.pathname.endsWith('/settings/general')
                     ? 'settings'
                     : 'index';
 
@@ -39,7 +39,7 @@ export const AppHeaderTabNav = ({ app }: AppHeaderTabNavProps) => {
                 </Navbar.Link>
                 <Navbar.Link
                     isActive={selectedRoute === 'settings'}
-                    href={`/app/${app.id}/settings/ports`}
+                    href={`/app/${app.id}/settings/general`}
                 >
                     Configuración
                 </Navbar.Link>

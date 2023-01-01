@@ -17,7 +17,7 @@ const Settings = () => {
     const [pluginPage, setPluginPage] = useState(1);
 
     return (
-        <AdminLayout loading={loading || loadingPlugins}>
+        <AdminLayout loading={loading || loadingPlugins} pageTitle="Configuración">
             <Text h2 className="mb-8">
                 Configuración
             </Text>
@@ -44,7 +44,7 @@ const Settings = () => {
 
                             return <Table.Row key={index}>
                                 <Table.Cell>
-                                    <div className='flex gap-4 items-center'>
+                                    <div className='flex items-center gap-4'>
                                         <Avatar size="sm" src={user?.avatarUrl} />
                                         {user?.username ?? "No registrado"}
                                     </div>
@@ -70,7 +70,7 @@ const Settings = () => {
                         }) ?? []}
                     </Table.Body>
                 </Table>
-                <Text h3 className="mb-8 mt-16">
+                <Text h3 className="mt-16 mb-8">
                     Plugins instalados
                 </Text>
                 <Table key={pluginPage}>{/*  TODO: Workarround */}

@@ -14,8 +14,8 @@ const Apps = () => {
     });
 
     return (
-        <AdminLayout error={error}>
-            <div className="w-full flex flex-row justify-between">
+        <AdminLayout error={error} pageTitle="Aplicaciones">
+            <div className="flex flex-row justify-between w-full">
                 <Text h2 className="mb-8">
                     Aplicaciones
                 </Text>

@@ -26,7 +26,7 @@ const Metrics = () => {
 
 
     return (
-        <AdminLayout error={error}>
+        <AdminLayout error={error} pageTitle="Métricas">
             <Text h2 className="mb-8">
                 Métricas
             </Text>

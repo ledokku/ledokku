@@ -1,6 +1,7 @@
 import { ApolloError } from '@apollo/client';
 import { Card, Container, Image, Text, useTheme } from '@nextui-org/react';
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
 import { ReactNode } from 'react';
 import TinyCrossfade from 'react-tiny-crossfade';
 import { Footer } from '../components/Footer';
@@ -12,15 +13,19 @@ interface AdminLayoutProps {
     loading?: boolean;
     error?: Error | ApolloError;
     children?: ReactNode;
+    pageTitle?: string;
     notFound?: boolean
 }
 
-export const AdminLayout = ({ children, loading, error, notFound }: AdminLayoutProps) => {
+export const AdminLayout = ({ children, loading, error, notFound, pageTitle }: AdminLayoutProps) => {
     const { isDark } = useTheme();
 
     return (
         <>
-            <div className="blur-3xl absolute w-full" style={{ zIndex: -10, filter: 'blur(64px)' }}>
+            <Head>
+                <title>{pageTitle ?? "Overclock Studios PaaS"}</title>
+            </Head>
+            <div className="absolute w-full blur-3xl" style={{ zIndex: -10, filter: 'blur(64px)' }}>
                 <Image
                     src={isDark ? '/bg_dark.jpg' : '/bg_light.jpg'}
                     height="15vh"

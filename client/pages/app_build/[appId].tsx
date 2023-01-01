@@ -48,7 +48,7 @@ const AppBuild = () => {
         },
     });
 
-    return <AdminLayout error={error ?? errorLogs} loading={loading || loadingLogs}>
+    return <AdminLayout error={error ?? errorLogs} loading={loading || loadingLogs} pageTitle={`Creación de ${data?.app.name}`}>
         <Text className="mb-2">
             Creando la aplicación <b>{data?.app.name}</b> desde{' '}
             <b>{data?.app.appMetaGithub?.repoOwner}/{data?.app.appMetaGithub?.repoName}</b>

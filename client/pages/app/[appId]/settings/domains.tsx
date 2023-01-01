@@ -20,7 +20,7 @@ const AppSettingsDomains = () => {
     const app = data?.app
 
     return (
-        <AdminLayout loading={loading} notFound={!app} error={error}>
+        <AdminLayout loading={loading} notFound={!app} error={error} pageTitle={`Dominios | ${app?.name}`}>
             {app && <>
                 <div>
                     <AppHeaderInfo app={app} />

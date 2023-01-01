@@ -31,7 +31,7 @@ const ActivityPage = () => {
     const app = data?.app;
 
     return (
-        <AdminLayout loading={loading || loadingActivity} notFound={!app} error={error ?? activityError}>
+        <AdminLayout loading={loading || loadingActivity} notFound={!app} error={error ?? activityError} pageTitle={`Actividad | ${app?.name}`}>
             {app && <div>
                 <AppHeaderInfo app={app} />
                 <AppHeaderTabNav app={app} />
@@ -40,7 +40,7 @@ const ActivityPage = () => {
                 {activityData?.activity.items.map((it, index) => (
                     <ActivityItem activity={it as any} key={index} />
                 ))}
-                <div className="flex flex-col justify-center items-center mt-8">
+                <div className="flex flex-col items-center justify-center mt-8">
                     <Pagination
                         page={page}
                         initialPage={1}

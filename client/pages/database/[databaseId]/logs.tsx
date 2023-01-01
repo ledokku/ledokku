@@ -33,7 +33,7 @@ const Logs = () => {
     const database = data?.database;
 
     return (
-        <AdminLayout loading={loading || databaseLogsLoading} error={error ?? databaseLogsError} notFound={!database}>
+        <AdminLayout loading={loading || databaseLogsLoading} error={error ?? databaseLogsError} notFound={!database} pageTitle={`Registros | ${database?.name}`}>
             {database && <>
                 <div>
                     <DatabaseHeaderInfo database={database} />

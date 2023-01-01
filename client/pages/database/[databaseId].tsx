@@ -160,7 +160,7 @@ const Database = () => {
         });
 
     return (
-        <AdminLayout loading={loading || databaseLoading} error={error ?? databaseError} notFound={!database}>
+        <AdminLayout loading={loading || databaseLoading} error={error ?? databaseError} notFound={!database} pageTitle={database?.name}>
             {database && <>
                 <div>
                     <DatabaseHeaderInfo database={database} />
@@ -300,7 +300,7 @@ const Database = () => {
                                                             {arrayOfLinkLogs.map((log) => (
                                                                 <p
                                                                     key={arrayOfLinkLogs.indexOf(log)}
-                                                                    className="text-s leading-5"
+                                                                    className="leading-5 text-s"
                                                                 >
                                                                     {log.message}
                                                                 </p>
@@ -358,7 +358,7 @@ const Database = () => {
                                         </p>
                                         <div className="mt-4">
                                             <Link href="/create-app">
-                                                <Button bordered className="text-sm mr-3">
+                                                <Button bordered className="mr-3 text-sm">
                                                     Crear aplicación
                                                 </Button>
                                             </Link>
@@ -368,7 +368,7 @@ const Database = () => {
 
                                 {!loading && database && database.apps && (
                                     <>
-                                        <Text h3 className="mb-4 mt-8">
+                                        <Text h3 className="mt-8 mb-4">
                                             {database.apps.length > 0 && 'Aplicaciones enlazadas'}
                                         </Text>
                                         <div className="flex flex-col">
@@ -436,7 +436,7 @@ const Database = () => {
                                                                             <b>{app.name}</b> de{' '}
                                                                             <b>{appAboutToUnlink}</b>!
                                                                         </p>
-                                                                        <p className="text-gray-500 mb-2">
+                                                                        <p className="mb-2 text-gray-500">
                                                                             El proceso de desenlace
                                                                             usualmente tarda unos
                                                                             minutos. Respira un poco,
@@ -450,7 +450,7 @@ const Database = () => {
                                                                                         key={arrayOfUnlinkLogs.indexOf(
                                                                                             log
                                                                                         )}
-                                                                                        className="text-s leading-5"
+                                                                                        className="leading-5 text-s"
                                                                                     >
                                                                                         {log.message}
                                                                                     </p>
@@ -523,7 +523,7 @@ const Database = () => {
                         )}
                     </Grid>
                     <Grid xs={12} direction="column">
-                        <Text h3 className="mb-8 mt-8">
+                        <Text h3 className="mt-8 mb-8">
                             Información del contenedor
                         </Text>
                         <Table>

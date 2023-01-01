@@ -15,8 +15,8 @@ const Databases = () => {
     });
 
     return (
-        <AdminLayout error={error}>
-            <div className="w-full flex flex-row justify-between">
+        <AdminLayout error={error} pageTitle="Bases de datos">
+            <div className="flex flex-row justify-between w-full">
                 <Text h2 className="mb-8">
                     Bases de datos
                 </Text>

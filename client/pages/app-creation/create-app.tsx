@@ -31,7 +31,7 @@ const SourceBox = ({ label, selected = false, icon, onClick, badge }: SourceBoxP
                 }`}
             onClick={onClick}
         >
-            <div className="mb-2 h-12">{icon}</div>
+            <div className="h-12 mb-2">{icon}</div>
             <Text h3>{label}</Text>
             {badge}
         </div>
@@ -64,7 +64,7 @@ const CreateApp = () => {
     });
 
     return (
-        <AdminLayout>
+        <AdminLayout pageTitle='Crear aplicación'>
             <Text h2>
                 Crear aplicación
             </Text>
@@ -72,12 +72,12 @@ const CreateApp = () => {
                 <div>
                     <form onSubmit={formik.handleSubmit}>
                         <div className="mt-4">
-                            <Text className=" text-gray-500">
+                            <Text className="text-gray-500 ">
                                 Elige entre crear una aplicación desde un repositorio de Github o
                                 una aplicación de Dokku.
                             </Text>
                             <Spacer y={1} />
-                            <div className='flex flex-col md:flex-row gap-4 md:gap-8'>
+                            <div className='flex flex-col gap-4 md:flex-row md:gap-8'>
                                 <div className='w-full md:w-1/4'>
                                     <SourceBox
                                         selected={formik.values.type === AppTypes.GITHUB}
@@ -126,7 +126,7 @@ const CreateApp = () => {
                             </div>
                         </div>
 
-                        <div className="mt-8 flex justify-end">
+                        <div className="flex justify-end mt-8">
                             <Button
                                 flat
                                 disabled={!formik.values.type || !!formik.errors.type}

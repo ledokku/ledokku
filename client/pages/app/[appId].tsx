@@ -158,7 +158,7 @@ const App = () => {
     };
 
     return (
-        <AdminLayout loading={loading} notFound={!data?.app}>
+        <AdminLayout loading={loading} notFound={!data?.app} pageTitle={app?.name}>
             {app?.status === AppStatus.Building && <>
                 <BuildingAlert app={app as any} />
                 <Spacer />
@@ -368,7 +368,7 @@ const App = () => {
                                     </Text>
                                     <div className="mt-4">
                                         <Link href="/create-database">
-                                            <Button bordered className="text-sm mr-3">
+                                            <Button bordered className="mr-3 text-sm">
                                                 Crear base de datos
                                             </Button>
                                         </Link>
@@ -458,7 +458,7 @@ const App = () => {
                                                                         </b>
                                                                         !
                                                                     </p>
-                                                                    <p className="text-gray-500 mb-2">
+                                                                    <p className="mb-2 text-gray-500">
                                                                         El proceso de desenlace
                                                                         usualmente tarda unos
                                                                         minutos. Respira un poco,

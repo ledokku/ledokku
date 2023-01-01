@@ -38,7 +38,7 @@ const Env = () => {
     const app = data?.app
 
     return (
-        <AdminLayout loading={loading || envVarLoading} error={error ?? envVarError}>
+        <AdminLayout loading={loading || envVarLoading} error={error ?? envVarError} pageTitle={`Variables de entorno | ${app?.name}`}>
             {app && <div>
                 <AppHeaderInfo app={app} />
                 <AppHeaderTabNav app={app} />

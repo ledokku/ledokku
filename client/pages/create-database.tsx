@@ -61,7 +61,7 @@ const DatabaseBox = ({ label, selected, icon, onClick }: DatabaseBoxProps) => {
                 }`}
             onClick={onClick}
         >
-            <div className="mb-2 h-12">{icon}</div>
+            <div className="h-12 mb-2">{icon}</div>
             <Text h3>{label}</Text>
         </div>
     );
@@ -170,7 +170,7 @@ const CreateDatabase = () => {
     }, [isDbCreationSuccess, toast]);
 
     return (
-        <AdminLayout>
+        <AdminLayout pageTitle='Crear base de datos'>
             <Text h2>Crear una base de datos</Text>
             <div className="mt-12">
                 {isTerminalVisible ? (
@@ -191,7 +191,7 @@ const CreateDatabase = () => {
 
                         {!!isDbCreationSuccess &&
                             isDbCreationSuccess === DbCreationStatus.SUCCESS ? (
-                            <div className="mt-12 flex justify-end">
+                            <div className="flex justify-end mt-12">
                                 <Button
                                     onClick={() => handleNext()}
                                     iconRight={<FiArrowRight size={20} />}
@@ -201,7 +201,7 @@ const CreateDatabase = () => {
                             </div>
                         ) : !!isDbCreationSuccess &&
                             isDbCreationSuccess === DbCreationStatus.FAILURE ? (
-                            <div className="mt-12 flex justify-end">
+                            <div className="flex justify-end mt-12">
                                 <Button
                                     onClick={() => {
                                         setIsTerminalVisible(false);
@@ -344,7 +344,7 @@ const CreateDatabase = () => {
                                 </Grid.Container>
                             </div>
 
-                            <div className="mt-12 flex justify-end">
+                            <div className="flex justify-end mt-12">
                                 <Button
                                     disabled={
                                         data?.isPluginInstalled.isPluginInstalled === false ||

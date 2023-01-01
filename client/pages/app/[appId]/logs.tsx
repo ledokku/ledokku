@@ -28,7 +28,7 @@ const Logs = () => {
 
 
     return (
-        <AdminLayout loading={loading || appLogsLoading} error={error ?? appLogsError} notFound={!data}>
+        <AdminLayout loading={loading || appLogsLoading} error={error ?? appLogsError} notFound={!data} pageTitle={`Registros | ${app?.name}`}>
             {app && <div>
                 <AppHeaderInfo app={app} />
                 <AppHeaderTabNav app={app} />
