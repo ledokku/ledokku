@@ -103,7 +103,7 @@ export class AppResolver {
     return this.appRepository.getAllPaginated(pagination, {
       tags: tags
         ? {
-            every: {
+            some: {
               name: {
                 in: tags,
               },

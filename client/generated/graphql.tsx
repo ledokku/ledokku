@@ -463,6 +463,7 @@ export type QueryAppProxyPortsArgs = {
 export type QueryAppsArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   page?: InputMaybe<Scalars['Int']>;
+  tags?: InputMaybe<Array<Scalars['String']>>;
 };
 
 
@@ -507,6 +508,7 @@ export type QueryDatabaseLogsArgs = {
 export type QueryDatabasesArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   page?: InputMaybe<Scalars['Int']>;
+  tags?: InputMaybe<Array<Scalars['String']>>;
 };
 
 
@@ -841,6 +843,7 @@ export type AppProxyPortsQuery = { __typename?: 'Query', appProxyPorts: Array<{ 
 export type AppsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
   page?: InputMaybe<Scalars['Int']>;
+  tags?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
 }>;
 
 
@@ -895,6 +898,7 @@ export type DatabaseLogsQuery = { __typename?: 'Query', databaseLogs: { __typena
 export type DatabaseQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
   page?: InputMaybe<Scalars['Int']>;
+  tags?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
 }>;
 
 
@@ -1932,8 +1936,8 @@ export type AppProxyPortsQueryHookResult = ReturnType<typeof useAppProxyPortsQue
 export type AppProxyPortsLazyQueryHookResult = ReturnType<typeof useAppProxyPortsLazyQuery>;
 export type AppProxyPortsQueryResult = Apollo.QueryResult<AppProxyPortsQuery, AppProxyPortsQueryVariables>;
 export const AppsDocument = gql`
-    query apps($limit: Int, $page: Int) {
-  apps(limit: $limit, page: $page) {
+    query apps($limit: Int, $page: Int, $tags: [String!]) {
+  apps(limit: $limit, page: $page, tags: $tags) {
     items {
       id
       name
@@ -1971,6 +1975,7 @@ export const AppsDocument = gql`
  *   variables: {
  *      limit: // value for 'limit'
  *      page: // value for 'page'
+ *      tags: // value for 'tags'
  *   },
  * });
  */
@@ -2226,8 +2231,8 @@ export type DatabaseLogsQueryHookResult = ReturnType<typeof useDatabaseLogsQuery
 export type DatabaseLogsLazyQueryHookResult = ReturnType<typeof useDatabaseLogsLazyQuery>;
 export type DatabaseLogsQueryResult = Apollo.QueryResult<DatabaseLogsQuery, DatabaseLogsQueryVariables>;
 export const DatabaseDocument = gql`
-    query database($limit: Int, $page: Int) {
-  databases(limit: $limit, page: $page) {
+    query database($limit: Int, $page: Int, $tags: [String!]) {
+  databases(limit: $limit, page: $page, tags: $tags) {
     items {
       id
       name
@@ -2256,6 +2261,7 @@ export const DatabaseDocument = gql`
  *   variables: {
  *      limit: // value for 'limit'
  *      page: // value for 'page'
+ *      tags: // value for 'tags'
  *   },
  * });
  */

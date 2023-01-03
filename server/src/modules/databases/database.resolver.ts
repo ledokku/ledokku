@@ -60,7 +60,7 @@ export class DatabaseResolver {
     return this.databaseRepository.getAllPaginated(pagination, {
       Tags: tags
         ? {
-            every: {
+            some: {
               name: {
                 in: tags,
               },

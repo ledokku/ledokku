@@ -1,6 +1,7 @@
-import { Badge, Button, Table, Text } from '@nextui-org/react';
+import { Badge, Button, Link, Table, Text } from '@nextui-org/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { AiOutlineCloseCircle } from 'react-icons/ai';
 import { useDatabaseQuery } from '../generated/graphql';
 import { DatabaseVersionBadge } from '../ui/components/DatabaseVersionBadge';
 import { AdminLayout } from '../ui/layout/layout';
@@ -8,9 +9,11 @@ import { AdminLayout } from '../ui/layout/layout';
 const Databases = () => {
     const history = useRouter();
     const [page, setPage] = useState(0);
+    const [tags, setTags] = useState<string[]>([]);
     const { data, loading, error } = useDatabaseQuery({
         variables: {
             page,
+            tags: tags.length > 0 ? tags : undefined,
         },
     });
 
@@ -28,14 +31,17 @@ const Databases = () => {
                     Crear base de datos
                 </Button>
             </div>
-            <Table
-                selectionMode="single"
-                onSelectionChange={(key: any) => {
-                    const index = key.currentKey;
-
-                    history.push(`/database/${data?.databases.items[index].id}`);
-                }}
-            >
+            {tags.map((it, index) => <Badge
+                key={index}
+                enableShadow
+                disableOutline
+                color="primary"
+            >{it}<AiOutlineCloseCircle
+                    className="ml-1 cursor-pointer"
+                    onClick={() => {
+                        setTags(tags.filter(it2 => it2 !== it))
+                    }} /></Badge>)}
+            <Table>
                 <Table.Header>
                     <Table.Column>Nombre</Table.Column>
                     <Table.Column>Tipo</Table.Column>
@@ -46,9 +52,11 @@ const Databases = () => {
                     {data?.databases.items.map((it, index) => (
                         <Table.Row key={index}>
                             <Table.Cell>
-                                <Text b h4 className='mb-0'>
-                                    {it.name}
-                                </Text>
+                                <Link href={`/database/${it.id}`}>
+                                    <Text b h4 className='mb-0'>
+                                        {it.name}
+                                    </Text>
+                                </Link>
                             </Table.Cell>
                             <Table.Cell>{it.type}</Table.Cell>
                             <Table.Cell>
@@ -57,6 +65,12 @@ const Databases = () => {
                                         key={index}
                                         enableShadow
                                         disableOutline
+                                        onClick={() => {
+                                            if (!tags.includes(it.name)) {
+                                                setTags([...tags, it.name])
+                                            }
+                                        }}
+                                        className="cursor-pointer"
                                         color="primary"
                                     >{it.name}</Badge>)}
                                 </div>

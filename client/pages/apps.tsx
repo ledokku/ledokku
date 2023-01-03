@@ -1,15 +1,18 @@
-import { Badge, Button, Table, Text } from '@nextui-org/react';
+import { Badge, Button, Link, Table, Text } from '@nextui-org/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { AiOutlineCloseCircle } from 'react-icons/ai';
 import { useAppsQuery } from '../generated/graphql';
 import { AdminLayout } from '../ui/layout/layout';
 
 const Apps = () => {
     const history = useRouter();
     const [page, setPage] = useState(0);
+    const [tags, setTags] = useState<string[]>([]);
     const { data, loading, error } = useAppsQuery({
         variables: {
             page,
+            tags: tags.length > 0 ? tags : undefined,
         },
     });
 
@@ -27,14 +30,17 @@ const Apps = () => {
                     Crear aplicación
                 </Button>
             </div>
-            <Table
-                selectionMode="single"
-                onSelectionChange={(key: any) => {
-                    const index = key.currentKey;
-
-                    history.push(`/app/${data?.apps.items[index].id}`);
-                }}
-            >
+            {tags.map((it, index) => <Badge
+                key={index}
+                enableShadow
+                disableOutline
+                color="primary"
+            >{it}<AiOutlineCloseCircle
+                    className="ml-1 cursor-pointer"
+                    onClick={() => {
+                        setTags(tags.filter(it2 => it2 !== it))
+                    }} /></Badge>)}
+            <Table>
                 <Table.Header>
                     <Table.Column>Nombre</Table.Column>
                     <Table.Column>Repositorio</Table.Column>
@@ -45,9 +51,11 @@ const Apps = () => {
                     {data?.apps.items.map((it, index) => (
                         <Table.Row key={index}>
                             <Table.Cell>
-                                <Text b h4 className='mb-0'>
-                                    {it.name}
-                                </Text>
+                                <Link href={`/app/${it.id}`}>
+                                    <Text b h4 className='mb-0'>
+                                        {it.name}
+                                    </Text>
+                                </Link>
                             </Table.Cell>
                             <Table.Cell>
                                 {it.appMetaGithub
@@ -59,6 +67,12 @@ const Apps = () => {
                                     {it.tags.map((it, index) => <Badge
                                         key={index}
                                         enableShadow
+                                        onClick={() => {
+                                            if (!tags.includes(it.name)) {
+                                                setTags([...tags, it.name])
+                                            }
+                                        }}
+                                        className="cursor-pointer"
                                         disableOutline
                                         color="primary"
                                     >{it.name}</Badge>)}
