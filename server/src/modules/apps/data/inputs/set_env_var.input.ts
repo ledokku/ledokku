@@ -10,4 +10,7 @@ export class SetEnvVarInput {
 
   @Field((type) => String)
   value: string;
+
+  @Field((type) => Boolean, { nullable: true })
+  asBuildArg?: boolean;
 }

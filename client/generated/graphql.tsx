@@ -135,6 +135,7 @@ export type Branch = {
 };
 
 export type BuildEnvVar = {
+  asBuildArg?: InputMaybe<Scalars['Boolean']>;
   key: Scalars['String'];
   value: Scalars['String'];
 };

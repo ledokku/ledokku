@@ -428,7 +428,7 @@ const CreateAppGithub = () => {
                             <Grid md xs={12}>
                                 <div className='w-full mt-8'>
                                     <div className='flex flex-row justify-between'>
-                                        <Text h5>Variables de entorno (Build)</Text>
+                                        <Text h5>Variables de entorno</Text>
                                         <Button size="sm" ghost onClick={() => envFile.current?.click()}>
                                             <FaUpload className='mr-2' /> Desde archivo
                                         </Button>
@@ -458,6 +458,19 @@ const CreateAppGithub = () => {
                                                                 setEnvVars(envVars.filter(it => it.key !== key))
                                                             }}
                                                         />
+                                                        <Checkbox
+                                                            label='Como build-arg'
+                                                            isSelected={envVar.asBuildArg ?? false}
+                                                            onChange={(val) => setEnvVars(envVars.map(it => {
+                                                                if (it.key === envVar.key) {
+                                                                    return {
+                                                                        ...it,
+                                                                        asBuildArg: val
+                                                                    }
+                                                                } else {
+                                                                    return it
+                                                                }
+                                                            }))} />
                                                         <div className="my-8">
                                                             <Divider />
                                                         </div>

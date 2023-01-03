@@ -11,6 +11,7 @@ interface QueueArgs {
   value: string;
   appId?: string;
   userId: string;
+  asBuildArg?: boolean;
   addToActivity?: boolean;
 }
 
@@ -32,13 +33,20 @@ export class SetEnvVarQueue extends IQueue<QueueArgs> {
       appId,
       userId,
       addToActivity = true,
+      asBuildArg,
     } = job.data;
 
     $log.info(
       `Iniciando asignacion de la variable de entorno ${appName} con ${key}=${value}`
     );
 
-    await this.dokkuAppRepository.setEnvVar(appName, { key, value });
+    await this.dokkuAppRepository.setEnvVar(
+      appName,
+      { key, value },
+      undefined,
+      undefined,
+      asBuildArg
+    );
 
     if (addToActivity) {
       await this.activityRepository.add({
