@@ -36,7 +36,7 @@ const AppSettingsAdvanced = () => {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [setAppTags, { loading: loadingSetTags }] = useSetAppTagsMutation();
 
-    const { data, loading, error } = useAppByIdQuery({
+    const { data, loading, error, refetch } = useAppByIdQuery({
         variables: {
             appId,
         },
@@ -111,7 +111,7 @@ const AppSettingsAdvanced = () => {
                                             tags: [...(tags ?? []), tag]
                                         }
                                     }
-                                })}
+                                }).then(res => refetch())}
                                 onRemove={(tag) => setAppTags({
                                     variables: {
                                         input: {
@@ -119,7 +119,8 @@ const AppSettingsAdvanced = () => {
                                             tags: (tags ?? []).filter((it) => it !== tag)
                                         }
                                     }
-                                })} />
+                                }).then(res => refetch())} />
+                            <Spacer y={2} />
                             <AppRestart appId={app.id} />
                             <Spacer y={2} />
                             <AppRebuild appId={app.id} />

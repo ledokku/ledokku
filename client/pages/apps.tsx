@@ -1,4 +1,4 @@
-import { Button, Table, Text } from '@nextui-org/react';
+import { Badge, Button, Table, Text } from '@nextui-org/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useAppsQuery } from '../generated/graphql';
@@ -38,6 +38,7 @@ const Apps = () => {
                 <Table.Header>
                     <Table.Column>Nombre</Table.Column>
                     <Table.Column>Repositorio</Table.Column>
+                    <Table.Column>Etiquetas</Table.Column>
                     <Table.Column>Status</Table.Column>
                 </Table.Header>
                 <Table.Body loadingState={loading ? 'loading' : 'idle'}>
@@ -52,6 +53,16 @@ const Apps = () => {
                                 {it.appMetaGithub
                                     ? `${it.appMetaGithub.repoOwner}/${it.appMetaGithub.repoName}`
                                     : ' '}
+                            </Table.Cell>
+                            <Table.Cell>
+                                <div className='flex flex-wrap max-w-xs gap-2'>
+                                    {it.tags.map((it, index) => <Badge
+                                        key={index}
+                                        enableShadow
+                                        disableOutline
+                                        color="primary"
+                                    >{it.name}</Badge>)}
+                                </div>
                             </Table.Cell>
                             <Table.Cell>
                                 {it.status}

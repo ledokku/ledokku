@@ -38,7 +38,7 @@ export const TagInput = ({ tags = [], onAdd, onRemove, disabled = false, loading
                     light>Agregar</Button>
             } />
         <Text color="$error">{error}</Text>
-        <div className="flex gap-2 mt-4">
+        <div className="flex flex-wrap gap-2 mt-4 w-[300px]">
             {tags.map((it, index) => <Badge
                 key={index}
                 enableShadow
