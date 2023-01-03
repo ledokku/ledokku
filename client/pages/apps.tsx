@@ -38,7 +38,7 @@ const Apps = () => {
                 <Table.Header>
                     <Table.Column>Nombre</Table.Column>
                     <Table.Column>Repositorio</Table.Column>
-                    <Table.Column>Etiquetas</Table.Column>
+                    <Table.Column width={300}>Etiquetas</Table.Column>
                     <Table.Column>Status</Table.Column>
                 </Table.Header>
                 <Table.Body loadingState={loading ? 'loading' : 'idle'}>
@@ -55,7 +55,7 @@ const Apps = () => {
                                     : ' '}
                             </Table.Cell>
                             <Table.Cell>
-                                <div className='flex flex-wrap max-w-xs gap-2'>
+                                <div className='flex flex-wrap gap-2'>
                                     {it.tags.map((it, index) => <Badge
                                         key={index}
                                         enableShadow

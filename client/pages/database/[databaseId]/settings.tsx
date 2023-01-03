@@ -6,9 +6,11 @@ import * as yup from 'yup';
 import {
     DashboardDocument,
     useDatabaseByIdQuery,
-    useDestroyDatabaseMutation
+    useDestroyDatabaseMutation,
+    useSetDatabaseTagsMutation
 } from '../../../generated/graphql';
 import { CodeBox } from '../../../ui/components/CodeBox';
+import { TagInput } from '../../../ui/components/TagInput';
 import { AdminLayout } from '../../../ui/layout/layout';
 import { DatabaseHeaderInfo } from '../../../ui/modules/database/DatabaseHeaderInfo';
 import { DatabaseHeaderTabNav } from '../../../ui/modules/database/DatabaseHeaderTabNav';
@@ -20,7 +22,8 @@ const Settings = () => {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const toast = useToast();
     const [destroyDatabaseMutation, { loading: destroyDbLoading }] = useDestroyDatabaseMutation();
-    const { data, loading, error } = useDatabaseByIdQuery({
+    const [setDatabaseTags, { loading: loadingSetTags }] = useSetDatabaseTagsMutation();
+    const { data, loading, error, refetch } = useDatabaseByIdQuery({
         variables: {
             databaseId,
         },
@@ -69,6 +72,7 @@ const Settings = () => {
     });
 
     const database = data?.database;
+    const tags = database?.tags?.map(it => it.name);
 
     return (
         <AdminLayout loading={loading} error={error} notFound={!database} pageTitle={`Registros | ${database?.name}`}>
@@ -80,9 +84,28 @@ const Settings = () => {
 
                 <div className="grid gap-4 mt-10 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1">
                     <div className="mb-6 w-3/3">
-                        <Text h2>Configuración</Text>
-                        <Spacer y={3} />
-                        <Card className="mt-8" variant="bordered" borderWeight="normal">
+                        <Spacer y={1} />
+                        <TagInput
+                            tags={tags}
+                            loading={loadingSetTags}
+                            onAdd={(tag) => setDatabaseTags({
+                                variables: {
+                                    input: {
+                                        id: database.id,
+                                        tags: [...(tags ?? []), tag]
+                                    }
+                                }
+                            }).then(res => refetch())}
+                            onRemove={(tag) => setDatabaseTags({
+                                variables: {
+                                    input: {
+                                        id: database.id,
+                                        tags: (tags ?? []).filter((it) => it !== tag)
+                                    }
+                                }
+                            }).then(res => refetch())} />
+                        <Spacer y={2} />
+                        <Card variant="bordered" borderWeight="normal">
                             <Card.Header>
                                 <Text h3 className="mb-1">
                                     Eliminar base de datos
