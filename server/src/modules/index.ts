@@ -11,3 +11,4 @@ export * from "./github/github.resolver";
 export * from "./plugins/plugin.resolver";
 export * from "./settings/settings.resolver";
 export * from "./system/system.resolver";
+export * from "./tags/tag.resolver";

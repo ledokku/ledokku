@@ -16,6 +16,7 @@ import {
 import { Alert } from '../../ui/components/Alert';
 import { EnvForm } from '../../ui/components/EnvForm';
 import { LoadingSection } from '../../ui/components/LoadingSection';
+import { TagInput } from '../../ui/components/TagInput';
 import { AdminLayout } from '../../ui/layout/layout';
 import { useToast } from '../../ui/toast';
 
@@ -45,6 +46,7 @@ const CreateAppGithub = () => {
     const [selectedBranch, setSelectedBranch] = useState('');
     const [isProceedModalOpen, setIsProceedModalOpen] = useState(false);
     const [isDockerfileEnabled, setIsDockerfileEnabled] = useState(false);
+    const [tags, setTags] = useState<string[]>([]);
     const { data: installationData, loading: installationLoading } = useGithubInstallationIdQuery({
         fetchPolicy: 'network-only',
     });
@@ -136,7 +138,8 @@ const CreateAppGithub = () => {
                                 gitRepoId: values.repo.id,
                                 githubInstallationId: values.installationId,
                                 dockerfilePath: isDockerfileEnabled ? values.dockerfilePath : undefined,
-                                envVars: envVars
+                                envVars: envVars,
+                                tags: tags.length > 0 ? tags : undefined
                             },
                         },
                     });
@@ -408,6 +411,11 @@ const CreateAppGithub = () => {
                                             </div>
                                         }
                                     </div>
+                                    <TagInput
+                                        tags={tags}
+                                        disabled={formik.values.repo.id.length === 0}
+                                        onAdd={(tag) => setTags([...tags, tag])}
+                                        onRemove={(tag) => setTags(tags.filter((it) => it !== tag))} />
                                     <Button
                                         className="mt-8"
                                         type="submit"

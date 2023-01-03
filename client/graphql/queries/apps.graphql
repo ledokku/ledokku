@@ -4,6 +4,9 @@ query apps($limit: Int, $page: Int) {
       id
       name
       type
+      tags {
+        name
+      }
       appMetaGithub {
         repoOwner
         repoName

@@ -4,6 +4,9 @@ query appById($appId: String!) {
     name
     createdAt
     status
+    tags {
+      name
+    }
     databases {
       id
       name

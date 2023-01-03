@@ -61,6 +61,7 @@ export type App = {
   name: Scalars['String'];
   ports: Array<ProxyPort>;
   status: AppStatus;
+  tags: Array<Tag>;
   type: AppTypes;
   updatedAt: Scalars['DateTime'];
   userId: Scalars['String'];
@@ -150,6 +151,7 @@ export type CreateAppGithubInput = {
   gitRepoFullName: Scalars['String'];
   gitRepoId: Scalars['String'];
   name: Scalars['String'];
+  tags?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type CreateAppResult = {
@@ -159,6 +161,7 @@ export type CreateAppResult = {
 
 export type CreateDatabaseInput = {
   name: Scalars['String'];
+  tags?: InputMaybe<Array<Scalars['String']>>;
   type: DbTypes;
   version?: InputMaybe<Scalars['String']>;
 };
@@ -169,6 +172,7 @@ export type Database = {
   createdAt: Scalars['DateTime'];
   id: Scalars['String'];
   name: Scalars['String'];
+  tags: Array<Tag>;
   type: DbTypes;
   updatedAt: Scalars['DateTime'];
   userId: Scalars['String'];
@@ -387,11 +391,13 @@ export type ProxyPort = {
 export type Query = {
   __typename?: 'Query';
   activity: ActivityPaginationInfo;
+  allTags: Array<Tag>;
   app: App;
   appLogs: Logs;
   appMetaGithub?: Maybe<AppGithubMeta>;
   appProxyPorts: Array<ProxyPort>;
   apps: AppPaginationInfo;
+  appsWithTag: AppPaginationInfo;
   branches: Array<Branch>;
   buildingApps: Array<App>;
   checkDomainStatus: Scalars['Int'];
@@ -400,6 +406,7 @@ export type Query = {
   databaseInfo: DatabaseInfo;
   databaseLogs: Logs;
   databases: DatabasePaginationInfo;
+  databasesWithTag: DatabasePaginationInfo;
   dokkuPlugins: PluginList;
   domains: Array<AppDomain>;
   envVars: EnvVarList;
@@ -447,6 +454,13 @@ export type QueryAppsArgs = {
 };
 
 
+export type QueryAppsWithTagArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  name: Scalars['String'];
+  page?: InputMaybe<Scalars['Int']>;
+};
+
+
 export type QueryBranchesArgs = {
   installationId: Scalars['String'];
   repositoryName: Scalars['String'];
@@ -480,6 +494,13 @@ export type QueryDatabaseLogsArgs = {
 
 export type QueryDatabasesArgs = {
   limit?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type QueryDatabasesWithTagArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  name: Scalars['String'];
   page?: InputMaybe<Scalars['Int']>;
 };
 
@@ -582,6 +603,12 @@ export type Subscription = {
 
 export type SubscriptionAppCreateLogsArgs = {
   appId: Scalars['ID'];
+};
+
+export type Tag = {
+  __typename?: 'Tag';
+  id: Scalars['ID'];
+  name: Scalars['String'];
 };
 
 export type UnlinkDatabaseInput = {
@@ -764,7 +791,7 @@ export type AppByIdQueryVariables = Exact<{
 }>;
 
 
-export type AppByIdQuery = { __typename?: 'Query', app: { __typename?: 'App', id: string, name: string, createdAt: any, status: AppStatus, databases: Array<{ __typename?: 'Database', id: string, name: string, type: DbTypes }>, appMetaGithub?: { __typename?: 'AppGithubMeta', repoId: string, repoName: string, repoOwner: string, branch: string, githubAppInstallationId: string } | null, ports: Array<{ __typename?: 'ProxyPort', scheme: string, host: string, container: string }> } };
+export type AppByIdQuery = { __typename?: 'Query', app: { __typename?: 'App', id: string, name: string, createdAt: any, status: AppStatus, tags: Array<{ __typename?: 'Tag', name: string }>, databases: Array<{ __typename?: 'Database', id: string, name: string, type: DbTypes }>, appMetaGithub?: { __typename?: 'AppGithubMeta', repoId: string, repoName: string, repoOwner: string, branch: string, githubAppInstallationId: string } | null, ports: Array<{ __typename?: 'ProxyPort', scheme: string, host: string, container: string }> } };
 
 export type AppLogsQueryVariables = Exact<{
   appId: Scalars['String'];
@@ -786,7 +813,7 @@ export type AppsQueryVariables = Exact<{
 }>;
 
 
-export type AppsQuery = { __typename?: 'Query', apps: { __typename?: 'AppPaginationInfo', totalPages: number, items: Array<{ __typename?: 'App', id: string, name: string, type: AppTypes, status: AppStatus, appMetaGithub?: { __typename?: 'AppGithubMeta', repoOwner: string, repoName: string } | null, ports: Array<{ __typename?: 'ProxyPort', scheme: string, host: string, container: string }> }> } };
+export type AppsQuery = { __typename?: 'Query', apps: { __typename?: 'AppPaginationInfo', totalPages: number, items: Array<{ __typename?: 'App', id: string, name: string, type: AppTypes, status: AppStatus, tags: Array<{ __typename?: 'Tag', name: string }>, appMetaGithub?: { __typename?: 'AppGithubMeta', repoOwner: string, repoName: string } | null, ports: Array<{ __typename?: 'ProxyPort', scheme: string, host: string, container: string }> }> } };
 
 export type BranchesQueryVariables = Exact<{
   installationId: Scalars['String'];
@@ -818,7 +845,7 @@ export type DatabaseByIdQueryVariables = Exact<{
 }>;
 
 
-export type DatabaseByIdQuery = { __typename?: 'Query', database: { __typename?: 'Database', id: string, name: string, type: DbTypes, version: string, apps: Array<{ __typename?: 'App', id: string, name: string }> } };
+export type DatabaseByIdQuery = { __typename?: 'Query', database: { __typename?: 'Database', id: string, name: string, type: DbTypes, version: string, tags: Array<{ __typename?: 'Tag', name: string }>, apps: Array<{ __typename?: 'App', id: string, name: string }> } };
 
 export type DatabaseInfoQueryVariables = Exact<{
   databaseId: Scalars['String'];
@@ -840,7 +867,7 @@ export type DatabaseQueryVariables = Exact<{
 }>;
 
 
-export type DatabaseQuery = { __typename?: 'Query', databases: { __typename?: 'DatabasePaginationInfo', totalPages: number, items: Array<{ __typename?: 'Database', id: string, name: string, type: DbTypes, version: string }> } };
+export type DatabaseQuery = { __typename?: 'Query', databases: { __typename?: 'DatabasePaginationInfo', totalPages: number, items: Array<{ __typename?: 'Database', id: string, name: string, type: DbTypes, version: string, tags: Array<{ __typename?: 'Tag', name: string }> }> } };
 
 export type DomainsQueryVariables = Exact<{
   appId: Scalars['String'];
@@ -901,6 +928,11 @@ export type SetupQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type SetupQuery = { __typename?: 'Query', setup: { __typename?: 'SetupResult', canConnectSsh: boolean, sshPublicKey: string, isGithubAppSetup: boolean, githubAppManifest: string } };
+
+export type GetAllTagsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllTagsQuery = { __typename?: 'Query', allTags: Array<{ __typename?: 'Tag', name: string }> };
 
 export type AppCreateLogsSubscriptionVariables = Exact<{
   appId: Scalars['ID'];
@@ -1679,6 +1711,9 @@ export const AppByIdDocument = gql`
     name
     createdAt
     status
+    tags {
+      name
+    }
     databases {
       id
       name
@@ -1806,6 +1841,9 @@ export const AppsDocument = gql`
       id
       name
       type
+      tags {
+        name
+      }
       appMetaGithub {
         repoOwner
         repoName
@@ -1982,6 +2020,9 @@ export const DatabaseByIdDocument = gql`
     name
     type
     version
+    tags {
+      name
+    }
     apps {
       id
       name
@@ -2095,6 +2136,9 @@ export const DatabaseDocument = gql`
       name
       type
       version
+      tags {
+        name
+      }
     }
     totalPages
   }
@@ -2488,6 +2532,40 @@ export function useSetupLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Setu
 export type SetupQueryHookResult = ReturnType<typeof useSetupQuery>;
 export type SetupLazyQueryHookResult = ReturnType<typeof useSetupLazyQuery>;
 export type SetupQueryResult = Apollo.QueryResult<SetupQuery, SetupQueryVariables>;
+export const GetAllTagsDocument = gql`
+    query GetAllTags {
+  allTags {
+    name
+  }
+}
+    `;
+
+/**
+ * __useGetAllTagsQuery__
+ *
+ * To run a query within a React component, call `useGetAllTagsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllTagsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllTagsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAllTagsQuery(baseOptions?: Apollo.QueryHookOptions<GetAllTagsQuery, GetAllTagsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAllTagsQuery, GetAllTagsQueryVariables>(GetAllTagsDocument, options);
+      }
+export function useGetAllTagsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllTagsQuery, GetAllTagsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAllTagsQuery, GetAllTagsQueryVariables>(GetAllTagsDocument, options);
+        }
+export type GetAllTagsQueryHookResult = ReturnType<typeof useGetAllTagsQuery>;
+export type GetAllTagsLazyQueryHookResult = ReturnType<typeof useGetAllTagsLazyQuery>;
+export type GetAllTagsQueryResult = Apollo.QueryResult<GetAllTagsQuery, GetAllTagsQueryVariables>;
 export const AppCreateLogsDocument = gql`
     subscription appCreateLogs($appId: ID!) {
   appCreateLogs(appId: $appId) {

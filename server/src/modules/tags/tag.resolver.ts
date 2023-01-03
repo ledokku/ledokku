@@ -1,13 +1,17 @@
 import { ResolverService } from '@tsed/typegraphql';
-import { Arg, Args, Authorized, Query } from 'type-graphql';
+import { Arg, Args, Authorized, Mutation, Query } from 'type-graphql';
 import { PaginationArgs } from '../../data/args/pagination';
 import {
   AppRepository,
   DatabaseRepository,
   TagRepository,
 } from '../../repositories';
-import { AppPaginationInfo } from '../apps/data/models/app.model';
-import { DatabasePaginationInfo } from '../databases/data/models/database.model';
+import { App, AppPaginationInfo } from '../apps/data/models/app.model';
+import {
+  Database,
+  DatabasePaginationInfo,
+} from '../databases/data/models/database.model';
+import { TagUpdateInput } from './data/inputs/tag_update.input';
 import { Tag } from './data/models/tag.model';
 
 @ResolverService()
@@ -50,6 +54,34 @@ export class TagResolver {
         some: {
           name: tagName,
         },
+      },
+    });
+  }
+
+  @Mutation((returns) => App)
+  @Authorized()
+  setAppTags(
+    @Arg('input', (type) => TagUpdateInput) { id, tags }: TagUpdateInput
+  ) {
+    return this.appRepository.update(id, {
+      tags: {
+        set: tags.map((it) => ({
+          name: it,
+        })),
+      },
+    });
+  }
+
+  @Mutation((returns) => Database)
+  @Authorized()
+  setDatabaseTags(
+    @Arg('input', (type) => TagUpdateInput) { id, tags }: TagUpdateInput
+  ) {
+    return this.databaseRepository.update(id, {
+      Tags: {
+        set: tags.map((it) => ({
+          name: it,
+        })),
       },
     });
   }

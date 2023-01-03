@@ -18,6 +18,7 @@ import {
 import { Alert } from '../ui/components/Alert';
 import { CodeBox } from '../ui/components/CodeBox';
 import { LoadingSection } from '../ui/components/LoadingSection';
+import { TagInput } from '../ui/components/TagInput';
 import { Terminal } from '../ui/components/Terminal';
 import { MongoIcon } from '../ui/icons/MongoIcon';
 import { MySQLIcon } from '../ui/icons/MySQLIcon';
@@ -80,6 +81,7 @@ const CreateDatabase = () => {
     const [isTerminalVisible, setIsTerminalVisible] = useState(false);
     const [createDatabaseMutation] = useCreateDatabaseMutation();
     const [isDbCreationSuccess, setIsDbCreationSuccess] = useState<DbCreationStatus>();
+    const [tags, setTags] = useState<string[]>([]);
 
     useCreateDatabaseLogsSubscription({
         onSubscriptionData: (data) => {
@@ -134,7 +136,12 @@ const CreateDatabase = () => {
             try {
                 await createDatabaseMutation({
                     variables: {
-                        input: { name: values.name, type: values.type, version: values.version ? values.version : undefined },
+                        input: {
+                            name: values.name,
+                            type: values.type,
+                            version: values.version ? values.version : undefined,
+                            tags: tags.length > 0 ? tags : undefined
+                        },
                     },
                 });
                 setIsTerminalVisible(true);
@@ -293,6 +300,10 @@ const CreateDatabase = () => {
                                                         click aquí para verlas
                                                     </Link>
                                                 </Text>}
+                                                <TagInput
+                                                    tags={tags}
+                                                    onAdd={(tag) => setTags([...tags, tag])}
+                                                    onRemove={(tag) => setTags(tags.filter((it) => it !== tag))} />
                                             </Grid>
                                         </Grid.Container>
                                     )}

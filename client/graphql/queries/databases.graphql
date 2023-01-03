@@ -5,6 +5,9 @@ query database($limit: Int, $page: Int) {
       name
       type
       version
+      tags {
+        name
+      }
     }
     totalPages
   }

@@ -19,6 +19,7 @@ import {
     useDestroyAppMutation
 } from '../../../../generated/graphql';
 import { CodeBox } from '../../../../ui/components/CodeBox';
+import { TagInput } from '../../../../ui/components/TagInput';
 import { AdminLayout } from '../../../../ui/layout/layout';
 import { AppHeaderInfo } from '../../../../ui/modules/app/AppHeaderInfo';
 import { AppHeaderTabNav } from '../../../../ui/modules/app/AppHeaderTabNav';
@@ -32,6 +33,7 @@ const AppSettingsAdvanced = () => {
     const appId = history.query.appId as string;
     const toast = useToast();
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [tags, setTags] = useState<string[]>([]);
 
     const { data, loading, error } = useAppByIdQuery({
         variables: {
@@ -97,6 +99,10 @@ const AppSettingsAdvanced = () => {
                             <AppSettingsMenu app={app} />
                         </Grid>
                         <Grid xs={9} direction="column">
+                            <TagInput
+                                tags={tags}
+                                onAdd={(tag) => setTags([...tags, tag])}
+                                onRemove={(tag) => setTags(tags.filter((it) => it !== tag))} />
                             <AppRestart appId={app.id} />
                             <Spacer y={2} />
                             <AppRebuild appId={app.id} />
