@@ -268,6 +268,8 @@ export type Mutation = {
   removeAppProxyPort: Scalars['Boolean'];
   removeDomain: BooleanResult;
   restartApp: BooleanResult;
+  setAppTags: App;
+  setDatabaseTags: Database;
   setDomain: BooleanResult;
   setEnvVar: BooleanResult;
   unlinkDatabase: BooleanResult;
@@ -347,6 +349,16 @@ export type MutationRemoveDomainArgs = {
 
 export type MutationRestartAppArgs = {
   input: RestartAppInput;
+};
+
+
+export type MutationSetAppTagsArgs = {
+  input: TagUpdateInput;
+};
+
+
+export type MutationSetDatabaseTagsArgs = {
+  input: TagUpdateInput;
 };
 
 
@@ -611,6 +623,11 @@ export type Tag = {
   name: Scalars['String'];
 };
 
+export type TagUpdateInput = {
+  id: Scalars['ID'];
+  tags: Array<Scalars['String']>;
+};
+
 export type UnlinkDatabaseInput = {
   appId: Scalars['String'];
   databaseId: Scalars['String'];
@@ -740,6 +757,20 @@ export type RestartAppMutationVariables = Exact<{
 
 
 export type RestartAppMutation = { __typename?: 'Mutation', restartApp: { __typename?: 'BooleanResult', result: boolean } };
+
+export type SetAppTagsMutationVariables = Exact<{
+  input: TagUpdateInput;
+}>;
+
+
+export type SetAppTagsMutation = { __typename?: 'Mutation', setAppTags: { __typename?: 'App', id: string } };
+
+export type SetDatabaseTagsMutationVariables = Exact<{
+  input: TagUpdateInput;
+}>;
+
+
+export type SetDatabaseTagsMutation = { __typename?: 'Mutation', setDatabaseTags: { __typename?: 'Database', id: string } };
 
 export type SetDomainMutationVariables = Exact<{
   input: SetDomainInput;
@@ -1459,6 +1490,72 @@ export function useRestartAppMutation(baseOptions?: Apollo.MutationHookOptions<R
 export type RestartAppMutationHookResult = ReturnType<typeof useRestartAppMutation>;
 export type RestartAppMutationResult = Apollo.MutationResult<RestartAppMutation>;
 export type RestartAppMutationOptions = Apollo.BaseMutationOptions<RestartAppMutation, RestartAppMutationVariables>;
+export const SetAppTagsDocument = gql`
+    mutation SetAppTags($input: TagUpdateInput!) {
+  setAppTags(input: $input) {
+    id
+  }
+}
+    `;
+export type SetAppTagsMutationFn = Apollo.MutationFunction<SetAppTagsMutation, SetAppTagsMutationVariables>;
+
+/**
+ * __useSetAppTagsMutation__
+ *
+ * To run a mutation, you first call `useSetAppTagsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetAppTagsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setAppTagsMutation, { data, loading, error }] = useSetAppTagsMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useSetAppTagsMutation(baseOptions?: Apollo.MutationHookOptions<SetAppTagsMutation, SetAppTagsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetAppTagsMutation, SetAppTagsMutationVariables>(SetAppTagsDocument, options);
+      }
+export type SetAppTagsMutationHookResult = ReturnType<typeof useSetAppTagsMutation>;
+export type SetAppTagsMutationResult = Apollo.MutationResult<SetAppTagsMutation>;
+export type SetAppTagsMutationOptions = Apollo.BaseMutationOptions<SetAppTagsMutation, SetAppTagsMutationVariables>;
+export const SetDatabaseTagsDocument = gql`
+    mutation SetDatabaseTags($input: TagUpdateInput!) {
+  setDatabaseTags(input: $input) {
+    id
+  }
+}
+    `;
+export type SetDatabaseTagsMutationFn = Apollo.MutationFunction<SetDatabaseTagsMutation, SetDatabaseTagsMutationVariables>;
+
+/**
+ * __useSetDatabaseTagsMutation__
+ *
+ * To run a mutation, you first call `useSetDatabaseTagsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetDatabaseTagsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setDatabaseTagsMutation, { data, loading, error }] = useSetDatabaseTagsMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useSetDatabaseTagsMutation(baseOptions?: Apollo.MutationHookOptions<SetDatabaseTagsMutation, SetDatabaseTagsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetDatabaseTagsMutation, SetDatabaseTagsMutationVariables>(SetDatabaseTagsDocument, options);
+      }
+export type SetDatabaseTagsMutationHookResult = ReturnType<typeof useSetDatabaseTagsMutation>;
+export type SetDatabaseTagsMutationResult = Apollo.MutationResult<SetDatabaseTagsMutation>;
+export type SetDatabaseTagsMutationOptions = Apollo.BaseMutationOptions<SetDatabaseTagsMutation, SetDatabaseTagsMutationVariables>;
 export const SetDomainDocument = gql`
     mutation setDomain($input: SetDomainInput!) {
   setDomain(input: $input) {

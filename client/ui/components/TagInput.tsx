@@ -1,15 +1,16 @@
-import { Badge, Button, Input, Text } from "@nextui-org/react";
+import { Badge, Button, Input, Loading, Text } from "@nextui-org/react";
 import { useState } from "react";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 
 interface TagInputProps {
     tags?: string[];
     disabled?: boolean;
+    loading?: boolean;
     onAdd?: (tag: string) => void;
     onRemove?: (tag: string) => void;
 }
 
-export const TagInput = ({ tags, onAdd, onRemove, disabled }: TagInputProps) => {
+export const TagInput = ({ tags = [], onAdd, onRemove, disabled = false, loading = false }: TagInputProps) => {
     const [name, setName] = useState("");
     const [error, setError] = useState<string | undefined>(undefined)
 
@@ -18,13 +19,14 @@ export const TagInput = ({ tags, onAdd, onRemove, disabled }: TagInputProps) => 
             label="Etiqueta"
             width="300px"
             value={name}
-            disabled={disabled}
+            contentLeft={loading ? <Loading size="xs" /> : undefined}
+            disabled={disabled || loading}
             onChange={(e) => setName(e.currentTarget.value)}
             labelRight={
                 <Button
                     size="xs"
-                    disabled={disabled}
-                    onClick={disabled ? undefined : () => {
+                    disabled={disabled || loading}
+                    onClick={disabled || loading ? undefined : () => {
                         const pattern = /^[a-z0-9-]+$/;
                         setError(undefined)
                         if (!pattern.test(name)) return setError(`No cumple con el patrón ${pattern}`)
@@ -37,7 +39,7 @@ export const TagInput = ({ tags, onAdd, onRemove, disabled }: TagInputProps) => 
             } />
         <Text color="$error">{error}</Text>
         <div className="flex gap-2 mt-4">
-            {tags?.map((it, index) => <Badge
+            {tags.map((it, index) => <Badge
                 key={index}
                 enableShadow
                 disableOutline

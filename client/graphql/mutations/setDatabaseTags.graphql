@@ -1,0 +1,5 @@
+mutation SetDatabaseTags($input: TagUpdateInput!) {
+    setDatabaseTags(input: $input) {
+        id
+    }
+}

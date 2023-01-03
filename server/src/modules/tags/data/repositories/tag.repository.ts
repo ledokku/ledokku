@@ -13,6 +13,15 @@ export class TagRepository {
     });
   }
 
+  ensureExist(tags: string[]) {
+    return this.prisma.tag.createMany({
+      data: tags.map((it) => ({
+        name: it,
+      })),
+      skipDuplicates: true,
+    });
+  }
+
   getAll(filter?: Prisma.TagWhereInput) {
     return this.prisma.tag.findMany({
       where: filter,

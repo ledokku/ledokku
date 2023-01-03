@@ -16,7 +16,8 @@ import * as yup from 'yup';
 import {
     DashboardDocument,
     useAppByIdQuery,
-    useDestroyAppMutation
+    useDestroyAppMutation,
+    useSetAppTagsMutation
 } from '../../../../generated/graphql';
 import { CodeBox } from '../../../../ui/components/CodeBox';
 import { TagInput } from '../../../../ui/components/TagInput';
@@ -33,7 +34,7 @@ const AppSettingsAdvanced = () => {
     const appId = history.query.appId as string;
     const toast = useToast();
     const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const [tags, setTags] = useState<string[]>([]);
+    const [setAppTags, { loading: loadingSetTags }] = useSetAppTagsMutation();
 
     const { data, loading, error } = useAppByIdQuery({
         variables: {
@@ -84,6 +85,7 @@ const AppSettingsAdvanced = () => {
     });
 
     const app = data?.app;
+    const tags = app?.tags?.map(it => it.name);
 
     return (
         <AdminLayout loading={loading} notFound={!app} error={error} pageTitle={`General | ${app?.name}`}>
@@ -101,8 +103,23 @@ const AppSettingsAdvanced = () => {
                         <Grid xs={9} direction="column">
                             <TagInput
                                 tags={tags}
-                                onAdd={(tag) => setTags([...tags, tag])}
-                                onRemove={(tag) => setTags(tags.filter((it) => it !== tag))} />
+                                loading={loadingSetTags}
+                                onAdd={(tag) => setAppTags({
+                                    variables: {
+                                        input: {
+                                            id: app.id,
+                                            tags: [...(tags ?? []), tag]
+                                        }
+                                    }
+                                })}
+                                onRemove={(tag) => setAppTags({
+                                    variables: {
+                                        input: {
+                                            id: app.id,
+                                            tags: (tags ?? []).filter((it) => it !== tag)
+                                        }
+                                    }
+                                })} />
                             <AppRestart appId={app.id} />
                             <Spacer y={2} />
                             <AppRebuild appId={app.id} />

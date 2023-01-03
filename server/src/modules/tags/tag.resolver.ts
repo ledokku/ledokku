@@ -60,9 +60,10 @@ export class TagResolver {
 
   @Mutation((returns) => App)
   @Authorized()
-  setAppTags(
+  async setAppTags(
     @Arg('input', (type) => TagUpdateInput) { id, tags }: TagUpdateInput
   ) {
+    await this.tagRepository.ensureExist(tags);
     return this.appRepository.update(id, {
       tags: {
         set: tags.map((it) => ({
@@ -74,9 +75,10 @@ export class TagResolver {
 
   @Mutation((returns) => Database)
   @Authorized()
-  setDatabaseTags(
+  async setDatabaseTags(
     @Arg('input', (type) => TagUpdateInput) { id, tags }: TagUpdateInput
   ) {
+    await this.tagRepository.ensureExist(tags);
     return this.databaseRepository.update(id, {
       Tags: {
         set: tags.map((it) => ({
