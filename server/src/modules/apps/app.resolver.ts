@@ -357,13 +357,7 @@ export class AppResolver {
 
       if (input.envVars && input.envVars.length > 0) {
         for (const env of input.envVars) {
-          this.setEnvVarQueue.add({
-            appName,
-            userId: context.auth.user.id,
-            key: env.key,
-            value: env.value,
-            addToActivity: false,
-          });
+          await this.dokkuAppRepository.setEnvVar(appName, env);
         }
       }
 

@@ -126,6 +126,8 @@ export class DeployAppQueue extends IQueue<QueueArgs, App> {
 
     const appToDelete = await this.appRepository.get(appId);
 
+    $log.info(appToDelete);
+
     if (appToDelete) {
       await this.appRepository.delete(appId);
 
