@@ -31,16 +31,18 @@ const Databases = () => {
                     Crear base de datos
                 </Button>
             </div>
-            {tags.map((it, index) => <Badge
-                key={index}
-                enableShadow
-                disableOutline
-                color="primary"
-            >{it}<AiOutlineCloseCircle
-                    className="ml-1 cursor-pointer"
-                    onClick={() => {
-                        setTags(tags.filter(it2 => it2 !== it))
-                    }} /></Badge>)}
+            <div className='flex gap-2'>
+                {tags.map((it, index) => <Badge
+                    key={index}
+                    enableShadow
+                    disableOutline
+                    color="primary"
+                >{it}<AiOutlineCloseCircle
+                        className="ml-1 cursor-pointer"
+                        onClick={() => {
+                            setTags(tags.filter(it2 => it2 !== it))
+                        }} /></Badge>)}
+            </div>
             <Table>
                 <Table.Header>
                     <Table.Column>Nombre</Table.Column>
