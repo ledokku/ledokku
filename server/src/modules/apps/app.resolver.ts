@@ -362,7 +362,7 @@ export class AppResolver {
             env,
             undefined,
             undefined,
-            true
+            env.asBuildArg
           );
         }
       }
