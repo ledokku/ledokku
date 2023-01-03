@@ -428,7 +428,7 @@ const CreateAppGithub = () => {
                             <Grid md xs={12}>
                                 <div className='w-full mt-8'>
                                     <div className='flex flex-row justify-between'>
-                                        <Text h5>Variables de entorno</Text>
+                                        <Text h5>Variables de entorno (Build)</Text>
                                         <Button size="sm" ghost onClick={() => envFile.current?.click()}>
                                             <FaUpload className='mr-2' /> Desde archivo
                                         </Button>

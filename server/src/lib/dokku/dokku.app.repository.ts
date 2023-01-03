@@ -107,16 +107,19 @@ export class DokkuAppRepository {
     appName: string,
     envVars: { key: string; value: string } | { key: string; value: string }[],
     { noRestart }: { noRestart: boolean } = { noRestart: false },
-    encoded?: boolean
+    encoded?: boolean,
+    asBuildArg?: boolean
   ): Promise<boolean> {
     if (!Array.isArray(envVars)) {
       envVars = [envVars];
     }
 
-    for (const env of envVars) {
-      await execSSHCommand(
-        `docker-options:add ${appName} build '--build-arg ${env.key}=${env.value}'`
-      );
+    if (asBuildArg) {
+      for (const env of envVars) {
+        await execSSHCommand(
+          `docker-options:add ${appName} build '--build-arg ${env.key}=${env.value}'`
+        );
+      }
     }
 
     const resultSetEnv = await execSSHCommand(

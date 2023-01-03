@@ -357,7 +357,13 @@ export class AppResolver {
 
       if (input.envVars && input.envVars.length > 0) {
         for (const env of input.envVars) {
-          await this.dokkuAppRepository.setEnvVar(appName, env);
+          await this.dokkuAppRepository.setEnvVar(
+            appName,
+            env,
+            undefined,
+            undefined,
+            true
+          );
         }
       }
 
