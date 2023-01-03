@@ -97,9 +97,20 @@ export class AppResolver {
   @Authorized()
   @Query((returns) => AppPaginationInfo)
   async apps(
-    @Args((type) => PaginationArgs) pagination: PaginationArgs
+    @Args((type) => PaginationArgs) pagination: PaginationArgs,
+    @Arg('tags', (type) => [String], { nullable: true }) tags?: string[]
   ): Promise<AppPaginationInfo> {
-    return this.appRepository.getAllPaginated(pagination);
+    return this.appRepository.getAllPaginated(pagination, {
+      tags: tags
+        ? {
+            every: {
+              name: {
+                in: tags,
+              },
+            },
+          }
+        : undefined,
+    });
   }
 
   @Authorized()

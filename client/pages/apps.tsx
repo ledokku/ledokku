@@ -32,7 +32,7 @@ const Apps = () => {
                 onSelectionChange={(key: any) => {
                     const index = key.currentKey;
 
-                    history.push(`app/${data?.apps.items[index].id}`);
+                    history.push(`/app/${data?.apps.items[index].id}`);
                 }}
             >
                 <Table.Header>

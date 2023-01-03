@@ -54,9 +54,20 @@ export class DatabaseResolver {
   @Authorized()
   @Query((returns) => DatabasePaginationInfo)
   async databases(
-    @Args((type) => PaginationArgs) pagination: PaginationArgs
+    @Args((type) => PaginationArgs) pagination: PaginationArgs,
+    @Arg('tags', (type) => [String], { nullable: true }) tags?: string[]
   ): Promise<DatabasePaginationInfo> {
-    return this.databaseRepository.getAllPaginated(pagination);
+    return this.databaseRepository.getAllPaginated(pagination, {
+      Tags: tags
+        ? {
+            every: {
+              name: {
+                in: tags,
+              },
+            },
+          }
+        : undefined,
+    });
   }
 
   @Authorized()
