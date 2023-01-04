@@ -92,13 +92,18 @@ export class DokkuAppRepository {
     const envVars = resultListEnv.stdout.split('\n');
     envVars.splice(0, 1);
 
-    console.log(envVars);
+    const buildArgs = await this.buildArgs(appName);
 
     return envVars.map((envVar) => {
       const split = envVar.split(':');
       return {
         key: split[0],
         value: split.slice(1).join(':').trim(),
+        asBuildArg: !!buildArgs.find((it) =>
+          RegExp(
+            `^--build-arg ${split[0]}=${split.slice(1).join(':').trim()}$`
+          ).test(it)
+        ),
       };
     });
   }

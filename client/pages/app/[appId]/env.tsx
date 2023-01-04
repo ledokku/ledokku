@@ -68,11 +68,19 @@ const Env = () => {
                                     key={envVar.key}
                                     name={envVar.key}
                                     value={envVar.value}
+                                    asBuildArg={false}
                                     onSubmit={
                                         async (values) => {
                                             try {
                                                 await setEnvVarMutation({
-                                                    variables: { key: values.name, value: values.value, appId },
+                                                    variables: {
+                                                        input: {
+                                                            key: values.name,
+                                                            value: values.value,
+                                                            appId,
+                                                            asBuildArg: values.asBuildArg
+                                                        }
+                                                    },
                                                     refetchQueries: [{ query: EnvVarsDocument, variables: { appId } }],
                                                 });
                                                 toast.success('Variable de entorno asignada');
@@ -103,11 +111,20 @@ const Env = () => {
                         key="newVar"
                         name=""
                         value=""
-                        isNewVar={true} onSubmit={
+                        asBuildArg={false}
+                        isNewVar={true}
+                        onSubmit={
                             async (values) => {
                                 try {
                                     await setEnvVarMutation({
-                                        variables: { key: values.name, value: values.value, appId },
+                                        variables: {
+                                            input: {
+                                                key: values.name,
+                                                value: values.value,
+                                                appId,
+                                                asBuildArg: values.asBuildArg
+                                            }
+                                        },
                                         refetchQueries: [{ query: EnvVarsDocument, variables: { appId } }],
                                     });
 

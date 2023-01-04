@@ -7,4 +7,7 @@ export class EnvVar {
 
   @Field((type) => String)
   value: string;
+
+  @Field((type) => Boolean)
+  asBuildArg: boolean;
 }

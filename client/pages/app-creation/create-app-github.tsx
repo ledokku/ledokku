@@ -442,12 +442,14 @@ const CreateAppGithub = () => {
                                                             key={envVar.key}
                                                             name={envVar.key}
                                                             value={envVar.value}
+                                                            asBuildArg={envVar.asBuildArg ?? false}
                                                             onSubmit={(data) => {
                                                                 setEnvVars(envVars.map(it => {
                                                                     if (it.key === data.name) {
                                                                         return {
                                                                             key: data.name,
-                                                                            value: data.value
+                                                                            value: data.value,
+                                                                            asBuildArg: data.asBuildArg
                                                                         }
                                                                     } else {
                                                                         return it
@@ -458,19 +460,6 @@ const CreateAppGithub = () => {
                                                                 setEnvVars(envVars.filter(it => it.key !== key))
                                                             }}
                                                         />
-                                                        <Checkbox
-                                                            label='Como build-arg'
-                                                            isSelected={envVar.asBuildArg ?? false}
-                                                            onChange={(val) => setEnvVars(envVars.map(it => {
-                                                                if (it.key === envVar.key) {
-                                                                    return {
-                                                                        ...it,
-                                                                        asBuildArg: val
-                                                                    }
-                                                                } else {
-                                                                    return it
-                                                                }
-                                                            }))} />
                                                         <div className="my-8">
                                                             <Divider />
                                                         </div>
@@ -481,11 +470,13 @@ const CreateAppGithub = () => {
                                                 key="newVar"
                                                 name=""
                                                 value=""
+                                                asBuildArg={false}
                                                 isNewVar={true}
                                                 onSubmit={(data) => {
                                                     setEnvVars([...envVars, {
                                                         key: data.name,
-                                                        value: data.value
+                                                        value: data.value,
+                                                        asBuildArg: data.asBuildArg
                                                     }])
                                                 }} />
                                         </div>

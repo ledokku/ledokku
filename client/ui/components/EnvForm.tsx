@@ -1,27 +1,39 @@
-import { Button, Grid, Input, Textarea } from '@nextui-org/react';
+import { Button, Checkbox, Grid, Input, Text, Textarea } from '@nextui-org/react';
 import { useFormik } from 'formik';
 import { useState } from 'react';
 import { FiTrash2 } from 'react-icons/fi';
+import * as yup from 'yup';
 
 interface EnvFormProps {
     name: string;
     value: string;
+    asBuildArg: boolean;
     isNewVar?: boolean;
     onDelete?: (key: string) => void,
-    onSubmit?: (values: { name: string; value: string }) => void
+    onSubmit?: (values: { name: string; value: string, asBuildArg: boolean }) => void
 }
 
-export const EnvForm = ({ name, value, isNewVar, onDelete, onSubmit }: EnvFormProps) => {
+export const EnvForm = ({ name, value, isNewVar, onDelete, onSubmit, asBuildArg }: EnvFormProps) => {
     const [focus, setFocus] = useState(false);
 
-    const formik = useFormik<{ name: string; value: string }>({
+    const envSchema = yup.object().shape<{ name: any; value: any, asBuildArg: any }>({
+        name: yup.string().required(),
+        value: yup.string().when("asBuildArg", {
+            is: true,
+            then: yup.string().matches(/^[^ ]*$/gm, "Los build-args no deben tener espacios")
+        }),
+        asBuildArg: yup.boolean()
+    });
+
+    const formik = useFormik<{ name: string; value: string, asBuildArg: boolean }>({
+        validateOnChange: true,
+        validateOnBlur: true,
         initialValues: {
             name,
             value,
+            asBuildArg,
         },
-        validate: (values) => {
-            if (values.name.length === 0) return new Error("Necesita un valor");
-        },
+        validationSchema: envSchema,
         onSubmit: (values) => {
             if (!values.name || !values.value) return;
             onSubmit?.call(this, values);
@@ -67,10 +79,22 @@ export const EnvForm = ({ name, value, isNewVar, onDelete, onSubmit }: EnvFormPr
                             value={formik.values.value}
                             onChange={formik.handleChange}
                         />
+                        <Text color="$error">{Object.values(formik.errors).find(it => !!it)}</Text>
                     </div>
                 </Grid>
+                <Checkbox
+                    label='Como build-arg'
+                    name='asBuildArg'
+                    size='md'
+                    isSelected={formik.values.asBuildArg}
+                    onChange={(val) => formik.setFieldValue("asBuildArg", val)} />
                 <Grid className="flex flex-row">
-                    <Button type="submit" className="mr-4">
+                    <Button
+                        type="submit"
+                        disabled={value === formik.values.value
+                            && name === formik.values.name
+                            && asBuildArg === formik.values.asBuildArg}
+                        className="mr-4">
                         {isNewVar ? (
                             'Agregar'
                         ) : (
@@ -91,6 +115,7 @@ export const EnvForm = ({ name, value, isNewVar, onDelete, onSubmit }: EnvFormPr
                             }}
                         />
                     )}
+
                 </Grid>
             </Grid.Container>
         </form>

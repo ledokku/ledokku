@@ -585,6 +585,7 @@ export type SetDomainInput = {
 
 export type SetEnvVarInput = {
   appId: Scalars['String'];
+  asBuildArg?: InputMaybe<Scalars['Boolean']>;
   key: Scalars['String'];
   value: Scalars['String'];
 };
@@ -783,9 +784,7 @@ export type SetDomainMutationVariables = Exact<{
 export type SetDomainMutation = { __typename?: 'Mutation', setDomain: { __typename?: 'BooleanResult', result: boolean } };
 
 export type SetEnvVarMutationVariables = Exact<{
-  key: Scalars['String'];
-  value: Scalars['String'];
-  appId: Scalars['String'];
+  input: SetEnvVarInput;
 }>;
 
 
@@ -1595,8 +1594,8 @@ export type SetDomainMutationHookResult = ReturnType<typeof useSetDomainMutation
 export type SetDomainMutationResult = Apollo.MutationResult<SetDomainMutation>;
 export type SetDomainMutationOptions = Apollo.BaseMutationOptions<SetDomainMutation, SetDomainMutationVariables>;
 export const SetEnvVarDocument = gql`
-    mutation setEnvVar($key: String!, $value: String!, $appId: String!) {
-  setEnvVar(input: {key: $key, value: $value, appId: $appId}) {
+    mutation setEnvVar($input: SetEnvVarInput!) {
+  setEnvVar(input: $input) {
     result
   }
 }
@@ -1616,9 +1615,7 @@ export type SetEnvVarMutationFn = Apollo.MutationFunction<SetEnvVarMutation, Set
  * @example
  * const [setEnvVarMutation, { data, loading, error }] = useSetEnvVarMutation({
  *   variables: {
- *      key: // value for 'key'
- *      value: // value for 'value'
- *      appId: // value for 'appId'
+ *      input: // value for 'input'
  *   },
  * });
  */

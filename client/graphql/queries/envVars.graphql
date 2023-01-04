@@ -3,6 +3,7 @@ query envVars($appId: String!) {
     envVars {
       key
       value
+      asBuildArg
     }
   }
 }
