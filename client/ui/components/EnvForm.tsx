@@ -81,19 +81,21 @@ export const EnvForm = ({ name, value, isNewVar, onDelete, onSubmit, asBuildArg 
                         />
                         <Text color="$error">{Object.values(formik.errors).find(it => !!it)}</Text>
                     </div>
+                    <Checkbox
+                        label='Como build-arg'
+                        className='mt-2'
+                        name='asBuildArg'
+                        size='md'
+                        isSelected={formik.values.asBuildArg}
+                        onChange={(val) => formik.setFieldValue("asBuildArg", val)} />
                 </Grid>
-                <Checkbox
-                    label='Como build-arg'
-                    name='asBuildArg'
-                    size='md'
-                    isSelected={formik.values.asBuildArg}
-                    onChange={(val) => formik.setFieldValue("asBuildArg", val)} />
                 <Grid className="flex flex-row">
                     <Button
                         type="submit"
                         disabled={value === formik.values.value
                             && name === formik.values.name
-                            && asBuildArg === formik.values.asBuildArg}
+                            && asBuildArg === formik.values.asBuildArg
+                            && !isNewVar}
                         className="mr-4">
                         {isNewVar ? (
                             'Agregar'
