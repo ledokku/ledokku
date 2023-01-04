@@ -305,7 +305,8 @@ export class GithubRepository {
     installationId: string,
     repositoryId: string,
     branchName: string,
-    userName: string
+    userName: string,
+    deleteOnFailed?: boolean
   ) {
     const installationAuthentication = await this.installationAuth({
       type: 'installation',
@@ -330,6 +331,7 @@ export class GithubRepository {
         appId: appToRedeploy.id,
         userName: userName,
         token: installationAuthentication.token,
+        deleteOnFailed,
       });
     }
   }

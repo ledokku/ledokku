@@ -62,7 +62,8 @@ export class WebhookController {
       installation,
       repository,
       branch,
-      userName
+      userName,
+      false
     );
   }
 }

@@ -15,6 +15,7 @@ interface QueueArgs {
   appId: string;
   userName: string;
   token: string;
+  deleteOnFailed?: boolean;
 }
 
 @Queue()
@@ -122,16 +123,18 @@ export class DeployAppQueue extends IQueue<QueueArgs, App> {
       },
     });
 
-    const { appId } = job.data;
+    const { appId, deleteOnFailed = true } = job.data;
 
-    const appToDelete = await this.appRepository.get(appId);
+    if (deleteOnFailed) {
+      const appToDelete = await this.appRepository.get(appId);
 
-    $log.info(appToDelete);
+      $log.info(appToDelete);
 
-    if (appToDelete) {
-      await this.appRepository.delete(appId);
+      if (appToDelete) {
+        await this.appRepository.delete(appId);
 
-      await this.dokkuAppRepository.destroy(appToDelete.name);
+        await this.dokkuAppRepository.destroy(appToDelete.name);
+      }
     }
   }
 }
