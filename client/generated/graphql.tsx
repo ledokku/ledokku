@@ -212,6 +212,7 @@ export type DestroyDatabaseInput = {
 
 export type EnvVar = {
   __typename?: 'EnvVar';
+  asBuildArg: Scalars['Boolean'];
   key: Scalars['String'];
   value: Scalars['String'];
 };
@@ -916,7 +917,7 @@ export type EnvVarsQueryVariables = Exact<{
 }>;
 
 
-export type EnvVarsQuery = { __typename?: 'Query', envVars: { __typename?: 'EnvVarList', envVars: Array<{ __typename?: 'EnvVar', key: string, value: string }> } };
+export type EnvVarsQuery = { __typename?: 'Query', envVars: { __typename?: 'EnvVarList', envVars: Array<{ __typename?: 'EnvVar', key: string, value: string, asBuildArg: boolean }> } };
 
 export type GetBuildingAppsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2315,6 +2316,7 @@ export const EnvVarsDocument = gql`
     envVars {
       key
       value
+      asBuildArg
     }
   }
 }

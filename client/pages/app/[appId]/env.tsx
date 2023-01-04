@@ -68,7 +68,7 @@ const Env = () => {
                                     key={envVar.key}
                                     name={envVar.key}
                                     value={envVar.value}
-                                    asBuildArg={false}
+                                    asBuildArg={envVar.asBuildArg}
                                     onSubmit={
                                         async (values) => {
                                             try {
