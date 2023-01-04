@@ -125,16 +125,28 @@ export class DeployAppQueue extends IQueue<QueueArgs, App> {
 
     const { appId, deleteOnFailed = true } = job.data;
 
+    const app = await this.appRepository.get(appId);
+
     if (deleteOnFailed) {
-      const appToDelete = await this.appRepository.get(appId);
+      $log.info(app);
 
-      $log.info(appToDelete);
-
-      if (appToDelete) {
+      if (app) {
         await this.appRepository.delete(appId);
 
-        await this.dokkuAppRepository.destroy(appToDelete.name);
+        await this.dokkuAppRepository.destroy(app.name);
       }
+    } else {
+      await this.activityRepository.add({
+        name: `Lanzamiento de "${app.name}" fallido`,
+        description: error.message,
+        referenceId: job.data.appId,
+        refersToModel: 'App',
+        Modifier: {
+          connect: {
+            username: job.data.userName,
+          },
+        },
+      });
     }
   }
 }
