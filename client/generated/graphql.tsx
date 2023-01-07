@@ -196,6 +196,7 @@ export type DatabasePaginationInfo = {
 };
 
 export enum DbTypes {
+  Mariadb = 'MARIADB',
   Mongodb = 'MONGODB',
   Mysql = 'MYSQL',
   Postgresql = 'POSTGRESQL',

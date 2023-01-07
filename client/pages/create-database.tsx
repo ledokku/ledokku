@@ -20,6 +20,7 @@ import { CodeBox } from '../ui/components/CodeBox';
 import { LoadingSection } from '../ui/components/LoadingSection';
 import { TagInput } from '../ui/components/TagInput';
 import { Terminal } from '../ui/components/Terminal';
+import { MariaDBIcon } from '../ui/icons/MariaDBIcon';
 import { MongoIcon } from '../ui/icons/MongoIcon';
 import { MySQLIcon } from '../ui/icons/MySQLIcon';
 import { PostgreSQLIcon } from '../ui/icons/PostgreSQLIcon';
@@ -50,6 +51,8 @@ function typeToDockerHub(type: DbTypes): string | undefined {
             return "mysql"
         case DbTypes.Redis:
             return "redis"
+        case DbTypes.Mariadb:
+            return "mariadb";
     }
 
     return undefined;
@@ -101,7 +104,7 @@ const CreateDatabase = () => {
     });
 
     const createDatabaseSchema = yup.object({
-        type: yup.string().oneOf(['POSTGRESQL', 'MYSQL', 'MONGODB', 'REDIS']).required(),
+        type: yup.string().oneOf(Object.values(DbTypes)).required(),
         name: yup.string().when('type', (type: DbTypes) => {
             return yup
                 .string()
@@ -314,41 +317,51 @@ const CreateDatabase = () => {
                                 <Grid.Container gap={3}>
                                     <Grid xs={12} md={3}>
                                         <DatabaseBox
-                                            selected={formik.values.type === 'POSTGRESQL'}
+                                            selected={formik.values.type === DbTypes.Postgresql}
                                             label="PostgreSQL"
                                             icon={<PostgreSQLIcon size={40} />}
                                             onClick={() =>
-                                                formik.setFieldValue('type', 'POSTGRESQL')
+                                                formik.setFieldValue('type', DbTypes.Postgresql)
                                             }
                                         />
                                     </Grid>
                                     <Grid xs={12} md={3}>
                                         <DatabaseBox
-                                            selected={formik.values.type === 'MYSQL'}
+                                            selected={formik.values.type === DbTypes.Mysql}
                                             label="MySQL"
                                             icon={<MySQLIcon size={40} />}
                                             onClick={() =>
-                                                formik.setFieldValue('type', 'MYSQL')
+                                                formik.setFieldValue('type', DbTypes.Mysql)
                                             }
                                         />
                                     </Grid>
                                     <Grid xs={12} md={3}>
                                         <DatabaseBox
-                                            selected={formik.values.type === 'MONGODB'}
+                                            selected={formik.values.type === DbTypes.Mongodb}
                                             label="MongoDB"
                                             icon={<MongoIcon size={40} />}
                                             onClick={() =>
-                                                formik.setFieldValue('type', 'MONGODB')
+                                                formik.setFieldValue('type', DbTypes.Mongodb)
                                             }
                                         />
                                     </Grid>
                                     <Grid xs={12} md={3}>
                                         <DatabaseBox
-                                            selected={formik.values.type === 'REDIS'}
+                                            selected={formik.values.type === DbTypes.Redis}
                                             label="Redis"
                                             icon={<RedisIcon size={40} />}
                                             onClick={() =>
-                                                formik.setFieldValue('type', 'REDIS')
+                                                formik.setFieldValue('type', DbTypes.Redis)
+                                            }
+                                        />
+                                    </Grid>
+                                    <Grid xs={12} md={3}>
+                                        <DatabaseBox
+                                            selected={formik.values.type === DbTypes.Mariadb}
+                                            label="MariaDB"
+                                            icon={<MariaDBIcon size={40} />}
+                                            onClick={() =>
+                                                formik.setFieldValue('type', DbTypes.Mariadb)
                                             }
                                         />
                                     </Grid>

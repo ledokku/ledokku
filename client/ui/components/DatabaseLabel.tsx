@@ -1,4 +1,5 @@
 import { DbTypes } from '../../generated/graphql';
+import { MariaDBIcon } from '../icons/MariaDBIcon';
 import { MongoIcon } from '../icons/MongoIcon';
 import { MySQLIcon } from '../icons/MySQLIcon';
 import { PostgreSQLIcon } from '../icons/PostgreSQLIcon';
@@ -10,15 +11,20 @@ interface LabelProps {
 }
 
 export const labelIcon = (type: DbTypes) => {
-    if (type === 'MONGODB') {
-        return <MongoIcon className="mt-1 mr-2" size={20} />;
-    } else if (type === 'REDIS') {
-        return <RedisIcon className="mt-1 mr-2" size={20} />;
-    } else if (type === 'MYSQL') {
-        return <MySQLIcon className="mt-1 mr-2" size={20} />;
-    } else if (type === 'POSTGRESQL') {
-        return <PostgreSQLIcon className="mt-1 mr-2" size={20} />;
+    switch (type) {
+        case DbTypes.Postgresql:
+            return <PostgreSQLIcon className="mt-1 mr-2" size={20} />
+        case DbTypes.Mongodb:
+            return <MongoIcon className="mt-1 mr-2" size={20} />
+        case DbTypes.Mysql:
+            return <MySQLIcon className="mt-1 mr-2" size={20} />
+        case DbTypes.Redis:
+            return <RedisIcon className="mt-1 mr-2" size={20} />
+        case DbTypes.Mariadb:
+            return <MariaDBIcon className="mt-1 mr-2" size={20} />;
     }
+
+    return <></>
 };
 
 export const DatabaseLabel = ({ name, type }: LabelProps) => (

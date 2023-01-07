@@ -1,4 +1,5 @@
 import { DbTypes } from '../../generated/graphql';
+import { MariaDBIcon } from '../icons/MariaDBIcon';
 import { MongoIcon } from '../icons/MongoIcon';
 import { MySQLIcon } from '../icons/MySQLIcon';
 import { PostgreSQLIcon } from '../icons/PostgreSQLIcon';
@@ -11,15 +12,17 @@ interface DbIconProps {
 
 export const DbIcon = ({ database, size }: DbIconProps) => {
     switch (database) {
-        case 'MONGODB':
-            return <MongoIcon size={size} />;
-        case 'POSTGRESQL':
-            return <PostgreSQLIcon size={size} />;
-        case 'REDIS':
-            return <RedisIcon size={size} />;
-        case 'MYSQL':
-            return <MySQLIcon size={size} />;
+        case DbTypes.Postgresql:
+            return <PostgreSQLIcon size={size} />
+        case DbTypes.Mongodb:
+            return <MongoIcon size={size} />
+        case DbTypes.Mysql:
+            return <MySQLIcon size={size} />
+        case DbTypes.Redis:
+            return <RedisIcon size={size} />
+        case DbTypes.Mariadb:
+            return <MariaDBIcon size={size} />;
     }
 
-    return <div />;
+    return <></>
 };

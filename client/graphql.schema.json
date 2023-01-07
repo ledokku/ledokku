@@ -2607,6 +2607,12 @@
         "interfaces": null,
         "enumValues": [
           {
+            "name": "MARIADB",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "MONGODB",
             "description": null,
             "isDeprecated": false,

@@ -2,14 +2,16 @@ import { DbTypes } from '../generated/graphql';
 
 export const dbTypeToDokkuPlugin = (dbType: DbTypes) => {
     switch (dbType) {
-        case 'MONGODB':
+        case DbTypes.Mongodb:
             return 'mongo';
-        case 'POSTGRESQL':
+        case DbTypes.Postgresql:
             return 'postgres';
-        case 'REDIS':
+        case DbTypes.Redis:
             return 'redis';
-        case 'MYSQL':
+        case DbTypes.Mysql:
             return 'mysql';
+        case DbTypes.Mariadb:
+            return 'mariadb';
     }
 
     return '';
@@ -17,14 +19,16 @@ export const dbTypeToDokkuPlugin = (dbType: DbTypes) => {
 
 export const dbTypeToReadableName = (dbType: DbTypes) => {
     switch (dbType) {
-        case 'MONGODB':
+        case DbTypes.Mongodb:
             return 'MongoDB';
-        case 'POSTGRESQL':
+        case DbTypes.Postgresql:
             return 'PostgreSQL';
-        case 'REDIS':
+        case DbTypes.Redis:
             return 'Redis';
-        case 'MYSQL':
+        case DbTypes.Mysql:
             return 'MySQL';
+        case DbTypes.Mariadb:
+            return 'MariaDB';
     }
 };
 
