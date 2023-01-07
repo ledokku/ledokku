@@ -31,6 +31,9 @@ export class AppRepository {
     return this.prisma.app.findMany({
       where: filter,
       take: limit,
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
   }
 
@@ -42,6 +45,9 @@ export class AppRepository {
       where: filter,
       take: limit,
       skip: limit * page,
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
 
     const total = await this.prisma.app.count({

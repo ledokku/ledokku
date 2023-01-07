@@ -35,6 +35,9 @@ export class DatabaseRepository {
   getAll(limit?: number): Promise<Database[]> {
     return this.prisma.database.findMany({
       take: limit,
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
   }
 
@@ -46,6 +49,9 @@ export class DatabaseRepository {
       take: limit,
       skip: limit * page,
       where: filter,
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
 
     const total = await this.prisma.database.count({
