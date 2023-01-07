@@ -136,6 +136,9 @@ export class DeployAppQueue extends IQueue<QueueArgs, App> {
         await this.dokkuAppRepository.destroy(app.name);
       }
     } else {
+      await this.appRepository.update(job.data.appId, {
+        status: AppStatus.IDLE,
+      });
       await this.activityRepository.add({
         name: `Lanzamiento de "${app.name}" fallido`,
         description: error.message,
