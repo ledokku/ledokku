@@ -10,6 +10,8 @@ export const dbTypeToDokkuPlugin = (dbType: DbTypes): string => {
       return 'redis';
     case DbTypes.MYSQL:
       return 'mysql';
+    case DbTypes.MARIADB:
+      return 'mariadb';
   }
 };
 

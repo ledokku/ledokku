@@ -108,6 +108,7 @@ enum DbTypes {
   POSTGRESQL
   MONGODB
   MYSQL
+  MARIADB
 }
 
 model Activity {
