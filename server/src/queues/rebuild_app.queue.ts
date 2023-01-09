@@ -30,7 +30,7 @@ export class RebuildAppQueue extends IQueue<QueueArgs> {
 
     $log.info(`Iniciando rebuild de ${appName}`);
 
-    const res = await this.dokkuAppRepository.restart(appName, {
+    const res = await this.dokkuAppRepository.rebuild(appName, {
       onStdout: (chunk) => {
         this.pubsub.publish(SubscriptionTopics.APP_REBUILT, <AppRebuildPayload>{
           appRebuildLogs: {
