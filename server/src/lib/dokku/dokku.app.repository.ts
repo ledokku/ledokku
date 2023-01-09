@@ -127,7 +127,7 @@ export class DokkuAppRepository {
       }
     } else {
       for (const env of envVars) {
-        this.unsetBuildArg(appName, env.key);
+        await this.unsetBuildArg(appName, env.key);
       }
     }
 
