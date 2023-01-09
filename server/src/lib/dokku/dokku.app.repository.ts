@@ -125,6 +125,10 @@ export class DokkuAppRepository {
           `docker-options:add ${appName} build '--build-arg ${env.key}=${env.value}'`
         );
       }
+    } else {
+      for (const env of envVars) {
+        await this.unsetEnvVar(appName, env.key, !noRestart);
+      }
     }
 
     const resultSetEnv = await execSSHCommand(
