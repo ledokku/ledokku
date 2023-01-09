@@ -127,7 +127,7 @@ export class DokkuAppRepository {
       }
     } else {
       for (const env of envVars) {
-        await this.unsetEnvVar(appName, env.key, !noRestart);
+        this.unsetBuildArg(appName, env.key);
       }
     }
 
@@ -160,11 +160,7 @@ export class DokkuAppRepository {
     );
   }
 
-  async unsetEnvVar(
-    appName: string,
-    key: string,
-    restart: boolean = true
-  ): Promise<boolean> {
+  async unsetBuildArg(appName: string, key: string) {
     const buildArg = (await this.buildArgs(appName)).find((it) =>
       RegExp(`^--build-arg ${key}=.*$`).test(it)
     );
@@ -174,6 +170,14 @@ export class DokkuAppRepository {
         `docker-options:remove ${appName} build '${buildArg}'`
       );
     }
+  }
+
+  async unsetEnvVar(
+    appName: string,
+    key: string,
+    restart: boolean = true
+  ): Promise<boolean> {
+    await this.unsetBuildArg(appName, key);
 
     const resultUnsetEnv = await execSSHCommand(
       `config:unset ${restart ? '' : '--no-restart'} ${appName} ${key}`
