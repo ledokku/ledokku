@@ -99,11 +99,15 @@ export class DokkuAppRepository {
       return {
         key: split[0],
         value: split.slice(1).join(':').trim(),
-        asBuildArg: !!buildArgs.find((it) =>
-          RegExp(
-            `^--build-arg ${split[0]}=${split.slice(1).join(':').trim()}$`
-          ).test(it)
-        ),
+        asBuildArg: !!buildArgs.find((it) => {
+          try {
+            return RegExp(
+              `^--build-arg ${split[0]}=${split.slice(1).join(':').trim()}$`
+            ).test(it);
+          } catch (e) {
+            return false;
+          }
+        }),
       };
     });
   }
@@ -121,9 +125,13 @@ export class DokkuAppRepository {
 
     if (asBuildArg) {
       for (const env of envVars) {
-        await execSSHCommand(
-          `docker-options:add ${appName} build '--build-arg ${env.key}=${env.value}'`
-        );
+        try {
+          RegExp(`^${env.value.trim()}$`).test(env.value);
+
+          await execSSHCommand(
+            `docker-options:add ${appName} build '--build-arg ${env.key}=${env.value}'`
+          );
+        } catch (e) {}
       }
     } else {
       for (const env of envVars) {
