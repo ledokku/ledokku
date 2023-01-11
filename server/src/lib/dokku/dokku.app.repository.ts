@@ -126,7 +126,9 @@ export class DokkuAppRepository {
     if (asBuildArg) {
       for (const env of envVars) {
         try {
-          RegExp(`^${env.value.trim()}$`).test(env.value);
+          RegExp(`^--build-arg ${env.key}=${env.value}$`).test(
+            `--build-arg ${env.key}=${env.value}`
+          );
 
           await execSSHCommand(
             `docker-options:add ${appName} build '--build-arg ${env.key}=${env.value}'`
