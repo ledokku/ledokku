@@ -60,6 +60,7 @@ import { SetDomainInput } from './data/inputs/set_domain.input';
 import { SetEnvVarInput } from './data/inputs/set_env_var.input';
 import { UnlinkDatabaseInput } from './data/inputs/unlink_database.input';
 import { UnsetEnvVarInput } from './data/inputs/unset_env_var.input';
+import { UpdateBranchInput } from './data/inputs/update_branch.input';
 import { App, AppPaginationInfo } from './data/models/app.model';
 import { AppCreatedPayload } from './data/models/app_created.payload';
 import { AppRebuildPayload } from './data/models/app_rebuild.payload';
@@ -439,6 +440,31 @@ export class AppResolver {
       input.host,
       input.container
     );
+
+    return true;
+  }
+
+  @Authorized()
+  @Mutation((returns) => Boolean)
+  async changeBranch(
+    @Arg('input', (type) => UpdateBranchInput)
+    input: UpdateBranchInput,
+    @Ctx() context: DokkuContext
+  ) {
+    const app = await this.appRepository.get(input.appId);
+
+    if (!app) {
+      throw new NotFound(`No se encontró la app con ID ${input.appId}`);
+    }
+
+    await this.dokkuAppRepository.changeBranch(app.name, input.branchName);
+    await this.appRepository.update(app.id, {
+      AppMetaGithub: {
+        update: {
+          branch: input.branchName,
+        },
+      },
+    });
 
     return true;
   }

@@ -73,6 +73,18 @@ export class DokkuAppRepository {
     return apps;
   }
 
+  async changeBranch(appName: string, branchName: string): Promise<boolean> {
+    const resultAppLogs = await execSSHCommand(
+      `git:set ${appName} deploy-branch ${branchName}`
+    );
+
+    if (resultAppLogs.code === 1) {
+      throw new InternalServerError(resultAppLogs.stderr);
+    }
+
+    return true;
+  }
+
   async logs(appName: string): Promise<string[]> {
     const resultAppLogs = await execSSHCommand(`logs ${appName}`);
     if (resultAppLogs.code === 1) {
