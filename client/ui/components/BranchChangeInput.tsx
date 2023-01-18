@@ -1,19 +1,22 @@
 import { Button, Input, Loading, Modal, Text } from "@nextui-org/react"
 import { useState } from "react"
-import { App, useChangeAppBranchMutation } from "../../generated/graphql"
+import { toast } from "react-toastify"
+import { App, AppByIdDocument, useChangeAppBranchMutation } from "../../generated/graphql"
 
 interface BranchChangeInputProp {
     app: App
 }
 
 export const BranchChangeInput = ({ app }: BranchChangeInputProp) => {
-    const [changeBranch, { loading }] = useChangeAppBranchMutation()
-    const [name, setName] = useState(app.appMetaGithub?.branch)
-    const [showChangeModal, setShowChangeModal] = useState(false)
-
     const ghInfo = app.appMetaGithub;
 
+
+    const [changeBranch, { loading }] = useChangeAppBranchMutation()
+    const [name, setName] = useState(ghInfo?.branch ?? "")
+    const [showChangeModal, setShowChangeModal] = useState(false)
+
     if (!ghInfo) return <></>
+
 
     return <div>
         <Modal
@@ -41,10 +44,16 @@ export const BranchChangeInput = ({ app }: BranchChangeInputProp) => {
                             variables: {
                                 input: {
                                     appId: app.id,
-                                    branchName: ghInfo.branch,
+                                    branchName: name,
                                 }
-                            }
-                        }).then(res => setShowChangeModal(false))
+                            },
+                            refetchQueries: [AppByIdDocument]
+                        }).then(res => {
+                            setShowChangeModal(false)
+                            toast.success("Rama actualizada")
+                        }).catch(e => {
+                            toast.error("Rama no actualizada")
+                        })
                     }}>
                     {loading ? <Loading color="currentColor" type="points-opacity" /> : "Cambiar"}
                 </Button>
