@@ -44,7 +44,7 @@ export const BranchChangeInput = ({ app }: BranchChangeInputProp) => {
                                     branchName: ghInfo.branch,
                                 }
                             }
-                        })
+                        }).then(res => setShowChangeModal(false))
                     }}>
                     {loading ? <Loading color="currentColor" type="points-opacity" /> : "Cambiar"}
                 </Button>
