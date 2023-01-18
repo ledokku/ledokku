@@ -19,6 +19,7 @@ import {
     useDestroyAppMutation,
     useSetAppTagsMutation
 } from '../../../../generated/graphql';
+import { BranchChangeInput } from '../../../../ui/components/BranchChangeInput';
 import { CodeBox } from '../../../../ui/components/CodeBox';
 import { TagInput } from '../../../../ui/components/TagInput';
 import { AdminLayout } from '../../../../ui/layout/layout';
@@ -33,6 +34,7 @@ const AppSettingsAdvanced = () => {
     const history = useRouter();
     const appId = history.query.appId as string;
     const toast = useToast();
+    const [branchName, setBranchName] = useState("");
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [setAppTags, { loading: loadingSetTags }] = useSetAppTagsMutation();
 
@@ -120,6 +122,8 @@ const AppSettingsAdvanced = () => {
                                         }
                                     }
                                 }).then(res => refetch())} />
+                            <Spacer y={2} />
+                            {app.appMetaGithub && <BranchChangeInput app={app as any} />}
                             <Spacer y={2} />
                             <AppRestart appId={app.id} />
                             <Spacer y={2} />

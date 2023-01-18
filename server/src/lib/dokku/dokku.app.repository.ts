@@ -1,3 +1,4 @@
+import { $log } from '@tsed/common';
 import { Injectable } from '@tsed/di';
 import { InternalServerError } from '@tsed/exceptions';
 import { NodeSSH, SSHExecOptions } from 'node-ssh';
@@ -77,6 +78,8 @@ export class DokkuAppRepository {
     const resultAppLogs = await execSSHCommand(
       `git:set ${appName} deploy-branch ${branchName}`
     );
+
+    $log.info(resultAppLogs.stdout);
 
     if (resultAppLogs.code === 1) {
       throw new InternalServerError(resultAppLogs.stderr);

@@ -259,6 +259,7 @@ export type Mutation = {
   addAllowedEmail: Scalars['String'];
   addAppProxyPort: Scalars['Boolean'];
   addDomain: BooleanResult;
+  changeBranch: Scalars['Boolean'];
   createAppDokku: CreateAppResult;
   createAppGithub: App;
   createDatabase: BooleanResult;
@@ -292,6 +293,11 @@ export type MutationAddAppProxyPortArgs = {
 
 export type MutationAddDomainArgs = {
   input: AddDomainInput;
+};
+
+
+export type MutationChangeBranchArgs = {
+  input: UpdateBranchInput;
 };
 
 
@@ -644,6 +650,11 @@ export type UnsetEnvVarInput = {
   key: Scalars['String'];
 };
 
+export type UpdateBranchInput = {
+  appId: Scalars['ID'];
+  branchName: Scalars['String'];
+};
+
 export type User = {
   __typename?: 'User';
   avatarUrl: Scalars['String'];
@@ -679,6 +690,13 @@ export type AddDomainMutationVariables = Exact<{
 
 
 export type AddDomainMutation = { __typename?: 'Mutation', addDomain: { __typename?: 'BooleanResult', result: boolean } };
+
+export type ChangeAppBranchMutationVariables = Exact<{
+  input: UpdateBranchInput;
+}>;
+
+
+export type ChangeAppBranchMutation = { __typename?: 'Mutation', changeBranch: boolean };
 
 export type CreateAppDokkuMutationVariables = Exact<{
   input: CreateAppDokkuInput;
@@ -1104,6 +1122,37 @@ export function useAddDomainMutation(baseOptions?: Apollo.MutationHookOptions<Ad
 export type AddDomainMutationHookResult = ReturnType<typeof useAddDomainMutation>;
 export type AddDomainMutationResult = Apollo.MutationResult<AddDomainMutation>;
 export type AddDomainMutationOptions = Apollo.BaseMutationOptions<AddDomainMutation, AddDomainMutationVariables>;
+export const ChangeAppBranchDocument = gql`
+    mutation ChangeAppBranch($input: UpdateBranchInput!) {
+  changeBranch(input: $input)
+}
+    `;
+export type ChangeAppBranchMutationFn = Apollo.MutationFunction<ChangeAppBranchMutation, ChangeAppBranchMutationVariables>;
+
+/**
+ * __useChangeAppBranchMutation__
+ *
+ * To run a mutation, you first call `useChangeAppBranchMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeAppBranchMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeAppBranchMutation, { data, loading, error }] = useChangeAppBranchMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useChangeAppBranchMutation(baseOptions?: Apollo.MutationHookOptions<ChangeAppBranchMutation, ChangeAppBranchMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ChangeAppBranchMutation, ChangeAppBranchMutationVariables>(ChangeAppBranchDocument, options);
+      }
+export type ChangeAppBranchMutationHookResult = ReturnType<typeof useChangeAppBranchMutation>;
+export type ChangeAppBranchMutationResult = Apollo.MutationResult<ChangeAppBranchMutation>;
+export type ChangeAppBranchMutationOptions = Apollo.BaseMutationOptions<ChangeAppBranchMutation, ChangeAppBranchMutationVariables>;
 export const CreateAppDokkuDocument = gql`
     mutation createAppDokku($input: CreateAppDokkuInput!) {
   createAppDokku(input: $input) {

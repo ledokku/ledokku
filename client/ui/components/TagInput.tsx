@@ -19,6 +19,7 @@ export const TagInput = ({ tags = [], onAdd, onRemove, disabled = false, loading
             label="Etiqueta"
             width="300px"
             value={name}
+            placeholder="Nombre de la etiqueta"
             contentLeft={loading ? <Loading size="xs" /> : undefined}
             disabled={disabled || loading}
             onChange={(e) => setName(e.currentTarget.value)}
