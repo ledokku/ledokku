@@ -36,7 +36,10 @@ export class AuthResolver {
 
     const settings = await this.settingsRepository.get();
 
-    if (!settings.allowedEmails.includes(email.email)) {
+    if (
+      settings.allowedEmails.length > 0 &&
+      !settings.allowedEmails.includes(email.email)
+    ) {
       throw new Forbidden('Usuario no permitido');
     }
 
