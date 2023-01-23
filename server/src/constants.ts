@@ -39,9 +39,6 @@ export const DOKKU_SSH_HOST =
   process.env.DOKKU_SSH_HOST ??
   throwError('Variable de entorno DOKKU_SSH_HOST es requerido');
 
-export const DOKKU_SSH_USERNAME = process.env.DOKKU_SSH_USERNAME;
-export const DOKKU_SSH_PASSWORD = process.env.DOKKU_SSH_PASSWORD;
-
 export const DOKKU_SSH_PORT = Number(process.env.DOKKU_SSH_PORT) ?? 3022;
 
 export const NUMBER_USERS_ALLOWED = process.env.NUMBER_USERS_ALLOWED ?? 1;
