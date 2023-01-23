@@ -1,3 +1,4 @@
+import { $log } from '@tsed/common';
 import { ResolverService } from '@tsed/typegraphql';
 import { Authorized, Ctx, Query, Root, Subscription } from 'type-graphql';
 import { DokkuContext } from '../../data/models/dokku_context';
@@ -25,7 +26,10 @@ export class SystemResolver {
 
   @Query((returns) => SetupResult)
   async setup(@Ctx() context: DokkuContext): Promise<SetupResult> {
-    const ssh = await sshConnect().catch((e) => undefined);
+    const ssh = await sshConnect().catch((e) => {
+      $log.info(e);
+      return undefined;
+    });
     return {
       canConnectSsh: ssh?.isConnected() === true,
       sshPublicKey: context.sshContext.publicKey,
