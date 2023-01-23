@@ -25,7 +25,11 @@ export async function execSSHCommand<T>(
   const ssh = await sshConnect();
 
   const res = await ssh.execCommand(
-    `${DOKKU_SSH_USERNAME !== 'dokku' ? 'dokku ' : ''}${command}`,
+    `${
+      DOKKU_SSH_USERNAME !== 'dokku'
+        ? `printf "${DOKKU_SSH_PASSWORD}\n" | sudo -S dokku `
+        : ''
+    }${command}`,
     options
   );
 
