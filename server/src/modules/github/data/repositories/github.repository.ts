@@ -1,3 +1,4 @@
+import { $log } from '@tsed/common';
 import { createAppAuth } from '@octokit/auth-app';
 import { Octokit } from '@octokit/rest';
 import { App, AppMetaGithub, PrismaClient, Roles, User } from '@prisma/client';
@@ -147,10 +148,14 @@ export class GithubRepository {
   }
 
   async repositories(installationId: string, per_page = 30, page = 1) {
+    $log.info(installationId);
+
     const installationAuthentication = await this.installationAuth({
       type: 'installation',
       installationId,
     });
+
+    $log.info(installationAuthentication.token, installationAuthentication);
 
     const octo = new Octokit({
       auth: installationAuthentication.token,
