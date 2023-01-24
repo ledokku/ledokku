@@ -45,6 +45,18 @@ export class DokkuAppRepository {
     return true;
   }
 
+  async enableSSL(appName: string): Promise<boolean> {
+    const resultAppsDestroy = await execSSHCommand(
+      `dokku letsencrypt:active ${appName} || dokku letsencrypt:enable ${appName}`
+    );
+
+    if (resultAppsDestroy.code === 1) {
+      throw new InternalServerError(resultAppsDestroy.stderr);
+    }
+
+    return true;
+  }
+
   async setDockerfilePath(appName: string, path: string): Promise<boolean> {
     await this.setBuilder(appName, 'dockerfile');
     await this.unsetEnvVar(appName, 'DOKKU_PROXY_PORT_MAP', false).catch((e) =>

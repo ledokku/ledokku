@@ -79,6 +79,10 @@ export class DeployAppQueue extends IQueue<QueueArgs, App> {
       }
     );
 
+    await this.dokkuAppRepository
+      .enableSSL(app.name)
+      .catch((e) => $log.warn(e));
+
     $log.info(
       `Finalizando de crear ${app.name} desde https://github.com/${repoOwner}/${repoName}.git`
     );
