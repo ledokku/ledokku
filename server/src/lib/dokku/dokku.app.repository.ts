@@ -52,7 +52,7 @@ export class DokkuAppRepository {
     });
 
     const resultAppsDestroy = await execSSHCommand(
-      `dokku letsencrypt:active ${appName} || dokku letsencrypt:enable ${appName}`
+      `letsencrypt:active ${appName} || letsencrypt:enable ${appName}`
     );
 
     if (resultAppsDestroy.code === 1) {
