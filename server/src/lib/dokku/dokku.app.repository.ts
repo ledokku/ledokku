@@ -46,6 +46,11 @@ export class DokkuAppRepository {
   }
 
   async enableSSL(appName: string): Promise<boolean> {
+    await this.setEnvVar(appName, {
+      key: 'DOKKU_LETSENCRYPT_EMAIL',
+      value: 'contacto@ocstudios.mx',
+    });
+
     const resultAppsDestroy = await execSSHCommand(
       `dokku letsencrypt:active ${appName} || dokku letsencrypt:enable ${appName}`
     );

@@ -1,3 +1,5 @@
+import { ProxyPort } from './../lib/dokku/models/proxy_ports.model';
+import { DokkuProxyRepository } from './../lib/dokku/dokku.proxy.repository';
 import { App, AppStatus } from '@prisma/client';
 import { $log } from '@tsed/common';
 import { InternalServerError } from '@tsed/exceptions';
@@ -25,7 +27,8 @@ export class DeployAppQueue extends IQueue<QueueArgs, App> {
     private dokkuGitRepository: DokkuGitRepository,
     private pubsub: PubSub,
     private activityRepository: ActivityRepository,
-    private dokkuAppRepository: DokkuAppRepository
+    private dokkuAppRepository: DokkuAppRepository,
+    private dokkuProxyRepository: DokkuProxyRepository
   ) {
     super();
   }
@@ -79,9 +82,26 @@ export class DeployAppQueue extends IQueue<QueueArgs, App> {
       }
     );
 
-    await this.dokkuAppRepository
-      .enableSSL(app.name)
-      .catch((e) => $log.warn(e));
+    const currentPorts = await this.dokkuProxyRepository
+      .ports(app.name)
+      .catch((err) => [] as ProxyPort[]);
+
+    if (currentPorts.length > 0) {
+      const webPort = currentPorts.find((it) => it.host === '80');
+
+      if (!webPort) {
+        await this.dokkuProxyRepository.add(
+          app.name,
+          'http',
+          '80',
+          currentPorts[0].container
+        );
+      }
+
+      await this.dokkuAppRepository
+        .enableSSL(app.name)
+        .catch((e) => $log.warn(e));
+    }
 
     $log.info(
       `Finalizando de crear ${app.name} desde https://github.com/${repoOwner}/${repoName}.git`
