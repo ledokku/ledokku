@@ -55,7 +55,7 @@ export class DokkuAppRepository {
     });
 
     const resultAppsDestroy = await execSSHCommand(
-      `letsencrypt:active ${appName} || letsencrypt:enable ${appName}`
+      `letsencrypt:enable ${appName}`
     );
 
     $log.info(resultAppsDestroy.stdout);
