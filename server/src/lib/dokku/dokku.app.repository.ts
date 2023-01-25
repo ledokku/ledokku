@@ -47,8 +47,6 @@ export class DokkuAppRepository {
   }
 
   async enableSSL(appName: string): Promise<boolean> {
-    $log.info(`Habilitando SSL para la app ${appName}...`);
-
     await this.setEnvVar(appName, {
       key: 'DOKKU_LETSENCRYPT_EMAIL',
       value: 'contacto@ocstudios.mx',
@@ -58,9 +56,7 @@ export class DokkuAppRepository {
       `letsencrypt:enable ${appName}`
     );
 
-    $log.info(resultAppsDestroy.stdout);
     if (resultAppsDestroy.code === 1) {
-      $log.warn(resultAppsDestroy.stderr);
       throw new InternalServerError(resultAppsDestroy.stderr);
     }
 

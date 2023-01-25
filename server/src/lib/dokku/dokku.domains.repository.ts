@@ -10,6 +10,8 @@ export class DokkuDomainsRepository {
       `domains:add ${appName} ${domainName}`
     );
 
+    await execSSHCommand(`letsencrypt:enable ${appName}`);
+
     if (resultAddDomain.code === 1) {
       throw new InternalServerError(resultAddDomain.stderr);
     }
