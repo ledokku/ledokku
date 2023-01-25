@@ -1,6 +1,7 @@
 import { $log } from '@tsed/common';
 import { Injectable } from '@tsed/di';
 import { InternalServerError } from '@tsed/exceptions';
+import e from 'express';
 import { NodeSSH, SSHExecOptions } from 'node-ssh';
 import { execSSHCommand } from '../ssh';
 import { EnvVar } from './models/env_var.model';
@@ -46,6 +47,8 @@ export class DokkuAppRepository {
   }
 
   async enableSSL(appName: string): Promise<boolean> {
+    $log.info(`Habilitando SSL para la app ${appName}...`);
+
     await this.setEnvVar(appName, {
       key: 'DOKKU_LETSENCRYPT_EMAIL',
       value: 'contacto@ocstudios.mx',
@@ -55,7 +58,9 @@ export class DokkuAppRepository {
       `letsencrypt:active ${appName} || letsencrypt:enable ${appName}`
     );
 
+    $log.info(resultAppsDestroy.stdout);
     if (resultAppsDestroy.code === 1) {
+      $log.warn(resultAppsDestroy.stderr);
       throw new InternalServerError(resultAppsDestroy.stderr);
     }
 
