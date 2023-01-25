@@ -11,7 +11,7 @@ const Metrics = () => {
 
     useEffect(() => {
         if (logs && logs.ledokkuLogs.length > 0) {
-            setData(logs.ledokkuLogs);
+            setData([...logs.ledokkuLogs, ...data]);
         }
     }, [logs])
 
