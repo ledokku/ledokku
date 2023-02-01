@@ -60,24 +60,26 @@ export class DeployAppQueue extends IQueue<QueueArgs, App> {
       branchName,
       {
         onStdout: (chunk) => {
-          this.pubsub.publish(SubscriptionTopics.APP_CREATED, {
+          const payload = {
             appCreateLogs: {
               message: chunk.toString(),
               type: 'stdout',
             },
             appId,
-          } as AppCreatedPayload);
+          } as AppCreatedPayload;
+          this.appRepository.addCreateLog(appId, payload.appCreateLogs);
+          this.pubsub.publish(SubscriptionTopics.APP_CREATED, payload);
         },
         onStderr: (chunk) => {
-          this.pubsub.publish(SubscriptionTopics.APP_CREATED, <
-            AppCreatedPayload
-          >{
+          const payload = {
             appCreateLogs: {
               message: chunk.toString(),
               type: 'stderr',
             },
             appId,
-          });
+          } as AppCreatedPayload;
+          this.appRepository.addCreateLog(appId, payload.appCreateLogs);
+          this.pubsub.publish(SubscriptionTopics.APP_CREATED, payload);
         },
       }
     );
@@ -111,13 +113,17 @@ export class DeployAppQueue extends IQueue<QueueArgs, App> {
   }
 
   async onSuccess(job: Job<QueueArgs, any, string>, result: App) {
-    this.pubsub?.publish(SubscriptionTopics.APP_CREATED, <AppCreatedPayload>{
+    const payload = <AppCreatedPayload>{
       appCreateLogs: {
         message: result.id,
         type: 'end:success',
       },
       appId: job.data.appId,
-    });
+    };
+
+    this.pubsub?.publish(SubscriptionTopics.APP_CREATED, payload);
+    this.appRepository.addCreateLog(result.id, payload.appCreateLogs);
+
     const { repoOwner, repoName, branch } = await this.appRepository
       .get(job.data.appId)
       .AppMetaGithub();
@@ -140,14 +146,16 @@ export class DeployAppQueue extends IQueue<QueueArgs, App> {
   }
 
   async onFailed(job: Job<QueueArgs, any>, error: Error) {
-    this.pubsub?.publish(SubscriptionTopics.APP_CREATED, <AppCreatedPayload>{
+    const { appId, deleteOnFailed = true } = job.data;
+
+    const payload = <AppCreatedPayload>{
       appCreateLogs: {
         message: 'Failed to create an app',
         type: 'end:failure',
       },
-    });
-
-    const { appId, deleteOnFailed = true } = job.data;
+    };
+    this.pubsub?.publish(SubscriptionTopics.APP_CREATED, payload);
+    this.appRepository.addCreateLog(appId, payload.appCreateLogs);
 
     const app = await this.appRepository.get(appId);
 

@@ -648,7 +648,6 @@ export class AppResolver {
     @Root() payload: AppCreatedPayload,
     @Arg('appId', (type) => ID) appId: string
   ): LogPayload {
-    this.appRepository.addCreateLog(appId, payload.appCreateLogs);
     return payload.appCreateLogs;
   }
 

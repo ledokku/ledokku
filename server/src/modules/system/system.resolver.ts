@@ -1,6 +1,7 @@
 import { $log } from '@tsed/common';
 import { ResolverService } from '@tsed/typegraphql';
 import { Authorized, Ctx, Query, Root, Subscription } from 'type-graphql';
+import { ledokkuLogs } from '../../config/appender';
 import { DokkuContext } from '../../data/models/dokku_context';
 import { LogPayload } from '../../data/models/log_payload';
 import { SubscriptionTopics } from '../../data/models/subscription_topics';
@@ -21,8 +22,6 @@ import { SetupResult } from './models/setup_result.model';
 @ResolverService()
 export class SystemResolver {
   constructor(private dokkuPluginRepository: DokkuPluginRepository) {}
-
-  private logs: LogPayload[] = [];
 
   @Query((returns) => SetupResult)
   async setup(@Ctx() context: DokkuContext): Promise<SetupResult> {
@@ -67,20 +66,13 @@ export class SystemResolver {
     topics: SubscriptionTopics.LEDOKKU_LOGS,
   })
   onLedokkuLog(@Root() payload: LedokkuLogsPayload): LogPayload {
-    if (this.logs.length > 20) {
-      this.logs.shift();
-    }
-    this.logs.push(payload.ledokkuLogs);
-
-    console.log(this.logs);
-
     return payload.ledokkuLogs;
   }
 
   @Authorized()
   @Query((returns) => [LogPayload])
   async ledokkuLogs(@Ctx() context: DokkuContext): Promise<LogPayload[]> {
-    return this.logs;
+    return ledokkuLogs;
   }
 
   @Authorized()
