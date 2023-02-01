@@ -1,3 +1,4 @@
+import { Roles } from '@prisma/client';
 import { $log } from '@tsed/common';
 import { Forbidden, InternalServerError } from '@tsed/exceptions';
 import { ResolverService } from '@tsed/typegraphql';
@@ -36,14 +37,15 @@ export class AuthResolver {
 
     const settings = await this.settingsRepository.get();
 
+    let user = await this.userRepository.getByGithubId(ghUser.node_id);
+
     if (
       settings.allowedEmails.length > 0 &&
-      !settings.allowedEmails.includes(email.email)
+      !settings.allowedEmails.includes(email.email) &&
+      user.role !== Roles.OWNER
     ) {
       throw new Forbidden('Usuario no permitido');
     }
-
-    let user = await this.userRepository.getByGithubId(ghUser.node_id);
 
     if (!user) {
       user = await this.githubRepository.createUser(data);
