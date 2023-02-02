@@ -118,15 +118,14 @@ export class AppRepository {
   }
 
   addCreateLog(appId: string, log: LogPayload) {
-    this.createLogsCache.get(appId).push(log);
+    this.getCreateLogs(appId).push(log);
   }
 
   getCreateLogs(appId: string): LogPayload[] {
-    if (this.createLogsCache.has(appId)) {
-      return this.createLogsCache.get(appId);
-    } else {
+    if (!this.createLogsCache.has(appId)) {
       this.createLogsCache.set(appId, []);
-      return [];
     }
+
+    return this.createLogsCache.get(appId);
   }
 }
