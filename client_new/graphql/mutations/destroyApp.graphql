@@ -1,5 +1,0 @@
-mutation destroyApp($input: DestroyAppInput!) {
-  destroyApp(input: $input) {
-    result
-  }
-}

@@ -1,5 +1,0 @@
-query databaseInfo($databaseId: String!) {
-  databaseInfo(databaseId: $databaseId) {
-    info
-  }
-}

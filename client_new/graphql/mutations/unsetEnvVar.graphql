@@ -1,5 +1,0 @@
-mutation unsetEnvVar($key: String!, $appId: String!) {
-  unsetEnvVar(input: { key: $key, appId: $appId }) {
-    result
-  }
-}
