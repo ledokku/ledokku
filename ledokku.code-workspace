@@ -7,10 +7,6 @@
 		{
 			"name": "server",
 			"path": "server"
-		},
-		{
-			"name": "client_new",
-			"path": "client_new"
 		}
 	],
 	"settings": {

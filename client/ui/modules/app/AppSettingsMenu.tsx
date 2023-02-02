@@ -20,7 +20,7 @@ export const AppSettingsMenu = ({ app }: AppSettingsMenuProps) => {
 
     return (
         <Navbar disableShadow css={{ maxH: 'inherit', display: 'block' }}>
-            <Navbar.Content variant={'highlight-rounded'} className="flex flex-col">
+            <Navbar.Content variant={'highlight-rounded'} className="flex flex-col gap-4">
                 <Navbar.Link
                     css={{ padding: 16 }}
                     isActive={selectedRoute === 'general'}
