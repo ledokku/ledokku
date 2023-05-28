@@ -117,6 +117,7 @@ const CreateDatabase = () => {
                         !dataDb?.databases.items.find((db) => db.name === name && type === db.type)
                 );
         }),
+        image: yup.string().optional(),
         version: yup.string()
             .matches(/^([a-zA-Z0-9-]+\.?)+$/, `Debe cumplir el patron ${/([a-zA-Z0-9-]+\.?)+/}`)
     });
@@ -127,10 +128,11 @@ const CreateDatabase = () => {
     ] = useIsPluginInstalledLazyQuery({
         pollInterval: 5000,
     });
-    const formik = useFormik<{ name: string; type: DbTypes, version: string }>({
+    const formik = useFormik<{ name: string; type: DbTypes, version: string, image: string }>({
         initialValues: {
             name: '',
             version: "",
+            image: "",
             type: DbTypes.Postgresql,
         },
         validateOnChange: true,
@@ -143,6 +145,7 @@ const CreateDatabase = () => {
                             name: values.name,
                             type: values.type,
                             version: values.version ? values.version : undefined,
+                            image: values.image ? values.image : undefined,
                             tags: tags.length > 0 ? tags : undefined
                         },
                     },
@@ -281,6 +284,18 @@ const CreateDatabase = () => {
                                                 direction="column"
                                                 className='mt-4'
                                             >
+                                                <Input
+                                                    autoComplete="off"
+                                                    id="image"
+                                                    label="Imagen"
+                                                    name="image"
+                                                    width="300px"
+                                                    placeholder="docker/imagen:version"
+                                                    value={formik.values.image}
+                                                    onChange={formik.handleChange}
+                                                    onBlur={formik.handleBlur}
+                                                />
+                                                <Text color="$error">{formik.errors.image}</Text>
                                                 <Input
                                                     autoComplete="off"
                                                     id="version"

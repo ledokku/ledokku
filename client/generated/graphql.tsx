@@ -161,6 +161,7 @@ export type CreateAppResult = {
 };
 
 export type CreateDatabaseInput = {
+  image?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   tags?: InputMaybe<Array<Scalars['String']>>;
   type: DbTypes;
