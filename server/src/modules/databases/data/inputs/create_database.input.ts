@@ -9,6 +9,9 @@ export class CreateDatabaseInput {
   @Field((type) => String, { nullable: true })
   version?: string;
 
+  @Field((type) => String, { nullable: true })
+  image?: string;
+
   @Field((type) => DbTypes)
   type: DbTypes;
 

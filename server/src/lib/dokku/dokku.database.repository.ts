@@ -11,12 +11,13 @@ export class DokkuDatabaseRepository {
     name: string,
     databaseType: DbTypes,
     version?: string,
+    image?: string,
     options?: SSHExecOptions
   ) {
     const resultDatabaseCreate = await execSSHCommand(
       `${dbTypeToDokkuPlugin(databaseType)}:create ${name} ${
         version ? `--image-version ${version}` : ''
-      }`,
+      } ${image ? `--image ${image}` : ''}}`,
       options
     );
 

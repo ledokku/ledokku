@@ -154,6 +154,7 @@ export class DatabaseResolver {
       databaseName: input.name,
       databaseType: input.type,
       version: input.version,
+      image: input.image,
       userId: context.auth.user.id,
       tags: input.tags,
     });
