@@ -301,6 +301,7 @@ const CreateDatabase = () => {
                                                     id="version"
                                                     label="Versión"
                                                     name="version"
+                                                    className='mt-4'
                                                     width="300px"
                                                     placeholder="x.x.x"
                                                     value={formik.values.version}
