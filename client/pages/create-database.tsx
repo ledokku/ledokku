@@ -290,18 +290,17 @@ const CreateDatabase = () => {
                                                     label="Imagen"
                                                     name="image"
                                                     width="300px"
-                                                    placeholder="docker/imagen:version"
+                                                    placeholder="docker/imagen"
                                                     value={formik.values.image}
                                                     onChange={formik.handleChange}
                                                     onBlur={formik.handleBlur}
                                                 />
-                                                <Text color="$error">{formik.errors.image}</Text>
+                                                <Text color="$error" className='mb-4'>{formik.errors.image}</Text>
                                                 <Input
                                                     autoComplete="off"
                                                     id="version"
                                                     label="Versión"
                                                     name="version"
-                                                    className='mt-4'
                                                     width="300px"
                                                     placeholder="x.x.x"
                                                     value={formik.values.version}

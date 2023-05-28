@@ -17,7 +17,7 @@ export class DokkuDatabaseRepository {
     const resultDatabaseCreate = await execSSHCommand(
       `${dbTypeToDokkuPlugin(databaseType)}:create ${name} ${
         version ? `--image-version ${version}` : ''
-      } ${image ? `--image ${image}` : ''}}`,
+      } ${image ? `--image ${image}` : ''}`,
       options
     );
 
