@@ -87,7 +87,7 @@ export const AppDomains = ({ app, domains }: AppDomainProps) => {
                     </Table>
                 )}
                 <div className="mt-8">
-                    {/* <AddAppDomain appId={app.id} /> */}
+                    <AddAppDomain appId={app.id} />
                 </div>
             </Grid>
         </Grid.Container>

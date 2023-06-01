@@ -1,6 +1,5 @@
 import { Injectable } from '@tsed/di';
 import { InternalServerError } from '@tsed/exceptions';
-import { NodeSSH } from 'node-ssh';
 import { execSSHCommand } from '../ssh';
 
 @Injectable()
@@ -11,6 +10,7 @@ export class DokkuDomainsRepository {
     );
 
     await execSSHCommand(`letsencrypt:enable ${appName}`);
+    await execSSHCommand(`proxy:build-config ${appName}`);
 
     if (resultAddDomain.code === 1) {
       throw new InternalServerError(resultAddDomain.stderr);

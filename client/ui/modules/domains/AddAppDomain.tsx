@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { Button, Input, Loading, Modal, Text } from '@nextui-org/react';
 import { useFormik } from 'formik';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 import * as yup from 'yup';
 import { useAddDomainMutation } from '../../../generated/graphql';
 import { useToast } from '../../toast';
-import { Button, Input, Loading, Modal, Text } from '@nextui-org/react';
 
 const addAppDomainYupSchema = yup.object().shape({
     domainName: yup.string().required('Domain name is required'),
@@ -11,11 +12,11 @@ const addAppDomainYupSchema = yup.object().shape({
 
 interface AddDomainProps {
     appId: string;
-    appDomainsRefetch: () => Promise<any>;
 }
 
-export const AddAppDomain = ({ appId, appDomainsRefetch }: AddDomainProps) => {
+export const AddAppDomain = ({ appId }: AddDomainProps) => {
     const toast = useToast();
+    const router = useRouter();
     const [addDomainMutation] = useAddDomainMutation();
     const [showAddForm, setShowAddForm] = useState(false);
 
@@ -36,7 +37,7 @@ export const AddAppDomain = ({ appId, appDomainsRefetch }: AddDomainProps) => {
                     },
                 });
 
-                await appDomainsRefetch();
+                router.reload();
                 toast.success('Dominio agregado');
                 setShowAddForm(false);
 

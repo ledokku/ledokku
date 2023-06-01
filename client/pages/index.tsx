@@ -53,7 +53,7 @@ const Index = ({ setup }: IndexProps) => {
                         <Button
                             shadow
                             className="mt-4"
-                            onClick={() => signIn('github', { callbackUrl: '/' })}
+                            onClick={() => signIn('github')}
                             icon={<FiGithub size={18} />}
                             iconLeftCss={{ display: 'contents', marginRight: '8px' }}
                             size="lg"
