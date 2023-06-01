@@ -1,22 +1,23 @@
+import { App } from '@/generated/graphql.server';
 import { Button, Loading, Modal, Text } from '@nextui-org/react';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { TerminalOutput } from 'react-terminal-ui';
 import {
     LogPayload,
-    useAppByIdQuery,
     useAppRebuildLogsSubscription,
-    useRebuildAppMutation,
+    useRebuildAppMutation
 } from '../../../generated/graphql';
-import { LoadingSection } from '../../../ui/components/LoadingSection';
 import { Terminal } from '../../../ui/components/Terminal';
 import { useToast } from '../../toast';
 
 interface AppRebuildProps {
-    appId: string;
+    app: App;
 }
 
-export const AppRebuild = ({ appId }: AppRebuildProps) => {
+export const AppRebuild = ({ app }: AppRebuildProps) => {
     const toast = useToast();
+    const router = useRouter();
     const [isRebuildAppModalOpen, setIsRebuildAppModalOpen] = useState(false);
     const [arrayOfRebuildLogs, setArrayOfRebuildLogs] = useState<LogPayload[]>([]);
     const [isTerminalVisible, setIsTerminalVisible] = useState(false);
@@ -26,14 +27,6 @@ export const AppRebuild = ({ appId }: AppRebuildProps) => {
     );
 
     const [rebuildAppMutation] = useRebuildAppMutation();
-
-    const { data, loading /* error */, refetch } = useAppByIdQuery({
-        variables: {
-            appId,
-        },
-        ssr: false,
-        skip: !appId,
-    });
 
     useAppRebuildLogsSubscription({
         onData: (options) => {
@@ -54,7 +47,7 @@ export const AppRebuild = ({ appId }: AppRebuildProps) => {
             await rebuildAppMutation({
                 variables: {
                     input: {
-                        appId,
+                        appId: app.id,
                     },
                 },
             });
@@ -64,24 +57,6 @@ export const AppRebuild = ({ appId }: AppRebuildProps) => {
             toast.error(e.message);
         }
     };
-
-    if (!data) {
-        return null;
-    }
-
-    // // TODO display error
-
-    if (loading) {
-        // TODO nice loading
-        return <LoadingSection />;
-    }
-
-    const { app } = data;
-
-    if (!app) {
-        // TODO nice 404
-        return <p>App not found.</p>;
-    }
 
     return (
         <>
@@ -98,7 +73,7 @@ export const AppRebuild = ({ appId }: AppRebuildProps) => {
                 closeButton
                 onClose={() => {
                     setIsRebuildAppModalOpen(false);
-                    refetch({ appId });
+                    router.reload();
                     setRebuildLoading(false);
                     setIsTerminalVisible(false);
                     setProcessStatus('notStarted');
@@ -135,7 +110,7 @@ export const AppRebuild = ({ appId }: AppRebuildProps) => {
                         bordered
                         onClick={() => {
                             setIsRebuildAppModalOpen(false);
-                            refetch({ appId });
+                            router.reload();
                             setRebuildLoading(false);
                             setIsTerminalVisible(false);
                             setProcessStatus('notStarted');

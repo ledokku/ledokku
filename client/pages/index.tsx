@@ -1,65 +1,21 @@
-import { Button, Container, Loading, Text } from '@nextui-org/react';
+import { SetupQuery } from '@/generated/graphql.server';
+import { Button, Container, Text } from '@nextui-org/react';
+import { GetServerSideProps } from 'next';
+import { getSession, signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 import { FiGithub } from 'react-icons/fi';
-import { GITHUB_APP_CLIENT_ID } from '../constants';
-import { useLoginWithGithubMutation, useSetupQuery } from '../generated/graphql';
+import { serverClient } from '../lib/apollo.server';
 import { CodeBox } from '../ui/components/CodeBox';
 import { OCStudiosLogo } from '../ui/icons/OCStudiosLogo';
-import { useAuth } from '../ui/modules/auth/AuthContext';
-import { useToast } from '../ui/toast';
 
-const Index = () => {
-    const toast = useToast();
-    const history = useRouter();
-    const { loggedIn, login } = useAuth();
-    const { data, loading, error } = useSetupQuery();
-    const [
-        loginWithGithubMutation,
-        { loading: loginWithGithubLoading },
-    ] = useLoginWithGithubMutation();
+interface IndexProps {
+    setup: SetupQuery['setup'];
+}
 
-    useEffect(() => {
-        const codeToLogin = async () => {
-            const queryString = window.location.search;
-            const urlParams = new URLSearchParams(queryString);
-            const githubCode = urlParams.get('code');
-            const githubState = urlParams.get('state');
+const Index = ({ setup }: IndexProps) => {
+    const router = useRouter();
 
-            // In case of login state is empty
-            if (githubState === 'github_login' && githubCode) {
-                // Remove hash in url
-                window.history.replaceState({}, document.title, '.');
-                try {
-                    const data = await loginWithGithubMutation({
-                        variables: { code: githubCode },
-                    });
-                    if (data.data?.loginWithGithub) {
-                        login(data.data.loginWithGithub.token);
-                        history.push('/dashboard');
-                    } else if (data.errors) {
-                        toast.error(data.errors[0]?.message ?? "Error al iniciar sesión");
-                    }
-                } catch (error: any) {
-                    toast.error(error.message);
-                }
-
-                return;
-            }
-        };
-
-        codeToLogin();
-    }, []);
-
-    const handleLogin = () => {
-        window.location.replace(
-            `https://github.com/login/oauth/authorize?client_id=${GITHUB_APP_CLIENT_ID}&state=github_login`
-        );
-    };
-
-    if (loggedIn) {
-        history.replace('/dashboard');
-    }
+    const loginError = router.query.error as string | undefined;
 
     return (
         <Container className="h-screen">
@@ -76,43 +32,61 @@ const Index = () => {
                     <OCStudiosLogo size={150} />
                 </div>
 
-                {error && <Text className="mt-4 text-red-500">{error.message}</Text>}
+                {loginError && <Text className="mt-4 text-red-500 text-center">{loginError}</Text>}
 
-                {(loading || loginWithGithubLoading) && <Loading className="mt-8" />}
-
-                {data?.setup.canConnectSsh === false && (
+                {setup?.canConnectSsh === false && (
                     <div className="w-156 flex flex-col justify-center">
                         <Text className="mt-4">
                             Para conectarse por SSH, ejecuta el siguiente comando en tu servidor de
                             Dokku.
                         </Text>
                         <CodeBox lang="bash">
-                            {`echo "${data.setup.sshPublicKey}" | dokku ssh-keys:add ledokku`}
+                            {`echo "${setup.sshPublicKey}" | dokku ssh-keys:add ledokku`}
                         </CodeBox>
                         <Text className="mt-3">Una vez finalizado, refresca la página.</Text>
                     </div>
                 )}
 
-                {data?.setup.canConnectSsh === true &&
-                    data?.setup.isGithubAppSetup === true &&
-                    !loginWithGithubLoading && (
-                        <div className="flex flex-col justify-center items-center">
-                            <Button
-                                shadow
-                                className="mt-4"
-                                onClick={handleLogin}
-                                icon={<FiGithub size={18} />}
-                                iconLeftCss={{ display: 'contents', marginRight: '8px' }}
-                                size="lg"
-                                color="gradient"
-                            >
-                                &nbsp; Iniciar sesión con Github
-                            </Button>
-                        </div>
-                    )}
+                {setup?.canConnectSsh &&
+                    setup.isGithubAppSetup &&
+                    <div className="flex flex-col justify-center items-center">
+                        <Button
+                            shadow
+                            className="mt-4"
+                            onClick={() => signIn('github', { callbackUrl: '/' })}
+                            icon={<FiGithub size={18} />}
+                            iconLeftCss={{ display: 'contents', marginRight: '8px' }}
+                            size="lg"
+                            color="gradient"
+                        >
+                            &nbsp; Iniciar sesión con Github
+                        </Button>
+                    </div>}
             </div>
         </Container>
     );
 };
+
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    const { setup } = await serverClient.setup();
+    const session = await getSession({ ctx });
+
+    if (session) {
+        return {
+            redirect: {
+                destination: '/dashboard',
+                permanent: true,
+            }
+        }
+    }
+
+    return {
+        props: {
+            setup,
+        }
+    }
+}
+
 
 export default Index;

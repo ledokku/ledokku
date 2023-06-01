@@ -1,11 +1,14 @@
+import { DatabaseByIdQuery } from '@/generated/graphql.server';
+import { serverClient } from '@/lib/apollo.server';
 import { Button, Card, Input, Loading, Modal, Spacer, Text } from '@nextui-org/react';
 import { useFormik } from 'formik';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import * as yup from 'yup';
 import {
     DashboardDocument,
-    useDatabaseByIdQuery,
     useDestroyDatabaseMutation,
     useSetDatabaseTagsMutation
 } from '../../../generated/graphql';
@@ -16,20 +19,17 @@ import { DatabaseHeaderInfo } from '../../../ui/modules/database/DatabaseHeaderI
 import { DatabaseHeaderTabNav } from '../../../ui/modules/database/DatabaseHeaderTabNav';
 import { useToast } from '../../../ui/toast';
 
-const Settings = () => {
-    const history = useRouter();
-    const databaseId = history.query.databaseId as string;
+interface SettingsProps {
+    database: DatabaseByIdQuery['database'];
+}
+
+const Settings = ({ database }: SettingsProps) => {
+    const router = useRouter();
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const toast = useToast();
     const [destroyDatabaseMutation, { loading: destroyDbLoading }] = useDestroyDatabaseMutation();
     const [setDatabaseTags, { loading: loadingSetTags }] = useSetDatabaseTagsMutation();
-    const { data, loading, error, refetch } = useDatabaseByIdQuery({
-        variables: {
-            databaseId,
-        },
-        ssr: false,
-        skip: !databaseId,
-    });
+
 
     const DeleteDatabaseNameSchema = yup.object().shape({
         databaseName: yup
@@ -38,7 +38,7 @@ const Settings = () => {
             .test(
                 'Equivale al nombre de la base de datos',
                 'Debe coincidir con el nombre de la base de datos',
-                (val) => val === data?.database?.name
+                (val) => val === database?.name
             ),
     });
 
@@ -54,7 +54,7 @@ const Settings = () => {
             try {
                 await destroyDatabaseMutation({
                     variables: {
-                        input: { databaseId },
+                        input: { databaseId: database?.id },
                     },
                     refetchQueries: [
                         {
@@ -64,18 +64,17 @@ const Settings = () => {
                 });
                 toast.success('Base de datos eliminada');
 
-                history.push('/dashboard');
+                router.push('/dashboard');
             } catch (error: any) {
                 toast.error(error.message);
             }
         },
     });
 
-    const database = data?.database;
     const tags = database?.tags?.map(it => it.name);
 
     return (
-        <AdminLayout loading={loading} error={error} notFound={!database} pageTitle={`Registros | ${database?.name}`}>
+        <AdminLayout pageTitle={`Registros | ${database?.name}`}>
             {database && <>
                 <div>
                     <DatabaseHeaderInfo database={database} />
@@ -95,7 +94,7 @@ const Settings = () => {
                                         tags: [...(tags ?? []), tag]
                                     }
                                 }
-                            }).then(res => refetch())}
+                            }).then(res => router.reload())}
                             onRemove={(tag) => setDatabaseTags({
                                 variables: {
                                     input: {
@@ -103,7 +102,7 @@ const Settings = () => {
                                         tags: (tags ?? []).filter((it) => it !== tag)
                                     }
                                 }
-                            }).then(res => refetch())} />
+                            }).then(res => router.reload())} />
                         <Spacer y={2} />
                         <Card variant="bordered" borderWeight="normal">
                             <Card.Header>
@@ -138,7 +137,7 @@ const Settings = () => {
                             <Modal.Body>
                                 Escribre el nombre de la base de datos para eliminar
                                 <CodeBox>
-                                    {data.database.name}
+                                    {database.name}
                                 </CodeBox>
                                 <Input
                                     css={{ marginBottom: 0 }}
@@ -180,5 +179,22 @@ const Settings = () => {
         </AdminLayout>
     );
 };
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    const session = await getSession(ctx);
+
+    const database = await serverClient.databaseById({
+        databaseId: ctx.params?.databaseId as string
+    }, {
+        "Authorization": `Bearer ${session?.accessToken}`
+    })
+
+
+    return {
+        props: {
+            database: database.database,
+        }
+    }
+}
 
 export default Settings;

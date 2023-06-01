@@ -1,9 +1,10 @@
+import { AppByIdQuery, EnvVar } from '@/generated/graphql.server';
+import { serverClient } from '@/lib/apollo.server';
 import { Divider, Link, Text } from '@nextui-org/react';
-import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/react';
 import {
     EnvVarsDocument,
-    useAppByIdQuery,
-    useEnvVarsQuery,
     useSetEnvVarMutation,
     useUnsetEnvVarMutation
 } from '../../../generated/graphql';
@@ -13,32 +14,18 @@ import { AppHeaderInfo } from '../../../ui/modules/app/AppHeaderInfo';
 import { AppHeaderTabNav } from '../../../ui/modules/app/AppHeaderTabNav';
 import { useToast } from '../../../ui/toast';
 
+interface EnvProps {
+    app: AppByIdQuery['app'];
+    envVars: EnvVar[];
+}
 
-const Env = () => {
-    const history = useRouter();
-    const appId = history.query.appId as string;
-    const { data, loading, error } = useAppByIdQuery({
-        variables: {
-            appId,
-        },
-        ssr: false,
-        skip: !appId,
-    });
+const Env = ({ app, envVars }: EnvProps) => {
     const toast = useToast();
-    const [unsetEnvVarMutation, { loading: unsetEnvVarLoading }] = useUnsetEnvVarMutation();
-    const [setEnvVarMutation, { loading: setEnvVarLoading }] = useSetEnvVarMutation();
-
-    const { data: envVarData, loading: envVarLoading, error: envVarError } = useEnvVarsQuery({
-        variables: {
-            appId,
-        },
-        fetchPolicy: 'network-only',
-    });
-
-    const app = data?.app
+    const [unsetEnvVarMutation] = useUnsetEnvVarMutation();
+    const [setEnvVarMutation] = useSetEnvVarMutation();
 
     return (
-        <AdminLayout loading={loading || envVarLoading} error={error ?? envVarError} pageTitle={`Variables de entorno | ${app?.name}`}>
+        <AdminLayout pageTitle={`Variables de entorno | ${app?.name}`}>
             {app && <div>
                 <AppHeaderInfo app={app} />
                 <AppHeaderTabNav app={app} />
@@ -59,85 +46,106 @@ const Env = () => {
                 </Text>
             </div>
 
-            {envVarData?.envVars.envVars && (
-                <div>
-                    {envVarData.envVars.envVars.map((envVar, index) => {
-                        return (
-                            <div key={index}>
-                                <EnvForm
-                                    key={envVar.key}
-                                    name={envVar.key}
-                                    value={envVar.value}
-                                    asBuildArg={envVar.asBuildArg}
-                                    onSubmit={
-                                        async (values) => {
-                                            try {
-                                                await setEnvVarMutation({
-                                                    variables: {
-                                                        input: {
-                                                            key: values.name,
-                                                            value: values.value,
-                                                            appId,
-                                                            asBuildArg: values.asBuildArg
-                                                        }
-                                                    },
-                                                    refetchQueries: [{ query: EnvVarsDocument, variables: { appId } }],
-                                                });
-                                                toast.success('Variable de entorno asignada');
-                                            } catch (error: any) {
-                                                toast.error(error.message);
-                                            }
+            <div className='flex flex-col'>
+                <EnvForm
+                    key="newVar"
+                    name=""
+                    value=""
+                    asBuildArg={false}
+                    isNewVar={true}
+                    onSubmit={
+                        async (values) => {
+                            try {
+                                await setEnvVarMutation({
+                                    variables: {
+                                        input: {
+                                            key: values.name,
+                                            value: values.value,
+                                            appId: app.id,
+                                            asBuildArg: values.asBuildArg
                                         }
-                                    }
-                                    onDelete={async () => {
+                                    },
+                                    refetchQueries: [{ query: EnvVarsDocument, variables: { appId: app.id } }],
+                                });
+
+                                toast.success('Variable de entorno asignada');
+                            } catch (error: any) {
+                                toast.error(error.message);
+                            }
+                        }
+                    } />
+                {envVars.map((envVar, index) => {
+                    return (
+                        <>
+                            <Divider className='my-4' />
+                            <EnvForm
+                                key={envVar.key}
+                                name={envVar.key}
+                                value={envVar.value}
+                                asBuildArg={envVar.asBuildArg}
+                                onSubmit={
+                                    async (values) => {
                                         try {
-                                            await unsetEnvVarMutation({
-                                                variables: { key: envVar.key, appId },
-                                                refetchQueries: [{ query: EnvVarsDocument, variables: { appId } }],
+                                            await setEnvVarMutation({
+                                                variables: {
+                                                    input: {
+                                                        key: values.name,
+                                                        value: values.value,
+                                                        asBuildArg: values.asBuildArg,
+                                                        appId: app.id,
+                                                    }
+                                                },
+                                                refetchQueries: [{ query: EnvVarsDocument, variables: { appId: app.id } }],
                                             });
-                                            toast.success('Variable de entorno eliminada');
+                                            toast.success('Variable de entorno asignada');
                                         } catch (error: any) {
                                             toast.error(error.message);
                                         }
-                                    }}
-                                />
-                                <div className="my-8">
-                                    <Divider />
-                                </div>
-                            </div>
-                        );
-                    })}
-                    <EnvForm
-                        key="newVar"
-                        name=""
-                        value=""
-                        asBuildArg={false}
-                        isNewVar={true}
-                        onSubmit={
-                            async (values) => {
-                                try {
-                                    await setEnvVarMutation({
-                                        variables: {
-                                            input: {
-                                                key: values.name,
-                                                value: values.value,
-                                                appId,
-                                                asBuildArg: values.asBuildArg
-                                            }
-                                        },
-                                        refetchQueries: [{ query: EnvVarsDocument, variables: { appId } }],
-                                    });
-
-                                    toast.success('Variable de entorno asignada');
-                                } catch (error: any) {
-                                    toast.error(error.message);
+                                    }
                                 }
-                            }
-                        } />
-                </div>
-            )}
+                                onDelete={async () => {
+                                    try {
+                                        await unsetEnvVarMutation({
+                                            variables: { key: envVar.key, appId: app.id },
+                                            refetchQueries: [{ query: EnvVarsDocument, variables: { appId: app.id } }],
+                                        });
+                                        toast.success('Variable de entorno eliminada');
+                                    } catch (error: any) {
+                                        toast.error(error.message);
+                                    }
+                                }}
+                            />
+                        </>
+                    );
+                })}
+
+            </div>
         </AdminLayout>
     );
 };
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    const session = await getSession(ctx);
+
+    const res = await serverClient.appById({
+        appId: ctx.params?.appId as string
+    }, {
+        Authorization: `Bearer ${session?.accessToken}`
+    });
+
+    const envVarData = await serverClient.envVars({
+        appId: ctx.params?.appId as string
+    }, {
+        Authorization: `Bearer ${session?.accessToken}`
+    });
+
+
+    return {
+        props: {
+            app: res.app,
+            envVars: envVarData.envVars.envVars
+        }
+    }
+}
 
 export default Env;

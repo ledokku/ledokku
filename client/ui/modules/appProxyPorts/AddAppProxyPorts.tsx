@@ -1,9 +1,10 @@
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 
+import { Button, Input, Loading, Modal, Text } from '@nextui-org/react';
+import { useRouter } from 'next/router';
 import { useAddAppProxyPortMutation } from '../../../generated/graphql';
 import { useToast } from '../../toast';
-import { Button, Input, Loading, Modal, Text } from '@nextui-org/react';
 
 const createAppProxyPortSchema = yup.object().shape({
     host: yup.string().required('El puerto del anfitrion es requerido'),
@@ -12,19 +13,18 @@ const createAppProxyPortSchema = yup.object().shape({
 
 interface AddAppProxyPortsProps {
     appId: string;
-    appProxyPortsRefetch: () => Promise<any>;
     open: boolean;
     onClose: () => void;
 }
 
 export const AddAppProxyPorts = ({
     appId,
-    appProxyPortsRefetch,
     open,
     onClose,
 }: AddAppProxyPortsProps) => {
     const [addAppProxyPortMutation] = useAddAppProxyPortMutation();
     const toast = useToast();
+    const router = useRouter();
     const formik = useFormik<{ host: string; container: string }>({
         initialValues: {
             host: '',
@@ -43,7 +43,7 @@ export const AddAppProxyPorts = ({
                         },
                     },
                 });
-                await appProxyPortsRefetch();
+                router.reload();
                 toast.success('Mapeo de puertos creado');
 
                 onClose();

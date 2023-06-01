@@ -224,6 +224,17 @@ export type EnvVarList = {
   envVars: Array<EnvVar>;
 };
 
+export type GithubAuthInput = {
+  access_token: Scalars['String'];
+  expires_at: Scalars['Int'];
+  provider: Scalars['String'];
+  providerAccountId: Scalars['String'];
+  refresh_token: Scalars['String'];
+  refresh_token_expires_in: Scalars['Int'];
+  token_type: Scalars['String'];
+  type: Scalars['String'];
+};
+
 export type Installation = {
   __typename?: 'Installation';
   id: Scalars['ID'];
@@ -268,6 +279,7 @@ export type Mutation = {
   destroyDatabase: BooleanResult;
   linkDatabase: BooleanResult;
   loginWithGithub: Auth;
+  loginWithGithubAccessToken: Auth;
   rebuildApp: BooleanResult;
   removeAllowedEmail: Scalars['String'];
   removeAppProxyPort: Scalars['Boolean'];
@@ -334,6 +346,11 @@ export type MutationLinkDatabaseArgs = {
 
 export type MutationLoginWithGithubArgs = {
   code: Scalars['String'];
+};
+
+
+export type MutationLoginWithGithubAccessTokenArgs = {
+  input: GithubAuthInput;
 };
 
 
@@ -747,6 +764,13 @@ export type LoginWithGithubMutationVariables = Exact<{
 
 
 export type LoginWithGithubMutation = { __typename?: 'Mutation', loginWithGithub: { __typename?: 'Auth', token: string } };
+
+export type LoginWithGithubAccessTokenMutationVariables = Exact<{
+  input: GithubAuthInput;
+}>;
+
+
+export type LoginWithGithubAccessTokenMutation = { __typename?: 'Mutation', loginWithGithubAccessToken: { __typename?: 'Auth', token: string } };
 
 export type RebuildAppMutationVariables = Exact<{
   input: RebuildAppInput;
@@ -1385,6 +1409,39 @@ export function useLoginWithGithubMutation(baseOptions?: Apollo.MutationHookOpti
 export type LoginWithGithubMutationHookResult = ReturnType<typeof useLoginWithGithubMutation>;
 export type LoginWithGithubMutationResult = Apollo.MutationResult<LoginWithGithubMutation>;
 export type LoginWithGithubMutationOptions = Apollo.BaseMutationOptions<LoginWithGithubMutation, LoginWithGithubMutationVariables>;
+export const LoginWithGithubAccessTokenDocument = gql`
+    mutation loginWithGithubAccessToken($input: GithubAuthInput!) {
+  loginWithGithubAccessToken(input: $input) {
+    token
+  }
+}
+    `;
+export type LoginWithGithubAccessTokenMutationFn = Apollo.MutationFunction<LoginWithGithubAccessTokenMutation, LoginWithGithubAccessTokenMutationVariables>;
+
+/**
+ * __useLoginWithGithubAccessTokenMutation__
+ *
+ * To run a mutation, you first call `useLoginWithGithubAccessTokenMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginWithGithubAccessTokenMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginWithGithubAccessTokenMutation, { data, loading, error }] = useLoginWithGithubAccessTokenMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useLoginWithGithubAccessTokenMutation(baseOptions?: Apollo.MutationHookOptions<LoginWithGithubAccessTokenMutation, LoginWithGithubAccessTokenMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginWithGithubAccessTokenMutation, LoginWithGithubAccessTokenMutationVariables>(LoginWithGithubAccessTokenDocument, options);
+      }
+export type LoginWithGithubAccessTokenMutationHookResult = ReturnType<typeof useLoginWithGithubAccessTokenMutation>;
+export type LoginWithGithubAccessTokenMutationResult = Apollo.MutationResult<LoginWithGithubAccessTokenMutation>;
+export type LoginWithGithubAccessTokenMutationOptions = Apollo.BaseMutationOptions<LoginWithGithubAccessTokenMutation, LoginWithGithubAccessTokenMutationVariables>;
 export const RebuildAppDocument = gql`
     mutation rebuildApp($input: RebuildAppInput!) {
   rebuildApp(input: $input) {

@@ -2,22 +2,23 @@ import { Button, Loading, Modal, Text } from '@nextui-org/react';
 import { useState } from 'react';
 import { TerminalOutput } from 'react-terminal-ui';
 
+import { App } from '@/generated/graphql.server';
+import { useRouter } from 'next/router';
 import {
     LogPayload,
-    useAppByIdQuery,
     useAppRestartLogsSubscription,
-    useRestartAppMutation,
+    useRestartAppMutation
 } from '../../../generated/graphql';
-import { LoadingSection } from '../../../ui/components/LoadingSection';
 import { Terminal } from '../../../ui/components/Terminal';
 import { useToast } from '../../toast';
 
 interface AppRestartProps {
-    appId: string;
+    app: App;
 }
 
-export const AppRestart = ({ appId }: AppRestartProps) => {
+export const AppRestart = ({ app }: AppRestartProps) => {
     const toast = useToast();
+    const router = useRouter();
     const [isRestartAppModalOpen, setIsRestartAppModalOpen] = useState(false);
     const [arrayOfRestartLogs, setArrayOfRestartLogs] = useState<LogPayload[]>([]);
     const [isTerminalVisible, setIsTerminalVisible] = useState(false);
@@ -27,14 +28,6 @@ export const AppRestart = ({ appId }: AppRestartProps) => {
     );
 
     const [restartAppMutation] = useRestartAppMutation();
-
-    const { data, loading /* error */, refetch } = useAppByIdQuery({
-        variables: {
-            appId,
-        },
-        ssr: false,
-        skip: !appId,
-    });
 
     useAppRestartLogsSubscription({
         onSubscriptionData: (data) => {
@@ -55,7 +48,7 @@ export const AppRestart = ({ appId }: AppRestartProps) => {
             await restartAppMutation({
                 variables: {
                     input: {
-                        appId,
+                        appId: app.id,
                     },
                 },
             });
@@ -65,24 +58,6 @@ export const AppRestart = ({ appId }: AppRestartProps) => {
             toast.error(e.message);
         }
     };
-
-    if (!data) {
-        return null;
-    }
-
-    // // TODO display error
-
-    if (loading) {
-        // TODO nice loading
-        return <LoadingSection />;
-    }
-
-    const { app } = data;
-
-    if (!app) {
-        // TODO nice 404
-        return <p>App not found.</p>;
-    }
 
     return (
         <>
@@ -100,7 +75,7 @@ export const AppRestart = ({ appId }: AppRestartProps) => {
                 blur
                 onClose={() => {
                     setIsRestartAppModalOpen(false);
-                    refetch({ appId });
+
                     setRestartLoading(false);
                     setIsTerminalVisible(false);
                     setProcessStatus('notStarted');
@@ -141,7 +116,7 @@ export const AppRestart = ({ appId }: AppRestartProps) => {
                         bordered
                         onClick={() => {
                             setIsRestartAppModalOpen(false);
-                            refetch({ appId });
+                            router.reload();
                             setRestartLoading(false);
                             setIsTerminalVisible(false);
                             setProcessStatus('notStarted');

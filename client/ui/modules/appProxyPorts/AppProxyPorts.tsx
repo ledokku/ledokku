@@ -1,33 +1,26 @@
+import { App } from '@/generated/graphql.server';
+import { Button, Grid, Loading, Modal, Table, Text } from '@nextui-org/react';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import {
-    useAppProxyPortsQuery,
-    useRemoveAppProxyPortMutation,
     ProxyPort,
+    useRemoveAppProxyPortMutation
 } from '../../../generated/graphql';
-import { AddAppProxyPorts } from './AddAppProxyPorts';
-import { useToast } from '../../toast';
-import { Button, Grid, Loading, Modal, Table, Text } from '@nextui-org/react';
 import { Alert } from '../../../ui/components/Alert';
-import { LoadingSection } from '../../../ui/components/LoadingSection';
+import { useToast } from '../../toast';
+import { AddAppProxyPorts } from './AddAppProxyPorts';
 
 interface AppProxyPortsProps {
-    appId: string;
+    app: App;
+    ports: ProxyPort[];
 }
 
-export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
+export const AppProxyPorts = ({ app, ports }: AppProxyPortsProps) => {
     const toast = useToast();
+    const router = useRouter();
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<false | ProxyPort>(false);
-    const {
-        data: appProxyPortsData,
-        loading: appProxyPortsLoading,
-        // TODO display error
-        // error: appProxyPortsError,
-        refetch: appProxyPortsRefetch,
-    } = useAppProxyPortsQuery({
-        variables: { appId },
-        notifyOnNetworkStatusChange: true,
-    });
+
     const [
         removeAppProxyPortMutation,
         { loading: removeAppPortLoading },
@@ -45,14 +38,14 @@ export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
             await removeAppProxyPortMutation({
                 variables: {
                     input: {
-                        appId,
+                        appId: app.id,
                         scheme: proxyPort.scheme,
                         host: proxyPort.host,
                         container: proxyPort.container,
                     },
                 },
             });
-            await appProxyPortsRefetch();
+            router.reload();
             setIsDeleteModalOpen(false);
             toast.success('Puerto eliminado');
         } catch (error: any) {
@@ -65,12 +58,10 @@ export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
             <Grid xs={12} className="flex flex-col">
                 <Text h3>Configuración de puertos</Text>
                 <Text>Los siguientes puertos están asignados a tu aplicación.</Text>
-
-                {appProxyPortsLoading ? <LoadingSection /> : null}
             </Grid>
 
             <Grid xs={12} className="flex flex-col">
-                {appProxyPortsData && appProxyPortsData.appProxyPorts.length > 0 ? (
+                {ports.length > 0 ? (
                     <Table className="w-full">
                         <Table.Header>
                             <Table.Column>Esquema</Table.Column>
@@ -79,7 +70,7 @@ export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
                             <Table.Column>Acciones</Table.Column>
                         </Table.Header>
                         <Table.Body>
-                            {appProxyPortsData.appProxyPorts.map((proxyPort, index) => (
+                            {ports.map((proxyPort, index) => (
                                 <Table.Row key={index}>
                                     <Table.Cell>{proxyPort.scheme}</Table.Cell>
                                     <Table.Cell>{proxyPort.host}</Table.Cell>
@@ -109,8 +100,7 @@ export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
                 </div>
 
                 <AddAppProxyPorts
-                    appId={appId}
-                    appProxyPortsRefetch={appProxyPortsRefetch}
+                    appId={app.id}
                     open={isAddModalOpen}
                     onClose={() => setIsAddModalOpen(false)}
                 />
@@ -126,7 +116,7 @@ export const AppProxyPorts = ({ appId }: AppProxyPortsProps) => {
                         Cancelar
                     </Button>
                     <Button size="sm" color="error" onClick={handleRemovePort}>
-                        {appProxyPortsLoading || removeAppPortLoading ? (
+                        {removeAppPortLoading ? (
                             <Loading color="currentColor" size="sm" type='points-opacity' />
                         ) : (
                             'Eliminar'

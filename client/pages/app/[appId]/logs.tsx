@@ -1,44 +1,44 @@
+import { AppByIdQuery } from '@/generated/graphql.server';
+import { serverClient } from '@/lib/apollo.server';
 import { Text } from '@nextui-org/react';
-import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/react';
+import { useEffect } from 'react';
 import { TerminalOutput } from 'react-terminal-ui';
-import { useAppByIdQuery, useAppLogsQuery } from '../../../generated/graphql';
+import { useAppLogsQuery } from '../../../generated/graphql';
 import { Alert } from '../../../ui/components/Alert';
 import { Terminal } from '../../../ui/components/Terminal';
 import { AdminLayout } from '../../../ui/layout/layout';
 import { AppHeaderInfo } from '../../../ui/modules/app/AppHeaderInfo';
 import { AppHeaderTabNav } from '../../../ui/modules/app/AppHeaderTabNav';
 
-const Logs = () => {
-    const history = useRouter();
-    const appId = history.query.appId as string;
+interface LogsProps {
+    app: AppByIdQuery['app'];
+}
 
-    const { data, loading, error } = useAppByIdQuery({
+const Logs = ({ app }: LogsProps) => {
+    const { data, loading, error, startPolling } = useAppLogsQuery({
         variables: {
-            appId,
+            appId: app.id,
         },
     });
 
-    const { data: appLogsData, loading: appLogsLoading, error: appLogsError } = useAppLogsQuery({
-        variables: {
-            appId,
-        },
-    });
-
-    const app = data?.app
-
+    useEffect(() => {
+        startPolling(1000);
+    }, [startPolling]);
 
     return (
-        <AdminLayout loading={loading || appLogsLoading} error={error ?? appLogsError} notFound={!data} pageTitle={`Registros | ${app?.name}`}>
+        <AdminLayout pageTitle={`Registros | ${app?.name}`}>
             {app && <div>
                 <AppHeaderInfo app={app} />
                 <AppHeaderTabNav app={app} />
             </div>}
 
-            <Text h3 className="mt-6">
+            <Text h3 className="my-6">
                 Registros de &quot;{app?.name}&quot;:
             </Text>
 
-            {!appLogsLoading && !appLogsError && !appLogsData ? (
+            {!loading && !error && !data ? (
                 <Alert
                     type="info"
                     message={`No hay registros de "${app?.name}".
@@ -46,9 +46,9 @@ const Logs = () => {
                 />
             ) : null}
 
-            {appLogsData?.appLogs ? (
+            {data?.appLogs ? (
                 <Terminal>
-                    {appLogsData.appLogs.logs.map((log, index) => (
+                    {data.appLogs.logs.map((log, index) => (
                         <TerminalOutput key={index}>{log}</TerminalOutput>
                     ))}
                 </Terminal>
@@ -56,5 +56,22 @@ const Logs = () => {
         </AdminLayout>
     );
 };
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    const session = await getSession(ctx);
+
+    const res = await serverClient.appById({
+        appId: ctx.params?.appId as string
+    }, {
+        Authorization: `Bearer ${session?.accessToken}`
+    });
+
+
+    return {
+        props: {
+            app: res.app
+        }
+    }
+}
 
 export default Logs;

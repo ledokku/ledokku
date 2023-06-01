@@ -1,17 +1,18 @@
 import { Avatar, Dropdown, Navbar, useTheme } from '@nextui-org/react';
+import { signOut, useSession } from 'next-auth/react';
 import { useTheme as useNextTheme } from 'next-themes';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useId } from 'react';
 import { FcIdea, FcImport } from 'react-icons/fc';
 import { OCStudiosLogo } from '../icons/OCStudiosLogo';
-import { useAuth } from '../modules/auth/AuthContext';
 
 export const Header = () => {
     const location = useRouter();
-    const { user, logout } = useAuth();
     const { setTheme } = useNextTheme();
-    const { isDark, theme } = useTheme();
+    const { isDark } = useTheme();
+    const { data } = useSession();
+
+    const user = data?.user;
 
     const menuItems: { link: string; name: string }[] = [
         { link: '/dashboard', name: 'Inicio' },
@@ -36,16 +37,15 @@ export const Header = () => {
             </Navbar.Brand>
             <Navbar.Content variant="underline-rounded" hideIn="md">
                 {menuItems.map((it, index) => {
-                    const id = useId();
                     return (
-                        <Navbar.Link
-                            id={id}
+                        <Navbar.Item
                             key={index}
                             isActive={location.pathname === it.link}
-                            href={it.link}
                         >
-                            {it.name}
-                        </Navbar.Link>
+                            <Link href={it.link} className='text-inherit'>
+                                {it.name}
+                            </Link>
+                        </Navbar.Item>
                     );
                 })}
             </Navbar.Content>
@@ -63,19 +63,22 @@ export const Header = () => {
                     <Dropdown>
                         <Dropdown.Button light>
                             <Avatar
-                                src={user?.avatarUrl}
+                                src={user?.image ?? ""}
                                 size="sm"
                                 className="mr-2"
                                 bordered
                                 color="default"
                             />{' '}
-                            {user?.userName}
+                            {user?.name}
                         </Dropdown.Button>
                         <Dropdown.Menu
                             onAction={(key) => {
                                 switch (key) {
                                     case 'logout':
-                                        logout();
+                                        signOut({
+                                            callbackUrl: '/',
+                                            redirect: true
+                                        });
                                         break;
                                     case 'theme':
                                         setTheme(!isDark ? 'dark' : 'light');

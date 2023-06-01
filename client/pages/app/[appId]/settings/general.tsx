@@ -1,3 +1,5 @@
+import { AppByIdQuery } from '@/generated/graphql.server';
+import { serverClient } from '@/lib/apollo.server';
 import {
     Button,
     Card,
@@ -10,12 +12,13 @@ import {
     Text
 } from '@nextui-org/react';
 import { useFormik } from 'formik';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import * as yup from 'yup';
 import {
     DashboardDocument,
-    useAppByIdQuery,
     useDestroyAppMutation,
     useSetAppTagsMutation
 } from '../../../../generated/graphql';
@@ -30,19 +33,15 @@ import { AppRestart } from '../../../../ui/modules/app/AppRestart';
 import { AppSettingsMenu } from '../../../../ui/modules/app/AppSettingsMenu';
 import { useToast } from '../../../../ui/toast';
 
-const AppSettingsAdvanced = () => {
-    const history = useRouter();
-    const appId = history.query.appId as string;
+interface AppSettingsGeneralProps {
+    app: AppByIdQuery['app'];
+}
+
+const AppSettingsAdvanced = ({ app }: AppSettingsGeneralProps) => {
+    const router = useRouter();
     const toast = useToast();
-    const [branchName, setBranchName] = useState("");
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [setAppTags, { loading: loadingSetTags }] = useSetAppTagsMutation();
-
-    const { data, loading, error, refetch } = useAppByIdQuery({
-        variables: {
-            appId,
-        },
-    });
 
     const [destroyAppMutation, { loading: destroyAppMutationLoading }] = useDestroyAppMutation();
 
@@ -53,7 +52,7 @@ const AppSettingsAdvanced = () => {
             .test(
                 'Equals app name',
                 'Debe ser igual al nombre de la aplicación',
-                (val) => val === data?.app?.name
+                (val) => val === app.name
             ),
     });
 
@@ -69,7 +68,7 @@ const AppSettingsAdvanced = () => {
             try {
                 await destroyAppMutation({
                     variables: {
-                        input: { appId },
+                        input: { appId: app.id },
                     },
                     refetchQueries: [
                         {
@@ -79,18 +78,17 @@ const AppSettingsAdvanced = () => {
                 });
                 toast.success('Aplicación eliminada');
 
-                history.push('/dashboard');
+                router.push('/dashboard');
             } catch (error: any) {
                 toast.error(error.message);
             }
         },
     });
 
-    const app = data?.app;
     const tags = app?.tags?.map(it => it.name);
 
     return (
-        <AdminLayout loading={loading} notFound={!app} error={error} pageTitle={`General | ${app?.name}`}>
+        <AdminLayout pageTitle={`General | ${app?.name}`}>
             {app && <>
                 <div>
                     <AppHeaderInfo app={app} />
@@ -113,7 +111,7 @@ const AppSettingsAdvanced = () => {
                                             tags: [...(tags ?? []), tag]
                                         }
                                     }
-                                }).then(res => refetch())}
+                                }).then(res => router.reload())}
                                 onRemove={(tag) => setAppTags({
                                     variables: {
                                         input: {
@@ -121,13 +119,13 @@ const AppSettingsAdvanced = () => {
                                             tags: (tags ?? []).filter((it) => it !== tag)
                                         }
                                     }
-                                }).then(res => refetch())} />
+                                }).then(res => router.reload())} />
                             <Spacer y={2} />
                             {app.appMetaGithub && <BranchChangeInput app={app as any} />}
                             <Spacer y={2} />
-                            <AppRestart appId={app.id} />
+                            <AppRestart app={app as any} />
                             <Spacer y={2} />
-                            <AppRebuild appId={app.id} />
+                            <AppRebuild app={app as any} />
                             <Spacer y={2} />
                             <Card className="mt-8" variant="bordered" borderWeight="normal">
                                 <Card.Header>
@@ -162,7 +160,7 @@ const AppSettingsAdvanced = () => {
                                 <Modal.Body>
                                     Escribre el nombre de la aplicación para eliminar
                                     <CodeBox>
-                                        {data.app.name}
+                                        {app.name}
                                     </CodeBox>
                                     <Input
                                         css={{ marginBottom: 0 }}
@@ -209,5 +207,22 @@ const AppSettingsAdvanced = () => {
         </AdminLayout>
     );
 };
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    const session = await getSession(ctx);
+
+    const res = await serverClient.appById({
+        appId: ctx.params?.appId as string
+    }, {
+        Authorization: `Bearer ${session?.accessToken}`
+    });
+
+
+    return {
+        props: {
+            app: res.app
+        }
+    }
+}
 
 export default AppSettingsAdvanced;

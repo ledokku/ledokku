@@ -1,29 +1,36 @@
+import { DashboardQuery } from '@/generated/graphql.server';
+import { serverClient } from '@/lib/apollo.server';
 import { Button, Card, Grid, Image, Spacer, Text } from '@nextui-org/react';
 import format from 'date-fns/format';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useDashboardQuery, useGetBuildingAppsQuery } from '../generated/graphql';
+import { useEffect } from 'react';
+import { useGetBuildingAppsQuery } from '../generated/graphql';
 import { BuildingAlert } from '../ui/components/BuildingAlert';
 import { DbIcon } from '../ui/components/DbIcon';
 import { GithubIcon } from '../ui/icons/GithubIcon';
 import { AdminLayout } from '../ui/layout/layout';
 import { ActivityFeed } from '../ui/modules/activity/ActivityFeed';
 
-const Dashboard = () => {
+interface DashboardProps {
+    data: DashboardQuery;
+}
+
+const Dashboard = ({ data }: DashboardProps) => {
     const router = useRouter();
-    const { data, loading, error } = useDashboardQuery({
-        fetchPolicy: 'cache-and-network',
-        variables: {
-            appLimit: 4,
-            databaseLimit: 4,
-        },
-    });
-    const { data: buildingApps } = useGetBuildingAppsQuery({
-        pollInterval: 5000
+
+    const { data: buildingApps, startPolling } = useGetBuildingAppsQuery({
+        fetchPolicy: 'network-only',
     });
 
+    useEffect(() => {
+        startPolling(2000);
+    }, [startPolling]);
+
     return (
-        <AdminLayout loading={loading} error={error}>
+        <AdminLayout>
             <div className='flex flex-col gap-2'>
                 {buildingApps && buildingApps.buildingApps.map((it, index) => <BuildingAlert key={index} app={it as any} />)}
                 {buildingApps && buildingApps.buildingApps.length > 0 && <Spacer />}
@@ -183,5 +190,22 @@ const Dashboard = () => {
         </AdminLayout>
     );
 };
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    const session = await getSession({ ctx });
+
+    const data = await serverClient.dashboard({
+        appLimit: 4,
+        databaseLimit: 4,
+    }, {
+        Authorization: `Bearer ${session?.accessToken}`,
+    });
+
+    return {
+        props: {
+            data: data,
+        }
+    }
+}
 
 export default Dashboard;

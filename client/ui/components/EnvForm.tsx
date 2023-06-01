@@ -1,4 +1,4 @@
-import { Button, Checkbox, Grid, Input, Text, Textarea } from '@nextui-org/react';
+import { Button, Checkbox, Input, Text, Textarea } from '@nextui-org/react';
 import { useFormik } from 'formik';
 import { useState } from 'react';
 import { FiTrash2 } from 'react-icons/fi';
@@ -17,7 +17,7 @@ export const EnvForm = ({ name, value, isNewVar, onDelete, onSubmit, asBuildArg 
     const [focus, setFocus] = useState(false);
 
     const envSchema = yup.object().shape<{ name: any; value: any, asBuildArg: any }>({
-        name: yup.string().required(),
+        name: yup.string().required("El nombre es requerido"),
         value: yup.string().when("asBuildArg", {
             is: true,
             then: yup.string().matches(/^[^ ]*$/gm, "Los build-args no deben tener espacios")
@@ -44,82 +44,105 @@ export const EnvForm = ({ name, value, isNewVar, onDelete, onSubmit, asBuildArg 
     });
 
     return (
-        <form onSubmit={formik.handleSubmit} autoComplete="off">
-            <Grid.Container gap={1} direction="column">
-                <Grid>
+        <form onSubmit={formik.handleSubmit}>
+            <div className='flex flex-col md:flex-row gap-4'>
+                <div className='w-full'>
                     <Input
                         width="100%"
                         autoComplete="off"
                         id={isNewVar ? 'newVarName' : name}
+                        status={formik.errors.name ? 'error' : undefined}
                         name="name"
                         placeholder="Nombre"
-                        label="Nombre"
+                        aria-autocomplete="none"
                         key={name}
                         value={formik.values.name}
                         onChange={formik.handleChange}
                     />
-                </Grid>
-                <Grid>
-                    <div>
-                        <Textarea
-                            width="100%"
-                            autoComplete="off"
-                            id={isNewVar ? 'newVarValue' : value}
-                            name="value"
-                            placeholder="Valor"
-                            label="Valor"
-                            key={value}
-                            onFocus={(e) => {
-                                setFocus(document.activeElement === e.currentTarget)
-                            }}
-                            onBlur={(e) => {
-                                setFocus(document.activeElement === e.currentTarget)
-                            }}
-                            style={{ filter: focus || isNewVar ? "" : 'blur(4px)' }}
-                            value={formik.values.value}
-                            onChange={formik.handleChange}
-                        />
-                        <Text color="$error">{Object.values(formik.errors).find(it => !!it)}</Text>
-                    </div>
+                </div>
+                <div className='w-full'>
+                    {formik.values.value.length > 40 ? <Textarea
+                        width="100%"
+                        size='md'
+                        autoComplete="off"
+                        id={isNewVar ? 'newVarValue' : value}
+                        name="value"
+                        placeholder="Valor"
+                        status={Object.values(formik.errors).some(it => !!it) ? 'error' : undefined}
+                        key={value}
+                        onFocus={(e) => {
+                            setFocus(document.activeElement === e.currentTarget)
+                        }}
+                        onBlur={(e) => {
+                            setFocus(document.activeElement === e.currentTarget)
+                        }}
+                        style={{ filter: focus || isNewVar ? "" : 'blur(4px)' }}
+                        value={formik.values.value}
+                        onChange={formik.handleChange}
+                    /> : <Input
+                        width="100%"
+                        size='md'
+                        autoComplete="off"
+                        id={isNewVar ? 'newVarValue' : value}
+                        name="value"
+                        placeholder="Valor"
+                        status={Object.values(formik.errors).some(it => !!it) ? 'error' : undefined}
+                        key={value}
+                        onFocus={(e) => {
+                            setFocus(document.activeElement === e.currentTarget)
+                        }}
+                        onBlur={(e) => {
+                            setFocus(document.activeElement === e.currentTarget)
+                        }}
+                        style={{ filter: focus || isNewVar ? "" : 'blur(4px)' }}
+                        value={formik.values.value}
+                        onChange={formik.handleChange}
+                    />
+                    }
+                    <Text color="$error">{Object.values(formik.errors).find(it => !!it)}</Text>
+                </div>
+                <div className="flex flex-col gap-2 items-end">
                     <Checkbox
                         label='Como build-arg'
-                        className='mt-2'
                         name='asBuildArg'
-                        size='md'
+                        size='sm'
                         isSelected={formik.values.asBuildArg}
                         onChange={(val) => formik.setFieldValue("asBuildArg", val)} />
-                </Grid>
-                <Grid className="flex flex-row">
-                    <Button
-                        type="submit"
-                        disabled={value === formik.values.value
-                            && name === formik.values.name
-                            && asBuildArg === formik.values.asBuildArg
-                            && !isNewVar}
-                        className="mr-4">
-                        {isNewVar ? (
-                            'Agregar'
-                        ) : (
-                            'Guardar'
-                        )}
-                    </Button>
-                    {!isNewVar && (
+                    <div className='flex gap-4 w-48 justify-end'>
                         <Button
-                            css={{ minWidth: '0px' }}
-                            color="error"
-                            aria-label="Delete"
-                            disabled={!onDelete}
-                            icon={
-                                <FiTrash2 />
-                            }
-                            onClick={() => {
-                                onDelete?.call(this, name);
-                            }}
-                        />
-                    )}
+                            type="submit"
+                            auto
+                            size="sm"
+                            disabled={value === formik.values.value
+                                && name === formik.values.name
+                                && asBuildArg === formik.values.asBuildArg
+                                && !isNewVar}>
+                            {isNewVar ? (
+                                'Agregar'
+                            ) : (
+                                'Guardar'
+                            )}
+                        </Button>
+                        {!isNewVar && (
+                            <Button
+                                auto
+                                css={{ minWidth: 'unset' }}
+                                size="sm"
+                                color="error"
+                                aria-label="Delete"
+                                disabled={!onDelete}
+                                icon={
+                                    <FiTrash2 />
+                                }
+                                onClick={() => {
+                                    onDelete?.call(this, name);
+                                }}
+                            />
+                        )}
+                    </div>
 
-                </Grid>
-            </Grid.Container>
+                </div>
+            </div>
         </form>
     );
 };

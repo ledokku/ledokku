@@ -1,12 +1,14 @@
+import { DatabaseByIdQuery, DatabaseInfoQuery } from '@/generated/graphql.server';
+import { serverClient } from '@/lib/apollo.server';
 import { Button, Card, Dropdown, Grid, Link, Loading, Modal, Table, Text } from '@nextui-org/react';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { FiInfo } from 'react-icons/fi';
 import {
     LogPayload,
     useAppsQuery,
-    useDatabaseByIdQuery,
-    useDatabaseInfoQuery,
     useLinkDatabaseLogsSubscription,
     useLinkDatabaseMutation,
     useUnlinkDatabaseLogsSubscription,
@@ -19,9 +21,14 @@ import { DatabaseHeaderInfo } from '../../ui/modules/database/DatabaseHeaderInfo
 import { DatabaseHeaderTabNav } from '../../ui/modules/database/DatabaseHeaderTabNav';
 import { useToast } from '../../ui/toast';
 
-const Database = () => {
-    const history = useRouter();
-    const databaseId = history.query.databaseId as string;
+interface DatabaseProps {
+    database: DatabaseByIdQuery['database'];
+    databaseInfo: DatabaseInfoQuery['databaseInfo'];
+}
+
+const Database = ({ database, databaseInfo }: DatabaseProps) => {
+    const router = useRouter();
+    const databaseId = router.query.databaseId as string;
     const toast = useToast();
     const [isUnlinkModalOpen, setIsUnlinkModalOpen] = useState(false);
     const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
@@ -50,24 +57,7 @@ const Database = () => {
         },
     });
 
-    const { data, loading, refetch, error } = useDatabaseByIdQuery({
-        variables: {
-            databaseId,
-        },
-        ssr: false,
-        skip: !databaseId,
-    });
-
     const [unlinkDatabaseMutation] = useUnlinkDatabaseMutation();
-
-    const { data: databaseInfoData, loading: databaseLoading, error: databaseError } = useDatabaseInfoQuery({
-        variables: {
-            databaseId,
-        },
-        ssr: false,
-        skip: !databaseId,
-        pollInterval: 15000,
-    });
 
     useUnlinkDatabaseLogsSubscription({
         onSubscriptionData: (data) => {
@@ -97,7 +87,6 @@ const Database = () => {
         },
     });
 
-    const database = data?.database;
     const apps = appsData?.apps;
 
     const handleUnlink = async (databaseId: string, appId: string) => {
@@ -151,7 +140,7 @@ const Database = () => {
         }
     };
 
-    const databaseInfos = databaseInfoData?.databaseInfo.info
+    const databaseInfos = databaseInfo.info
         .map((data) => data.trim())
         .map((info) => {
             const name = info.split(':')[0];
@@ -160,7 +149,7 @@ const Database = () => {
         });
 
     return (
-        <AdminLayout loading={loading || databaseLoading} error={error ?? databaseError} notFound={!database} pageTitle={database?.name}>
+        <AdminLayout pageTitle={database?.name}>
             {database && <>
                 <div>
                     <DatabaseHeaderInfo database={database} />
@@ -223,7 +212,7 @@ const Database = () => {
                                                     );
 
                                                     if (key === 'create-new-app-internal-id') {
-                                                        history.push({
+                                                        router.push({
                                                             pathname: '/create-app',
                                                         });
                                                     } else if (app) {
@@ -275,7 +264,7 @@ const Database = () => {
                                             closeButton
                                             onClose={() => {
                                                 setIsLinkModalOpen(false);
-                                                refetch({ databaseId });
+                                                router.reload();
                                                 setLinkLoading(false);
                                                 setIsTerminalVisible(false);
                                                 setProcessStatus('notStarted');
@@ -323,7 +312,8 @@ const Database = () => {
                                                     bordered
                                                     onClick={() => {
                                                         setIsLinkModalOpen(false);
-                                                        refetch({ databaseId });
+                                                        router.reload();
+
                                                         setLinkLoading(false);
                                                         setIsTerminalVisible(false);
                                                         setProcessStatus('notStarted');
@@ -366,7 +356,7 @@ const Database = () => {
                                     </>
                                 )}
 
-                                {!loading && database && database.apps && (
+                                {database && database.apps && (
                                     <>
                                         <Text h3 className="mt-8 mb-4">
                                             {database.apps.length > 0 && 'Aplicaciones enlazadas'}
@@ -418,7 +408,8 @@ const Database = () => {
                                                             closeButton
                                                             onClose={() => {
                                                                 setIsUnlinkModalOpen(false);
-                                                                refetch({ databaseId });
+                                                                router.reload();
+
                                                                 setUnlinkLoading(false);
                                                                 setIsTerminalVisible(false);
                                                                 setAppAboutToUnlink('');
@@ -475,7 +466,8 @@ const Database = () => {
                                                                     bordered
                                                                     onClick={() => {
                                                                         setIsUnlinkModalOpen(false);
-                                                                        refetch({ databaseId });
+                                                                        router.reload();
+
                                                                         setUnlinkLoading(false);
                                                                         setIsTerminalVisible(false);
                                                                         setAppAboutToUnlink('');
@@ -548,5 +540,28 @@ const Database = () => {
         </AdminLayout>
     );
 };
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    const session = await getSession(ctx);
+
+    const database = await serverClient.databaseById({
+        databaseId: ctx.params?.databaseId as string
+    }, {
+        "Authorization": `Bearer ${session?.accessToken}`
+    })
+
+    const databaseInfo = await serverClient.databaseInfo({
+        databaseId: ctx.params?.databaseId as string
+    }, {
+        "Authorization": `Bearer ${session?.accessToken}`
+    })
+
+    return {
+        props: {
+            database: database.database,
+            databaseInfo: databaseInfo.databaseInfo
+        }
+    }
+}
 
 export default Database;

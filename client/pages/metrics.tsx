@@ -1,5 +1,5 @@
 import { Text } from '@nextui-org/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { TerminalOutput } from 'react-terminal-ui';
 import { LogPayload, useLedokkuLogsQuery, useOnLedokkuLogsSubscription } from '../generated/graphql';
 import { Terminal } from '../ui/components/Terminal';
@@ -7,13 +7,13 @@ import { AdminLayout } from '../ui/layout/layout';
 
 const Metrics = () => {
     const [data, setData] = useState<LogPayload[]>([]);
-    const { data: logs, loading: loadingLogs, error } = useLedokkuLogsQuery();
-
-    useEffect(() => {
-        if (logs && logs.ledokkuLogs.length > 0) {
-            setData([...logs.ledokkuLogs, ...data]);
-        }
-    }, [logs])
+    const { loading: loadingLogs, error } = useLedokkuLogsQuery({
+        onCompleted(logs) {
+            if (logs && logs.ledokkuLogs.length > 0) {
+                setData([...logs.ledokkuLogs, ...data]);
+            }
+        },
+    });
 
     useOnLedokkuLogsSubscription({
         onSubscriptionData(options) {

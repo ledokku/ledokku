@@ -1,37 +1,32 @@
+import { AppByIdQuery } from '@/generated/graphql.server';
+import { serverClient } from '@/lib/apollo.server';
 import { Pagination } from '@nextui-org/react';
-import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/react';
 import { useState } from 'react';
-import { useActivityQuery, useAppByIdQuery } from '../../../generated/graphql';
+import { useActivityQuery } from '../../../generated/graphql';
 import { AdminLayout } from '../../../ui/layout/layout';
 import { ActivityItem } from '../../../ui/modules/activity/ActivityFeed';
 import { AppHeaderInfo } from '../../../ui/modules/app/AppHeaderInfo';
 import { AppHeaderTabNav } from '../../../ui/modules/app/AppHeaderTabNav';
 
-const ActivityPage = () => {
-    const history = useRouter();
-    const appId = history.query.appId as string;
-    const { data, loading, error } = useAppByIdQuery({
-        variables: {
-            appId,
-        },
-        ssr: false,
-        skip: !appId,
-    });
+interface ActivityProps {
+    app: AppByIdQuery['app'];
+}
 
+const ActivityPage = ({ app }: ActivityProps) => {
     const [page, setPage] = useState(1);
 
-    const { loading: loadingActivity, data: activityData, error: activityError } = useActivityQuery({
+    const { data: activityData } = useActivityQuery({
         variables: {
             limit: 10,
             page: page - 1,
-            refId: appId
+            refId: app.id
         },
     });
 
-    const app = data?.app;
-
     return (
-        <AdminLayout loading={loading || loadingActivity} notFound={!app} error={error ?? activityError} pageTitle={`Actividad | ${app?.name}`}>
+        <AdminLayout pageTitle={`Actividad | ${app?.name}`}>
             {app && <div>
                 <AppHeaderInfo app={app} />
                 <AppHeaderTabNav app={app} />
@@ -53,5 +48,22 @@ const ActivityPage = () => {
 
     );
 };
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    const session = await getSession(ctx);
+
+    const res = await serverClient.appById({
+        appId: ctx.params?.appId as string
+    }, {
+        Authorization: `Bearer ${session?.accessToken}`
+    });
+
+
+    return {
+        props: {
+            app: res.app
+        }
+    }
+}
 
 export default ActivityPage;

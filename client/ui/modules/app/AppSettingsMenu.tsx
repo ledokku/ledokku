@@ -1,4 +1,5 @@
 import { Navbar } from '@nextui-org/react';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 interface AppSettingsMenuProps {
@@ -20,28 +21,37 @@ export const AppSettingsMenu = ({ app }: AppSettingsMenuProps) => {
 
     return (
         <Navbar disableShadow css={{ maxH: 'inherit', display: 'block' }}>
-            <Navbar.Content variant={'highlight-rounded'} className="flex flex-col gap-4">
-                <Navbar.Link
-                    css={{ padding: 16 }}
+            <Navbar.Content variant={'highlight-rounded'} className="flex flex-col gap-4 items-stretch">
+                <Navbar.Item
+                    className='p-4 h-fit'
                     isActive={selectedRoute === 'general'}
-                    href={`/app/${app.id}/settings/general`}
                 >
-                    General
-                </Navbar.Link>
-                <Navbar.Link
-                    css={{ padding: 16 }}
+                    <Link
+                        className='text-white'
+                        href={`/app/${app.id}/settings/general`}>
+                        General
+                    </Link>
+                </Navbar.Item>
+                <Navbar.Item
+                    className='p-4 h-fit'
                     isActive={selectedRoute === 'ports'}
-                    href={`/app/${app.id}/settings/ports`}
                 >
-                    Configuración de puertos
-                </Navbar.Link>
-                <Navbar.Link
-                    css={{ padding: 16 }}
+                    <Link
+                        className='text-white'
+                        href={`/app/${app.id}/settings/ports`}>
+                        Configuración de puertos
+                    </Link>
+                </Navbar.Item>
+                <Navbar.Item
+                    className='p-4 h-fit'
                     isActive={selectedRoute === 'domains'}
-                    href={`/app/${app.id}/settings/domains`}
                 >
-                    Dominios
-                </Navbar.Link>
+                    <Link
+                        className='text-white'
+                        href={`/app/${app.id}/settings/domains`}>
+                        Dominios
+                    </Link>
+                </Navbar.Item>
 
             </Navbar.Content>
         </Navbar>

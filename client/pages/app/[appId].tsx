@@ -1,3 +1,5 @@
+import { AppByIdQuery } from '@/generated/graphql.server';
+import { serverClient } from '@/lib/apollo.server';
 import {
     Button,
     Card,
@@ -10,6 +12,8 @@ import {
     Table,
     Text
 } from '@nextui-org/react';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { FiInfo } from 'react-icons/fi';
@@ -17,7 +21,6 @@ import { TerminalOutput } from 'react-terminal-ui';
 import {
     AppStatus,
     LogPayload,
-    useAppByIdQuery,
     useDatabaseQuery,
     useLinkDatabaseLogsSubscription,
     useLinkDatabaseMutation,
@@ -33,9 +36,12 @@ import { AppHeaderInfo } from '../../ui/modules/app/AppHeaderInfo';
 import { AppHeaderTabNav } from '../../ui/modules/app/AppHeaderTabNav';
 import { useToast } from '../../ui/toast';
 
-const App = () => {
-    const history = useRouter();
-    const appId = history.query.appId as string;
+interface AppProps {
+    app: AppByIdQuery['app'];
+}
+
+const App = ({ app }: AppProps) => {
+    const router = useRouter();
     const toast = useToast();
     const [isUnlinkModalOpen, setIsUnlinkModalOpen] = useState(false);
     const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
@@ -95,18 +101,8 @@ const App = () => {
         },
     });
 
-    const { data, loading, refetch, error } = useAppByIdQuery({
-        variables: {
-            appId,
-        },
-        fetchPolicy: 'cache-and-network',
-        ssr: false,
-        skip: !appId,
-    });
-
-    const app = data?.app;
     const databases = databaseData?.databases
-    const linkedDatabases = data?.app.databases ?? [];
+    const linkedDatabases = app.databases ?? [];
     const linkedIds = linkedDatabases.map((db) => db.id);
     const notLinkedDatabases = databaseData?.databases.items.filter((db) => {
         return linkedIds?.indexOf(db.id) === -1;
@@ -158,7 +154,7 @@ const App = () => {
     };
 
     return (
-        <AdminLayout loading={loading} notFound={!data?.app} pageTitle={app?.name}>
+        <AdminLayout pageTitle={app?.name}>
             {app?.status === AppStatus.Building && <>
                 <BuildingAlert app={app as any} />
                 <Spacer />
@@ -229,7 +225,7 @@ const App = () => {
                                                 );
 
                                                 if (key === 'create-new-database-internal-id') {
-                                                    history.push({
+                                                    router.push({
                                                         pathname: '/create-database',
                                                     });
                                                 } else if (db) {
@@ -285,7 +281,7 @@ const App = () => {
                                         blur
                                         onClose={() => {
                                             setIsLinkModalOpen(false);
-                                            refetch({ appId });
+                                            router.reload();
                                             setLinkLoading(false);
                                             setIsTerminalVisible(false);
                                             setProcessStatus('notStarted');
@@ -333,7 +329,7 @@ const App = () => {
                                                 bordered
                                                 onClick={() => {
                                                     setIsLinkModalOpen(false);
-                                                    refetch({ appId });
+                                                    router.reload();
                                                     setLinkLoading(false);
                                                     setIsTerminalVisible(false);
                                                     setProcessStatus('notStarted');
@@ -346,7 +342,7 @@ const App = () => {
                                                 type="submit"
                                                 onClick={() => {
                                                     setProcessStatus('running');
-                                                    handleConnect(selectedDb.value.id, appId);
+                                                    handleConnect(selectedDb.value.id, app.id);
                                                 }}
                                                 disabled={isTerminalVisible}
                                             >
@@ -375,7 +371,7 @@ const App = () => {
                                     </div>
                                 </>
                             )}
-                            {!loading && app && app.databases && (
+                            {app && app.databases && (
                                 <>
                                     <Text h3 className="mt-8 mb-4">
                                         {app.databases.length > 0 && 'Bases de datos enlazadas'}
@@ -437,7 +433,7 @@ const App = () => {
                                                         blur
                                                         onClose={() => {
                                                             setIsUnlinkModalOpen(false);
-                                                            refetch({ appId });
+                                                            router.reload();
                                                             setUnlinkLoading(false);
                                                             setIsTerminalVisible(false);
                                                             setdatabaseAboutToUnlink('');
@@ -496,7 +492,7 @@ const App = () => {
                                                                 bordered
                                                                 onClick={() => {
                                                                     setIsUnlinkModalOpen(false);
-                                                                    refetch({ appId });
+                                                                    router.reload();
                                                                     setUnlinkLoading(false);
                                                                     setIsTerminalVisible(false);
                                                                     setdatabaseAboutToUnlink('');
@@ -513,7 +509,7 @@ const App = () => {
                                                                     setProcessStatus('running');
                                                                     handleUnlink(
                                                                         database.id,
-                                                                        appId
+                                                                        app.id
                                                                     );
                                                                 }}
                                                                 disabled={isTerminalVisible}
@@ -549,5 +545,22 @@ const App = () => {
         </AdminLayout>
     );
 };
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    const session = await getSession(ctx);
+
+    const res = await serverClient.appById({
+        appId: ctx.params?.appId as string
+    }, {
+        Authorization: `Bearer ${session?.accessToken}`
+    });
+
+
+    return {
+        props: {
+            app: res.app
+        }
+    }
+}
 
 export default App;

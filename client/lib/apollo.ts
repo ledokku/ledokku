@@ -4,6 +4,7 @@ import { onError } from '@apollo/client/link/error';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { createClient } from 'graphql-ws';
+import { getSession, signOut } from 'next-auth/react';
 import { SERVER_URL, SERVER_WS_URL } from '../constants';
 
 const httpLink = new HttpLink({
@@ -15,35 +16,33 @@ const wsLink =
         ? new GraphQLWsLink(
               createClient({
                   url: `${SERVER_WS_URL}/graphql`,
-                  connectionParams: () => {
+                  connectionParams: async () => {
+                      const session = await getSession();
                       return {
-                          token: localStorage.getItem('accessToken'),
+                          token: session?.accessToken,
                       };
                   },
               })
           )
         : null;
 
-const authLink = setContext((_, { headers }) => {
-    const token = localStorage.getItem('accessToken');
+const authLink = setContext(async (_, { headers }) => {
+    const session = await getSession();
     return {
         headers: {
             ...headers,
-            authorization: token ? `Bearer ${token}` : '',
+            authorization: session?.accessToken ? `Bearer ${session?.accessToken}` : '',
         },
     };
 });
 
 const errorLink = onError(({ graphQLErrors }) => {
+    console.debug('errorLink', graphQLErrors);
     if (graphQLErrors) {
         const error = graphQLErrors[0];
-        /**
-         * If we get the "Unauthorized" message from the server
-         * it means the token is not valid anymore so we log out the user
-         */
+
         if (error.message.includes('Unauthorized')) {
-            localStorage.removeItem('accessToken');
-            window.location.href = '/';
+            signOut({ callbackUrl: '/', redirect: true });
         }
     }
 });

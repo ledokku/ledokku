@@ -1,13 +1,12 @@
 import { ApolloError } from '@apollo/client';
 import { Card, Container, Image, Text, useTheme } from '@nextui-org/react';
-import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { ReactNode } from 'react';
 import TinyCrossfade from 'react-tiny-crossfade';
 import { Footer } from '../components/Footer';
 import { LoadingSection } from '../components/LoadingSection';
 import { NotFound } from '../components/NotFound';
-const Header = dynamic(async () => (await import('../components/Header')).Header, { ssr: false });
+import { Header } from '../components/Header';
 
 interface AdminLayoutProps {
     loading?: boolean;

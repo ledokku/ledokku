@@ -10,10 +10,13 @@
 		}
 	],
 	"settings": {
-		"nuxt.isNuxtApp": false,
 		"debug.inlineValues": "on",
 		"typescript.tsdk": "node_modules\\typescript\\lib",
 		"editor.formatOnSave": true,
+		"editor.codeActionsOnSave": {
+			"source.fixAll": true,
+			"source.organizeImports": true
+		},
 	},
 	"launch": {
 		"version": "0.2.0",

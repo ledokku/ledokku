@@ -1,7 +1,10 @@
+import { DatabaseByIdQuery } from '@/generated/graphql.server';
+import { serverClient } from '@/lib/apollo.server';
 import { Text } from '@nextui-org/react';
-import { useRouter } from 'next/router';
-import React from 'react';
-import { useDatabaseByIdQuery, useDatabaseLogsQuery } from '../../../generated/graphql';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/react';
+import React, { useEffect } from 'react';
+import { useDatabaseLogsQuery } from '../../../generated/graphql';
 import { Alert } from '../../../ui/components/Alert';
 import { LoadingSection } from '../../../ui/components/LoadingSection';
 import { Terminal } from '../../../ui/components/Terminal';
@@ -9,31 +12,29 @@ import { AdminLayout } from '../../../ui/layout/layout';
 import { DatabaseHeaderInfo } from '../../../ui/modules/database/DatabaseHeaderInfo';
 import { DatabaseHeaderTabNav } from '../../../ui/modules/database/DatabaseHeaderTabNav';
 
-const Logs = () => {
-    const history = useRouter();
-    const databaseId = history.query.databaseId as string;
+interface LogsProps {
+    database: DatabaseByIdQuery['database'];
+}
 
-    const { data, loading, error } = useDatabaseByIdQuery({
-        variables: {
-            databaseId,
-        },
-    });
-
+const Logs = ({ database }: LogsProps) => {
     const {
         data: databaseLogsData,
         error: databaseLogsError,
         loading: databaseLogsLoading,
+        startPolling
     } = useDatabaseLogsQuery({
         variables: {
-            databaseId,
+            databaseId: database.id,
         },
-        pollInterval: 15000,
     });
 
-    const database = data?.database;
+    useEffect(() => {
+        startPolling(1000);
+    }, [startPolling]);
+
 
     return (
-        <AdminLayout loading={loading || databaseLogsLoading} error={error ?? databaseLogsError} notFound={!database} pageTitle={`Registros | ${database?.name}`}>
+        <AdminLayout pageTitle={`Registros | ${database?.name}`}>
             {database && <>
                 <div>
                     <DatabaseHeaderInfo database={database} />
@@ -60,5 +61,22 @@ const Logs = () => {
         </AdminLayout>
     );
 };
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    const session = await getSession(ctx);
+
+    const database = await serverClient.databaseById({
+        databaseId: ctx.params?.databaseId as string
+    }, {
+        "Authorization": `Bearer ${session?.accessToken}`
+    })
+
+
+    return {
+        props: {
+            database: database.database,
+        }
+    }
+}
 
 export default Logs;

@@ -1,26 +1,22 @@
+import { AppByIdQuery, AppProxyPortsQuery } from '@/generated/graphql.server';
+import { serverClient } from '@/lib/apollo.server';
 import { Container, Grid } from '@nextui-org/react';
-import { useRouter } from 'next/router';
-import { useAppByIdQuery } from '../../../../generated/graphql';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/react';
 import { AdminLayout } from '../../../../ui/layout/layout';
 import { AppHeaderInfo } from '../../../../ui/modules/app/AppHeaderInfo';
 import { AppHeaderTabNav } from '../../../../ui/modules/app/AppHeaderTabNav';
 import { AppSettingsMenu } from '../../../../ui/modules/app/AppSettingsMenu';
 import { AppProxyPorts } from '../../../../ui/modules/appProxyPorts/AppProxyPorts';
 
-const AppSettingsPorts = () => {
-    const history = useRouter();
-    const appId = history.query.appId as string;
+interface AppSettingsPortsProps {
+    app: AppByIdQuery['app'];
+    ports: AppProxyPortsQuery['appProxyPorts'];
+}
 
-    const { data, loading, error } = useAppByIdQuery({
-        variables: {
-            appId,
-        },
-    });
-
-    const app = data?.app
-
+const AppSettingsPorts = ({ app, ports }: AppSettingsPortsProps) => {
     return (
-        <AdminLayout loading={loading} notFound={!app} error={error} pageTitle={`Puertos | ${app?.name}`}>
+        <AdminLayout pageTitle={`Puertos | ${app?.name}`}>
             {app && <> <div>
                 <AppHeaderInfo app={app} />
                 <AppHeaderTabNav app={app} />
@@ -32,7 +28,7 @@ const AppSettingsPorts = () => {
                             <AppSettingsMenu app={app} />
                         </Grid>
                         <Grid xs={9}>
-                            <AppProxyPorts appId={app.id} />
+                            <AppProxyPorts app={app as any} ports={ports} />
                         </Grid>
                     </Grid.Container>
                 </Container>
@@ -40,5 +36,29 @@ const AppSettingsPorts = () => {
         </AdminLayout >
     );
 };
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    const session = await getSession(ctx);
+
+    const res = await serverClient.appById({
+        appId: ctx.params?.appId as string
+    }, {
+        Authorization: `Bearer ${session?.accessToken}`
+    });
+
+    const ports = await serverClient.appProxyPorts({
+        appId: ctx.params?.appId as string,
+    }, {
+        Authorization: `Bearer ${session?.accessToken}`
+    });
+
+
+    return {
+        props: {
+            app: res.app,
+            ports: ports.appProxyPorts
+        }
+    }
+}
 
 export default AppSettingsPorts;

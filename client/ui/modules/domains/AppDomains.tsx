@@ -1,40 +1,20 @@
+import { App, AppDomain } from '@/generated/graphql.server';
 import { Button, Grid, Link, Table, Text } from '@nextui-org/react';
 import { FiTrash2 } from 'react-icons/fi';
+import { toast } from 'react-toastify';
 import {
     DomainsDocument,
-    useAppByIdQuery,
-    useDomainsQuery,
     useRemoveDomainMutation
 } from '../../../generated/graphql';
-import { LoadingSection } from '../../../ui/components/LoadingSection';
 import { UrlStatus } from '../../components/UrlStatus';
-import { useToast } from '../../toast';
 import { AddAppDomain } from './AddAppDomain';
 
 interface AppDomainProps {
-    appId: string;
+    app: App;
+    domains: AppDomain[];
 }
 
-export const AppDomains = ({ appId }: AppDomainProps) => {
-    const toast = useToast();
-    const { data, loading /* error */ } = useAppByIdQuery({
-        variables: {
-            appId,
-        },
-        ssr: false,
-        skip: !appId,
-    });
-
-    const {
-        data: domainsData,
-        loading: domainsDataLoading,
-        refetch: appDomainsRefetch,
-    } = useDomainsQuery({
-        variables: {
-            appId,
-        },
-    });
-
+export const AppDomains = ({ app, domains }: AppDomainProps) => {
     const [
         removeDomainMutation,
         { loading: removeDomainMutationLoading },
@@ -45,11 +25,11 @@ export const AppDomains = ({ appId }: AppDomainProps) => {
             await removeDomainMutation({
                 variables: {
                     input: {
-                        appId,
+                        appId: app.id,
                         domainName: domain,
                     },
                 },
-                refetchQueries: [{ query: DomainsDocument, variables: { appId } }],
+                refetchQueries: [{ query: DomainsDocument, variables: { appId: app.id } }],
             });
             toast.success('Dominio eliminado');
         } catch (error: any) {
@@ -57,23 +37,6 @@ export const AppDomains = ({ appId }: AppDomainProps) => {
         }
     };
 
-    if (!data) {
-        return null;
-    }
-
-    // // TODO display error
-
-    if (loading || domainsDataLoading) {
-        // TODO nice loading
-        return <LoadingSection />;
-    }
-
-    const { app } = data;
-
-    if (!app) {
-        // TODO nice 404
-        return <p>App not found.</p>;
-    }
 
     return (
         <Grid.Container gap={2}>
@@ -83,7 +46,7 @@ export const AppDomains = ({ appId }: AppDomainProps) => {
             </Grid>
 
             <Grid xs={12} direction="column">
-                {domainsData?.domains.length === 0 ? (
+                {domains.length === 0 ? (
                     <Text h5>Actualmente no hay ningún dominio asignado</Text>
                 ) : (
                     <Table width="100%">
@@ -94,7 +57,7 @@ export const AppDomains = ({ appId }: AppDomainProps) => {
                             <Table.Column width={70}>Acciones</Table.Column>
                         </Table.Header>
                         <Table.Body>
-                            {domainsData?.domains.map((it, index) => (
+                            {domains.map((it, index) => (
                                 <Table.Row key={index}>
                                     <Table.Cell>
                                         <UrlStatus url={`http://${it.domain}`} />
@@ -124,7 +87,7 @@ export const AppDomains = ({ appId }: AppDomainProps) => {
                     </Table>
                 )}
                 <div className="mt-8">
-                    <AddAppDomain appId={appId} appDomainsRefetch={appDomainsRefetch} />
+                    {/* <AddAppDomain appId={app.id} /> */}
                 </div>
             </Grid>
         </Grid.Container>
