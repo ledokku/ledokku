@@ -3,10 +3,12 @@ import { $log } from '@tsed/common';
 import { Forbidden, InternalServerError } from '@tsed/exceptions';
 import { ResolverService } from '@tsed/typegraphql';
 import jsonwebtoken from 'jsonwebtoken';
-import { Arg, Mutation, Resolver } from 'type-graphql';
+import { Arg, Mutation } from 'type-graphql';
 import { SettingsRepository, UserRepository } from '../../repositories';
+import { GithubOAuthLoginResponse } from '../github/data/models/github_oauth_login_response';
 import { GithubRepository } from '../github/data/repositories/github.repository';
 import { JWT_SECRET } from './../../constants';
+import { GithubAuthInput } from './data/github_auth.model';
 import { Auth } from './data/models/auth.model';
 
 @ResolverService(Auth)
@@ -30,6 +32,20 @@ export class AuthResolver {
       throw new InternalServerError(data.error_description);
     }
 
+    return this.getOrCreateUserAndLogin(data);
+  }
+
+  @Mutation((returns) => Auth)
+  async loginWithGithubAccessToken(
+    @Arg('input', (type) => GithubAuthInput) data: GithubAuthInput
+  ): Promise<Auth> {
+    return this.getOrCreateUserAndLogin({
+      ...data,
+      scope: '',
+    });
+  }
+
+  private async getOrCreateUserAndLogin(data: GithubOAuthLoginResponse) {
     const ghUser = await this.githubRepository.getGithubUser(data.access_token);
     const email = await this.githubRepository.getPrimaryEmail(
       data.access_token
