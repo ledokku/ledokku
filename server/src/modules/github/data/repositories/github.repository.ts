@@ -90,6 +90,7 @@ export class GithubRepository {
           appId: res.id,
           userName: user.username,
           token: installationAuthentication.token,
+          deleteOnFailed: false
         });
 
         return res;
