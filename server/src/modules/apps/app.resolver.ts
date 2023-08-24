@@ -151,7 +151,11 @@ export class AppResolver {
       throw new NotFound(`No se encontró la app con ID ${appId}`);
     }
 
-    return this.dokkuProxyRepository.ports(app.name);
+    try {
+      return this.dokkuProxyRepository.ports(app.name);
+    } catch (e) {
+      return [];
+    }
   }
 
   @Authorized()
