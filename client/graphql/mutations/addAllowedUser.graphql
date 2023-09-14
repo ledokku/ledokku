@@ -1,3 +1,0 @@
-mutation addAllowedUser($email: String!) {
-    addAllowedEmail(email: $email)
-}

@@ -1,5 +1,0 @@
-mutation SetAppTags($input: TagUpdateInput!) {
-    setAppTags(input: $input) {
-        id
-    }
-}

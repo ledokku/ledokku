@@ -1,6 +1,0 @@
-subscription appCreateLogs($appId: ID!) {
-  appCreateLogs(appId: $appId) {
-    message
-    type
-  }
-}

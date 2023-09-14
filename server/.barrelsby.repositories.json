@@ -1,6 +1,0 @@
-{
-    "directory": ["./src/"],
-    "include": [".repository.ts"],
-    "name": "repositories",
-    "delete": true
-}

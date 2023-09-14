@@ -1,6 +1,0 @@
-subscription OnLedokkuLogs {
-    onLedokkuLog {
-        message
-        type
-    }
-}

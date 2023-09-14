@@ -1,74 +1,81 @@
-# Ledokku Fork - Beautiful web UI for all things Dokku
-##### Migrated and maintained by Overclock Studios SA de CV
+# Turborepo starter
 
-## Preview
+This is an official starter Turborepo.
 
-<div style="display: flex; flex-direction: row; flex-wrap: wrap; ">
-    <img src="images/app1.png" alt="App" style="width: 49%"/>
-    <img src="images/app2.png" alt="App" style="width: 49%"/>
-    <img src="images/app3.png" alt="App" style="width: 49%"/>
-    <img src="images/app.png" alt="App" style="width: 49%"/>
-</div>
+## Using this example
 
-Ledokku is a beautiful UI powered by [Dokku](http://dokku.viewdocs.io/dokku/)
+Run the following command:
 
-With Ledokku you will be able to deploy apps written in:
-**Node js, PHP, Ruby and many more**.
+```sh
+npx create-turbo@latest
+```
 
-And link them with most popular databases: **PostgreSQL, MongoDB, Redis**.
+## What's inside?
 
-## Just few clicks and your app is live
+This Turborepo includes the following packages/apps:
 
-- Install Ledokku on your Dokku server
-- Deploy your app using the Dokku workflow
-- Create and link your db (PostgreSQL, mongoDB, redis)
-- App is live 🎉🎉🎉
+### Apps and Packages
 
-## Getting started guide
+- `docs`: a [Next.js](https://nextjs.org/) app
+- `web`: another [Next.js](https://nextjs.org/) app
+- `ui`: a stub React component library shared by both `web` and `docs` applications
+- `eslint-config-custom`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
+- `tsconfig`: `tsconfig.json`s used throughout the monorepo
 
-Want to try Ledokku out yourself? Head to our [getting started guide](https://www.ledokku.com/docs/getting-started)
+Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
-## Our vision
+### Utilities
 
-We started to work on this because current deployment solutions were expensive or hard to configure. With Ledokku we plan to provide a solution where deployment experience is smooth, enjoyable and affordable.
+This Turborepo has some additional tools already setup for you:
 
-## MVP
+- [TypeScript](https://www.typescriptlang.org/) for static type checking
+- [ESLint](https://eslint.org/) for code linting
+- [Prettier](https://prettier.io) for code formatting
 
-To get initial feedback we are working on the MVP state where current Dokku users will be able to use the web ui of Ledokku while keeping control of their server. It will allow us to gather feedback from active Dokku users and shape the future of Ledokku.
+### Build
 
-## MVP features
+To build all apps and packages, run the following command:
 
-- Beautiful web ui
-- Common app management (create, delete, stop)
-- Env variables management (set, unset, edit)
-- Databases management (create, delete, link)
-- Explore app logs
+```
+cd my-turborepo
+pnpm build
+```
 
-### Built with
+### Develop
 
-- Dokku 🐳
-- Node.js 💚
-- TypeGraphQL 💓
-- Prisma △
-- TypeScript 💙
-- NextUI 💄
-- GithubAPI 🐱
-- Tailwind CSS 🌪
-- Docusaurus 🦖
-- Docs hosted on [Netlify](https://www.netlify.com/)
+To develop all apps and packages, run the following command:
 
-### TODO
-- Localization
+```
+cd my-turborepo
+pnpm dev
+```
 
-## Contributing
+### Remote Caching
 
-Read our [contributing guide](CONTRIBUTING.md) to see how to locally setup the repository and see our development process.
+Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
 
-## Made by
+By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
 
-[Leo](https://github.com/pradel),
-[Arturs](https://github.com/Akirtovskis)
+```
+cd my-turborepo
+npx turbo login
+```
 
-## License
+This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
 
-Ledokku is licensed under the [MIT license](https://github.com/ledokku/ledokku/blob/master/LICENSE).
+Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+
+```
+npx turbo link
+```
+
+## Useful Links
+
+Learn more about the power of Turborepo:
+
+- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
+- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
+- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
+- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
+- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
+- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)

@@ -1,2 +1,0 @@
--- AlterEnum
-ALTER TYPE "DbTypes" ADD VALUE 'MARIADB';

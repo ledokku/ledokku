@@ -1,5 +1,0 @@
-mutation createAppGithub($input: CreateAppGithubInput!) {
-  createAppGithub(input: $input) {
-    id
-  }
-}

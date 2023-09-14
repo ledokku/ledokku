@@ -1,3 +1,0 @@
-query CheckDomainStatus($url: String!){
-    checkDomainStatus(url: $url)
-}

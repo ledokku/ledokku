@@ -1,7 +1,0 @@
-query GetBuildingApps {
-    buildingApps {
-        id
-        name
-        status
-    }
-}

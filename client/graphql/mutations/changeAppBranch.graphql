@@ -1,3 +1,0 @@
-mutation ChangeAppBranch($input: UpdateBranchInput!){
-    changeBranch(input: $input)
-}

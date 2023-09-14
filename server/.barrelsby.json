@@ -1,5 +1,0 @@
-{
-    "directory": ["./src/modules/"],
-    "include": [".resolver.ts"],
-    "delete": true
-}
