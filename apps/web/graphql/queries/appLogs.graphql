@@ -1,0 +1,5 @@
+query appLogs($appId: String!) {
+  appLogs(appId: $appId) {
+    logs
+  }
+}

@@ -1,0 +1,7 @@
+query appProxyPorts($appId: String!) {
+  appProxyPorts(appId: $appId) {
+    scheme
+    host
+    container
+  }
+}

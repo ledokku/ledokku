@@ -1,0 +1,23 @@
+query apps($limit: Int, $page: Int, $tags: [String!]) {
+  apps(limit: $limit, page: $page, tags: $tags) {
+    items {
+      id
+      name
+      type
+      tags {
+        name
+      }
+      appMetaGithub {
+        repoOwner
+        repoName
+      }
+      ports {
+        scheme
+        host
+        container
+      }
+      status
+    }
+    totalPages
+  }
+}
