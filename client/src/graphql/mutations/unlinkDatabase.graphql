@@ -1,5 +1,0 @@
-mutation unlinkDatabase($input: UnlinkDatabaseInput!) {
-  unlinkDatabase(input: $input) {
-    result
-  }
-}

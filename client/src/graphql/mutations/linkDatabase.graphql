@@ -1,5 +1,0 @@
-mutation linkDatabase($input: LinkDatabaseInput!) {
-  linkDatabase(input: $input) {
-    result
-  }
-}

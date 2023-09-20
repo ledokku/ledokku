@@ -1,6 +1,0 @@
-subscription appRebuildLogs {
-  appRebuildLogs {
-    message
-    type
-  }
-}
