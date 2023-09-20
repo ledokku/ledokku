@@ -1,0 +1,6 @@
+query GetCreateLogs($appId: ID!) {
+    createLogs(appId: $appId){
+        message
+        type
+    }
+}

@@ -1,0 +1,5 @@
+mutation loginWithGithubAccessToken($input: GithubAuthInput!) {
+    loginWithGithubAccessToken(input: $input) {
+        token
+    }
+}

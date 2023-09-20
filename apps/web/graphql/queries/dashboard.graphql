@@ -1,0 +1,23 @@
+query dashboard($appLimit: Int, $databaseLimit: Int, $appPage: Int, $databasePage: Int,) {
+  apps(limit: $appLimit, page: $appPage) {
+    items{
+      id
+      name
+      createdAt
+      appMetaGithub {
+        repoName
+        repoOwner
+      }
+    }
+    totalPages
+  }
+  databases(limit: $databaseLimit, page: $databasePage) {
+    items {
+      id
+      name
+      type
+      createdAt
+    }
+    totalPages
+  }
+}

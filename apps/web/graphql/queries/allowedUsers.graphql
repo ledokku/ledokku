@@ -1,0 +1,11 @@
+query allowedUsers {
+    settings {
+        allowedEmails
+        allowedUsers {
+            id
+            username
+            avatarUrl
+            email
+        }
+    }
+}

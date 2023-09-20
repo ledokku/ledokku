@@ -1,0 +1,100 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+h1.display {
+  @apply text-6xl font-black !important;
+}
+
+h1 {
+  @apply text-4xl font-bold !important;
+}
+
+h2 {
+  @apply text-3xl font-bold !important;
+}
+
+h3 {
+  @apply text-2xl font-bold !important;
+}
+
+h4 {
+  @apply text-xl font-bold !important;
+}
+
+h5 {
+  @apply text-lg font-bold !important;
+}
+
+h6 {
+  @apply text-base font-bold !important;
+}
+
+::-webkit-scrollbar {
+  width: 20px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #d6dbe1;
+  border-radius: 20px;
+  border: 6px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #a8b2bf;
+}
+
+.component-wrapper {
+  transition: height 0.3s;
+  overflow: hidden;
+}
+
+.before-enter {
+  opacity: 0;
+}
+
+.entering {
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+
+.before-leave {
+  opacity: 1;
+}
+
+.leaving {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.animated-gradient {
+  position: absolute;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 114, 245, 1) 45%,
+    rgb(211, 231, 255) 50%,
+    rgba(0, 114, 245, 1) 55%
+  );
+  width: 400%;
+  height: 100%;
+  top: 0px;
+  left: 0px;
+  animation: gradientAnimation 2s linear infinite;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    transform: translate(0);
+  }
+  99.9% {
+    transform: translate(-60%);
+  }
+  100% {
+    transform: translate(0);
+  }
+}

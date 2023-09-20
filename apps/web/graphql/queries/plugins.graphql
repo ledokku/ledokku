@@ -1,0 +1,6 @@
+query plugins{
+    plugins {
+        name
+        version
+    }
+}
