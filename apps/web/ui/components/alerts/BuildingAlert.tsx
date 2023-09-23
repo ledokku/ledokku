@@ -21,7 +21,7 @@ export const BuildingAlert = ({ app }: BuildingAlertProps) => {
             <Button
               variant="ghost"
               as={Link}
-              href={`/app_build/${app.id}`}
+              href={`/dashboard/apps/${app.id}/build`}
               size="sm"
             >
               Ver registros
