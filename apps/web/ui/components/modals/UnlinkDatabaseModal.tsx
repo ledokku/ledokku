@@ -2,6 +2,7 @@
 
 import {
   AppByIdQuery,
+  DatabaseByIdQuery,
   DatabaseQuery,
   LogPayload,
   useLinkDatabaseLogsSubscription,
@@ -19,13 +20,15 @@ import {
   Spinner,
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
-import { Terminal } from "../Terminal";
+import { Terminal } from "../misc/Terminal";
 import toast from "react-hot-toast";
 
 interface LinkDatabaseModalProps {
   isOpen: boolean;
-  app?: AppByIdQuery["app"];
-  database?: AppByIdQuery["app"]["databases"][0];
+  app?: DatabaseByIdQuery["database"]["apps"][0] | AppByIdQuery["app"];
+  database?:
+    | AppByIdQuery["app"]["databases"][0]
+    | DatabaseByIdQuery["database"];
   onOpenChange: (open: boolean) => void;
 }
 

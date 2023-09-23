@@ -3,7 +3,7 @@
 import { Card, CardBody, Button } from "@nextui-org/react";
 import Link from "next/link";
 import { FiInfo } from "react-icons/fi";
-import { DbIcon } from "../DbIcon";
+import { DbIcon } from "../../icons/DbIcon";
 import { AppByIdQuery } from "@/generated/graphql";
 import { UnlinkDatabaseModal } from "../modals/UnlinkDatabaseModal";
 import { useState } from "react";

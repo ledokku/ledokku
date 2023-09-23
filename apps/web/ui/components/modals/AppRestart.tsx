@@ -16,7 +16,7 @@ import {
   useAppRestartLogsSubscription,
   useRestartAppMutation,
 } from "@/generated/graphql";
-import { Terminal } from "@/ui/components/Terminal";
+import { Terminal } from "@/ui/components/misc/Terminal";
 import toast from "react-hot-toast";
 import { FiRefreshCw } from "react-icons/fi";
 

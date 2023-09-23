@@ -3,7 +3,7 @@
 import { Pagination } from "@nextui-org/react";
 import { useState } from "react";
 import { useActivityQuery } from "@/generated/graphql";
-import { ActivityItem } from "@/ui/modules/activity/ActivityFeed";
+import { ActivityItem } from "@/ui/components/list/ActivityFeed";
 import { PageProps } from "@/types/next";
 
 const ActivityPage = ({ params }: PageProps) => {

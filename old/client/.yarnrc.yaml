@@ -1,6 +1,0 @@
-packageExtensions:
-  eslint-config-next@*:
-    dependencies:
-      next: "*"
-      react: "*"
-      react-dom: "*"

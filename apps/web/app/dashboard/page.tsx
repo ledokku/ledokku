@@ -4,12 +4,13 @@ import {
   useDashboardQuery,
   useGetBuildingAppsQuery,
 } from "@/generated/graphql";
-import { BuildingAlert } from "@/ui/components/BuildingAlert";
+import { BuildingAlert } from "@/ui/components/alerts/BuildingAlert";
 import { AppCard } from "@/ui/components/card/AppCard";
 import { DatabaseCard } from "@/ui/components/card/DatabaseCard";
-import { ActivityFeed } from "@/ui/modules/activity/ActivityFeed";
+import { ActivityFeed } from "@/ui/components/list/ActivityFeed";
 import { Button, Spacer, Spinner } from "@nextui-org/react";
 import Link from "next/link";
+import { FiDatabase, FiPhone, FiServer } from "react-icons/fi";
 
 export default function Dashboard() {
   const { data: buildingApps } = useGetBuildingAppsQuery({
@@ -32,24 +33,26 @@ export default function Dashboard() {
       </div>
       <div className="w-full flex flex-col md:flex-row justify-end mb-4 items-end">
         <Button
-          variant="bordered"
+          variant="flat"
           color="primary"
           className="mr-0 md:mr-4 mb-4 md:mb-0"
           as={Link}
-          href="/dashboard/create-database"
+          href="/dashboard/create/database"
+          startContent={<FiDatabase />}
         >
           Crear base de datos
         </Button>
         <Button
           as={Link}
           color="primary"
-          href="/dashboard/app-creation/create-app"
+          href="/dashboard/create/app"
+          startContent={<FiServer />}
         >
           Crear aplicación
         </Button>
       </div>
-      <div className="flex flex-col xl:flex-row gap-16">
-        <div className="w-full">
+      <div className="flex flex-col xl:flex-row gap-16 w-full">
+        <div className="xl:w-2/3">
           <div>
             <h2 className="mb-4">Aplicaciones</h2>
             {loading && <Spinner />}
@@ -77,7 +80,7 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-        <div className="w-full">
+        <div className="xl:w-1/3">
           <div className="flex justify-between">
             <h2 className="mb-4">Última actividad</h2>
             <Button variant="ghost" as={Link} href="/activity">

@@ -2,6 +2,7 @@
   "extends": "tsconfig/nextjs.json",
   "compilerOptions": {
     "plugins": [{ "name": "next" }],
+    "moduleResolution": "node",
     "paths": {
       "@/*": ["./*"]
     }

@@ -1,8 +1,8 @@
 "use client";
 
 import { useAppLogsQuery } from "@/generated/graphql";
-import { Alert } from "@/ui/components/Alert";
-import { Terminal } from "@/ui/components/Terminal";
+import { Alert } from "@/ui/components/alerts/Alert";
+import { Terminal } from "@/ui/components/misc/Terminal";
 import { PageProps } from "@/types/next";
 
 export default function AppLogs({ params }: PageProps) {
