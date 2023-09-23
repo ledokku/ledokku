@@ -17,7 +17,7 @@ interface SourceBoxProps {
 const SourceBox = ({ label, icon, type, badge, disabled }: SourceBoxProps) => {
   return (
     <Link
-      href={`/dashboard/create/app/${type}`}
+      href={`/dashboard/create/app/${type.toLocaleLowerCase()}`}
       className={disabled ? "pointer-events-none" : ""}
     >
       <div
