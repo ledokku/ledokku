@@ -5,26 +5,28 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string;
-  String: string;
-  Boolean: boolean;
-  Int: number;
-  Float: number;
-  DateTime: any;
+  ID: { input: string; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
+  DateTime: { input: any; output: any; }
 };
 
 export type Activity = {
   __typename?: 'Activity';
-  createdAt: Scalars['DateTime'];
-  description?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
+  createdAt: Scalars['DateTime']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['String']['output'];
   modifier?: Maybe<User>;
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
   reference?: Maybe<ActivityModelUnion>;
-  updatedAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type ActivityModelUnion = App | AppBuild | Database;
@@ -32,78 +34,78 @@ export type ActivityModelUnion = App | AppBuild | Database;
 export type ActivityPaginationInfo = {
   __typename?: 'ActivityPaginationInfo';
   items: Array<Activity>;
-  nextPage?: Maybe<Scalars['Int']>;
-  page: Scalars['Int'];
-  prevPage?: Maybe<Scalars['Int']>;
-  totalItems: Scalars['Int'];
-  totalPages: Scalars['Int'];
+  nextPage?: Maybe<Scalars['Int']['output']>;
+  page: Scalars['Int']['output'];
+  prevPage?: Maybe<Scalars['Int']['output']>;
+  totalItems: Scalars['Int']['output'];
+  totalPages: Scalars['Int']['output'];
 };
 
 export type AddAppProxyPortInput = {
-  appId: Scalars['String'];
-  container: Scalars['String'];
-  host: Scalars['String'];
+  appId: Scalars['String']['input'];
+  container: Scalars['String']['input'];
+  host: Scalars['String']['input'];
 };
 
 export type AddDomainInput = {
-  appId: Scalars['String'];
-  domainName: Scalars['String'];
+  appId: Scalars['String']['input'];
+  domainName: Scalars['String']['input'];
 };
 
 export type App = {
   __typename?: 'App';
   appMetaGithub?: Maybe<AppGithubMeta>;
-  createdAt: Scalars['DateTime'];
+  createdAt: Scalars['DateTime']['output'];
   databases: Array<Database>;
-  dockerfilePath?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
+  dockerfilePath?: Maybe<Scalars['String']['output']>;
+  id: Scalars['String']['output'];
   logs: Logs;
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
   ports: Array<ProxyPort>;
   status: AppStatus;
   tags: Array<Tag>;
   type: AppTypes;
-  updatedAt: Scalars['DateTime'];
-  userId: Scalars['String'];
+  updatedAt: Scalars['DateTime']['output'];
+  userId: Scalars['String']['output'];
 };
 
 export type AppBuild = {
   __typename?: 'AppBuild';
   app: App;
-  appId: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  id: Scalars['ID'];
-  status: Scalars['ID'];
-  updatedAt: Scalars['DateTime'];
-  userId?: Maybe<Scalars['ID']>;
+  appId: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  status: Scalars['ID']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  userId?: Maybe<Scalars['ID']['output']>;
 };
 
 export type AppDomain = {
   __typename?: 'AppDomain';
-  domain: Scalars['String'];
+  domain: Scalars['String']['output'];
 };
 
 export type AppGithubMeta = {
   __typename?: 'AppGithubMeta';
-  appId: Scalars['String'];
-  branch: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  githubAppInstallationId: Scalars['String'];
-  id: Scalars['String'];
-  repoId: Scalars['String'];
-  repoName: Scalars['String'];
-  repoOwner: Scalars['String'];
-  updatedAt: Scalars['DateTime'];
+  appId: Scalars['String']['output'];
+  branch: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  githubAppInstallationId: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  repoId: Scalars['String']['output'];
+  repoName: Scalars['String']['output'];
+  repoOwner: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type AppPaginationInfo = {
   __typename?: 'AppPaginationInfo';
   items: Array<App>;
-  nextPage?: Maybe<Scalars['Int']>;
-  page: Scalars['Int'];
-  prevPage?: Maybe<Scalars['Int']>;
-  totalItems: Scalars['Int'];
-  totalPages: Scalars['Int'];
+  nextPage?: Maybe<Scalars['Int']['output']>;
+  page: Scalars['Int']['output'];
+  prevPage?: Maybe<Scalars['Int']['output']>;
+  totalItems: Scalars['Int']['output'];
+  totalPages: Scalars['Int']['output'];
 };
 
 export enum AppStatus {
@@ -121,79 +123,79 @@ export enum AppTypes {
 
 export type Auth = {
   __typename?: 'Auth';
-  token: Scalars['String'];
+  token: Scalars['String']['output'];
 };
 
 export type BooleanResult = {
   __typename?: 'BooleanResult';
-  result: Scalars['Boolean'];
+  result: Scalars['Boolean']['output'];
 };
 
 export type Branch = {
   __typename?: 'Branch';
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
 };
 
 export type BuildEnvVar = {
-  asBuildArg?: InputMaybe<Scalars['Boolean']>;
-  key: Scalars['String'];
-  value: Scalars['String'];
+  asBuildArg?: InputMaybe<Scalars['Boolean']['input']>;
+  key: Scalars['String']['input'];
+  value: Scalars['String']['input'];
 };
 
 export type CreateAppDokkuInput = {
-  name: Scalars['String'];
+  name: Scalars['String']['input'];
 };
 
 export type CreateAppGithubInput = {
-  branchName: Scalars['String'];
-  dockerfilePath?: InputMaybe<Scalars['String']>;
+  branchName: Scalars['String']['input'];
+  dockerfilePath?: InputMaybe<Scalars['String']['input']>;
   envVars?: InputMaybe<Array<BuildEnvVar>>;
-  githubInstallationId: Scalars['String'];
-  gitRepoFullName: Scalars['String'];
-  gitRepoId: Scalars['String'];
-  name: Scalars['String'];
-  tags?: InputMaybe<Array<Scalars['String']>>;
+  githubInstallationId: Scalars['String']['input'];
+  gitRepoFullName: Scalars['String']['input'];
+  gitRepoId: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  tags?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type CreateAppResult = {
   __typename?: 'CreateAppResult';
-  appId: Scalars['String'];
+  appId: Scalars['String']['output'];
 };
 
 export type CreateDatabaseInput = {
-  image?: InputMaybe<Scalars['String']>;
-  name: Scalars['String'];
-  tags?: InputMaybe<Array<Scalars['String']>>;
+  image?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  tags?: InputMaybe<Array<Scalars['String']['input']>>;
   type: DbTypes;
-  version?: InputMaybe<Scalars['String']>;
+  version?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Database = {
   __typename?: 'Database';
   apps: Array<App>;
-  createdAt: Scalars['DateTime'];
-  id: Scalars['String'];
-  name: Scalars['String'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['String']['output'];
+  name: Scalars['String']['output'];
   tags: Array<Tag>;
   type: DbTypes;
-  updatedAt: Scalars['DateTime'];
-  userId: Scalars['String'];
-  version: Scalars['String'];
+  updatedAt: Scalars['DateTime']['output'];
+  userId: Scalars['String']['output'];
+  version?: Maybe<Scalars['String']['output']>;
 };
 
 export type DatabaseInfo = {
   __typename?: 'DatabaseInfo';
-  info: Array<Scalars['String']>;
+  info: Array<Scalars['String']['output']>;
 };
 
 export type DatabasePaginationInfo = {
   __typename?: 'DatabasePaginationInfo';
   items: Array<Database>;
-  nextPage?: Maybe<Scalars['Int']>;
-  page: Scalars['Int'];
-  prevPage?: Maybe<Scalars['Int']>;
-  totalItems: Scalars['Int'];
-  totalPages: Scalars['Int'];
+  nextPage?: Maybe<Scalars['Int']['output']>;
+  page: Scalars['Int']['output'];
+  prevPage?: Maybe<Scalars['Int']['output']>;
+  totalItems: Scalars['Int']['output'];
+  totalPages: Scalars['Int']['output'];
 };
 
 export enum DbTypes {
@@ -205,18 +207,18 @@ export enum DbTypes {
 }
 
 export type DestroyAppInput = {
-  appId: Scalars['String'];
+  appId: Scalars['String']['input'];
 };
 
 export type DestroyDatabaseInput = {
-  databaseId: Scalars['String'];
+  databaseId: Scalars['String']['input'];
 };
 
 export type EnvVar = {
   __typename?: 'EnvVar';
-  asBuildArg: Scalars['Boolean'];
-  key: Scalars['String'];
-  value: Scalars['String'];
+  asBuildArg: Scalars['Boolean']['output'];
+  key: Scalars['String']['output'];
+  value: Scalars['String']['output'];
 };
 
 export type EnvVarList = {
@@ -225,64 +227,64 @@ export type EnvVarList = {
 };
 
 export type GithubAuthInput = {
-  access_token: Scalars['String'];
-  expires_at: Scalars['Int'];
-  provider: Scalars['String'];
-  providerAccountId: Scalars['String'];
-  refresh_token: Scalars['String'];
-  refresh_token_expires_in: Scalars['Int'];
-  token_type: Scalars['String'];
-  type: Scalars['String'];
+  access_token: Scalars['String']['input'];
+  expires_at: Scalars['Int']['input'];
+  provider: Scalars['String']['input'];
+  providerAccountId: Scalars['String']['input'];
+  refresh_token: Scalars['String']['input'];
+  refresh_token_expires_in: Scalars['Int']['input'];
+  token_type: Scalars['String']['input'];
+  type: Scalars['String']['input'];
 };
 
 export type Installation = {
   __typename?: 'Installation';
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
 };
 
 export type IsDatabaseLinked = {
   __typename?: 'IsDatabaseLinked';
-  isLinked: Scalars['String'];
+  isLinked: Scalars['String']['output'];
 };
 
 export type IsPluginInstalled = {
   __typename?: 'IsPluginInstalled';
-  isPluginInstalled: Scalars['Boolean'];
+  isPluginInstalled: Scalars['Boolean']['output'];
 };
 
 export type LinkDatabaseInput = {
-  appId: Scalars['String'];
-  databaseId: Scalars['String'];
+  appId: Scalars['String']['input'];
+  databaseId: Scalars['String']['input'];
 };
 
 export type LogPayload = {
   __typename?: 'LogPayload';
-  message: Scalars['String'];
-  type: Scalars['String'];
+  message: Scalars['String']['output'];
+  type: Scalars['String']['output'];
 };
 
 export type Logs = {
   __typename?: 'Logs';
-  logs: Array<Scalars['String']>;
+  logs: Array<Scalars['String']['output']>;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  addAllowedEmail: Scalars['String'];
-  addAppProxyPort: Scalars['Boolean'];
+  addAllowedEmail: Scalars['String']['output'];
+  addAppProxyPort: Scalars['Boolean']['output'];
   addDomain: BooleanResult;
-  changeBranch: Scalars['Boolean'];
+  changeBranch: Scalars['Boolean']['output'];
   createAppDokku: CreateAppResult;
   createAppGithub: App;
-  createDatabase: BooleanResult;
+  createDatabase: Database;
   destroyApp: BooleanResult;
   destroyDatabase: BooleanResult;
   linkDatabase: BooleanResult;
   loginWithGithub: Auth;
   loginWithGithubAccessToken: Auth;
   rebuildApp: BooleanResult;
-  removeAllowedEmail: Scalars['String'];
-  removeAppProxyPort: Scalars['Boolean'];
+  removeAllowedEmail: Scalars['String']['output'];
+  removeAppProxyPort: Scalars['Boolean']['output'];
   removeDomain: BooleanResult;
   restartApp: BooleanResult;
   setAppTags: App;
@@ -295,7 +297,7 @@ export type Mutation = {
 
 
 export type MutationAddAllowedEmailArgs = {
-  email: Scalars['String'];
+  email: Scalars['String']['input'];
 };
 
 
@@ -345,7 +347,7 @@ export type MutationLinkDatabaseArgs = {
 
 
 export type MutationLoginWithGithubArgs = {
-  code: Scalars['String'];
+  code: Scalars['String']['input'];
 };
 
 
@@ -360,7 +362,7 @@ export type MutationRebuildAppArgs = {
 
 
 export type MutationRemoveAllowedEmailArgs = {
-  email: Scalars['String'];
+  email: Scalars['String']['input'];
 };
 
 
@@ -410,21 +412,21 @@ export type MutationUnsetEnvVarArgs = {
 
 export type Plugin = {
   __typename?: 'Plugin';
-  name: Scalars['String'];
-  version: Scalars['String'];
+  name: Scalars['String']['output'];
+  version: Scalars['String']['output'];
 };
 
 export type PluginList = {
   __typename?: 'PluginList';
   plugins: Array<Plugin>;
-  version: Scalars['String'];
+  version: Scalars['String']['output'];
 };
 
 export type ProxyPort = {
   __typename?: 'ProxyPort';
-  container: Scalars['String'];
-  host: Scalars['String'];
-  scheme: Scalars['String'];
+  container: Scalars['String']['output'];
+  host: Scalars['String']['output'];
+  scheme: Scalars['String']['output'];
 };
 
 export type Query = {
@@ -439,7 +441,7 @@ export type Query = {
   appsWithTag: AppPaginationInfo;
   branches: Array<Branch>;
   buildingApps: Array<App>;
-  checkDomainStatus: Scalars['Int'];
+  checkDomainStatus: Scalars['Int']['output'];
   createLogs: Array<LogPayload>;
   database: Database;
   databaseInfo: DatabaseInfo;
@@ -461,142 +463,142 @@ export type Query = {
 
 
 export type QueryActivityArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  page?: InputMaybe<Scalars['Int']>;
-  refId?: InputMaybe<Scalars['String']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+  refId?: InputMaybe<Scalars['String']['input']>;
 };
 
 
 export type QueryAppArgs = {
-  appId: Scalars['String'];
+  appId: Scalars['String']['input'];
 };
 
 
 export type QueryAppLogsArgs = {
-  appId: Scalars['String'];
+  appId: Scalars['String']['input'];
 };
 
 
 export type QueryAppMetaGithubArgs = {
-  appId: Scalars['String'];
+  appId: Scalars['String']['input'];
 };
 
 
 export type QueryAppProxyPortsArgs = {
-  appId: Scalars['String'];
+  appId: Scalars['String']['input'];
 };
 
 
 export type QueryAppsArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  page?: InputMaybe<Scalars['Int']>;
-  tags?: InputMaybe<Array<Scalars['String']>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+  tags?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
 export type QueryAppsWithTagArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  name: Scalars['String'];
-  page?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  name: Scalars['String']['input'];
+  page?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
 export type QueryBranchesArgs = {
-  installationId: Scalars['String'];
-  repositoryName: Scalars['String'];
+  installationId: Scalars['String']['input'];
+  repositoryName: Scalars['String']['input'];
 };
 
 
 export type QueryCheckDomainStatusArgs = {
-  url: Scalars['String'];
+  url: Scalars['String']['input'];
 };
 
 
 export type QueryCreateLogsArgs = {
-  appId: Scalars['ID'];
+  appId: Scalars['ID']['input'];
 };
 
 
 export type QueryDatabaseArgs = {
-  databaseId: Scalars['String'];
+  databaseId: Scalars['String']['input'];
 };
 
 
 export type QueryDatabaseInfoArgs = {
-  databaseId: Scalars['String'];
+  databaseId: Scalars['String']['input'];
 };
 
 
 export type QueryDatabaseLogsArgs = {
-  databaseId: Scalars['String'];
+  databaseId: Scalars['String']['input'];
 };
 
 
 export type QueryDatabasesArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  page?: InputMaybe<Scalars['Int']>;
-  tags?: InputMaybe<Array<Scalars['String']>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+  tags?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
 export type QueryDatabasesWithTagArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  name: Scalars['String'];
-  page?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  name: Scalars['String']['input'];
+  page?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
 export type QueryDomainsArgs = {
-  appId: Scalars['String'];
+  appId: Scalars['String']['input'];
 };
 
 
 export type QueryEnvVarsArgs = {
-  appId: Scalars['String'];
+  appId: Scalars['String']['input'];
 };
 
 
 export type QueryIsDatabaseLinkedArgs = {
-  appId: Scalars['String'];
-  databaseId: Scalars['String'];
+  appId: Scalars['String']['input'];
+  databaseId: Scalars['String']['input'];
 };
 
 
 export type QueryIsPluginInstalledArgs = {
-  pluginName: Scalars['String'];
+  pluginName: Scalars['String']['input'];
 };
 
 
 export type QueryRepositoriesArgs = {
-  installationId: Scalars['String'];
+  installationId: Scalars['String']['input'];
 };
 
 export type RebuildAppInput = {
-  appId: Scalars['String'];
+  appId: Scalars['String']['input'];
 };
 
 export type RemoveAppProxyPortInput = {
-  appId: Scalars['String'];
-  container: Scalars['String'];
-  host: Scalars['String'];
-  scheme: Scalars['String'];
+  appId: Scalars['String']['input'];
+  container: Scalars['String']['input'];
+  host: Scalars['String']['input'];
+  scheme: Scalars['String']['input'];
 };
 
 export type RemoveDomainInput = {
-  appId: Scalars['String'];
-  domainName: Scalars['String'];
+  appId: Scalars['String']['input'];
+  domainName: Scalars['String']['input'];
 };
 
 export type Repository = {
   __typename?: 'Repository';
-  fullName: Scalars['String'];
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  private: Scalars['String'];
+  fullName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  private: Scalars['String']['output'];
 };
 
 export type RestartAppInput = {
-  appId: Scalars['String'];
+  appId: Scalars['String']['input'];
 };
 
 export enum Roles {
@@ -605,30 +607,30 @@ export enum Roles {
 }
 
 export type SetDomainInput = {
-  appId: Scalars['String'];
-  domainName: Scalars['String'];
+  appId: Scalars['String']['input'];
+  domainName: Scalars['String']['input'];
 };
 
 export type SetEnvVarInput = {
-  appId: Scalars['String'];
-  asBuildArg?: InputMaybe<Scalars['Boolean']>;
-  key: Scalars['String'];
-  value: Scalars['String'];
+  appId: Scalars['String']['input'];
+  asBuildArg?: InputMaybe<Scalars['Boolean']['input']>;
+  key: Scalars['String']['input'];
+  value: Scalars['String']['input'];
 };
 
 export type Settings = {
   __typename?: 'Settings';
-  allowedEmails: Array<Scalars['String']>;
+  allowedEmails: Array<Scalars['String']['output']>;
   allowedUsers: Array<User>;
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
 };
 
 export type SetupResult = {
   __typename?: 'SetupResult';
-  canConnectSsh: Scalars['Boolean'];
-  githubAppManifest: Scalars['String'];
-  isGithubAppSetup: Scalars['Boolean'];
-  sshPublicKey: Scalars['String'];
+  canConnectSsh: Scalars['Boolean']['output'];
+  githubAppManifest: Scalars['String']['output'];
+  isGithubAppSetup: Scalars['Boolean']['output'];
+  sshPublicKey: Scalars['String']['output'];
 };
 
 export type Subscription = {
@@ -644,52 +646,52 @@ export type Subscription = {
 
 
 export type SubscriptionAppCreateLogsArgs = {
-  appId: Scalars['ID'];
+  appId: Scalars['ID']['input'];
 };
 
 export type Tag = {
   __typename?: 'Tag';
-  id: Scalars['ID'];
-  name: Scalars['String'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
 };
 
 export type TagUpdateInput = {
-  id: Scalars['ID'];
-  tags: Array<Scalars['String']>;
+  id: Scalars['ID']['input'];
+  tags: Array<Scalars['String']['input']>;
 };
 
 export type UnlinkDatabaseInput = {
-  appId: Scalars['String'];
-  databaseId: Scalars['String'];
+  appId: Scalars['String']['input'];
+  databaseId: Scalars['String']['input'];
 };
 
 export type UnsetEnvVarInput = {
-  appId: Scalars['String'];
-  key: Scalars['String'];
+  appId: Scalars['String']['input'];
+  key: Scalars['String']['input'];
 };
 
 export type UpdateBranchInput = {
-  appId: Scalars['ID'];
-  branchName: Scalars['String'];
+  appId: Scalars['ID']['input'];
+  branchName: Scalars['String']['input'];
 };
 
 export type User = {
   __typename?: 'User';
-  avatarUrl: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  email: Scalars['String'];
-  githubAccessToken: Scalars['String'];
-  githubId: Scalars['String'];
-  id: Scalars['ID'];
-  refreshToken: Scalars['String'];
-  refreshTokenExpiresAt: Scalars['DateTime'];
+  avatarUrl: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  email: Scalars['String']['output'];
+  githubAccessToken: Scalars['String']['output'];
+  githubId: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  refreshToken: Scalars['String']['output'];
+  refreshTokenExpiresAt: Scalars['DateTime']['output'];
   role: Roles;
-  updatedAt: Scalars['DateTime'];
-  username: Scalars['String'];
+  updatedAt: Scalars['DateTime']['output'];
+  username: Scalars['String']['output'];
 };
 
 export type AddAllowedUserMutationVariables = Exact<{
-  email: Scalars['String'];
+  email: Scalars['String']['input'];
 }>;
 
 
@@ -735,7 +737,7 @@ export type CreateDatabaseMutationVariables = Exact<{
 }>;
 
 
-export type CreateDatabaseMutation = { __typename?: 'Mutation', createDatabase: { __typename?: 'BooleanResult', result: boolean } };
+export type CreateDatabaseMutation = { __typename?: 'Mutation', createDatabase: { __typename?: 'Database', id: string } };
 
 export type DestroyAppMutationVariables = Exact<{
   input: DestroyAppInput;
@@ -759,7 +761,7 @@ export type LinkDatabaseMutationVariables = Exact<{
 export type LinkDatabaseMutation = { __typename?: 'Mutation', linkDatabase: { __typename?: 'BooleanResult', result: boolean } };
 
 export type LoginWithGithubMutationVariables = Exact<{
-  code: Scalars['String'];
+  code: Scalars['String']['input'];
 }>;
 
 
@@ -780,7 +782,7 @@ export type RebuildAppMutationVariables = Exact<{
 export type RebuildAppMutation = { __typename?: 'Mutation', rebuildApp: { __typename?: 'BooleanResult', result: boolean } };
 
 export type RemoveAllowedUserMutationVariables = Exact<{
-  email: Scalars['String'];
+  email: Scalars['String']['input'];
 }>;
 
 
@@ -843,21 +845,21 @@ export type UnlinkDatabaseMutationVariables = Exact<{
 export type UnlinkDatabaseMutation = { __typename?: 'Mutation', unlinkDatabase: { __typename?: 'BooleanResult', result: boolean } };
 
 export type UnsetEnvVarMutationVariables = Exact<{
-  key: Scalars['String'];
-  appId: Scalars['String'];
+  key: Scalars['String']['input'];
+  appId: Scalars['String']['input'];
 }>;
 
 
 export type UnsetEnvVarMutation = { __typename?: 'Mutation', unsetEnvVar: { __typename?: 'BooleanResult', result: boolean } };
 
 export type ActivityQueryVariables = Exact<{
-  page?: InputMaybe<Scalars['Int']>;
-  limit?: InputMaybe<Scalars['Int']>;
-  refId?: InputMaybe<Scalars['String']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  refId?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type ActivityQuery = { __typename?: 'Query', activity: { __typename?: 'ActivityPaginationInfo', nextPage?: number | null, prevPage?: number | null, totalItems: number, totalPages: number, items: Array<{ __typename?: 'Activity', name: string, description?: string | null, createdAt: any, modifier?: { __typename?: 'User', username: string, avatarUrl: string } | null, reference?: { __typename?: 'App', id: string, name: string, type: AppTypes, appMetaGithub?: { __typename?: 'AppGithubMeta', repoOwner: string, repoName: string } | null } | { __typename?: 'AppBuild', status: string, buildId: string } | { __typename?: 'Database', name: string, version: string, dbId: string, dbType: DbTypes } | null }> } };
+export type ActivityQuery = { __typename?: 'Query', activity: { __typename?: 'ActivityPaginationInfo', nextPage?: number | null, prevPage?: number | null, totalItems: number, totalPages: number, items: Array<{ __typename?: 'Activity', name: string, description?: string | null, createdAt: any, modifier?: { __typename?: 'User', username: string, avatarUrl: string } | null, reference?: { __typename?: 'App', id: string, name: string, type: AppTypes, appMetaGithub?: { __typename?: 'AppGithubMeta', repoOwner: string, repoName: string } | null } | { __typename?: 'AppBuild', status: string, buildId: string } | { __typename?: 'Database', name: string, version?: string | null, dbId: string, dbType: DbTypes } | null }> } };
 
 export type AllowedUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -865,99 +867,99 @@ export type AllowedUsersQueryVariables = Exact<{ [key: string]: never; }>;
 export type AllowedUsersQuery = { __typename?: 'Query', settings: { __typename?: 'Settings', allowedEmails: Array<string>, allowedUsers: Array<{ __typename?: 'User', id: string, username: string, avatarUrl: string, email: string }> } };
 
 export type AppByIdQueryVariables = Exact<{
-  appId: Scalars['String'];
+  appId: Scalars['String']['input'];
 }>;
 
 
 export type AppByIdQuery = { __typename?: 'Query', app: { __typename?: 'App', id: string, name: string, createdAt: any, status: AppStatus, tags: Array<{ __typename?: 'Tag', name: string }>, databases: Array<{ __typename?: 'Database', id: string, name: string, type: DbTypes }>, appMetaGithub?: { __typename?: 'AppGithubMeta', repoId: string, repoName: string, repoOwner: string, branch: string, githubAppInstallationId: string } | null, ports: Array<{ __typename?: 'ProxyPort', scheme: string, host: string, container: string }> } };
 
 export type AppLogsQueryVariables = Exact<{
-  appId: Scalars['String'];
+  appId: Scalars['String']['input'];
 }>;
 
 
 export type AppLogsQuery = { __typename?: 'Query', appLogs: { __typename?: 'Logs', logs: Array<string> } };
 
 export type AppProxyPortsQueryVariables = Exact<{
-  appId: Scalars['String'];
+  appId: Scalars['String']['input'];
 }>;
 
 
 export type AppProxyPortsQuery = { __typename?: 'Query', appProxyPorts: Array<{ __typename?: 'ProxyPort', scheme: string, host: string, container: string }> };
 
 export type AppsQueryVariables = Exact<{
-  limit?: InputMaybe<Scalars['Int']>;
-  page?: InputMaybe<Scalars['Int']>;
-  tags?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+  tags?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
 }>;
 
 
 export type AppsQuery = { __typename?: 'Query', apps: { __typename?: 'AppPaginationInfo', totalPages: number, items: Array<{ __typename?: 'App', id: string, name: string, type: AppTypes, status: AppStatus, tags: Array<{ __typename?: 'Tag', name: string }>, appMetaGithub?: { __typename?: 'AppGithubMeta', repoOwner: string, repoName: string } | null, ports: Array<{ __typename?: 'ProxyPort', scheme: string, host: string, container: string }> }> } };
 
 export type BranchesQueryVariables = Exact<{
-  installationId: Scalars['String'];
-  repositoryName: Scalars['String'];
+  installationId: Scalars['String']['input'];
+  repositoryName: Scalars['String']['input'];
 }>;
 
 
 export type BranchesQuery = { __typename?: 'Query', branches: Array<{ __typename?: 'Branch', name: string }> };
 
 export type CheckDomainStatusQueryVariables = Exact<{
-  url: Scalars['String'];
+  url: Scalars['String']['input'];
 }>;
 
 
 export type CheckDomainStatusQuery = { __typename?: 'Query', checkDomainStatus: number };
 
 export type DashboardQueryVariables = Exact<{
-  appLimit?: InputMaybe<Scalars['Int']>;
-  databaseLimit?: InputMaybe<Scalars['Int']>;
-  appPage?: InputMaybe<Scalars['Int']>;
-  databasePage?: InputMaybe<Scalars['Int']>;
+  appLimit?: InputMaybe<Scalars['Int']['input']>;
+  databaseLimit?: InputMaybe<Scalars['Int']['input']>;
+  appPage?: InputMaybe<Scalars['Int']['input']>;
+  databasePage?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
 export type DashboardQuery = { __typename?: 'Query', apps: { __typename?: 'AppPaginationInfo', totalPages: number, items: Array<{ __typename?: 'App', id: string, name: string, createdAt: any, appMetaGithub?: { __typename?: 'AppGithubMeta', repoName: string, repoOwner: string } | null }> }, databases: { __typename?: 'DatabasePaginationInfo', totalPages: number, items: Array<{ __typename?: 'Database', id: string, name: string, type: DbTypes, createdAt: any }> } };
 
 export type DatabaseByIdQueryVariables = Exact<{
-  databaseId: Scalars['String'];
+  databaseId: Scalars['String']['input'];
 }>;
 
 
-export type DatabaseByIdQuery = { __typename?: 'Query', database: { __typename?: 'Database', id: string, name: string, type: DbTypes, version: string, tags: Array<{ __typename?: 'Tag', name: string }>, apps: Array<{ __typename?: 'App', id: string, name: string }> } };
+export type DatabaseByIdQuery = { __typename?: 'Query', database: { __typename?: 'Database', id: string, name: string, type: DbTypes, version?: string | null, tags: Array<{ __typename?: 'Tag', name: string }>, apps: Array<{ __typename?: 'App', id: string, name: string }> } };
 
 export type DatabaseInfoQueryVariables = Exact<{
-  databaseId: Scalars['String'];
+  databaseId: Scalars['String']['input'];
 }>;
 
 
 export type DatabaseInfoQuery = { __typename?: 'Query', databaseInfo: { __typename?: 'DatabaseInfo', info: Array<string> } };
 
 export type DatabaseLogsQueryVariables = Exact<{
-  databaseId: Scalars['String'];
+  databaseId: Scalars['String']['input'];
 }>;
 
 
 export type DatabaseLogsQuery = { __typename?: 'Query', databaseLogs: { __typename?: 'Logs', logs: Array<string> } };
 
 export type DatabaseQueryVariables = Exact<{
-  limit?: InputMaybe<Scalars['Int']>;
-  page?: InputMaybe<Scalars['Int']>;
-  tags?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+  tags?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
 }>;
 
 
-export type DatabaseQuery = { __typename?: 'Query', databases: { __typename?: 'DatabasePaginationInfo', totalPages: number, items: Array<{ __typename?: 'Database', id: string, name: string, type: DbTypes, version: string, tags: Array<{ __typename?: 'Tag', name: string }> }> } };
+export type DatabaseQuery = { __typename?: 'Query', databases: { __typename?: 'DatabasePaginationInfo', totalPages: number, items: Array<{ __typename?: 'Database', id: string, name: string, type: DbTypes, version?: string | null, tags: Array<{ __typename?: 'Tag', name: string }> }> } };
 
 export type DomainsQueryVariables = Exact<{
-  appId: Scalars['String'];
+  appId: Scalars['String']['input'];
 }>;
 
 
 export type DomainsQuery = { __typename?: 'Query', domains: Array<{ __typename?: 'AppDomain', domain: string }> };
 
 export type EnvVarsQueryVariables = Exact<{
-  appId: Scalars['String'];
+  appId: Scalars['String']['input'];
 }>;
 
 
@@ -969,7 +971,7 @@ export type GetBuildingAppsQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetBuildingAppsQuery = { __typename?: 'Query', buildingApps: Array<{ __typename?: 'App', id: string, name: string, status: AppStatus }> };
 
 export type GetCreateLogsQueryVariables = Exact<{
-  appId: Scalars['ID'];
+  appId: Scalars['ID']['input'];
 }>;
 
 
@@ -981,7 +983,7 @@ export type GithubInstallationIdQueryVariables = Exact<{ [key: string]: never; }
 export type GithubInstallationIdQuery = { __typename?: 'Query', githubInstallationId: { __typename?: 'Installation', id: string } };
 
 export type IsPluginInstalledQueryVariables = Exact<{
-  pluginName: Scalars['String'];
+  pluginName: Scalars['String']['input'];
 }>;
 
 
@@ -998,7 +1000,7 @@ export type PluginsQueryVariables = Exact<{ [key: string]: never; }>;
 export type PluginsQuery = { __typename?: 'Query', plugins: Array<{ __typename?: 'Plugin', name: string, version: string }> };
 
 export type RepositoriesQueryVariables = Exact<{
-  installationId: Scalars['String'];
+  installationId: Scalars['String']['input'];
 }>;
 
 
@@ -1015,7 +1017,7 @@ export type GetAllTagsQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetAllTagsQuery = { __typename?: 'Query', allTags: Array<{ __typename?: 'Tag', name: string }> };
 
 export type AppCreateLogsSubscriptionVariables = Exact<{
-  appId: Scalars['ID'];
+  appId: Scalars['ID']['input'];
 }>;
 
 
@@ -1247,7 +1249,7 @@ export type CreateAppGithubMutationOptions = Apollo.BaseMutationOptions<CreateAp
 export const CreateDatabaseDocument = gql`
     mutation createDatabase($input: CreateDatabaseInput!) {
   createDatabase(input: $input) {
-    result
+    id
   }
 }
     `;

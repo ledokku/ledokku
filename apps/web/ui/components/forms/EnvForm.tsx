@@ -119,7 +119,7 @@ export const EnvForm = ({
             <Button
               type="submit"
               size="sm"
-              disabled={
+              isDisabled={
                 value === formik.values.value &&
                 name === formik.values.name &&
                 asBuildArg === formik.values.asBuildArg &&

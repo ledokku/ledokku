@@ -1,10 +1,11 @@
-import { Card, CardBody } from "@nextui-org/react";
+import { Card, CardBody, CardFooter } from "@nextui-org/react";
 
 interface AlertProps {
   title?: string;
   message: string;
   type: "success" | "danger" | "warning" | "primary" | "secondary";
   className?: string;
+  children?: React.ReactNode;
 }
 
 const staticClasses = `
@@ -15,7 +16,13 @@ const staticClasses = `
     bg-secondary-50 text-secondary-800 text-secondary-600
 `;
 
-export const Alert = ({ message, title, type, className }: AlertProps) => {
+export const Alert = ({
+  message,
+  title,
+  type,
+  className,
+  children,
+}: AlertProps) => {
   return (
     <>
       <div className={staticClasses} />
@@ -27,6 +34,7 @@ export const Alert = ({ message, title, type, className }: AlertProps) => {
             ) : undefined}
             <p className={`text-${type}-600`}>{message}</p>
           </CardBody>
+          {children && <CardFooter>{children}</CardFooter>}
         </Card>
       </div>
     </>

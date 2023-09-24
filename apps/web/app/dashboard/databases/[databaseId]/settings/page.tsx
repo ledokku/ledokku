@@ -10,6 +10,7 @@ import {
   Input,
   Modal,
   ModalBody,
+  ModalContent,
   ModalFooter,
   ModalHeader,
   Snippet,
@@ -135,41 +136,43 @@ const Settings = () => {
             isOpen={showDeleteModal}
             onClose={() => setShowDeleteModal(false)}
           >
-            <ModalHeader>
-              <h4>Eliminar base de datos</h4>
-            </ModalHeader>
-            <ModalBody>
-              Escribre el nombre de la base de datos para eliminar
-              <Snippet hideSymbol>{database.name}</Snippet>
-              <Input
-                autoComplete="off"
-                id="databaseName"
-                name="databaseName"
-                label="Nombre de la base de datos"
-                placeholder={database.name}
-                value={formik.values.databaseName}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                errorMessage={formik.errors.databaseName}
-              />
-            </ModalBody>
-            <ModalFooter>
-              <Button size="sm" onClick={() => setShowDeleteModal(false)}>
-                Cancelar
-              </Button>
-              <Button
-                size="sm"
-                type="submit"
-                color="danger"
-                onClick={() => formik.handleSubmit()}
-                disabled={
-                  !formik.values.databaseName || !!formik.errors.databaseName
-                }
-                isLoading={destroyDbLoading}
-              >
-                Eliminar
-              </Button>
-            </ModalFooter>
+            <ModalContent>
+              <ModalHeader>
+                <h4>Eliminar base de datos</h4>
+              </ModalHeader>
+              <ModalBody>
+                Escribre el nombre de la base de datos para eliminar
+                <Snippet hideSymbol>{database.name}</Snippet>
+                <Input
+                  autoComplete="off"
+                  id="databaseName"
+                  name="databaseName"
+                  label="Nombre de la base de datos"
+                  placeholder={database.name}
+                  value={formik.values.databaseName}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  errorMessage={formik.errors.databaseName}
+                />
+              </ModalBody>
+              <ModalFooter>
+                <Button size="sm" onClick={() => setShowDeleteModal(false)}>
+                  Cancelar
+                </Button>
+                <Button
+                  size="sm"
+                  type="submit"
+                  color="danger"
+                  onClick={() => formik.handleSubmit()}
+                  disabled={
+                    !formik.values.databaseName || !!formik.errors.databaseName
+                  }
+                  isLoading={destroyDbLoading}
+                >
+                  Eliminar
+                </Button>
+              </ModalFooter>
+            </ModalContent>
           </Modal>
         </div>
       </div>

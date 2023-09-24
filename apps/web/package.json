@@ -49,6 +49,7 @@
     "yup": "^1.2.0"
   },
   "devDependencies": {
+    "@graphql-codegen/introspection": "^4.0.0",
     "@types/lodash": "^4.14.199",
     "@types/luxon": "^3.3.2"
   }

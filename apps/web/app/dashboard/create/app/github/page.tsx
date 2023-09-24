@@ -27,6 +27,7 @@ import { TagInput } from "@/ui/components/forms/TagInput";
 import { FiUpload } from "react-icons/fi";
 import { EnvForm } from "@/ui/components/forms/EnvForm";
 import { Alert } from "@/ui/components/alerts/Alert";
+import * as yup from "yup";
 
 interface BranchOption {
   value: Branch;
@@ -51,7 +52,44 @@ export default function CreateAppGithub() {
   const [isOpenConfigOpen, setIsOpenConfigOpen] = useState(false);
   const { installationId, repositories, apps } = useGithubContext();
 
-  const [createAppGithubMutation, { loading }] = useCreateAppGithubMutation();
+  const [createAppGithubMutation, { loading }] = useCreateAppGithubMutation({
+    onCompleted(data) {
+      router.push(`/dashboard/apps/${data.createAppGithub.id}/build`);
+    },
+    onError(error) {
+      error.message === "Not Found"
+        ? toast.error(`Repositorio: ${values.gitRepoFullName} no encontrado`)
+        : toast.error(error.message);
+    },
+  });
+
+  const validationSchema = yup
+    .object()
+    .shape<Record<keyof CreateAppGithubForm, any>>({
+      name: yup
+        .string()
+        .required("El nombre es requerido")
+        .matches(/^[a-z0-9-]+$/, "Solo se permiten letras, numeros y guiones")
+        .notOneOf(
+          apps.map((it) => it.name),
+          "Ya existe una aplicación con este nombre"
+        ),
+      gitRepoFullName: yup.string().required("El repositorio es requerido"),
+      branchName: yup.string().required("La rama es requerida"),
+      gitRepoId: yup.string().required("El repositorio es requerido"),
+      githubInstallationId: yup
+        .string()
+        .required("El repositorio es requerido"),
+      dockerfilePath: yup.string().required("El directorio es requerido"),
+      envVars: yup.array().of(
+        yup.object().shape({
+          key: yup.string().required("El nombre es requerido"),
+          value: yup.string().required("El valor es requerido"),
+        })
+      ),
+      tags: yup.array().of(yup.string()),
+      isDockerfileEnabled: yup.boolean(),
+    });
 
   const {
     values,
@@ -60,37 +98,32 @@ export default function CreateAppGithub() {
     handleChange,
     resetForm,
     handleSubmit,
-    isSubmitting,
+    isValid,
   } = useFormik<CreateAppGithubForm>({
     initialValues: {
       name: "",
       gitRepoFullName: "",
       branchName: "",
       gitRepoId: "",
-      githubInstallationId: "",
+      githubInstallationId: installationId,
       dockerfilePath: "Dockerfile",
       envVars: [],
       tags: [],
       isDockerfileEnabled: false,
     },
+    validationSchema,
+    validateOnMount: true,
     onSubmit: async ({ isDockerfileEnabled, ...values }) => {
-      try {
-        const app = await createAppGithubMutation({
-          variables: {
-            input: {
-              ...values,
-              dockerfilePath: isDockerfileEnabled
-                ? values.dockerfilePath
-                : undefined,
-            },
+      createAppGithubMutation({
+        variables: {
+          input: {
+            ...values,
+            dockerfilePath: isDockerfileEnabled
+              ? values.dockerfilePath
+              : undefined,
           },
-        });
-        router.push(`/dashboard/apps/${app.data?.createAppGithub.id}/build`);
-      } catch (error: any) {
-        error.message === "Not Found"
-          ? toast.error(`Repositorio: ${values.gitRepoFullName} no encontrado`)
-          : toast.error(error.message);
-      }
+        },
+      });
     },
   });
 
@@ -192,15 +225,17 @@ export default function CreateAppGithub() {
                 placeholder="Selecciona un repositorio"
                 value={values.gitRepoId}
                 onSelectionChange={(e) => {
-                  const repo = repositories.find(
-                    (item) => item.id === e.toString()
-                  );
+                  if (e instanceof Set) {
+                    const repo = repositories.find(
+                      (item) => item.id === e.values().next().value
+                    );
 
-                  if (repo) {
-                    handleChangeRepo(repo);
+                    if (repo) {
+                      handleChangeRepo(repo);
+                    }
                   }
                 }}
-                errorMessage={errors.gitRepoId}
+                errorMessage={errors.gitRepoId ?? errors.gitRepoFullName}
               >
                 {repositories.map((repo) => (
                   <SelectItem
@@ -237,8 +272,10 @@ export default function CreateAppGithub() {
               label="Rama a lanzar"
               placeholder="Selecciona una rama"
               value={values.branchName}
-              onChange={(e) => {
-                setFieldValue("branchName", e.currentTarget.value);
+              onSelectionChange={(e) => {
+                if (e instanceof Set) {
+                  return setFieldValue("branchName", e.values().next().value);
+                }
               }}
               isLoading={branchesLoading}
               errorMessage={errors.branchName}
@@ -289,6 +326,15 @@ export default function CreateAppGithub() {
                 );
               }}
             />
+            <Button
+              isLoading={loading}
+              onClick={() => handleSubmit()}
+              color="primary"
+              className="self-start"
+              isDisabled={!isValid}
+            >
+              Crear aplicación
+            </Button>
           </div>
         </div>
         <div className="lg:w-1/2">
