@@ -1,6 +1,7 @@
 FROM node:18-alpine
 
 WORKDIR /app
+ENV NEXT_PUBLIC_SERVER_URL="http://localhost:4000"
 
 COPY . .
 
