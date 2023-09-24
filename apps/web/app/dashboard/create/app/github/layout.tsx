@@ -11,22 +11,20 @@ export default async function RootLayout({
   const apps = await client.apps({
     limit: 1_000_000,
   });
-  console.log("Apps");
 
   const installation = await client.githubInstallationId();
-  console.log("Installation");
   const repos = await client
     .repositories({
       installationId: installation.githubInstallationId.id,
     })
-    .catch(() => null);
-  console.log("Repos");
+    .then((res) => res.repositories)
+    .catch(() => []);
 
   return (
     <GithubProvider
       apps={apps.apps.items}
       installationId={installation.githubInstallationId.id}
-      repositories={repos?.repositories ?? null}
+      repositories={repos}
     >
       {children}
     </GithubProvider>

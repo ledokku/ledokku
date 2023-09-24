@@ -6,7 +6,7 @@ import { createContext, useContext } from "react";
 const GithubContext = createContext<{
   apps: AppsQuery["apps"]["items"];
   installationId: string;
-  repositories: RepositoriesQuery["repositories"] | null;
+  repositories: RepositoriesQuery["repositories"];
 } | null>(null);
 
 export const GithubProvider = ({
@@ -18,7 +18,7 @@ export const GithubProvider = ({
   children: React.ReactNode;
   apps: AppsQuery["apps"]["items"];
   installationId: string;
-  repositories: RepositoriesQuery["repositories"] | null;
+  repositories: RepositoriesQuery["repositories"];
 }) => {
   return (
     <GithubContext.Provider

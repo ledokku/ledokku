@@ -1,9 +1,6 @@
 "use client";
 
-import { serverClient } from "@/lib/apollo.server";
 import { useFormik } from "formik";
-import { GetServerSideProps } from "next";
-import { getSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
 import {
   Branch,
@@ -20,18 +17,16 @@ import { OpenGithubConfigurationModal } from "@/ui/components/modals/OpenGithubC
 import { useGithubContext } from "@/contexts/GithubContext";
 import {
   Button,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
+  Checkbox,
+  Input,
+  Link,
   Select,
   SelectItem,
 } from "@nextui-org/react";
-
-interface RepoOption {
-  value: Repository;
-  label: string;
-}
+import { TagInput } from "@/ui/components/forms/TagInput";
+import { FiUpload } from "react-icons/fi";
+import { EnvForm } from "@/ui/components/forms/EnvForm";
+import { Alert } from "@/ui/components/alerts/Alert";
 
 interface BranchOption {
   value: Branch;
@@ -46,7 +41,7 @@ interface CreateAppGithubForm {
   githubInstallationId: string;
   dockerfilePath?: string;
   envVars: BuildEnvVar[];
-  tags?: string[];
+  tags: string[];
   isDockerfileEnabled?: boolean;
 }
 
@@ -56,13 +51,17 @@ export default function CreateAppGithub() {
   const [isOpenConfigOpen, setIsOpenConfigOpen] = useState(false);
   const { installationId, repositories, apps } = useGithubContext();
 
-  const [getBranches, { data: branchesData, loading: branchesLoading }] =
-    useBranchesLazyQuery({
-      fetchPolicy: "network-only",
-    });
   const [createAppGithubMutation, { loading }] = useCreateAppGithubMutation();
 
-  const formik = useFormik<CreateAppGithubForm>({
+  const {
+    values,
+    errors,
+    setFieldValue,
+    handleChange,
+    resetForm,
+    handleSubmit,
+    isSubmitting,
+  } = useFormik<CreateAppGithubForm>({
     initialValues: {
       name: "",
       gitRepoFullName: "",
@@ -95,9 +94,12 @@ export default function CreateAppGithub() {
     },
   });
 
+  const [getBranches, { data: branchesData, loading: branchesLoading }] =
+    useBranchesLazyQuery();
+
   const { openEnvFile } = useOpenEnvFile({
     onRead(envVars) {
-      formik.setFieldValue("envVars", envVars);
+      setFieldValue("envVars", envVars);
     },
     onError(error) {
       toast.error(error);
@@ -110,11 +112,12 @@ export default function CreateAppGithub() {
       .map((it) => (/^[a-z0-9-]+$/.test(it) ? it : "-"))
       .join("");
 
-    formik.setFieldValue("gitRepoFullName", active.fullName);
-    formik.setFieldValue("branchName", "");
-    formik.setFieldValue("gitRepoId", active.id);
-    formik.setFieldValue("name", name);
-    formik.setFieldValue("dockerfilePath", "Dockerfile");
+    resetForm();
+    setFieldValue("gitRepoFullName", active.fullName);
+    setFieldValue("branchName", "");
+    setFieldValue("gitRepoId", active.id);
+    setFieldValue("name", name);
+    setFieldValue("dockerfilePath", "Dockerfile");
   };
 
   let branchOptions: BranchOption[] = [];
@@ -126,15 +129,36 @@ export default function CreateAppGithub() {
   }
 
   useEffect(() => {
-    if (formik.values.gitRepoFullName.length > 0) {
+    if (values.gitRepoFullName.length > 0) {
       getBranches({
         variables: {
           installationId,
-          repositoryName: formik.values.gitRepoFullName,
+          repositoryName: values.gitRepoFullName,
         },
       });
     }
-  }, [formik.values.gitRepoFullName, getBranches, installationId]);
+  }, [values.gitRepoFullName, getBranches, installationId]);
+
+  if (repositories.length === 0)
+    return (
+      <>
+        <OpenGithubConfigurationModal
+          isOpen={isOpenConfigOpen}
+          onClose={() => setIsOpenConfigOpen(false)}
+        />
+        <Alert
+          className="mb-8"
+          title="Configura los permisos de repositorios"
+          type="warning"
+          message="Primero necesitas configurar los permisos de los repositorios
+      que te gustaria usar. Una vez completado,
+      es hora de escoger el repositorio y la rama que te gustaria para crear la aplicación."
+        />
+        <Button onClick={() => setIsOpenConfigOpen(true)} color="primary">
+          Configurar permisos
+        </Button>
+      </>
+    );
 
   return (
     <>
@@ -153,29 +177,30 @@ export default function CreateAppGithub() {
           }
         }}
       />
-      <div>
-        <h2>Crear nueva aplicación de Github</h2>
-        {repositories && (
-          <>
-            <p>
-              Cuando hagas push a Git, tu aplicación va a lanzarse de nuevo
-              automaticamente.
-            </p>
+      <div className="flex flex-col lg:flex-row gap-16">
+        <div className="lg:w-1/2">
+          <h2>Crear nueva aplicación de Github</h2>
+          <p>
+            Cuando hagas push a Git, tu aplicación va a lanzarse de nuevo
+            automaticamente.
+          </p>
 
+          <div className="mt-8 flex flex-col gap-8">
             <div>
               <Select
                 label="Repositorio"
                 placeholder="Selecciona un repositorio"
-                value={formik.values.gitRepoId}
-                onChange={(e) => {
+                value={values.gitRepoId}
+                onSelectionChange={(e) => {
                   const repo = repositories.find(
-                    (item) => item.id === e.currentTarget.value
+                    (item) => item.id === e.toString()
                   );
 
                   if (repo) {
                     handleChangeRepo(repo);
                   }
                 }}
+                errorMessage={errors.gitRepoId}
               >
                 {repositories.map((repo) => (
                   <SelectItem
@@ -187,271 +212,170 @@ export default function CreateAppGithub() {
                   </SelectItem>
                 ))}
               </Select>
+              <p>
+                ¿No puedes ver los repositorios privados?{" "}
+                <Link
+                  onClick={() => setIsOpenConfigOpen(true)}
+                  isExternal
+                  className="cursor-pointer"
+                >
+                  Configura la app de Github
+                </Link>
+              </p>
             </div>
-          </>
-        )}
+            <Input
+              id="name"
+              name="name"
+              label="Nombre de la app"
+              value={values.name}
+              onChange={handleChange}
+              fullWidth
+              errorMessage={errors.name}
+              isDisabled={values.gitRepoId.length === 0}
+            />
+            <Select
+              label="Rama a lanzar"
+              placeholder="Selecciona una rama"
+              value={values.branchName}
+              onChange={(e) => {
+                setFieldValue("branchName", e.currentTarget.value);
+              }}
+              isLoading={branchesLoading}
+              errorMessage={errors.branchName}
+              isDisabled={values.gitRepoId.length === 0}
+            >
+              {branchOptions.map((option) => (
+                <SelectItem key={option.value.name} value={option.value.name}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </Select>
+            <div>
+              <Checkbox
+                id="isDockerfileEnabled"
+                name="isDockerfileEnabled"
+                isDisabled={values.gitRepoId.length === 0}
+                isSelected={values.isDockerfileEnabled}
+                onChange={handleChange}
+              >
+                Usar Docker
+              </Checkbox>
+              {values.isDockerfileEnabled && (
+                <div className="mt-2">
+                  <Input
+                    id="dockerfilePath"
+                    name="dockerfilePath"
+                    label="Directorio del archivo Dockerfile"
+                    value={values.dockerfilePath}
+                    onChange={handleChange}
+                    isDisabled={values.gitRepoId.length === 0}
+                    startContent="./"
+                    fullWidth
+                    errorMessage={errors.dockerfilePath}
+                  />
+                </div>
+              )}
+            </div>
+            <TagInput
+              tags={values.tags ?? []}
+              disabled={values.gitRepoId.length === 0}
+              onAdd={(tag) => {
+                setFieldValue("tags", [...values.tags, tag]);
+              }}
+              onRemove={(tag) => {
+                setFieldValue(
+                  "tags",
+                  values.tags.filter((it) => it !== tag)
+                );
+              }}
+            />
+          </div>
+        </div>
+        <div className="lg:w-1/2">
+          <div className="flex justify-between">
+            <h5>Variables de entorno</h5>
+            <Button
+              size="sm"
+              color="primary"
+              onClick={() => envFile.current?.click()}
+              startContent={<FiUpload className="mr-2" />}
+            >
+              Desde archivo
+            </Button>
+          </div>
+          <div className="mt-8 flex flex-col divide-y divide-divider">
+            <EnvForm
+              asBuildArg={false}
+              className="mb-2"
+              name=""
+              value=""
+              isNewVar={true}
+              onSubmit={(data) => {
+                const exists = values.envVars.find(
+                  (it) => it.key === data.name
+                );
+
+                if (!exists) {
+                  setFieldValue("envVars", [
+                    ...values.envVars,
+                    {
+                      key: data.name.trim(),
+                      value: data.value,
+                      asBuildArg: data.asBuildArg,
+                    },
+                  ]);
+                } else {
+                  setFieldValue(
+                    "envVars",
+                    values.envVars.map((it) => {
+                      if (it.key === data.name) {
+                        return data;
+                      } else {
+                        return it;
+                      }
+                    })
+                  );
+                }
+              }}
+            />
+            {values.envVars
+              .map((envVar) => {
+                return (
+                  <EnvForm
+                    className="py-2"
+                    key={envVar.key}
+                    name={envVar.key}
+                    value={envVar.value}
+                    asBuildArg={envVar.asBuildArg ?? false}
+                    onSubmit={(data) => {
+                      setFieldValue(
+                        "envVars",
+                        values.envVars.map((it) => {
+                          if (it.key === data.name) {
+                            return {
+                              key: data.name,
+                              value: data.value,
+                              asBuildArg: data.asBuildArg,
+                            };
+                          } else {
+                            return it;
+                          }
+                        })
+                      );
+                    }}
+                    onDelete={(key) => {
+                      setFieldValue(
+                        "envVars",
+                        values.envVars.filter((it) => it.key !== key)
+                      );
+                    }}
+                  />
+                );
+              })
+              .reverse()}
+          </div>
+        </div>
       </div>
     </>
   );
-
-  //       {repos ? (
-  //         <>
-  //           <p>
-  //             Cuando hagas push a Git, tu aplicación va a lanzarse de nuevo
-  //             automaticamente.
-  //           </p>
-
-  //           <div>
-  //             <div>
-  //               <form onSubmit={formik.handleSubmit} className="mt-8">
-  //                 <Text h5>Repositorio</Text>
-  //                 <Dropdown>
-  //                   <Dropdown.Button flat>
-  //                     {selectedRepo?.fullName ?? "Selecciona un repositorio"}
-  //                   </Dropdown.Button>
-  //                   <Dropdown.Menu
-  //                     color="primary"
-  //                     css={{ $$dropdownMenuWidth: "auto" }}
-  //                     selectionMode="single"
-  //                     selectedKeys={
-  //                       new Set(selectedRepo?.id ? [selectedRepo?.id] : [])
-  //                     }
-  //                     onAction={(key) => {
-  //                       const repo = repos.find((item) => item.id === key);
-
-  //                       if (repo) {
-  //                         handleChangeRepo(repo);
-  //                       }
-  //                     }}
-  //                   >
-  //                     {repos.map((option) => (
-  //                       <Dropdown.Item key={option.id}>
-  //                         {option.name}
-  //                       </Dropdown.Item>
-  //                     ))}
-  //                   </Dropdown.Menu>
-  //                 </Dropdown>
-
-  //                 <Text className="mt-1" h6>
-  //                   ¿No puedes ver los repositorios privados?{" "}
-  //                   <Link
-  //                     onClick={() => setIsOpenConfigOpen(true)}
-  //                     css={{ display: "inline" }}
-  //                   >
-  //                     Configura la app de Github
-  //                   </Link>
-  //                 </Text>
-  //                 <div className="mt-8 mb-4">
-  //                   <Input
-  //                     label="Nombre de la app"
-  //                     value={formik.values.name}
-  //                     onChange={(e) => {
-  //                       formik.setFieldValue(
-  //                         "name",
-  //                         e.currentTarget.value,
-  //                         true
-  //                       );
-  //                     }}
-  //                     disabled={formik.values.repo.id.length === 0}
-  //                     fullWidth
-  //                   />
-  //                   <Text className="text-red-500">{formik.errors.name}</Text>
-  //                 </div>
-  //                 <Text h5 className="mt-8">
-  //                   Rama a lanzar
-  //                 </Text>
-  //                 <Dropdown>
-  //                   <Dropdown.Button flat disabled={!branchesData}>
-  //                     {branchesLoading ? (
-  //                       <Loading color="currentColor" size="sm" />
-  //                     ) : selectedBranch !== "" ? (
-  //                       selectedBranch
-  //                     ) : (
-  //                       "Selecciona una rama"
-  //                     )}
-  //                   </Dropdown.Button>
-  //                   <Dropdown.Menu
-  //                     color="primary"
-  //                     css={{ $$dropdownMenuWidth: "auto" }}
-  //                     selectionMode="single"
-  //                     selectedKeys={
-  //                       new Set(selectedBranch ? [selectedBranch] : [])
-  //                     }
-  //                     onAction={(key) => {
-  //                       const repo = branchOptions.find(
-  //                         (item) => item.value.name === key
-  //                       );
-
-  //                       if (repo) {
-  //                         handleChangeBranch(repo);
-  //                       }
-  //                     }}
-  //                   >
-  //                     {branchOptions.map((option) => (
-  //                       <Dropdown.Item key={option.value.name}>
-  //                         {option.label}
-  //                       </Dropdown.Item>
-  //                     ))}
-  //                   </Dropdown.Menu>
-  //                 </Dropdown>
-  //                 <div className="mt-8 mb-4">
-  //                   <Checkbox
-  //                     label="Usar Docker"
-  //                     isDisabled={formik.values.repo.id.length === 0}
-  //                     isSelected={isDockerfileEnabled}
-  //                     onChange={(val) => setIsDockerfileEnabled(val)}
-  //                   />
-
-  //                   {isDockerfileEnabled && (
-  //                     <div className="mt-2">
-  //                       <Input
-  //                         label="Directorio del Dockerfile"
-  //                         value={formik.values.dockerfilePath}
-  //                         onChange={(e) => {
-  //                           formik.setFieldValue(
-  //                             "dockerfilePath",
-  //                             e.currentTarget.value,
-  //                             true
-  //                           );
-  //                         }}
-  //                         disabled={formik.values.repo.id.length === 0}
-  //                         labelLeft="./"
-  //                         fullWidth
-  //                       />
-  //                       <Text className="text-red-500">
-  //                         {formik.errors.dockerfilePath}
-  //                       </Text>
-  //                     </div>
-  //                   )}
-  //                 </div>
-  //                 <TagInput
-  //                   tags={tags}
-  //                   disabled={formik.values.repo.id.length === 0}
-  //                   onAdd={(tag) => setTags([...tags, tag])}
-  //                   onRemove={(tag) => setTags(tags.filter((it) => it !== tag))}
-  //                 />
-  //                 <Button
-  //                   className="mt-8"
-  //                   type="submit"
-  //                   disabled={!selectedBranch || !selectedRepo}
-  //                 >
-  //                   {!loading ? (
-  //                     "Crear"
-  //                   ) : (
-  //                     <Loading color="currentColor" type="points-opacity" />
-  //                   )}
-  //                 </Button>
-  //               </form>
-  //             </div>
-  //             <Grid md xs={12}>
-  //               <div className="w-full mt-8">
-  //                 <div className="flex flex-row justify-between mb-4">
-  //                   <Text h5>Variables de entorno</Text>
-  //                   <Button
-  //                     size="sm"
-  //                     ghost
-  //                     onClick={() => envFile.current?.click()}
-  //                   >
-  //                     <FaUpload className="mr-2" /> Desde archivo
-  //                   </Button>
-  //                 </div>
-  //                 {
-  //                   <div className="w-full">
-  //                     <EnvForm
-  //                       key="newVar"
-  //                       name=""
-  //                       value=""
-  //                       asBuildArg={false}
-  //                       isNewVar={true}
-  //                       onSubmit={(data) => {
-  //                         const exists = envVars.find(
-  //                           (it) => it.key === data.name
-  //                         );
-
-  //                         if (!exists) {
-  //                           setEnvVars([
-  //                             ...envVars,
-  //                             {
-  //                               key: data.name,
-  //                               value: data.value,
-  //                               asBuildArg: data.asBuildArg,
-  //                             },
-  //                           ]);
-  //                         } else {
-  //                           setEnvVars(
-  //                             envVars.map((it) => {
-  //                               if (it.key === data.name) {
-  //                                 return {
-  //                                   key: data.name,
-  //                                   value: data.value,
-  //                                   asBuildArg: data.asBuildArg,
-  //                                 };
-  //                               } else {
-  //                                 return it;
-  //                               }
-  //                             })
-  //                           );
-  //                         }
-  //                       }}
-  //                     />
-  //                     {envVars
-  //                       .map((envVar, index) => {
-  //                         return (
-  //                           <>
-  //                             <Divider className="my-4" />
-  //                             <EnvForm
-  //                               key={envVar.key}
-  //                               name={envVar.key}
-  //                               value={envVar.value}
-  //                               asBuildArg={envVar.asBuildArg ?? false}
-  //                               onSubmit={(data) => {
-  //                                 setEnvVars(
-  //                                   envVars.map((it) => {
-  //                                     if (it.key === data.name) {
-  //                                       return {
-  //                                         key: data.name,
-  //                                         value: data.value,
-  //                                         asBuildArg: data.asBuildArg,
-  //                                       };
-  //                                     } else {
-  //                                       return it;
-  //                                     }
-  //                                   })
-  //                                 );
-  //                               }}
-  //                               onDelete={(key) => {
-  //                                 setEnvVars(
-  //                                   envVars.filter((it) => it.key !== key)
-  //                                 );
-  //                               }}
-  //                             />
-  //                           </>
-  //                         );
-  //                       })
-  //                       .reverse()}
-  //                   </div>
-  //                 }
-  //               </div>
-  //             </Grid>
-  //           </div>
-  //         </>
-  //       ) : (
-  //         <>
-  //           <Alert
-  //             className="my-8"
-  //             title="Configura los permisos de repositorios"
-  //             type="warning"
-  //             message="Primero necesitas configurar los permisos de los repositorios
-  //               que te gustaria usar. Una vez completado,
-  //               es hora de escoger el repositorio y la rama que te gustaria para crear la aplicación."
-  //           />
-  //           <Button onClick={() => setIsOpenConfigOpen(true)}>
-  //             Configurar permisos
-  //           </Button>
-  //         </>
-  //       )}
-  //     </>
-
-  //   </AdminLayout>
-  // );
 }

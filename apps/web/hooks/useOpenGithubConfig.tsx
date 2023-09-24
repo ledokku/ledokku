@@ -1,8 +1,14 @@
 import { GITHUB_APP_NAME } from "@/constants";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-export function useOpenGithubConfig() {
+interface OpenGithubConfigOptions {
+  onClosed?: () => void;
+}
+
+export function useOpenGithubConfig({
+  onClosed,
+}: OpenGithubConfigOptions = {}) {
   const [isWindowOpen, setIsWindowOpen] = useState(false);
   const router = useRouter();
 
@@ -20,15 +26,13 @@ export function useOpenGithubConfig() {
 
     if (!githubConfigWindow) return;
 
-    githubConfigWindow.onclose = () => {
-      setIsWindowOpen(false);
-      router.refresh();
-    };
-
-    githubConfigWindow.oncancel = () => {
-      setIsWindowOpen(false);
-      router.refresh();
-    };
+    const interval = setInterval(() => {
+      if (githubConfigWindow.closed) {
+        clearInterval(interval);
+        setIsWindowOpen(false);
+        onClosed?.();
+      }
+    }, 100);
   };
 
   return {

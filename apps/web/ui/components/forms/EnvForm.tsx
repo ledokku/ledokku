@@ -15,6 +15,7 @@ interface EnvFormProps {
     value: string;
     asBuildArg: boolean;
   }) => void;
+  className?: string;
 }
 
 export const EnvForm = ({
@@ -24,6 +25,7 @@ export const EnvForm = ({
   onDelete,
   onSubmit,
   asBuildArg,
+  className,
 }: EnvFormProps) => {
   const [focus, setFocus] = useState(false);
 
@@ -62,7 +64,7 @@ export const EnvForm = ({
   });
 
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form onSubmit={formik.handleSubmit} className={className}>
       <div className="flex flex-col md:flex-row gap-4 items-start">
         <div className="md:w-1/3 w-full">
           <Input
@@ -84,6 +86,7 @@ export const EnvForm = ({
             }}
             size="md"
             maxRows={formik.values.value.length > 50 ? 5 : 1}
+            rows={formik.values.value.length > 50 ? 5 : 1}
             autoComplete="off"
             id={isNewVar ? "newVarValue" : value}
             name="value"
@@ -101,19 +104,18 @@ export const EnvForm = ({
             onChange={formik.handleChange}
           />
         </div>
-        <div className="flex flex-col gap-2 md:items-end">
-          <div className="flex items-center gap-2">
-            Build Arg
-            <Checkbox
-              name="asBuildArg"
-              size="sm"
-              isSelected={formik.values.asBuildArg}
-              onChange={(val) =>
-                formik.setFieldValue("asBuildArg", val.target.checked)
-              }
-            />
-          </div>
-          <div className="flex gap-4 w-48 md:justify-end">
+        <div className="flex flex-col gap-2 md:items-end whitespace-nowrap">
+          <Checkbox
+            name="asBuildArg"
+            size="sm"
+            isSelected={formik.values.asBuildArg}
+            onChange={(val) =>
+              formik.setFieldValue("asBuildArg", val.target.checked)
+            }
+          >
+            ARG
+          </Checkbox>
+          <div className="flex gap-2 md:justify-end">
             <Button
               type="submit"
               size="sm"

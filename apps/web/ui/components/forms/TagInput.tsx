@@ -8,6 +8,7 @@ interface TagInputProps {
   loading?: boolean;
   onAdd?: (tag: string) => void;
   onRemove?: (tag: string) => void;
+  className?: string;
 }
 
 export const TagInput = ({
@@ -16,26 +17,27 @@ export const TagInput = ({
   onRemove,
   disabled = false,
   loading = false,
+  className,
 }: TagInputProps) => {
   const [name, setName] = useState("");
   const [error, setError] = useState<string | undefined>(undefined);
 
   return (
-    <div>
+    <div className={className}>
       <Input
-        label="Etiqueta"
-        width="300px"
+        label="Etiquetas"
         value={name}
         placeholder="Nombre de la etiqueta"
         startContent={loading ? <Spinner size="sm" /> : undefined}
-        disabled={disabled || loading}
+        isDisabled={disabled || loading}
         onChange={(e) => setName(e.currentTarget.value)}
         errorMessage={error}
         endContent={
           <Button
             size="sm"
             color="primary"
-            disabled={disabled || loading}
+            isDisabled={disabled}
+            isLoading={loading}
             onClick={
               disabled || loading
                 ? undefined

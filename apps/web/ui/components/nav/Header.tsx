@@ -45,7 +45,7 @@ export const Header = () => {
       onMenuOpenChange={setIsMenuOpen}
       maxWidth="2xl"
       position="sticky"
-      className="[&>header]:px-0"
+      className="2xl:[&>header]:px-0"
       isBlurred
       isBordered
       classNames={{
