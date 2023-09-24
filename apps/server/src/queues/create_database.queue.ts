@@ -73,6 +73,15 @@ export class CreateDatabaseQueue extends IQueue<QueueArgs> {
   async onSuccess(job: Job<QueueArgs, any, string>, database: Database) {
     const { userId } = job.data;
 
+    const version = await this.dokkuDatabaseRepository.version(
+      database.name,
+      database.type
+    );
+
+    await this.databaseRepository.update(database.id, {
+      version,
+    });
+
     await this.activityRepository.add({
       name: `Base de datos "${database.name}" creada`,
       description: database.id,

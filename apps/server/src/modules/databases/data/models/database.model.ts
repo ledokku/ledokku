@@ -20,8 +20,8 @@ export class Database implements DatabaseClass {
   @Field((type) => DbTypes)
   type: DbTypes;
 
-  @Field((type) => String)
-  version: string;
+  @Field((type) => String, { nullable: true })
+  version: string | null;
 
   @Field((type) => String)
   userId: string;

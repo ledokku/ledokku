@@ -153,7 +153,7 @@ export class DatabaseResolver {
     const createdDb = await this.databaseRepository.create({
       name: input.name,
       type: input.type,
-      version: input.version ?? "latest",
+      version: input.version,
       Tags: {
         connectOrCreate: input.tags?.map((it) => ({
           where: {
