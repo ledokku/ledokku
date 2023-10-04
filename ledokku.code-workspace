@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": "apps/web"
+		},
+		{
+			"path": "apps/server"
+		}
+	],
+	"settings": {
+		"debug.inlineValues": "on",
+		"typescript.tsdk": "node_modules\\typescript\\lib",
+		"editor.formatOnSave": true
+	}
+}

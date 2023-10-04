@@ -1,5 +1,0 @@
-query domains($appId: String!) {
-  domains(appId: $appId) {
-    domains
-  }
-}

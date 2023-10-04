@@ -1,0 +1,142 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                    String     @id @default(uuid())
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @updatedAt
+  username              String     @unique
+  avatarUrl             String
+  email                 String     @unique
+  githubId              String     @unique
+  githubAccessToken     String
+  refreshToken          String
+  refreshTokenExpiresAt DateTime
+  App                   App[]
+  role                  Roles
+  Database              Database[]
+  AppBuild              AppBuild[]
+  Activity              Activity[]
+}
+
+enum Roles {
+  OWNER
+  ADMIN
+}
+
+model App {
+  id             String         @id @default(uuid())
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  name           String
+  dockerfilePath String?
+  type           AppTypes
+  appBuild       AppBuild[]
+  status         AppStatus      @default(IDLE)
+  databases      Database[]
+  User           User?          @relation(fields: [userId], references: [id])
+  userId         String?
+  AppMetaGithub  AppMetaGithub?
+  tags           Tag[]
+}
+
+enum AppTypes {
+  DOKKU
+  GITHUB
+  GITLAB
+  DOCKER
+}
+
+enum AppStatus {
+  RUNNING
+  BUILDING
+  IDLE
+}
+
+model AppMetaGithub {
+  id                      String   @id @default(uuid())
+  app                     App      @relation(fields: [appId], references: [id], onDelete: Cascade)
+  appId                   String   @unique
+  repoId                  String
+  repoOwner               String
+  repoName                String
+  branch                  String
+  githubAppInstallationId String
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+}
+
+model AppBuild {
+  id        String         @id @default(uuid())
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  status    AppBuildStatus
+  app       App            @relation(fields: [appId], references: [id])
+  appId     String
+  User      User?          @relation(fields: [userId], references: [id])
+  userId    String?
+}
+
+enum AppBuildStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  ERRORED
+}
+
+model Database {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String
+  type      DbTypes
+  version   String?
+  apps      App[]
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+  Tags      Tag[]
+}
+
+enum DbTypes {
+  REDIS
+  POSTGRESQL
+  MONGODB
+  MYSQL
+  MARIADB
+}
+
+model Activity {
+  id            String           @id @default(uuid())
+  name          String
+  description   String?
+  refersToModel ModelReferences?
+  referenceId   String?
+  modifierId    String?
+  Modifier      User?            @relation(fields: [modifierId], references: [id])
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+}
+
+enum ModelReferences {
+  Database
+  App
+  AppBuild
+}
+
+model Settings {
+  id            String   @id @default(uuid())
+  allowedEmails String[] @default([])
+}
+
+model Tag {
+  id        String     @id @default(uuid())
+  name      String     @unique
+  Databases Database[]
+  Apps      App[]
+}

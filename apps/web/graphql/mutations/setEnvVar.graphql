@@ -1,0 +1,5 @@
+mutation setEnvVar($input: SetEnvVarInput!) {
+  setEnvVar(input: $input) {
+    result
+  }
+}

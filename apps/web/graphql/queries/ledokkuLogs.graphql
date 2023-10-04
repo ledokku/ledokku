@@ -1,0 +1,6 @@
+query LedokkuLogs {
+    ledokkuLogs {
+        message
+        type
+    }
+}

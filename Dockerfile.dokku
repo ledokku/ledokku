@@ -1,0 +1,7 @@
+FROM dokku/dokku:0.27.10
+
+RUN dokku plugin:install https://github.com/dokku/dokku-letsencrypt.git; exit 0
+RUN dokku plugin:install https://github.com/dokku/dokku-postgres.git postgres; exit 0
+RUN dokku plugin:install https://github.com/dokku/dokku-mysql.git mysql; exit 0
+RUN dokku plugin:install https://github.com/dokku/dokku-mongo.git mongo; exit 0
+RUN dokku plugin:install https://github.com/dokku/dokku-redis.git redis; exit 0

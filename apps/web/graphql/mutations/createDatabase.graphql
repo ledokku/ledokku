@@ -1,0 +1,5 @@
+mutation createDatabase($input: CreateDatabaseInput!) {
+  createDatabase(input: $input) {
+    id
+  }
+}
