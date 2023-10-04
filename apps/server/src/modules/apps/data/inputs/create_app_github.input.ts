@@ -1,4 +1,4 @@
-import { Field, InputType } from 'type-graphql';
+import { Field, ID, InputType } from 'type-graphql';
 import { BuildEnvVar } from './build_env_var.input';
 
 @InputType()
@@ -26,4 +26,7 @@ export class CreateAppGithubInput {
 
   @Field((type) => [String], { nullable: true })
   tags?: string[];
+
+  @Field((type)=> ID , { nullable: true })
+  databaseId?:string;
 }

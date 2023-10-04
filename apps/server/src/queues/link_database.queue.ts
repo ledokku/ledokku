@@ -12,7 +12,7 @@ import { DatabaseRepository } from './../modules/databases/data/repositories/dat
 interface QueueArgs {
   appId: string;
   databaseId: string;
-  userId: string;
+  userId?: string | undefined;
 }
 
 @Queue()
