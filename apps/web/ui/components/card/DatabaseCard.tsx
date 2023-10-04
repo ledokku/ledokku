@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { DateTime } from "luxon";
 import { Database } from "@/generated/graphql";
-import { DbIcon } from "../DbIcon";
+import { DbIcon } from "../../icons/DbIcon";
 
 interface DatabaseCardProps {
   database: Database;
@@ -14,7 +14,7 @@ interface DatabaseCardProps {
 
 export const DatabaseCard = ({ database }: DatabaseCardProps) => {
   return (
-    <Link href={`/database/${database.id}`} className="w-full">
+    <Link href={`/dashboard/databases/${database.id}`} className="w-full">
       <Card isHoverable isPressable className="w-full">
         <CardBody>
           <div className="flex w-full items-start">

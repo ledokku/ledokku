@@ -1,16 +1,12 @@
-FROM node:16
+FROM node:18-alpine
 
-WORKDIR /usr/src/app
+WORKDIR /app
+ENV NEXT_PUBLIC_SERVER_URL="http://localhost:4000"
 
-COPY server/package.json .
-COPY yarn.lock .
+COPY . .
 
-RUN yarn
-
-COPY ./server .
-
-RUN yarn prisma:generate
+RUN yarn install --frozen-lockfile
 RUN yarn build
 
 EXPOSE 4000
-CMD [ "yarn", "start" ]
+CMD [ "yarn", "workspace", "@ledokku/server", "start" ]

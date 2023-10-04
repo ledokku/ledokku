@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  Badge,
   Button,
   Link,
   Table,
@@ -12,10 +11,11 @@ import {
   TableCell,
   Pagination,
   Spinner,
+  Chip,
 } from "@nextui-org/react";
 import { useMemo, useState } from "react";
-import { AiOutlineCloseCircle } from "react-icons/ai";
 import { useAppsQuery } from "@/generated/graphql";
+import { FiServer } from "react-icons/fi";
 
 const Apps = () => {
   const [page, setPage] = useState(1);
@@ -49,7 +49,7 @@ const Apps = () => {
         <TableCell>
           <div className="flex flex-wrap gap-2">
             {it.tags.map((it, index) => (
-              <Badge
+              <Chip
                 key={index}
                 onClick={() => {
                   if (!tags.includes(it.name)) {
@@ -57,11 +57,10 @@ const Apps = () => {
                   }
                 }}
                 className="cursor-pointer"
-                disableOutline
                 color="primary"
               >
                 {it.name}
-              </Badge>
+              </Chip>
             ))}
           </div>
         </TableCell>
@@ -83,21 +82,27 @@ const Apps = () => {
     <>
       <div className="flex flex-row justify-between w-full mb-4">
         <h2>Aplicaciones</h2>
-        <Button href="dashboard/app-creation/create-app" color="primary">
+        <Button
+          href="/dashboard/create/app"
+          color="primary"
+          startContent={<FiServer />}
+        >
           Crear aplicación
         </Button>
       </div>
-      <div className="flex gap-2">
+      <div className="flex gap-2 mb-4">
         {tags.map((it, index) => (
-          <Badge key={index} disableOutline color="primary">
+          <Chip
+            isCloseable
+            onClose={() => {
+              setPage(1);
+              setTags(tags.filter((it2) => it2 !== it));
+            }}
+            key={index}
+            color="primary"
+          >
             {it}
-            <AiOutlineCloseCircle
-              className="ml-1 cursor-pointer"
-              onClick={() => {
-                setTags(tags.filter((it2) => it2 !== it));
-              }}
-            />
-          </Badge>
+          </Chip>
         ))}
       </div>
       <Table
@@ -128,7 +133,8 @@ const Apps = () => {
         </TableHeader>
         <TableBody
           loadingContent={<Spinner />}
-          loadingState={loading ? "loading" : "idle"}
+          isLoading={loading}
+          emptyContent="No hay aplicaciones"
         >
           {rows}
         </TableBody>

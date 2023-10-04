@@ -1,6 +1,5 @@
 "use client";
 
-import { AppByIdQuery } from "@/generated/graphql.server";
 import {
   Button,
   Link,
@@ -11,27 +10,19 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import {
-  DatabaseQuery,
-  LogPayload,
-  useDatabaseQuery,
-  useUnlinkDatabaseLogsSubscription,
-  useUnlinkDatabaseMutation,
-} from "@/generated/graphql";
-import toast from "react-hot-toast";
+import { DatabaseQuery } from "@/generated/graphql";
 import { DateTime } from "luxon";
 import { DatabaseLinkCard } from "@/ui/components/card/DatabaseLinkCard";
 import { LinkDatabaseToAppForm } from "@/ui/components/forms/LinkDatabaseToAppForm";
-import { Terminal } from "@/ui/components/Terminal";
+import { useAppContext } from "@/contexts/AppContext";
+import { FiDatabase } from "react-icons/fi";
 
 interface AppProps {
-  app: AppByIdQuery["app"];
   databases: DatabaseQuery["databases"]["items"];
 }
 
-const AppInfoPage = ({ app, databases }: AppProps) => {
+const AppInfoPage = ({ databases }: AppProps) => {
+  const app = useAppContext();
   const linkedDatabases = app.databases ?? [];
   const linkedIds = linkedDatabases.map((db) => db.id);
   const notLinkedDatabases =
@@ -75,16 +66,15 @@ const AppInfoPage = ({ app, databases }: AppProps) => {
           <h3 className="mb-8">Bases de datos conectadas</h3>
           {databases && databases.length === 0 ? (
             <>
-              <div className="mt-4 mb-4">
-                <p className="text-gray-400">
-                  Actualmente no has creado bases de datos, para hacerlo haz el
-                  procesos de creación de bases de datos.
-                </p>
-              </div>
+              <p className="text-gray-400 mb-4">
+                Actualmente no has creado bases de datos, para hacerlo haz el
+                procesos de creación de bases de datos.
+              </p>
               <Button
                 as={Link}
-                href="/dashboard/create-database/"
+                href="/dashboard/create/database/"
                 color="primary"
+                startContent={<FiDatabase />}
               >
                 Crear una base de datos
               </Button>

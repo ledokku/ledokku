@@ -1,7 +1,8 @@
+import { AppProvider } from "@/contexts/AppContext";
 import { serverClientWithAuth } from "@/lib/apollo.server";
 import { PageProps } from "@/types/next";
-import { AppHeaderInfo } from "@/ui/modules/app/AppHeaderInfo";
-import { AppHeaderTabNav } from "@/ui/modules/app/AppHeaderTabNav";
+import { AppHeaderInfo } from "@/ui/components/misc/AppHeaderInfo";
+import { AppHeaderTabNav } from "@/ui/components/nav/AppHeaderTabNav";
 
 export default async function RootLayout({
   children,
@@ -18,15 +19,14 @@ export default async function RootLayout({
   });
 
   return (
-    <div className="flex flex-col">
-      <div className="flex flex-col gap-8 mb-8">
-        <AppHeaderInfo
-          app={app.app}
-          domains={domains.domains.map((it) => it.domain)}
-        />
-        <AppHeaderTabNav app={app.app} />
+    <AppProvider app={app.app}>
+      <div className="flex flex-col">
+        <div className="flex flex-col gap-8 mb-8">
+          <AppHeaderInfo domains={domains.domains.map((it) => it.domain)} />
+          <AppHeaderTabNav />
+        </div>
+        <div>{children}</div>
       </div>
-      <div>{children}</div>
-    </div>
+    </AppProvider>
   );
 }

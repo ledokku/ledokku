@@ -1,5 +1,5 @@
 mutation createDatabase($input: CreateDatabaseInput!) {
   createDatabase(input: $input) {
-    result
+    id
   }
 }

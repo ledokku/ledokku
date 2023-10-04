@@ -1,18 +1,14 @@
 FROM node:18-alpine
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 ARG NEXT_PUBLIC_SERVER_URL=
 ENV NEXT_PUBLIC_SERVER_URL=${NEXT_PUBLIC_SERVER_URL}
 
-COPY client/package.json .
-COPY yarn.lock .
+COPY . .
 
-RUN yarn
-
-COPY ./client .
-
+RUN yarn install --frozen-lockfile
 RUN yarn build
 
 EXPOSE 3000
-CMD [ "yarn", "start" ]
+CMD [ "yarn", "workspace", "@ledokku/web", "start" ]

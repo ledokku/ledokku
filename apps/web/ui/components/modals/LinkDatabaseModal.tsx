@@ -2,6 +2,8 @@
 
 import {
   AppByIdQuery,
+  AppsQuery,
+  DatabaseByIdQuery,
   DatabaseQuery,
   LogPayload,
   useLinkDatabaseLogsSubscription,
@@ -17,13 +19,16 @@ import {
   Spinner,
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
-import { Terminal } from "../Terminal";
+import { Terminal } from "../misc/Terminal";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 interface LinkDatabaseModalProps {
   isOpen: boolean;
-  app?: AppByIdQuery["app"];
-  database?: DatabaseQuery["databases"]["items"][0];
+  app?: AppsQuery["apps"]["items"][0] | AppByIdQuery["app"];
+  database?:
+    | DatabaseQuery["databases"]["items"][0]
+    | DatabaseByIdQuery["database"];
   onOpenChange: (open: boolean) => void;
 }
 
@@ -34,6 +39,7 @@ export const LinkDatabaseModal = ({
   isOpen,
 }: LinkDatabaseModalProps) => {
   const [linkLogHistory, setLinkLogHistory] = useState<LogPayload[]>([]);
+  const router = useRouter();
 
   const [linkDatabaseMutation, { loading: databaseLinkLoading }] =
     useLinkDatabaseMutation();
@@ -82,7 +88,15 @@ export const LinkDatabaseModal = ({
     <Modal
       isOpen={isOpen}
       closeButton
-      onOpenChange={onOpenChange}
+      onOpenChange={(val) => {
+        if (
+          !val &&
+          linkLogHistory[linkLogHistory.length - 1]?.type === "end:success"
+        ) {
+          router.refresh();
+        }
+        onOpenChange(val);
+      }}
       size={isTerminalVisible ? "5xl" : "md"}
       backdrop="blur"
     >

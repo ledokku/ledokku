@@ -1,22 +1,22 @@
-import { $log } from '@tsed/common';
-import { createAppAuth } from '@octokit/auth-app';
-import { Octokit } from '@octokit/rest';
-import { App, AppMetaGithub, PrismaClient, Roles, User } from '@prisma/client';
-import { Injectable } from '@tsed/di';
-import { Unauthorized } from '@tsed/exceptions';
-import fetch from 'node-fetch';
-import { DeployAppQueue } from '../../../../queues/deploy_app.queue';
-import { SettingsRepository } from '../../../../repositories';
-import { formatGithubPem } from './../../../../config';
+import { $log } from "@tsed/common";
+import { createAppAuth } from "@octokit/auth-app";
+import { Octokit } from "@octokit/rest";
+import { App, AppMetaGithub, PrismaClient, Roles, User } from "@prisma/client";
+import { Injectable } from "@tsed/di";
+import { Unauthorized } from "@tsed/exceptions";
+import fetch from "node-fetch";
+import { DeployAppQueue } from "../../../../queues/deploy_app.queue";
+import { SettingsRepository } from "../../../../repositories";
+import { formatGithubPem } from "./../../../../config";
 import {
   GITHUB_APP_CLIENT_ID,
   GITHUB_APP_CLIENT_SECRET,
   GITHUB_APP_ID,
   GITHUB_APP_PEM,
-} from './../../../../constants';
-import { SyncServerQueue } from './../../../../queues/sync_server.queue';
-import { GithubError } from './../models/github_error';
-import { GithubOAuthLoginResponse } from './../models/github_oauth_login_response';
+} from "./../../../../constants";
+import { SyncServerQueue } from "./../../../../queues/sync_server.queue";
+import { GithubError } from "./../models/github_error";
+import { GithubOAuthLoginResponse } from "./../models/github_oauth_login_response";
 
 @Injectable()
 export class GithubRepository {
@@ -44,11 +44,11 @@ export class GithubRepository {
     tags?: string[]
   ): Promise<App> {
     const installationAuthentication = await this.installationAuth({
-      type: 'installation',
+      type: "installation",
       installationId,
     });
 
-    const fullName = repoFullName.split('/');
+    const fullName = repoFullName.split("/");
 
     const repoData = {
       owner: fullName[0],
@@ -60,7 +60,7 @@ export class GithubRepository {
         data: {
           userId: user.id,
           name: appName,
-          type: 'GITHUB',
+          type: "GITHUB",
           tags: {
             connectOrCreate: tags?.map((it) => ({
               where: {
@@ -77,7 +77,7 @@ export class GithubRepository {
               repoOwner: repoData.owner,
               repoId,
               githubAppInstallationId: installationId,
-              branch: branch ? branch : 'main',
+              branch: branch ? branch : "main",
             },
           },
         },
@@ -90,7 +90,7 @@ export class GithubRepository {
           appId: res.id,
           userName: user.username,
           token: installationAuthentication.token,
-          deleteOnFailed: false
+          deleteOnFailed: false,
         });
 
         return res;
@@ -99,7 +99,7 @@ export class GithubRepository {
 
   async repository(installationId: string, repoFullName: string) {
     const installationAuthentication = await this.installationAuth({
-      type: 'installation',
+      type: "installation",
       installationId,
     });
 
@@ -107,7 +107,7 @@ export class GithubRepository {
       auth: installationAuthentication.token,
     });
 
-    const fullName = repoFullName.split('/');
+    const fullName = repoFullName.split("/");
 
     const repoData = {
       owner: fullName[0],
@@ -124,7 +124,7 @@ export class GithubRepository {
 
   async branch(installationId: string, repoFullName: string, branch: string) {
     const installationAuthentication = await this.installationAuth({
-      type: 'installation',
+      type: "installation",
       installationId,
     });
 
@@ -132,7 +132,7 @@ export class GithubRepository {
       auth: installationAuthentication.token,
     });
 
-    const fullName = repoFullName.split('/');
+    const fullName = repoFullName.split("/");
 
     const repoData = {
       owner: fullName[0],
@@ -152,7 +152,7 @@ export class GithubRepository {
     $log.info(installationId);
 
     const installationAuthentication = await this.installationAuth({
-      type: 'installation',
+      type: "installation",
       installationId,
     });
 
@@ -163,7 +163,7 @@ export class GithubRepository {
     });
 
     return octo
-      .request('GET /installation/repositories', {
+      .request("GET /installation/repositories", {
         per_page,
         page,
       })
@@ -176,7 +176,7 @@ export class GithubRepository {
     });
 
     return octo
-      .request('GET /user/installations', {
+      .request("GET /user/installations", {
         per_page,
         page,
       })
@@ -186,17 +186,17 @@ export class GithubRepository {
   async loginOAuthApp(
     code: string
   ): Promise<GithubOAuthLoginResponse | GithubError> {
-    return fetch('https://github.com/login/oauth/access_token', {
-      method: 'POST',
+    return fetch("https://github.com/login/oauth/access_token", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
+        "Content-Type": "application/json",
+        Accept: "application/json",
       },
       body: JSON.stringify({
         client_id: GITHUB_APP_CLIENT_ID,
         client_secret: GITHUB_APP_CLIENT_SECRET,
         code,
-        state: 'github_login',
+        state: "github_login",
       }),
     }).then<GithubOAuthLoginResponse | GithubError>((res) => res.json() as any);
   }
@@ -224,9 +224,8 @@ export class GithubRepository {
       auth: access_token,
     });
 
-    const {
-      data: emails,
-    } = await octokit.users.listEmailsForAuthenticatedUser();
+    const { data: emails } =
+      await octokit.users.listEmailsForAuthenticatedUser();
 
     return emails;
   }
@@ -252,7 +251,7 @@ export class GithubRepository {
       settings.allowedEmails.length > 0 &&
       !settings.allowedEmails.includes(email.email)
     ) {
-      throw new Unauthorized('Este correo electrónico no esta permitido');
+      throw new Unauthorized("Este correo electrónico no esta permitido");
     }
 
     const now = new Date();
@@ -289,12 +288,11 @@ export class GithubRepository {
   }
 
   async branches(
-    username: string,
-    repositoryName: string,
+    repoFullName: string,
     installationId: string
   ) {
     const installationAuthentication = await this.installationAuth({
-      type: 'installation',
+      type: "installation",
       installationId,
     });
 
@@ -302,9 +300,7 @@ export class GithubRepository {
       auth: installationAuthentication.token,
     });
 
-    return (
-      await octo.request(`GET /repos/${username}/${repositoryName}/branches`)
-    ).data;
+    return (await octo.request(`GET /repos/${repoFullName}/branches`)).data;
   }
 
   async deployRepository(
@@ -315,7 +311,7 @@ export class GithubRepository {
     deleteOnFailed?: boolean
   ) {
     const installationAuthentication = await this.installationAuth({
-      type: 'installation',
+      type: "installation",
       installationId,
     });
 

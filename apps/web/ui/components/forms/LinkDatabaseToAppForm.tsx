@@ -2,8 +2,8 @@ import { Select, SelectSection, SelectItem, Button } from "@nextui-org/react";
 import { Formik, Form } from "formik";
 import { useRouter } from "next/navigation";
 import { FiPlus } from "react-icons/fi";
-import { labelIcon } from "../DatabaseLabel";
-import { DbIcon } from "../DbIcon";
+import { labelIcon } from "../misc/DatabaseLabel";
+import { DbIcon } from "../../icons/DbIcon";
 import { LinkDatabaseModal } from "../modals/LinkDatabaseModal";
 import * as yup from "yup";
 import { AppByIdQuery, DatabaseQuery } from "@/generated/graphql";
@@ -33,7 +33,7 @@ export const LinkDatabaseToAppForm = ({
           console.log(values);
 
           if (values.database === "create-new-database-internal-id")
-            return router.push("/dashboard/create-database");
+            return router.push("/dashboard/create/app");
 
           utils.setFieldValue("openDialog", true);
         }}

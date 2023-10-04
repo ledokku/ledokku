@@ -14,7 +14,7 @@ import {
   useAppRebuildLogsSubscription,
   useRebuildAppMutation,
 } from "@/generated/graphql";
-import { Terminal } from "@/ui/components/Terminal";
+import { Terminal } from "@/ui/components/misc/Terminal";
 import toast from "react-hot-toast";
 import { FiCodepen } from "react-icons/fi";
 
